@@ -1,0 +1,14 @@
+.tmp/
+node_modules/
+dist/
+build/
+out/
+coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+*.zip
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal

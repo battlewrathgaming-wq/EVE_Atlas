@@ -1,0 +1,46 @@
+{
+  "killmail_id": 1001,
+  "killmail_time": "2026-05-01T20:15:00Z",
+  "solar_system_id": 30000142,
+  "victim": {
+    "character_id": 90000001,
+    "character_name": "Observed Victim",
+    "corporation_id": 98000001,
+    "corporation_name": "Victim Logistics",
+    "alliance_id": 99000001,
+    "alliance_name": "Quiet Coalition",
+    "ship_type_id": 587,
+    "ship_type_name": "Rifter",
+    "damage_taken": 4120
+  },
+  "attackers": [
+    {
+      "character_id": 90000002,
+      "character_name": "Atlas Scout",
+      "corporation_id": 98000002,
+      "corporation_name": "Signal Cartel Test",
+      "alliance_id": 99000002,
+      "alliance_name": "Observed Operators",
+      "ship_type_id": 603,
+      "ship_type_name": "Merlin",
+      "weapon_type_id": 2488,
+      "damage_done": 2600,
+      "final_blow": true,
+      "security_status": -1.2
+    },
+    {
+      "character_id": 90000003,
+      "character_name": "Atlas Wing",
+      "corporation_id": 98000002,
+      "corporation_name": "Signal Cartel Test",
+      "alliance_id": 99000002,
+      "alliance_name": "Observed Operators",
+      "ship_type_id": 602,
+      "ship_type_name": "Kestrel",
+      "weapon_type_id": 2488,
+      "damage_done": 1520,
+      "final_blow": false,
+      "security_status": -0.4
+    }
+  ]
+}

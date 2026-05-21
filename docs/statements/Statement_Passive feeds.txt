@@ -1,0 +1,41 @@
+Passive Feed Spotlighting
+-------------------------
+
+Broad passive feeds should be treated as temporary discovery streams, not automatic archives.
+
+The platform may listen to broad event feeds such as R2Z2, but should only retain or expand records that match current intelligence intent.
+
+Primary use case:
+- watchlist pilots
+- watched corporations
+- watched alliances
+- watched systems
+- active session interests
+
+Default behavior:
+- inspect lightweight feed event
+- check against watchlists/session filters
+- if relevant:
+    - expand via ESI
+    - normalize
+    - alert
+    - persist
+- if not relevant:
+    - discard or retain only minimal transient diagnostics
+
+This supports:
+- real-time spotlighting
+- fog-of-war awareness
+- respectful API use
+- low storage pressure
+- intent-driven collection
+
+It avoids:
+- turning passive feeds into uncontrolled scraping
+- expanding every event
+- storing irrelevant universe-wide activity
+
+Guiding rule:
+Receiving an event does not mean the system must keep it.
+
+Expansion and persistence are deliberate intelligence decisions.

@@ -1,0 +1,37 @@
+{
+  "name": "aura-atlas",
+  "version": "0.1.0",
+  "description": "Local-first evidence-based capsuleer intelligence PoC.",
+  "main": "src/main/main.js",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/dev.ps1",
+    "start": "electron .",
+    "verify:fixture": "node scripts/verify-fixture-ingestion.js",
+    "verify:idempotent": "node scripts/verify-idempotent-ingestion.js",
+    "verify:sde-fixture": "node scripts/verify-sde-fixture.js",
+    "verify:sde-real-local": "node scripts/verify-sde-real-local.js",
+    "verify:sde-inventory": "node scripts/verify-sde-inventory.js",
+    "verify:radius": "node scripts/verify-radius.js",
+    "verify:planner": "node scripts/verify-system-radius-planner.js",
+    "verify:collector": "node scripts/verify-system-radius-collector.js",
+    "verify:reports": "node scripts/verify-reports.js",
+    "verify:operators": "node scripts/verify-operators.js",
+    "verify:radius-report": "node scripts/verify-radius-report.js",
+    "verify:hydration": "node scripts/verify-hydration.js",
+    "verify:metadata-lookup": "node scripts/verify-metadata-lookup.js",
+    "verify:bulk-synthetic": "node scripts/verify-bulk-synthetic.js",
+    "verify:system-watch-live": "node scripts/verify-system-watch-live.js",
+    "verify:system-watch-idempotent-live": "node scripts/verify-system-watch-idempotent-live.js",
+    "report:run": "node scripts/report-run.js",
+    "report:system": "node scripts/report-system.js",
+    "report:operators": "node scripts/report-operators.js",
+    "report:radius": "node scripts/report-radius.js",
+    "hydrate:report-operators": "node scripts/hydrate-report-operators.js",
+    "import:sde-inventory": "node scripts/import-sde-inventory.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^30.0.0"
+  }
+}

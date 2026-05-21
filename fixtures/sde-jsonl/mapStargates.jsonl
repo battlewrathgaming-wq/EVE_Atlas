@@ -1,0 +1,4 @@
+{"_key":50000001,"_value":{"solarSystemID":30000001,"destination":{"solarSystemID":30000002}}}
+{"_key":50000002,"_value":{"solarSystemID":30000002,"destination":{"solarSystemID":30000003}}}
+{"_key":50000003,"_value":{"solarSystemID":30000003,"destination":{"solarSystemID":30000001}}}
+{"_key":50000004,"_value":{"solarSystemID":30000003,"destination":{"solarSystemID":30000004}}}
