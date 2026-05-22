@@ -267,5 +267,30 @@ Completed:
 
 - The accepted live scoped discovery smoke returned zero refs. A positive-ref discovery-only smoke is deferred until a known respectful target/window is available.
 - Evidence pruning remains blocked even though snapshot preflight now exists.
-- Assessment review appears partly present in the renderer; close the task only after explicit citation/status visibility checks.
-- Trace packs should support debugging and audit handoff without dumping raw evidence by default.
+
+## Current Milestone: Operator UI Workflow Polish
+
+Mission statement:
+
+Turn the proven backend/service shell into a clearer operator workflow without adding passive live collection, passive expansion, or evidence deletion.
+
+This milestone should leave Atlas with:
+
+- renderer-visible support/debug trace pack generation
+- improved assessment creation/review ergonomics
+- written live target-selection discipline
+- a held positive-ref discovery-only smoke candidate for when a respectful target/window is known
+- no automatic live work
+- no automatic queue expansion
+- no evidence pruning
+
+Recommended order:
+
+1. `debug-trace-renderer-surface.md`
+2. `assessment-artifact-ergonomics-pass.md`
+3. `live-target-discipline-checklist.md`
+4. `positive-ref-live-smoke-candidate.md`
+
+Roadmap:
+
+- `docs/roadmap/operator-ui-workflow-polish.md`
