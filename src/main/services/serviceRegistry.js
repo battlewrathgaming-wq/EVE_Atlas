@@ -153,6 +153,11 @@ const COMMANDS = {
     description: 'Build a structured corporation observation report response',
     handler: ({ db, payload }) => buildReportResponse(db, { ...payload, reportType: 'corporation' })
   },
+  'report.corpus_health': {
+    classification: 'read-only',
+    description: 'Build a structured local evidence corpus health report response',
+    handler: ({ db }) => buildReportResponse(db, { reportType: 'corpus_health' })
+  },
   'report.queue': {
     classification: 'read-only',
     description: 'Build a structured discovery queue report response',

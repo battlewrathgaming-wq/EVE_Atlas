@@ -217,11 +217,10 @@ This milestone should leave Atlas with:
 
 Recommended order:
 
-1. `evidence-corpus-health-report.md`
-3. `runtime-db-snapshot-and-restore-preflight.md`
-4. `operator-workflow-scenario-smoke.md`
-5. `assessment-artifact-review-surface.md`
-6. `operator-debug-trace-pack.md`
+1. `runtime-db-snapshot-and-restore-preflight.md`
+2. `operator-workflow-scenario-smoke.md`
+3. `assessment-artifact-review-surface.md`
+4. `operator-debug-trace-pack.md`
 
 Supporting audit:
 
@@ -230,3 +229,4 @@ Supporting audit:
 Completed:
 
 - `live-scoped-discovery-success-smoke-review.md`
+- `evidence-corpus-health-report.md`

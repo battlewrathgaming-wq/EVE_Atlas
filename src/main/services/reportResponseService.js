@@ -1,4 +1,5 @@
 const { buildActorReport, buildActorReportModel, renderActorReport } = require('../reports/actorReport');
+const { buildCorpusHealthReport, buildCorpusHealthReportModel, renderCorpusHealthReport } = require('../reports/corpusHealthReport');
 const { buildCorporationObservationReport } = require('../reports/corporationObservationReport');
 const { buildQueueReport } = require('../reports/queueReport');
 const { buildRadiusReport, buildRadiusReportModel, renderRadiusReport } = require('../reports/radiusReport');
@@ -15,6 +16,9 @@ function buildReportResponse(db, request = {}) {
   }
   if (reportType === 'radius') {
     return buildNativeRadiusReportResponse(db, params, options);
+  }
+  if (reportType === 'corpus_health') {
+    return buildNativeCorpusHealthReportResponse(db);
   }
   const text = buildReportText(db, reportType, params, options);
   const parsed = parseReportText(text);
@@ -46,6 +50,52 @@ function buildReportResponse(db, request = {}) {
     warnings: warningRows(parsed.sections.Warnings),
     labels: labelsFromText(text),
     raw_ids: rawIdsFromText(text),
+    text
+  };
+}
+
+function buildNativeCorpusHealthReportResponse(db) {
+  const model = buildCorpusHealthReportModel(db);
+  const text = renderCorpusHealthReport(model);
+  return {
+    report_type: 'corpus_health',
+    generated_at: model.generated_at,
+    response_mode: 'native-structured',
+    scope: {
+      report_type: 'corpus_health',
+      parameters: {},
+      evidence_window: {
+        start: null,
+        end: null,
+        lookbackSeconds: null,
+        label: 'all local stored data'
+      }
+    },
+    health: {
+      classification: model.classification,
+      counts: model.counts,
+      integrity: model.integrity,
+      warnings_by_type: model.warning_rows,
+      freshness: model.freshness
+    },
+    evidence_basis: {
+      sample_status: null,
+      source: 'local SQLite evidence and metadata tables',
+      text: 'Read-only local corpus health. This is not an observation report.'
+    },
+    observations: {
+      sections: []
+    },
+    collection_provenance: {
+      text: null
+    },
+    warnings: model.warning_rows.map((row) => ({
+      code: row.warning_type,
+      message: `${row.count} warning(s); latest ${row.latest || 'unknown'}`
+    })),
+    labels: [],
+    raw_ids: {},
+    boundaries: model.boundaries,
     text
   };
 }
@@ -136,6 +186,9 @@ function buildReportText(db, reportType, params, options) {
   }
   if (reportType === 'corporation') {
     return buildCorporationObservationReport(db, params, options);
+  }
+  if (reportType === 'corpus_health') {
+    return buildCorpusHealthReport(db);
   }
   if (reportType === 'queue') {
     return buildQueueReport(db, params);

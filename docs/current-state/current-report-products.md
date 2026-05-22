@@ -16,6 +16,7 @@ AURA Atlas currently has CLI/text report products for:
 - corporation metadata readiness
 - queue status
 - metadata status
+- evidence corpus health
 
 The renderer currently has native structured presentation for:
 
@@ -23,6 +24,8 @@ The renderer currently has native structured presentation for:
 - radius evidence reports
 - queue/watch preview state
 - task/readiness/service status surfaces
+- manual discovery and manual expansion task actions
+- assessment artifact creation flow
 
 The backend exposes native structured actor and radius report responses. The renderer consumes those responses without parsing CLI text or recomputing observations.
 
@@ -51,6 +54,8 @@ They do not derive observations from:
 - pending queue refs
 - at-a-glance preview metadata
 
+Assessment artifacts are separate work products. They may cite report context and stored killmail IDs, but the assessment layer does not become an evidence source.
+
 ## Current Verification
 
 - `verify:report-scope`
@@ -60,11 +65,16 @@ They do not derive observations from:
 - `verify:report-response`
 - `verify:corporation-report`
 - `verify:metadata-status`
+- `verify:corpus-health`
+- `verify:assessment-artifacts`
+- `verify:evidence-rules`
 - `verify:controlled-workflow`
 
 The controlled workflow check runs reports after mixed collection lanes have written to the same disposable DB. This is the current pre-UI confidence check that reports can read stored evidence without depending on how evidence was discovered.
 
-`report.actor` and `report.radius` now return native structured responses for renderer presentation while retaining text output for CLI/export.
+`report.actor`, `report.radius`, and queue report paths now return structured responses for renderer presentation while retaining text output for CLI/export where appropriate.
+
+`report.corpus_health` is now a read-only structured service response and `report:corpus-health` is available for CLI/export. It checks local SQLite corpus counts, integrity signals, warning groups, and operational freshness without parsing SDE zip files, calling zKill/ESI, or making assessment claims.
 
 ## Current Constraint
 
@@ -72,10 +82,12 @@ Report meaning must remain backend-owned.
 
 The renderer may render structured sections and text export. It must not parse CLI text, recompute observations, infer assessment, or treat pending discovery refs as evidence.
 
-## Known Presentation Follow-Up
+## Current Presentation Status
 
-The queue report text export path needs a small renderer fix so structured queue report responses do not display as `[object Object]`.
+The previous queue report text export issue has been completed and moved to `docs/gap/complete/queue-report-text-export-fix.md`.
 
-Tracked by:
+Current presentation work should focus on operator workflow clarity rather than bug repair:
 
-- `docs/gap/to-do/queue-report-text-export-fix.md`
+- make citation status readable when assessment artifacts are shown
+- keep discovery queue language visibly separate from evidence language
+- preserve backend-owned report meaning as more renderer surfaces are added

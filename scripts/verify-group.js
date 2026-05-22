@@ -47,7 +47,8 @@ const GROUPS = {
     'verify:operators',
     'verify:radius-report',
     'verify:hydration',
-    'verify:metadata-status'
+    'verify:metadata-status',
+    'verify:corpus-health'
   ],
   manual: [
     'verify:manual-discovery'
