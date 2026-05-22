@@ -18,9 +18,8 @@ The current checklist is grouped around preparing the Electron shell and rendere
 
 Recommended order:
 
-1. `concurrency-and-locking.md`
-2. `destructive-actions-and-retention.md`
-3. `ui-language-contract.md`
+1. `destructive-actions-and-retention.md`
+2. `ui-language-contract.md`
 
 Supporting current-state note:
 
@@ -28,4 +27,4 @@ Supporting current-state note:
 
 Completed items are moved to `docs/gap/complete`.
 
-The next implementation slice should tighten concurrency and locking rules, because evidence-creating and destructive actions need predictable task overlap behavior before UI triggers exist.
+The next implementation slice should define destructive action and retention UI safeguards, because pruning/compaction needs explicit confirmation and preservation rules before any renderer control exists.

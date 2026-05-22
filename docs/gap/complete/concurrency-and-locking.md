@@ -1,4 +1,6 @@
-# TODO: Concurrency And Locking
+# Complete: Concurrency And Locking
+
+Status: Complete For IPC Shell Preparation
 
 ## Actionables
 
@@ -31,3 +33,18 @@ Initial policy to consider:
 
 The backend has clear task locks or equivalent safeguards for evidence-writing and destructive actions.
 
+## Current Implementation
+
+- Read-only tasks do not acquire locks and may overlap.
+- Metadata tasks serialize by metadata scope.
+- Evidence-creating tasks serialize by evidence scope.
+- Exclusive tasks block active non-read tasks and block new non-read tasks while active.
+- Destructive tasks use exclusive/global locking and are blocked during active evidence or metadata work.
+- Lock conflicts return taxonomy-shaped `TASK_LOCKED` errors.
+- Verified by `verify:task-runner`.
+
+## Remaining Follow-On Work
+
+- Individual worker/service wrappers still need to choose correct task classification and scope keys as they are exposed to UI.
+- Persistent task history can be revisited if in-memory task history is insufficient.
+- Cancellation remains vocabulary-level until worker operations support abort signals.

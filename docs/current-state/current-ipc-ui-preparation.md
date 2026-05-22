@@ -23,6 +23,7 @@ Current implemented shell:
 - `task.get` service command
 - task-wrapped service invocation with `asTask: true`
 - shared message taxonomy for readiness, live gate, and task responses
+- task locking for read-only, metadata, evidence-creating, destructive, and exclusive work
 
 ## Backend Actions Ready For IPC Wrapping
 

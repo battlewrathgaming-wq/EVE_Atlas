@@ -34,17 +34,18 @@ class TaskRunner {
     this.tasks.set(task.task_id, task);
     this.pruneHistory();
 
-    const lockKey = lockKeyFor(task);
-    if (lockKey && this.activeLocks.has(lockKey)) {
+    const lockKeys = lockKeysFor(task);
+    const conflict = lockConflictFor(lockKeys, this.activeLocks);
+    if (conflict) {
       task.status = TASK_STATES.FAILED;
       task.finished_at = nowIso();
       task.error = {
-        ...taxonomyMessage('TASK_LOCKED', `Task lock is already active for ${lockKey}`, { source: 'task.runner' })
+        ...taxonomyMessage('TASK_LOCKED', `Task lock is already active for ${conflict}`, { source: 'task.runner' })
       };
       return task;
     }
 
-    if (lockKey) {
+    for (const lockKey of lockKeys) {
       this.activeLocks.set(lockKey, task.task_id);
     }
 
@@ -76,8 +77,10 @@ class TaskRunner {
       });
       return this.getTask(task.task_id);
     } finally {
-      if (lockKey && this.activeLocks.get(lockKey) === task.task_id) {
-        this.activeLocks.delete(lockKey);
+      for (const lockKey of lockKeys) {
+        if (this.activeLocks.get(lockKey) === task.task_id) {
+          this.activeLocks.delete(lockKey);
+        }
       }
     }
   }
@@ -165,20 +168,38 @@ class TaskRunner {
   }
 }
 
-function lockKeyFor(task) {
+function lockKeysFor(task) {
   if (task.classification === TASK_CLASSIFICATIONS.READ_ONLY) {
-    return null;
+    return [];
   }
   if (task.classification === TASK_CLASSIFICATIONS.METADATA_ONLY) {
-    return task.scope_key ? `metadata:${task.scope_key}` : null;
+    return task.scope_key ? [`metadata:${task.scope_key}`] : [];
   }
   if (task.classification === TASK_CLASSIFICATIONS.EVIDENCE_CREATING) {
-    return `evidence:${task.scope_key || 'global'}`;
+    return [`evidence:${task.scope_key || 'global'}`];
   }
   if (task.classification === TASK_CLASSIFICATIONS.DESTRUCTIVE || task.classification === TASK_CLASSIFICATIONS.EXCLUSIVE) {
+    return ['exclusive:global'];
+  }
+  return task.scope_key ? [`${task.classification}:${task.scope_key}`] : [];
+}
+
+function lockConflictFor(lockKeys, activeLocks) {
+  if (!lockKeys.length) {
+    return null;
+  }
+  if (activeLocks.has('exclusive:global')) {
     return 'exclusive:global';
   }
-  return task.scope_key ? `${task.classification}:${task.scope_key}` : null;
+  for (const lockKey of lockKeys) {
+    if (activeLocks.has(lockKey)) {
+      return lockKey;
+    }
+  }
+  if (lockKeys.includes('exclusive:global') && activeLocks.size > 0) {
+    return [...activeLocks.keys()].sort()[0];
+  }
+  return null;
 }
 
 function normalizeFinalStatus(status) {
@@ -214,5 +235,7 @@ module.exports = {
   TaskRunner,
   TASK_STATES,
   TASK_CLASSIFICATIONS,
+  lockKeysFor,
+  lockConflictFor,
   defaultTaskRunner
 };
