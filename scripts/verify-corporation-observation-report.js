@@ -76,11 +76,22 @@ async function main() {
   assertIncludes(report, 'Observed Member Pilots');
   assertIncludes(report, 'Atlas Scout [characterID: 90000002]');
   assertIncludes(report, 'Atlas Wing [characterID: 90000003]');
+  assertIncludes(report, 'Final Blows');
+  assertIncludes(report, 'Damage');
+  assertIncludes(report, 'Observed Final Blows');
   assertIncludes(report, 'Observed Ships');
   assertIncludes(report, 'Merlin [typeID: 603]');
   assertIncludes(report, 'Kestrel [typeID: 602]');
   assertIncludes(report, 'Observed Regions');
+  assertIncludes(report, 'Observed Activity Cadence');
+  assertIncludes(report, 'Fri 21:00');
+  assertIncludes(report, 'Observed Counterpart Corporations');
+  assertIncludes(report, 'Victim Logistics [corporationID: 98000001]');
+  assertIncludes(report, 'Observed Counterpart Alliances');
+  assertIncludes(report, 'Quiet Coalition [allianceID: 99000001]');
   assertIncludes(report, 'Recent Timeline');
+  assertIncludes(report, 'Aggressor Detail');
+  assertIncludes(report, 'final blow, damage');
   assertIncludes(report, 'does not assess intent, affiliation, staging, ownership, or threat');
   assertIncludes(emptyWindowReport, 'Stored evidence matching this scope: 0 killmails / 0 corporation activity events');
 

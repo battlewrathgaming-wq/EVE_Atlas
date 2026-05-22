@@ -10,6 +10,15 @@ const {
   evidenceWindowClause,
   formatEvidenceWindow
 } = require('./reportUtils');
+const {
+  activityCadenceRows,
+  counterpartEntityRows,
+  finalBlowRows,
+  formatFinalBlowPilot,
+  formatShip,
+  formatUtcBucket,
+  roleMix
+} = require('./observationMetrics');
 
 function buildCorporationObservationReport(db, input, options = {}) {
   const corporation = resolveActor(db, {
@@ -63,7 +72,18 @@ function buildCorporationObservationReport(db, input, options = {}) {
       { label: 'Pilot', value: (row) => formatEntityLabel(row.character_name, 'character', row.character_id) },
       { label: 'Role Mix', value: roleMix },
       { label: 'Appearances', value: (row) => row.appearances },
+      { label: 'Final Blows', value: (row) => row.final_blows },
+      { label: 'Damage', value: (row) => row.damage_done },
       { label: 'Systems', value: (row) => `${row.unique_systems}: ${row.systems_seen || 'unknown'}` },
+      { label: 'First Observed', value: (row) => row.first_observed },
+      { label: 'Last Observed', value: (row) => row.last_observed }
+    ])),
+    printSection('Observed Final Blows', table(observation.finalBlows, [
+      { label: 'Pilot', value: formatFinalBlowPilot },
+      { label: 'Ship', value: formatShip },
+      { label: 'Final Blows', value: (row) => row.final_blows },
+      { label: 'Damage', value: (row) => row.damage_done },
+      { label: 'Systems', value: (row) => row.unique_systems },
       { label: 'First Observed', value: (row) => row.first_observed },
       { label: 'Last Observed', value: (row) => row.last_observed }
     ])),
@@ -79,6 +99,30 @@ function buildCorporationObservationReport(db, input, options = {}) {
       { label: 'First Observed', value: (row) => row.first_observed },
       { label: 'Last Observed', value: (row) => row.last_observed }
     ])),
+    printSection('Observed Activity Cadence', table(observation.cadence, [
+      { label: 'UTC Bucket', value: formatUtcBucket },
+      { label: 'Role Mix', value: roleMix },
+      { label: 'Appearances', value: (row) => row.appearances },
+      { label: 'Killmails', value: (row) => row.killmails }
+    ])),
+    printSection('Observed Counterpart Corporations', table(observation.counterpartCorporations, [
+      { label: 'Corporation', value: (row) => formatEntityLabel(row.entity_name, 'corporation', row.entity_id) },
+      { label: 'Role Mix', value: roleMix },
+      { label: 'Appearances', value: (row) => row.appearances },
+      { label: 'Killmails', value: (row) => row.killmails },
+      { label: 'Systems', value: (row) => row.unique_systems },
+      { label: 'First Observed', value: (row) => row.first_observed },
+      { label: 'Last Observed', value: (row) => row.last_observed }
+    ])),
+    printSection('Observed Counterpart Alliances', table(observation.counterpartAlliances, [
+      { label: 'Alliance', value: (row) => formatEntityLabel(row.entity_name, 'alliance', row.entity_id) },
+      { label: 'Role Mix', value: roleMix },
+      { label: 'Appearances', value: (row) => row.appearances },
+      { label: 'Killmails', value: (row) => row.killmails },
+      { label: 'Systems', value: (row) => row.unique_systems },
+      { label: 'First Observed', value: (row) => row.first_observed },
+      { label: 'Last Observed', value: (row) => row.last_observed }
+    ])),
     printSection('Recent Timeline', table(observation.timeline, [
       { label: 'Time', value: (row) => row.killmail_time },
       { label: 'Killmail', value: (row) => row.killmail_id },
@@ -86,7 +130,8 @@ function buildCorporationObservationReport(db, input, options = {}) {
       { label: 'System', value: (row) => formatSystemLabel(row.solar_system_name, row.solar_system_id) },
       { label: 'Region', value: (row) => row.region_name || 'unknown' },
       { label: 'Observed Pilot', value: (row) => row.pilot_label || 'unknown' },
-      { label: 'Ship', value: (row) => formatTypeLabel(row.ship_name, row.ship_type_id) }
+      { label: 'Ship', value: (row) => formatTypeLabel(row.ship_name, row.ship_type_id) },
+      { label: 'Aggressor Detail', value: (row) => row.aggressor_detail || '' }
     ])),
     printSection('Warnings', scope.warnings.length ? scope.warnings.map((warning) => `${warning.warning_type}: ${warning.message}`).join('\n') : '(none)')
   ].join('\n');
@@ -99,6 +144,10 @@ function corporationObservationScope(db, corporation, evidenceWindow, killmailId
       memberPilots: [],
       ships: [],
       regions: [],
+      cadence: [],
+      finalBlows: [],
+      counterpartCorporations: [],
+      counterpartAlliances: [],
       timeline: []
     };
   }
@@ -120,6 +169,8 @@ function corporationObservationScope(db, corporation, evidenceWindow, killmailId
            MAX(ae.character_name) AS character_name,
            SUM(CASE WHEN ae.role = 'attacker' THEN 1 ELSE 0 END) AS attacker_appearances,
            SUM(CASE WHEN ae.role = 'victim' THEN 1 ELSE 0 END) AS victim_appearances,
+           SUM(CASE WHEN ae.final_blow = 1 THEN 1 ELSE 0 END) AS final_blows,
+           SUM(COALESCE(ae.damage_done, 0)) AS damage_done,
            COUNT(*) AS appearances,
            COUNT(DISTINCT ae.solar_system_id) AS unique_systems,
            GROUP_CONCAT(DISTINCT ss.solar_system_name) AS systems_seen,
@@ -165,6 +216,32 @@ function corporationObservationScope(db, corporation, evidenceWindow, killmailId
     GROUP BY COALESCE(ss.region_name, 'unknown')
     ORDER BY killmail_count DESC, region_name ASC
   `).all(...killmailIds, ...killmailWindow.params);
+  const cadence = activityCadenceRows(db, {
+    killmailIds,
+    entityType: 'corporation',
+    entityId: corporation.entity_id
+  }, { evidenceWindow });
+  const finalBlows = finalBlowRows(db, {
+    killmailIds,
+    corporationId: corporation.entity_id,
+    characterRowsOnly: true
+  }, { evidenceWindow });
+  const counterpartCorporations = counterpartEntityRows(db, {
+    killmailIds,
+    excludeIds: [corporation.entity_id]
+  }, 'corporation', { evidenceWindow });
+  const corporationAllianceIds = db.prepare(`
+    SELECT DISTINCT alliance_id
+    FROM activity_events
+    WHERE entity_type = 'corporation'
+      AND entity_id = ?
+      AND alliance_id IS NOT NULL
+      AND killmail_id IN (${placeholders})
+  `).all(corporation.entity_id, ...killmailIds).map((row) => row.alliance_id);
+  const counterpartAlliances = counterpartEntityRows(db, {
+    killmailIds,
+    excludeIds: corporationAllianceIds
+  }, 'alliance', { evidenceWindow });
   const corpEvents = db.prepare(`
     SELECT ae.killmail_id, ae.role
     FROM activity_events ae
@@ -179,7 +256,9 @@ function corporationObservationScope(db, corporation, evidenceWindow, killmailId
     }, {});
   const pilotStatement = db.prepare(`
     SELECT ae.character_id, ae.character_name, ae.ship_type_id,
-           COALESCE(ae.ship_type_name, tm.type_name) AS ship_name
+           COALESCE(ae.ship_type_name, tm.type_name) AS ship_name,
+           ae.final_blow,
+           ae.damage_done
     FROM activity_events ae
     LEFT JOIN type_metadata tm ON tm.type_id = ae.ship_type_id
     WHERE ae.killmail_id = ?
@@ -205,7 +284,8 @@ function corporationObservationScope(db, corporation, evidenceWindow, killmailId
         corporation_role: corpEvents[killmail.killmail_id] || 'unknown',
         pilot_label: pilot ? formatEntityLabel(pilot.character_name, 'character', pilot.character_id) : null,
         ship_type_id: pilot?.ship_type_id,
-        ship_name: pilot?.ship_name
+        ship_name: pilot?.ship_name,
+        aggressor_detail: pilot?.final_blow ? `final blow, damage ${pilot.damage_done || 0}` : (pilot?.damage_done ? `damage ${pilot.damage_done}` : '')
       };
     });
 
@@ -214,6 +294,10 @@ function corporationObservationScope(db, corporation, evidenceWindow, killmailId
     memberPilots,
     ships,
     regions,
+    cadence,
+    finalBlows,
+    counterpartCorporations,
+    counterpartAlliances,
     timeline
   };
 }
@@ -232,16 +316,6 @@ function scopedKillmailIds(db, corporation, evidenceWindow) {
     ORDER BY ae.killmail_id
   `).all(corporation.entity_id, ...activityWindow.params, ...killmailWindow.params)
     .map((row) => row.killmail_id);
-}
-
-function roleMix(row) {
-  if (row.attacker_appearances && row.victim_appearances) {
-    return `attacker ${row.attacker_appearances} / victim ${row.victim_appearances}`;
-  }
-  if (row.attacker_appearances) {
-    return `attacker ${row.attacker_appearances}`;
-  }
-  return `victim ${row.victim_appearances}`;
 }
 
 function corporationSampleStatus(scope) {
