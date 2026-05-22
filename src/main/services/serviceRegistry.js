@@ -1,4 +1,4 @@
-const { buildAppReadiness } = require('./appReadinessService');
+const { buildAppReadiness, prepareAppRuntimePaths } = require('./appReadinessService');
 const { getLiveApiGateState } = require('./liveApiGateService');
 const {
   runActorWatchService,
@@ -25,6 +25,11 @@ const COMMANDS = {
     classification: 'read-only',
     description: 'Return app readiness, settings, lookup status, path status, and live API gate state',
     handler: ({ db, databasePath }) => buildAppReadiness(db, { databasePath })
+  },
+  'app.prepare': {
+    classification: 'metadata-only',
+    description: 'Create approved runtime/cache directories for app operation',
+    handler: ({ databasePath }) => prepareAppRuntimePaths({ databasePath })
   },
   'live.gate': {
     classification: 'read-only',

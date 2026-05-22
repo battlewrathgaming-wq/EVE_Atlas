@@ -1,39 +1,55 @@
 const path = require('node:path');
+const fs = require('node:fs');
 const { openDatabase, migrate, closeDatabase } = require('../src/main/db/database');
-const { buildAppReadiness, ensureAppReady } = require('../src/main/services/appReadinessService');
-const { auraTempRoot, projectRoot } = require('../src/main/util/tempPaths');
+const { buildAppReadiness, ensureAppReady, prepareAppRuntimePaths } = require('../src/main/services/appReadinessService');
+const { projectRoot } = require('../src/main/util/tempPaths');
 
 function main() {
   const previous = captureEnv();
-  process.env.AURA_ATLAS_TEST_TMP = path.join(projectRoot(), '.tmp');
-  process.env.AURA_ATLAS_CACHE_DIR = path.join(projectRoot(), '.tmp', 'cache');
-  process.env.AURA_ATLAS_SDE_CACHE_DIR = path.join(projectRoot(), '.tmp', 'sde');
+  const readinessRoot = path.join(projectRoot(), '.tmp', 'readiness-side-effects');
+  fs.rmSync(readinessRoot, { recursive: true, force: true });
+  process.env.AURA_ATLAS_TEST_TMP = readinessRoot;
+  process.env.AURA_ATLAS_CACHE_DIR = path.join(readinessRoot, 'cache');
+  process.env.AURA_ATLAS_SDE_CACHE_DIR = path.join(readinessRoot, 'sde');
   delete process.env.AURA_ATLAS_LIVE_API;
 
   const db = openDatabase(':memory:');
   migrate(db);
   try {
     const empty = buildAppReadiness(db, {
-      databasePath: path.join(auraTempRoot(), 'readiness-fixture.sqlite'),
+      databasePath: path.join(readinessRoot, 'readiness-fixture.sqlite'),
       mode: 'verify'
     });
+    assert(!fs.existsSync(readinessRoot), 'readiness check should not create temp root');
     assert(empty.status === 'degraded', 'empty migrated DB should be degraded, not blocked');
     assert(empty.checks.db_initialized === true, 'DB should be initialized');
     assert(empty.checks.migrations_applied === true, 'migrations should be applied');
+    assert(empty.checks.runtime_paths_valid === true, 'runtime paths should be valid');
+    assert(empty.checks.runtime_paths_ready === false, 'missing runtime paths should be reported as not ready');
     assert(empty.checks.topology_lookup_ready === false, 'empty DB should not have topology ready');
     assert(empty.checks.type_metadata_ready === false, 'empty DB should not have type metadata ready');
     assert(empty.live_api.enabled === false, 'live API should default disabled');
+    assertHasWarning(empty, 'RUNTIME_PATHS_MISSING');
     assertHasWarning(empty, 'SDE_TOPOLOGY_NOT_READY');
     assertHasWarning(empty, 'SDE_INVENTORY_NOT_READY');
     assertHasWarning(empty, 'LIVE_API_DISABLED');
 
+    const prepared = prepareAppRuntimePaths({
+      databasePath: path.join(readinessRoot, 'readiness-fixture.sqlite')
+    });
+    assert(prepared.status === 'prepared', 'prepare should create valid runtime paths');
+    assert(fs.existsSync(readinessRoot), 'prepare should create temp root');
+    assert(fs.existsSync(path.join(readinessRoot, 'cache')), 'prepare should create cache dir');
+    assert(fs.existsSync(path.join(readinessRoot, 'sde')), 'prepare should create SDE cache dir');
+
     seedReadinessMetadata(db);
     process.env.AURA_ATLAS_LIVE_API = '1';
     const ready = buildAppReadiness(db, {
-      databasePath: path.join(auraTempRoot(), 'readiness-fixture.sqlite'),
+      databasePath: path.join(readinessRoot, 'readiness-fixture.sqlite'),
       mode: 'verify'
     });
     assert(ready.status === 'ready', `seeded DB should be ready, got ${ready.status}`);
+    assert(ready.checks.runtime_paths_ready === true, 'prepared runtime paths should be ready');
     assert(ready.checks.topology_lookup_ready === true, 'topology should be ready');
     assert(ready.checks.type_metadata_ready === true, 'type metadata should be ready');
     assert(ready.live_api.enabled === true, 'live API should reflect explicit gate');
@@ -44,6 +60,7 @@ function main() {
     assertThrows(() => ensureAppReady(empty, ['topology_lookup_ready']), 'missing topology should block required readiness');
   } finally {
     closeDatabase(db);
+    fs.rmSync(readinessRoot, { recursive: true, force: true });
     restoreEnv(previous);
   }
 

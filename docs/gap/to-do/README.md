@@ -18,7 +18,7 @@ The current checklist is grouped around preparing the Electron shell and rendere
 
 Recommended order:
 
-1. `readiness-side-effects.md`
+No remaining implementation items are currently listed in this folder.
 
 Supporting current-state note:
 
@@ -26,6 +26,6 @@ Supporting current-state note:
 
 Completed items are moved to `docs/gap/complete`.
 
-`queue-status-scope-isolation.md`, `ui-language-contract.md`, `ipc-mutating-action-services.md`, `background-worker-execution.md`, `http-timeouts-and-cancellation.md`, `structured-report-responses.md`, `watch-scheduler-and-backoff.md`, and `report-performance-indexes.md` have been completed and moved to `docs/gap/complete`.
+`queue-status-scope-isolation.md`, `ui-language-contract.md`, `ipc-mutating-action-services.md`, `background-worker-execution.md`, `http-timeouts-and-cancellation.md`, `structured-report-responses.md`, `watch-scheduler-and-backoff.md`, `report-performance-indexes.md`, and `readiness-side-effects.md` have been completed and moved to `docs/gap/complete`.
 
-The next implementation slice should address readiness side effects, because the renderer will need readiness checks that do not unexpectedly mutate evidence or runtime state.
+The next implementation slice should come from refreshed audit/gap review, or from the planned renderer shell once backend service semantics are accepted.

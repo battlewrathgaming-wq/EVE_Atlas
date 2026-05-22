@@ -2,6 +2,26 @@
 
 Date: 2026-05-22
 
+## Progress Snapshot
+
+Recorded: 2026-05-22 13:32:29 +01:00
+
+Recent backend/UI-readiness work completed:
+
+- service registry and IPC command shell are in place
+- task wrapping, detached execution, cancellation, and HTTP timeout handling are verified
+- live API gates and user-defined scope validation are centralized
+- queue selection, queue status isolation, and retention preflight are implemented
+- watch schedule/status planning and watch run state recording are implemented
+- report response contracts and common report-scope indexes are implemented
+- offline `verify:all` passes with 40 scripts
+
+Current lane:
+
+- finish the remaining readiness side-effects gap
+- keep readiness checks clear for the future renderer shell
+- avoid UI work until backend service semantics are stable
+
 ## What Exists
 
 AURA Atlas is currently backend-first and CLI-verifiable.
@@ -13,6 +33,7 @@ Current implemented shell:
 - `atlas:service:list`
 - `atlas:service:invoke`
 - `app.readiness` service command
+- `app.prepare` service command for explicit runtime path preparation
 - `scope.defaults` service command
 - `scope.validate` service command
 - `live.gate` service command
@@ -33,6 +54,7 @@ Current implemented shell:
 - watch scheduling/status services for due, blocked, inactive, backoff, session-gated, and live-gated actor/system watches
 - metadata-only watch run state recording for success/failure, next poll, and backoff timing
 - compound report/query indexes for common evidence scopes and queue diagnostics
+- read-only readiness inspection separated from explicit runtime path preparation
 - native structured actor report response with text rendering retained for CLI/export
 
 ## Backend Actions Ready For IPC Wrapping
@@ -40,6 +62,7 @@ Current implemented shell:
 Implemented backend actions include:
 
 - read app readiness/settings
+- prepare approved runtime/cache/SDE directories
 - resolve typed actor names
 - validate user-defined scopes
 - run manual discovery

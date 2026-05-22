@@ -1,24 +1,16 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { USER_AGENT } = require('../../shared/constants');
-const { auraTempRoot, projectRoot } = require('../util/tempPaths');
+const { projectRoot } = require('../util/tempPaths');
 const { taxonomyMessage } = require('./messageTaxonomy');
 
 function buildAppReadiness(db, options = {}) {
   const databasePath = options.databasePath || process.env.AURA_ATLAS_DB_PATH || null;
-  const tempRoot = process.env.AURA_ATLAS_TEST_TMP || path.join(projectRoot(), '.tmp');
-  const cacheDir = process.env.AURA_ATLAS_CACHE_DIR || path.join(tempRoot, 'cache');
-  const sdeCacheDir = process.env.AURA_ATLAS_SDE_CACHE_DIR || path.join(tempRoot, 'sde');
+  const paths = resolveRuntimePaths(databasePath);
+  const pathState = inspectRuntimePaths(paths);
   const topology = latestRow(db, 'sde_imports');
   const inventory = latestRow(db, 'sde_inventory_imports');
   const counts = lookupCounts(db);
-  const paths = {
-    project_root: path.resolve(projectRoot()),
-    database_path: databasePath ? path.resolve(databasePath) : null,
-    temp_root: path.resolve(tempRoot),
-    cache_dir: path.resolve(cacheDir),
-    sde_cache_dir: path.resolve(sdeCacheDir)
-  };
   const checks = {
     db_initialized: Boolean(db),
     migrations_applied: migrationCount(db) > 0,
@@ -32,7 +24,8 @@ function buildAppReadiness(db, options = {}) {
     ),
     inventory_imported: Boolean(inventory),
     type_metadata_ready: Boolean(inventory && counts.type_metadata > 0),
-    runtime_paths_valid: runtimePathsValid(paths),
+    runtime_paths_valid: pathState.valid,
+    runtime_paths_ready: pathState.ready,
     live_api_enabled: process.env.AURA_ATLAS_LIVE_API === '1',
     user_agent_configured: typeof USER_AGENT === 'string' && USER_AGENT.trim().length > 0
   };
@@ -53,6 +46,7 @@ function buildAppReadiness(db, options = {}) {
       rule: 'Live zKill/ESI calls require explicit enablement'
     },
     paths,
+    path_state: pathState.paths,
     checks,
     lookup_counts: counts,
     sde: {
@@ -61,6 +55,33 @@ function buildAppReadiness(db, options = {}) {
     },
     blockers,
     warnings
+  };
+}
+
+function prepareAppRuntimePaths(options = {}) {
+  const databasePath = options.databasePath || process.env.AURA_ATLAS_DB_PATH || null;
+  const paths = resolveRuntimePaths(databasePath);
+  const before = inspectRuntimePaths(paths);
+  if (!before.valid) {
+    const error = new Error('Runtime/cache paths are not valid for this environment');
+    error.code = 'RUNTIME_PATHS_INVALID';
+    error.path_state = before.paths;
+    throw error;
+  }
+
+  const created = [];
+  for (const entry of before.paths.filter((item) => item.required && !item.exists)) {
+    fs.mkdirSync(entry.path, { recursive: true });
+    created.push(entry.key);
+  }
+
+  const after = inspectRuntimePaths(paths);
+  return {
+    status: after.ready ? 'prepared' : 'degraded',
+    generated_at: new Date().toISOString(),
+    paths,
+    path_state: after.paths,
+    created
   };
 }
 
@@ -154,19 +175,61 @@ function warningsFor(checks, paths) {
   if (paths.database_path && !isInsideProject(paths.database_path) && process.env.AURA_ATLAS_ALLOW_EXTERNAL_PATHS !== '1') {
     warnings.push(warning('DB_PATH_OUTSIDE_PROJECT', 'Runtime DB path is outside the project root'));
   }
+  if (checks.runtime_paths_valid && !checks.runtime_paths_ready) {
+    warnings.push(warning('RUNTIME_PATHS_MISSING', 'Runtime/cache paths are valid but missing; run app.prepare to create them'));
+  }
   return warnings;
 }
 
-function runtimePathsValid(paths) {
-  const required = [paths.temp_root, paths.cache_dir, paths.sde_cache_dir].filter(Boolean);
-  return required.every((target) => {
-    try {
-      fs.mkdirSync(target, { recursive: true });
-      return fs.existsSync(target);
-    } catch {
-      return false;
-    }
-  });
+function resolveRuntimePaths(databasePath = null) {
+  const tempRoot = process.env.AURA_ATLAS_TEST_TMP || path.join(projectRoot(), '.tmp');
+  const cacheDir = process.env.AURA_ATLAS_CACHE_DIR || path.join(tempRoot, 'cache');
+  const sdeCacheDir = process.env.AURA_ATLAS_SDE_CACHE_DIR || path.join(tempRoot, 'sde');
+  return {
+    project_root: path.resolve(projectRoot()),
+    database_path: databasePath ? path.resolve(databasePath) : null,
+    temp_root: path.resolve(tempRoot),
+    cache_dir: path.resolve(cacheDir),
+    sde_cache_dir: path.resolve(sdeCacheDir)
+  };
+}
+
+function inspectRuntimePaths(paths) {
+  const entries = [
+    inspectPath('project_root', paths.project_root, { required: true, mustExist: true }),
+    inspectPath('database_path', paths.database_path, { required: false }),
+    inspectPath('temp_root', paths.temp_root, { required: true }),
+    inspectPath('cache_dir', paths.cache_dir, { required: true }),
+    inspectPath('sde_cache_dir', paths.sde_cache_dir, { required: true })
+  ].filter(Boolean);
+  const runtimeEntries = entries.filter((entry) => entry.required && entry.key !== 'project_root');
+  return {
+    valid: entries.every((entry) => entry.valid),
+    ready: runtimeEntries.every((entry) => entry.exists && entry.is_directory),
+    paths: entries
+  };
+}
+
+function inspectPath(key, targetPath, options = {}) {
+  if (!targetPath) {
+    return null;
+  }
+  const exists = fs.existsSync(targetPath);
+  const stat = exists ? fs.statSync(targetPath) : null;
+  const isDirectory = Boolean(stat?.isDirectory());
+  const isFile = Boolean(stat?.isFile());
+  const allowed = key === 'database_path'
+    ? (isInsideProject(targetPath) || process.env.AURA_ATLAS_ALLOW_EXTERNAL_PATHS === '1')
+    : isInsideProject(targetPath);
+  return {
+    key,
+    path: targetPath,
+    required: options.required === true,
+    exists,
+    is_directory: isDirectory,
+    is_file: isFile,
+    valid: allowed && (!options.mustExist || exists)
+  };
 }
 
 function isInsideProject(targetPath) {
@@ -200,5 +263,6 @@ function warning(code, message) {
 
 module.exports = {
   buildAppReadiness,
+  prepareAppRuntimePaths,
   ensureAppReady
 };

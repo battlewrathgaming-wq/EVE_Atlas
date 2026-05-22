@@ -40,6 +40,8 @@ The app can produce a readiness object that the renderer can show and use to ena
 
 - `app.readiness` service command exists.
 - Readiness object includes DB/migration state, SDE topology/inventory state, lookup counts, runtime paths, live API gate state, and User-Agent state.
+- `app.readiness` is read-only and does not create missing runtime/cache directories.
+- `app.prepare` is the explicit metadata-only command that creates approved runtime/cache/SDE directories.
 - Verified by `verify:app-readiness` and `verify:service-registry`.
 
 ## Remaining Follow-On Work

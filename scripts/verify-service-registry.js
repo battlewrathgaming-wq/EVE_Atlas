@@ -13,6 +13,7 @@ async function main() {
   try {
     const commands = listServiceCommands();
     const readinessCommand = commands.find((entry) => entry.command === 'app.readiness');
+    const prepareCommand = commands.find((entry) => entry.command === 'app.prepare');
     const liveGateCommand = commands.find((entry) => entry.command === 'live.gate');
     const reportActorCommand = commands.find((entry) => entry.command === 'report.actor');
     const queueSelectionCommand = commands.find((entry) => entry.command === 'queue.selection');
@@ -32,6 +33,8 @@ async function main() {
     const watchRecordRunCommand = commands.find((entry) => entry.command === 'watch.recordRun');
     assert(readinessCommand, 'app.readiness should be listed');
     assert(readinessCommand.classification === 'read-only', 'app.readiness should be read-only');
+    assert(prepareCommand, 'app.prepare should be listed');
+    assert(prepareCommand.classification === 'metadata-only', 'app.prepare should be metadata-only');
     assert(liveGateCommand, 'live.gate should be listed');
     assert(liveGateCommand.classification === 'read-only', 'live.gate should be read-only');
     assert(reportActorCommand, 'report.actor should be listed');

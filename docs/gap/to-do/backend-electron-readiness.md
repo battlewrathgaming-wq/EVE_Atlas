@@ -156,6 +156,22 @@ Current verification:
 - `verify:report-indexes`
 - included in `verify:all`
 
+### Readiness Side Effects
+
+Status: Implemented
+
+Readiness semantics are now split:
+
+- `app.readiness` is read-only inspection and does not create runtime/cache paths.
+- `app.prepare` is metadata-only preparation and creates approved runtime/cache/SDE directories.
+- readiness reports valid-but-missing runtime paths with `RUNTIME_PATHS_MISSING`.
+
+Current verification:
+
+- `verify:app-readiness`
+- `verify:service-registry`
+- included in `verify:all`
+
 ## Related Documents
 
 - `docs/contracts/scope-definition-contract.md`
@@ -182,4 +198,4 @@ Current verification:
 - `docs/gap/complete/structured-report-responses.md`
 - `docs/gap/complete/watch-scheduler-and-backoff.md`
 - `docs/gap/complete/report-performance-indexes.md`
-- `docs/gap/to-do/readiness-side-effects.md`
+- `docs/gap/complete/readiness-side-effects.md`
