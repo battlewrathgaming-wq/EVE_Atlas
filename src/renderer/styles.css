@@ -305,13 +305,20 @@ h4 {
 }
 
 .form-grid input,
-.form-grid select {
+.form-grid select,
+.form-grid textarea {
   width: 100%;
   border: 1px solid var(--line);
   background: #0c1114;
   color: var(--text);
   padding: 9px 10px;
   font: inherit;
+}
+
+.form-grid textarea {
+  resize: vertical;
+  min-height: 76px;
+  line-height: 1.45;
 }
 
 .compact-form {

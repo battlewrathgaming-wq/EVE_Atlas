@@ -89,7 +89,6 @@ This milestone should leave Atlas with:
 
 Recommended order:
 
-- `assessment-report-workflow-ui.md`
 - `report-presentation-polish.md`
 - `compaction-preservation-preflight.md`
 - `aura-core-extraction-brief.md`
@@ -97,3 +96,5 @@ Recommended order:
 Supporting audit:
 
 - `docs/audits/audit-2026-05-22-overseer-runtime-handover-and-core-clone-readiness.md`
+
+Completed operational workflow hardening items are moved to `docs/gap/complete`.

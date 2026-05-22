@@ -1,6 +1,6 @@
 # Gap To-Do: Assessment Report Workflow UI
 
-Status: Open
+Status: Complete
 Priority: P1
 Milestone: Operational Workflow Hardening
 
@@ -30,6 +30,14 @@ Turn backend assessment artifacts into a deliberate operator workflow: save asse
 ## Completion Signal
 
 A user can save an assessment artifact from a report context, inspect it later, and see clear language that it is assessment memory separate from raw evidence.
+
+Completed:
+
+- Actor report context can seed an assessment artifact payload through the renderer service bridge.
+- Saving requires a loaded actor report, assessment reason or summary, and explicit boundary confirmation.
+- Score fields require an assessment reason.
+- Saved artifacts can be listed and inspected from the Reports view.
+- The workflow uses `assessment.create`, `assessment.list`, and `assessment.get` only; it does not mutate evidence.
 
 Verification should include:
 

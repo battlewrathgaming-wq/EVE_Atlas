@@ -18,12 +18,14 @@ Recent backend/UI-readiness work completed:
 - queue/watch status UI previews discovery queue selections through `queue.selection` and watch due/blocked/backoff/session/live-gate state through `watch.schedule`
 - session-armed watch executor is implemented as volatile app-session state with explicit Arm/Disarm controls, one due-watch dispatch per tick, and task-backed execution
 - assessment artifact persistence is implemented for deliberate assessment memory; executable evidence pruning remains blocked
+- Reports view can now save, list, and inspect deliberate assessment memory from a loaded actor report context without mutating evidence
 - `docs/gap/to-do` has no active presentation-validation gap; completed rigging items are in `docs/gap/complete`
 - Electron visual smoke now runs through `npm.cmd run smoke:electron`, writes screenshots/results under `F:\Projects\AURA-Atlas\.tmp\electron-visual-smoke`, and verifies startup creates no evidence/fetch runs
 - Electron was updated to `v42.2.0` so the app runtime supports the backend `node:sqlite` dependency
 - `verify:electron-runtime` now checks that Electron itself can use `node:sqlite`, closing the gap between desktop Node verification and Electron runtime behavior
 - first controlled evidence-creating UI path exists for `manual.discovery`, using scope validation, live gate preflight, explicit confirmation, and detached task execution
 - manual expansion UI exists in Queue / Watches with preflight, selected ref IDs, ESI call estimate, confirmation, and detached task execution
+- assessment workflow UI exists in Reports with loaded actor context, reason/summary requirement, score-reason guard, visible evidence/assessment boundary, and saved artifact detail inspection
 - controlled live operational smoke covered manual discovery and session-armed watch dispatch against a disposable DB
 - runtime process isolation has been reviewed and deliberately deferred; detached tasks remain acceptable for the next milestone
 - current recommended first future isolation target, if measured pressure appears, is SDE import / SDE sync-compare
@@ -94,6 +96,7 @@ Current implemented shell:
 - queue/watch pane exposes explicit session Arm/Disarm controls and executor state without arming on page load
 - actions pane exposes manual discovery as the first controlled execution path; it queues zKill refs only and routes execution through task services
 - frameless window controls for minimize, close, and always-on-top
+- reports pane can create assessment memory from actor report context through `assessment.create`, then list/inspect artifacts through `assessment.list` and `assessment.get`
 - native structured actor report response with text rendering retained for CLI/export
 - Electron visual smoke harness captures readiness, scopes, tasks, queue/watch, and reports screenshots from the real app window
 
@@ -177,7 +180,7 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 ## Not Yet Implemented
 
 - broader visual/product polish beyond the initial shell
-- additional renderer controls for manual expansion, metadata hydration, actor watch, and system/radius watch execution outside the session executor
+- additional renderer controls for metadata hydration, actor watch, and system/radius watch execution outside the session executor
 - executable retention/deprecation actions and assessment compaction
 - executable evidence compaction/pruning actions
 - true worker-thread/process isolation for CPU-heavy or synchronous SQLite-heavy tasks
@@ -223,5 +226,6 @@ Latest reviewed commits:
 - current handover outcome - tracked presentation-validation checklist complete; next milestone should choose operational workflow hardening rather than speculative runtime refactor
 - current live operational smoke - explicit manual discovery and session-armed watch executor smoke completed with one zKill call per successful path, zero ESI calls, and zero evidence writes in the selected one-hour ZTS-4D window
 - current manual expansion UI slice - explicit queue-ref expansion path added; report-scoped hydration UI deferred for separate metadata-only wording
+- current assessment report workflow slice - actor report context can create/list/inspect assessment artifacts through the service bridge with explicit boundary confirmation and no evidence mutation
 
 These commits move the earlier rigging gaps into an initial presentation checkpoint. The main remaining risk is no longer missing service vocabulary; it is preserving the service/evidence boundary while adding further executable UI actions and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.

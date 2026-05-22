@@ -454,6 +454,56 @@
               <div id="actor-raw-ids" class="detail-list"></div>
             </div>
           </div>
+          <div class="panel">
+            <h4>Assessment Memory</h4>
+            <p class="form-note" id="assessment-boundary">Assessment memory is a deliberate operator record over a loaded report context. It is not raw evidence and does not mutate stored killmails or activity events.</p>
+            <div id="assessment-context" class="detail-list"></div>
+            <div class="form-grid">
+              <label class="full-width">
+                <span>Assessment Reason</span>
+                <textarea id="assessment-reason" rows="3" placeholder="Why this entity should be remembered from this evidence sample"></textarea>
+              </label>
+              <label class="full-width">
+                <span>Assessment Summary</span>
+                <textarea id="assessment-summary" rows="3" placeholder="Optional concise operator-facing memory"></textarea>
+              </label>
+              <label>
+                <span>Interest Score</span>
+                <input id="assessment-interest-score" type="number" min="0" max="100" placeholder="0-100" />
+              </label>
+              <label>
+                <span>Priority Score</span>
+                <input id="assessment-priority-score" type="number" min="0" max="100" placeholder="0-100" />
+              </label>
+              <label>
+                <span>Impact Score</span>
+                <input id="assessment-impact-score" type="number" min="0" max="100" placeholder="0-100" />
+              </label>
+              <label>
+                <span>Confidence</span>
+                <input id="assessment-confidence" type="number" min="0" max="100" placeholder="0-100" />
+              </label>
+            </div>
+            <label class="checkbox-row">
+              <input id="assessment-confirm" type="checkbox" />
+              <span>I understand this saves assessment memory, not evidence, and does not change stored ESI killmails.</span>
+            </label>
+            <div class="action-row stacked-actions">
+              <button class="primary-action" type="button" id="save-assessment-artifact">Save Assessment Memory</button>
+              <button class="secondary-action" type="button" id="refresh-assessment-artifacts">Refresh Saved Assessments</button>
+            </div>
+            <div id="assessment-status" class="detail-list"></div>
+          </div>
+          <div class="report-grid">
+            <div class="panel">
+              <h4>Saved Assessments</h4>
+              <div id="assessment-artifact-list" class="task-list"></div>
+            </div>
+            <div class="panel">
+              <h4>Assessment Detail</h4>
+              <div id="assessment-artifact-detail" class="detail-list"></div>
+            </div>
+          </div>
           <details class="panel">
             <summary>Text Export</summary>
             <pre class="report-output" id="report-output">No report loaded.</pre>

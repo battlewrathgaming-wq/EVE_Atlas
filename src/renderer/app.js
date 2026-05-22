@@ -10,6 +10,10 @@ const state = {
   tasks: [],
   selectedTaskId: null,
   selectedTask: null,
+  actorReport: null,
+  actorReportRequest: null,
+  assessmentArtifacts: [],
+  selectedAssessmentArtifact: null,
   window: {
     alwaysOnTop: false
   }
@@ -102,6 +106,20 @@ const els = {
   actorObservations: document.querySelector('#actor-observations'),
   actorWarnings: document.querySelector('#actor-warnings'),
   actorRawIds: document.querySelector('#actor-raw-ids'),
+  assessmentBoundary: document.querySelector('#assessment-boundary'),
+  assessmentReason: document.querySelector('#assessment-reason'),
+  assessmentSummary: document.querySelector('#assessment-summary'),
+  assessmentInterestScore: document.querySelector('#assessment-interest-score'),
+  assessmentPriorityScore: document.querySelector('#assessment-priority-score'),
+  assessmentImpactScore: document.querySelector('#assessment-impact-score'),
+  assessmentConfidence: document.querySelector('#assessment-confidence'),
+  assessmentConfirm: document.querySelector('#assessment-confirm'),
+  saveAssessmentArtifact: document.querySelector('#save-assessment-artifact'),
+  refreshAssessmentArtifacts: document.querySelector('#refresh-assessment-artifacts'),
+  assessmentContext: document.querySelector('#assessment-context'),
+  assessmentStatus: document.querySelector('#assessment-status'),
+  assessmentArtifactList: document.querySelector('#assessment-artifact-list'),
+  assessmentArtifactDetail: document.querySelector('#assessment-artifact-detail'),
   loadQueueReport: document.querySelector('#load-queue-report'),
   reportOutput: document.querySelector('#report-output'),
   pinWindow: document.querySelector('#pin-window'),
@@ -127,6 +145,7 @@ async function init() {
     renderWindowState();
     setServiceState(`${state.commands.length} services`);
     bindEvents();
+    renderAssessmentContext();
     await Promise.all([
       loadReadiness(),
       loadScopeDefaults(),
@@ -134,6 +153,7 @@ async function init() {
       loadWatchSchedule(),
       loadWatchExecutorStatus(),
       loadTasks(),
+      loadAssessmentArtifacts(),
       loadQueueReport()
     ]);
   } catch (error) {
@@ -160,6 +180,8 @@ function bindEvents() {
   els.preflightManualDiscovery.addEventListener('click', preflightManualDiscovery);
   els.runManualDiscovery.addEventListener('click', runManualDiscovery);
   els.loadActorReport.addEventListener('click', loadActorReport);
+  els.saveAssessmentArtifact.addEventListener('click', saveAssessmentArtifact);
+  els.refreshAssessmentArtifacts.addEventListener('click', loadAssessmentArtifacts);
   els.loadQueueReport.addEventListener('click', loadQueueReport);
   els.pinWindow.addEventListener('click', toggleAlwaysOnTop);
   els.minimizeWindow.addEventListener('click', () => windowBridge.minimize());
@@ -746,7 +768,9 @@ async function loadQueueReport() {
 async function loadActorReport() {
   setBusy(els.loadActorReport, true);
   try {
-    const report = await service.invoke('report.actor', actorReportRequest());
+    const request = actorReportRequest();
+    const report = await service.invoke('report.actor', request);
+    state.actorReportRequest = request;
     renderActorReport(report);
   } catch (error) {
     renderError(els.actorEvidence, error);
@@ -778,6 +802,7 @@ function actorReportRequest() {
 }
 
 function renderActorReport(report) {
+  state.actorReport = report;
   els.reportOutput.textContent = report.text || 'No text export returned.';
   renderRows(els.actorEvidence, [
     ['Report Type', report.report_type || 'actor'],
@@ -793,6 +818,212 @@ function renderActorReport(report) {
   renderObservationSections(report.observations?.sections || []);
   renderWarnings(report.warnings || []);
   renderRawIds(report.raw_ids || {});
+  renderAssessmentContext();
+}
+
+function renderAssessmentContext() {
+  const report = state.actorReport;
+  if (!report) {
+    renderRows(els.assessmentContext, [
+      ['Context', 'Load an actor report before saving assessment memory.'],
+      ['Boundary', 'Assessment artifacts are memory, not raw evidence.']
+    ]);
+    return;
+  }
+  const actor = report.scope?.actor || {};
+  const counts = report.evidence_basis?.evidence_range || {};
+  renderRows(els.assessmentContext, [
+    ['Actor', actorLabel(report)],
+    ['Evidence Window', report.scope?.evidence_window?.label || 'unknown'],
+    ['Sample Status', report.evidence_basis?.sample_status || 'unknown'],
+    ['Killmails', counts.killmail_count ?? 0],
+    ['Activity Events', counts.activity_event_count ?? 0],
+    ['Boundary', 'This records assessment memory over the loaded report context; it does not change evidence.']
+  ]);
+}
+
+async function saveAssessmentArtifact() {
+  setBusy(els.saveAssessmentArtifact, true);
+  try {
+    if (!state.actorReport) {
+      throw new Error('Load an actor report before saving assessment memory');
+    }
+    if (!els.assessmentConfirm.checked) {
+      throw new Error('Assessment save requires the boundary confirmation checkbox');
+    }
+    const payload = assessmentArtifactPayload();
+    const artifact = await service.invoke('assessment.create', payload);
+    renderRows(els.assessmentStatus, [
+      ['Saved Artifact', artifact.artifact_id],
+      ['Entity', artifact.entity_name ? `${artifact.entity_name} [${artifact.entity_type}: ${artifact.entity_id}]` : `${artifact.entity_type}:${artifact.entity_id}`],
+      ['Boundary', artifact.boundary || 'assessment artifacts are assessment memory, not evidence']
+    ]);
+    clearAssessmentInputs();
+    await loadAssessmentArtifacts();
+    await loadAssessmentArtifactDetail(artifact.artifact_id);
+  } catch (error) {
+    renderError(els.assessmentStatus, error);
+  } finally {
+    setBusy(els.saveAssessmentArtifact, false);
+  }
+}
+
+function assessmentArtifactPayload() {
+  const report = state.actorReport;
+  const actor = report.scope?.actor || {};
+  const assessmentReason = els.assessmentReason.value.trim();
+  const assessmentSummary = els.assessmentSummary.value.trim();
+  const scores = {
+    interestScore: numberOrUndefined(els.assessmentInterestScore.value),
+    priorityScore: numberOrUndefined(els.assessmentPriorityScore.value),
+    impactScore: numberOrUndefined(els.assessmentImpactScore.value),
+    confidence: numberOrUndefined(els.assessmentConfidence.value)
+  };
+  const hasScore = Object.values(scores).some((value) => value !== undefined);
+  if (!assessmentReason && !assessmentSummary) {
+    throw new Error('Assessment requires a reason or summary');
+  }
+  if (hasScore && !assessmentReason) {
+    throw new Error('Score fields require an assessment reason');
+  }
+  return cleanObject({
+    artifactType: 'entity_interest',
+    entityType: actor.entity_type,
+    entityId: actor.entity_id,
+    entityName: actor.entity_name,
+    interestScore: scores.interestScore,
+    priorityScore: scores.priorityScore,
+    impactScore: scores.impactScore,
+    confidence: scores.confidence,
+    assessmentReason,
+    assessmentSummary,
+    evidenceWindowStart: report.scope?.evidence_window?.start || report.evidence_basis?.evidence_range?.earliest,
+    evidenceWindowEnd: report.scope?.evidence_window?.end || report.evidence_basis?.evidence_range?.latest,
+    evidenceScopeType: 'actor',
+    evidenceScope: report.scope,
+    sourceReportType: 'actor',
+    sourceReportParameters: state.actorReportRequest,
+    sourceRunIds: report.collection_provenance?.collection?.run_ids || [],
+    sampleKillmailIds: report.raw_ids?.killmail_ids || [],
+    appearanceCount: report.evidence_basis?.evidence_range?.activity_event_count ?? 0,
+    attackerAppearanceCount: roleCount(report, 'attacker'),
+    victimAppearanceCount: roleCount(report, 'victim'),
+    systemsObserved: observedRows(report, 'Observed Systems'),
+    regionsObserved: uniqueObservedValues(observedRows(report, 'Observed Systems'), 'Region'),
+    shipsObserved: observedRows(report, 'Observed Ships'),
+    assessedBy: 'local-operator'
+  });
+}
+
+function roleCount(report, role) {
+  const section = observationSectionByTitle(report, 'Actor Role Split');
+  const row = (section?.rows || []).find((entry) => String(entry.values?.Role || '').toLowerCase() === role);
+  return Number(row?.values?.Events) || 0;
+}
+
+function observedRows(report, title) {
+  const section = observationSectionByTitle(report, title);
+  return (section?.rows || []).slice(0, 12).map((row) => row.values || row.raw || row);
+}
+
+function uniqueObservedValues(rows, key) {
+  return [...new Set(rows.map((row) => row[key]).filter(Boolean))];
+}
+
+function observationSectionByTitle(report, title) {
+  return (report.observations?.sections || []).find((section) => section.title === title || section.name === title);
+}
+
+function clearAssessmentInputs() {
+  els.assessmentReason.value = '';
+  els.assessmentSummary.value = '';
+  els.assessmentInterestScore.value = '';
+  els.assessmentPriorityScore.value = '';
+  els.assessmentImpactScore.value = '';
+  els.assessmentConfidence.value = '';
+  els.assessmentConfirm.checked = false;
+}
+
+async function loadAssessmentArtifacts() {
+  setBusy(els.refreshAssessmentArtifacts, true);
+  try {
+    const filter = state.actorReport?.scope?.actor
+      ? {
+        entityType: state.actorReport.scope.actor.entity_type,
+        entityId: state.actorReport.scope.actor.entity_id,
+        limit: 12
+      }
+      : { limit: 12 };
+    const result = await service.invoke('assessment.list', filter);
+    state.assessmentArtifacts = result.artifacts || [];
+    renderAssessmentArtifacts();
+  } catch (error) {
+    renderError(els.assessmentArtifactList, error);
+  } finally {
+    setBusy(els.refreshAssessmentArtifacts, false);
+  }
+}
+
+function renderAssessmentArtifacts() {
+  els.assessmentArtifactList.innerHTML = '';
+  if (!state.assessmentArtifacts.length) {
+    els.assessmentArtifactList.textContent = 'No assessment artifacts saved for the current view.';
+    renderRows(els.assessmentArtifactDetail, [
+      ['Detail', 'Select a saved assessment artifact to inspect it.'],
+      ['Boundary', 'Assessment memory is separate from evidence.']
+    ]);
+    return;
+  }
+  state.assessmentArtifacts.forEach((artifact) => {
+    const item = document.createElement('button');
+    item.className = `task-item ${artifact.status || 'active'}`;
+    item.type = 'button';
+    item.innerHTML = [
+      `<strong>${escapeHtml(artifactLabel(artifact))}</strong>`,
+      `<span>${escapeHtml(artifact.artifact_type)} - ${escapeHtml(artifact.status)}</span>`,
+      `<small>${escapeHtml(artifact.updated_at || artifact.created_at || 'unknown time')}</small>`
+    ].join('');
+    item.addEventListener('click', () => loadAssessmentArtifactDetail(artifact.artifact_id));
+    els.assessmentArtifactList.appendChild(item);
+  });
+}
+
+async function loadAssessmentArtifactDetail(artifactId) {
+  try {
+    const artifact = await service.invoke('assessment.get', { artifactId });
+    state.selectedAssessmentArtifact = artifact;
+    renderRows(els.assessmentArtifactDetail, [
+      ['Artifact ID', artifact.artifact_id],
+      ['Entity', artifactLabel(artifact)],
+      ['Status', artifact.status],
+      ['Reason', artifact.assessment_reason || 'none'],
+      ['Summary', artifact.assessment_summary || 'none'],
+      ['Scores', scoreSummary(artifact.scores)],
+      ['Evidence Window', `${artifact.evidence_window?.start || 'unknown'} -> ${artifact.evidence_window?.end || 'unknown'}`],
+      ['Sample Killmails', artifact.sample_killmail_ids?.length ?? 0],
+      ['Appearances', artifact.counts?.appearances ?? 0],
+      ['Boundary', artifact.boundary || 'assessment artifacts are assessment memory, not evidence'],
+      ['Updated', artifact.updated_at || 'unknown']
+    ]);
+  } catch (error) {
+    renderError(els.assessmentArtifactDetail, error);
+  }
+}
+
+function artifactLabel(artifact) {
+  const label = artifact.entity_name || '[Resolve with ESI]';
+  return `${label} [${artifact.entity_type}: ${artifact.entity_id}]`;
+}
+
+function scoreSummary(scores = {}) {
+  return [
+    ['interest', scores.interest],
+    ['priority', scores.priority],
+    ['impact', scores.impact],
+    ['confidence', scores.confidence]
+  ].filter(([, value]) => value !== null && value !== undefined)
+    .map(([label, value]) => `${label}: ${value}`)
+    .join('; ') || 'none';
 }
 
 function actorLabel(report) {

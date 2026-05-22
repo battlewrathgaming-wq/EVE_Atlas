@@ -86,6 +86,14 @@ function main() {
   assert(htmlText.includes('actor-provenance'), 'report view should include actor provenance section');
   assert(htmlText.includes('actor-observations'), 'report view should include actor observations section');
   assert(htmlText.includes('actor-raw-ids'), 'report view should include actor raw IDs section');
+  assert(htmlText.includes('assessment-boundary'), 'report view should include assessment/evidence boundary text');
+  assert(htmlText.includes('assessment-reason'), 'assessment workflow should include reason input');
+  assert(htmlText.includes('assessment-summary'), 'assessment workflow should include summary input');
+  assert(htmlText.includes('assessment-interest-score'), 'assessment workflow should include score controls');
+  assert(htmlText.includes('assessment-confirm'), 'assessment workflow should require visible boundary confirmation');
+  assert(htmlText.includes('save-assessment-artifact'), 'assessment workflow should include explicit save action');
+  assert(htmlText.includes('assessment-artifact-list'), 'assessment workflow should include saved artifact list');
+  assert(htmlText.includes('assessment-artifact-detail'), 'assessment workflow should include saved artifact detail');
 
   assert(rendererText.includes("service.invoke('app.readiness'"), 'renderer should call app.readiness through service bridge');
   assert(rendererText.includes("service.invoke('app.prepare'"), 'renderer should call app.prepare through service bridge');
@@ -122,6 +130,12 @@ function main() {
   assert(rendererText.includes('renderActorReport'), 'renderer should render native actor report response');
   assert(rendererText.includes('renderObservationSections'), 'renderer should render backend observation sections');
   assert(rendererText.includes('renderRawIds'), 'renderer should show raw IDs from backend response');
+  assert(rendererText.includes("service.invoke('assessment.create'"), 'renderer should create assessment artifacts through service bridge');
+  assert(rendererText.includes("service.invoke('assessment.list'"), 'renderer should list assessment artifacts through service bridge');
+  assert(rendererText.includes("service.invoke('assessment.get'"), 'renderer should inspect assessment artifacts through service bridge');
+  assert(rendererText.includes('assessmentConfirm.checked'), 'assessment save should require visible boundary confirmation');
+  assert(rendererText.includes('assessmentArtifactPayload'), 'renderer should build assessment artifact payload from report context');
+  assert(rendererText.includes('Score fields require an assessment reason'), 'renderer should require reasons for score fields');
   assert(rendererText.includes("service.invoke('report.queue'"), 'renderer should call a report through service bridge');
   assert(rendererText.includes('service.list()'), 'renderer should read service command availability');
   assert(rendererText.includes('windowBridge.setAlwaysOnTop'), 'renderer should toggle always-on-top through preload bridge');
@@ -144,6 +158,7 @@ function main() {
   assert(styleText.includes('.status-badge'), 'renderer styles should define queue/watch status badges');
   assert(styleText.includes('.observation-table'), 'renderer styles should define actor observation tables');
   assert(styleText.includes('.form-grid'), 'renderer styles should define actor report controls');
+  assert(styleText.includes('.form-grid textarea'), 'renderer styles should define assessment text areas');
   assert(styleText.includes('.report-output'), 'renderer styles should define report output');
 
   const packageText = read(path.join(ROOT, 'package.json'));
