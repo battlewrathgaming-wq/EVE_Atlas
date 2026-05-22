@@ -22,6 +22,7 @@ The renderer currently has native structured presentation for:
 
 - actor evidence reports
 - radius evidence reports
+- local evidence corpus health in the Readiness view
 - queue/watch preview state
 - task/readiness/service status surfaces
 - manual discovery and manual expansion task actions
@@ -75,6 +76,8 @@ The controlled workflow check runs reports after mixed collection lanes have wri
 `report.actor`, `report.radius`, and queue report paths now return structured responses for renderer presentation while retaining text output for CLI/export where appropriate.
 
 `report.corpus_health` is now a read-only structured service response and `report:corpus-health` is available for CLI/export. It checks local SQLite corpus counts, integrity signals, warning groups, and operational freshness without parsing SDE zip files, calling zKill/ESI, or making assessment claims.
+
+The renderer exposes corpus health in the Readiness view as a local operational readiness surface. It uses the structured `report.corpus_health` response and does not parse report text or trigger live API work.
 
 ## Current Constraint
 

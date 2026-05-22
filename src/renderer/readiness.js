@@ -25,6 +25,18 @@ async function prepareApp() {
   }
 }
 
+async function loadCorpusHealth() {
+  setBusy(els.loadCorpusHealth, true);
+  try {
+    const report = await service.invoke('report.corpus_health');
+    renderCorpusHealth(report);
+  } catch (error) {
+    renderError(els.corpusHealthIntegrity, error);
+  } finally {
+    setBusy(els.loadCorpusHealth, false);
+  }
+}
+
 function renderReadiness(readiness) {
   els.readinessSummary.innerHTML = '';
   const cards = [
@@ -91,6 +103,63 @@ function renderReadiness(readiness) {
   }
   els.prepareApp.hidden = !readiness.warnings?.some((entry) => entry.code === 'RUNTIME_PATHS_MISSING');
   renderNextAction(readiness);
+}
+
+function renderCorpusHealth(report) {
+  const health = report.health || {};
+  const counts = health.counts || [];
+  const freshness = health.freshness || {};
+  renderRows(els.corpusHealthCounts, [
+    ['Classification', health.classification || 'read-only local corpus health; not observation and not assessment'],
+    ['Killmails', countValue(counts, 'killmails')],
+    ['Activity Events', countValue(counts, 'activity_events')],
+    ['Discovery Refs', countValue(counts, 'discovered_killmail_refs')],
+    ['Assessment Artifacts', countValue(counts, 'assessment_artifacts')],
+    ['API Logs', countValue(counts, 'api_request_logs')]
+  ]);
+  renderRows(els.corpusHealthFreshness, [
+    ['Latest Fetch Run', freshness.latest_fetch_run?.run_id || 'none'],
+    ['Fetch Status', freshness.latest_fetch_run?.status || 'none'],
+    ['Latest Evidence', freshness.latest_evidence_time || 'none'],
+    ['Latest Metadata Run', freshness.latest_metadata_run?.run_id || 'none'],
+    ['Topology Build', freshness.latest_sde_topology?.build_number || 'none'],
+    ['Inventory Build', freshness.latest_sde_inventory?.build_number || 'none'],
+    ['Boundary', 'Local SQLite only; no zKill, ESI, SDE zip parsing, observation, or assessment.']
+  ]);
+  renderCorpusIntegrity(health.integrity || []);
+  renderCorpusWarnings(health.warnings_by_type || []);
+}
+
+function renderCorpusIntegrity(rows) {
+  els.corpusHealthIntegrity.innerHTML = '';
+  if (!rows.length) {
+    els.corpusHealthIntegrity.textContent = 'No integrity checks returned.';
+    return;
+  }
+  rows.forEach((entry) => {
+    const row = document.createElement('div');
+    row.className = `message ${entry.status === 'attention' ? 'warning' : 'ready'}`;
+    row.innerHTML = `<span>${escapeHtml(entry.check)}</span><span>${escapeHtml(entry.count)} - ${escapeHtml(entry.status)}</span>`;
+    els.corpusHealthIntegrity.appendChild(row);
+  });
+}
+
+function renderCorpusWarnings(rows) {
+  els.corpusHealthWarnings.innerHTML = '';
+  if (!rows.length) {
+    els.corpusHealthWarnings.textContent = 'No data quality warnings grouped in the local corpus.';
+    return;
+  }
+  rows.forEach((entry) => {
+    const row = document.createElement('div');
+    row.className = 'message warning';
+    row.innerHTML = `<span>${escapeHtml(entry.warning_type)}</span><span>${escapeHtml(entry.count)} warnings; latest ${escapeHtml(entry.latest || 'unknown')}</span>`;
+    els.corpusHealthWarnings.appendChild(row);
+  });
+}
+
+function countValue(counts, area) {
+  return counts.find((row) => row.area === area)?.rows ?? 0;
 }
 
 function renderNextAction(readiness) {

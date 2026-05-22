@@ -67,6 +67,11 @@ function main() {
   assert(htmlText.includes('path-state'), 'readiness screen should include runtime path state');
   assert(htmlText.includes('topology-state'), 'readiness screen should include SDE topology state');
   assert(htmlText.includes('inventory-state'), 'readiness screen should include SDE inventory state');
+  assert(htmlText.includes('load-corpus-health'), 'readiness screen should include corpus health action');
+  assert(htmlText.includes('corpus-health-counts'), 'readiness screen should include corpus health counts');
+  assert(htmlText.includes('corpus-health-integrity'), 'readiness screen should include corpus health integrity checks');
+  assert(htmlText.includes('corpus-health-warnings'), 'readiness screen should include corpus health warning groups');
+  assert(htmlText.includes('not an observation report or assessment'), 'corpus health UI should distinguish readiness from observation and assessment');
   assert(htmlText.includes('view-tasks'), 'renderer should include tasks view');
   assert(htmlText.includes('task-detail'), 'task view should include task detail panel');
   assert(htmlText.includes('task-progress'), 'task view should include progress timeline');
@@ -126,6 +131,9 @@ function main() {
   assert(htmlText.includes('assessment-artifact-detail'), 'assessment workflow should include saved artifact detail');
 
   assert(rendererText.includes("service.invoke('app.readiness'"), 'renderer should call app.readiness through service bridge');
+  assert(rendererText.includes("service.invoke('report.corpus_health'"), 'renderer should call corpus health through service bridge');
+  assert(rendererText.includes('renderCorpusHealth'), 'renderer should render structured corpus health response');
+  assert(rendererText.includes('Local SQLite only; no zKill, ESI, SDE zip parsing, observation, or assessment.'), 'corpus health rendering should state local/no-live/no-assessment boundary');
   assert(rendererText.includes("service.invoke('app.prepare'"), 'renderer should call app.prepare through service bridge');
   assert(rendererText.includes("service.invoke('scope.defaults'"), 'renderer should load scope defaults through service bridge');
   assert(rendererText.includes("service.invoke('scope.validate'"), 'renderer should validate scope through service bridge');

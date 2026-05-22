@@ -83,6 +83,27 @@
             <h4>Backend Messages</h4>
             <div id="readiness-messages" class="message-list"></div>
           </div>
+          <div class="panel">
+            <div class="task-detail-heading">
+              <h4>Evidence Corpus Health</h4>
+              <button class="secondary-action" type="button" id="load-corpus-health">Load Corpus Health</button>
+            </div>
+            <p class="form-note">Corpus health is local database readiness. It is not an observation report or assessment, and it does not call live APIs.</p>
+            <div class="report-grid">
+              <div>
+                <h4>Core Counts</h4>
+                <div id="corpus-health-counts" class="detail-list"></div>
+              </div>
+              <div>
+                <h4>Operational Freshness</h4>
+                <div id="corpus-health-freshness" class="detail-list"></div>
+              </div>
+            </div>
+            <h4 class="subheading">Integrity Checks</h4>
+            <div id="corpus-health-integrity" class="message-list"></div>
+            <h4 class="subheading">Warning Groups</h4>
+            <div id="corpus-health-warnings" class="message-list"></div>
+          </div>
         </section>
 
         <section class="view" id="view-scopes" aria-labelledby="scopes-title">

@@ -34,6 +34,11 @@ const els = {
   topologyState: document.querySelector('#topology-state'),
   inventoryState: document.querySelector('#inventory-state'),
   readinessMessages: document.querySelector('#readiness-messages'),
+  loadCorpusHealth: document.querySelector('#load-corpus-health'),
+  corpusHealthCounts: document.querySelector('#corpus-health-counts'),
+  corpusHealthFreshness: document.querySelector('#corpus-health-freshness'),
+  corpusHealthIntegrity: document.querySelector('#corpus-health-integrity'),
+  corpusHealthWarnings: document.querySelector('#corpus-health-warnings'),
   prepareApp: document.querySelector('#prepare-app'),
   refreshReadiness: document.querySelector('#refresh-readiness'),
   validateScope: document.querySelector('#validate-scope'),
@@ -202,6 +207,7 @@ function bindEvents() {
     item.addEventListener('click', () => selectView(item.dataset.view));
   });
   els.refreshReadiness.addEventListener('click', loadReadiness);
+  els.loadCorpusHealth.addEventListener('click', loadCorpusHealth);
   els.prepareApp.addEventListener('click', prepareApp);
   els.validateScope.addEventListener('click', validateScopeInput);
   els.refreshTasks.addEventListener('click', loadTasks);
