@@ -48,10 +48,11 @@ class HttpClient {
         });
 
         if (response.ok) {
-          this.log({ provider, endpoint, method, statusCode: response.status, durationMs: Date.now() - started, retryCount });
           const text = await response.text();
+          const data = parseJsonResponse(text, provider, endpoint);
+          this.log({ provider, endpoint, method, statusCode: response.status, durationMs: Date.now() - started, retryCount });
           requestSignal.cleanup();
-          return text ? JSON.parse(text) : null;
+          return data;
         }
 
         if (RETRY_STATUSES.has(response.status) && attempt < this.maxAttempts - 1) {
@@ -206,10 +207,32 @@ function normalizeRequestError(error, requestSignal) {
       error: abortError('HTTP_CANCELLED', 'HTTP request cancelled')
     };
   }
+  if (error?.nonRetryable) {
+    return {
+      nonRetryable: true,
+      error
+    };
+  }
   return {
     nonRetryable: false,
     error
   };
+}
+
+function parseJsonResponse(text, provider, endpoint) {
+  if (!text) {
+    return null;
+  }
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    const wrapped = new Error(`${provider} returned invalid JSON for ${endpoint}`);
+    wrapped.code = 'HTTP_INVALID_JSON';
+    wrapped.name = 'SyntaxError';
+    wrapped.cause = error;
+    wrapped.nonRetryable = true;
+    throw wrapped;
+  }
 }
 
 function abortError(code, message) {
@@ -221,5 +244,6 @@ function abortError(code, message) {
 
 module.exports = {
   HttpClient,
-  DEFAULT_TIMEOUT_MS
+  DEFAULT_TIMEOUT_MS,
+  parseJsonResponse
 };

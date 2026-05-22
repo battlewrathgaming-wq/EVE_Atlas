@@ -26,6 +26,7 @@ const GROUPS = {
     'verify:watch-executor',
     'verify:mutating-services',
     'verify:background-execution',
+    'verify:http-boundaries',
     'verify:http-timeouts',
     'verify:fixture',
     'verify:idempotent',

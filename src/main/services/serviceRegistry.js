@@ -1,5 +1,5 @@
 const { buildAppReadiness, prepareAppRuntimePaths } = require('./appReadinessService');
-const { getLiveApiGateState } = require('./liveApiGateService');
+const { actionGate, getLiveApiGateState } = require('./liveApiGateService');
 const {
   runActorWatchService,
   runAssessmentCreateService,
@@ -87,7 +87,7 @@ const COMMANDS = {
   'sde.build-lookups': {
     classification: 'exclusive',
     description: 'Download or read SDE JSONL source, build local lookup tables, then remove source files by default',
-    handler: ({ db, payload }) => buildSdeLookupTables(db, payload)
+    handler: ({ db, payload, signal }) => runSdeLookupBuildCommand(db, payload, { signal })
   },
   'watch.create': {
     classification: 'metadata-only',
@@ -255,6 +255,7 @@ function listServiceCommands() {
 }
 
 async function invokeServiceCommand(command, payload = {}, context = {}) {
+  validateServiceInvokeEnvelope({ command, payload });
   const definition = COMMANDS[command];
   if (!definition) {
     const error = new Error(`Unknown service command: ${command}`);
@@ -296,18 +297,73 @@ function registerIpcServiceHandlers(ipcMain, contextProvider) {
 
   ipcMain.handle('atlas:service:list', () => listServiceCommands());
   ipcMain.handle('atlas:service:invoke', async (_event, request) => {
-    const command = request?.command;
-    const payload = request?.payload || {};
+    const envelope = validateServiceInvokeEnvelope(request);
+    const command = envelope.command;
+    const payload = envelope.payload;
     return invokeServiceCommand(command, payload, {
       ...contextProvider(),
-      asTask: request?.asTask === true,
-      detachedTask: request?.detachedTask === true || request?.background === true
+      asTask: envelope.asTask,
+      detachedTask: envelope.detachedTask || envelope.background
     });
   });
+}
+
+function validateServiceInvokeEnvelope(request = {}) {
+  if (!request || typeof request !== 'object' || Array.isArray(request)) {
+    const error = new Error('Service invoke request must be an object envelope');
+    error.code = 'SERVICE_ENVELOPE_INVALID';
+    throw error;
+  }
+  if (!request.command || typeof request.command !== 'string') {
+    const error = new Error('Service invoke request requires a string command');
+    error.code = 'SERVICE_COMMAND_INVALID';
+    throw error;
+  }
+  const payload = request.payload === undefined ? {} : request.payload;
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+    const error = new Error('Service invoke payload must be an object');
+    error.code = 'SERVICE_PAYLOAD_INVALID';
+    throw error;
+  }
+  for (const flag of ['asTask', 'detachedTask', 'background']) {
+    if (request[flag] !== undefined && typeof request[flag] !== 'boolean') {
+      const error = new Error(`Service invoke ${flag} flag must be boolean`);
+      error.code = 'SERVICE_ENVELOPE_INVALID';
+      throw error;
+    }
+  }
+  return {
+    command: request.command,
+    payload,
+    asTask: request.asTask === true,
+    detachedTask: request.detachedTask === true,
+    background: request.background === true
+  };
+}
+
+function runSdeLookupBuildCommand(db, payload = {}, context = {}) {
+  const hasLocalSource = Boolean(payload.sourcePath || payload.source_path || payload.path);
+  const normalizedPayload = {
+    ...payload,
+    sourcePath: payload.sourcePath || payload.source_path || payload.path || null,
+    signal: context.signal || payload.signal
+  };
+  if (!hasLocalSource) {
+    const gate = actionGate('sde.build-lookups', payload);
+    if (!gate.allowed) {
+      const blocker = gate.blockers[0];
+      const error = new Error(blocker?.message || 'SDE lookup download requires explicit live API enablement');
+      error.code = blocker?.code || 'LIVE_API_DISABLED';
+      error.details = gate;
+      throw error;
+    }
+  }
+  return buildSdeLookupTables(db, normalizedPayload);
 }
 
 module.exports = {
   listServiceCommands,
   invokeServiceCommand,
-  registerIpcServiceHandlers
+  registerIpcServiceHandlers,
+  validateServiceInvokeEnvelope
 };

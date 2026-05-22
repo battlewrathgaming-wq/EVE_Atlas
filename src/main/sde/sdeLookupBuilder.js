@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const https = require('node:https');
+const { validateEndpointUrl } = require('../api/endpointPolicy');
 const { SdeTopologyImporter } = require('./sdeImporter');
 const { SdeInventoryImporter } = require('./sdeInventoryImporter');
 const { auraTempRoot, projectRoot } = require('../util/tempPaths');
@@ -28,7 +29,11 @@ async function buildSdeLookupTables(db, options = {}) {
   let lastModified = options.lastModified || null;
   let latestMetadataChecksum = options.latestMetadataChecksum || null;
   let downloaded = false;
-  const download = options.downloadFile || downloadFile;
+  const download = options.downloadFile || ((url, destination, downloadOptions = {}) => downloadFile(url, destination, {
+    signal: options.signal,
+    timeoutMs: options.timeoutMs,
+    ...downloadOptions
+  }));
   const TopologyImporter = options.TopologyImporter || SdeTopologyImporter;
   const InventoryImporter = options.InventoryImporter || SdeInventoryImporter;
 
@@ -39,7 +44,9 @@ async function buildSdeLookupTables(db, options = {}) {
       buildNumber = buildNumber || buildNumberFromFilename(sourcePath);
     } else {
       const latestPath = path.join(workDir, 'latest.jsonl');
-      const latest = await download(LATEST_METADATA_URL, latestPath);
+      const latest = await download(LATEST_METADATA_URL, latestPath, {
+        maxBytes: options.maxLatestBytes || 1024 * 1024
+      });
       latestMetadataChecksum = latest.checksum;
       buildNumber = buildNumber || await readLatestBuildNumber(latestPath);
       sourceUrl = buildNumber
@@ -48,7 +55,9 @@ async function buildSdeLookupTables(db, options = {}) {
       sourcePath = path.join(workDir, buildNumber
         ? `eve-online-static-data-${buildNumber}-jsonl.zip`
         : 'eve-online-static-data-latest-jsonl.zip');
-      const zipDownload = await download(sourceUrl, sourcePath);
+      const zipDownload = await download(sourceUrl, sourcePath, {
+        maxBytes: options.maxZipBytes || 2 * 1024 * 1024 * 1024
+      });
       etag = zipDownload.etag || null;
       lastModified = zipDownload.lastModified || null;
       downloaded = true;
@@ -187,10 +196,17 @@ function assertProjectLocalPath(targetPath, label) {
   }
 }
 
-function downloadFile(url, destination, redirectCount = 0) {
+function downloadFile(url, destination, options = {}) {
+  const redirectCount = options.redirectCount || 0;
   return new Promise((resolve, reject) => {
     if (redirectCount > 5) {
       reject(new Error(`Too many redirects while downloading ${url}`));
+      return;
+    }
+    try {
+      validateEndpointUrl(url, 'sde_lookup_download');
+    } catch (error) {
+      reject(error);
       return;
     }
 
@@ -207,7 +223,10 @@ function downloadFile(url, destination, redirectCount = 0) {
           return;
         }
         const redirected = new URL(location, url).toString();
-        downloadFile(redirected, destination, redirectCount + 1).then(resolve, reject);
+        downloadFile(redirected, destination, {
+          ...options,
+          redirectCount: redirectCount + 1
+        }).then(resolve, reject);
         return;
       }
 
@@ -217,7 +236,29 @@ function downloadFile(url, destination, redirectCount = 0) {
         return;
       }
 
+      const maxBytes = Number(options.maxBytes || 0);
+      const contentLength = Number(response.headers['content-length']);
+      if (maxBytes > 0 && Number.isFinite(contentLength) && contentLength > maxBytes) {
+        response.resume();
+        const error = new Error(`SDE download exceeded maximum byte size before processing: ${contentLength} > ${maxBytes}`);
+        error.code = 'SDE_DOWNLOAD_TOO_LARGE';
+        reject(error);
+        return;
+      }
+
       const file = fs.createWriteStream(destination);
+      let receivedBytes = 0;
+      response.on('data', (chunk) => {
+        receivedBytes += chunk.length;
+        if (maxBytes > 0 && receivedBytes > maxBytes) {
+          response.destroy();
+          file.destroy();
+          fs.rmSync(destination, { force: true });
+          const error = new Error(`SDE download exceeded maximum byte size: ${receivedBytes} > ${maxBytes}`);
+          error.code = 'SDE_DOWNLOAD_TOO_LARGE';
+          reject(error);
+        }
+      });
       response.pipe(file);
       file.on('finish', () => {
         file.close(() => {
@@ -232,6 +273,28 @@ function downloadFile(url, destination, redirectCount = 0) {
       });
       file.on('error', reject);
     });
+    const timeoutMs = Number(options.timeoutMs || 30000);
+    request.setTimeout(timeoutMs, () => {
+      request.destroy();
+      const error = new Error('SDE download timed out');
+      error.code = 'SDE_DOWNLOAD_TIMEOUT';
+      reject(error);
+    });
+    if (options.signal) {
+      if (options.signal.aborted) {
+        request.destroy();
+        const error = new Error('SDE download cancelled');
+        error.code = 'SDE_DOWNLOAD_CANCELLED';
+        reject(error);
+        return;
+      }
+      options.signal.addEventListener('abort', () => {
+        request.destroy();
+        const error = new Error('SDE download cancelled');
+        error.code = 'SDE_DOWNLOAD_CANCELLED';
+        reject(error);
+      }, { once: true });
+    }
     request.on('error', reject);
   });
 }
@@ -247,5 +310,6 @@ module.exports = {
   buildSdeLookupTables,
   lookupReadiness,
   LATEST_METADATA_URL,
-  LATEST_JSONL_ZIP_URL
+  LATEST_JSONL_ZIP_URL,
+  downloadFile
 };

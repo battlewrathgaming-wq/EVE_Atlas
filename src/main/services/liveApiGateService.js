@@ -46,6 +46,17 @@ const ACTIONS = {
     mode: 'local-only',
     providers: [],
     description: 'Import SDE metadata from local directory or zip'
+  },
+  'sde.build-lookups': {
+    mode: 'live-required',
+    providers: ['ccp-sde'],
+    description: 'Download official SDE source and rebuild local lookup tables when no local source path is supplied',
+    estimate: () => ({
+      zkill: 0,
+      esi: 0,
+      sde: 2,
+      total: 2
+    })
   }
 };
 

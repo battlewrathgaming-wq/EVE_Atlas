@@ -383,3 +383,4 @@ Completed:
 - `passive-surface-side-effect-sweep.md`
 - `sde-lookup-builder-failure-modes.md`
 - `partial-failure-and-transaction-integrity.md`
+- `http-endpoint-client-hardening.md`
