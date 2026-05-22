@@ -167,6 +167,8 @@ CREATE TABLE IF NOT EXISTS sde_inventory_imports (
   build_number TEXT,
   variant TEXT NOT NULL,
   source_url TEXT,
+  etag TEXT,
+  last_modified TEXT,
   imported_at TEXT NOT NULL,
   file_checksum TEXT,
   categories_count INTEGER NOT NULL DEFAULT 0,

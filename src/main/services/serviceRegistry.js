@@ -24,6 +24,7 @@ const {
 const { buildQueueExpansionSelection } = require('./queueSelectionService');
 const { buildReportResponse } = require('./reportResponseService');
 const { buildRetentionPreflight, listRetentionActions } = require('./retentionActionService');
+const { buildSdeLookupTables } = require('../sde/sdeLookupBuilder');
 const {
   buildRuntimeDbSnapshotPreflight,
   createRuntimeDbSnapshot
@@ -82,6 +83,11 @@ const COMMANDS = {
     classification: 'exclusive',
     description: 'Import local SDE inventory/type metadata into SQLite lookup tables',
     handler: ({ db, payload }) => runSdeInventoryImportService(db, payload)
+  },
+  'sde.build-lookups': {
+    classification: 'exclusive',
+    description: 'Download or read SDE JSONL source, build local lookup tables, then remove source files by default',
+    handler: ({ db, payload }) => buildSdeLookupTables(db, payload)
   },
   'watch.create': {
     classification: 'metadata-only',

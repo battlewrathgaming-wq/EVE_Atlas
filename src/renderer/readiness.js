@@ -272,6 +272,13 @@ function nextActionFor(readiness) {
       body: 'Create the approved local runtime, cache, and SDE folders.'
     };
   }
+  if (readiness.warnings?.some((entry) => entry.code === 'SDE_LOOKUP_MISSING')) {
+    return {
+      kind: 'warning',
+      title: 'Build Local Lookup Tables',
+      body: 'Downloads the official EVE Static Data Export, imports the system topology and inventory type metadata Atlas needs, records source provenance, then removes the downloaded source files. Reports use the resulting local SQLite lookup tables only.'
+    };
+  }
   if (!readiness.checks?.topology_lookup_ready) {
     return {
       kind: 'warning',

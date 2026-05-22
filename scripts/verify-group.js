@@ -31,6 +31,7 @@ const GROUPS = {
   ],
   sde: [
     'verify:sde-fixture',
+    'verify:sde-build-lookups',
     'verify:radius',
     'verify:planner',
     'verify:system-resolution',

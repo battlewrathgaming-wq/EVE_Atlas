@@ -32,8 +32,13 @@ function applyCompatibilityMigrations(db) {
 
   ensureColumn(db, 'sde_imports', 'latest_metadata_checksum', 'TEXT');
   ensureColumn(db, 'sde_imports', 'changes_metadata_checksum', 'TEXT');
+  ensureColumn(db, 'sde_imports', 'etag', 'TEXT');
+  ensureColumn(db, 'sde_imports', 'last_modified', 'TEXT');
   ensureColumn(db, 'sde_imports', 'constellations_count', 'INTEGER NOT NULL DEFAULT 0');
   ensureColumn(db, 'sde_imports', 'regions_count', 'INTEGER NOT NULL DEFAULT 0');
+
+  ensureColumn(db, 'sde_inventory_imports', 'etag', 'TEXT');
+  ensureColumn(db, 'sde_inventory_imports', 'last_modified', 'TEXT');
 
   ensureColumn(db, 'solar_systems', 'constellation_id', 'INTEGER');
   ensureColumn(db, 'solar_systems', 'constellation_name', 'TEXT');

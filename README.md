@@ -76,6 +76,14 @@ Run the offline verification suite:
 npm.cmd run verify:all
 ```
 
+Build local SDE lookup tables if Readiness reports `SDE_LOOKUP_MISSING`:
+
+```powershell
+npm run sde:build-lookups
+```
+
+This explicit command downloads the official EVE SDE JSONL source into the configured `.tmp` SDE cache, imports Atlas lookup tables, records provenance, then removes the downloaded/extracted source files. Use `AURA_ATLAS_KEEP_SDE_SOURCE=1` only for debug inspection.
+
 Run the Electron smoke check:
 
 ```powershell
@@ -182,6 +190,7 @@ Discovery-only live work should call zKill only and queue refs. ESI expansion sh
 npm run dev
 npm.cmd run verify:all
 npm.cmd run smoke:electron
+npm run sde:build-lookups
 npm run report:corpus-health
 npm run snapshot:runtime-db
 npm run report:debug-trace

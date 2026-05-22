@@ -46,9 +46,9 @@ class SdeInventoryImporter {
       `),
       insertManifest: this.db.prepare(`
         INSERT INTO sde_inventory_imports (
-          build_number, variant, source_url, imported_at, file_checksum,
+          build_number, variant, source_url, etag, last_modified, imported_at, file_checksum,
           categories_count, groups_count, types_count, type_metadata_count
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `)
     };
   }
@@ -83,6 +83,8 @@ class SdeInventoryImporter {
       this.insertManifest({
         buildNumber: options.buildNumber || buildNumberFromFilename(inputPath),
         sourceUrl: options.sourceUrl || inputPath,
+        etag: options.etag || null,
+        lastModified: options.lastModified || null,
         fileChecksum: checksum,
         counts
       });
@@ -169,11 +171,13 @@ class SdeInventoryImporter {
     return { types, typeMetadata };
   }
 
-  insertManifest({ buildNumber, sourceUrl, fileChecksum, counts }) {
+  insertManifest({ buildNumber, sourceUrl, etag, lastModified, fileChecksum, counts }) {
     this.statements.insertManifest.run(
       buildNumber || null,
       'jsonl',
       sourceUrl,
+      etag || null,
+      lastModified || null,
       new Date().toISOString(),
       fileChecksum,
       counts.categories,

@@ -338,3 +338,11 @@ Completed:
 - Decide whether a reproducible demo DB is worth building now or whether fixture verification is enough.
 - Keep live trial instructions optional and gated.
 - Evidence pruning remains blocked.
+
+## Completed Local Lookup Readiness Item
+
+Completed:
+
+- `sde-build-local-lookup-tables.md`
+
+The implementation is recorded in `docs/gap/complete/sde-build-local-lookup-tables.md`. No active SDE lookup source-retention gap remains in this folder.

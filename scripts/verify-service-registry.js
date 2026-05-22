@@ -37,6 +37,7 @@ async function main() {
     const actorWatchCommand = commands.find((entry) => entry.command === 'actor.watch');
     const systemRadiusWatchCommand = commands.find((entry) => entry.command === 'system.radius.watch');
     const metadataHydrationCommand = commands.find((entry) => entry.command === 'metadata.hydration');
+    const sdeBuildLookupsCommand = commands.find((entry) => entry.command === 'sde.build-lookups');
     const watchCreateCommand = commands.find((entry) => entry.command === 'watch.create');
     const watchListCommand = commands.find((entry) => entry.command === 'watch.list');
     const watchScheduleCommand = commands.find((entry) => entry.command === 'watch.schedule');
@@ -76,6 +77,7 @@ async function main() {
     assert(actorWatchCommand?.classification === 'evidence-creating', 'actor.watch should be evidence-creating');
     assert(systemRadiusWatchCommand?.classification === 'evidence-creating', 'system.radius.watch should be evidence-creating');
     assert(metadataHydrationCommand?.classification === 'metadata-only', 'metadata.hydration should be metadata-only');
+    assert(sdeBuildLookupsCommand?.classification === 'exclusive', 'sde.build-lookups should be exclusive');
     assert(watchCreateCommand?.classification === 'metadata-only', 'watch.create should be metadata-only');
     assert(watchListCommand?.classification === 'read-only', 'watch.list should be read-only');
     assert(watchScheduleCommand?.classification === 'read-only', 'watch.schedule should be read-only');

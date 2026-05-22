@@ -28,8 +28,10 @@ function main() {
     assert(empty.checks.runtime_paths_ready === false, 'missing runtime paths should be reported as not ready');
     assert(empty.checks.topology_lookup_ready === false, 'empty DB should not have topology ready');
     assert(empty.checks.type_metadata_ready === false, 'empty DB should not have type metadata ready');
+    assert(empty.checks.sde_lookup_ready === false, 'empty DB should not have complete SDE lookup readiness');
     assert(empty.live_api.enabled === false, 'live API should default disabled');
     assertHasWarning(empty, 'RUNTIME_PATHS_MISSING');
+    assertHasWarning(empty, 'SDE_LOOKUP_MISSING');
     assertHasWarning(empty, 'SDE_TOPOLOGY_NOT_READY');
     assertHasWarning(empty, 'SDE_INVENTORY_NOT_READY');
     assertHasWarning(empty, 'LIVE_API_DISABLED');
@@ -52,6 +54,7 @@ function main() {
     assert(ready.checks.runtime_paths_ready === true, 'prepared runtime paths should be ready');
     assert(ready.checks.topology_lookup_ready === true, 'topology should be ready');
     assert(ready.checks.type_metadata_ready === true, 'type metadata should be ready');
+    assert(ready.checks.sde_lookup_ready === true, 'SDE lookup readiness should require topology and inventory');
     assert(ready.live_api.enabled === true, 'live API should reflect explicit gate');
     assert(ready.sde.topology.build_number === 'fixture-build', 'topology build should be reported');
     assert(ready.sde.inventory.build_number === 'fixture-build', 'inventory build should be reported');

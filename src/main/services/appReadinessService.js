@@ -29,6 +29,7 @@ function buildAppReadiness(db, options = {}) {
     live_api_enabled: process.env.AURA_ATLAS_LIVE_API === '1',
     user_agent_configured: typeof USER_AGENT === 'string' && USER_AGENT.trim().length > 0
   };
+  checks.sde_lookup_ready = checks.topology_lookup_ready && checks.type_metadata_ready;
   const blockers = blockersFor(checks);
   const warnings = warningsFor(checks, paths);
 
@@ -166,6 +167,12 @@ function blockersFor(checks) {
 
 function warningsFor(checks, paths) {
   const warnings = [];
+  if (!checks.topology_lookup_ready || !checks.type_metadata_ready) {
+    warnings.push(warning(
+      'SDE_LOOKUP_MISSING',
+      'Local SDE lookup tables are missing or incomplete. Atlas cannot reliably resolve systems, topology, ships, or typeIDs until lookup tables are built.'
+    ));
+  }
   if (!checks.topology_lookup_ready) {
     warnings.push(warning('SDE_TOPOLOGY_NOT_READY', 'Topology-dependent actions require SDE topology import'));
   }
