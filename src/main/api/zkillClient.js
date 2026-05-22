@@ -5,7 +5,7 @@ class ZKillDiscoveryClient {
     this.httpClient = httpClient;
   }
 
-  async discoverRefs({ targetType, targetId, pastSeconds, maxRefs = 100 }) {
+  async discoverRefs({ targetType, targetId, pastSeconds, maxRefs = 100, includePreview = false }) {
     const modifier = modifierForTarget(targetType);
     const endpoint = `${ZKILL_BASE_URL}/${modifier}/${targetId}/pastSeconds/${pastSeconds}/`;
     const data = await this.httpClient.json('zkill', endpoint);
@@ -24,7 +24,11 @@ class ZKillDiscoveryClient {
         continue;
       }
 
-      refs.push({ killmail_id: killmailId, hash });
+      refs.push({
+        killmail_id: killmailId,
+        hash,
+        ...(includePreview ? { preview: discoveryPreview(row) } : {})
+      });
       seen.add(key);
 
       if (refs.length >= maxRefs) {
@@ -34,6 +38,27 @@ class ZKillDiscoveryClient {
 
     return refs;
   }
+}
+
+function discoveryPreview(row) {
+  return {
+    killmail_time: row.killmail_time || null,
+    solar_system_id: row.solar_system_id || null,
+    victim: row.victim ? {
+      character_id: row.victim.character_id || null,
+      corporation_id: row.victim.corporation_id || null,
+      alliance_id: row.victim.alliance_id || null,
+      ship_type_id: row.victim.ship_type_id || null
+    } : null,
+    attacker_count: Array.isArray(row.attackers) ? row.attackers.length : null,
+    zkb: row.zkb ? {
+      totalValue: row.zkb.totalValue ?? null,
+      points: row.zkb.points ?? null,
+      npc: row.zkb.npc ?? null,
+      solo: row.zkb.solo ?? null,
+      awox: row.zkb.awox ?? null
+    } : null
+  };
 }
 
 function modifierForTarget(targetType) {
@@ -53,5 +78,6 @@ function modifierForTarget(targetType) {
 
 module.exports = {
   ZKillDiscoveryClient,
-  modifierForTarget
+  modifierForTarget,
+  discoveryPreview
 };

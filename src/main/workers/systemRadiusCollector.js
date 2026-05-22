@@ -179,7 +179,8 @@ async function discoverRefs(plannerOutput, zkillClient) {
         targetType: 'system',
         targetId: request.target_id,
         pastSeconds: request.past_seconds,
-        maxRefs: request.max_refs
+        maxRefs: request.max_refs,
+        includePreview: request.include_preview || false
       });
       if (!Array.isArray(refs)) {
         warnings.push(`zKill discovery for system ${request.target_id} returned a non-array response`);
@@ -236,7 +237,8 @@ function expansionCandidate(ref, sourceSystemId, priority) {
     priority,
     already_cached: false,
     selected_for_expansion: false,
-    skip_reason: null
+    skip_reason: null,
+    preview: ref?.preview || null
   };
 }
 

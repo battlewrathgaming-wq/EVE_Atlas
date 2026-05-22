@@ -249,6 +249,7 @@ CREATE TABLE IF NOT EXISTS discovered_killmail_refs (
   failure_count INTEGER NOT NULL DEFAULT 0,
   last_error TEXT,
   priority INTEGER NOT NULL DEFAULT 0,
+  preview_json TEXT,
   PRIMARY KEY (killmail_id, killmail_hash, discovered_by_type, discovered_by_id)
 );
 

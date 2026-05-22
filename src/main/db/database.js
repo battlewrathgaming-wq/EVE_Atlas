@@ -40,6 +40,8 @@ function applyCompatibilityMigrations(db) {
   ensureColumn(db, 'solar_systems', 'region_id', 'INTEGER');
   ensureColumn(db, 'solar_systems', 'region_name', 'TEXT');
   ensureColumn(db, 'solar_systems', 'security_status', 'REAL');
+
+  ensureColumn(db, 'discovered_killmail_refs', 'preview_json', 'TEXT');
 }
 
 function ensureColumn(db, tableName, columnName, definition) {

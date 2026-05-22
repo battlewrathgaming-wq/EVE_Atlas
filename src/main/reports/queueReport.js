@@ -6,6 +6,7 @@ const {
 } = require('./reportUtils');
 
 const VALID_STATUSES = new Set(['pending', 'expanded', 'cached', 'failed', 'superseded']);
+const VALID_QUEUE_TYPES = new Set(['actor', 'system_radius', 'manual_actor', 'manual_system', 'manual_radius']);
 
 function buildQueueReport(db, options = {}) {
   const filter = queueFilter(options);
@@ -39,6 +40,7 @@ function buildQueueReport(db, options = {}) {
       { label: 'Hash', value: (row) => shortHash(row.killmail_hash) },
       { label: 'Source', value: (row) => sourceLabel(row) },
       { label: 'Priority', value: (row) => row.priority },
+      { label: 'At A Glance', value: previewLabel },
       { label: 'Discovered', value: (row) => row.discovered_at },
       { label: 'Last Seen Run', value: (row) => row.last_seen_run_id || 'none' },
       { label: 'Failures', value: (row) => row.failure_count },
@@ -50,11 +52,13 @@ function buildQueueReport(db, options = {}) {
       { label: 'Source', value: (row) => sourceLabel(row) },
       { label: 'First Seen', value: (row) => row.discovered_at },
       { label: 'Last Seen', value: (row) => row.last_seen_at },
+      { label: 'At A Glance', value: previewLabel },
       { label: 'Expanded', value: (row) => row.expanded_at || '' },
       { label: 'Failed', value: (row) => row.failed_at || '' }
     ])),
     printSection('Evidence Boundary', [
       'Pending refs are not activity evidence.',
+      'At-a-glance values are zKill discovery preview metadata only.',
       'Reports derive observations only from expanded ESI killmails and normalized activity_events.',
       'ESI expansion should drain pending refs under cap before repeating discovery for the same scope.'
     ].join('\n'))
@@ -67,8 +71,8 @@ function queueFilter(options) {
   const status = options.status ? String(options.status).toLowerCase() : null;
   const limit = Number(options.limit || 10);
 
-  if (type && !['actor', 'system_radius'].includes(type)) {
-    throw new Error('Queue report type must be actor or system_radius');
+  if (type && !VALID_QUEUE_TYPES.has(type)) {
+    throw new Error(`Queue report type must be one of ${[...VALID_QUEUE_TYPES].join(', ')}`);
   }
   if (type && !id) {
     throw new Error('Queue report requires --id when --type is provided');
@@ -229,6 +233,38 @@ function shortHash(hash) {
     return text;
   }
   return `${text.slice(0, 12)}...`;
+}
+
+function previewLabel(row) {
+  const preview = parsePreview(row.preview_json);
+  if (!preview) {
+    return '';
+  }
+  const parts = [];
+  if (preview.killmail_time) {
+    parts.push(preview.killmail_time);
+  }
+  if (preview.victim?.ship_type_id) {
+    parts.push(`victim ship typeID ${preview.victim.ship_type_id}`);
+  }
+  if (preview.attacker_count !== null && preview.attacker_count !== undefined) {
+    parts.push(`${preview.attacker_count} attackers`);
+  }
+  if (preview.zkb?.totalValue !== null && preview.zkb?.totalValue !== undefined) {
+    parts.push(`zkill value ${Math.round(Number(preview.zkb.totalValue))}`);
+  }
+  return parts.join('; ');
+}
+
+function parsePreview(value) {
+  if (!value) {
+    return null;
+  }
+  try {
+    return JSON.parse(value);
+  } catch {
+    return null;
+  }
 }
 
 module.exports = {

@@ -108,12 +108,13 @@ class EvidenceRepository {
           killmail_id, killmail_hash, discovered_by_type, discovered_by_id,
           source_scope, source_system_id, source_actor_type, source_actor_id,
           discovered_at, first_seen_run_id, last_seen_run_id, last_seen_at,
-          status, priority
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          status, priority, preview_json
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(killmail_id, killmail_hash, discovered_by_type, discovered_by_id) DO UPDATE SET
           last_seen_run_id = excluded.last_seen_run_id,
           last_seen_at = excluded.last_seen_at,
           priority = excluded.priority,
+          preview_json = COALESCE(excluded.preview_json, discovered_killmail_refs.preview_json),
           status = CASE
             WHEN discovered_killmail_refs.status IN ('expanded', 'cached') THEN discovered_killmail_refs.status
             WHEN discovered_killmail_refs.status = 'failed' THEN discovered_killmail_refs.status
@@ -389,7 +390,8 @@ class EvidenceRepository {
         context.runId || null,
         timestamp,
         this.hasKillmail(candidate.killmail_id) ? 'cached' : 'pending',
-        candidate.priority || 0
+        candidate.priority || 0,
+        candidate.preview ? json(candidate.preview) : null
       );
       written += 1;
     }

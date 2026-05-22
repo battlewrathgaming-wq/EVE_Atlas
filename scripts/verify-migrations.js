@@ -19,6 +19,7 @@ function main() {
   assertColumn(db, 'solar_systems', 'region_id');
   assertColumn(db, 'solar_systems', 'region_name');
   assertColumn(db, 'solar_systems', 'security_status');
+  assertColumn(db, 'discovered_killmail_refs', 'preview_json');
   assertTable(db, 'metadata_runs');
   assertTable(db, 'regions');
   assertTable(db, 'constellations');
