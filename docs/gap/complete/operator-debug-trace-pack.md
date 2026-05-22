@@ -37,5 +37,20 @@ This is a supportability task, not a new intelligence feature.
 ## Dev Notes
 
 ```txt
+Completed 2026-05-22.
 
+Implemented report:debug-trace through scripts/operator-debug-trace-pack.js and
+src/main/support/operatorDebugTracePack.js.
+
+Trace packs are explicit local support/debug artifacts written under .tmp by default.
+They include recent fetch runs, API request logs, in-memory task history summaries,
+data quality warning groups/latest warnings, queue status, corpus health summary,
+app readiness summary, and smoke artifact paths.
+
+They do not call zKill or ESI, do not parse SDE zip files, do not create evidence,
+observations, or assessments, and exclude raw expanded ESI payloads by default.
+
+Added verify:operator-debug-trace to produce a fixture trace pack and confirm it is
+read-only for killmails, activity_events, discovered refs, fetch runs, API logs,
+warnings, and assessment artifacts.
 ```

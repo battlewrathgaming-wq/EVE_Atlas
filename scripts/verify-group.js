@@ -70,7 +70,8 @@ const GROUPS = {
     'verify:local-scale-smoke',
     'verify:actor-bulk',
     'verify:controlled-workflow',
-    'verify:operator-workflow'
+    'verify:operator-workflow',
+    'verify:operator-debug-trace'
   ]
 };
 
