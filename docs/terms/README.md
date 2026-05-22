@@ -10,6 +10,7 @@ Use this folder when a term becomes important enough that misunderstanding it co
 
 - `activity-event.md`
 - `collection-provenance.md`
+- `discovery-queue.md`
 - `entity-interest.md`
 - `evidence.md`
 - `evidence-report.md`
