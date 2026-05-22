@@ -51,4 +51,21 @@ Manual lane:
 - `verify:actor-watch`
 - `verify:manual-discovery`
 - `verify:db-integrity`
+- `verify:scope-controls`
+- `verify:controlled-workflow`
+- `verify:all`
 
+`verify:all` currently runs the offline verification set. Live smoke checks are intentionally separate and require `AURA_ATLAS_LIVE_API=1`.
+
+## Current Scope Controls
+
+User-facing scope defaults and validation now live in shared backend helpers.
+
+Current consumers include:
+
+- manual discovery CLI
+- manual expansion CLI
+- live actor watch runner
+- live system/radius watch runner
+
+This gives CLI, future IPC handlers, and future UI controls a common backend source for defaults and guardrails.

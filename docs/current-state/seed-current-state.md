@@ -37,6 +37,7 @@ Useful current-state documents include:
 - `current-reports.md`
 - `current-metadata-hydration.md`
 - `current-live-gates-and-storage-paths.md`
+- `current-ipc-ui-preparation.md`
 
 ## Known Implemented Building Blocks
 
@@ -56,6 +57,9 @@ At the time this seed was aligned, AURA Atlas includes:
 - metadata report hydrator
 - run/system/operator/radius reports
 - verification scripts for fixture, idempotency, SDE, radius, planner, collector, reports, hydration, and metadata lookup
+- shared scope validation/default helpers for CLI, future IPC, and future UI
+- controlled disposable DB workflow verification
+- explicit gated live smoke verification groups
 
 ## Current-State Vs Audit
 
@@ -76,4 +80,3 @@ Keep current-state documents:
 - implementation-grounded
 - linked to source files and scripts
 - clear about what is implemented versus not implemented
-

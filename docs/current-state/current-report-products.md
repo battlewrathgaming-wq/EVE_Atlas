@@ -50,4 +50,6 @@ They do not derive observations from:
 - `verify:actor-report`
 - `verify:corporation-report`
 - `verify:metadata-status`
+- `verify:controlled-workflow`
 
+The controlled workflow check runs reports after mixed collection lanes have written to the same disposable DB. This is the current pre-UI confidence check that reports can read stored evidence without depending on how evidence was discovered.

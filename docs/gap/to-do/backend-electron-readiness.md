@@ -19,7 +19,9 @@ Current evidence:
 
 ### Controlled Disposable DB Batch Test
 
-Need one realistic workflow test using a disposable DB under the project `.tmp` path.
+Status: Implemented
+
+One realistic workflow test now uses a disposable DB under the project `.tmp` path.
 
 Suggested flow:
 
@@ -39,11 +41,18 @@ Purpose:
 - catch cross-feature drift
 - provide a pre-UI confidence gate
 
+Current verification:
+
+- `verify:controlled-workflow`
+- included in `verify:all`
+
 ### Live Smoke Grouping
 
-Live scripts exist, but grouped gated live smoke commands are not yet formalized.
+Status: Implemented
 
-Potential commands:
+Grouped gated live smoke commands now exist.
+
+Current commands:
 
 - `verify:live-smoke`
 - `verify:live-actor-smoke`
@@ -102,15 +111,23 @@ Open questions:
 
 ### Shared Scope Validation Helpers
 
-User-facing scope rules are documented, but validation/default application is not yet centralized.
+Status: Implemented
 
-Needed:
+User-facing scope rules are documented and validation/default application is now centralized for current CLI/live runner paths.
+
+Current coverage:
 
 - shared defaults for manual discovery
 - shared defaults for actor watch
 - shared defaults for system/radius watch
 - consistent validation for lookback, refs, expansions, radius, max systems
-- single source used by CLI, future IPC, and UI
+- current CLI and live runners use shared helpers
+- future IPC and UI should use the same helpers
+
+Current verification:
+
+- `verify:scope-controls`
+- included in `verify:all`
 
 ## Related Documents
 

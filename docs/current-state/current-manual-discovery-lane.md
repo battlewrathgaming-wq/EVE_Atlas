@@ -41,10 +41,12 @@ Manual expansion:
 - respects max expansion cap
 - writes evidence through the existing ingestion pipeline
 
+Manual discovery and manual expansion now use shared scope validation/default helpers. This keeps the CLI path aligned with the future IPC/UI path.
+
 ## Current Verification
 
 - `verify:manual-discovery`
 - `verify:queue-report`
 - `verify:queue-preflight`
 - `verify:db-integrity`
-
+- `verify:controlled-workflow`
