@@ -143,7 +143,7 @@ This milestone should leave Atlas with:
 
 Recommended order:
 
-- `assessment-from-area-context-review.md`
+- No active Structured Area Review And Watch Authoring gap remains in this folder.
 
 Supporting audit:
 
@@ -161,3 +161,4 @@ Completed:
 - `watch-authoring-ui.md`
 - `report-scoped-metadata-hydration-expansion.md`
 - `local-scale-and-stability-smoke.md`
+- `assessment-from-area-context-review.md`

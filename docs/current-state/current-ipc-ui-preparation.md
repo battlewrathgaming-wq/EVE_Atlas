@@ -39,6 +39,7 @@ Recent backend/UI-readiness work completed:
 - watch authoring UI is implemented as metadata-only actor and system/radius intent creation, separate from collection execution
 - report-scoped metadata hydration now supports radius reports using report-relevant entity IDs and metadata-only runs
 - local scale/stability smoke is implemented with a disposable `.tmp` DB: 120 killmails, 840 activity events, 80 queued refs, actor/corporation/radius/queue/metadata reports all completed under 50 ms in the first measured run
+- assessment from area context has a no-build decision for this milestone: radius reports remain observation surfaces, and future assessment must be deliberate through a selected entity or explicit analyst note
 - assessment compaction writes are intentionally deferred; compaction remains read-only preview and evidence deletion remains blocked
 - runtime process isolation has been reviewed and deliberately deferred; detached tasks remain acceptable for the next milestone
 - current recommended first future isolation target, if measured pressure appears, is SDE import / SDE sync-compare
@@ -273,6 +274,7 @@ Latest reviewed commits:
 - current watch authoring UI - Queue / Watches pane can create actor and system/radius watches through `watch.create` without running collection
 - current report-scoped hydration expansion - radius reports can hydrate report-relevant entity IDs without evidence mutation or type-ID ESI lookup
 - current local scale/stability smoke - synthetic fixture corpus confirmed report paths remain fast and detached tasks remain acceptable; prepared-corpus Electron smoke is deferred because the current visual smoke contract intentionally asserts zero evidence at startup
+- current assessment from area context review - do not add broad radius assessment creation yet; future path should be selected-entity assessment or explicit area analyst note with source radius snapshot and boundary confirmation
 - current controlled actor workflow - fixture path proves actor scope to queued refs, ESI expansion, stored evidence, actor report, queue state, and optional assessment UI path without passive collection
 - current controlled area workflow - fixture path proves local topology radius scope to capped collection, stored evidence, radius report observations, and repeated/multi-system presence language without ownership/staging claims
 - current live expansion smoke - typed actor name resolved through ESI, zKill refs queued as possible evidence, one selected ref expanded through ESI, and reports confirmed partial sample boundaries
