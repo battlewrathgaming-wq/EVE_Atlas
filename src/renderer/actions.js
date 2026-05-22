@@ -41,6 +41,7 @@ function manualDiscoveryInput() {
   return cleanObject({
     scope,
     centerSystemId: numberOrUndefined(els.actionSystemId.value),
+    centerSystemName: textOrUndefined(els.actionSystemName.value),
     radiusJumps: numberOrUndefined(els.actionRadius.value),
     lookbackSeconds: numberOrUndefined(els.actionLookback.value),
     maxSystems: numberOrUndefined(els.actionMaxSystems.value),
@@ -58,6 +59,7 @@ function renderManualDiscoveryPreflight(result) {
     ['Estimated zKill Calls', gate.estimated_api_calls?.zkill ?? 0],
     ['Estimated ESI Calls', gate.estimated_api_calls?.esi ?? 0],
     ['Expected Effect', 'Queue zKill refs only; zero ESI expansion'],
+    ['Discovery Boundary', 'Queued refs and preview values are not observations until ESI expansion succeeds'],
     ['Confirmation Required', gate.display?.requires_confirmation ? 'yes' : 'no']
   ]);
   els.manualDiscoveryNormalized.textContent = JSON.stringify({

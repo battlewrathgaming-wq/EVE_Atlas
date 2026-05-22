@@ -107,6 +107,7 @@ const els = {
   actionActorId: document.querySelector('#action-actor-id'),
   actionActorName: document.querySelector('#action-actor-name'),
   actionSystemId: document.querySelector('#action-system-id'),
+  actionSystemName: document.querySelector('#action-system-name'),
   actionRadius: document.querySelector('#action-radius'),
   actionLookback: document.querySelector('#action-lookback'),
   actionMaxRefs: document.querySelector('#action-max-refs'),

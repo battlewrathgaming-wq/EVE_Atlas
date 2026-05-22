@@ -196,7 +196,7 @@ const COMMANDS = {
   'scope.validate': {
     classification: 'read-only',
     description: 'Validate and normalize a user-defined scope without running collection',
-    handler: ({ payload }) => validateScope(payload)
+    handler: ({ db, payload }) => validateScope(payload, { db })
   },
   'task.list': {
     classification: 'read-only',

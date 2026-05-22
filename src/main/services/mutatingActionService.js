@@ -11,6 +11,7 @@ const {
   hydrateOperatorReportCandidates
 } = require('../metadata/reportHydrator');
 const { resolveActorIdentity } = require('../resolution/actorResolver');
+const { resolveSystemIdentity } = require('../resolution/systemResolver');
 const {
   normalizeManualDiscoveryScope,
   normalizeManualExpansionScope,
@@ -218,8 +219,30 @@ async function normalizeManualDiscoveryInput(db, payload, dependencies) {
   }
   return normalizeManualDiscoveryScope({
     ...payload,
+    ...resolveSystemInput(db, payload),
     trigger: payload.trigger || 'manual'
   });
+}
+
+function resolveSystemInput(db, payload = {}) {
+  const scope = String(payload.scope || '').toLowerCase();
+  if (scope !== 'system' && scope !== 'radius') {
+    return {};
+  }
+  if (payload.centerSystemId || payload.center_system_id) {
+    return {
+      centerSystemId: payload.centerSystemId || payload.center_system_id
+    };
+  }
+  const systemName = payload.centerSystemName || payload.center_system_name || payload.systemName || payload.system_name;
+  if (!systemName) {
+    return {};
+  }
+  const system = resolveSystemIdentity(db, { systemName });
+  return {
+    centerSystemId: system.solar_system_id,
+    centerSystemName: system.solar_system_name
+  };
 }
 
 async function resolveActorInput(db, payload = {}, dependencies = {}) {

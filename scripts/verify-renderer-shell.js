@@ -94,6 +94,7 @@ function main() {
   assert(htmlText.includes('view-actions'), 'renderer should include controlled actions view');
   assert(htmlText.includes('preflight-manual-discovery'), 'actions view should include manual discovery preflight');
   assert(htmlText.includes('run-manual-discovery'), 'actions view should include explicit manual discovery start');
+  assert(htmlText.includes('action-system-name'), 'actions view should include system name control for local resolver input');
   assert(htmlText.includes('action-confirm-live'), 'manual discovery should require visible live confirmation control');
   assert(htmlText.includes('manual-discovery-normalized'), 'manual discovery should show normalized backend payload');
   assert(htmlText.includes('view-reports'), 'renderer should include reports view');
@@ -160,6 +161,8 @@ function main() {
   assert(rendererText.includes("service.invoke('manual.discovery'"), 'renderer should start manual discovery through service bridge');
   assert(rendererText.includes('detachedTask: true'), 'manual discovery should run as a detached task');
   assert(rendererText.includes('actionConfirmLive.checked'), 'manual discovery should require visible confirmation');
+  assert(rendererText.includes('centerSystemName'), 'manual discovery should pass system name through backend validation/resolution');
+  assert(rendererText.includes('Queued refs and preview values are not observations'), 'manual discovery preflight should label queue preview as non-observation');
   assert(rendererText.includes("service.invoke('report.actor'"), 'renderer should call report.actor through service bridge');
   assert(rendererText.includes("service.invoke('report.radius'"), 'renderer should call report.radius through service bridge');
   assert(rendererText.includes('radiusReportRequest'), 'renderer should build radius report payload explicitly');

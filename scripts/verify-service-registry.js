@@ -11,6 +11,13 @@ async function main() {
   const db = openDatabase(':memory:');
   migrate(db);
   try {
+    db.prepare(`
+      INSERT INTO solar_systems (
+        solar_system_id, solar_system_name, constellation_id, constellation_name,
+        region_id, region_name, security_status
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)
+    `).run(30000001, 'Atlas Prime', 20000001, 'Test Constellation', 10000001, 'Test Region', 0.4);
+
     const commands = listServiceCommands();
     const readinessCommand = commands.find((entry) => entry.command === 'app.readiness');
     const prepareCommand = commands.find((entry) => entry.command === 'app.prepare');
@@ -106,6 +113,16 @@ async function main() {
     assert(validated.valid === true, 'scope.validate should return valid result');
     assert(validated.normalized.lookbackSeconds === defaults.manualActorDiscovery.lookbackSeconds, 'scope.validate should apply defaults');
 
+    const namedSystemScope = await invokeServiceCommand('scope.validate', {
+      kind: 'manual_discovery',
+      input: {
+        scope: 'system',
+        centerSystemName: 'Atlas Prime'
+      }
+    }, { db });
+    assert(namedSystemScope.normalized.centerSystemId === 30000001, 'scope.validate should resolve system names locally when DB context is available');
+    assert(namedSystemScope.normalized.radiusJumps === 0, 'named system discovery should remain radius 0');
+
     await assertRejects(
       () => invokeServiceCommand('scope.validate', {
         kind: 'actor_watch',
@@ -144,7 +161,7 @@ async function main() {
       payload: {
         kind: 'system_radius_watch',
         input: {
-          centerSystemId: 30000001,
+          centerSystemName: 'Atlas Prime',
           radiusJumps: 1
         }
       }

@@ -44,6 +44,7 @@ Recent backend/UI-readiness work completed:
 - scoped zKill discovery has a live-gated smoke harness that performs system-name resolution, plans the `/systemID/{id}/pastSeconds/{seconds}/` route, queues discovery refs only, reports trace/freshness context, and makes zero ESI expansion calls
 - assessment artifact citation validation is implemented: cited sample killmail IDs must exist locally, entity-focused citations must match cited activity events, and artifacts store creation-time citation status/details
 - compaction preview can now be converted into a validated `evidence_compaction` assessment artifact only through explicit assessment creation; `retention.preflight` remains read-only and evidence deletion remains blocked
+- scoped system/radius discover-refs-only work is exposed through the existing Actions pane with system-name input, backend local resolution, live gate preflight, visible confirmation, and zero automatic expansion
 - assessment compaction writes are intentionally deferred; compaction remains read-only preview and evidence deletion remains blocked
 - runtime process isolation has been reviewed and deliberately deferred; detached tasks remain acceptable for the next milestone
 - current recommended first future isolation target, if measured pressure appears, is SDE import / SDE sync-compare
@@ -283,6 +284,7 @@ Latest reviewed commits:
 - current scoped zKill/live trace pass - local system resolver and scoped route builder verified offline; live smoke path now prints DB path, resolved system, route, live gate estimate, queued refs, API counts, preview time range, and the non-evidence freshness boundary
 - current assessment citation validation/status pass - assessment memory now records citation status/details and rejects missing cited killmail IDs or actor-scope citation mismatches without mutating evidence
 - current compaction preview interlock pass - read-only preview can produce an assessment-create payload, and explicit artifact creation validates citation status while preserving killmail/activity counts
+- current scoped discovery UI decision - use the existing Actions pane and `manual.discovery` service for system/radius queue-only discovery, including local system-name resolution and non-observation wording
 - current controlled actor workflow - fixture path proves actor scope to queued refs, ESI expansion, stored evidence, actor report, queue state, and optional assessment UI path without passive collection
 - current controlled area workflow - fixture path proves local topology radius scope to capped collection, stored evidence, radius report observations, and repeated/multi-system presence language without ownership/staging claims
 - current live expansion smoke - typed actor name resolved through ESI, zKill refs queued as possible evidence, one selected ref expanded through ESI, and reports confirmed partial sample boundaries
