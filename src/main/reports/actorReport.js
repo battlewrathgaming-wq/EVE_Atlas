@@ -254,11 +254,23 @@ function actorScope(db, actor, evidenceWindow) {
     }
     return acc;
   }, { discovered: 0, cached: 0, expanded: 0, failed: 0, events: 0, capSkipped: false });
+  const actorRouteTotals = actorRuns.reduce((acc, run) => {
+    acc.discovered += run.discovered_refs;
+    acc.cached += run.already_cached;
+    acc.expanded += run.expanded_new;
+    acc.failed += run.failed_expansions;
+    acc.events += run.activity_events_written;
+    if (run.error_summary && run.error_summary.includes('Expansion cap skipped')) {
+      acc.capSkipped = true;
+    }
+    return acc;
+  }, { discovered: 0, cached: 0, expanded: 0, failed: 0, events: 0, capSkipped: false });
 
   return {
     runs,
     zkillLogs,
     actorZkillLogs,
+    actorRuns,
     pastSecondsValues,
     killmailRange,
     activityEventCount,
@@ -273,6 +285,7 @@ function actorScope(db, actor, evidenceWindow) {
     warnings,
     apiCalls,
     totals,
+    actorRouteTotals,
     queueCounts,
     latestDiscoveredRefs: actorRuns[actorRuns.length - 1]?.discovered_refs || 0
   };

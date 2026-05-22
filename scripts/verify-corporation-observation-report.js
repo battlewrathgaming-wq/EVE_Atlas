@@ -69,7 +69,7 @@ async function main() {
   assertIncludes(report, 'Corporation: Signal Cartel Test [corporationID: 98000002]');
   assertIncludes(report, 'Basis: 3 expanded killmails / 3 corporation activity events matching corporation/time scope');
   assertIncludes(report, 'Event-time member pilot rows in scope: 6');
-  assertIncludes(report, 'observation sections are filtered by stored evidence scope');
+  assertIncludes(report, 'Observation sections are filtered by stored evidence scope');
   assertIncludes(report, 'Corporation Role Split');
   assertIncludes(report, 'Observed Systems');
   assertIncludes(report, 'Atlas Prime [solarSystemID: 30000001]');
