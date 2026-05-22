@@ -346,3 +346,37 @@ Completed:
 - `sde-build-local-lookup-tables.md`
 
 The implementation is recorded in `docs/gap/complete/sde-build-local-lookup-tables.md`. No active SDE lookup source-retention gap remains in this folder.
+
+## Current Milestone: Aggressive Testing And Bug Hunting
+
+Mission statement:
+
+Attack Atlas with bad inputs, interrupted workflows, scale pressure, UI edge cases, and boundary-abuse attempts before treating the local alpha as stable.
+
+This milestone should leave Atlas with:
+
+- adversarial evidence fixtures
+- transaction/partial-failure checks
+- passive surface side-effect sweeps
+- SDE lookup builder failure-mode coverage
+- seeded Electron operator rugged smoke
+- task concurrency and cancellation stress checks
+- larger synthetic scale pressure evidence
+- live API refusal and conservative smoke matrix
+- current documentation/test-index alignment
+
+Supporting audit:
+
+- `docs/audits/audit-2026-05-23-aggressive-testing-and-bug-hunt-assessment.md`
+
+Active tasks:
+
+- `adversarial-evidence-fixture-suite.md`
+- `partial-failure-and-transaction-integrity.md`
+- `passive-surface-side-effect-sweep.md`
+- `sde-lookup-builder-failure-modes.md`
+- `electron-operator-rugged-smoke.md`
+- `task-concurrency-and-cancellation-stress.md`
+- `large-synthetic-scale-pressure.md`
+- `live-api-refusal-and-smoke-matrix.md`
+- `documentation-drift-and-test-index.md`
