@@ -1,5 +1,7 @@
 # TODO: App Readiness And Settings
 
+Status: Partially Implemented
+
 ## Actionables
 
 - Define app readiness checks.
@@ -34,3 +36,8 @@ Readiness checks:
 
 The app can produce a readiness object that the renderer can show and use to enable/disable actions.
 
+## Current Implementation
+
+- `app.readiness` service command exists.
+- Readiness object includes DB/migration state, SDE topology/inventory state, lookup counts, runtime paths, live API gate state, and User-Agent state.
+- Verified by `verify:app-readiness` and `verify:service-registry`.

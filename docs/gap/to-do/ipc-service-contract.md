@@ -1,5 +1,7 @@
 # TODO: IPC Service Contract
 
+Status: Partially Implemented
+
 ## Actionables
 
 - Define renderer-safe commands for core actions.
@@ -45,3 +47,10 @@ Suggested service boundaries:
 
 There is a documented IPC command list, service boundary, and verification path showing renderer actions cannot bypass the evidence pipeline.
 
+## Current Implementation
+
+- Generic service IPC shell exists with `atlas:service:list` and `atlas:service:invoke`.
+- `app.readiness` is registered as a read-only service command.
+- Unknown commands are rejected.
+- Commands require backend DB context.
+- Verified by `verify:service-registry`.

@@ -4,6 +4,8 @@ const GROUPS = {
   core: [
     'verify:migrations',
     'verify:scope-controls',
+    'verify:app-readiness',
+    'verify:service-registry',
     'verify:fixture',
     'verify:idempotent',
     'verify:db-integrity'

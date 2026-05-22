@@ -6,12 +6,19 @@ Date: 2026-05-22
 
 AURA Atlas is currently backend-first and CLI-verifiable.
 
-The project is ready to define an Electron IPC shell around existing backend services. The renderer/UI should call a controlled backend interface rather than repositories, workers, or SQLite directly.
+The project now has the first Electron IPC service shell around backend services. The renderer/UI should call a controlled backend interface rather than repositories, workers, or SQLite directly.
+
+Current implemented shell:
+
+- `atlas:service:list`
+- `atlas:service:invoke`
+- `app.readiness` service command
 
 ## Backend Actions Ready For IPC Wrapping
 
 Implemented backend actions include:
 
+- read app readiness/settings
 - resolve typed actor names
 - validate user-defined scopes
 - run manual discovery
@@ -43,6 +50,8 @@ Offline verification now includes:
 - individual feature checks
 - grouped `verify:all`
 - a controlled disposable DB workflow check
+- app readiness verification
+- service registry / IPC handler verification
 
 Live smoke grouping exists separately:
 
@@ -54,9 +63,9 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 
 ## Not Yet Implemented
 
-- Electron IPC channel definitions
 - renderer shell
 - UI controls for scope selection
 - session-armed watch scheduler
 - long-running retention/deprecation policy
-
+- IPC wrappers for evidence-creating actions
+- IPC wrappers for report products beyond app readiness

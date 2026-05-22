@@ -20,6 +20,8 @@
     "verify:bulk": "node scripts/verify-group.js bulk",
     "verify:scope-controls": "node scripts/verify-scope-controls.js",
     "verify:controlled-workflow": "node scripts/verify-controlled-workflow.js",
+    "verify:app-readiness": "node scripts/verify-app-readiness.js",
+    "verify:service-registry": "node scripts/verify-service-registry.js",
     "verify:idempotent": "node scripts/verify-idempotent-ingestion.js",
     "verify:sde-fixture": "node scripts/verify-sde-fixture.js",
     "verify:sde-real-local": "node scripts/verify-sde-real-local.js",

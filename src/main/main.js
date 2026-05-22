@@ -1,5 +1,6 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const { initializeRuntimeDatabase, closeDatabase } = require('./db/database');
+const { registerIpcServiceHandlers } = require('./services/serviceRegistry');
 
 let runtimeDb = null;
 
@@ -15,6 +16,7 @@ function createWindow() {
 
 app.whenReady().then(() => {
   runtimeDb = initializeRuntimeDatabase(app);
+  registerIpcServiceHandlers(ipcMain, () => runtimeDb);
   createWindow();
 });
 
