@@ -97,7 +97,7 @@ async function main() {
   assertIncludes(report, 'Atlas Scout [characterID: 90000002]');
   assertIncludes(report, 'Watchlisted');
   assertIncludes(report, 'yes');
-  assertIncludes(report, 'candidate operator, multi-system presence');
+  assertIncludes(report, 'repeated attacker, multi-system presence');
   assertIncludes(report, 'Atlas Prime [solarSystemID: 30000001]');
   assertIncludes(report, 'Atlas Gate [solarSystemID: 30000002]');
   assertIncludes(report, 'Test Constellation');

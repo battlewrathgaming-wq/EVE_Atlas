@@ -11,6 +11,15 @@ const {
   evidenceWindowClause,
   formatEvidenceWindow
 } = require('./reportUtils');
+const {
+  activityCadenceRows,
+  finalBlowRows,
+  formatAggressorDetail,
+  formatFinalBlowPilot,
+  formatShip,
+  formatUtcBucket,
+  roleMix
+} = require('./observationMetrics');
 
 const VALID_ENTITY_TYPES = new Set(['character', 'corporation', 'alliance']);
 
@@ -62,13 +71,31 @@ function buildActorReport(db, input, options = {}) {
     ])),
     printSection('Event-Time Corporations', table(scope.corporationRows, associatedEntityColumns('corporation'))),
     printSection('Event-Time Alliances', table(scope.allianceRows, associatedEntityColumns('alliance'))),
+    printSection('Observed Activity Cadence', table(scope.cadenceRows, [
+      { label: 'UTC Bucket', value: formatUtcBucket },
+      { label: 'Role Mix', value: roleMix },
+      { label: 'Appearances', value: (row) => row.appearances },
+      { label: 'Killmails', value: (row) => row.killmails }
+    ])),
+    printSection('Observed Final Blows', table(scope.finalBlowRows, [
+      { label: 'Actor', value: formatFinalBlowPilot },
+      { label: 'Ship', value: formatShip },
+      { label: 'Final Blows', value: (row) => row.final_blows },
+      { label: 'Damage', value: (row) => row.damage_done },
+      { label: 'Systems', value: (row) => row.unique_systems },
+      { label: 'First Observed', value: (row) => row.first_observed },
+      { label: 'Last Observed', value: (row) => row.last_observed }
+    ])),
     printSection('Recent Timeline', table(scope.timeline, [
       { label: 'Time', value: (row) => row.killmail_time },
       { label: 'Killmail', value: (row) => row.killmail_id },
       { label: 'Role', value: (row) => row.role },
       { label: 'System', value: (row) => formatSystemLabel(row.solar_system_name, row.solar_system_id) },
       { label: 'Region', value: (row) => row.region_name || 'unknown' },
-      { label: 'Ship', value: (row) => formatTypeLabel(row.ship_name, row.ship_type_id) }
+      { label: 'Ship', value: (row) => formatTypeLabel(row.ship_name, row.ship_type_id) },
+      { label: 'Corp', value: (row) => formatEntityLabel(row.corporation_name, 'corporation', row.corporation_id) },
+      { label: 'Alliance', value: (row) => row.alliance_id ? formatEntityLabel(row.alliance_name, 'alliance', row.alliance_id) : 'none' },
+      { label: 'Aggressor Detail', value: formatAggressorDetail }
     ])),
     printSection('Warnings', scope.warnings.length ? scope.warnings.map((warning) => `${warning.warning_type}: ${warning.message}`).join('\n') : '(none)')
   ].join('\n');
@@ -179,15 +206,28 @@ function actorScope(db, actor, evidenceWindow) {
   const timeline = db.prepare(`
     SELECT ae.killmail_time, ae.killmail_id, ae.role, ae.solar_system_id,
            ss.solar_system_name, ss.region_name,
-           ae.ship_type_id, COALESCE(ae.ship_type_name, tm.type_name) AS ship_name
+           ae.ship_type_id, COALESCE(ae.ship_type_name, tm.type_name) AS ship_name,
+           ae.corporation_id, COALESCE(ae.corporation_name, corp.entity_name) AS corporation_name,
+           ae.alliance_id, COALESCE(ae.alliance_name, alliance.entity_name) AS alliance_name,
+           ae.final_blow, ae.damage_done
     FROM activity_events ae
     LEFT JOIN solar_systems ss ON ss.solar_system_id = ae.solar_system_id
     LEFT JOIN type_metadata tm ON tm.type_id = ae.ship_type_id
+    LEFT JOIN entities corp ON corp.entity_type = 'corporation' AND corp.entity_id = ae.corporation_id
+    LEFT JOIN entities alliance ON alliance.entity_type = 'alliance' AND alliance.entity_id = ae.alliance_id
     WHERE ae.entity_type = ? AND ae.entity_id = ?
       ${activityWindow.sql}
     ORDER BY ae.killmail_time DESC, ae.killmail_id DESC
     LIMIT 20
   `).all(actor.entity_type, actor.entity_id, ...activityWindow.params);
+  const cadenceRows = activityCadenceRows(db, {
+    entityType: actor.entity_type,
+    entityId: actor.entity_id
+  }, { evidenceWindow });
+  const finalBlowRowsForActor = finalBlowRows(db, {
+    entityType: actor.entity_type,
+    entityId: actor.entity_id
+  }, { evidenceWindow });
   const warnings = runIds.length ? db.prepare(`
     SELECT DISTINCT warning_type, message
     FROM data_quality_warnings
@@ -227,6 +267,8 @@ function actorScope(db, actor, evidenceWindow) {
     shipRows,
     corporationRows,
     allianceRows,
+    cadenceRows,
+    finalBlowRows: finalBlowRowsForActor,
     timeline,
     warnings,
     apiCalls,
@@ -242,17 +284,19 @@ function associatedEntities(db, actor, associatedType, evidenceWindow) {
   const nameColumn = associatedType === 'corporation' ? 'corporation_name' : 'alliance_name';
   return db.prepare(`
     SELECT actor_events.${idColumn} AS entity_id,
-           MAX(actor_events.${nameColumn}) AS entity_name,
+           COALESCE(MAX(known.entity_name), MAX(actor_events.${nameColumn})) AS entity_name,
            COUNT(*) AS appearances,
            MIN(actor_events.killmail_time) AS first_observed,
            MAX(actor_events.killmail_time) AS last_observed
     FROM activity_events actor_events
+    LEFT JOIN entities known
+      ON known.entity_type = ? AND known.entity_id = actor_events.${idColumn}
     WHERE actor_events.entity_type = ? AND actor_events.entity_id = ?
       AND actor_events.${idColumn} IS NOT NULL
       ${activityWindow.sql}
     GROUP BY actor_events.${idColumn}
     ORDER BY appearances DESC, entity_name ASC
-  `).all(actor.entity_type, actor.entity_id, ...activityWindow.params)
+  `).all(associatedType, actor.entity_type, actor.entity_id, ...activityWindow.params)
     .map((row) => ({ ...row, entity_type: associatedType }));
 }
 

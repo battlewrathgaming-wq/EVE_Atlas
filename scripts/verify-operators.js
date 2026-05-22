@@ -83,7 +83,7 @@ async function main() {
   assertIncludes(report, 'Watchlisted');
   assertIncludes(report, 'Atlas Scout [characterID: 90000002]');
   assertIncludes(report, 'yes');
-  assertIncludes(report, 'candidate operator');
+  assertIncludes(report, 'repeated attacker');
   assertIncludes(report, 'not proof of staging, ownership, or affiliation');
   assertIncludes(report, 'Source: zKill discovery + ESI expanded killmails');
   assertIncludes(emptyWindowReport, 'Evidence window: 2026-05-02T00:00:00Z -> 2026-05-03T00:00:00Z');

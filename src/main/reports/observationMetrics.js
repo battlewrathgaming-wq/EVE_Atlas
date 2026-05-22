@@ -122,6 +122,16 @@ function formatShip(row) {
   return formatTypeLabel(row.ship_name, row.ship_type_id);
 }
 
+function formatAggressorDetail(row) {
+  if (row.final_blow) {
+    return `final blow, damage ${row.damage_done || 0}`;
+  }
+  if (row.damage_done) {
+    return `damage ${row.damage_done}`;
+  }
+  return '';
+}
+
 function buildActivityFilter(filters, evidenceWindow = {}, alias = 'ae') {
   const clauses = [];
   const params = [];
@@ -141,6 +151,14 @@ function buildActivityFilter(filters, evidenceWindow = {}, alias = 'ae') {
     clauses.push(`${alias}.corporation_id = ?`);
     params.push(filters.corporationId);
   }
+  if (filters.systemId) {
+    clauses.push(`${alias}.solar_system_id = ?`);
+    params.push(filters.systemId);
+  }
+  if (filters.systemIds?.length) {
+    clauses.push(`${alias}.solar_system_id IN (${filters.systemIds.map(() => '?').join(', ')})`);
+    params.push(...filters.systemIds);
+  }
   if (filters.characterRowsOnly) {
     clauses.push(`${alias}.entity_type = 'character'`);
   }
@@ -158,6 +176,7 @@ module.exports = {
   counterpartEntityRows,
   finalBlowRows,
   formatFinalBlowPilot,
+  formatAggressorDetail,
   formatShip,
   formatUtcBucket,
   roleMix

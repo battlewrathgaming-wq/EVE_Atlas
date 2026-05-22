@@ -14,6 +14,7 @@ const {
   activityCadenceRows,
   counterpartEntityRows,
   finalBlowRows,
+  formatAggressorDetail,
   formatFinalBlowPilot,
   formatShip,
   formatUtcBucket,
@@ -285,7 +286,7 @@ function corporationObservationScope(db, corporation, evidenceWindow, killmailId
         pilot_label: pilot ? formatEntityLabel(pilot.character_name, 'character', pilot.character_id) : null,
         ship_type_id: pilot?.ship_type_id,
         ship_name: pilot?.ship_name,
-        aggressor_detail: pilot?.final_blow ? `final blow, damage ${pilot.damage_done || 0}` : (pilot?.damage_done ? `damage ${pilot.damage_done}` : '')
+        aggressor_detail: pilot ? formatAggressorDetail(pilot) : ''
       };
     });
 

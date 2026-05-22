@@ -5,8 +5,10 @@ const {
   table,
   printSection,
   formatSystemLabel,
-  formatEntityLabel
+  formatEntityLabel,
+  formatTypeLabel
 } = require('./reportUtils');
+const { formatAggressorDetail } = require('./observationMetrics');
 
 function buildRunReport(db, runId) {
   const run = db.prepare('SELECT * FROM fetch_runs WHERE run_id = ?').get(runId);
@@ -33,13 +35,7 @@ function buildRunReport(db, runId) {
   const actorTarget = initialActorTarget || actorTargetFromScope(inferredScope);
   const system = systemId ? db.prepare('SELECT * FROM solar_systems WHERE solar_system_id = ?').get(systemId) : null;
   const actor = actorTarget ? resolveActor(db, actorTarget) : null;
-  const killmails = db.prepare(`
-    SELECT k.killmail_id, k.killmail_time, k.solar_system_id, ss.solar_system_name, ss.region_name
-    FROM killmails k
-    LEFT JOIN solar_systems ss ON ss.solar_system_id = k.solar_system_id
-    WHERE k.killmail_id IN (SELECT killmail_id FROM ingestion_audits WHERE run_id = ?)
-    ORDER BY k.killmail_time DESC, k.killmail_id DESC
-  `).all(runId);
+  const killmails = runKillmailTimeline(db, runId);
   const eventCount = db.prepare(`
     SELECT COUNT(*) AS count
     FROM activity_events
@@ -136,7 +132,11 @@ function buildRunReport(db, runId) {
       { label: 'Time', value: (row) => row.killmail_time },
       { label: 'Killmail', value: (row) => row.killmail_id },
       { label: 'System', value: (row) => formatSystemLabel(row.solar_system_name, row.solar_system_id) },
-      { label: 'Region', value: (row) => row.region_name || 'unknown' }
+      { label: 'Region', value: (row) => row.region_name || 'unknown' },
+      { label: 'Victim', value: (row) => row.victim_label || 'unknown' },
+      { label: 'Victim Ship', value: (row) => formatTypeLabel(row.victim_ship_name, row.victim_ship_type_id) },
+      { label: 'Observed Attacker', value: (row) => row.attacker_label || 'unknown' },
+      { label: 'Aggressor Detail', value: formatAggressorDetail }
     ])),
     printSection('Participant Role Split', table(roleSplit, [
       { label: 'Role', value: (row) => row.role },
@@ -158,6 +158,51 @@ function buildRunReport(db, runId) {
     printSection('Warnings', warnings.length ? warnings.map((warning) => `${warning.warning_type}: ${warning.message}`).join('\n') : '(none)'),
     `\nStored events in this run's expanded sample: ${eventCount}`
   ].join('\n');
+}
+
+function runKillmailTimeline(db, runId) {
+  const killmails = db.prepare(`
+    SELECT k.killmail_id, k.killmail_time, k.solar_system_id, ss.solar_system_name, ss.region_name
+    FROM killmails k
+    LEFT JOIN solar_systems ss ON ss.solar_system_id = k.solar_system_id
+    WHERE k.killmail_id IN (SELECT killmail_id FROM ingestion_audits WHERE run_id = ?)
+    ORDER BY k.killmail_time DESC, k.killmail_id DESC
+  `).all(runId);
+  const victimStatement = db.prepare(`
+    SELECT ae.entity_type, ae.entity_id, COALESCE(ae.entity_name, known.entity_name) AS entity_name,
+           ae.ship_type_id, COALESCE(ae.ship_type_name, tm.type_name) AS ship_name
+    FROM activity_events ae
+    LEFT JOIN entities known ON known.entity_type = ae.entity_type AND known.entity_id = ae.entity_id
+    LEFT JOIN type_metadata tm ON tm.type_id = ae.ship_type_id
+    WHERE ae.killmail_id = ? AND ae.role = 'victim'
+    ORDER BY CASE ae.entity_type WHEN 'character' THEN 0 WHEN 'corporation' THEN 1 ELSE 2 END
+    LIMIT 1
+  `);
+  const attackerStatement = db.prepare(`
+    SELECT ae.entity_type, ae.entity_id, COALESCE(ae.entity_name, known.entity_name) AS entity_name,
+           ae.final_blow, ae.damage_done
+    FROM activity_events ae
+    LEFT JOIN entities known ON known.entity_type = ae.entity_type AND known.entity_id = ae.entity_id
+    WHERE ae.killmail_id = ? AND ae.role = 'attacker'
+    ORDER BY ae.final_blow DESC,
+             CASE ae.entity_type WHEN 'character' THEN 0 WHEN 'corporation' THEN 1 ELSE 2 END,
+             ae.damage_done DESC
+    LIMIT 1
+  `);
+
+  return killmails.map((killmail) => {
+    const victim = victimStatement.get(killmail.killmail_id);
+    const attacker = attackerStatement.get(killmail.killmail_id);
+    return {
+      ...killmail,
+      victim_label: victim ? formatEntityLabel(victim.entity_name, victim.entity_type, victim.entity_id) : null,
+      victim_ship_type_id: victim?.ship_type_id,
+      victim_ship_name: victim?.ship_name,
+      attacker_label: attacker ? formatEntityLabel(attacker.entity_name, attacker.entity_type, attacker.entity_id) : null,
+      final_blow: attacker?.final_blow,
+      damage_done: attacker?.damage_done
+    };
+  });
 }
 
 function discoveryQueueState(db, scope) {

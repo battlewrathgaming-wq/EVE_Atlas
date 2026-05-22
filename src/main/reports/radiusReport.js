@@ -12,6 +12,15 @@ const {
   evidenceWindowClause,
   formatEvidenceWindow
 } = require('./reportUtils');
+const {
+  activityCadenceRows,
+  finalBlowRows,
+  formatAggressorDetail,
+  formatFinalBlowPilot,
+  formatShip,
+  formatUtcBucket,
+  roleMix
+} = require('./observationMetrics');
 
 function buildRadiusReport(db, centerNameOrId, options = {}) {
   const radiusJumps = Number(options.radiusJumps ?? 0);
@@ -80,13 +89,31 @@ function buildRadiusReport(db, centerNameOrId, options = {}) {
       { label: 'Role', value: (row) => row.role },
       { label: 'Events', value: (row) => row.count }
     ])),
+    printSection('Observed Activity Cadence', table(scope.cadenceRows, [
+      { label: 'UTC Bucket', value: formatUtcBucket },
+      { label: 'Role Mix', value: roleMix },
+      { label: 'Appearances', value: (row) => row.appearances },
+      { label: 'Killmails', value: (row) => row.killmails }
+    ])),
+    printSection('Observed Final Blows', table(scope.finalBlowRows, [
+      { label: 'Attacker', value: formatFinalBlowPilot },
+      { label: 'Ship', value: formatShip },
+      { label: 'Final Blows', value: (row) => row.final_blows },
+      { label: 'Damage', value: (row) => row.damage_done },
+      { label: 'Systems', value: (row) => row.unique_systems },
+      { label: 'First Observed', value: (row) => row.first_observed },
+      { label: 'Last Observed', value: (row) => row.last_observed }
+    ])),
     printSection('Recent Timeline', table(scope.timeline, [
       { label: 'Time', value: (row) => row.killmail_time },
       { label: 'Killmail', value: (row) => row.killmail_id },
       { label: 'System', value: (row) => formatSystemLabel(row.solar_system_name, row.solar_system_id) },
       { label: 'Region', value: (row) => row.region_name || 'unknown' },
       { label: 'Victim Ship', value: (row) => formatTypeLabel(row.victim_ship_name, row.victim_ship_type_id) },
-      { label: 'Observed Attacker', value: (row) => row.attacker_label || 'unknown' }
+      { label: 'Victim', value: (row) => row.victim_label || 'unknown' },
+      { label: 'Observed Attacker', value: (row) => row.attacker_label || 'unknown' },
+      { label: 'Attacker Ship', value: (row) => row.attacker_ship_type_id ? formatTypeLabel(row.attacker_ship_name, row.attacker_ship_type_id) : 'unknown' },
+      { label: 'Aggressor Detail', value: formatAggressorDetail }
     ])),
     printSection('Warnings', scope.warnings.length ? scope.warnings.map((warning) => `${warning.warning_type}: ${warning.message}`).join('\n') : '(none)')
   ].join('\n');
@@ -181,6 +208,8 @@ function radiusScope(db, systemIds, options = {}) {
     .slice(0, 30);
   const multiSystemOperators = operatorRows.filter((row) => row.unique_systems > 1);
   const timeline = buildTimeline(db, systemIds, evidenceWindow);
+  const cadenceRows = activityCadenceRows(db, { systemIds }, { evidenceWindow });
+  const finalBlowRowsForRadius = finalBlowRows(db, { systemIds }, { evidenceWindow });
   const warnings = runIds.length ? db.prepare(`
     SELECT DISTINCT warning_type, message
     FROM data_quality_warnings
@@ -220,6 +249,8 @@ function radiusScope(db, systemIds, options = {}) {
     regionCounts,
     operatorRows,
     multiSystemOperators,
+    cadenceRows,
+    finalBlowRows: finalBlowRowsForRadius,
     timeline,
     warnings,
     apiCalls,
@@ -242,7 +273,7 @@ function radiusOperatorRows(db, systemIds, evidenceWindow) {
   return db.prepare(`
     SELECT ae.entity_type,
            ae.entity_id,
-           COALESCE(MAX(w.entity_name), MAX(ae.entity_name)) AS entity_name,
+           COALESCE(MAX(w.entity_name), MAX(known.entity_name), MAX(ae.entity_name)) AS entity_name,
            CASE WHEN MAX(w.watch_id) IS NULL THEN 0 ELSE 1 END AS watchlisted,
            SUM(CASE WHEN ae.role = 'attacker' THEN 1 ELSE 0 END) AS attacker_appearances,
            SUM(CASE WHEN ae.role = 'victim' THEN 1 ELSE 0 END) AS victim_appearances,
@@ -255,6 +286,8 @@ function radiusOperatorRows(db, systemIds, evidenceWindow) {
     LEFT JOIN solar_systems ss ON ss.solar_system_id = ae.solar_system_id
     LEFT JOIN watchlist_entities w
       ON w.entity_type = ae.entity_type AND w.entity_id = ae.entity_id
+    LEFT JOIN entities known
+      ON known.entity_type = ae.entity_type AND known.entity_id = ae.entity_id
     WHERE ae.solar_system_id IN (${placeholders})
       ${activityWindow.sql}
     GROUP BY ae.entity_type, ae.entity_id
@@ -275,16 +308,22 @@ function buildTimeline(db, systemIds, evidenceWindow) {
     LIMIT 20
   `).all(...systemIds, ...killmailWindow.params);
   const victimStatement = db.prepare(`
-    SELECT ae.ship_type_id, COALESCE(ae.ship_type_name, tm.type_name) AS ship_name
+    SELECT ae.entity_type, ae.entity_id, COALESCE(ae.entity_name, known.entity_name) AS entity_name,
+           ae.ship_type_id, COALESCE(ae.ship_type_name, tm.type_name) AS ship_name
     FROM activity_events ae
+    LEFT JOIN entities known ON known.entity_type = ae.entity_type AND known.entity_id = ae.entity_id
     LEFT JOIN type_metadata tm ON tm.type_id = ae.ship_type_id
     WHERE ae.killmail_id = ? AND ae.role = 'victim' AND ae.ship_type_id IS NOT NULL
     ORDER BY CASE ae.entity_type WHEN 'character' THEN 0 WHEN 'corporation' THEN 1 ELSE 2 END
     LIMIT 1
   `);
   const attackerStatement = db.prepare(`
-    SELECT ae.entity_type, ae.entity_id, ae.entity_name
+    SELECT ae.entity_type, ae.entity_id, COALESCE(ae.entity_name, known.entity_name) AS entity_name,
+           ae.ship_type_id, COALESCE(ae.ship_type_name, tm.type_name) AS ship_name,
+           ae.final_blow, ae.damage_done
     FROM activity_events ae
+    LEFT JOIN entities known ON known.entity_type = ae.entity_type AND known.entity_id = ae.entity_id
+    LEFT JOIN type_metadata tm ON tm.type_id = ae.ship_type_id
     WHERE ae.killmail_id = ? AND ae.role = 'attacker'
     ORDER BY ae.final_blow DESC,
              CASE ae.entity_type WHEN 'character' THEN 0 WHEN 'corporation' THEN 1 ELSE 2 END,
@@ -299,7 +338,12 @@ function buildTimeline(db, systemIds, evidenceWindow) {
       ...killmail,
       victim_ship_type_id: victim.ship_type_id,
       victim_ship_name: victim.ship_name,
-      attacker_label: attacker ? formatEntityLabel(attacker.entity_name, attacker.entity_type, attacker.entity_id) : null
+      victim_label: victim ? formatEntityLabel(victim.entity_name, victim.entity_type, victim.entity_id) : null,
+      attacker_label: attacker ? formatEntityLabel(attacker.entity_name, attacker.entity_type, attacker.entity_id) : null,
+      attacker_ship_type_id: attacker?.ship_type_id,
+      attacker_ship_name: attacker?.ship_name,
+      final_blow: attacker?.final_blow,
+      damage_done: attacker?.damage_done
     };
   });
 }
@@ -318,19 +362,9 @@ function operatorColumns() {
   ];
 }
 
-function roleMix(row) {
-  if (row.attacker_appearances && row.victim_appearances) {
-    return `attacker ${row.attacker_appearances} / victim ${row.victim_appearances}`;
-  }
-  if (row.attacker_appearances) {
-    return `attacker ${row.attacker_appearances}`;
-  }
-  return `victim ${row.victim_appearances}`;
-}
-
 function radiusLabelFor(row) {
   if (row.unique_systems > 1 && row.attacker_appearances > 1) {
-    return 'candidate operator, multi-system presence';
+    return 'repeated attacker, multi-system presence';
   }
   if (row.unique_systems > 1) {
     return 'multi-system presence';

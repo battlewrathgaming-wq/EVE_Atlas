@@ -33,7 +33,7 @@ function buildObservedOperatorsReport(db, systemNameOrId, options = {}) {
     `Discovery provenance window(s): ${scope.pastSecondsValues.length ? scope.pastSecondsValues.map(formatWindow).join(', ') : 'unknown'}`,
     `Collection provenance runs: ${scope.runs.length}`,
     `Collected at: ${scope.runs[0]?.started_at || 'none'} -> ${scope.runs[scope.runs.length - 1]?.finished_at || 'none'}`,
-    `Interpretation: repeated attacker appearances are candidate operators for further investigation, not proof of staging, ownership, or affiliation.`,
+    `Interpretation: repeated attacker appearances are observation signals for further inspection, not proof of staging, ownership, or affiliation.`,
     printSection('Evidence Footer', [
       `Stored evidence matching this scope: ${scope.killmailRange.count} killmails / ${scope.activityEventCount} activity events`,
       `Collection provenance systems scanned: ${scope.zkillLogs.length}`,
@@ -135,7 +135,7 @@ function operatorRows(db, systemId, evidenceWindow = buildEvidenceWindow()) {
   return db.prepare(`
     SELECT ae.entity_type,
            ae.entity_id,
-           COALESCE(MAX(w.entity_name), MAX(ae.entity_name)) AS entity_name,
+           COALESCE(MAX(w.entity_name), MAX(known.entity_name), MAX(ae.entity_name)) AS entity_name,
            CASE WHEN MAX(w.watch_id) IS NULL THEN 0 ELSE 1 END AS watchlisted,
            SUM(CASE WHEN ae.role = 'attacker' THEN 1 ELSE 0 END) AS attacker_appearances,
            SUM(CASE WHEN ae.role = 'victim' THEN 1 ELSE 0 END) AS victim_appearances,
@@ -146,10 +146,12 @@ function operatorRows(db, systemId, evidenceWindow = buildEvidenceWindow()) {
     FROM activity_events ae
     LEFT JOIN watchlist_entities w
       ON w.entity_type = ae.entity_type AND w.entity_id = ae.entity_id
+    LEFT JOIN entities known
+      ON known.entity_type = ae.entity_type AND known.entity_id = ae.entity_id
     WHERE ae.solar_system_id = ?
       ${activityWindow.sql}
     GROUP BY ae.entity_type, ae.entity_id
-    ORDER BY watchlisted DESC, appearances DESC, attacker_appearances DESC, COALESCE(MAX(w.entity_name), MAX(ae.entity_name)) ASC
+    ORDER BY watchlisted DESC, appearances DESC, attacker_appearances DESC, entity_name ASC
   `).all(systemId, ...activityWindow.params);
 }
 
@@ -179,7 +181,7 @@ function operatorReportCandidates(db, systemId, options = {}) {
 function shipRows(db, systemId, evidenceWindow = buildEvidenceWindow()) {
   const activityWindow = evidenceWindowClause(evidenceWindow, 'ae.killmail_time');
   return db.prepare(`
-    SELECT ae.entity_type, ae.entity_id, MAX(ae.entity_name) AS entity_name,
+    SELECT ae.entity_type, ae.entity_id, COALESCE(MAX(known.entity_name), MAX(ae.entity_name)) AS entity_name,
            GROUP_CONCAT(DISTINCT
              CASE
                WHEN COALESCE(ae.ship_type_name, tm.type_name) IS NOT NULL THEN COALESCE(ae.ship_type_name, tm.type_name) || ' [typeID: ' || ae.ship_type_id || ']'
@@ -187,6 +189,8 @@ function shipRows(db, systemId, evidenceWindow = buildEvidenceWindow()) {
              END
            ) AS ships
     FROM activity_events ae
+    LEFT JOIN entities known
+      ON known.entity_type = ae.entity_type AND known.entity_id = ae.entity_id
     LEFT JOIN type_metadata tm ON tm.type_id = ae.ship_type_id
     WHERE ae.solar_system_id = ? AND ae.ship_type_id IS NOT NULL
       ${activityWindow.sql}
@@ -209,7 +213,7 @@ function roleMix(row) {
 
 function labelFor(row) {
   if (row.attacker_appearances > 1) {
-    return 'candidate operator';
+    return 'repeated attacker';
   }
   if (row.attacker_appearances === 1 && row.victim_appearances > 0) {
     return 'mixed presence';

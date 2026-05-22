@@ -11,6 +11,15 @@ const {
   evidenceWindowClause,
   formatEvidenceWindow
 } = require('./reportUtils');
+const {
+  activityCadenceRows,
+  finalBlowRows,
+  formatAggressorDetail,
+  formatFinalBlowPilot,
+  formatShip,
+  formatUtcBucket,
+  roleMix
+} = require('./observationMetrics');
 
 function buildSystemReport(db, systemNameOrId, options = {}) {
   const system = resolveSystem(db, systemNameOrId);
@@ -56,17 +65,16 @@ function buildSystemReport(db, systemNameOrId, options = {}) {
     GROUP BY role
     ORDER BY role
   `).all(system.solar_system_id, ...activityWindow.params);
-  const timeline = db.prepare(`
-    SELECT killmail_id, killmail_time
-    FROM killmails
-    WHERE solar_system_id = ?
-      ${killmailWindow.sql}
-    ORDER BY killmail_time DESC, killmail_id DESC
-    LIMIT 20
-  `).all(system.solar_system_id, ...killmailWindow.params);
+  const timeline = buildTimeline(db, system.solar_system_id, evidenceWindow);
   const repeatedCharacters = topEntities(db, system.solar_system_id, 'character', evidenceWindow);
   const repeatedCorps = topEntities(db, system.solar_system_id, 'corporation', evidenceWindow);
   const repeatedAlliances = topEntities(db, system.solar_system_id, 'alliance', evidenceWindow);
+  const cadenceRows = activityCadenceRows(db, {
+    systemId: system.solar_system_id
+  }, { evidenceWindow });
+  const finalBlowRowsForSystem = finalBlowRows(db, {
+    systemId: system.solar_system_id
+  }, { evidenceWindow });
   const ships = db.prepare(`
     SELECT ae.ship_type_id,
            COALESCE(ae.ship_type_name, tm.type_name) AS ship_name,
@@ -126,11 +134,31 @@ function buildSystemReport(db, systemNameOrId, options = {}) {
     ].join('\n')),
     printSection('Recent Killmail Timeline', table(timeline, [
       { label: 'Time', value: (row) => row.killmail_time },
-      { label: 'Killmail', value: (row) => row.killmail_id }
+      { label: 'Killmail', value: (row) => row.killmail_id },
+      { label: 'Victim', value: (row) => row.victim_label || 'unknown' },
+      { label: 'Victim Ship', value: (row) => formatTypeLabel(row.victim_ship_name, row.victim_ship_type_id) },
+      { label: 'Observed Attacker', value: (row) => row.attacker_label || 'unknown' },
+      { label: 'Attacker Ship', value: (row) => row.attacker_ship_type_id ? formatTypeLabel(row.attacker_ship_name, row.attacker_ship_type_id) : 'unknown' },
+      { label: 'Aggressor Detail', value: formatAggressorDetail }
     ])),
     printSection('Attacker/Victim Split', table(roleSplit, [
       { label: 'Role', value: (row) => row.role },
       { label: 'Events', value: (row) => row.count }
+    ])),
+    printSection('Observed Activity Cadence', table(cadenceRows, [
+      { label: 'UTC Bucket', value: formatUtcBucket },
+      { label: 'Role Mix', value: roleMix },
+      { label: 'Appearances', value: (row) => row.appearances },
+      { label: 'Killmails', value: (row) => row.killmails }
+    ])),
+    printSection('Observed Final Blows', table(finalBlowRowsForSystem, [
+      { label: 'Attacker', value: formatFinalBlowPilot },
+      { label: 'Ship', value: formatShip },
+      { label: 'Final Blows', value: (row) => row.final_blows },
+      { label: 'Damage', value: (row) => row.damage_done },
+      { label: 'Systems', value: (row) => row.unique_systems },
+      { label: 'First Observed', value: (row) => row.first_observed },
+      { label: 'Last Observed', value: (row) => row.last_observed }
     ])),
     printSection('Repeated Pilots', table(repeatedCharacters, entityColumns())),
     printSection('Repeated Corporations', table(repeatedCorps, entityColumns())),
@@ -160,18 +188,71 @@ function resolveSystem(db, value) {
 function topEntities(db, systemId, entityType, evidenceWindow = buildEvidenceWindow()) {
   const activityWindow = evidenceWindowClause(evidenceWindow, 'killmail_time');
   return db.prepare(`
-    SELECT MAX(entity_name) AS entity_name, entity_id, entity_type,
+    SELECT COALESCE(MAX(known.entity_name), MAX(ae.entity_name)) AS entity_name, ae.entity_id, ae.entity_type,
            SUM(CASE WHEN role = 'attacker' THEN 1 ELSE 0 END) AS attacker_events,
            SUM(CASE WHEN role = 'victim' THEN 1 ELSE 0 END) AS victim_events,
            COUNT(*) AS appearances
-    FROM activity_events
-    WHERE solar_system_id = ? AND entity_type = ?
+    FROM activity_events ae
+    LEFT JOIN entities known
+      ON known.entity_type = ae.entity_type AND known.entity_id = ae.entity_id
+    WHERE ae.solar_system_id = ? AND ae.entity_type = ?
       ${activityWindow.sql}
-    GROUP BY entity_type, entity_id
+    GROUP BY ae.entity_type, ae.entity_id
     HAVING COUNT(*) > 1
-    ORDER BY appearances DESC, MAX(entity_name) ASC
+    ORDER BY appearances DESC, entity_name ASC
     LIMIT 10
   `).all(systemId, entityType, ...activityWindow.params);
+}
+
+function buildTimeline(db, systemId, evidenceWindow) {
+  const killmailWindow = evidenceWindowClause(evidenceWindow, 'k.killmail_time');
+  const killmails = db.prepare(`
+    SELECT k.killmail_id, k.killmail_time
+    FROM killmails k
+    WHERE k.solar_system_id = ?
+      ${killmailWindow.sql}
+    ORDER BY k.killmail_time DESC, k.killmail_id DESC
+    LIMIT 20
+  `).all(systemId, ...killmailWindow.params);
+  const victimStatement = db.prepare(`
+    SELECT ae.entity_type, ae.entity_id, COALESCE(ae.entity_name, known.entity_name) AS entity_name,
+           ae.ship_type_id, COALESCE(ae.ship_type_name, tm.type_name) AS ship_name
+    FROM activity_events ae
+    LEFT JOIN entities known ON known.entity_type = ae.entity_type AND known.entity_id = ae.entity_id
+    LEFT JOIN type_metadata tm ON tm.type_id = ae.ship_type_id
+    WHERE ae.killmail_id = ? AND ae.role = 'victim'
+    ORDER BY CASE ae.entity_type WHEN 'character' THEN 0 WHEN 'corporation' THEN 1 ELSE 2 END
+    LIMIT 1
+  `);
+  const attackerStatement = db.prepare(`
+    SELECT ae.entity_type, ae.entity_id, COALESCE(ae.entity_name, known.entity_name) AS entity_name,
+           ae.ship_type_id, COALESCE(ae.ship_type_name, tm.type_name) AS ship_name,
+           ae.final_blow, ae.damage_done
+    FROM activity_events ae
+    LEFT JOIN entities known ON known.entity_type = ae.entity_type AND known.entity_id = ae.entity_id
+    LEFT JOIN type_metadata tm ON tm.type_id = ae.ship_type_id
+    WHERE ae.killmail_id = ? AND ae.role = 'attacker'
+    ORDER BY ae.final_blow DESC,
+             CASE ae.entity_type WHEN 'character' THEN 0 WHEN 'corporation' THEN 1 ELSE 2 END,
+             ae.damage_done DESC
+    LIMIT 1
+  `);
+
+  return killmails.map((killmail) => {
+    const victim = victimStatement.get(killmail.killmail_id);
+    const attacker = attackerStatement.get(killmail.killmail_id);
+    return {
+      ...killmail,
+      victim_label: victim ? formatEntityLabel(victim.entity_name, victim.entity_type, victim.entity_id) : null,
+      victim_ship_type_id: victim?.ship_type_id,
+      victim_ship_name: victim?.ship_name,
+      attacker_label: attacker ? formatEntityLabel(attacker.entity_name, attacker.entity_type, attacker.entity_id) : null,
+      attacker_ship_type_id: attacker?.ship_type_id,
+      attacker_ship_name: attacker?.ship_name,
+      final_blow: attacker?.final_blow,
+      damage_done: attacker?.damage_done
+    };
+  });
 }
 
 function entityColumns() {

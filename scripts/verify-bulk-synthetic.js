@@ -77,7 +77,7 @@ async function main() {
   assertIncludes(report, 'Collection provenance failed expansions: 1');
   assertIncludes(report, 'Multi-System Presence');
   assertIncludes(report, 'Atlas Scout [characterID: 90000002]');
-  assertIncludes(report, 'candidate operator, multi-system presence');
+  assertIncludes(report, 'repeated attacker, multi-system presence');
 
   closeDatabase(db);
   console.log('bulk synthetic system verified');
