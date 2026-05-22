@@ -24,6 +24,10 @@ const {
 const { buildQueueExpansionSelection } = require('./queueSelectionService');
 const { buildReportResponse } = require('./reportResponseService');
 const { buildRetentionPreflight, listRetentionActions } = require('./retentionActionService');
+const {
+  buildRuntimeDbSnapshotPreflight,
+  createRuntimeDbSnapshot
+} = require('./runtimeSnapshotService');
 const { getScopeDefaults, validateScope } = require('./scopeService');
 const { defaultTaskRunner } = require('./taskRunner');
 
@@ -187,6 +191,16 @@ const COMMANDS = {
     classification: 'read-only',
     description: 'Preview destructive/retention action impact and confirmation requirements',
     handler: ({ db, payload }) => buildRetentionPreflight(db, payload)
+  },
+  'runtime.db_snapshot.preflight': {
+    classification: 'read-only',
+    description: 'Preview runtime DB snapshot destination, counts, and freshness without writing',
+    handler: ({ db, payload, databasePath }) => buildRuntimeDbSnapshotPreflight(db, payload, { databasePath })
+  },
+  'runtime.db_snapshot.create': {
+    classification: 'exclusive',
+    description: 'Create an explicit SQLite runtime DB snapshot under the approved project temp area',
+    handler: ({ db, payload, databasePath }) => createRuntimeDbSnapshot(db, payload, { databasePath })
   },
   'queue.selection': {
     classification: 'read-only',

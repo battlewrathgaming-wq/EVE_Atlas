@@ -209,24 +209,37 @@ This milestone should leave Atlas with:
 
 - a reviewed live scoped zKill success-smoke path and artifact checklist
 - a corpus health report for local runtime databases
+- a renderer-visible local corpus health surface or an explicit deferral decision
 - a DB snapshot/restore preflight before any pruning or destructive maintenance
 - an offline operator workflow scenario smoke that exercises the shell/service boundary
 - assessment artifact review surfaces that display citation status and evidence basis clearly
+- a support/debug trace pack that references run state without becoming a raw evidence export
 - no automatic evidence deletion
 - no passive broad ingestion
 
 Recommended order:
 
-1. `runtime-db-snapshot-and-restore-preflight.md`
+1. `corpus-health-renderer-surface.md`
 2. `operator-workflow-scenario-smoke.md`
 3. `assessment-artifact-review-surface.md`
 4. `operator-debug-trace-pack.md`
+5. `positive-ref-scoped-discovery-smoke-decision.md`
 
 Supporting audit:
 
 - `docs/audits/audit-2026-05-22-overseer-evidence-safe-assessment-review.md`
+- `docs/audits/audit-2026-05-22-overseer-operator-readiness-review.md`
 
 Completed:
 
 - `live-scoped-discovery-success-smoke-review.md`
 - `evidence-corpus-health-report.md`
+- `runtime-db-snapshot-and-restore-preflight.md`
+
+## Open Discussion For Next Handoff
+
+- The accepted live scoped discovery smoke returned zero refs. This is fine for boundary proof, but Dev should either run or defer a positive-ref discovery-only smoke.
+- Corpus health is available through CLI/service only. Dev should decide where it belongs in the renderer before adding more report surfaces.
+- Evidence pruning remains blocked until snapshot/restore preflight is implemented and verified.
+- Assessment review appears partly present in the renderer; close the task only after explicit citation/status visibility checks.
+- Trace packs should support debugging and audit handoff without dumping raw evidence by default.

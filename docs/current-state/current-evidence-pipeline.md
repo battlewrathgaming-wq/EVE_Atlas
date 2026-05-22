@@ -114,3 +114,9 @@ The accepted success-smoke review is recorded in `docs/audits/audit-2026-05-22-l
 `report:corpus-health` and `report.corpus_health` provide a read-only local database health report. The report summarizes evidence row counts, queue state, watch/metadata/assessment counts, duplicate/orphan checks, unresolved label checks, warning groups, and freshness of fetch runs, metadata runs, and SDE imports.
 
 The corpus health report is an operational readiness report. It is not an observation report and not an assessment artifact.
+
+## Current Snapshot Safety
+
+`runtime.db_snapshot.preflight` reports the runtime DB path, destination path, file size, WAL/SHM state, core table counts, latest fetch run, latest evidence timestamp, and assessment artifact counts without writing files.
+
+`runtime.db_snapshot.create` is an explicit exclusive action that writes a SQLite snapshot under the approved project `.tmp` area by default. Verification opens the snapshot and confirms core counts plus raw ESI payload/checksum preservation. Evidence pruning remains blocked.
