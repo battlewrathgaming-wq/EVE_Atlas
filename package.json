@@ -44,6 +44,8 @@
     "watch:add-entity": "node scripts/watch-add-entity.js",
     "watch:list": "node scripts/watch-list.js",
     "hydrate:report-operators": "node scripts/hydrate-report-operators.js",
+    "hydrate:report-actor": "node scripts/hydrate-report-actor.js",
+    "import:sde-topology": "node scripts/import-sde-topology.js",
     "import:sde-inventory": "node scripts/import-sde-inventory.js"
   },
   "dependencies": {},

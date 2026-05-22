@@ -5,7 +5,7 @@ const { EvidenceRepository } = require('../src/main/db/evidenceRepository');
 const { SdeTopologyImporter } = require('../src/main/sde/sdeImporter');
 const { collectSystemRadiusWatch } = require('../src/main/workers/systemRadiusCollector');
 const { buildObservedOperatorsReport } = require('../src/main/reports/operatorReport');
-const { hydrateOperatorReportCandidates } = require('../src/main/metadata/reportHydrator');
+const { hydrateActorReportCandidates, hydrateOperatorReportCandidates } = require('../src/main/metadata/reportHydrator');
 
 async function main() {
   const db = openDatabase(':memory:');
@@ -82,6 +82,20 @@ async function main() {
   assertIncludes(after, 'Atlas Scout');
   assertIncludes(after, 'Signal Cartel Test');
   assertIncludes(after, 'typeID 603 [unresolved]');
+
+  const actorHydration = await hydrateActorReportCandidates(db, {
+    entityType: 'character',
+    entityId: 90000002,
+    entityName: 'Atlas Scout'
+  }, {
+    httpClient: fakeHttpClient(),
+    topN: 10,
+    threshold: 1
+  });
+  assert(actorHydration.ids_discovered > 0, 'actor hydration should discover report-scoped IDs');
+  assert(actorHydration.requested_from_esi === 0, 'actor hydration should skip already known report-scoped IDs');
+  assert(actorHydration.types_upserted === 0, 'actor hydration should not resolve inventory types through live ESI');
+  assert(count(db, 'metadata_runs') === 2, 'actor hydration should write a metadata run');
 
   closeDatabase(db);
   console.log('report candidate hydration verified');
