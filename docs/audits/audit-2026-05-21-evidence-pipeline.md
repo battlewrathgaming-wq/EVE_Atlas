@@ -3,6 +3,8 @@
 Date: 2026-05-21
 Scope: Milestone 1 and early Milestone 2 evidence pipeline
 
+Snapshot note: This is an earlier implementation snapshot. Later alignment and milestone status are captured in the 2026-05-22 audits, especially `audit-2026-05-22-milestone-checklist.md` and `audit-2026-05-22-manual-discovery-pipeline-trace.md`.
+
 ## Current Behavior
 
 AURA Atlas ingests killmail evidence through a scoped pipeline:
