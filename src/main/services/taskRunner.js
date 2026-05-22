@@ -1,0 +1,220 @@
+const TASK_STATES = Object.freeze({
+  QUEUED: 'queued',
+  RUNNING: 'running',
+  SUCCEEDED: 'succeeded',
+  FAILED: 'failed',
+  CANCELLED: 'cancelled',
+  PARTIAL: 'partial',
+  CAPPED: 'capped'
+});
+
+const TASK_CLASSIFICATIONS = Object.freeze({
+  READ_ONLY: 'read-only',
+  METADATA_ONLY: 'metadata-only',
+  EVIDENCE_CREATING: 'evidence-creating',
+  DESTRUCTIVE: 'destructive',
+  EXCLUSIVE: 'exclusive'
+});
+
+class TaskRunner {
+  constructor({ historyLimit = 100 } = {}) {
+    this.historyLimit = historyLimit;
+    this.tasks = new Map();
+    this.activeLocks = new Map();
+  }
+
+  async runTask(definition, handler) {
+    if (typeof handler !== 'function') {
+      throw new Error('runTask requires a handler function');
+    }
+
+    const task = this.createTask(definition);
+    this.tasks.set(task.task_id, task);
+    this.pruneHistory();
+
+    const lockKey = lockKeyFor(task);
+    if (lockKey && this.activeLocks.has(lockKey)) {
+      task.status = TASK_STATES.FAILED;
+      task.finished_at = nowIso();
+      task.error = {
+        code: 'TASK_LOCKED',
+        message: `Task lock is already active for ${lockKey}`
+      };
+      return task;
+    }
+
+    if (lockKey) {
+      this.activeLocks.set(lockKey, task.task_id);
+    }
+
+    try {
+      this.updateTask(task.task_id, {
+        status: TASK_STATES.RUNNING,
+        started_at: nowIso()
+      });
+      const context = {
+        task_id: task.task_id,
+        progress: (event) => this.addProgress(task.task_id, event),
+        warn: (warning) => this.addWarning(task.task_id, warning)
+      };
+      const result = await handler(context);
+      const finalStatus = normalizeFinalStatus(result?.status) || TASK_STATES.SUCCEEDED;
+      this.updateTask(task.task_id, {
+        status: finalStatus,
+        result: result?.data !== undefined ? result.data : result,
+        finished_at: nowIso()
+      });
+      return this.getTask(task.task_id);
+    } catch (error) {
+      this.updateTask(task.task_id, {
+        status: TASK_STATES.FAILED,
+        error: {
+          code: error.code || 'TASK_FAILED',
+          message: error.message
+        },
+        finished_at: nowIso()
+      });
+      return this.getTask(task.task_id);
+    } finally {
+      if (lockKey && this.activeLocks.get(lockKey) === task.task_id) {
+        this.activeLocks.delete(lockKey);
+      }
+    }
+  }
+
+  createTask(definition = {}) {
+    const classification = definition.classification || TASK_CLASSIFICATIONS.READ_ONLY;
+    const task = {
+      task_id: createTaskId(),
+      type: definition.type || 'unknown',
+      classification,
+      scope_key: definition.scopeKey || null,
+      status: TASK_STATES.QUEUED,
+      queued_at: nowIso(),
+      started_at: null,
+      finished_at: null,
+      progress: [],
+      warnings: [],
+      result: null,
+      error: null
+    };
+    return task;
+  }
+
+  addProgress(taskId, event = {}) {
+    const task = this.requireTask(taskId);
+    const progress = {
+      at: nowIso(),
+      stage: event.stage || 'progress',
+      message: event.message || null,
+      current: numberOrNull(event.current),
+      total: numberOrNull(event.total)
+    };
+    task.progress.push(progress);
+    return progress;
+  }
+
+  addWarning(taskId, warning = {}) {
+    const task = this.requireTask(taskId);
+    const entry = {
+      at: nowIso(),
+      severity: warning.severity || 'warning',
+      code: warning.code || 'TASK_WARNING',
+      message: warning.message || String(warning)
+    };
+    task.warnings.push(entry);
+    return entry;
+  }
+
+  updateTask(taskId, patch) {
+    const task = this.requireTask(taskId);
+    Object.assign(task, patch);
+    return task;
+  }
+
+  getTask(taskId) {
+    const task = this.tasks.get(taskId);
+    return task ? clone(task) : null;
+  }
+
+  listTasks({ limit = 20 } = {}) {
+    return Array.from(this.tasks.values())
+      .sort((a, b) => b.queued_at.localeCompare(a.queued_at))
+      .slice(0, limit)
+      .map(clone);
+  }
+
+  requireTask(taskId) {
+    const task = this.tasks.get(taskId);
+    if (!task) {
+      throw new Error(`Unknown task: ${taskId}`);
+    }
+    return task;
+  }
+
+  pruneHistory() {
+    if (this.tasks.size <= this.historyLimit) {
+      return;
+    }
+    const tasks = Array.from(this.tasks.values())
+      .sort((a, b) => a.queued_at.localeCompare(b.queued_at));
+    for (const task of tasks.slice(0, this.tasks.size - this.historyLimit)) {
+      if (task.status === TASK_STATES.RUNNING || task.status === TASK_STATES.QUEUED) {
+        continue;
+      }
+      this.tasks.delete(task.task_id);
+    }
+  }
+}
+
+function lockKeyFor(task) {
+  if (task.classification === TASK_CLASSIFICATIONS.READ_ONLY) {
+    return null;
+  }
+  if (task.classification === TASK_CLASSIFICATIONS.METADATA_ONLY) {
+    return task.scope_key ? `metadata:${task.scope_key}` : null;
+  }
+  if (task.classification === TASK_CLASSIFICATIONS.EVIDENCE_CREATING) {
+    return `evidence:${task.scope_key || 'global'}`;
+  }
+  if (task.classification === TASK_CLASSIFICATIONS.DESTRUCTIVE || task.classification === TASK_CLASSIFICATIONS.EXCLUSIVE) {
+    return 'exclusive:global';
+  }
+  return task.scope_key ? `${task.classification}:${task.scope_key}` : null;
+}
+
+function normalizeFinalStatus(status) {
+  if (!status) {
+    return null;
+  }
+  const value = String(status);
+  if (!Object.values(TASK_STATES).includes(value)) {
+    throw new Error(`Invalid task status: ${status}`);
+  }
+  return value;
+}
+
+function createTaskId() {
+  return `task_${Date.now()}_${Math.random().toString(16).slice(2, 10)}`;
+}
+
+function nowIso() {
+  return new Date().toISOString();
+}
+
+function numberOrNull(value) {
+  return Number.isFinite(Number(value)) ? Number(value) : null;
+}
+
+function clone(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+const defaultTaskRunner = new TaskRunner();
+
+module.exports = {
+  TaskRunner,
+  TASK_STATES,
+  TASK_CLASSIFICATIONS,
+  defaultTaskRunner
+};

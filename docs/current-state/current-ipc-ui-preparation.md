@@ -15,6 +15,9 @@ Current implemented shell:
 - `app.readiness` service command
 - `scope.defaults` service command
 - `scope.validate` service command
+- `task.list` service command
+- `task.get` service command
+- task-wrapped service invocation with `asTask: true`
 
 ## Backend Actions Ready For IPC Wrapping
 
@@ -55,6 +58,7 @@ Offline verification now includes:
 - app readiness verification
 - service registry / IPC handler verification
 - scope defaults/validation verification
+- task runner verification
 
 Live smoke grouping exists separately:
 

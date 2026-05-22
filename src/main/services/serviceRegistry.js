@@ -1,5 +1,6 @@
 const { buildAppReadiness } = require('./appReadinessService');
 const { getScopeDefaults, validateScope } = require('./scopeService');
+const { defaultTaskRunner } = require('./taskRunner');
 
 const COMMANDS = {
   'app.readiness': {
@@ -16,6 +17,16 @@ const COMMANDS = {
     classification: 'read-only',
     description: 'Validate and normalize a user-defined scope without running collection',
     handler: ({ payload }) => validateScope(payload)
+  },
+  'task.list': {
+    classification: 'read-only',
+    description: 'Return recent backend task history',
+    handler: ({ payload }) => defaultTaskRunner.listTasks({ limit: payload.limit || 20 })
+  },
+  'task.get': {
+    classification: 'read-only',
+    description: 'Return one backend task by task_id',
+    handler: ({ payload }) => defaultTaskRunner.getTask(payload.task_id)
   }
 };
 
@@ -39,6 +50,18 @@ async function invokeServiceCommand(command, payload = {}, context = {}) {
     error.code = 'SERVICE_CONTEXT_MISSING_DB';
     throw error;
   }
+  if (context.asTask) {
+    return defaultTaskRunner.runTask({
+      type: command,
+      classification: definition.classification,
+      scopeKey: payload.scopeKey || command
+    }, async (task) => {
+      task.progress({ stage: 'start', message: `Running ${command}` });
+      const data = await definition.handler({ ...context, payload });
+      task.progress({ stage: 'finish', message: `Finished ${command}` });
+      return { status: 'succeeded', data };
+    });
+  }
   return definition.handler({ ...context, payload });
 }
 
@@ -54,7 +77,10 @@ function registerIpcServiceHandlers(ipcMain, contextProvider) {
   ipcMain.handle('atlas:service:invoke', async (_event, request) => {
     const command = request?.command;
     const payload = request?.payload || {};
-    return invokeServiceCommand(command, payload, contextProvider());
+    return invokeServiceCommand(command, payload, {
+      ...contextProvider(),
+      asTask: request?.asTask === true
+    });
   });
 }
 

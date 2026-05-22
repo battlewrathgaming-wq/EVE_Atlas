@@ -28,6 +28,14 @@ Assessment artifacts are committed memory.
 Queues are ephemeral until resumability is required.
 ```
 
+Additional memory rule:
+
+```txt
+Evidence may age out of tactical value, but assessment memory may remain valuable.
+Atlas should support compacting old evidence into committed assessment artifacts before pruning.
+Assessment artifacts should survive evidence pruning.
+```
+
 ## Policy By Data Class
 
 ### Evidence Records
@@ -51,6 +59,7 @@ Policy:
 - manual prune only
 - prune must be explicit, scoped, and auditable
 - raw expanded killmail evidence must not be silently replaced
+- before pruning old evidence, Atlas should offer or require assessment/summary preservation when the evidence has produced meaningful observations
 
 ### Collection Provenance
 
@@ -158,6 +167,28 @@ Policy:
 - they may be updated, cooled, archived, or promoted to watchlists
 - they should not be silently pruned with diagnostics
 - derivation or reason should be preserved when practical
+- they may preserve a small supporting snapshot after raw evidence is pruned
+
+Suggested minimum supporting snapshot:
+
+```txt
+entity
+interest score
+assessment reason
+evidence window
+appearance counts
+systems/regions observed
+role mix
+created from report/scope
+```
+
+Example:
+
+```txt
+Repeated attacker-side presence in ZTS-4D radius.
+8 appearances across 2 systems.
+Observed during 2026-05-21 evidence window.
+```
 
 ### Expansion Queues
 
@@ -174,6 +205,23 @@ Policy:
 - persist only outcomes: discovered, cached, attempted, skipped, failed, expanded
 - revisit if Atlas needs resumable long-running collection or scheduled background backlog
 
+## Suggested Early Defaults
+
+These are not hard limits yet, but they describe the intended lifecycle direction:
+
+| Data Class | Suggested Early Policy |
+| --- | --- |
+| Assessment artifacts | Keep indefinitely |
+| Killmail evidence | Keep indefinitely during PoC |
+| Activity events | Keep with killmail evidence |
+| Observation snapshots | Future; preserve selectively |
+| API request logs | Later prune after 30 days |
+| Metadata runs | Later prune after 90 days |
+| Pending queue refs | Later expire after 30 days |
+| Expanded queue refs | Later archive/prune after 7 days |
+| SDE import records | Keep recent import history |
+| Runtime `.tmp` DBs | Disposable |
+
 ## Related Tenets
 
 - Evidence First
@@ -181,4 +229,3 @@ Policy:
 - IDs Are Facts, Names Are Labels
 - Collection Provenance Is Not Intelligence Scope
 - Respectful API Use
-

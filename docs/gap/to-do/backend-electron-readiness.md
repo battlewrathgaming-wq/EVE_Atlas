@@ -139,7 +139,8 @@ Current verification:
 - `docs/current-state/current-ipc-ui-preparation.md`
 - `docs/gap/complete/app-readiness-and-settings.md`
 - `docs/gap/complete/ipc-service-contract.md`
-- `docs/gap/to-do/task-runner-and-progress.md`
+- `docs/gap/complete/scope-controls-contract.md`
+- `docs/gap/complete/task-runner-and-progress.md`
 - `docs/gap/to-do/live-api-gate-ux.md`
 - `docs/gap/to-do/report-response-contract.md`
 - `docs/gap/to-do/scope-controls-contract.md`

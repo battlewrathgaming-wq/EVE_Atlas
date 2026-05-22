@@ -1,4 +1,6 @@
-# TODO: Task Runner And Progress Model
+# Complete: Task Runner And Progress Model
+
+Status: Complete For IPC Shell Preparation
 
 ## Actionables
 
@@ -33,3 +35,18 @@ The UI needs a common way to show progress without each feature inventing its ow
 
 The app has one task lifecycle vocabulary and a backend path for progress updates, warnings, cancellation, and recent task history.
 
+## Current Implementation
+
+- Shared task states exist: queued, running, succeeded, failed, cancelled, partial, capped.
+- Shared task classifications exist: read-only, metadata-only, evidence-creating, destructive, exclusive.
+- Task runner records progress, warnings, result, error, and recent in-memory history.
+- Non-read-only task locking prevents unsafe overlap by scope/classification.
+- Service registry can run service commands as tasks with `asTask: true`.
+- `task.list` and `task.get` service commands expose recent task history.
+- Verified by `verify:task-runner` and `verify:service-registry`.
+
+## Remaining Follow-On Work
+
+- Long-running collectors/importers still need to emit richer staged progress as they are wrapped.
+- Cancellation is represented in the vocabulary but not yet wired to cancellable worker operations.
+- Persistent task history can be added later if in-memory history is not enough for the Electron shell.

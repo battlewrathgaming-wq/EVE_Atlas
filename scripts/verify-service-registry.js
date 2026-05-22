@@ -15,12 +15,15 @@ async function main() {
     const readinessCommand = commands.find((entry) => entry.command === 'app.readiness');
     const scopeDefaultsCommand = commands.find((entry) => entry.command === 'scope.defaults');
     const scopeValidateCommand = commands.find((entry) => entry.command === 'scope.validate');
+    const taskListCommand = commands.find((entry) => entry.command === 'task.list');
     assert(readinessCommand, 'app.readiness should be listed');
     assert(readinessCommand.classification === 'read-only', 'app.readiness should be read-only');
     assert(scopeDefaultsCommand, 'scope.defaults should be listed');
     assert(scopeDefaultsCommand.classification === 'read-only', 'scope.defaults should be read-only');
     assert(scopeValidateCommand, 'scope.validate should be listed');
     assert(scopeValidateCommand.classification === 'read-only', 'scope.validate should be read-only');
+    assert(taskListCommand, 'task.list should be listed');
+    assert(taskListCommand.classification === 'read-only', 'task.list should be read-only');
 
     const readiness = await invokeServiceCommand('app.readiness', {}, {
       db,
@@ -87,6 +90,17 @@ async function main() {
       }
     });
     assert(ipcScope.normalized.maxExpansions === 2, 'IPC scope validation should apply system watch defaults');
+
+    const taskWrappedReadiness = await ipcMain.handlers.get('atlas:service:invoke')(null, {
+      command: 'app.readiness',
+      payload: {},
+      asTask: true
+    });
+    assert(taskWrappedReadiness.status === 'succeeded', 'asTask service call should return succeeded task');
+    assert(taskWrappedReadiness.result.checks.db_initialized === true, 'asTask result should include command data');
+
+    const taskHistory = await invokeServiceCommand('task.list', { limit: 5 }, { db });
+    assert(taskHistory.some((task) => task.task_id === taskWrappedReadiness.task_id), 'task.list should include task-wrapped command');
   } finally {
     closeDatabase(db);
   }

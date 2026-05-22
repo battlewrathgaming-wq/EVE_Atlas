@@ -1,6 +1,6 @@
-# TODO: Scope Controls Contract
+# Complete: Scope Controls Contract
 
-Status: Partially Implemented
+Status: Complete For IPC Shell Preparation
 
 ## Actionables
 

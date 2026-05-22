@@ -6,6 +6,7 @@ const GROUPS = {
     'verify:scope-controls',
     'verify:app-readiness',
     'verify:service-registry',
+    'verify:task-runner',
     'verify:fixture',
     'verify:idempotent',
     'verify:db-integrity'
