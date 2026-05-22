@@ -116,6 +116,9 @@ Backend actions:
 - System scope should resolve from local SDE first.
 - Actor scope must require explicit actor type before resolving names.
 - Manual discovery scope must be explicit: actor, system, or radius.
+- Manual discovery should default to zero ESI expansion.
+- Routine watches may expand automatically, but only under visible global caps.
+- User-facing controls should expose lookback window, ref caps, expansion caps, and radius/system caps before live collection.
 - Evidence reports should filter by evidence scope and time, not collection route.
 - Collection provenance should remain visible but secondary.
 
@@ -130,6 +133,7 @@ Backend actions:
 
 - `docs/contracts/discovery-queue-contract.md`
 - `docs/contracts/expansion-selection-contract.md`
+- `docs/contracts/scope-definition-contract.md`
 - `docs/contracts/report-scope-contract.md`
 - `docs/terms/manual-discovery.md`
 - `docs/terms/at-a-glance-preview.md`
