@@ -1,6 +1,6 @@
 # Gap To-Do: Session-Armed Watch Executor Implementation
 
-Status: Open
+Status: Complete
 Priority: P1
 Milestone: Presentation Validation And Controlled Execution
 
@@ -46,6 +46,23 @@ Verification should prove:
 - live disabled blocks dispatch
 - one due watch dispatches per tick
 - `watch.recordRun` receives success/failure state
+
+## Completion Notes
+
+Implemented through the backend service boundary as volatile session state:
+
+- `watch.executor.status`
+- `watch.executor.arm`
+- `watch.executor.disarm`
+- `watch.executor.tick`
+
+The renderer exposes explicit Arm/Disarm controls in Queue / Watches. Passive readiness, report, queue, and watch status refreshes remain read-only and do not dispatch collection.
+
+Verification:
+
+- `verify:watch-executor`
+- `verify:service-registry`
+- `verify:renderer-shell`
 
 ## Related Documents
 

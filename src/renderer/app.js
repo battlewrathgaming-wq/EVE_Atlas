@@ -65,7 +65,10 @@ const els = {
   refreshWatchStatus: document.querySelector('#refresh-watch-status'),
   watchSessionArmed: document.querySelector('#watch-session-armed'),
   watchLiveApiEnabled: document.querySelector('#watch-live-api-enabled'),
+  armWatchSession: document.querySelector('#arm-watch-session'),
+  disarmWatchSession: document.querySelector('#disarm-watch-session'),
   watchSummary: document.querySelector('#watch-summary'),
+  watchExecutorState: document.querySelector('#watch-executor-state'),
   watchList: document.querySelector('#watch-list'),
   preflightManualDiscovery: document.querySelector('#preflight-manual-discovery'),
   runManualDiscovery: document.querySelector('#run-manual-discovery'),
@@ -123,6 +126,7 @@ async function init() {
       loadScopeDefaults(),
       loadQueueSelection(),
       loadWatchSchedule(),
+      loadWatchExecutorStatus(),
       loadTasks(),
       loadQueueReport()
     ]);
@@ -143,6 +147,8 @@ function bindEvents() {
   els.cancelTask.addEventListener('click', cancelSelectedTask);
   els.previewQueueSelection.addEventListener('click', loadQueueSelection);
   els.refreshWatchStatus.addEventListener('click', loadWatchSchedule);
+  els.armWatchSession.addEventListener('click', armWatchSession);
+  els.disarmWatchSession.addEventListener('click', disarmWatchSession);
   els.preflightManualDiscovery.addEventListener('click', preflightManualDiscovery);
   els.runManualDiscovery.addEventListener('click', runManualDiscovery);
   els.loadActorReport.addEventListener('click', loadActorReport);
@@ -388,6 +394,48 @@ async function loadWatchSchedule() {
   }
 }
 
+async function loadWatchExecutorStatus() {
+  try {
+    const status = await service.invoke('watch.executor.status');
+    renderWatchExecutor(status);
+  } catch (error) {
+    renderError(els.watchExecutorState, error);
+  }
+}
+
+async function armWatchSession() {
+  setBusy(els.armWatchSession, true);
+  try {
+    const status = await service.invoke('watch.executor.arm', {
+      liveApiEnabled: els.watchLiveApiEnabled.checked
+    });
+    els.watchSessionArmed.checked = status.session_armed === true;
+    renderWatchExecutor(status);
+    renderWatchSchedule(status.schedule);
+    await loadTasks();
+  } catch (error) {
+    renderError(els.watchExecutorState, error);
+  } finally {
+    setBusy(els.armWatchSession, false);
+  }
+}
+
+async function disarmWatchSession() {
+  setBusy(els.disarmWatchSession, true);
+  try {
+    const status = await service.invoke('watch.executor.disarm', {
+      reason: 'User disarmed watch session from renderer'
+    });
+    els.watchSessionArmed.checked = false;
+    renderWatchExecutor(status);
+    renderWatchSchedule(status.schedule);
+  } catch (error) {
+    renderError(els.watchExecutorState, error);
+  } finally {
+    setBusy(els.disarmWatchSession, false);
+  }
+}
+
 function renderWatchSchedule(schedule) {
   renderRows(els.watchSummary, [
     ['Generated', schedule.now || 'unknown'],
@@ -415,6 +463,20 @@ function renderWatchSchedule(schedule) {
     ].join('');
     els.watchList.appendChild(row);
   });
+}
+
+function renderWatchExecutor(status) {
+  const tick = status.tick || null;
+  renderRows(els.watchExecutorState, [
+    ['Session Armed', status.session_armed ? 'yes' : 'no'],
+    ['Active Task', status.active_task_id || 'none'],
+    ['Poll Interval', status.poll_interval_ms ? `${status.poll_interval_ms} ms` : 'unknown'],
+    ['Last Tick', status.last_tick || 'none'],
+    ['Last Dispatch', status.last_dispatch?.task_id || 'none'],
+    ['Last Blocked Reason', status.last_blocked_reason || 'none'],
+    ['Latest Tick Status', tick?.status || 'none'],
+    ['Latest Tick Reason', tick?.reason || 'none']
+  ]);
 }
 
 function watchSourceLabel(watch) {

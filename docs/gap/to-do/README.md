@@ -18,7 +18,7 @@ The current checklist is grouped around preparing the Electron shell and rendere
 
 Recommended order:
 
-- No active IPC/UI checklist item remains in this folder.
+- Active IPC/UI checklist items are listed under the current milestone below.
 
 ## Completed Milestone: Initial Presentation Shell
 
@@ -69,6 +69,5 @@ The milestone should leave Atlas with:
 
 Recommended order:
 
-1. `session-armed-watch-executor-implementation.md`
-2. `assessment-artifact-persistence.md`
-3. `runtime-process-isolation-review.md`
+1. `assessment-artifact-persistence.md`
+2. `runtime-process-isolation-review.md`

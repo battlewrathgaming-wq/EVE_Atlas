@@ -34,6 +34,7 @@
     "verify:message-taxonomy": "node scripts/verify-message-taxonomy.js",
     "verify:retention-preflight": "node scripts/verify-retention-preflight.js",
     "verify:watch-scheduler": "node scripts/verify-watch-scheduler.js",
+    "verify:watch-executor": "node scripts/verify-watch-executor.js",
     "verify:mutating-services": "node scripts/verify-mutating-services.js",
     "verify:background-execution": "node scripts/verify-background-execution.js",
     "verify:http-timeouts": "node scripts/verify-http-timeouts.js",

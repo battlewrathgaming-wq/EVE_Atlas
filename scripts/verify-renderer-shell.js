@@ -65,6 +65,9 @@ function main() {
   assert(htmlText.includes('refresh-watch-status'), 'watch view should include refresh action');
   assert(htmlText.includes('watch-session-armed'), 'watch view should include session gate preview');
   assert(htmlText.includes('watch-live-api-enabled'), 'watch view should include live API gate preview');
+  assert(htmlText.includes('arm-watch-session'), 'watch view should include explicit session arm control');
+  assert(htmlText.includes('disarm-watch-session'), 'watch view should include explicit session disarm control');
+  assert(htmlText.includes('watch-executor-state'), 'watch view should include session executor state');
   assert(htmlText.includes('watch-list'), 'watch view should include watch list');
   assert(htmlText.includes('view-actions'), 'renderer should include controlled actions view');
   assert(htmlText.includes('preflight-manual-discovery'), 'actions view should include manual discovery preflight');
@@ -98,7 +101,11 @@ function main() {
   assert(rendererText.includes("service.invoke('queue.selection'"), 'renderer should call queue.selection through service bridge');
   assert(rendererText.includes('renderQueueSelection'), 'renderer should render queue selection preview');
   assert(rendererText.includes("service.invoke('watch.schedule'"), 'renderer should call watch.schedule through service bridge');
+  assert(rendererText.includes("service.invoke('watch.executor.status'"), 'renderer should read watch executor state through service bridge');
+  assert(rendererText.includes("service.invoke('watch.executor.arm'"), 'renderer should explicitly arm watch executor through service bridge');
+  assert(rendererText.includes("service.invoke('watch.executor.disarm'"), 'renderer should explicitly disarm watch executor through service bridge');
   assert(rendererText.includes('renderWatchSchedule'), 'renderer should render watch schedule status');
+  assert(rendererText.includes('renderWatchExecutor'), 'renderer should render watch executor state');
   assert(rendererText.includes("service.invoke('live.gate'"), 'renderer should preflight live gate through service bridge');
   assert(rendererText.includes("service.invoke('manual.discovery'"), 'renderer should start manual discovery through service bridge');
   assert(rendererText.includes('detachedTask: true'), 'manual discovery should run as a detached task');

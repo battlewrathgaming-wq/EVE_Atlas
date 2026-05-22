@@ -10,6 +10,10 @@ const {
   runSystemRadiusWatchService,
   runWatchCreateService,
   runWatchListService,
+  runWatchExecutorArmService,
+  runWatchExecutorDisarmService,
+  runWatchExecutorStatusService,
+  runWatchExecutorTickService,
   runWatchRecordRunService,
   runWatchScheduleService,
   runWatchUpdateService
@@ -95,6 +99,26 @@ const COMMANDS = {
     classification: 'metadata-only',
     description: 'Record success/failure scheduling state after a watch run',
     handler: ({ db, payload }) => runWatchRecordRunService(db, payload)
+  },
+  'watch.executor.status': {
+    classification: 'read-only',
+    description: 'Return volatile session-armed watch executor state',
+    handler: ({ db }) => runWatchExecutorStatusService(db)
+  },
+  'watch.executor.arm': {
+    classification: 'evidence-creating',
+    description: 'Arm the current app session and dispatch at most one due watch',
+    handler: ({ db, payload, ...context }) => runWatchExecutorArmService(db, payload, context)
+  },
+  'watch.executor.disarm': {
+    classification: 'metadata-only',
+    description: 'Disarm the current app session watch executor',
+    handler: ({ db, payload }) => runWatchExecutorDisarmService(db, payload)
+  },
+  'watch.executor.tick': {
+    classification: 'evidence-creating',
+    description: 'Run one session-armed watch executor tick',
+    handler: ({ db, payload, ...context }) => runWatchExecutorTickService(db, payload, context)
   },
   'report.build': {
     classification: 'read-only',

@@ -31,6 +31,10 @@ async function main() {
     const watchListCommand = commands.find((entry) => entry.command === 'watch.list');
     const watchScheduleCommand = commands.find((entry) => entry.command === 'watch.schedule');
     const watchRecordRunCommand = commands.find((entry) => entry.command === 'watch.recordRun');
+    const watchExecutorStatusCommand = commands.find((entry) => entry.command === 'watch.executor.status');
+    const watchExecutorArmCommand = commands.find((entry) => entry.command === 'watch.executor.arm');
+    const watchExecutorDisarmCommand = commands.find((entry) => entry.command === 'watch.executor.disarm');
+    const watchExecutorTickCommand = commands.find((entry) => entry.command === 'watch.executor.tick');
     assert(readinessCommand, 'app.readiness should be listed');
     assert(readinessCommand.classification === 'read-only', 'app.readiness should be read-only');
     assert(prepareCommand, 'app.prepare should be listed');
@@ -60,6 +64,10 @@ async function main() {
     assert(watchListCommand?.classification === 'read-only', 'watch.list should be read-only');
     assert(watchScheduleCommand?.classification === 'read-only', 'watch.schedule should be read-only');
     assert(watchRecordRunCommand?.classification === 'metadata-only', 'watch.recordRun should be metadata-only');
+    assert(watchExecutorStatusCommand?.classification === 'read-only', 'watch.executor.status should be read-only');
+    assert(watchExecutorArmCommand?.classification === 'evidence-creating', 'watch.executor.arm should be evidence-creating');
+    assert(watchExecutorDisarmCommand?.classification === 'metadata-only', 'watch.executor.disarm should be metadata-only');
+    assert(watchExecutorTickCommand?.classification === 'evidence-creating', 'watch.executor.tick should be evidence-creating');
 
     const readiness = await invokeServiceCommand('app.readiness', {}, {
       db,

@@ -276,12 +276,20 @@
                 <input id="watch-live-api-enabled" type="checkbox" />
                 <span>Live API enabled for schedule preview</span>
               </label>
+              <div class="action-row stacked-actions">
+                <button class="primary-action" type="button" id="arm-watch-session">Arm Watch Session</button>
+                <button class="secondary-action" type="button" id="disarm-watch-session">Disarm</button>
+              </div>
               <p class="form-note">This view previews scheduler state only. Due watches are not executed from page load.</p>
             </div>
             <div class="panel">
               <h4>Watch Summary</h4>
               <div id="watch-summary" class="detail-list"></div>
             </div>
+          </div>
+          <div class="panel">
+            <h4>Session Executor</h4>
+            <div id="watch-executor-state" class="detail-list"></div>
           </div>
           <div class="panel">
             <h4>Watch Schedule</h4>

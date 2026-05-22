@@ -17,6 +17,7 @@ const GROUPS = {
     'verify:message-taxonomy',
     'verify:retention-preflight',
     'verify:watch-scheduler',
+    'verify:watch-executor',
     'verify:mutating-services',
     'verify:background-execution',
     'verify:http-timeouts',

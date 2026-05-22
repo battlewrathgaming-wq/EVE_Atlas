@@ -20,6 +20,7 @@ const { SdeTopologyImporter } = require('../sde/sdeImporter');
 const { SdeInventoryImporter } = require('../sde/sdeInventoryImporter');
 const { addWatchlistEntity, listWatchlistEntities } = require('../watchlist/watchlistRepository');
 const { buildWatchScheduleStatus, recordWatchRunResult } = require('../watchlist/watchScheduler');
+const { defaultWatchSessionExecutor } = require('../watchlist/watchExecutor');
 
 async function runManualDiscoveryService(db, payload = {}, dependencies = {}) {
   assertLiveAllowed('manual.discovery', payload);
@@ -130,6 +131,22 @@ function runWatchRecordRunService(db, payload = {}) {
   return recordWatchRunResult(db, payload);
 }
 
+function runWatchExecutorStatusService(db) {
+  return defaultWatchSessionExecutor.status(db);
+}
+
+function runWatchExecutorDisarmService(db, payload = {}) {
+  return defaultWatchSessionExecutor.disarm(db, payload);
+}
+
+function runWatchExecutorArmService(db, payload = {}, dependencies = {}) {
+  return defaultWatchSessionExecutor.arm(db, payload, dependencies);
+}
+
+function runWatchExecutorTickService(db, payload = {}, dependencies = {}) {
+  return defaultWatchSessionExecutor.tick(db, payload, dependencies);
+}
+
 async function normalizeManualDiscoveryInput(db, payload, dependencies) {
   if (String(payload.scope || '').toLowerCase() === 'actor') {
     const actor = await resolveActorInput(db, payload, dependencies);
@@ -179,5 +196,9 @@ module.exports = {
   runWatchUpdateService,
   runWatchListService,
   runWatchScheduleService,
-  runWatchRecordRunService
+  runWatchRecordRunService,
+  runWatchExecutorStatusService,
+  runWatchExecutorDisarmService,
+  runWatchExecutorArmService,
+  runWatchExecutorTickService
 };

@@ -16,9 +16,9 @@ Recent backend/UI-readiness work completed:
 - actor-first report UI renders native structured `report.actor` responses with evidence, observation, provenance, warnings, raw IDs, and text export separated
 - scope controls UI loads backend defaults and validates manual discovery, manual expansion, actor watch, and system/radius watch inputs through `scope.validate`
 - queue/watch status UI previews discovery queue selections through `queue.selection` and watch due/blocked/backoff/session/live-gate state through `watch.schedule`
-- session-armed watch executor behavior is contracted before implementation; startup remains disarmed and passive views cannot trigger collection
+- session-armed watch executor is implemented as volatile app-session state with explicit Arm/Disarm controls, one due-watch dispatch per tick, and task-backed execution
 - assessment artifact and evidence compaction behavior is contracted; executable evidence pruning remains blocked until artifact persistence and verification exist
-- `docs/gap/to-do` is cleared except for its README; completed rigging items are now in `docs/gap/complete`
+- `docs/gap/to-do` now tracks the remaining presentation-validation gaps; completed rigging items are in `docs/gap/complete`
 - Electron visual smoke now runs through `npm.cmd run smoke:electron`, writes screenshots/results under `F:\Projects\AURA-Atlas\.tmp\electron-visual-smoke`, and verifies startup creates no evidence/fetch runs
 - Electron was updated to `v42.2.0` so the app runtime supports the backend `node:sqlite` dependency
 - `verify:electron-runtime` now checks that Electron itself can use `node:sqlite`, closing the gap between desktop Node verification and Electron runtime behavior
@@ -28,16 +28,16 @@ Recent backend/UI-readiness work completed:
 - queue selection, queue status isolation, and retention preflight are implemented
 - watch schedule/status planning and watch run state recording are implemented
 - report response contracts and common report-scope indexes are implemented
-- offline `verify:all` passes with 42 scripts
+- offline `verify:all` passes with 43 scripts
 - clean local checkpoint reviewed at `26f37a7`
 
 Current lane:
 
 - accept the initial presentation shell as the first renderer baseline
 - keep the current renderer mostly read-only until evidence-creating controls are deliberately wired through task services, live gates, and explicit user action
-- use the completed contracts as the source for future session-armed execution and retention/assessment work
+- use the completed contracts as the source for future retention/assessment work
 - keep the session-armed watch executor loop separate from passive page load behavior
-- implement any future watch executor from `docs/contracts/session-armed-watch-executor-contract.md`
+- keep the implemented watch executor aligned with `docs/contracts/session-armed-watch-executor-contract.md`
 - keep retention/destructive actions blocked until assessment artifact persistence exists
 - defer true worker-thread/process isolation until heavier batch/runtime testing proves it is needed
 - run visual/app smoke through `npm.cmd run smoke:electron` or `npm start` rather than direct `file:///F:/...` navigation; the Codex in-app browser blocks direct file navigation by policy
@@ -77,6 +77,7 @@ Current implemented shell:
 - bounded HTTP request timeouts and task cancellation signals for live/API-backed work
 - watch scheduling/status services for due, blocked, inactive, backoff, session-gated, and live-gated actor/system watches
 - metadata-only watch run state recording for success/failure, next poll, and backoff timing
+- session-armed watch executor services for status, arm, disarm, and one-tick dispatch of due watches through task execution
 - compound report/query indexes for common evidence scopes and queue diagnostics
 - read-only readiness inspection separated from explicit runtime path preparation
 - initial renderer panes for readiness, task history, and queue report output
@@ -85,6 +86,7 @@ Current implemented shell:
 - report pane presents actor reports from backend response sections without recomputing evidence in the renderer
 - scope pane exposes lookback, caps, radius, system, actor, and queue selection inputs before future live actions
 - queue/watch pane exposes queued discovery refs, non-evidence preview fields, expected ESI calls, selected/skipped/cached/failed state, and passive watch schedule status
+- queue/watch pane exposes explicit session Arm/Disarm controls and executor state without arming on page load
 - actions pane exposes manual discovery as the first controlled execution path; it queues zKill refs only and routes execution through task services
 - frameless window controls for minimize, close, and always-on-top
 - native structured actor report response with text rendering retained for CLI/export
@@ -146,6 +148,7 @@ Offline verification now includes:
 - background execution verification
 - HTTP timeout/cancellation verification
 - watch scheduler/backoff verification
+- watch executor verification
 - report index/query-plan verification
 - renderer shell service-boundary verification
 - frameless shell/window-control verification through `verify:renderer-shell`
@@ -168,8 +171,7 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 ## Not Yet Implemented
 
 - broader visual/product polish beyond the initial shell
-- additional renderer controls for manual expansion, metadata hydration, actor watch, and system/radius watch execution
-- session-armed watch executor loop
+- additional renderer controls for manual expansion, metadata hydration, actor watch, and system/radius watch execution outside the session executor
 - executable retention/deprecation actions and assessment compaction
 - assessment artifact schema/persistence
 - true worker-thread/process isolation for CPU-heavy or synchronous SQLite-heavy tasks
@@ -201,7 +203,7 @@ Latest reviewed commits:
 - current actor report slice - first structured report presentation surface
 - current scope controls slice - backend-defaulted, backend-validated scope payload preview
 - current queue/watch slice - passive discovery queue selection preview and watch schedule status
-- current session-armed executor contract slice - volatile user-armed watch execution semantics before implementation
+- current session-armed executor slice - volatile user-armed watch execution with explicit Arm/Disarm, one due-watch dispatch per tick, task-backed collection, and success/failure schedule recording
 - current retention design slice - assessment artifacts and evidence compaction contract before destructive pruning
 
-These commits move the earlier rigging gaps into an initial presentation checkpoint. The main remaining risk is no longer missing service vocabulary; it is preserving the service/evidence boundary while adding executable UI actions, then implementing the contracted session-armed executor and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.
+These commits move the earlier rigging gaps into an initial presentation checkpoint. The main remaining risk is no longer missing service vocabulary; it is preserving the service/evidence boundary while adding further executable UI actions and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.
