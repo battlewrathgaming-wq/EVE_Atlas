@@ -25,6 +25,7 @@
     "verify:watchlist": "node scripts/verify-watchlist.js",
     "verify:actor-watch": "node scripts/verify-actor-watch.js",
     "verify:actor-report": "node scripts/verify-actor-report.js",
+    "verify:actor-bulk": "node scripts/verify-actor-bulk-workflow.js",
     "verify:queue-report": "node scripts/verify-queue-report.js",
     "verify:queue-preflight": "node scripts/verify-queue-preflight.js",
     "verify:actor-resolution": "node scripts/verify-actor-resolution.js",
