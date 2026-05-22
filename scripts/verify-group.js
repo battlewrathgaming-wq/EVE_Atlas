@@ -11,6 +11,7 @@ const GROUPS = {
     'verify:task-runner',
     'verify:live-api-gate',
     'verify:report-response',
+    'verify:passive-side-effects',
     'verify:report-indexes',
     'verify:queue-selection',
     'verify:queue-scope-isolation',

@@ -373,10 +373,13 @@ Active tasks:
 
 - `adversarial-evidence-fixture-suite.md`
 - `partial-failure-and-transaction-integrity.md`
-- `passive-surface-side-effect-sweep.md`
 - `sde-lookup-builder-failure-modes.md`
 - `electron-operator-rugged-smoke.md`
 - `task-concurrency-and-cancellation-stress.md`
 - `large-synthetic-scale-pressure.md`
 - `live-api-refusal-and-smoke-matrix.md`
 - `documentation-drift-and-test-index.md`
+
+Completed:
+
+- `passive-surface-side-effect-sweep.md`
