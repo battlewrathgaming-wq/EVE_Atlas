@@ -21,12 +21,13 @@ Recent backend/UI-readiness work completed:
 - `docs/gap/to-do` is cleared except for its README; completed rigging items are now in `docs/gap/complete`
 - Electron visual smoke now runs through `npm.cmd run smoke:electron`, writes screenshots/results under `F:\Projects\AURA-Atlas\.tmp\electron-visual-smoke`, and verifies startup creates no evidence/fetch runs
 - Electron was updated to `v42.2.0` so the app runtime supports the backend `node:sqlite` dependency
+- `verify:electron-runtime` now checks that Electron itself can use `node:sqlite`, closing the gap between desktop Node verification and Electron runtime behavior
 - task wrapping, detached execution, cancellation, and HTTP timeout handling are verified
 - live API gates and user-defined scope validation are centralized
 - queue selection, queue status isolation, and retention preflight are implemented
 - watch schedule/status planning and watch run state recording are implemented
 - report response contracts and common report-scope indexes are implemented
-- offline `verify:all` passes with 41 scripts
+- offline `verify:all` passes with 42 scripts
 - clean local checkpoint reviewed at `26f37a7`
 
 Current lane:
@@ -130,6 +131,7 @@ Offline verification now includes:
 - grouped `verify:all`
 - a controlled disposable DB workflow check
 - app readiness verification
+- Electron runtime verification for `node:sqlite`
 - service registry / IPC handler verification
 - scope defaults/validation verification
 - live API gate verification

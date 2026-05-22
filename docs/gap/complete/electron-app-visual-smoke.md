@@ -106,6 +106,12 @@ Result:
 - Startup created no fetch runs, killmails, or activity events.
 - App readiness is `degraded` in the disposable smoke DB because SDE topology/inventory are not imported there; this is expected for an isolated smoke DB.
 
+Hardening added after the first pass:
+
+- `verify:electron-runtime` checks Electron's bundled Node can load and use `node:sqlite`.
+- `app.readiness` now exposes `killmails` and `activity_events` counts so the smoke's no-evidence-startup assertion is direct.
+- `verify:renderer-shell` guards against redeclaring preload-exposed global names in renderer code.
+
 Issues found and fixed during smoke:
 
 - Electron `v30.5.1` did not include the `node:sqlite` built-in used by the backend. Electron was updated to `v42.2.0`, which resolves the runtime mismatch.
@@ -114,6 +120,7 @@ Issues found and fixed during smoke:
 Verification:
 
 - `verify:renderer-shell`
+- `verify:electron-runtime`
 - `smoke:electron`
 
 ## Dev Worker Notes / Failure Comment

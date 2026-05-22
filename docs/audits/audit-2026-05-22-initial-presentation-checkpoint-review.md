@@ -40,7 +40,7 @@ The renderer path should stay this way. UI components should not call repositori
 The following confidence signals are in place:
 
 - `verify:renderer-shell` statically checks the renderer shell, preload bridge, window controls, service calls, and boundary rules.
-- `verify:all` runs the offline verification suite and currently contains 40 scripts.
+- `verify:all` runs the offline verification suite and currently contains 42 scripts, including Electron runtime verification.
 - Live smoke commands remain separate from `verify:all` and require `AURA_ATLAS_LIVE_API=1`.
 - `docs/gap/to-do` is cleared except for its README; completed rigging items are now archived in `docs/gap/complete`.
 

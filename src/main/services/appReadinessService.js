@@ -116,6 +116,8 @@ function lookupCounts(db) {
     system_adjacency: count(db, 'system_adjacency'),
     type_metadata: count(db, 'type_metadata'),
     entities: count(db, 'entities'),
+    killmails: count(db, 'killmails'),
+    activity_events: count(db, 'activity_events'),
     fetch_runs: count(db, 'fetch_runs'),
     metadata_runs: count(db, 'metadata_runs')
   };

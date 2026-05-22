@@ -102,6 +102,7 @@ function main() {
   assert(rendererText.includes('service.list()'), 'renderer should read service command availability');
   assert(rendererText.includes('windowBridge.setAlwaysOnTop'), 'renderer should toggle always-on-top through preload bridge');
   assert(!rendererText.includes('const atlasWindow = window.atlasWindow'), 'renderer should avoid redeclaring exposed atlasWindow global');
+  assert(!/const\s+(atlasServices|atlasWindow)\s*=/.test(rendererText), 'renderer should not redeclare preload-exposed global names');
   assert(!rendererText.includes("service.invoke('manual.expansion'"), 'renderer should not trigger manual expansion from passive views');
   assert(!rendererText.includes("service.invoke('actor.watch'"), 'renderer should not trigger actor collection from passive views');
   assert(!rendererText.includes("service.invoke('system.radius.watch'"), 'renderer should not trigger system/radius collection from passive views');
