@@ -198,3 +198,35 @@ Completed:
 - `scoped-discovery-ui-path-decision.md`
 - `live-scoped-zkill-smoke-artifacts.md`
 - `evidence-rule-regression-checks.md`
+
+## Current Milestone: Operator Evidence Operations Readiness
+
+Mission statement:
+
+Turn Atlas from a proven controlled workflow into a cautious operator workstation. The next work should make live operations reviewable, local evidence stores inspectable, runtime data safer to handle, and assessment memory easier to review without weakening the evidence boundary.
+
+This milestone should leave Atlas with:
+
+- a reviewed live scoped zKill success-smoke path and artifact checklist
+- a corpus health report for local runtime databases
+- a DB snapshot/restore preflight before any pruning or destructive maintenance
+- an offline operator workflow scenario smoke that exercises the shell/service boundary
+- assessment artifact review surfaces that display citation status and evidence basis clearly
+- no automatic evidence deletion
+- no passive broad ingestion
+
+Recommended order:
+
+1. `evidence-corpus-health-report.md`
+3. `runtime-db-snapshot-and-restore-preflight.md`
+4. `operator-workflow-scenario-smoke.md`
+5. `assessment-artifact-review-surface.md`
+6. `operator-debug-trace-pack.md`
+
+Supporting audit:
+
+- `docs/audits/audit-2026-05-22-overseer-evidence-safe-assessment-review.md`
+
+Completed:
+
+- `live-scoped-discovery-success-smoke-review.md`

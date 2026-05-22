@@ -122,7 +122,7 @@ function preflightLocalSystemScope(db) {
       lookbackSeconds: integerEnv('AURA_ATLAS_LIVE_LOOKBACK_SECONDS', 3600),
       maxSystems: 1,
       maxRefsPerSystem: integerEnv('AURA_ATLAS_LIVE_MAX_REFS_PER_SYSTEM', 5),
-      maxRadius: 0,
+      maxRadius: 1,
       maxTopologySystems: 1,
       trigger: 'manual'
     });
