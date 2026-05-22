@@ -54,6 +54,7 @@ Recent backend/UI-readiness work completed:
 - Positive-ref scoped discovery-only live smoke is deferred until a known respectful target/window is available; current live/offline coverage is enough for this milestone.
 - Next tracked milestone is Operator UI Workflow Polish: expose trace packs in the renderer, improve assessment ergonomics, document live target discipline, and hold the positive-ref live smoke until a suitable target/window is known.
 - Debug trace pack generation is now exposed in the Readiness view through `support.debug_trace_pack`, with visible output path, timestamp, included/excluded summary, and no-live/no-evidence boundary wording.
+- Assessment creation ergonomics now show loaded report context, cited killmail IDs, local citation-validation timing, and score/reason rules before save; saved status echoes citation status and cited IDs.
 - assessment compaction writes are intentionally deferred; compaction remains read-only preview and evidence deletion remains blocked
 - runtime process isolation has been reviewed and deliberately deferred; detached tasks remain acceptable for the next milestone
 - current recommended first future isolation target, if measured pressure appears, is SDE import / SDE sync-compare

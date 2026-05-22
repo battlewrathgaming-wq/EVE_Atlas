@@ -286,9 +286,8 @@ This milestone should leave Atlas with:
 
 Recommended order:
 
-1. `assessment-artifact-ergonomics-pass.md`
-2. `live-target-discipline-checklist.md`
-3. `positive-ref-live-smoke-candidate.md`
+1. `live-target-discipline-checklist.md`
+2. `positive-ref-live-smoke-candidate.md`
 
 Roadmap:
 
@@ -297,3 +296,4 @@ Roadmap:
 Completed:
 
 - `debug-trace-renderer-surface.md`
+- `assessment-artifact-ergonomics-pass.md`

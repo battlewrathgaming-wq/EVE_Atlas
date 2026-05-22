@@ -194,18 +194,26 @@ function renderAssessmentContext() {
   if (!report) {
     renderRows(els.assessmentContext, [
       ['Context', 'Load an actor report before saving assessment memory.'],
+      ['Source Report', 'none'],
+      ['Cited Killmail IDs', 'none'],
+      ['Score Rule', 'Scores are optional; any score requires an assessment reason.'],
       ['Boundary', 'Assessment artifacts are memory, not raw evidence.']
     ]);
     return;
   }
   const actor = report.scope?.actor || {};
   const counts = report.evidence_basis?.evidence_range || {};
+  const citedKillmailIds = report.raw_ids?.killmail_ids || [];
   renderRows(els.assessmentContext, [
     ['Actor', actorLabel(report)],
+    ['Source Report', report.report_type || 'actor'],
     ['Evidence Window', report.scope?.evidence_window?.label || 'unknown'],
     ['Sample Status', report.evidence_basis?.sample_status || 'unknown'],
     ['Killmails', counts.killmail_count ?? 0],
     ['Activity Events', counts.activity_event_count ?? 0],
+    ['Cited Killmail IDs', citedKillmailIds.length ? citedKillmailIds.join(', ') : 'none'],
+    ['Citation Status', 'validated locally on save'],
+    ['Score Rule', 'Scores are optional; any score requires an assessment reason.'],
     ['Boundary', 'This records assessment memory over the loaded report context; it does not change evidence.']
   ]);
 }
@@ -367,6 +375,8 @@ async function saveAssessmentArtifact() {
     renderRows(els.assessmentStatus, [
       ['Saved Artifact', artifact.artifact_id],
       ['Entity', artifact.entity_name ? `${artifact.entity_name} [${artifact.entity_type}: ${artifact.entity_id}]` : `${artifact.entity_type}:${artifact.entity_id}`],
+      ['Citation Status', artifact.citation?.status || 'not_applicable'],
+      ['Cited Killmail IDs', artifact.sample_killmail_ids?.length ? artifact.sample_killmail_ids.join(', ') : 'none'],
       ['Boundary', artifact.boundary || 'assessment artifacts are assessment memory, not evidence']
     ]);
     clearAssessmentInputs();

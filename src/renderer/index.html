@@ -638,13 +638,13 @@
             <pre class="task-output" id="metadata-hydration-normalized">Load an actor report to preview hydration candidates.</pre>
           </div>
           <div class="panel">
-            <h4>Assessment Memory</h4>
+            <h4>Create Assessment From Loaded Report</h4>
             <p class="form-note" id="assessment-boundary">Assessment memory is a deliberate operator record over a loaded report context. It is not raw evidence and does not mutate stored killmails or activity events.</p>
             <div id="assessment-context" class="detail-list"></div>
             <div class="form-grid">
               <label class="full-width">
                 <span>Assessment Reason</span>
-                <textarea id="assessment-reason" rows="3" placeholder="Why this entity should be remembered from this evidence sample"></textarea>
+                <textarea id="assessment-reason" rows="3" placeholder="Why this entity should be remembered from this cited evidence sample"></textarea>
               </label>
               <label class="full-width">
                 <span>Assessment Summary</span>
@@ -667,6 +667,7 @@
                 <input id="assessment-confidence" type="number" min="0" max="100" placeholder="0-100" />
               </label>
             </div>
+            <p class="form-note">Scores are optional. If any score is entered, a reason is required. Cited killmail IDs are validated locally when saved.</p>
             <label class="checkbox-row">
               <input id="assessment-confirm" type="checkbox" />
               <span>I understand this saves assessment memory, not evidence, and does not change stored ESI killmails.</span>

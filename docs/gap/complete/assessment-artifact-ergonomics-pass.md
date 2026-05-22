@@ -35,5 +35,27 @@ Assessment artifacts are deliberate memory. They should be useful to create from
 ## Dev Notes
 
 ```txt
+Completed 2026-05-22.
 
+Reviewed the existing actor-report assessment creation and review flow. The structure
+was accepted; this pass improved clarity rather than changing the persistence model.
+
+Renderer changes:
+- retitled the creation panel as "Create Assessment From Loaded Report"
+- shows source report context in the assessment basis
+- shows cited killmail IDs before save
+- states citation status is validated locally on save
+- makes the score/reason rule visible before save
+- saved status now echoes citation status and cited killmail IDs
+
+Boundaries preserved:
+- assessment creation remains explicit
+- visible confirmation remains required
+- assessment artifacts do not mutate evidence
+- observation reports do not read assessment artifacts
+
+Verification:
+- verify:renderer-shell
+- verify:assessment-review
+- verify:assessment-artifacts
 ```

@@ -137,6 +137,9 @@ function main() {
   assert(htmlText.includes('save-assessment-artifact'), 'assessment workflow should include explicit save action');
   assert(htmlText.includes('assessment-artifact-list'), 'assessment workflow should include saved artifact list');
   assert(htmlText.includes('assessment-artifact-detail'), 'assessment workflow should include saved artifact detail');
+  assert(htmlText.includes('Create Assessment From Loaded Report'), 'assessment workflow should describe loaded report context');
+  assert(htmlText.includes('Scores are optional. If any score is entered, a reason is required.'), 'assessment workflow should state score/reason rule');
+  assert(htmlText.includes('Cited killmail IDs are validated locally when saved.'), 'assessment workflow should state local citation validation');
 
   assert(rendererText.includes("service.invoke('app.readiness'"), 'renderer should call app.readiness through service bridge');
   assert(rendererText.includes("service.invoke('runtime.db_snapshot.preflight'"), 'renderer should call runtime snapshot preflight through service bridge');
@@ -208,6 +211,10 @@ function main() {
   assert(rendererText.includes('assessmentConfirm.checked'), 'assessment save should require visible boundary confirmation');
   assert(rendererText.includes('assessmentArtifactPayload'), 'renderer should build assessment artifact payload from report context');
   assert(rendererText.includes('Score fields require an assessment reason'), 'renderer should require reasons for score fields');
+  assert(rendererText.includes("['Source Report', report.report_type || 'actor']"), 'assessment context should show source report context');
+  assert(rendererText.includes("['Cited Killmail IDs', citedKillmailIds.length ? citedKillmailIds.join(', ') : 'none']"), 'assessment context should show cited killmail IDs before save');
+  assert(rendererText.includes("['Citation Status', 'validated locally on save']"), 'assessment context should show citation validation timing');
+  assert(rendererText.includes("['Score Rule', 'Scores are optional; any score requires an assessment reason.']"), 'assessment context should show score rule');
   assert(rendererText.includes("service.invoke('report.queue'"), 'renderer should call a report through service bridge');
   assert(rendererText.includes('reportTextExport'), 'renderer should normalize report text exports safely');
   assert(rendererText.includes('typeof report.text'), 'renderer should render structured report text when available');
