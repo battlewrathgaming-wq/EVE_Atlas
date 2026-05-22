@@ -148,6 +148,8 @@ async function verifyIdempotentCachedSkip() {
   assert(first.collection_plan.estimated_api_calls.esi === 1, 'first run should estimate selected ESI expansions');
   assert(first.expansion_queue.some((candidate) => candidate.skip_reason === 'duplicate'), 'first queue should include duplicate skip reason');
   assert(first.expansion_queue.some((candidate) => candidate.selected_for_expansion), 'first queue should include selected expansion candidate');
+  assert(count(db, 'discovered_killmail_refs') === 1, 'first run should persist one unique system-radius discovered ref');
+  assert(discoveryRefStatus(db, 1001) === 'expanded', 'first run should mark expanded system-radius ref');
 
   const second = await collectSystemRadiusWatch(input, { db, zkillClient, esiClient });
   assert(second.zkill_refs_discovered === 2, 'second run should rediscover refs');
@@ -217,20 +219,25 @@ async function verifyGradualIngestAfterCacheSkip() {
   const first = await collectSystemRadiusWatch(input, { db, zkillClient, esiClient });
   const second = await collectSystemRadiusWatch(input, { db, zkillClient, esiClient });
 
-  assertSame(expanded, [1001, 1002, 1003, 1004], 'rerun should expand next uncached refs after cache skip');
+  assertSame(expanded, [1001, 1002, 1003, 1004], 'rerun should expand next pending refs without repeating discovery');
   assert(first.expansion_attempted === 2, 'first gradual run should attempt first 2 expansions');
   assert(first.expansion_cap_skipped === 2, 'first gradual run should skip 2 refs by cap');
   assert(first.malformed_refs_removed === 2, 'first gradual run should remove malformed refs');
   assert(first.expansion_queue_summary.malformed === 2, 'first gradual run should explain malformed skips');
   assert(first.expansion_queue_summary.cap_skipped === 2, 'first gradual run should explain cap skips');
   assert(first.persisted_killmails === 2, 'first gradual run should persist 2 killmails');
-  assert(second.already_cached_killmails === 2, 'second gradual run should count first 2 as cached');
+  assert(second.zkill_refs_discovered === 0, 'second gradual run should skip zKill discovery while pending refs exist');
+  assert(second.zkill_discovery_skipped === true, 'second gradual run should identify skipped zKill discovery');
+  assert(second.pending_refs_considered === 2, 'second gradual run should consider two pending refs');
+  assert(second.already_cached_killmails === 0, 'second gradual run should drain pending refs, not rediscover cached refs');
   assert(second.expansion_attempted === 2, 'second gradual run should attempt next 2 expansions');
   assert(second.expansion_cap_skipped === 0, 'second gradual run should have no remaining uncached refs past cap');
-  assert(second.expansion_queue_summary.cached === 2, 'second gradual run should explain cached refs');
+  assert(second.expansion_queue_summary.cached === 0, 'second gradual run should not rediscover cached refs');
   assert(second.expansion_queue_summary.selected === 2, 'second gradual run should select next uncached refs');
   assert(second.persisted_killmails === 2, 'second gradual run should persist next 2 killmails');
   assert(count(db, 'killmails') === 4, 'gradual runs should store all 4 killmails');
+  assert(discoveryRefStatus(db, 1001) === 'expanded', 'gradual run should mark first ref expanded');
+  assert(discoveryRefStatus(db, 1004) === 'expanded', 'gradual run should mark last ref expanded');
 
   closeDatabase(db);
 }
@@ -257,6 +264,14 @@ function withEnv(values, callback) {
 
 function count(db, tableName) {
   return db.prepare(`SELECT COUNT(*) AS count FROM ${tableName}`).get().count;
+}
+
+function discoveryRefStatus(db, killmailId) {
+  return db.prepare(`
+    SELECT status
+    FROM discovered_killmail_refs
+    WHERE killmail_id = ?
+  `).get(killmailId)?.status;
 }
 
 function assert(condition, message) {

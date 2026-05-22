@@ -25,8 +25,24 @@ async function collectSystemRadiusWatch(input, dependencies = {}) {
 
   try {
     const plannerOutput = dependencies.plannerOutput || planSystemRadiusWatch(input, { topologyService });
-    const discovery = await discoverRefs(plannerOutput, zkillClient);
+    const pendingRefs = repository.pendingDiscoveryRefs({
+      discoveredByType: 'system_radius',
+      discoveredById: input.centerSystemId,
+      limit: plannerOutput.caps.maxExpansions
+    });
+    const discovery = pendingRefs.length
+      ? pendingSystemRadiusDiscovery(pendingRefs)
+      : await discoverRefs(plannerOutput, zkillClient);
+    if (!pendingRefs.length) {
+      repository.upsertDiscoveredKillmailRefs(discovery.expansionQueue, {
+        runId: fetchRun.run_id,
+        discoveredByType: 'system_radius',
+        discoveredById: input.centerSystemId,
+        sourceScope: `system:${input.centerSystemId}:radius:${input.radiusJumps ?? 0}`
+      });
+    }
     const selection = selectExpansionCandidates(discovery.expansionQueue, repository, plannerOutput.caps.maxExpansions);
+    repository.markDiscoveryRefsSelected(selection.selectedRefs);
     const evidencePackage = await buildEvidencePackageFromRefs({
       refs: selection.selectedRefs,
       repository,
@@ -44,8 +60,16 @@ async function collectSystemRadiusWatch(input, dependencies = {}) {
     });
     markFailedExpansionCandidates(selection.expansionQueue, evidencePackage.warnings);
     selection.skipCounts = summarizeExpansionQueue(selection.expansionQueue);
+    repository.markDiscoveryRefsFailed(evidencePackage.warnings);
 
     const persistResult = repository.persistEvidencePackage(evidencePackage);
+    repository.markDiscoveryRefsExpanded(evidencePackage.killmails.map((killmail) => ({
+      killmail_id: killmail.killmail_id,
+      hash: killmail.killmail_hash
+    })));
+    repository.markDiscoveryRefsCached(selection.expansionQueue
+      .filter((candidate) => candidate.skip_reason === 'cached')
+      .map((candidate) => ({ killmail_id: candidate.killmail_id, hash: candidate.hash })));
     const apiCounts = apiCountsForRun(db, fetchRun.run_id);
     const collectionWarnings = [
       ...plannerOutput.guardrailWarnings,
@@ -72,6 +96,7 @@ async function collectSystemRadiusWatch(input, dependencies = {}) {
       duplicate_refs_removed: discovery.duplicateRefsRemoved,
       unique_refs_after_dedupe: discovery.uniqueRefs.length,
       malformed_refs_removed: discovery.malformedRefsRemoved,
+      pending_refs_considered: discovery.pendingRefsConsidered || 0,
       already_cached_killmails: selection.skipCounts.cached + evidencePackage.run.already_cached,
       expansion_attempted: selection.selectedRefs.length,
       expansion_cap_skipped: selection.skipCounts.cap_skipped,
@@ -88,6 +113,7 @@ async function collectSystemRadiusWatch(input, dependencies = {}) {
       included_systems: plannerOutput.includedSystems,
       skipped_systems: plannerOutput.skippedSystems,
       planned_zkill_requests: plannerOutput.plannedZkillRequests.length,
+      zkill_discovery_skipped: Boolean(pendingRefs.length),
       collection_plan: buildCollectionPlanSummary(plannerOutput, selection),
       expansion_queue: selection.expansionQueue,
       expansion_queue_summary: selection.skipCounts
@@ -112,6 +138,29 @@ async function collectSystemRadiusWatch(input, dependencies = {}) {
     }, 'failed', error.message);
     throw error;
   }
+}
+
+function pendingSystemRadiusDiscovery(pendingRefs) {
+  const expansionQueue = pendingRefs.map((ref, index) => ({
+    killmail_id: ref.killmail_id,
+    hash: ref.hash,
+    source_system_id: ref.source_system_id || null,
+    discovered_at: new Date().toISOString(),
+    priority: ref.priority || index + 1,
+    already_cached: false,
+    selected_for_expansion: false,
+    skip_reason: null
+  }));
+  return {
+    systemsScanned: 0,
+    discoveredRefs: 0,
+    duplicateRefsRemoved: 0,
+    malformedRefsRemoved: 0,
+    uniqueRefs: pendingRefs.map((ref) => ({ killmail_id: ref.killmail_id, hash: ref.hash })),
+    pendingRefsConsidered: pendingRefs.length,
+    expansionQueue,
+    warnings: ['zKill discovery skipped; draining pending system-radius discovery refs from local queue']
+  };
 }
 
 async function discoverRefs(plannerOutput, zkillClient) {

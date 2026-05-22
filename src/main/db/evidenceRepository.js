@@ -398,7 +398,7 @@ class EvidenceRepository {
 
   pendingDiscoveryRefs({ discoveredByType, discoveredById, limit }) {
     return this.db.prepare(`
-      SELECT killmail_id, killmail_hash AS hash, priority
+      SELECT killmail_id, killmail_hash AS hash, source_system_id, priority
       FROM discovered_killmail_refs
       WHERE discovered_by_type = ?
         AND discovered_by_id = ?
