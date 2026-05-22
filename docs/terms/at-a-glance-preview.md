@@ -11,9 +11,12 @@ It helps a user decide whether a ref may merit ESI expansion.
 An at-a-glance preview may include lightweight fields such as:
 
 - killmail time reported by zKill
+- solar system ID, with local SDE label if available
 - victim ship type ID
+- victim character/corporation/alliance IDs, with local cached labels if available
 - attacker count
 - zKill value
+- zKill points and simple flags when present
 
 ## Evidence Boundary
 
@@ -40,6 +43,39 @@ Preview helps select.
 Expansion creates evidence.
 Reports observe evidence.
 ```
+
+## Missing Labels
+
+Preview should use local labels when they are already available:
+
+- SDE labels for systems and type IDs
+- cached entity labels from local metadata
+
+If a useful preview label is not available locally, do not perform live metadata hydration just to improve the preview.
+
+Use the compact placeholder:
+
+```txt
+[Resolve with ESI]
+```
+
+This is not a button label and not a separate workflow. It means the authoritative information for that preview field becomes available by expanding the killmail through the existing ESI evidence pipeline.
+
+The placeholder should be read as:
+
+```txt
+This preview cannot safely assert that label yet.
+Full evidence comes from ESI killmail expansion.
+```
+
+Avoid preview wording such as:
+
+- unresolved
+- lookup failed
+- hydrate
+- resolve name
+
+Those phrases either sound like errors or suggest a live metadata side path.
 
 ## Related Terms
 

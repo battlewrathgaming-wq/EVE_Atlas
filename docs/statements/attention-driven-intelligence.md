@@ -25,6 +25,18 @@ user/system interest
 
 Repeated small observations over time are more valuable than aggressive broad collection bursts.
 
+## Preview Labels
+
+Manual discovery previews may show lightweight zKill discovery metadata to help direct attention.
+
+When a preview field has an ID but no local cached label, Atlas should not perform live metadata hydration just to make the preview prettier. Use:
+
+```txt
+[Resolve with ESI]
+```
+
+This phrase means the authoritative detail is available through the existing ESI killmail expansion pipeline. It is not a separate metadata lookup instruction and not a claim that the preview itself is evidence.
+
 ## Non-Goals
 
 This statement does not mean Atlas should discard intentionally ingested evidence casually.
@@ -36,4 +48,3 @@ Once scoped evidence is expanded and stored, retention should be deliberate, aud
 - Evidence First
 - Collection Is Incomplete By Default
 - Respectful API Use
-
