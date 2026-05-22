@@ -18,8 +18,7 @@ The current checklist is grouped around preparing the Electron shell and rendere
 
 Recommended order:
 
-1. `destructive-actions-and-retention.md`
-2. `ui-language-contract.md`
+1. `ui-language-contract.md`
 
 Supporting current-state note:
 
@@ -27,4 +26,4 @@ Supporting current-state note:
 
 Completed items are moved to `docs/gap/complete`.
 
-The next implementation slice should define destructive action and retention UI safeguards, because pruning/compaction needs explicit confirmation and preservation rules before any renderer control exists.
+The next implementation slice should lock down UI language, because the renderer needs evidence/observation/assessment wording before screens are built.

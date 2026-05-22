@@ -146,5 +146,5 @@ Current verification:
 - `docs/gap/complete/queue-expansion-selection.md`
 - `docs/gap/complete/error-warning-taxonomy.md`
 - `docs/gap/complete/concurrency-and-locking.md`
-- `docs/gap/to-do/destructive-actions-and-retention.md`
+- `docs/gap/complete/destructive-actions-and-retention.md`
 - `docs/gap/to-do/ui-language-contract.md`

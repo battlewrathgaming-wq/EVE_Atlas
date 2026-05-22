@@ -27,6 +27,7 @@
     "verify:report-response": "node scripts/verify-report-response.js",
     "verify:queue-selection": "node scripts/verify-queue-selection.js",
     "verify:message-taxonomy": "node scripts/verify-message-taxonomy.js",
+    "verify:retention-preflight": "node scripts/verify-retention-preflight.js",
     "verify:idempotent": "node scripts/verify-idempotent-ingestion.js",
     "verify:sde-fixture": "node scripts/verify-sde-fixture.js",
     "verify:sde-real-local": "node scripts/verify-sde-real-local.js",

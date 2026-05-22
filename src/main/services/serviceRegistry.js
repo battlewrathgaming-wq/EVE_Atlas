@@ -2,6 +2,7 @@ const { buildAppReadiness } = require('./appReadinessService');
 const { getLiveApiGateState } = require('./liveApiGateService');
 const { buildQueueExpansionSelection } = require('./queueSelectionService');
 const { buildReportResponse } = require('./reportResponseService');
+const { buildRetentionPreflight, listRetentionActions } = require('./retentionActionService');
 const { getScopeDefaults, validateScope } = require('./scopeService');
 const { defaultTaskRunner } = require('./taskRunner');
 
@@ -50,6 +51,16 @@ const COMMANDS = {
     classification: 'read-only',
     description: 'Build a structured system evidence report response',
     handler: ({ db, payload }) => buildReportResponse(db, { ...payload, reportType: 'system' })
+  },
+  'retention.actions': {
+    classification: 'read-only',
+    description: 'List destructive/retention action definitions',
+    handler: () => listRetentionActions()
+  },
+  'retention.preflight': {
+    classification: 'read-only',
+    description: 'Preview destructive/retention action impact and confirmation requirements',
+    handler: ({ db, payload }) => buildRetentionPreflight(db, payload)
   },
   'queue.selection': {
     classification: 'read-only',

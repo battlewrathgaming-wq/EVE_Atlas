@@ -1,4 +1,6 @@
-# TODO: Destructive Actions And Retention UX
+# Complete: Destructive Actions And Retention UX
+
+Status: Complete For IPC Shell Preparation
 
 ## Actionables
 
@@ -32,3 +34,17 @@ Potential actions:
 
 Any destructive UI action has confirmation, scope summary, and appropriate preservation/compaction path.
 
+## Current Implementation
+
+- `retention.actions` lists known destructive/retention action definitions.
+- `retention.preflight` previews impact, confirmation requirements, and preservation policy.
+- Evidence pruning preflight recommends assessment preservation before deletion.
+- Diagnostics, metadata, queue, runtime, evidence, and assessment-compaction action types are defined.
+- Preflight is read-only and performs no pruning/deletion.
+- Verified by `verify:retention-preflight` and `verify:service-registry`.
+
+## Remaining Follow-On Work
+
+- Actual pruning/deletion commands are not implemented yet.
+- Renderer confirmation flows still need to consume the preflight shape.
+- Assessment artifact persistence must exist before evidence pruning is exposed as an executable action.

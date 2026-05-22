@@ -11,6 +11,7 @@ const GROUPS = {
     'verify:report-response',
     'verify:queue-selection',
     'verify:message-taxonomy',
+    'verify:retention-preflight',
     'verify:fixture',
     'verify:idempotent',
     'verify:db-integrity'

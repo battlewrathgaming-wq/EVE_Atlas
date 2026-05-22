@@ -16,6 +16,7 @@ async function main() {
     const liveGateCommand = commands.find((entry) => entry.command === 'live.gate');
     const reportActorCommand = commands.find((entry) => entry.command === 'report.actor');
     const queueSelectionCommand = commands.find((entry) => entry.command === 'queue.selection');
+    const retentionPreflightCommand = commands.find((entry) => entry.command === 'retention.preflight');
     const scopeDefaultsCommand = commands.find((entry) => entry.command === 'scope.defaults');
     const scopeValidateCommand = commands.find((entry) => entry.command === 'scope.validate');
     const taskListCommand = commands.find((entry) => entry.command === 'task.list');
@@ -27,6 +28,8 @@ async function main() {
     assert(reportActorCommand.classification === 'read-only', 'report.actor should be read-only');
     assert(queueSelectionCommand, 'queue.selection should be listed');
     assert(queueSelectionCommand.classification === 'read-only', 'queue.selection should be read-only');
+    assert(retentionPreflightCommand, 'retention.preflight should be listed');
+    assert(retentionPreflightCommand.classification === 'read-only', 'retention.preflight should be read-only');
     assert(scopeDefaultsCommand, 'scope.defaults should be listed');
     assert(scopeDefaultsCommand.classification === 'read-only', 'scope.defaults should be read-only');
     assert(scopeValidateCommand, 'scope.validate should be listed');

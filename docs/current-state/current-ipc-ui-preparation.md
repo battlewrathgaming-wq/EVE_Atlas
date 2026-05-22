@@ -24,6 +24,7 @@ Current implemented shell:
 - task-wrapped service invocation with `asTask: true`
 - shared message taxonomy for readiness, live gate, and task responses
 - task locking for read-only, metadata, evidence-creating, destructive, and exclusive work
+- retention/destructive action preflight for confirmation and impact summaries
 
 ## Backend Actions Ready For IPC Wrapping
 
@@ -68,6 +69,7 @@ Offline verification now includes:
 - report response verification
 - queue expansion selection verification
 - message taxonomy verification
+- retention preflight verification
 - task runner verification
 
 Live smoke grouping exists separately:
