@@ -20,6 +20,10 @@ async function main() {
   try {
     await verifyBuildAndCleanup(tempRoot);
     await verifyKeepSource(tempRoot);
+    await verifyFailedDownload(tempRoot);
+    await verifyInvalidSourceFailure(tempRoot);
+    await verifyExistingLookupPreservedOnRefreshFailure(tempRoot);
+    await verifyInterruptedInventoryImportPreservesReadyLookups(tempRoot);
     verifyMissingReadiness();
     verifyReportsDoNotReferenceSdeSource();
     console.log('SDE lookup builder verified');
@@ -126,6 +130,151 @@ function verifyMissingReadiness() {
   } finally {
     closeDatabase(db);
   }
+
+  const topologyOnly = openDatabase(':memory:');
+  migrate(topologyOnly);
+  seedTopologyOnly(topologyOnly);
+  try {
+    const readiness = buildAppReadiness(topologyOnly, { mode: 'verify' });
+    assert(readiness.checks.topology_lookup_ready === true, 'topology-only DB should report topology ready');
+    assert(readiness.checks.type_metadata_ready === false, 'topology-only DB should report inventory missing');
+    assert(readiness.warnings.some((warning) => warning.code === 'SDE_LOOKUP_MISSING'), 'topology-only DB should produce SDE_LOOKUP_MISSING');
+  } finally {
+    closeDatabase(topologyOnly);
+  }
+}
+
+async function verifyFailedDownload(tempRoot) {
+  const db = openDatabase(':memory:');
+  migrate(db);
+  const cacheDir = path.join(tempRoot, 'failed-download-cache');
+
+  try {
+    await assertRejects(
+      () => buildSdeLookupTables(db, {
+        cacheDir,
+        downloadFile: async () => {
+          throw new Error('fixture SDE download failed');
+        }
+      }),
+      /fixture SDE download failed/,
+      'failed official SDE download should surface the download error'
+    );
+    assert(!hasLookupBuildDirs(cacheDir), 'failed download should clean temporary work directory');
+    const readiness = buildAppReadiness(db, { mode: 'verify' });
+    assert(readiness.warnings.some((warning) => warning.code === 'SDE_LOOKUP_MISSING'), 'failed download should leave lookup readiness missing');
+  } finally {
+    closeDatabase(db);
+  }
+}
+
+async function verifyInvalidSourceFailure(tempRoot) {
+  const db = openDatabase(':memory:');
+  migrate(db);
+  const cacheDir = path.join(tempRoot, 'invalid-source-cache');
+  const invalidZip = path.join(tempRoot, 'invalid-source', 'eve-online-static-data-999999-jsonl.zip');
+  fs.mkdirSync(path.dirname(invalidZip), { recursive: true });
+  fs.writeFileSync(invalidZip, 'not a real zip');
+
+  try {
+    await assertRejects(
+      () => buildSdeLookupTables(db, {
+        sourcePath: invalidZip,
+        sourceUrl: 'fixture://invalid-sde.zip',
+        cacheDir
+      }),
+      /Command failed|End of Central Directory|not a real zip|archive|SDE lookup build incomplete/i,
+      'invalid source input should fail'
+    );
+    assert(!hasLookupBuildDirs(cacheDir), 'invalid source failure should clean temporary work directory');
+    const readiness = buildAppReadiness(db, { mode: 'verify' });
+    assert(readiness.checks.sde_lookup_ready === false, 'invalid source should not mark lookup tables ready');
+  } finally {
+    closeDatabase(db);
+  }
+}
+
+async function verifyExistingLookupPreservedOnRefreshFailure(tempRoot) {
+  const db = openDatabase(':memory:');
+  migrate(db);
+  const cacheDir = path.join(tempRoot, 'preserve-cache');
+  const goodZip = createFixtureZip(path.join(tempRoot, 'preserve-good-source'));
+  const badZip = path.join(tempRoot, 'preserve-bad-source', 'eve-online-static-data-999999-jsonl.zip');
+  fs.mkdirSync(path.dirname(badZip), { recursive: true });
+  fs.writeFileSync(badZip, 'not a real zip');
+
+  try {
+    await buildSdeLookupTables(db, {
+      sourcePath: goodZip,
+      sourceUrl: 'fixture://preserve-good.zip',
+      buildNumber: 'fixture-build',
+      cacheDir
+    });
+    const before = lookupTableCounts(db);
+    assert(before.sdeReady === true, 'fixture good import should establish ready lookup tables');
+
+    await assertRejects(
+      () => buildSdeLookupTables(db, {
+        sourcePath: badZip,
+        sourceUrl: 'fixture://preserve-bad.zip',
+        cacheDir
+      }),
+      /Command failed|End of Central Directory|not a real zip|archive|SDE lookup build incomplete/i,
+      'failed refresh should surface invalid source error'
+    );
+
+    const after = lookupTableCounts(db);
+    assertSame(after, before, 'failed refresh should preserve existing lookup table counts');
+    assert(buildAppReadiness(db, { mode: 'verify' }).checks.sde_lookup_ready === true, 'failed refresh should not make existing lookups unready');
+  } finally {
+    closeDatabase(db);
+  }
+}
+
+async function verifyInterruptedInventoryImportPreservesReadyLookups(tempRoot) {
+  const db = openDatabase(':memory:');
+  migrate(db);
+  const cacheDir = path.join(tempRoot, 'interrupted-cache');
+  const goodZip = createFixtureZip(path.join(tempRoot, 'interrupted-good-source'));
+
+  class FailingInventoryImporter {
+    importFromPath() {
+      throw new Error('fixture inventory import interrupted');
+    }
+  }
+
+  try {
+    await buildSdeLookupTables(db, {
+      sourcePath: goodZip,
+      sourceUrl: 'fixture://interrupted-good.zip',
+      buildNumber: 'fixture-build',
+      cacheDir
+    });
+    const before = lookupTableCounts(db);
+    assert(before.sdeReady === true, 'fixture good import should establish ready lookup tables before interruption test');
+
+    await assertRejects(
+      () => buildSdeLookupTables(db, {
+        sourcePath: goodZip,
+        sourceUrl: 'fixture://interrupted-refresh.zip',
+        buildNumber: 'fixture-build',
+        cacheDir,
+        InventoryImporter: FailingInventoryImporter
+      }),
+      /fixture inventory import interrupted/,
+      'interrupted inventory import should surface clear error'
+    );
+
+    const after = lookupTableCounts(db);
+    assert(after.regions >= before.regions, 'interrupted refresh should not remove regions');
+    assert(after.constellations >= before.constellations, 'interrupted refresh should not remove constellations');
+    assert(after.solar_systems >= before.solar_systems, 'interrupted refresh should not remove systems');
+    assert(after.system_adjacency >= before.system_adjacency, 'interrupted refresh should not remove adjacency');
+    assert(after.type_metadata === before.type_metadata, 'interrupted inventory refresh should not remove existing type metadata');
+    assert(buildAppReadiness(db, { mode: 'verify' }).checks.sde_lookup_ready === true, 'interrupted refresh should preserve existing ready state');
+  } finally {
+    closeDatabase(db);
+  }
 }
 
 function verifyReportsDoNotReferenceSdeSource() {
@@ -211,6 +360,89 @@ function walk(root) {
 
 function count(db, tableName) {
   return db.prepare(`SELECT COUNT(*) AS count FROM ${tableName}`).get().count;
+}
+
+function lookupCounts(db) {
+  const counts = {
+    regions: count(db, 'regions'),
+    constellations: count(db, 'constellations'),
+    solar_systems: count(db, 'solar_systems'),
+    system_adjacency: count(db, 'system_adjacency'),
+    type_metadata: count(db, 'type_metadata'),
+    sde_imports: count(db, 'sde_imports'),
+    sde_inventory_imports: count(db, 'sde_inventory_imports')
+  };
+  return {
+    ...counts,
+    sdeReady: counts.regions > 0 &&
+      counts.constellations > 0 &&
+      counts.solar_systems > 0 &&
+      counts.system_adjacency > 0 &&
+      counts.type_metadata > 0
+  };
+}
+
+function lookupTableCounts(db) {
+  const counts = {
+    regions: count(db, 'regions'),
+    constellations: count(db, 'constellations'),
+    solar_systems: count(db, 'solar_systems'),
+    system_adjacency: count(db, 'system_adjacency'),
+    type_metadata: count(db, 'type_metadata')
+  };
+  return {
+    ...counts,
+    sdeReady: counts.regions > 0 &&
+      counts.constellations > 0 &&
+      counts.solar_systems > 0 &&
+      counts.system_adjacency > 0 &&
+      counts.type_metadata > 0
+  };
+}
+
+function seedTopologyOnly(db) {
+  db.prepare(`
+    INSERT INTO regions (region_id, region_name, source_sde_build, imported_at)
+    VALUES (?, ?, ?, ?)
+  `).run(10000001, 'Test Region', 'fixture-build', '2026-05-23T00:00:00Z');
+  db.prepare(`
+    INSERT INTO constellations (constellation_id, constellation_name, region_id, region_name, source_sde_build, imported_at)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `).run(20000001, 'Test Constellation', 10000001, 'Test Region', 'fixture-build', '2026-05-23T00:00:00Z');
+  db.prepare(`
+    INSERT INTO solar_systems (
+      solar_system_id, solar_system_name, constellation_id, constellation_name,
+      region_id, region_name, security_status
+    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+  `).run(30000001, 'Atlas Prime', 20000001, 'Test Constellation', 10000001, 'Test Region', 0.4);
+  db.prepare(`
+    INSERT INTO system_adjacency (from_system_id, to_system_id, connection_type)
+    VALUES (?, ?, ?)
+  `).run(30000001, 30000002, 'stargate');
+  db.prepare(`
+    INSERT INTO sde_imports (
+      build_number, variant, source_url, imported_at, file_checksum,
+      systems_count, constellations_count, regions_count, adjacency_count
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run('fixture-build', 'jsonl', 'fixture://topology-only.zip', '2026-05-23T00:00:00Z', 'checksum', 1, 1, 1, 1);
+}
+
+async function assertRejects(fn, expectedPattern, message) {
+  try {
+    await fn();
+  } catch (error) {
+    if (!expectedPattern || expectedPattern.test(String(error.message || error))) {
+      return error;
+    }
+    throw new Error(`${message}: expected ${expectedPattern}, got ${error.message}`);
+  }
+  throw new Error(message);
+}
+
+function assertSame(actual, expected, message) {
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+    throw new Error(`${message}\nBefore: ${JSON.stringify(expected)}\nAfter: ${JSON.stringify(actual)}`);
+  }
 }
 
 function captureEnv() {

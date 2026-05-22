@@ -28,6 +28,9 @@ async function buildSdeLookupTables(db, options = {}) {
   let lastModified = options.lastModified || null;
   let latestMetadataChecksum = options.latestMetadataChecksum || null;
   let downloaded = false;
+  const download = options.downloadFile || downloadFile;
+  const TopologyImporter = options.TopologyImporter || SdeTopologyImporter;
+  const InventoryImporter = options.InventoryImporter || SdeInventoryImporter;
 
   try {
     if (sourcePath) {
@@ -36,7 +39,7 @@ async function buildSdeLookupTables(db, options = {}) {
       buildNumber = buildNumber || buildNumberFromFilename(sourcePath);
     } else {
       const latestPath = path.join(workDir, 'latest.jsonl');
-      const latest = await downloadFile(LATEST_METADATA_URL, latestPath);
+      const latest = await download(LATEST_METADATA_URL, latestPath);
       latestMetadataChecksum = latest.checksum;
       buildNumber = buildNumber || await readLatestBuildNumber(latestPath);
       sourceUrl = buildNumber
@@ -45,13 +48,13 @@ async function buildSdeLookupTables(db, options = {}) {
       sourcePath = path.join(workDir, buildNumber
         ? `eve-online-static-data-${buildNumber}-jsonl.zip`
         : 'eve-online-static-data-latest-jsonl.zip');
-      const zipDownload = await downloadFile(sourceUrl, sourcePath);
+      const zipDownload = await download(sourceUrl, sourcePath);
       etag = zipDownload.etag || null;
       lastModified = zipDownload.lastModified || null;
       downloaded = true;
     }
 
-    const topologyImporter = new SdeTopologyImporter(db);
+    const topologyImporter = new TopologyImporter(db);
     const topology = await topologyImporter.importFromPath(sourcePath, {
       buildNumber,
       sourceUrl,
@@ -61,7 +64,7 @@ async function buildSdeLookupTables(db, options = {}) {
       tempRoot: extractionRoot
     });
 
-    const inventoryImporter = new SdeInventoryImporter(db);
+    const inventoryImporter = new InventoryImporter(db);
     const inventory = await inventoryImporter.importFromPath(sourcePath, {
       buildNumber,
       sourceUrl,
@@ -69,6 +72,8 @@ async function buildSdeLookupTables(db, options = {}) {
       lastModified,
       tempRoot: extractionRoot
     });
+
+    assertCompleteLookupImport(topology, inventory);
 
     const result = {
       status: 'sde lookup tables built',
@@ -104,6 +109,31 @@ async function buildSdeLookupTables(db, options = {}) {
     if (!keepSource) {
       fs.rmSync(workDir, { recursive: true, force: true });
     }
+    throw error;
+  }
+}
+
+function assertCompleteLookupImport(topology, inventory) {
+  const missing = [];
+  if (!topology || topology.regions <= 0) {
+    missing.push('regions');
+  }
+  if (!topology || topology.constellations <= 0) {
+    missing.push('constellations');
+  }
+  if (!topology || topology.systems <= 0) {
+    missing.push('solar systems');
+  }
+  if (!topology || topology.adjacency <= 0) {
+    missing.push('system adjacency');
+  }
+  if (!inventory || inventory.typeMetadata <= 0) {
+    missing.push('type metadata');
+  }
+  if (missing.length) {
+    const error = new Error(`SDE lookup build incomplete; missing imported ${missing.join(', ')}`);
+    error.code = 'SDE_LOOKUP_BUILD_INCOMPLETE';
+    error.missing = missing;
     throw error;
   }
 }
