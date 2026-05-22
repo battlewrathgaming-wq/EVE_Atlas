@@ -1,7 +1,7 @@
 # Gap To-Do: Backend And Electron Readiness
 
 Date: 2026-05-22
-Status: Open
+Status: Complete As Readiness Checkpoint
 
 ## Context
 
@@ -16,6 +16,16 @@ Current evidence:
 - current implementation work is concentrated in Electron main-process/backend services, SQLite, workers, reports, and CLI verification.
 
 ## Important Open Backend Gaps
+
+Review outcome:
+
+The original backend/Electron readiness gaps have been implemented, contracted, or moved into explicit future work. This note is no longer an active to-do blocker for the initial presentation shell.
+
+Remaining implementation work is intentionally tracked by current-state/audit review rather than this support note:
+
+- session-armed watch executor implementation, governed by `docs/contracts/session-armed-watch-executor-contract.md`
+- assessment artifact persistence and future retention execution, governed by `docs/contracts/assessment-compaction-contract.md`
+- broader renderer/report UX work after the initial presentation shell
 
 ### Controlled Disposable DB Batch Test
 
@@ -66,7 +76,7 @@ Rules:
 
 ### Retention And Deprecation Policy
 
-Status: Policy and preflight implemented; executable pruning/compaction actions remain open.
+Status: Policy, preflight, and assessment compaction contract implemented; executable pruning/compaction actions remain future work.
 
 Retention rules are not finalized for:
 
@@ -76,17 +86,18 @@ Retention rules are not finalized for:
 - metadata refresh age
 - stale failed refs
 
-This should become a dedicated policy/implementation slice before long-running use.
+This has a dedicated policy/contract baseline before long-running use.
 
 Current guardrail:
 
 - `retention.actions` lists destructive/retention action definitions.
 - `retention.preflight` previews impact and confirmation requirements.
+- `docs/contracts/assessment-compaction-contract.md` defines the artifact/compaction behavior required before evidence pruning.
 - No actual pruning/deletion action should be exposed until assessment preservation/compaction behavior is implemented.
 
 ### Electron IPC / Backend API Boundary
 
-Status: Implemented for the first renderer baseline; renderer consumption remains open.
+Status: Implemented for the first renderer baseline; broader renderer consumption remains future product work.
 
 The renderer now has a controlled backend interface through `atlas:service:list` and `atlas:service:invoke`.
 
@@ -113,15 +124,15 @@ Rule:
 
 Renderer/UI should not call repositories, workers, or raw SQLite directly.
 
-Remaining work:
+Future work:
 
-- build renderer components against these service responses
+- build broader renderer components against these service responses
 - avoid introducing direct renderer access to repositories, workers, CLI scripts, or SQLite
 - decide which actions should default to detached task execution in the UI
 
 ### Watch Persistence And Scheduler
 
-Status: Scheduler planning/state update implemented; session-armed executor loop remains open.
+Status: Scheduler planning/state update implemented; session-armed executor contract implemented; executor loop remains future work.
 
 Collection workers exist, and due/backoff/status planning now has a service surface:
 
@@ -130,12 +141,17 @@ Collection workers exist, and due/backoff/status planning now has a service surf
 
 The service layer can identify due, blocked, inactive, not-due, backoff, session-gated, and live-gated watches. It can also record success/failure timing state after a run.
 
-Open questions:
+Contracted behavior:
 
-- how watches are armed/disarmed per session
-- how due runs are triggered in Electron
-- how the future executor loops over due watches without starting live collection from passive page load
-- how evidence-creating watch runs are task-wrapped by default in the UI
+- session arming is volatile and user-controlled
+- startup and passive page load remain disarmed
+- executor polling and dispatch gates are defined
+- future due watch runs use existing evidence-creating task services
+- success/failure timing records through `watch.recordRun`
+
+Reference:
+
+- `docs/contracts/session-armed-watch-executor-contract.md`
 
 ### Shared Scope Validation Helpers
 
@@ -219,3 +235,14 @@ Current verification:
 - `docs/gap/complete/watch-scheduler-and-backoff.md`
 - `docs/gap/complete/report-performance-indexes.md`
 - `docs/gap/complete/readiness-side-effects.md`
+- `docs/gap/complete/renderer-shell-service-boundary.md`
+- `docs/gap/complete/frameless-widget-shell.md`
+- `docs/gap/complete/readiness-settings-screen.md`
+- `docs/gap/complete/task-progress-and-cancellation-ui.md`
+- `docs/gap/complete/report-presentation-actor-first.md`
+- `docs/gap/complete/scope-controls-ui.md`
+- `docs/gap/complete/queue-and-watch-status-views.md`
+- `docs/gap/complete/session-armed-watch-executor-contract.md`
+- `docs/gap/complete/retention-assessment-compaction-design.md`
+- `docs/contracts/session-armed-watch-executor-contract.md`
+- `docs/contracts/assessment-compaction-contract.md`

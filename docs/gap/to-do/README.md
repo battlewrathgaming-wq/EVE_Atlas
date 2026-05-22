@@ -40,12 +40,11 @@ The milestone should leave Atlas with:
 
 ## Supporting Notes
 
-- `backend-electron-readiness.md`
 - `docs/current-state/current-ipc-ui-preparation.md`
 - `docs/audits/audit-2026-05-22-rigging-checkpoint-review.md`
 
 Completed items are moved to `docs/gap/complete`.
 
-`queue-status-scope-isolation.md`, `ui-language-contract.md`, `ipc-mutating-action-services.md`, `background-worker-execution.md`, `http-timeouts-and-cancellation.md`, `structured-report-responses.md`, `watch-scheduler-and-backoff.md`, `report-performance-indexes.md`, `readiness-side-effects.md`, `renderer-shell-service-boundary.md`, `frameless-widget-shell.md`, `readiness-settings-screen.md`, `task-progress-and-cancellation-ui.md`, `report-presentation-actor-first.md`, `scope-controls-ui.md`, `queue-and-watch-status-views.md`, `session-armed-watch-executor-contract.md`, and `retention-assessment-compaction-design.md` have been completed and moved to `docs/gap/complete`.
+`backend-electron-readiness.md`, `queue-status-scope-isolation.md`, `ui-language-contract.md`, `ipc-mutating-action-services.md`, `background-worker-execution.md`, `http-timeouts-and-cancellation.md`, `structured-report-responses.md`, `watch-scheduler-and-backoff.md`, `report-performance-indexes.md`, `readiness-side-effects.md`, `renderer-shell-service-boundary.md`, `frameless-widget-shell.md`, `readiness-settings-screen.md`, `task-progress-and-cancellation-ui.md`, `report-presentation-actor-first.md`, `scope-controls-ui.md`, `queue-and-watch-status-views.md`, `session-armed-watch-executor-contract.md`, and `retention-assessment-compaction-design.md` have been completed and moved to `docs/gap/complete`.
 
 The next implementation slice should come from the refreshed audit/current-state review, not this checklist.
