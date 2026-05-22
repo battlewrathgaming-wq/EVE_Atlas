@@ -1,14 +1,14 @@
 ﻿# Gap To-Do: Report Presentation Actor First
 
-Status: Open
+Status: Complete
 Priority: P1
 
-## Actionables
+## Completed
 
-- Build the first report UI around the native structured actor report response.
-- Render evidence basis, observations, collection provenance, warnings, labels, raw IDs, and retained text/export output.
-- Use UI language from the completed UI language contract.
-- Treat text-bridged report types as transitional until they gain native structured models.
+- Built the first report UI around the native structured actor report response.
+- Renders evidence basis, observations, collection provenance, warnings, raw IDs, and retained text/export output.
+- Uses UI language from the completed UI language contract.
+- Treats text-bridged report types as transitional until they gain native structured models.
 
 ## Task Requirements
 
@@ -35,6 +35,12 @@ The view should show:
 ## Completion Signal
 
 An actor report can be requested and rendered from `report.actor`/`report.build` structured data, with evidence/observation/provenance sections clearly separated.
+
+## Verification
+
+- `verify:renderer-shell`
+- `verify:report-response`
+- `verify:all`
 
 ## Related Documents
 

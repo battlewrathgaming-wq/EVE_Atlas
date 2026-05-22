@@ -18,11 +18,10 @@ The current checklist is grouped around preparing the Electron shell and rendere
 
 Recommended order:
 
-1. `report-presentation-actor-first.md`
-2. `scope-controls-ui.md`
-3. `queue-and-watch-status-views.md`
-4. `session-armed-watch-executor-contract.md`
-5. `retention-assessment-compaction-design.md`
+1. `scope-controls-ui.md`
+2. `queue-and-watch-status-views.md`
+3. `session-armed-watch-executor-contract.md`
+4. `retention-assessment-compaction-design.md`
 
 ## Milestone Todo
 
@@ -50,6 +49,6 @@ The milestone should leave Atlas with:
 
 Completed items are moved to `docs/gap/complete`.
 
-`queue-status-scope-isolation.md`, `ui-language-contract.md`, `ipc-mutating-action-services.md`, `background-worker-execution.md`, `http-timeouts-and-cancellation.md`, `structured-report-responses.md`, `watch-scheduler-and-backoff.md`, `report-performance-indexes.md`, `readiness-side-effects.md`, `renderer-shell-service-boundary.md`, `frameless-widget-shell.md`, `readiness-settings-screen.md`, and `task-progress-and-cancellation-ui.md` have been completed and moved to `docs/gap/complete`.
+`queue-status-scope-isolation.md`, `ui-language-contract.md`, `ipc-mutating-action-services.md`, `background-worker-execution.md`, `http-timeouts-and-cancellation.md`, `structured-report-responses.md`, `watch-scheduler-and-backoff.md`, `report-performance-indexes.md`, `readiness-side-effects.md`, `renderer-shell-service-boundary.md`, `frameless-widget-shell.md`, `readiness-settings-screen.md`, `task-progress-and-cancellation-ui.md`, and `report-presentation-actor-first.md` have been completed and moved to `docs/gap/complete`.
 
-The next implementation slice should continue with actor-report presentation before broader report/UI polishing.
+The next implementation slice should continue with scope controls before broader report/UI polishing.

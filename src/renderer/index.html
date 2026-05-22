@@ -113,11 +113,65 @@
           <div class="section-heading">
             <div>
               <h3 id="reports-title">Report Surface</h3>
-              <p>Transitional report output from stored evidence services.</p>
+              <p>Structured report presentation from stored evidence services.</p>
             </div>
-            <button class="primary-action" type="button" id="load-queue-report">Load Queue Report</button>
+            <button class="primary-action" type="button" id="load-actor-report">Load Actor Report</button>
           </div>
-          <pre class="report-output" id="report-output">No report loaded.</pre>
+          <div class="panel">
+            <h4>Actor Scope</h4>
+            <div class="form-grid">
+              <label>
+                <span>Actor Type</span>
+                <select id="actor-report-type">
+                  <option value="character">Character</option>
+                  <option value="corporation">Corporation</option>
+                  <option value="alliance">Alliance</option>
+                </select>
+              </label>
+              <label>
+                <span>Actor ID</span>
+                <input id="actor-report-id" type="number" min="1" placeholder="90000002" />
+              </label>
+              <label>
+                <span>Display Label</span>
+                <input id="actor-report-name" type="text" placeholder="Optional cached label" />
+              </label>
+              <label>
+                <span>Lookback Seconds</span>
+                <input id="actor-report-lookback" type="number" min="1" placeholder="All stored evidence" />
+              </label>
+            </div>
+            <p class="form-note">Actor reports require a durable ID. Names are labels unless resolved by backend workflows.</p>
+          </div>
+          <div class="report-grid">
+            <div class="panel">
+              <h4>Evidence Basis</h4>
+              <div id="actor-evidence" class="detail-list"></div>
+            </div>
+            <div class="panel">
+              <h4>Collection Provenance</h4>
+              <div id="actor-provenance" class="detail-list"></div>
+            </div>
+          </div>
+          <div class="panel">
+            <h4>Observations</h4>
+            <div id="actor-observations" class="observation-list"></div>
+          </div>
+          <div class="report-grid">
+            <div class="panel">
+              <h4>Warnings</h4>
+              <div id="actor-warnings" class="message-list"></div>
+            </div>
+            <div class="panel">
+              <h4>Raw IDs</h4>
+              <div id="actor-raw-ids" class="detail-list"></div>
+            </div>
+          </div>
+          <details class="panel">
+            <summary>Text Export</summary>
+            <pre class="report-output" id="report-output">No report loaded.</pre>
+          </details>
+          <button class="secondary-action" type="button" id="load-queue-report">Load Queue Report Text</button>
         </section>
       </main>
     </div>

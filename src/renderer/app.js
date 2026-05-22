@@ -32,6 +32,16 @@ const els = {
   taskProgress: document.querySelector('#task-progress'),
   taskOutput: document.querySelector('#task-output'),
   cancelTask: document.querySelector('#cancel-task'),
+  loadActorReport: document.querySelector('#load-actor-report'),
+  actorReportType: document.querySelector('#actor-report-type'),
+  actorReportId: document.querySelector('#actor-report-id'),
+  actorReportName: document.querySelector('#actor-report-name'),
+  actorReportLookback: document.querySelector('#actor-report-lookback'),
+  actorEvidence: document.querySelector('#actor-evidence'),
+  actorProvenance: document.querySelector('#actor-provenance'),
+  actorObservations: document.querySelector('#actor-observations'),
+  actorWarnings: document.querySelector('#actor-warnings'),
+  actorRawIds: document.querySelector('#actor-raw-ids'),
   loadQueueReport: document.querySelector('#load-queue-report'),
   reportOutput: document.querySelector('#report-output'),
   pinWindow: document.querySelector('#pin-window'),
@@ -76,6 +86,7 @@ function bindEvents() {
   els.prepareApp.addEventListener('click', prepareApp);
   els.refreshTasks.addEventListener('click', loadTasks);
   els.cancelTask.addEventListener('click', cancelSelectedTask);
+  els.loadActorReport.addEventListener('click', loadActorReport);
   els.loadQueueReport.addEventListener('click', loadQueueReport);
   els.pinWindow.addEventListener('click', toggleAlwaysOnTop);
   els.minimizeWindow.addEventListener('click', () => atlasWindow.minimize());
@@ -166,6 +177,143 @@ async function loadQueueReport() {
   } finally {
     setBusy(els.loadQueueReport, false);
   }
+}
+
+async function loadActorReport() {
+  setBusy(els.loadActorReport, true);
+  try {
+    const report = await service.invoke('report.actor', actorReportRequest());
+    renderActorReport(report);
+  } catch (error) {
+    renderError(els.actorEvidence, error);
+    els.reportOutput.textContent = `Actor report unavailable: ${error.message}`;
+  } finally {
+    setBusy(els.loadActorReport, false);
+  }
+}
+
+function actorReportRequest() {
+  const entityType = els.actorReportType.value;
+  const entityId = Number(els.actorReportId.value);
+  if (!Number.isInteger(entityId) || entityId <= 0) {
+    throw new Error('Actor report requires a positive actor ID');
+  }
+  const entityName = els.actorReportName.value.trim();
+  const lookbackSeconds = Number(els.actorReportLookback.value);
+  const options = Number.isInteger(lookbackSeconds) && lookbackSeconds > 0
+    ? { lookbackSeconds }
+    : {};
+  return {
+    params: {
+      entityType,
+      entityId,
+      entityName: entityName || undefined
+    },
+    options
+  };
+}
+
+function renderActorReport(report) {
+  els.reportOutput.textContent = report.text || 'No text export returned.';
+  renderRows(els.actorEvidence, [
+    ['Report Type', report.report_type || 'actor'],
+    ['Mode', report.response_mode || 'unknown'],
+    ['Sample Status', report.evidence_basis?.sample_status || 'unknown'],
+    ['Evidence Window', report.scope?.evidence_window?.label || 'unknown'],
+    ['Actor', actorLabel(report)],
+    ['Killmails', report.evidence_basis?.evidence_range?.killmail_count ?? 0],
+    ['Activity Events', report.evidence_basis?.evidence_range?.activity_event_count ?? 0],
+    ['Source', report.evidence_basis?.source || 'unknown']
+  ]);
+  renderRows(els.actorProvenance, linesAsRows(report.collection_provenance?.lines || []));
+  renderObservationSections(report.observations?.sections || []);
+  renderWarnings(report.warnings || []);
+  renderRawIds(report.raw_ids || {});
+}
+
+function actorLabel(report) {
+  const actor = report.scope?.actor;
+  if (!actor) {
+    return 'unknown';
+  }
+  const label = actor.entity_name || '[Resolve with ESI]';
+  return `${label} [${actor.entity_type}: ${actor.entity_id}]`;
+}
+
+function linesAsRows(lines) {
+  return lines.map((line) => {
+    const [label, ...rest] = String(line).split(':');
+    return rest.length ? [label.trim(), rest.join(':').trim()] : ['Note', line];
+  });
+}
+
+function renderObservationSections(sections) {
+  els.actorObservations.innerHTML = '';
+  if (!sections.length) {
+    els.actorObservations.textContent = 'No observation sections returned.';
+    return;
+  }
+  sections.forEach((section) => {
+    const article = document.createElement('article');
+    article.className = 'observation-section';
+    article.innerHTML = `<h5>${escapeHtml(section.title || section.name)}</h5>`;
+    if (!section.rows?.length) {
+      const empty = document.createElement('p');
+      empty.className = 'empty-note';
+      empty.textContent = 'No rows in this evidence scope.';
+      article.appendChild(empty);
+    } else {
+      article.appendChild(observationTable(section.columns || [], section.rows));
+    }
+    els.actorObservations.appendChild(article);
+  });
+}
+
+function observationTable(columns, rows) {
+  const table = document.createElement('table');
+  table.className = 'observation-table';
+  const thead = document.createElement('thead');
+  const header = document.createElement('tr');
+  columns.forEach((column) => {
+    const th = document.createElement('th');
+    th.textContent = column;
+    header.appendChild(th);
+  });
+  thead.appendChild(header);
+  table.appendChild(thead);
+  const tbody = document.createElement('tbody');
+  rows.slice(0, 20).forEach((row) => {
+    const tr = document.createElement('tr');
+    columns.forEach((column) => {
+      const td = document.createElement('td');
+      td.textContent = row.values?.[column] ?? '';
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  return table;
+}
+
+function renderWarnings(warnings) {
+  els.actorWarnings.innerHTML = '';
+  if (!warnings.length) {
+    els.actorWarnings.textContent = 'No warnings returned.';
+    return;
+  }
+  warnings.forEach((warning) => {
+    const row = document.createElement('div');
+    row.className = 'message warning';
+    row.innerHTML = `<span>${escapeHtml(warning.code || 'WARNING')}</span><span>${escapeHtml(warning.message || '')}</span>`;
+    els.actorWarnings.appendChild(row);
+  });
+}
+
+function renderRawIds(rawIds) {
+  renderRows(els.actorRawIds, Object.entries(rawIds).map(([key, values]) => [
+    key,
+    Array.isArray(values) && values.length ? values.join(', ') : 'none'
+  ]));
 }
 
 async function toggleAlwaysOnTop() {
@@ -259,7 +407,7 @@ function renderTasks(tasks) {
     item.type = 'button';
     item.innerHTML = [
       `<strong>${escapeHtml(task.type || task.task_id)}</strong>`,
-      `<span>${escapeHtml(task.status || 'unknown')} · ${escapeHtml(task.classification || 'unknown')}</span>`,
+      `<span>${escapeHtml(task.status || 'unknown')} - ${escapeHtml(task.classification || 'unknown')}</span>`,
       `<small>${escapeHtml(task.scope_key || 'unscoped')}</small>`
     ].join('');
     item.addEventListener('click', () => loadTaskDetail(task.task_id));

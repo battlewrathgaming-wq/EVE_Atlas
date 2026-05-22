@@ -50,6 +50,13 @@ function main() {
   assert(htmlText.includes('task-progress'), 'task view should include progress timeline');
   assert(htmlText.includes('cancel-task'), 'task view should include cancellation control');
   assert(htmlText.includes('view-reports'), 'renderer should include reports view');
+  assert(htmlText.includes('load-actor-report'), 'report view should include actor report action');
+  assert(htmlText.includes('actor-report-type'), 'report view should include actor type control');
+  assert(htmlText.includes('actor-report-id'), 'report view should include actor ID control');
+  assert(htmlText.includes('actor-evidence'), 'report view should include actor evidence section');
+  assert(htmlText.includes('actor-provenance'), 'report view should include actor provenance section');
+  assert(htmlText.includes('actor-observations'), 'report view should include actor observations section');
+  assert(htmlText.includes('actor-raw-ids'), 'report view should include actor raw IDs section');
 
   assert(rendererText.includes("service.invoke('app.readiness'"), 'renderer should call app.readiness through service bridge');
   assert(rendererText.includes("service.invoke('app.prepare'"), 'renderer should call app.prepare through service bridge');
@@ -63,6 +70,10 @@ function main() {
   assert(rendererText.includes('isCancellable'), 'renderer should gate cancellation by task state');
   assert(rendererText.includes('renderProgress'), 'renderer should render task progress events');
   assert(rendererText.includes('renderTaskOutput'), 'renderer should render task warnings/errors/results');
+  assert(rendererText.includes("service.invoke('report.actor'"), 'renderer should call report.actor through service bridge');
+  assert(rendererText.includes('renderActorReport'), 'renderer should render native actor report response');
+  assert(rendererText.includes('renderObservationSections'), 'renderer should render backend observation sections');
+  assert(rendererText.includes('renderRawIds'), 'renderer should show raw IDs from backend response');
   assert(rendererText.includes("service.invoke('report.queue'"), 'renderer should call a report through service bridge');
   assert(rendererText.includes('service.list()'), 'renderer should read service command availability');
   assert(rendererText.includes('atlasWindow.setAlwaysOnTop'), 'renderer should toggle always-on-top through preload bridge');
@@ -76,6 +87,8 @@ function main() {
   assert(styleText.includes('-webkit-app-region: no-drag'), 'renderer styles should protect controls from drag');
   assert(styleText.includes('.task-layout'), 'renderer styles should define task layout');
   assert(styleText.includes('.timeline-row'), 'renderer styles should define progress timeline rows');
+  assert(styleText.includes('.observation-table'), 'renderer styles should define actor observation tables');
+  assert(styleText.includes('.form-grid'), 'renderer styles should define actor report controls');
   assert(styleText.includes('.report-output'), 'renderer styles should define report output');
 
   console.log('renderer shell service boundary verified');

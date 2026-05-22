@@ -284,6 +284,36 @@ h4 {
   align-items: start;
 }
 
+.report-grid,
+.form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+}
+
+.form-grid label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.form-grid input,
+.form-grid select {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #0c1114;
+  color: var(--text);
+  padding: 9px 10px;
+  font: inherit;
+}
+
+.form-note {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
 .task-list {
   display: grid;
   gap: 8px;
@@ -361,6 +391,46 @@ h4 {
 
 .timeline-row p {
   color: var(--muted);
+}
+
+.observation-list {
+  display: grid;
+  gap: 16px;
+}
+
+.observation-section {
+  display: grid;
+  gap: 8px;
+  overflow: auto;
+}
+
+.observation-section h5 {
+  margin: 0;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.empty-note {
+  color: var(--muted);
+}
+
+.observation-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.observation-table th,
+.observation-table td {
+  border-top: 1px solid #263039;
+  padding: 7px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.observation-table th {
+  color: var(--muted);
+  font-weight: 600;
 }
 
 .detail-row,

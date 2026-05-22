@@ -13,6 +13,7 @@ Recent backend/UI-readiness work completed:
 - frameless draggable shell with user-controlled persisted always-on-top state is in place
 - readiness/settings screen shows runtime paths, SDE topology, SDE inventory, live API state, User-Agent, backend messages, and next local action
 - task progress/cancellation UI shows task history, selected task details, progress events, warnings, result/error payloads, and cancel action for running tasks
+- actor-first report UI renders native structured `report.actor` responses with evidence, observation, provenance, warnings, raw IDs, and text export separated
 - task wrapping, detached execution, cancellation, and HTTP timeout handling are verified
 - live API gates and user-defined scope validation are centralized
 - queue selection, queue status isolation, and retention preflight are implemented
@@ -65,6 +66,7 @@ Current implemented shell:
 - initial renderer panes for readiness, task history, and queue report output
 - readiness pane exposes explicit `app.prepare` only when backend readiness reports missing runtime paths
 - task pane uses only `task.list`, `task.get`, and `task.cancel` service calls
+- report pane presents actor reports from backend response sections without recomputing evidence in the renderer
 - frameless window controls for minimize, close, and always-on-top
 - native structured actor report response with text rendering retained for CLI/export
 
@@ -126,6 +128,7 @@ Offline verification now includes:
 - frameless shell/window-control verification through `verify:renderer-shell`
 - readiness/settings screen verification through `verify:renderer-shell` and `verify:app-readiness`
 - task progress/cancellation UI verification through `verify:renderer-shell` and `verify:task-runner`
+- actor report presentation verification through `verify:renderer-shell` and `verify:report-response`
 - native actor report response verification
 - task runner verification
 
@@ -156,5 +159,6 @@ Latest reviewed commits:
 - current frameless shell slice - draggable window chrome and persisted always-on-top state
 - current readiness screen slice - explicit readiness/settings presentation through service responses
 - current task UI slice - task inspection, progress, warnings, result/error preview, and cancellation controls
+- current actor report slice - first structured report presentation surface
 
 These commits move the earlier rigging gaps into a usable backend baseline for initial presentation work. The main remaining risk is not missing service vocabulary; it is wiring a renderer that uses these services without bypassing them, and deciding how session-armed watch execution should trigger due watches safely.
