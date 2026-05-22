@@ -13,6 +13,8 @@ Current implemented shell:
 - `atlas:service:list`
 - `atlas:service:invoke`
 - `app.readiness` service command
+- `scope.defaults` service command
+- `scope.validate` service command
 
 ## Backend Actions Ready For IPC Wrapping
 
@@ -52,6 +54,7 @@ Offline verification now includes:
 - a controlled disposable DB workflow check
 - app readiness verification
 - service registry / IPC handler verification
+- scope defaults/validation verification
 
 Live smoke grouping exists separately:
 

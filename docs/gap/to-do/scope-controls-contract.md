@@ -1,5 +1,7 @@
 # TODO: Scope Controls Contract
 
+Status: Partially Implemented
+
 ## Actionables
 
 - Define scope controls that map directly to evidence filters.
@@ -36,3 +38,14 @@ Potential controls:
 
 Each UI scope control has a clear mapping to backend query/report parameters.
 
+## Current Implementation
+
+- Shared backend scope defaults and validation exist.
+- `scope.defaults` service command exposes defaults through the IPC service shell.
+- `scope.validate` service command normalizes and validates user-defined scopes without running collection.
+- Verified through `verify:scope-controls` and `verify:service-registry`.
+
+## Remaining Follow-On Work
+
+- Renderer controls still need to map to the service command payloads.
+- Region, constellation, role, disposition, and ship/type report filters remain future UI/report scope work.

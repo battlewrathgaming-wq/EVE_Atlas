@@ -1,10 +1,21 @@
 const { buildAppReadiness } = require('./appReadinessService');
+const { getScopeDefaults, validateScope } = require('./scopeService');
 
 const COMMANDS = {
   'app.readiness': {
     classification: 'read-only',
     description: 'Return app readiness, settings, lookup status, path status, and live API gate state',
     handler: ({ db, databasePath }) => buildAppReadiness(db, { databasePath })
+  },
+  'scope.defaults': {
+    classification: 'read-only',
+    description: 'Return user-facing scope defaults for CLI, IPC, and UI controls',
+    handler: () => getScopeDefaults()
+  },
+  'scope.validate': {
+    classification: 'read-only',
+    description: 'Validate and normalize a user-defined scope without running collection',
+    handler: ({ payload }) => validateScope(payload)
   }
 };
 

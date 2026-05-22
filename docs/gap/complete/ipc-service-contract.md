@@ -1,6 +1,6 @@
-# TODO: IPC Service Contract
+# Complete: IPC Service Contract
 
-Status: Partially Implemented
+Status: Complete For Initial Service Shell
 
 ## Actionables
 
@@ -54,3 +54,7 @@ There is a documented IPC command list, service boundary, and verification path 
 - Unknown commands are rejected.
 - Commands require backend DB context.
 - Verified by `verify:service-registry`.
+
+## Remaining Follow-On Work
+
+Individual service commands for reports, discovery, expansion, hydration, watches, and tasks remain separate implementation slices. The initial IPC service boundary exists.

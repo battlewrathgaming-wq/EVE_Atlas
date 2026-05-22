@@ -13,8 +13,14 @@ async function main() {
   try {
     const commands = listServiceCommands();
     const readinessCommand = commands.find((entry) => entry.command === 'app.readiness');
+    const scopeDefaultsCommand = commands.find((entry) => entry.command === 'scope.defaults');
+    const scopeValidateCommand = commands.find((entry) => entry.command === 'scope.validate');
     assert(readinessCommand, 'app.readiness should be listed');
     assert(readinessCommand.classification === 'read-only', 'app.readiness should be read-only');
+    assert(scopeDefaultsCommand, 'scope.defaults should be listed');
+    assert(scopeDefaultsCommand.classification === 'read-only', 'scope.defaults should be read-only');
+    assert(scopeValidateCommand, 'scope.validate should be listed');
+    assert(scopeValidateCommand.classification === 'read-only', 'scope.validate should be read-only');
 
     const readiness = await invokeServiceCommand('app.readiness', {}, {
       db,
@@ -22,6 +28,31 @@ async function main() {
     });
     assert(readiness.checks.migrations_applied === true, 'readiness command should return migrated DB state');
     assert(readiness.app.name === 'AURA Atlas', 'readiness command should return app identity');
+
+    const defaults = await invokeServiceCommand('scope.defaults', {}, { db });
+    assert(defaults.manualActorDiscovery.maxRefs === 20, 'scope defaults should include manual actor defaults');
+
+    const validated = await invokeServiceCommand('scope.validate', {
+      kind: 'manual_discovery',
+      input: {
+        scope: 'actor',
+        entityType: 'character',
+        entityId: 90000002
+      }
+    }, { db });
+    assert(validated.valid === true, 'scope.validate should return valid result');
+    assert(validated.normalized.lookbackSeconds === defaults.manualActorDiscovery.lookbackSeconds, 'scope.validate should apply defaults');
+
+    await assertRejects(
+      () => invokeServiceCommand('scope.validate', {
+        kind: 'actor_watch',
+        input: {
+          entityType: 'system',
+          entityId: 30000001
+        }
+      }, { db }),
+      'invalid typed actor scope should be rejected'
+    );
 
     await assertRejects(
       () => invokeServiceCommand('evidence.rawInsert', {}, { db }),
@@ -44,6 +75,18 @@ async function main() {
       payload: {}
     });
     assert(ipcReadiness.checks.db_initialized === true, 'IPC invoke should return readiness object');
+
+    const ipcScope = await ipcMain.handlers.get('atlas:service:invoke')(null, {
+      command: 'scope.validate',
+      payload: {
+        kind: 'system_radius_watch',
+        input: {
+          centerSystemId: 30000001,
+          radiusJumps: 1
+        }
+      }
+    });
+    assert(ipcScope.normalized.maxExpansions === 2, 'IPC scope validation should apply system watch defaults');
   } finally {
     closeDatabase(db);
   }

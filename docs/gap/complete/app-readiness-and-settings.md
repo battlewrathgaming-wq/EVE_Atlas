@@ -1,6 +1,6 @@
-# TODO: App Readiness And Settings
+# Complete: App Readiness And Settings
 
-Status: Partially Implemented
+Status: Complete For IPC Shell Preparation
 
 ## Actionables
 
@@ -41,3 +41,7 @@ The app can produce a readiness object that the renderer can show and use to ena
 - `app.readiness` service command exists.
 - Readiness object includes DB/migration state, SDE topology/inventory state, lookup counts, runtime paths, live API gate state, and User-Agent state.
 - Verified by `verify:app-readiness` and `verify:service-registry`.
+
+## Remaining Follow-On Work
+
+Renderer presentation and settings editing are separate UI implementation work. The backend readiness object and service command now exist.
