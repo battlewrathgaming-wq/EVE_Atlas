@@ -136,3 +136,15 @@ Current verification:
 - `docs/current-state/current-evidence-pipeline.md`
 - `docs/current-state/current-manual-discovery-lane.md`
 - `docs/current-state/current-report-products.md`
+- `docs/current-state/current-ipc-ui-preparation.md`
+- `docs/gap/to-do/app-readiness-and-settings.md`
+- `docs/gap/to-do/ipc-service-contract.md`
+- `docs/gap/to-do/task-runner-and-progress.md`
+- `docs/gap/to-do/live-api-gate-ux.md`
+- `docs/gap/to-do/report-response-contract.md`
+- `docs/gap/to-do/scope-controls-contract.md`
+- `docs/gap/to-do/queue-expansion-selection.md`
+- `docs/gap/to-do/error-warning-taxonomy.md`
+- `docs/gap/to-do/concurrency-and-locking.md`
+- `docs/gap/to-do/destructive-actions-and-retention.md`
+- `docs/gap/to-do/ui-language-contract.md`
