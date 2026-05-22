@@ -7,9 +7,76 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <main>
-      <h1>AURA Atlas</h1>
-      <p>Evidence pipeline foundation is in place. Reporting UI comes after stored evidence views.</p>
-    </main>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <span class="brand-mark">A7</span>
+          <div>
+            <h1>AURA Atlas</h1>
+            <p>Evidence memory</p>
+          </div>
+        </div>
+        <nav class="nav-list" aria-label="Primary">
+          <button class="nav-item active" type="button" data-view="readiness">Readiness</button>
+          <button class="nav-item" type="button" data-view="tasks">Tasks</button>
+          <button class="nav-item" type="button" data-view="reports">Reports</button>
+        </nav>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Initial Presentation Shell</p>
+            <h2 id="view-title">Readiness</h2>
+          </div>
+          <div class="service-state" id="service-state">Connecting</div>
+        </header>
+
+        <section class="view active" id="view-readiness" aria-labelledby="readiness-title">
+          <div class="section-heading">
+            <div>
+              <h3 id="readiness-title">App Readiness</h3>
+              <p>Read-only status from the backend service boundary.</p>
+            </div>
+            <button class="primary-action" type="button" id="refresh-readiness">Refresh</button>
+          </div>
+          <div class="status-grid" id="readiness-summary"></div>
+          <div class="panel">
+            <h4>Runtime Paths</h4>
+            <div id="path-state" class="detail-list"></div>
+          </div>
+          <div class="panel">
+            <h4>Backend Messages</h4>
+            <div id="readiness-messages" class="message-list"></div>
+          </div>
+          <button class="secondary-action" type="button" id="prepare-app" hidden>Prepare Runtime Paths</button>
+        </section>
+
+        <section class="view" id="view-tasks" aria-labelledby="tasks-title">
+          <div class="section-heading">
+            <div>
+              <h3 id="tasks-title">Task History</h3>
+              <p>Recent backend tasks surfaced through IPC.</p>
+            </div>
+            <button class="primary-action" type="button" id="refresh-tasks">Refresh</button>
+          </div>
+          <div class="panel">
+            <div id="task-list" class="detail-list"></div>
+          </div>
+        </section>
+
+        <section class="view" id="view-reports" aria-labelledby="reports-title">
+          <div class="section-heading">
+            <div>
+              <h3 id="reports-title">Report Surface</h3>
+              <p>Transitional report output from stored evidence services.</p>
+            </div>
+            <button class="primary-action" type="button" id="load-queue-report">Load Queue Report</button>
+          </div>
+          <pre class="report-output" id="report-output">No report loaded.</pre>
+        </section>
+      </main>
+    </div>
+    <script src="./app.js"></script>
   </body>
 </html>

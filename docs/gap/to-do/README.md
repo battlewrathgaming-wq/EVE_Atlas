@@ -18,14 +18,39 @@ The current checklist is grouped around preparing the Electron shell and rendere
 
 Recommended order:
 
-No remaining implementation items are currently listed in this folder.
+1. `readiness-settings-screen.md`
+2. `task-progress-and-cancellation-ui.md`
+3. `report-presentation-actor-first.md`
+4. `scope-controls-ui.md`
+5. `queue-and-watch-status-views.md`
+6. `session-armed-watch-executor-contract.md`
+7. `retention-assessment-compaction-design.md`
 
-Supporting current-state note:
+## Milestone Todo
+
+Current milestone: initial presentation shell.
+
+The goal is not to build the final interface. The goal is to prove that the renderer can present Atlas work products through the service boundary without becoming a data authority.
+
+The milestone should leave Atlas with:
+
+- a minimal Electron renderer shell
+- a visible readiness/settings screen
+- common task progress and cancellation UI
+- a first structured report presentation surface
+- scope controls backed by service validation
+- queue/watch status views that do not trigger hidden live work
+- an agreed session-armed watch executor contract
+- an accepted retention/assessment compaction design before destructive pruning work
+
+## Supporting Notes
 
 - `backend-electron-readiness.md`
+- `docs/current-state/current-ipc-ui-preparation.md`
+- `docs/audits/audit-2026-05-22-rigging-checkpoint-review.md`
 
 Completed items are moved to `docs/gap/complete`.
 
-`queue-status-scope-isolation.md`, `ui-language-contract.md`, `ipc-mutating-action-services.md`, `background-worker-execution.md`, `http-timeouts-and-cancellation.md`, `structured-report-responses.md`, `watch-scheduler-and-backoff.md`, `report-performance-indexes.md`, and `readiness-side-effects.md` have been completed and moved to `docs/gap/complete`.
+`queue-status-scope-isolation.md`, `ui-language-contract.md`, `ipc-mutating-action-services.md`, `background-worker-execution.md`, `http-timeouts-and-cancellation.md`, `structured-report-responses.md`, `watch-scheduler-and-backoff.md`, `report-performance-indexes.md`, `readiness-side-effects.md`, and `renderer-shell-service-boundary.md` have been completed and moved to `docs/gap/complete`.
 
-The next implementation slice should come from refreshed audit/gap review, or from the planned renderer shell once backend service semantics are accepted.
+The next implementation slice should continue with `readiness-settings-screen.md`, then move through task status and actor-report presentation before broader report/UI polishing.

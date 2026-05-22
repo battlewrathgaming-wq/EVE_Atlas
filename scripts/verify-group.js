@@ -3,6 +3,7 @@ const { spawnSync } = require('node:child_process');
 const GROUPS = {
   core: [
     'verify:migrations',
+    'verify:renderer-shell',
     'verify:scope-controls',
     'verify:app-readiness',
     'verify:service-registry',

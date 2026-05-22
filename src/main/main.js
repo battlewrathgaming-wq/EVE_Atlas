@@ -1,3 +1,4 @@
+const path = require('node:path');
 const { app, BrowserWindow, ipcMain } = require('electron');
 const { initializeRuntimeDatabase, closeDatabase } = require('./db/database');
 const { registerIpcServiceHandlers } = require('./services/serviceRegistry');
@@ -8,7 +9,12 @@ function createWindow() {
   const window = new BrowserWindow({
     width: 1100,
     height: 720,
-    title: 'AURA Atlas'
+    title: 'AURA Atlas',
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false
+    }
   });
 
   window.loadFile('src/renderer/index.html');

@@ -9,6 +9,7 @@ Recorded: 2026-05-22 13:32:29 +01:00
 Recent backend/UI-readiness work completed:
 
 - service registry and IPC command shell are in place
+- initial Electron renderer shell is in place and uses only the preload service bridge
 - task wrapping, detached execution, cancellation, and HTTP timeout handling are verified
 - live API gates and user-defined scope validation are centralized
 - queue selection, queue status isolation, and retention preflight are implemented
@@ -19,7 +20,7 @@ Recent backend/UI-readiness work completed:
 Current lane:
 
 - accept the backend rigging checkpoint as the first renderer-ready service baseline
-- design the initial renderer shell against service responses instead of repositories or CLI scripts
+- build out the initial renderer shell against service responses instead of repositories or CLI scripts
 - keep the session-armed watch executor loop separate from passive page load behavior
 - defer true worker-thread/process isolation until heavier batch/runtime testing proves it is needed
 
@@ -33,6 +34,7 @@ Current implemented shell:
 
 - `atlas:service:list`
 - `atlas:service:invoke`
+- `window.atlasServices` preload bridge for renderer service calls
 - `app.readiness` service command
 - `app.prepare` service command for explicit runtime path preparation
 - `scope.defaults` service command
@@ -56,6 +58,7 @@ Current implemented shell:
 - metadata-only watch run state recording for success/failure, next poll, and backoff timing
 - compound report/query indexes for common evidence scopes and queue diagnostics
 - read-only readiness inspection separated from explicit runtime path preparation
+- initial renderer panes for readiness, task history, and queue report output
 - native structured actor report response with text rendering retained for CLI/export
 
 ## Backend Actions Ready For IPC Wrapping
@@ -112,6 +115,7 @@ Offline verification now includes:
 - HTTP timeout/cancellation verification
 - watch scheduler/backoff verification
 - report index/query-plan verification
+- renderer shell service-boundary verification
 - native actor report response verification
 - task runner verification
 
@@ -125,8 +129,8 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 
 ## Not Yet Implemented
 
-- renderer shell
 - UI controls for scope selection
+- dedicated readiness/settings screen polish
 - session-armed watch executor loop
 - executable retention/deprecation actions and assessment compaction
 - true worker-thread/process isolation for CPU-heavy or synchronous SQLite-heavy tasks
@@ -138,5 +142,6 @@ Latest reviewed commits:
 - `e059924` - watch scheduler status service
 - `fa34b9a` - report performance indexes
 - `eda3938` - readiness inspection/preparation separation
+- current renderer shell slice - preload service bridge and initial presentation shell
 
 These commits move the earlier rigging gaps into a usable backend baseline for initial presentation work. The main remaining risk is not missing service vocabulary; it is wiring a renderer that uses these services without bypassing them, and deciding how session-armed watch execution should trigger due watches safely.
