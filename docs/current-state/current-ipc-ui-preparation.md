@@ -192,6 +192,7 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 - broader controlled actor/area operation workflow from UI scope to evidence/observation/assessment review
 - controlled actor operation workflow is documented and verified offline with `Atlas Scout [characterID: 90000002]`, manual discovery, manual expansion, actor watch, reports, queue state, and renderer boundary checks
 - controlled area operation workflow is documented and verified offline with `Atlas Prime [solarSystemID: 30000001]`, local topology radius planning, capped collection, radius report observations, and multi-system presence wording
+- live expansion smoke passed against `Mr Jesterman [characterID: 1329523328]`: 5 queued refs, 1 ESI killmail expansion, 1 stored killmail, 8 activity events, 4 refs left pending in a disposable DB
 - renderer modularization/component boundary review before `src/renderer/app.js` absorbs more workflow orchestration
 - renderer modularization review is complete: keep `app.js` whole for one narrow controlled actor/area proof, then split before adding another full structured report/workflow surface
 - executable retention/deprecation actions and actual assessment compaction writes
@@ -248,5 +249,6 @@ Latest reviewed commits:
 - current renderer modularization review - defer file split for one narrow operator-proof slice, with explicit triggers for modularization before broader workflow expansion
 - current controlled actor workflow - fixture path proves actor scope to queued refs, ESI expansion, stored evidence, actor report, queue state, and optional assessment UI path without passive collection
 - current controlled area workflow - fixture path proves local topology radius scope to capped collection, stored evidence, radius report observations, and repeated/multi-system presence language without ownership/staging claims
+- current live expansion smoke - typed actor name resolved through ESI, zKill refs queued as possible evidence, one selected ref expanded through ESI, and reports confirmed partial sample boundaries
 
 These commits move the earlier rigging gaps into an initial presentation checkpoint. The main remaining risk is no longer missing service vocabulary; it is preserving the service/evidence boundary while adding further executable UI actions and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.

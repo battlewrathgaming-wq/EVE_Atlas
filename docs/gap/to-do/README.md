@@ -117,7 +117,6 @@ The milestone should leave Atlas with:
 
 Recommended order:
 
-- `live-expansion-smoke.md`
 - `metadata-hydration-ui.md`
 - `structured-report-expansion.md`
 - `retention-compaction-write-decision.md`
