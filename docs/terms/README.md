@@ -9,6 +9,7 @@ Use this folder when a term becomes important enough that misunderstanding it co
 ## Current Terms
 
 - `activity-event.md`
+- `at-a-glance-preview.md`
 - `collection-provenance.md`
 - `discovery-queue.md`
 - `entity-interest.md`
@@ -16,6 +17,7 @@ Use this folder when a term becomes important enough that misunderstanding it co
 - `evidence-report.md`
 - `expanded-killmail.md`
 - `metadata.md`
+- `manual-discovery.md`
 - `watchlist.md`
 - `actor-watch.md`
 - `system-radius-watch.md`
