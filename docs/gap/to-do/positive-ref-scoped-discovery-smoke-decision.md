@@ -1,6 +1,6 @@
 # Positive-Ref Scoped Discovery Smoke Decision
 
-Milestone: Operator Evidence Operations Readiness
+Milestone: Operator Workflow Closure And Debuggability
 
 ## Mission
 
@@ -11,6 +11,7 @@ The accepted success smoke proved live gating and no-evidence behavior, but it r
 ## Actionables
 
 - Decide whether the value justifies another live API call.
+- Prefer deferral unless a respectful target/window is already known.
 - If running it:
   - use `AURA_ATLAS_LIVE_API=1`
   - use a disposable or clearly named `.tmp` DB

@@ -1,6 +1,6 @@
 # Operator Workflow Scenario Smoke
 
-Milestone: Operator Evidence Operations Readiness
+Milestone: Operator Workflow Closure And Debuggability
 
 ## Mission
 
@@ -32,6 +32,7 @@ scope validation
 - Verify reports derive observations only from stored evidence.
 - Verify assessment artifacts cite validated stored killmail IDs.
 - Verify task history/status surfaces are coherent enough for renderer display.
+- Include corpus health and snapshot preflight as support checks if practical, without creating snapshots unless the scenario explicitly confirms the action.
 
 ## Acceptance Checks
 
@@ -39,6 +40,7 @@ scope validation
 - Scenario fails if queue refs are treated as observations.
 - Scenario fails if assessment artifacts cite non-local evidence without explicit unverified status.
 - Scenario fails if renderer/service actions bypass scope validation.
+- Scenario confirms support/readiness products do not become evidence, observation, or assessment.
 
 ## Dev Notes
 

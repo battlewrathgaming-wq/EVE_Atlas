@@ -1,6 +1,6 @@
 # Operator Debug Trace Pack
 
-Milestone: Operator Evidence Operations Readiness
+Milestone: Operator Workflow Closure And Debuggability
 
 ## Mission
 
@@ -23,6 +23,8 @@ This is a supportability task, not a new intelligence feature.
 - Redact or avoid sensitive values if any are introduced later.
 - Store trace packs under `.tmp` by default.
 - Add a fixture-backed verification that produces a trace pack without live APIs.
+- Include enough detail for another chat/dev worker to understand the failure context.
+- Prefer summaries, counts, command results, and artifact paths over raw evidence payloads.
 
 ## Acceptance Checks
 
@@ -30,6 +32,7 @@ This is a supportability task, not a new intelligence feature.
 - Trace pack does not call live APIs.
 - Trace pack does not create evidence, observations, or assessments.
 - Trace pack can be attached to an audit handover without needing the full runtime DB.
+- Trace pack makes clear what it excludes by default, especially raw ESI payloads.
 
 ## Dev Notes
 

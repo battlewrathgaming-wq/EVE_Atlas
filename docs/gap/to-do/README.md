@@ -199,7 +199,7 @@ Completed:
 - `live-scoped-zkill-smoke-artifacts.md`
 - `evidence-rule-regression-checks.md`
 
-## Current Milestone: Operator Evidence Operations Readiness
+## Completed Milestone: Operator Evidence Operations Readiness
 
 Mission statement:
 
@@ -218,13 +218,6 @@ This milestone should leave Atlas with:
 - no automatic evidence deletion
 - no passive broad ingestion
 
-Recommended order:
-
-1. `operator-workflow-scenario-smoke.md`
-2. `assessment-artifact-review-surface.md`
-3. `operator-debug-trace-pack.md`
-4. `positive-ref-scoped-discovery-smoke-decision.md`
-
 Supporting audit:
 
 - `docs/audits/audit-2026-05-22-overseer-evidence-safe-assessment-review.md`
@@ -239,11 +232,39 @@ Completed:
 - `corpus-health-renderer-surface.md`
 - `runtime-snapshot-renderer-surface.md`
 
+## Current Milestone: Operator Workflow Closure And Debuggability
+
+Mission statement:
+
+Prove that the existing Atlas rigging works as one coherent operator loop and make failures reviewable without dumping raw evidence by default.
+
+This milestone should leave Atlas with:
+
+- an offline operator workflow scenario smoke that uses service/task paths
+- explicit assessment artifact review closure
+- a bounded operator debug trace pack
+- a decision on whether to run a positive-ref scoped discovery-only smoke
+- no automatic live work
+- no evidence pruning
+- no passive broad ingestion
+
+Recommended order:
+
+1. `assessment-artifact-review-surface.md`
+2. `operator-debug-trace-pack.md`
+3. `positive-ref-scoped-discovery-smoke-decision.md`
+
+Roadmap:
+
+- `docs/roadmap/operator-workflow-closure-and-debuggability.md`
+
+Completed:
+
+- `operator-workflow-scenario-smoke.md`
+
 ## Open Discussion For Next Handoff
 
 - The accepted live scoped discovery smoke returned zero refs. This is fine for boundary proof, but Dev should either run or defer a positive-ref discovery-only smoke.
-- Corpus health is available through CLI/service only. Dev should decide where it belongs in the renderer before adding more report surfaces.
-- Snapshot preflight/create is available through CLI/service only. Dev should decide whether to expose a narrow renderer safety surface before adding any retention controls.
 - Evidence pruning remains blocked even though snapshot preflight now exists.
 - Assessment review appears partly present in the renderer; close the task only after explicit citation/status visibility checks.
 - Trace packs should support debugging and audit handoff without dumping raw evidence by default.

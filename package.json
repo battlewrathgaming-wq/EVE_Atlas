@@ -21,6 +21,7 @@
     "verify:bulk": "node scripts/verify-group.js bulk",
     "verify:scope-controls": "node scripts/verify-scope-controls.js",
     "verify:controlled-workflow": "node scripts/verify-controlled-workflow.js",
+    "verify:operator-workflow": "node scripts/verify-operator-workflow-scenario.js",
     "verify:electron-runtime": "electron scripts/verify-electron-runtime.js",
     "verify:renderer-shell": "node scripts/verify-renderer-shell.js",
     "verify:app-readiness": "node scripts/verify-app-readiness.js",

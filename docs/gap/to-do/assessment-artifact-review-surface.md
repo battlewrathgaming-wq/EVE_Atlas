@@ -1,6 +1,6 @@
 # Assessment Artifact Review Surface
 
-Milestone: Operator Evidence Operations Readiness
+Milestone: Operator Workflow Closure And Debuggability
 
 ## Mission
 
@@ -32,6 +32,7 @@ Note: the renderer already has an assessment artifact list/detail surface. This 
 - Do not use assessment artifacts as a source for observation reports.
 - Add fixture-backed verification for display/read response.
 - Add renderer/static verification that citation status and citation basis are visible.
+- Confirm assessment review can be inspected after the operator workflow scenario creates an artifact.
 
 ## Acceptance Checks
 
@@ -40,6 +41,7 @@ Note: the renderer already has an assessment artifact list/detail surface. This 
 - Citation status is not hidden in a JSON blob only.
 - No assessment artifact mutates raw killmail evidence.
 - Existing renderer behavior is either accepted and documented, or corrected with a narrow patch.
+- The closure note records whether the existing surface was accepted or changed.
 
 ## Dev Notes
 

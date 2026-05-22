@@ -48,6 +48,7 @@ Recent backend/UI-readiness work completed:
 - live scoped zKill smoke now writes reviewable `.tmp` JSON artifacts for refusal/failure/success paths, including topology/evidence counts, route, API counts, queued ref summary, and non-evidence boundary wording
 - evidence-rule regression checks now protect core boundaries in `verify:all`: immutable raw killmail persistence, manual discovery as queue-only possible evidence, queue non-evidence wording, assessment citation validation, hydration without evidence mutation, and non-destructive retention preflight
 - Readiness view now exposes local corpus health and runtime DB snapshot safety through structured service calls. Corpus health is read-only; snapshot creation requires visible confirmation and does not restore, prune, compact, delete evidence, or call live APIs.
+- Offline operator workflow scenario smoke now exercises the renderer-like service/task loop: scope validation, manual discovery, queue report, selected expansion, metadata hydration, actor report, assessment creation, corpus health, snapshot preflight, and task history.
 - assessment compaction writes are intentionally deferred; compaction remains read-only preview and evidence deletion remains blocked
 - runtime process isolation has been reviewed and deliberately deferred; detached tasks remain acceptable for the next milestone
 - current recommended first future isolation target, if measured pressure appears, is SDE import / SDE sync-compare
