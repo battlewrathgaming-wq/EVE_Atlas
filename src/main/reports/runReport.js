@@ -66,15 +66,15 @@ function buildRunReport(db, runId) {
     FROM killmails
     WHERE killmail_id IN (SELECT killmail_id FROM ingestion_audits WHERE run_id = ?)
   `).get(runId);
-  const systemsScanned = zkillLogs
+  const zkillSystemIds = zkillLogs
     .map((log) => parseSystemId(log.endpoint))
     .filter(Boolean);
-  const systemRows = systemsScanned.length ? db.prepare(`
+  const systemRows = zkillSystemIds.length ? db.prepare(`
     SELECT solar_system_id, solar_system_name, constellation_name, region_name
     FROM solar_systems
-    WHERE solar_system_id IN (${systemsScanned.map(() => '?').join(', ')})
+    WHERE solar_system_id IN (${zkillSystemIds.map(() => '?').join(', ')})
     ORDER BY solar_system_name
-  `).all(...systemsScanned) : [];
+  `).all(...zkillSystemIds) : [];
   const partialReasons = partialSampleReasons(run);
   const status = sampleStatus({
     expandedCount: run.expanded_new,
@@ -97,7 +97,7 @@ function buildRunReport(db, runId) {
     `Expanded sample: ${run.expanded_new} expanded / ${run.discovered_refs} discovered refs; ${run.failed_expansions} failed`,
     `Coverage note: ${partialReasons.length ? partialReasons.join('; ') : 'all discovered refs expanded successfully for this run'}`,
     printSection('Diagnostics Summary', [
-      `Systems scanned: ${systemsScanned.length}`,
+      `zKill requests: ${zkillLogs.length}`,
       `zKill refs discovered: ${run.discovered_refs}`,
       `Already cached killmails: ${run.already_cached}`,
       `New ESI expansions: ${run.expanded_new}`,
@@ -107,7 +107,7 @@ function buildRunReport(db, runId) {
       `Error summary: ${run.error_summary || 'none'}`
     ].join('\n')),
     printSection('Evidence Footer', [
-      `Systems scanned: ${zkillLogs.length}`,
+      `zKill requests: ${zkillLogs.length}`,
       `zKill refs discovered: ${run.discovered_refs}`,
       `Already cached: ${run.already_cached}`,
       `Expanded new: ${run.expanded_new}`,

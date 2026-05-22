@@ -24,6 +24,7 @@
     "verify:migrations": "node scripts/verify-migrations.js",
     "verify:watchlist": "node scripts/verify-watchlist.js",
     "verify:actor-watch": "node scripts/verify-actor-watch.js",
+    "verify:actor-watch-live": "node scripts/verify-actor-watch-live.js",
     "verify:system-watch-live": "node scripts/verify-system-watch-live.js",
     "verify:system-watch-idempotent-live": "node scripts/verify-system-watch-idempotent-live.js",
     "report:run": "node scripts/report-run.js",

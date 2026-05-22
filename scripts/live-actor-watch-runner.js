@@ -1,0 +1,115 @@
+const path = require('node:path');
+const { openDatabase, migrate, closeDatabase } = require('../src/main/db/database');
+const { collectActorWatch } = require('../src/main/workers/actorWatchCollector');
+const { auraTempRoot } = require('../src/main/util/tempPaths');
+const {
+  assertProjectLocalPath,
+  assertNoRuntimeSdeZipImport
+} = require('./live-system-watch-runner');
+
+async function runLiveActorWatch() {
+  assertLiveEnabled();
+  assertNoRuntimeSdeZipImport();
+  const tempRoot = auraTempRoot();
+  process.env.AURA_ATLAS_TEST_TMP = process.env.AURA_ATLAS_TEST_TMP || tempRoot;
+  process.env.AURA_ATLAS_CACHE_DIR = process.env.AURA_ATLAS_CACHE_DIR || path.join(tempRoot, 'cache');
+  process.env.AURA_ATLAS_SDE_CACHE_DIR = process.env.AURA_ATLAS_SDE_CACHE_DIR || path.join(tempRoot, 'sde');
+
+  assertProjectLocalPath(process.env.AURA_ATLAS_TEST_TMP, 'AURA_ATLAS_TEST_TMP');
+  assertProjectLocalPath(process.env.AURA_ATLAS_CACHE_DIR, 'AURA_ATLAS_CACHE_DIR');
+  assertProjectLocalPath(process.env.AURA_ATLAS_SDE_CACHE_DIR, 'AURA_ATLAS_SDE_CACHE_DIR');
+
+  const dbPath = process.env.AURA_ATLAS_DB_PATH || path.join(tempRoot, 'actor-watch-live.sqlite');
+  assertProjectLocalPath(dbPath, 'AURA_ATLAS_DB_PATH');
+  process.env.AURA_ATLAS_DB_PATH = dbPath;
+
+  const db = openDatabase(dbPath);
+  migrate(db);
+
+  try {
+    const input = liveActorInput(db);
+    const first = await collectActorWatch(input, { db });
+    return { db_path: dbPath, first };
+  } finally {
+    closeDatabase(db);
+  }
+}
+
+function assertLiveEnabled() {
+  if (process.env.AURA_ATLAS_LIVE_API !== '1') {
+    throw new Error('Refusing live actor watch: set AURA_ATLAS_LIVE_API=1 to allow zKill/ESI calls');
+  }
+}
+
+function liveActorInput(db) {
+  const actor = resolveActorInput(db);
+  return {
+    entityType: actor.entity_type,
+    entityId: actor.entity_id,
+    entityName: actor.entity_name,
+    lookbackSeconds: integerEnv('AURA_ATLAS_LIVE_ACTOR_LOOKBACK_SECONDS', 86400),
+    maxRefs: integerEnv('AURA_ATLAS_LIVE_ACTOR_MAX_REFS', 10),
+    maxExpansions: integerEnv('AURA_ATLAS_LIVE_ACTOR_MAX_EXPANSIONS', 2),
+    trigger: 'manual',
+    watchId: process.env.AURA_ATLAS_LIVE_ACTOR_WATCH_ID || `actor:${actor.entity_type}:${actor.entity_id}`
+  };
+}
+
+function resolveActorInput(db) {
+  const watchId = process.env.AURA_ATLAS_LIVE_ACTOR_WATCH_ID;
+  if (watchId && !process.env.AURA_ATLAS_LIVE_ACTOR_TYPE && !process.env.AURA_ATLAS_LIVE_ACTOR_ID) {
+    const row = db.prepare(`
+      SELECT entity_type, entity_id, entity_name
+      FROM watchlist_entities
+      WHERE watch_id = ?
+    `).get(Number(watchId));
+    if (!row) {
+      throw new Error(`No watchlist entity found for watch_id ${watchId}`);
+    }
+    return row;
+  }
+
+  const entityType = String(process.env.AURA_ATLAS_LIVE_ACTOR_TYPE || '').toLowerCase();
+  if (!['character', 'corporation', 'alliance'].includes(entityType)) {
+    throw new Error('AURA_ATLAS_LIVE_ACTOR_TYPE must be character, corporation, or alliance');
+  }
+
+  const entityId = integerEnv('AURA_ATLAS_LIVE_ACTOR_ID', null);
+  const known = db.prepare(`
+    SELECT entity_name
+    FROM entities
+    WHERE entity_type = ? AND entity_id = ?
+  `).get(entityType, entityId);
+  const watch = db.prepare(`
+    SELECT entity_name
+    FROM watchlist_entities
+    WHERE entity_type = ? AND entity_id = ?
+  `).get(entityType, entityId);
+
+  return {
+    entity_type: entityType,
+    entity_id: entityId,
+    entity_name: process.env.AURA_ATLAS_LIVE_ACTOR_NAME || watch?.entity_name || known?.entity_name || null
+  };
+}
+
+function integerEnv(name, fallback) {
+  const raw = process.env[name];
+  if ((raw === undefined || raw === '') && fallback !== null) {
+    return fallback;
+  }
+  if (raw === undefined || raw === '') {
+    throw new Error(`${name} is required`);
+  }
+  const value = Number(raw);
+  if (!Number.isInteger(value) || value <= 0) {
+    throw new Error(`${name} must be a positive integer`);
+  }
+  return value;
+}
+
+module.exports = {
+  runLiveActorWatch,
+  assertLiveEnabled,
+  liveActorInput
+};
