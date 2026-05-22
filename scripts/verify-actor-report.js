@@ -115,6 +115,8 @@ async function main() {
   assertIncludes(report, 'Actor: Atlas Scout [characterID: 90000002]');
   assertIncludes(report, 'Evidence window: all stored evidence');
   assertIncludes(report, 'Basis: 3 expanded killmails / 3 actor activity events matching actor/time scope');
+  assertIncludes(report, 'Evidence Basis');
+  assertIncludes(report, 'Collection Provenance');
   assertIncludes(report, 'Actor discovery window(s): 86400 seconds / 24 hours');
   assertIncludes(report, 'Stored evidence matching this scope: 3 killmails / 3 actor activity events');
   assertIncludes(report, 'Collection provenance zKill requests: 2');
@@ -137,6 +139,8 @@ async function main() {
   assertIncludes(runReport, 'Collection target: Atlas Scout [characterID: 90000002]');
   assertIncludes(runReport, 'First zKill actor: Atlas Scout [characterID: 90000002]');
   assertIncludes(runReport, 'Collection Routes');
+  assertIncludes(runReport, 'Run Evidence Basis');
+  assertIncludes(runReport, 'Collection Provenance');
   assertIncludes(runReport, 'character');
   assertIncludes(runReport, 'Atlas Scout [characterID: 90000002]');
   assertIncludes(runReport, 'Current Discovery Queue State');

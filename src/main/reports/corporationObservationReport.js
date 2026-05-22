@@ -43,9 +43,12 @@ function buildCorporationObservationReport(db, input, options = {}) {
     `Collection provenance runs: ${scope.runs.length}`,
     `Collected at: ${scope.runs[0]?.started_at || 'none'} -> ${scope.runs[scope.runs.length - 1]?.finished_at || 'none'}`,
     'Interpretation: this report observes stored evidence for a corporation. It does not assess intent, affiliation, staging, ownership, or threat.',
-    printSection('Evidence Footer', [
+    printSection('Evidence Basis', [
       `Stored evidence matching this scope: ${scope.killmailRange.count} killmails / ${scope.activityEventCount} corporation activity events`,
       `Event-time member pilot rows in scope: ${observation.memberPilotEventCount}`,
+      'Source: zKill discovery + ESI expanded killmails'
+    ].join('\n')),
+    printSection('Collection Provenance', [
       `Matching evidence ingestion runs: ${scope.runs.length}`,
       `Actor-route collection runs: ${scope.actorRuns.length}`,
       `Actor-route zKill requests: ${scope.actorZkillLogs.length}`,
@@ -55,8 +58,7 @@ function buildCorporationObservationReport(db, input, options = {}) {
       `Actor-route failed expansions: ${scope.actorRouteTotals.failed}`,
       `Actor-route activity events written: ${scope.actorRouteTotals.events}`,
       `Current discovery queue: ${scope.queueCounts.expanded} expanded / ${scope.queueCounts.cached} cached / ${scope.queueCounts.pending} pending / ${scope.queueCounts.failed} failed`,
-      'Observation sections are filtered by stored evidence scope; collection provenance explains how evidence entered storage.',
-      'Source: zKill discovery + ESI expanded killmails'
+      'Observation sections are filtered by stored evidence scope; collection provenance explains how evidence entered storage.'
     ].join('\n')),
     printSection('Corporation Role Split', table(scope.roleSplit, [
       { label: 'Role', value: (row) => row.role },

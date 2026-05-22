@@ -56,8 +56,11 @@ function buildRadiusReport(db, centerNameOrId, options = {}) {
       { label: 'Region', value: (row) => row.region_name || 'unknown' },
       { label: 'Security', value: (row) => row.security_status ?? 'unknown' }
     ])),
-    printSection('Evidence Footer', [
+    printSection('Evidence Basis', [
       `Stored evidence matching this scope: ${scope.killmailRange.count} killmails / ${scope.activityEventCount} activity events`,
+      'Source: zKill discovery + ESI expanded killmails'
+    ].join('\n')),
+    printSection('Collection Provenance', [
       `Collection provenance systems scanned: ${scope.zkillLogs.length}`,
       `Collection provenance zKill refs discovered: ${scope.totals.discovered}`,
       `Collection provenance already cached: ${scope.totals.cached}`,
@@ -65,8 +68,7 @@ function buildRadiusReport(db, centerNameOrId, options = {}) {
       `Collection provenance failed expansions: ${scope.totals.failed}`,
       `Collection provenance activity events written: ${scope.totals.events}`,
       `Collection provenance API calls: zkill ${scope.apiCalls.zkill || 0} / esi ${scope.apiCalls.esi || 0}`,
-      'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.',
-      'Source: zKill discovery + ESI expanded killmails'
+      'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.'
     ].join('\n')),
     printSection('Activity By System', table(scope.systemCounts, [
       { label: 'System', value: (row) => formatSystemLabel(row.solar_system_name, row.solar_system_id) },

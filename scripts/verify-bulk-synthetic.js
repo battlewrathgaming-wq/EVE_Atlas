@@ -72,6 +72,8 @@ async function main() {
   assertIncludes(report, 'AURA Atlas Radius Watch Evidence Report - PARTIAL SAMPLE');
   assertIncludes(report, 'Center: Atlas Prime [solarSystemID: 30000001]');
   assertIncludes(report, 'Included systems: 4');
+  assertIncludes(report, 'Evidence Basis');
+  assertIncludes(report, 'Collection Provenance');
   assertIncludes(report, 'Stored evidence matching this scope: 5 killmails / 35 activity events');
   assertIncludes(report, 'Collection provenance zKill refs discovered: 11');
   assertIncludes(report, 'Collection provenance failed expansions: 1');

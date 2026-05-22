@@ -121,16 +121,18 @@ function buildSystemReport(db, systemNameOrId, options = {}) {
     `Discovery provenance window(s): ${pastSecondsValues.length ? pastSecondsValues.map(formatWindow).join(', ') : 'unknown'}`,
     `Collection provenance runs: ${runs.length}`,
     `Collected at: ${runs[0]?.started_at || 'none'} -> ${runs[runs.length - 1]?.finished_at || 'none'}`,
-    printSection('Evidence Footer', [
+    printSection('Evidence Basis', [
       `Stored evidence matching this scope: ${killmailRange.count} killmails / ${activityEventCount} activity events`,
+      'Source: zKill discovery + ESI expanded killmails'
+    ].join('\n')),
+    printSection('Collection Provenance', [
       `Collection provenance systems scanned: ${zkillLogs.length}`,
       `Collection provenance zKill refs discovered: ${totals.discovered}`,
       `Collection provenance already cached: ${totals.cached}`,
       `Collection provenance expanded new: ${totals.expanded}`,
       `Collection provenance failed expansions: ${totals.failed}`,
       `Collection provenance activity events written: ${totals.events}`,
-      'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.',
-      'Source: zKill discovery + ESI expanded killmails'
+      'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.'
     ].join('\n')),
     printSection('Recent Killmail Timeline', table(timeline, [
       { label: 'Time', value: (row) => row.killmail_time },

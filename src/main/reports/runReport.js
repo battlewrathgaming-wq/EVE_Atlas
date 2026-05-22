@@ -114,14 +114,18 @@ function buildRunReport(db, runId) {
       `Cached refs for scope: ${queue.cached}`,
       `Next pending/failed refs: ${queue.next.length ? queue.next.map((row) => `${row.killmail_id} (${row.status})`).join(', ') : 'none'}`
     ].join('\n')),
-    printSection('Evidence Footer', [
+    printSection('Run Evidence Basis', [
+      `Expanded evidence range: ${range.earliest || 'none'} -> ${range.latest || 'none'}`,
+      `Stored activity events in expanded sample: ${eventCount}`,
+      'Source: zKill discovery + ESI expanded killmails'
+    ].join('\n')),
+    printSection('Collection Provenance', [
       `zKill requests: ${zkillLogs.length}`,
       `zKill refs discovered: ${run.discovered_refs}`,
       `Already cached: ${run.already_cached}`,
       `Expanded new: ${run.expanded_new}`,
       `Failed expansions: ${run.failed_expansions}`,
-      `Activity events written: ${run.activity_events_written}`,
-      'Source: zKill discovery + ESI expanded killmails'
+      `Activity events written: ${run.activity_events_written}`
     ].join('\n')),
     printSection('Systems Scanned', table(systemRows, [
       { label: 'System', value: (row) => formatSystemLabel(row.solar_system_name, row.solar_system_id) },

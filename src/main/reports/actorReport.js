@@ -39,8 +39,11 @@ function buildActorReport(db, input, options = {}) {
     `Collection provenance runs: ${scope.runs.length}`,
     `Collected at: ${scope.runs[0]?.started_at || 'none'} -> ${scope.runs[scope.runs.length - 1]?.finished_at || 'none'}`,
     `Interpretation: actor appearances are stored killmail evidence within scope, not proof of current location, intent, staging, ownership, or affiliation.`,
-    printSection('Evidence Footer', [
+    printSection('Evidence Basis', [
       `Stored evidence matching this scope: ${scope.killmailRange.count} killmails / ${scope.activityEventCount} actor activity events`,
+      'Source: zKill discovery + ESI expanded killmails'
+    ].join('\n')),
+    printSection('Collection Provenance', [
       `Collection provenance zKill requests: ${scope.zkillLogs.length}`,
       `Actor-route zKill requests: ${scope.actorZkillLogs.length}`,
       `Collection provenance zKill refs discovered: ${scope.totals.discovered}`,
@@ -49,8 +52,7 @@ function buildActorReport(db, input, options = {}) {
       `Collection provenance failed expansions: ${scope.totals.failed}`,
       `Collection provenance activity events written: ${scope.totals.events}`,
       `Collection provenance API calls: zkill ${scope.apiCalls.zkill || 0} / esi ${scope.apiCalls.esi || 0}`,
-      'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.',
-      'Source: zKill discovery + ESI expanded killmails'
+      'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.'
     ].join('\n')),
     printSection('Actor Role Split', table(scope.roleSplit, [
       { label: 'Role', value: (row) => row.role },

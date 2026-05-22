@@ -70,6 +70,8 @@ async function main() {
   assertIncludes(runReport, 'Expanded sample: 1 expanded / 3 discovered refs; 0 failed');
   assertIncludes(runReport, 'Coverage note: expansion cap skipped refs; not all discovered refs are represented in this run sample');
   assertIncludes(runReport, 'Diagnostics Summary');
+  assertIncludes(runReport, 'Run Evidence Basis');
+  assertIncludes(runReport, 'Collection Provenance');
   assertIncludes(runReport, 'API calls by provider: zkill 1 / esi 0');
   assertIncludes(runReport, 'Systems Scanned');
   assertIncludes(runReport, 'zKill Requests');
@@ -80,6 +82,8 @@ async function main() {
   assertIncludes(systemReport, 'Evidence window: all stored evidence');
   assertIncludes(systemReport, 'Discovery provenance window(s): 86400 seconds / 24 hours');
   assertIncludes(systemReport, 'Expanded sample: 1 stored killmails matching system/time scope');
+  assertIncludes(systemReport, 'Evidence Basis');
+  assertIncludes(systemReport, 'Collection Provenance');
   assertIncludes(systemReport, 'Stored evidence matching this scope: 1 killmails / 7 activity events');
   assertIncludes(systemReport, 'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.');
   assertIncludes(emptyWindowReport, 'Evidence window: 2026-05-02T00:00:00Z -> 2026-05-03T00:00:00Z');

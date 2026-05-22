@@ -34,15 +34,17 @@ function buildObservedOperatorsReport(db, systemNameOrId, options = {}) {
     `Collection provenance runs: ${scope.runs.length}`,
     `Collected at: ${scope.runs[0]?.started_at || 'none'} -> ${scope.runs[scope.runs.length - 1]?.finished_at || 'none'}`,
     `Interpretation: repeated attacker appearances are observation signals for further inspection, not proof of staging, ownership, or affiliation.`,
-    printSection('Evidence Footer', [
+    printSection('Evidence Basis', [
       `Stored evidence matching this scope: ${scope.killmailRange.count} killmails / ${scope.activityEventCount} activity events`,
+      'Source: zKill discovery + ESI expanded killmails'
+    ].join('\n')),
+    printSection('Collection Provenance', [
       `Collection provenance systems scanned: ${scope.zkillLogs.length}`,
       `Collection provenance zKill refs discovered: ${scope.totals.discovered}`,
       `Collection provenance already cached: ${scope.totals.cached}`,
       `Collection provenance expanded new: ${scope.totals.expanded}`,
       `Collection provenance failed expansions: ${scope.totals.failed}`,
-      'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.',
-      'Source: zKill discovery + ESI expanded killmails'
+      'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.'
     ].join('\n')),
     printSection('Observed Operators', table(repeatedRows, [
       { label: 'Type', value: (row) => row.entity_type },
