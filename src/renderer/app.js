@@ -1,9 +1,13 @@
 const service = window.atlasServices;
+const atlasWindow = window.atlasWindow;
 
 const state = {
   commands: [],
   readiness: null,
-  tasks: []
+  tasks: [],
+  window: {
+    alwaysOnTop: false
+  }
 };
 
 const els = {
@@ -19,12 +23,18 @@ const els = {
   refreshTasks: document.querySelector('#refresh-tasks'),
   taskList: document.querySelector('#task-list'),
   loadQueueReport: document.querySelector('#load-queue-report'),
-  reportOutput: document.querySelector('#report-output')
+  reportOutput: document.querySelector('#report-output'),
+  pinWindow: document.querySelector('#pin-window'),
+  minimizeWindow: document.querySelector('#minimize-window'),
+  closeWindow: document.querySelector('#close-window')
 };
 
 function assertServiceBridge() {
   if (!service?.list || !service?.invoke) {
     throw new Error('Atlas service bridge is unavailable');
+  }
+  if (!atlasWindow?.getState || !atlasWindow?.setAlwaysOnTop) {
+    throw new Error('Atlas window bridge is unavailable');
   }
 }
 
@@ -33,6 +43,8 @@ async function init() {
     assertServiceBridge();
     setServiceState('Connecting');
     state.commands = await service.list();
+    state.window = await atlasWindow.getState();
+    renderWindowState();
     setServiceState(`${state.commands.length} services`);
     bindEvents();
     await Promise.all([
@@ -54,6 +66,9 @@ function bindEvents() {
   els.prepareApp.addEventListener('click', prepareApp);
   els.refreshTasks.addEventListener('click', loadTasks);
   els.loadQueueReport.addEventListener('click', loadQueueReport);
+  els.pinWindow.addEventListener('click', toggleAlwaysOnTop);
+  els.minimizeWindow.addEventListener('click', () => atlasWindow.minimize());
+  els.closeWindow.addEventListener('click', () => atlasWindow.close());
 }
 
 function selectView(name) {
@@ -107,6 +122,16 @@ async function loadQueueReport() {
     els.reportOutput.textContent = `Report unavailable: ${error.message}`;
   } finally {
     setBusy(els.loadQueueReport, false);
+  }
+}
+
+async function toggleAlwaysOnTop() {
+  els.pinWindow.disabled = true;
+  try {
+    state.window = await atlasWindow.setAlwaysOnTop(!state.window.alwaysOnTop);
+    renderWindowState();
+  } finally {
+    els.pinWindow.disabled = false;
   }
 }
 
@@ -164,6 +189,11 @@ function renderRows(target, rows) {
     row.innerHTML = `<span>${escapeHtml(label)}</span><span>${escapeHtml(value)}</span>`;
     target.appendChild(row);
   });
+}
+
+function renderWindowState() {
+  els.pinWindow.classList.toggle('active', state.window.alwaysOnTop === true);
+  els.pinWindow.textContent = state.window.alwaysOnTop ? 'Pinned' : 'Pin';
 }
 
 function renderError(target, error) {

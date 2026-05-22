@@ -35,6 +35,7 @@ The goal is not to build the final interface. The goal is to prove that the rend
 The milestone should leave Atlas with:
 
 - a minimal Electron renderer shell
+- a frameless draggable widget shell with optional always-on-top state
 - a visible readiness/settings screen
 - common task progress and cancellation UI
 - a first structured report presentation surface
@@ -51,6 +52,6 @@ The milestone should leave Atlas with:
 
 Completed items are moved to `docs/gap/complete`.
 
-`queue-status-scope-isolation.md`, `ui-language-contract.md`, `ipc-mutating-action-services.md`, `background-worker-execution.md`, `http-timeouts-and-cancellation.md`, `structured-report-responses.md`, `watch-scheduler-and-backoff.md`, `report-performance-indexes.md`, `readiness-side-effects.md`, and `renderer-shell-service-boundary.md` have been completed and moved to `docs/gap/complete`.
+`queue-status-scope-isolation.md`, `ui-language-contract.md`, `ipc-mutating-action-services.md`, `background-worker-execution.md`, `http-timeouts-and-cancellation.md`, `structured-report-responses.md`, `watch-scheduler-and-backoff.md`, `report-performance-indexes.md`, `readiness-side-effects.md`, `renderer-shell-service-boundary.md`, and `frameless-widget-shell.md` have been completed and moved to `docs/gap/complete`.
 
-The next implementation slice should continue with `readiness-settings-screen.md`, then move through task status and actor-report presentation before broader report/UI polishing.
+The next implementation slice should continue with `readiness-settings-screen.md`, task status, and actor-report presentation before broader report/UI polishing.

@@ -21,16 +21,66 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: Segoe UI, system-ui, sans-serif;
+  overflow: hidden;
 }
 
 button {
   font: inherit;
 }
 
+.window-chrome {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  height: 36px;
+  border-bottom: 1px solid var(--line);
+  background: #0c1114;
+  user-select: none;
+}
+
+.drag-region {
+  display: flex;
+  align-items: center;
+  padding-left: 12px;
+  -webkit-app-region: drag;
+}
+
+.chrome-title {
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.chrome-controls {
+  display: flex;
+  -webkit-app-region: no-drag;
+}
+
+.chrome-button {
+  min-width: 46px;
+  height: 35px;
+  border: 0;
+  border-left: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.chrome-button:hover,
+.chrome-button.active {
+  background: var(--panel-strong);
+  color: var(--text);
+}
+
+.chrome-button.danger:hover {
+  background: #6f2727;
+  color: #ffffff;
+}
+
 .app-shell {
   display: grid;
   grid-template-columns: 248px 1fr;
-  min-height: 100vh;
+  height: calc(100vh - 36px);
+  overflow: hidden;
 }
 
 .sidebar {
@@ -102,6 +152,7 @@ h1 {
 .workspace {
   min-width: 0;
   padding: 24px;
+  overflow: auto;
 }
 
 .topbar {
