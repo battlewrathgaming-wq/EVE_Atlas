@@ -192,6 +192,7 @@ function queuePreviewRows(ref) {
 async function loadWatchSchedule() {
   setBusy(els.refreshWatchStatus, true);
   try {
+    await service.invoke('watch.list');
     state.watchSchedule = await service.invoke('watch.schedule', {
       sessionArmed: els.watchSessionArmed.checked,
       liveApiEnabled: els.watchLiveApiEnabled.checked
@@ -245,6 +246,87 @@ async function disarmWatchSession() {
   } finally {
     setBusy(els.disarmWatchSession, false);
   }
+}
+
+async function saveActorWatch() {
+  setBusy(els.saveActorWatch, true);
+  try {
+    const validation = await service.invoke('scope.validate', {
+      kind: 'actor_watch',
+      input: actorWatchAuthoringInput()
+    });
+    const result = await service.invoke('watch.create', {
+      ...validation.normalized,
+      pollIntervalMinutes: numberOrUndefined(els.watchAuthorActorPoll.value),
+      notes: textOrUndefined(els.watchAuthorActorNotes.value)
+    }, {
+      asTask: true
+    });
+    renderRows(els.watchAuthoringStatus, [
+      ['Action', 'actor watch saved'],
+      ['Task ID', result.task_id],
+      ['Classification', result.classification],
+      ['Evidence Effect', 'none; watch authoring is metadata-only']
+    ]);
+    await loadTasks();
+    await loadWatchSchedule();
+  } catch (error) {
+    renderError(els.watchAuthoringStatus, error);
+  } finally {
+    setBusy(els.saveActorWatch, false);
+  }
+}
+
+async function saveSystemWatch() {
+  setBusy(els.saveSystemWatch, true);
+  try {
+    const validation = await service.invoke('scope.validate', {
+      kind: 'system_radius_watch',
+      input: systemWatchAuthoringInput()
+    });
+    const result = await service.invoke('watch.create', {
+      watchType: 'system_radius',
+      ...validation.normalized,
+      pollIntervalMinutes: numberOrUndefined(els.watchAuthorSystemPoll.value),
+      notes: textOrUndefined(els.watchAuthorSystemNotes.value)
+    }, {
+      asTask: true
+    });
+    renderRows(els.watchAuthoringStatus, [
+      ['Action', 'system/radius watch saved'],
+      ['Task ID', result.task_id],
+      ['Classification', result.classification],
+      ['Evidence Effect', 'none; watch authoring is metadata-only']
+    ]);
+    await loadTasks();
+    await loadWatchSchedule();
+  } catch (error) {
+    renderError(els.watchAuthoringStatus, error);
+  } finally {
+    setBusy(els.saveSystemWatch, false);
+  }
+}
+
+function actorWatchAuthoringInput() {
+  return cleanObject({
+    entityType: els.watchAuthorActorType.value,
+    entityId: numberOrUndefined(els.watchAuthorActorId.value),
+    entityName: textOrUndefined(els.watchAuthorActorName.value),
+    lookbackSeconds: numberOrUndefined(els.watchAuthorActorLookback.value),
+    maxRefs: numberOrUndefined(els.watchAuthorActorExpansions.value),
+    maxExpansions: numberOrUndefined(els.watchAuthorActorExpansions.value)
+  });
+}
+
+function systemWatchAuthoringInput() {
+  return cleanObject({
+    centerSystemId: numberOrUndefined(els.watchAuthorSystemId.value),
+    radiusJumps: numberOrUndefined(els.watchAuthorRadius.value),
+    lookbackSeconds: numberOrUndefined(els.watchAuthorSystemLookback.value),
+    maxSystems: numberOrUndefined(els.watchAuthorMaxSystems.value),
+    maxRefsPerSystem: 1,
+    maxExpansions: numberOrUndefined(els.watchAuthorSystemExpansions.value)
+  });
 }
 
 function renderWatchSchedule(schedule) {

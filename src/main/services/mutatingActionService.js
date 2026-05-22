@@ -23,7 +23,7 @@ const {
   getAssessmentArtifact,
   listAssessmentArtifacts
 } = require('../assessment/assessmentArtifactRepository');
-const { addWatchlistEntity, listWatchlistEntities } = require('../watchlist/watchlistRepository');
+const { addSystemRadiusWatch, addWatchlistEntity, listSystemRadiusWatches, listWatchlistEntities } = require('../watchlist/watchlistRepository');
 const { buildWatchScheduleStatus, recordWatchRunResult } = require('../watchlist/watchScheduler');
 const { defaultWatchSessionExecutor } = require('../watchlist/watchExecutor');
 
@@ -109,6 +109,25 @@ async function runSdeInventoryImportService(db, payload = {}) {
 }
 
 async function runWatchCreateService(db, payload = {}, dependencies = {}) {
+  if (isSystemRadiusWatchPayload(payload)) {
+    const normalized = normalizeSystemRadiusWatchScope({
+      centerSystemId: payload.centerSystemId || payload.center_system_id,
+      radiusJumps: payload.radiusJumps ?? payload.radius_jumps,
+      lookbackSeconds: payload.lookbackSeconds ?? payload.lookback_seconds,
+      maxSystems: payload.maxSystems ?? payload.max_systems_per_run,
+      maxRefsPerSystem: payload.maxRefsPerSystem ?? payload.max_refs_per_system ?? 1,
+      maxExpansions: payload.maxExpansions ?? payload.max_killmails_per_run,
+      maxRadius: payload.maxRadius,
+      maxTopologySystems: payload.maxTopologySystems
+    });
+    return addSystemRadiusWatch(db, {
+      ...payload,
+      ...normalized,
+      pollIntervalMinutes: payload.pollIntervalMinutes ?? payload.poll_interval_minutes,
+      isActive: payload.isActive ?? payload.is_active,
+      notes: payload.notes
+    });
+  }
   const actor = await resolveActorInput(db, payload, dependencies);
   return addWatchlistEntity(db, {
     ...payload,
@@ -124,8 +143,14 @@ async function runWatchUpdateService(db, payload = {}, dependencies = {}) {
 
 function runWatchListService(db) {
   return {
-    watches: listWatchlistEntities(db)
+    watches: listWatchlistEntities(db),
+    system_watches: listSystemRadiusWatches(db)
   };
+}
+
+function isSystemRadiusWatchPayload(payload = {}) {
+  const watchType = String(payload.watchType || payload.watch_type || '').toLowerCase();
+  return watchType === 'system_radius' || watchType === 'system' || payload.centerSystemId || payload.center_system_id;
 }
 
 function runWatchScheduleService(db, payload = {}) {

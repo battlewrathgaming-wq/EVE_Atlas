@@ -1,4 +1,5 @@
 const { nowIso } = require('../db/evidenceRepository');
+const { TopologyService } = require('../sde/topologyService');
 
 const VALID_ENTITY_TYPES = new Set(['character', 'corporation', 'alliance']);
 
@@ -55,6 +56,114 @@ function listWatchlistEntities(db) {
   `).all();
 }
 
+function addSystemRadiusWatch(db, input) {
+  const centerSystemId = normalizeEntityId(input.centerSystemId);
+  const system = db.prepare(`
+    SELECT solar_system_id, solar_system_name
+    FROM solar_systems
+    WHERE solar_system_id = ?
+  `).get(centerSystemId);
+  if (!system) {
+    throw new Error(`No system found for ${centerSystemId}`);
+  }
+
+  const radiusJumps = nonNegativeIntegerOrDefault(input.radiusJumps, 1, 'radiusJumps');
+  const topology = new TopologyService(db);
+  const includedSystemIds = topology.getSystemsWithinRadius(centerSystemId, radiusJumps, {
+    maxRadius: integerOrDefault(input.maxRadius, 5),
+    maxSystems: integerOrDefault(input.maxTopologySystems, 100)
+  });
+
+  const values = {
+    centerSystemId,
+    centerSystemName: system.solar_system_name,
+    radiusJumps,
+    includedSystemIds: JSON.stringify(includedSystemIds),
+    excludedSystemIds: JSON.stringify(input.excludedSystemIds || []),
+    lookbackHours: Math.max(1, Math.ceil(integerOrDefault(input.lookbackSeconds, 86400) / 3600)),
+    maxSystemsPerRun: integerOrDefault(input.maxSystems, 10),
+    maxKillmailsPerRun: integerOrDefault(input.maxExpansions || input.maxKillmailsPerRun, 2),
+    isActive: input.isActive === false ? 0 : 1,
+    pollIntervalMinutes: integerOrDefault(input.pollIntervalMinutes, 60),
+    notes: input.notes || null
+  };
+
+  const watchId = input.watchId || input.watch_id;
+  if (watchId) {
+    db.prepare(`
+      UPDATE system_watches
+      SET center_system_id = ?,
+          center_system_name = ?,
+          radius_jumps = ?,
+          included_system_ids = ?,
+          excluded_system_ids = ?,
+          lookback_hours = ?,
+          max_systems_per_run = ?,
+          max_killmails_per_run = ?,
+          is_active = ?,
+          poll_interval_minutes = ?,
+          notes = ?
+      WHERE watch_id = ?
+    `).run(
+      values.centerSystemId,
+      values.centerSystemName,
+      values.radiusJumps,
+      values.includedSystemIds,
+      values.excludedSystemIds,
+      values.lookbackHours,
+      values.maxSystemsPerRun,
+      values.maxKillmailsPerRun,
+      values.isActive,
+      values.pollIntervalMinutes,
+      values.notes,
+      normalizeEntityId(watchId)
+    );
+  } else {
+    db.prepare(`
+      INSERT INTO system_watches (
+        center_system_id, center_system_name, radius_jumps, included_system_ids,
+        excluded_system_ids, lookback_hours, max_systems_per_run,
+        max_killmails_per_run, is_active, poll_interval_minutes, notes
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      values.centerSystemId,
+      values.centerSystemName,
+      values.radiusJumps,
+      values.includedSystemIds,
+      values.excludedSystemIds,
+      values.lookbackHours,
+      values.maxSystemsPerRun,
+      values.maxKillmailsPerRun,
+      values.isActive,
+      values.pollIntervalMinutes,
+      values.notes
+    );
+  }
+
+  const row = db.prepare(`
+    SELECT *
+    FROM system_watches
+    WHERE watch_id = COALESCE(?, last_insert_rowid())
+  `).get(watchId || null);
+  return {
+    watch_type: 'system_radius',
+    watch: row,
+    authored_at: nowIso()
+  };
+}
+
+function listSystemRadiusWatches(db) {
+  return db.prepare(`
+    SELECT watch_id, center_system_id, center_system_name, radius_jumps,
+           included_system_ids, excluded_system_ids, lookback_hours,
+           max_systems_per_run, max_killmails_per_run, is_active,
+           poll_interval_minutes, last_polled_at, next_poll_at,
+           last_success_at, last_error_at, backoff_until, notes
+    FROM system_watches
+    ORDER BY center_system_name, radius_jumps, watch_id
+  `).all();
+}
+
 function normalizeEntityType(entityType) {
   const value = String(entityType || '').toLowerCase();
   if (!VALID_ENTITY_TYPES.has(value)) {
@@ -82,7 +191,20 @@ function integerOrDefault(value, fallback) {
   return number;
 }
 
+function nonNegativeIntegerOrDefault(value, fallback, label) {
+  if (value === undefined || value === null || value === '') {
+    return fallback;
+  }
+  const number = Number(value);
+  if (!Number.isInteger(number) || number < 0) {
+    throw new Error(`${label} must be a non-negative integer`);
+  }
+  return number;
+}
+
 module.exports = {
   addWatchlistEntity,
+  addSystemRadiusWatch,
+  listSystemRadiusWatches,
   listWatchlistEntities
 };

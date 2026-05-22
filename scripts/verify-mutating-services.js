@@ -5,6 +5,7 @@ const { invokeServiceCommand, listServiceCommands } = require('../src/main/servi
 async function main() {
   const db = openDatabase(':memory:');
   migrate(db);
+  seedSystem(db);
 
   try {
     assertMutatingCommandsListed();
@@ -101,6 +102,7 @@ async function verifyManualDiscoveryAndExpansionThroughService(db) {
 }
 
 async function verifyWatchServices(db) {
+  const fetchRunsBeforeWatchAuthoring = count(db, 'fetch_runs');
   const created = await invokeServiceCommand('watch.create', {
     entityType: 'character',
     entityId: 90000002,
@@ -114,6 +116,34 @@ async function verifyWatchServices(db) {
   const listed = await invokeServiceCommand('watch.list', {}, { db });
   assert(listed.watches.length === 1, 'watch.list should return created watch');
   assert(listed.watches[0].entity_name === 'Atlas Service Scout', 'watch.list should include watch label');
+  assert(Array.isArray(listed.system_watches), 'watch.list should include system watch rows');
+
+  const systemWatch = await invokeServiceCommand('watch.create', {
+    watchType: 'system_radius',
+    centerSystemId: 30000001,
+    radiusJumps: 0,
+    lookbackSeconds: 86400,
+    maxSystems: 1,
+    maxExpansions: 2,
+    pollIntervalMinutes: 90,
+    notes: 'Metadata-only system watch fixture'
+  }, { db, asTask: true });
+  assert(systemWatch.status === 'succeeded', 'system watch.create service task should succeed');
+  assert(systemWatch.classification === 'metadata-only', 'system watch.create task should carry metadata-only classification');
+
+  const afterSystem = await invokeServiceCommand('watch.list', {}, { db });
+  assert(afterSystem.system_watches.length === 1, 'watch.list should return created system watch');
+  assert(afterSystem.system_watches[0].center_system_id === 30000001, 'system watch should preserve center system ID');
+  assert(count(db, 'fetch_runs') === fetchRunsBeforeWatchAuthoring, 'watch authoring should not create collection runs');
+}
+
+function seedSystem(db) {
+  db.prepare(`
+    INSERT INTO solar_systems (
+      solar_system_id, solar_system_name, constellation_id, constellation_name,
+      region_id, region_name, security_status
+    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+  `).run(30000001, 'Atlas Prime', 20000001, 'Test Constellation', 10000001, 'Test Region', 0.4);
 }
 
 function fakeZkillClient(refs, calls = []) {

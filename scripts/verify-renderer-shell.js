@@ -85,6 +85,11 @@ function main() {
   assert(htmlText.includes('arm-watch-session'), 'watch view should include explicit session arm control');
   assert(htmlText.includes('disarm-watch-session'), 'watch view should include explicit session disarm control');
   assert(htmlText.includes('watch-executor-state'), 'watch view should include session executor state');
+  assert(htmlText.includes('watch-author-actor-type'), 'watch view should include actor watch authoring controls');
+  assert(htmlText.includes('save-actor-watch'), 'watch view should include explicit actor watch save action');
+  assert(htmlText.includes('watch-author-system-id'), 'watch view should include system watch authoring controls');
+  assert(htmlText.includes('save-system-watch'), 'watch view should include explicit system watch save action');
+  assert(htmlText.includes('watch-authoring-status'), 'watch view should include watch authoring status');
   assert(htmlText.includes('watch-list'), 'watch view should include watch list');
   assert(htmlText.includes('view-actions'), 'renderer should include controlled actions view');
   assert(htmlText.includes('preflight-manual-discovery'), 'actions view should include manual discovery preflight');
@@ -141,10 +146,15 @@ function main() {
   assert(rendererText.includes('queueConfirmExpansion.checked'), 'manual expansion should require visible confirmation');
   assert(rendererText.includes('selectedKillmailIds'), 'manual expansion should submit selected queue refs explicitly');
   assert(rendererText.includes("service.invoke('watch.schedule'"), 'renderer should call watch.schedule through service bridge');
+  assert(rendererText.includes("service.invoke('watch.list'"), 'renderer should call watch.list through service bridge');
+  assert(rendererText.includes("service.invoke('watch.create'"), 'renderer should create watches through service bridge');
   assert(rendererText.includes("service.invoke('watch.executor.status'"), 'renderer should read watch executor state through service bridge');
   assert(rendererText.includes("service.invoke('watch.executor.arm'"), 'renderer should explicitly arm watch executor through service bridge');
   assert(rendererText.includes("service.invoke('watch.executor.disarm'"), 'renderer should explicitly disarm watch executor through service bridge');
   assert(rendererText.includes('renderWatchSchedule'), 'renderer should render watch schedule status');
+  assert(rendererText.includes('actorWatchAuthoringInput'), 'renderer should build actor watch authoring payload');
+  assert(rendererText.includes('systemWatchAuthoringInput'), 'renderer should build system watch authoring payload');
+  assert(rendererText.includes('watch authoring is metadata-only'), 'renderer should label watch authoring as metadata-only');
   assert(rendererText.includes('renderWatchExecutor'), 'renderer should render watch executor state');
   assert(rendererText.includes("service.invoke('live.gate'"), 'renderer should preflight live gate through service bridge');
   assert(rendererText.includes("service.invoke('manual.discovery'"), 'renderer should start manual discovery through service bridge');

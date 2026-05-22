@@ -79,6 +79,23 @@ const els = {
   disarmWatchSession: document.querySelector('#disarm-watch-session'),
   watchSummary: document.querySelector('#watch-summary'),
   watchExecutorState: document.querySelector('#watch-executor-state'),
+  watchAuthorActorType: document.querySelector('#watch-author-actor-type'),
+  watchAuthorActorId: document.querySelector('#watch-author-actor-id'),
+  watchAuthorActorName: document.querySelector('#watch-author-actor-name'),
+  watchAuthorActorLookback: document.querySelector('#watch-author-actor-lookback'),
+  watchAuthorActorExpansions: document.querySelector('#watch-author-actor-expansions'),
+  watchAuthorActorPoll: document.querySelector('#watch-author-actor-poll'),
+  watchAuthorActorNotes: document.querySelector('#watch-author-actor-notes'),
+  saveActorWatch: document.querySelector('#save-actor-watch'),
+  watchAuthorSystemId: document.querySelector('#watch-author-system-id'),
+  watchAuthorRadius: document.querySelector('#watch-author-radius'),
+  watchAuthorSystemLookback: document.querySelector('#watch-author-system-lookback'),
+  watchAuthorMaxSystems: document.querySelector('#watch-author-max-systems'),
+  watchAuthorSystemExpansions: document.querySelector('#watch-author-system-expansions'),
+  watchAuthorSystemPoll: document.querySelector('#watch-author-system-poll'),
+  watchAuthorSystemNotes: document.querySelector('#watch-author-system-notes'),
+  saveSystemWatch: document.querySelector('#save-system-watch'),
+  watchAuthoringStatus: document.querySelector('#watch-authoring-status'),
   watchList: document.querySelector('#watch-list'),
   preflightManualDiscovery: document.querySelector('#preflight-manual-discovery'),
   runManualDiscovery: document.querySelector('#run-manual-discovery'),
@@ -191,6 +208,8 @@ function bindEvents() {
   els.refreshWatchStatus.addEventListener('click', loadWatchSchedule);
   els.armWatchSession.addEventListener('click', armWatchSession);
   els.disarmWatchSession.addEventListener('click', disarmWatchSession);
+  els.saveActorWatch.addEventListener('click', saveActorWatch);
+  els.saveSystemWatch.addEventListener('click', saveSystemWatch);
   els.preflightManualDiscovery.addEventListener('click', preflightManualDiscovery);
   els.runManualDiscovery.addEventListener('click', runManualDiscovery);
   els.loadActorReport.addEventListener('click', loadActorReport);

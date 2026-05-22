@@ -309,6 +309,85 @@
             <div id="watch-executor-state" class="detail-list"></div>
           </div>
           <div class="panel">
+            <h4>Watch Authoring</h4>
+            <p class="form-note">Creating or updating a watch records operator intent only. It does not run zKill or ESI collection.</p>
+            <div class="report-grid">
+              <div>
+                <h4>Actor Watch</h4>
+                <div class="form-grid compact-form">
+                  <label>
+                    <span>Actor Type</span>
+                    <select id="watch-author-actor-type">
+                      <option value="character">Character</option>
+                      <option value="corporation">Corporation</option>
+                      <option value="alliance">Alliance</option>
+                    </select>
+                  </label>
+                  <label>
+                    <span>Actor ID</span>
+                    <input id="watch-author-actor-id" type="number" min="1" placeholder="90000002" />
+                  </label>
+                  <label>
+                    <span>Actor Label</span>
+                    <input id="watch-author-actor-name" type="text" placeholder="Cached display label" />
+                  </label>
+                  <label>
+                    <span>Lookback Seconds</span>
+                    <input id="watch-author-actor-lookback" type="number" min="1" placeholder="Backend default" />
+                  </label>
+                  <label>
+                    <span>Max Expansions</span>
+                    <input id="watch-author-actor-expansions" type="number" min="1" placeholder="Backend default" />
+                  </label>
+                  <label>
+                    <span>Poll Minutes</span>
+                    <input id="watch-author-actor-poll" type="number" min="1" placeholder="60" />
+                  </label>
+                  <label class="full-width">
+                    <span>Notes</span>
+                    <input id="watch-author-actor-notes" type="text" placeholder="Why this actor is interesting" />
+                  </label>
+                </div>
+                <button class="secondary-action" type="button" id="save-actor-watch">Save Actor Watch</button>
+              </div>
+              <div>
+                <h4>System / Radius Watch</h4>
+                <div class="form-grid compact-form">
+                  <label>
+                    <span>Center System ID</span>
+                    <input id="watch-author-system-id" type="number" min="1" placeholder="30004660" />
+                  </label>
+                  <label>
+                    <span>Radius Jumps</span>
+                    <input id="watch-author-radius" type="number" min="0" max="5" placeholder="Backend default" />
+                  </label>
+                  <label>
+                    <span>Lookback Seconds</span>
+                    <input id="watch-author-system-lookback" type="number" min="1" placeholder="Backend default" />
+                  </label>
+                  <label>
+                    <span>Max Systems</span>
+                    <input id="watch-author-max-systems" type="number" min="1" placeholder="Backend default" />
+                  </label>
+                  <label>
+                    <span>Max Expansions</span>
+                    <input id="watch-author-system-expansions" type="number" min="1" placeholder="Backend default" />
+                  </label>
+                  <label>
+                    <span>Poll Minutes</span>
+                    <input id="watch-author-system-poll" type="number" min="1" placeholder="60" />
+                  </label>
+                  <label class="full-width">
+                    <span>Notes</span>
+                    <input id="watch-author-system-notes" type="text" placeholder="Why this area is interesting" />
+                  </label>
+                </div>
+                <button class="secondary-action" type="button" id="save-system-watch">Save System Watch</button>
+              </div>
+            </div>
+            <div id="watch-authoring-status" class="detail-list"></div>
+          </div>
+          <div class="panel">
             <h4>Watch Schedule</h4>
             <div id="watch-list" class="watch-list"></div>
           </div>
