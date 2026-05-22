@@ -55,6 +55,14 @@ function main() {
   assert(htmlText.includes('task-detail'), 'task view should include task detail panel');
   assert(htmlText.includes('task-progress'), 'task view should include progress timeline');
   assert(htmlText.includes('cancel-task'), 'task view should include cancellation control');
+  assert(htmlText.includes('view-queue-watch'), 'renderer should include queue/watch status view');
+  assert(htmlText.includes('preview-queue-selection'), 'queue view should include selection preview action');
+  assert(htmlText.includes('queue-selection-summary'), 'queue view should include selection summary');
+  assert(htmlText.includes('queue-ref-list'), 'queue view should include queued ref list');
+  assert(htmlText.includes('refresh-watch-status'), 'watch view should include refresh action');
+  assert(htmlText.includes('watch-session-armed'), 'watch view should include session gate preview');
+  assert(htmlText.includes('watch-live-api-enabled'), 'watch view should include live API gate preview');
+  assert(htmlText.includes('watch-list'), 'watch view should include watch list');
   assert(htmlText.includes('view-reports'), 'renderer should include reports view');
   assert(htmlText.includes('load-actor-report'), 'report view should include actor report action');
   assert(htmlText.includes('actor-report-type'), 'report view should include actor type control');
@@ -79,6 +87,10 @@ function main() {
   assert(rendererText.includes('isCancellable'), 'renderer should gate cancellation by task state');
   assert(rendererText.includes('renderProgress'), 'renderer should render task progress events');
   assert(rendererText.includes('renderTaskOutput'), 'renderer should render task warnings/errors/results');
+  assert(rendererText.includes("service.invoke('queue.selection'"), 'renderer should call queue.selection through service bridge');
+  assert(rendererText.includes('renderQueueSelection'), 'renderer should render queue selection preview');
+  assert(rendererText.includes("service.invoke('watch.schedule'"), 'renderer should call watch.schedule through service bridge');
+  assert(rendererText.includes('renderWatchSchedule'), 'renderer should render watch schedule status');
   assert(rendererText.includes("service.invoke('report.actor'"), 'renderer should call report.actor through service bridge');
   assert(rendererText.includes('renderActorReport'), 'renderer should render native actor report response');
   assert(rendererText.includes('renderObservationSections'), 'renderer should render backend observation sections');
@@ -86,6 +98,9 @@ function main() {
   assert(rendererText.includes("service.invoke('report.queue'"), 'renderer should call a report through service bridge');
   assert(rendererText.includes('service.list()'), 'renderer should read service command availability');
   assert(rendererText.includes('atlasWindow.setAlwaysOnTop'), 'renderer should toggle always-on-top through preload bridge');
+  assert(!rendererText.includes("service.invoke('manual.expansion'"), 'renderer should not trigger manual expansion from passive views');
+  assert(!rendererText.includes("service.invoke('actor.watch'"), 'renderer should not trigger actor collection from passive views');
+  assert(!rendererText.includes("service.invoke('system.radius.watch'"), 'renderer should not trigger system/radius collection from passive views');
   assert(!/require\s*\(/.test(rendererText), 'renderer should not require backend modules');
   assert(!/electron|ipcRenderer|BrowserWindow/.test(rendererText), 'renderer should not import or reference Electron APIs directly');
   assert(!/from\s+['"].*\.\.\/main/.test(rendererText), 'renderer should not import main-process modules');
@@ -96,6 +111,9 @@ function main() {
   assert(styleText.includes('-webkit-app-region: no-drag'), 'renderer styles should protect controls from drag');
   assert(styleText.includes('.task-layout'), 'renderer styles should define task layout');
   assert(styleText.includes('.timeline-row'), 'renderer styles should define progress timeline rows');
+  assert(styleText.includes('.queue-ref-list'), 'renderer styles should define queue ref list');
+  assert(styleText.includes('.watch-list'), 'renderer styles should define watch list');
+  assert(styleText.includes('.status-badge'), 'renderer styles should define queue/watch status badges');
   assert(styleText.includes('.observation-table'), 'renderer styles should define actor observation tables');
   assert(styleText.includes('.form-grid'), 'renderer styles should define actor report controls');
   assert(styleText.includes('.report-output'), 'renderer styles should define report output');

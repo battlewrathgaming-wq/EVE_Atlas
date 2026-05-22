@@ -15,6 +15,7 @@ Recent backend/UI-readiness work completed:
 - task progress/cancellation UI shows task history, selected task details, progress events, warnings, result/error payloads, and cancel action for running tasks
 - actor-first report UI renders native structured `report.actor` responses with evidence, observation, provenance, warnings, raw IDs, and text export separated
 - scope controls UI loads backend defaults and validates manual discovery, manual expansion, actor watch, and system/radius watch inputs through `scope.validate`
+- queue/watch status UI previews discovery queue selections through `queue.selection` and watch due/blocked/backoff/session/live-gate state through `watch.schedule`
 - task wrapping, detached execution, cancellation, and HTTP timeout handling are verified
 - live API gates and user-defined scope validation are centralized
 - queue selection, queue status isolation, and retention preflight are implemented
@@ -69,6 +70,7 @@ Current implemented shell:
 - task pane uses only `task.list`, `task.get`, and `task.cancel` service calls
 - report pane presents actor reports from backend response sections without recomputing evidence in the renderer
 - scope pane exposes lookback, caps, radius, system, actor, and queue selection inputs before future live actions
+- queue/watch pane exposes queued discovery refs, non-evidence preview fields, expected ESI calls, selected/skipped/cached/failed state, and passive watch schedule status
 - frameless window controls for minimize, close, and always-on-top
 - native structured actor report response with text rendering retained for CLI/export
 
@@ -132,6 +134,7 @@ Offline verification now includes:
 - task progress/cancellation UI verification through `verify:renderer-shell` and `verify:task-runner`
 - actor report presentation verification through `verify:renderer-shell` and `verify:report-response`
 - scope controls UI verification through `verify:renderer-shell` and `verify:scope-controls`
+- queue/watch status UI verification through `verify:renderer-shell`, `verify:queue-selection`, `verify:queue-report`, and `verify:watch-scheduler`
 - native actor report response verification
 - task runner verification
 
@@ -145,7 +148,6 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 
 ## Not Yet Implemented
 
-- UI controls for scope selection
 - dedicated readiness/settings screen polish
 - session-armed watch executor loop
 - executable retention/deprecation actions and assessment compaction
@@ -164,5 +166,6 @@ Latest reviewed commits:
 - current task UI slice - task inspection, progress, warnings, result/error preview, and cancellation controls
 - current actor report slice - first structured report presentation surface
 - current scope controls slice - backend-defaulted, backend-validated scope payload preview
+- current queue/watch slice - passive discovery queue selection preview and watch schedule status
 
 These commits move the earlier rigging gaps into a usable backend baseline for initial presentation work. The main remaining risk is not missing service vocabulary; it is wiring a renderer that uses these services without bypassing them, and deciding how session-armed watch execution should trigger due watches safely.

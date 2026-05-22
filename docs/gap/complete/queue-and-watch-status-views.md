@@ -1,6 +1,6 @@
 ﻿# Gap To-Do: Queue And Watch Status Views
 
-Status: Open
+Status: Complete
 Priority: P2
 
 ## Actionables

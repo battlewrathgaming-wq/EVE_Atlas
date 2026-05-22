@@ -30,6 +30,7 @@
           <button class="nav-item active" type="button" data-view="readiness">Readiness</button>
           <button class="nav-item" type="button" data-view="scopes">Scopes</button>
           <button class="nav-item" type="button" data-view="tasks">Tasks</button>
+          <button class="nav-item" type="button" data-view="queue-watch">Queue / Watches</button>
           <button class="nav-item" type="button" data-view="reports">Reports</button>
         </nav>
       </aside>
@@ -207,6 +208,83 @@
               <h4 class="subheading">Warnings And Result</h4>
               <pre class="task-output" id="task-output">Select a task to inspect details.</pre>
             </div>
+          </div>
+        </section>
+
+        <section class="view" id="view-queue-watch" aria-labelledby="queue-watch-title">
+          <div class="section-heading">
+            <div>
+              <h3 id="queue-watch-title">Queue And Watch Status</h3>
+              <p>Inspect pending discovery refs and watch readiness without triggering collection.</p>
+            </div>
+            <div class="action-row">
+              <button class="secondary-action" type="button" id="refresh-watch-status">Refresh Watches</button>
+              <button class="primary-action" type="button" id="preview-queue-selection">Preview Queue</button>
+            </div>
+          </div>
+          <div class="readiness-layout">
+            <div class="panel">
+              <h4>Queue Selection Scope</h4>
+              <div class="form-grid compact-form">
+                <label>
+                  <span>Discovery Type</span>
+                  <input id="queue-discovered-by-type" type="text" placeholder="manual_actor" />
+                </label>
+                <label>
+                  <span>Discovery ID</span>
+                  <input id="queue-discovered-by-id" type="text" placeholder="character:90000002" />
+                </label>
+                <label>
+                  <span>Selection Mode</span>
+                  <select id="queue-selection-mode">
+                    <option value="next">Next</option>
+                    <option value="oldest">Oldest</option>
+                    <option value="newest">Newest</option>
+                    <option value="priority">Priority</option>
+                    <option value="selected">Selected IDs</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Max Expansions</span>
+                  <input id="queue-max-expansions" type="number" min="1" value="2" />
+                </label>
+                <label class="full-width">
+                  <span>Selected Killmail IDs</span>
+                  <input id="queue-killmail-ids" type="text" placeholder="123456, 123457" />
+                </label>
+              </div>
+              <p class="form-note">Queue previews are zKill discovery context only. Activity observations begin after ESI expansion.</p>
+            </div>
+            <div class="panel">
+              <h4>Selection Summary</h4>
+              <div id="queue-selection-summary" class="detail-list"></div>
+            </div>
+          </div>
+          <div class="panel">
+            <h4>Queued References</h4>
+            <div id="queue-ref-list" class="queue-ref-list"></div>
+          </div>
+          <div class="readiness-layout">
+            <div class="panel">
+              <h4>Watch Gates</h4>
+              <label class="checkbox-row">
+                <input id="watch-session-armed" type="checkbox" />
+                <span>Session armed</span>
+              </label>
+              <label class="checkbox-row">
+                <input id="watch-live-api-enabled" type="checkbox" />
+                <span>Live API enabled for schedule preview</span>
+              </label>
+              <p class="form-note">This view previews scheduler state only. Due watches are not executed from page load.</p>
+            </div>
+            <div class="panel">
+              <h4>Watch Summary</h4>
+              <div id="watch-summary" class="detail-list"></div>
+            </div>
+          </div>
+          <div class="panel">
+            <h4>Watch Schedule</h4>
+            <div id="watch-list" class="watch-list"></div>
           </div>
         </section>
 

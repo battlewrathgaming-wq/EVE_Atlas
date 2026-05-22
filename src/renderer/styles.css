@@ -199,6 +199,12 @@ h2 {
   gap: 16px;
 }
 
+.action-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
 h3 {
   margin-bottom: 4px;
   font-size: 20px;
@@ -306,6 +312,27 @@ h4 {
   color: var(--text);
   padding: 9px 10px;
   font: inherit;
+}
+
+.compact-form {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+
+.checkbox-row input {
+  width: 16px;
+  height: 16px;
 }
 
 .form-note {
@@ -431,6 +458,95 @@ h4 {
 .observation-table th {
   color: var(--muted);
   font-weight: 600;
+}
+
+.queue-ref-list,
+.watch-list {
+  display: grid;
+  gap: 10px;
+}
+
+.queue-ref,
+.watch-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.8fr) minmax(160px, 0.7fr) minmax(0, 1.5fr);
+  gap: 12px;
+  align-items: start;
+  border: 1px solid #263039;
+  background: #12181c;
+  padding: 12px;
+}
+
+.queue-ref.selected,
+.watch-row.due {
+  border-color: #3f756d;
+}
+
+.queue-ref strong,
+.watch-row strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.queue-ref span,
+.watch-row span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.queue-ref dl,
+.watch-row dl {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 6px 10px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.queue-ref dt,
+.watch-row dt {
+  color: var(--muted);
+}
+
+.queue-ref dd,
+.watch-row dd {
+  margin: 0;
+  color: var(--text);
+  word-break: break-word;
+}
+
+.status-badge {
+  display: inline-block;
+  margin: 0 5px 5px 0;
+  border: 1px solid var(--line);
+  background: #0c1114;
+  color: var(--muted);
+  padding: 4px 6px;
+  font-size: 12px;
+}
+
+.status-badge.selected,
+.status-badge.due,
+.status-badge.ready {
+  border-color: #3f756d;
+  color: var(--accent);
+}
+
+.status-badge.failed,
+.status-badge.backoff,
+.status-badge.live-api-disabled,
+.status-badge.session-not-armed {
+  border-color: #7b3b3b;
+  color: var(--danger);
+}
+
+.status-badge.cap-skipped,
+.status-badge.cached,
+.status-badge.not-due,
+.status-badge.inactive {
+  border-color: #7c6835;
+  color: var(--warn);
 }
 
 .detail-row,
