@@ -372,7 +372,6 @@ Supporting audit:
 Active tasks:
 
 - `adversarial-evidence-fixture-suite.md`
-- `partial-failure-and-transaction-integrity.md`
 - `electron-operator-rugged-smoke.md`
 - `task-concurrency-and-cancellation-stress.md`
 - `large-synthetic-scale-pressure.md`
@@ -383,3 +382,4 @@ Completed:
 
 - `passive-surface-side-effect-sweep.md`
 - `sde-lookup-builder-failure-modes.md`
+- `partial-failure-and-transaction-integrity.md`
