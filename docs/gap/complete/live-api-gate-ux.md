@@ -1,4 +1,6 @@
-# TODO: Live API Gate UX
+# Complete: Live API Gate UX
+
+Status: Complete For IPC Shell Preparation
 
 ## Actionables
 
@@ -31,3 +33,17 @@ The UI needs a product equivalent:
 
 The UI can clearly distinguish local reads from live zKill/ESI actions, and live actions are explicit, scoped, and gated.
 
+## Current Implementation
+
+- `live.gate` service command reports live API gate state for all known actions or one scoped action.
+- Local-only actions are allowed without live API enablement.
+- Live-required actions are blocked unless `AURA_ATLAS_LIVE_API=1`.
+- Gate responses include estimated zKill/ESI calls where practical.
+- Gate responses include UI-oriented display hints for confirmation and scope/cap display.
+- Verified by `verify:live-api-gate` and `verify:service-registry`.
+
+## Remaining Follow-On Work
+
+- Renderer controls still need to display and enforce the gate state.
+- Actual live collectors continue to enforce their own live gate checks.
+- Rate-limit/backoff state should be added as live API diagnostics mature.

@@ -13,11 +13,14 @@ async function main() {
   try {
     const commands = listServiceCommands();
     const readinessCommand = commands.find((entry) => entry.command === 'app.readiness');
+    const liveGateCommand = commands.find((entry) => entry.command === 'live.gate');
     const scopeDefaultsCommand = commands.find((entry) => entry.command === 'scope.defaults');
     const scopeValidateCommand = commands.find((entry) => entry.command === 'scope.validate');
     const taskListCommand = commands.find((entry) => entry.command === 'task.list');
     assert(readinessCommand, 'app.readiness should be listed');
     assert(readinessCommand.classification === 'read-only', 'app.readiness should be read-only');
+    assert(liveGateCommand, 'live.gate should be listed');
+    assert(liveGateCommand.classification === 'read-only', 'live.gate should be read-only');
     assert(scopeDefaultsCommand, 'scope.defaults should be listed');
     assert(scopeDefaultsCommand.classification === 'read-only', 'scope.defaults should be read-only');
     assert(scopeValidateCommand, 'scope.validate should be listed');
@@ -31,6 +34,13 @@ async function main() {
     });
     assert(readiness.checks.migrations_applied === true, 'readiness command should return migrated DB state');
     assert(readiness.app.name === 'AURA Atlas', 'readiness command should return app identity');
+
+    const liveGate = await invokeServiceCommand('live.gate', {
+      action: 'manual.expansion',
+      input: { maxExpansions: 2 }
+    }, { db });
+    assert(liveGate.mode === 'live-required', 'manual expansion should be live-required');
+    assert(liveGate.estimated_api_calls.esi === 2, 'manual expansion should estimate ESI calls from cap');
 
     const defaults = await invokeServiceCommand('scope.defaults', {}, { db });
     assert(defaults.manualActorDiscovery.maxRefs === 20, 'scope defaults should include manual actor defaults');

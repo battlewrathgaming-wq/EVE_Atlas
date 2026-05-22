@@ -23,6 +23,7 @@
     "verify:app-readiness": "node scripts/verify-app-readiness.js",
     "verify:service-registry": "node scripts/verify-service-registry.js",
     "verify:task-runner": "node scripts/verify-task-runner.js",
+    "verify:live-api-gate": "node scripts/verify-live-api-gate.js",
     "verify:idempotent": "node scripts/verify-idempotent-ingestion.js",
     "verify:sde-fixture": "node scripts/verify-sde-fixture.js",
     "verify:sde-real-local": "node scripts/verify-sde-real-local.js",

@@ -7,6 +7,7 @@ const GROUPS = {
     'verify:app-readiness',
     'verify:service-registry',
     'verify:task-runner',
+    'verify:live-api-gate',
     'verify:fixture',
     'verify:idempotent',
     'verify:db-integrity'

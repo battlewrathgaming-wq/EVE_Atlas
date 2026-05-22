@@ -18,13 +18,12 @@ The current checklist is grouped around preparing the Electron shell and rendere
 
 Recommended order:
 
-1. `live-api-gate-ux.md`
-2. `report-response-contract.md`
-3. `queue-expansion-selection.md`
-4. `error-warning-taxonomy.md`
-5. `concurrency-and-locking.md`
-6. `destructive-actions-and-retention.md`
-7. `ui-language-contract.md`
+1. `report-response-contract.md`
+2. `queue-expansion-selection.md`
+3. `error-warning-taxonomy.md`
+4. `concurrency-and-locking.md`
+5. `destructive-actions-and-retention.md`
+6. `ui-language-contract.md`
 
 Supporting current-state note:
 
@@ -32,4 +31,4 @@ Supporting current-state note:
 
 Completed items are moved to `docs/gap/complete`.
 
-The next implementation slice should expose live API gate state/action blocking through the service boundary, because UI actions need to distinguish local reads from live zKill/ESI work.
+The next implementation slice should define stable report response objects, because renderer components should not parse CLI text or re-derive evidence meaning.

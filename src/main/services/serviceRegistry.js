@@ -1,4 +1,5 @@
 const { buildAppReadiness } = require('./appReadinessService');
+const { getLiveApiGateState } = require('./liveApiGateService');
 const { getScopeDefaults, validateScope } = require('./scopeService');
 const { defaultTaskRunner } = require('./taskRunner');
 
@@ -7,6 +8,11 @@ const COMMANDS = {
     classification: 'read-only',
     description: 'Return app readiness, settings, lookup status, path status, and live API gate state',
     handler: ({ db, databasePath }) => buildAppReadiness(db, { databasePath })
+  },
+  'live.gate': {
+    classification: 'read-only',
+    description: 'Return live API gate state for all actions or one scoped action',
+    handler: ({ payload }) => getLiveApiGateState(payload)
   },
   'scope.defaults': {
     classification: 'read-only',
