@@ -1,6 +1,6 @@
 # Gap To-Do: Evidence-Creating UI Actions
 
-Status: Open
+Status: Complete For Manual Discovery
 Priority: P1
 Milestone: Presentation Validation And Controlled Execution
 
@@ -46,6 +46,42 @@ Routine actor/system watches should wait until the task and confirmation pattern
 ## Completion Signal
 
 At least one evidence-creating action can be started from the renderer through the service/task boundary, inspected in task progress, and verified without direct backend imports.
+
+## Completion Notes
+
+Completed: 2026-05-22
+
+First implemented action:
+
+```txt
+manual.discovery
+```
+
+Renderer behavior:
+
+- Adds an `Actions` view for controlled execution.
+- Manual discovery preflight calls `scope.validate`.
+- Manual discovery preflight calls `live.gate`.
+- The UI shows normalized scope, live gate state, provider estimate, zKill/ESI call estimate, and expected effect before execution.
+- The user must check an explicit live zKill confirmation box before starting.
+- Starting manual discovery calls `manual.discovery` through `window.atlasServices`.
+- The action runs with `asTask: true` and `detachedTask: true`.
+- The renderer switches to the Tasks view so progress/result/error state is inspected through the task UI.
+
+Boundary:
+
+- No manual discovery runs from page load, view refresh, or passive preview.
+- Manual discovery performs zKill discovery only and zero ESI expansion.
+- Queued refs remain discovery/provenance metadata, not killmail evidence.
+- Routine actor/system watches remain unexposed in the renderer for now.
+- Manual expansion and metadata hydration remain future controlled-action slices.
+
+Verification:
+
+- `verify:renderer-shell`
+- `verify:mutating-services`
+- `verify:live-api-gate`
+- `smoke:electron`
 
 ## Related Documents
 

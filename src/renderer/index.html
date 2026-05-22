@@ -31,6 +31,7 @@
           <button class="nav-item" type="button" data-view="scopes">Scopes</button>
           <button class="nav-item" type="button" data-view="tasks">Tasks</button>
           <button class="nav-item" type="button" data-view="queue-watch">Queue / Watches</button>
+          <button class="nav-item" type="button" data-view="actions">Actions</button>
           <button class="nav-item" type="button" data-view="reports">Reports</button>
         </nav>
       </aside>
@@ -286,6 +287,88 @@
             <h4>Watch Schedule</h4>
             <div id="watch-list" class="watch-list"></div>
           </div>
+        </section>
+
+        <section class="view" id="view-actions" aria-labelledby="actions-title">
+          <div class="section-heading">
+            <div>
+              <h3 id="actions-title">Controlled Actions</h3>
+              <p>Start explicit backend actions through validation, live gates, and task execution.</p>
+            </div>
+            <div class="action-row">
+              <button class="secondary-action" type="button" id="preflight-manual-discovery">Preflight</button>
+              <button class="primary-action" type="button" id="run-manual-discovery">Start Manual Discovery</button>
+            </div>
+          </div>
+          <div class="panel">
+            <h4>Manual Discovery</h4>
+            <div class="form-grid">
+              <label>
+                <span>Scope</span>
+                <select id="action-discovery-scope">
+                  <option value="actor">Actor</option>
+                  <option value="system">System</option>
+                  <option value="radius">Radius</option>
+                </select>
+              </label>
+              <label>
+                <span>Actor Type</span>
+                <select id="action-actor-type">
+                  <option value="character">Character</option>
+                  <option value="corporation">Corporation</option>
+                  <option value="alliance">Alliance</option>
+                </select>
+              </label>
+              <label>
+                <span>Actor ID</span>
+                <input id="action-actor-id" type="number" min="1" placeholder="Optional if name is provided" />
+              </label>
+              <label>
+                <span>Actor Name</span>
+                <input id="action-actor-name" type="text" placeholder="Typed name for backend resolution" />
+              </label>
+              <label>
+                <span>Center System ID</span>
+                <input id="action-system-id" type="number" min="1" placeholder="Required for system/radius" />
+              </label>
+              <label>
+                <span>Radius Jumps</span>
+                <input id="action-radius" type="number" min="0" placeholder="0 for system, 1 for radius" />
+              </label>
+              <label>
+                <span>Lookback Seconds</span>
+                <input id="action-lookback" type="number" min="1" placeholder="Backend default" />
+              </label>
+              <label>
+                <span>Max Refs</span>
+                <input id="action-max-refs" type="number" min="1" placeholder="Actor default" />
+              </label>
+              <label>
+                <span>Max Systems</span>
+                <input id="action-max-systems" type="number" min="1" placeholder="Radius default" />
+              </label>
+              <label>
+                <span>Max Refs Per System</span>
+                <input id="action-max-refs-per-system" type="number" min="1" placeholder="System/radius default" />
+              </label>
+            </div>
+            <label class="checkbox-row">
+              <input id="action-confirm-live" type="checkbox" />
+              <span>I understand this manual discovery makes live zKill discovery calls and queues refs only.</span>
+            </label>
+            <p class="form-note">Manual discovery performs zero ESI expansion. Queued refs are discovery/provenance metadata, not evidence.</p>
+          </div>
+          <div class="report-grid">
+            <div class="panel">
+              <h4>Preflight</h4>
+              <div id="manual-discovery-preflight" class="detail-list"></div>
+            </div>
+            <div class="panel">
+              <h4>Task Result</h4>
+              <div id="manual-discovery-task" class="detail-list"></div>
+            </div>
+          </div>
+          <pre class="task-output" id="manual-discovery-normalized">Preflight required before execution.</pre>
         </section>
 
         <section class="view" id="view-reports" aria-labelledby="reports-title">

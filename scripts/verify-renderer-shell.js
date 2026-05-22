@@ -66,6 +66,11 @@ function main() {
   assert(htmlText.includes('watch-session-armed'), 'watch view should include session gate preview');
   assert(htmlText.includes('watch-live-api-enabled'), 'watch view should include live API gate preview');
   assert(htmlText.includes('watch-list'), 'watch view should include watch list');
+  assert(htmlText.includes('view-actions'), 'renderer should include controlled actions view');
+  assert(htmlText.includes('preflight-manual-discovery'), 'actions view should include manual discovery preflight');
+  assert(htmlText.includes('run-manual-discovery'), 'actions view should include explicit manual discovery start');
+  assert(htmlText.includes('action-confirm-live'), 'manual discovery should require visible live confirmation control');
+  assert(htmlText.includes('manual-discovery-normalized'), 'manual discovery should show normalized backend payload');
   assert(htmlText.includes('view-reports'), 'renderer should include reports view');
   assert(htmlText.includes('load-actor-report'), 'report view should include actor report action');
   assert(htmlText.includes('actor-report-type'), 'report view should include actor type control');
@@ -94,6 +99,10 @@ function main() {
   assert(rendererText.includes('renderQueueSelection'), 'renderer should render queue selection preview');
   assert(rendererText.includes("service.invoke('watch.schedule'"), 'renderer should call watch.schedule through service bridge');
   assert(rendererText.includes('renderWatchSchedule'), 'renderer should render watch schedule status');
+  assert(rendererText.includes("service.invoke('live.gate'"), 'renderer should preflight live gate through service bridge');
+  assert(rendererText.includes("service.invoke('manual.discovery'"), 'renderer should start manual discovery through service bridge');
+  assert(rendererText.includes('detachedTask: true'), 'manual discovery should run as a detached task');
+  assert(rendererText.includes('actionConfirmLive.checked'), 'manual discovery should require visible confirmation');
   assert(rendererText.includes("service.invoke('report.actor'"), 'renderer should call report.actor through service bridge');
   assert(rendererText.includes('renderActorReport'), 'renderer should render native actor report response');
   assert(rendererText.includes('renderObservationSections'), 'renderer should render backend observation sections');

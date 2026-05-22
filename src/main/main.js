@@ -130,6 +130,7 @@ async function runVisualSmoke(window, outputDir) {
     ['scopes', 'scopes.png'],
     ['tasks', 'tasks.png'],
     ['queue-watch', 'queue-watch.png'],
+    ['actions', 'actions.png'],
     ['reports', 'reports.png']
   ];
   await waitForSmokeReady(window);
@@ -167,7 +168,7 @@ function smokeChecks(window) {
         hasWindowBridge: Boolean(window.atlasWindow && window.atlasWindow.getState),
         noNodeRequire: typeof window.require === 'undefined',
         noElectronGlobal: typeof window.ipcRenderer === 'undefined',
-        hasViews: ['readiness', 'scopes', 'tasks', 'queue-watch', 'reports']
+        hasViews: ['readiness', 'scopes', 'tasks', 'queue-watch', 'actions', 'reports']
           .every((name) => Boolean(document.querySelector('#view-' + name))),
         status: readiness.status,
         fetchRuns: readiness.lookup_counts.fetch_runs,

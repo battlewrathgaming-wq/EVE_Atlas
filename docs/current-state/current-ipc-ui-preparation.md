@@ -22,6 +22,7 @@ Recent backend/UI-readiness work completed:
 - Electron visual smoke now runs through `npm.cmd run smoke:electron`, writes screenshots/results under `F:\Projects\AURA-Atlas\.tmp\electron-visual-smoke`, and verifies startup creates no evidence/fetch runs
 - Electron was updated to `v42.2.0` so the app runtime supports the backend `node:sqlite` dependency
 - `verify:electron-runtime` now checks that Electron itself can use `node:sqlite`, closing the gap between desktop Node verification and Electron runtime behavior
+- first controlled evidence-creating UI path exists for `manual.discovery`, using scope validation, live gate preflight, explicit confirmation, and detached task execution
 - task wrapping, detached execution, cancellation, and HTTP timeout handling are verified
 - live API gates and user-defined scope validation are centralized
 - queue selection, queue status isolation, and retention preflight are implemented
@@ -84,6 +85,7 @@ Current implemented shell:
 - report pane presents actor reports from backend response sections without recomputing evidence in the renderer
 - scope pane exposes lookback, caps, radius, system, actor, and queue selection inputs before future live actions
 - queue/watch pane exposes queued discovery refs, non-evidence preview fields, expected ESI calls, selected/skipped/cached/failed state, and passive watch schedule status
+- actions pane exposes manual discovery as the first controlled execution path; it queues zKill refs only and routes execution through task services
 - frameless window controls for minimize, close, and always-on-top
 - native structured actor report response with text rendering retained for CLI/export
 - Electron visual smoke harness captures readiness, scopes, tasks, queue/watch, and reports screenshots from the real app window
@@ -166,7 +168,7 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 ## Not Yet Implemented
 
 - broader visual/product polish beyond the initial shell
-- renderer controls that execute evidence-creating collection actions; these should remain behind task services, live gates, scope validation, and explicit user confirmation
+- additional renderer controls for manual expansion, metadata hydration, actor watch, and system/radius watch execution
 - session-armed watch executor loop
 - executable retention/deprecation actions and assessment compaction
 - assessment artifact schema/persistence
@@ -191,6 +193,7 @@ Latest reviewed commits:
 - `ef495bf` - assessment compaction contract
 - `26f37a7` - retired backend electron readiness note
 - current visual smoke slice - real Electron smoke harness, Electron runtime update, renderer global collision fix
+- current controlled action slice - manual discovery UI through validation, live gate, explicit confirmation, and detached task execution
 - current renderer shell slice - preload service bridge and initial presentation shell
 - current frameless shell slice - draggable window chrome and persisted always-on-top state
 - current readiness screen slice - explicit readiness/settings presentation through service responses

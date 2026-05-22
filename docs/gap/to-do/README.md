@@ -69,7 +69,6 @@ The milestone should leave Atlas with:
 
 Recommended order:
 
-1. `evidence-creating-ui-actions.md`
-2. `session-armed-watch-executor-implementation.md`
-3. `assessment-artifact-persistence.md`
-4. `runtime-process-isolation-review.md`
+1. `session-armed-watch-executor-implementation.md`
+2. `assessment-artifact-persistence.md`
+3. `runtime-process-isolation-review.md`
