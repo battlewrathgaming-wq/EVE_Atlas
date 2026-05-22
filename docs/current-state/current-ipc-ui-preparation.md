@@ -51,6 +51,7 @@ Recent backend/UI-readiness work completed:
 - Offline operator workflow scenario smoke now exercises the renderer-like service/task loop: scope validation, manual discovery, queue report, selected expansion, metadata hydration, actor report, assessment creation, corpus health, snapshot preflight, and task history.
 - Assessment artifact review closure is complete: saved artifacts expose artifact type, typed entity scope, scores, status, evidence window, citation status, cited killmail IDs, source report/run context, created/updated timestamps, and boundary wording without mutating evidence.
 - Operator debug trace packs are available through `report:debug-trace`; they write bounded local support artifacts under `.tmp` with run/API/task/warning/queue/corpus/readiness summaries and exclude raw ESI payloads by default.
+- Positive-ref scoped discovery-only live smoke is deferred until a known respectful target/window is available; current live/offline coverage is enough for this milestone.
 - assessment compaction writes are intentionally deferred; compaction remains read-only preview and evidence deletion remains blocked
 - runtime process isolation has been reviewed and deliberately deferred; detached tasks remain acceptable for the next milestone
 - current recommended first future isolation target, if measured pressure appears, is SDE import / SDE sync-compare

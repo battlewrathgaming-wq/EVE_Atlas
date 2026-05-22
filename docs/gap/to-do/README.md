@@ -250,7 +250,7 @@ This milestone should leave Atlas with:
 
 Recommended order:
 
-1. `positive-ref-scoped-discovery-smoke-decision.md`
+- No active Operator Workflow Closure And Debuggability gap remains in this folder.
 
 Roadmap:
 
@@ -261,10 +261,11 @@ Completed:
 - `operator-workflow-scenario-smoke.md`
 - `assessment-artifact-review-surface.md`
 - `operator-debug-trace-pack.md`
+- `positive-ref-scoped-discovery-smoke-decision.md`
 
 ## Open Discussion For Next Handoff
 
-- The accepted live scoped discovery smoke returned zero refs. This is fine for boundary proof, but Dev should either run or defer a positive-ref discovery-only smoke.
+- The accepted live scoped discovery smoke returned zero refs. A positive-ref discovery-only smoke is deferred until a known respectful target/window is available.
 - Evidence pruning remains blocked even though snapshot preflight now exists.
 - Assessment review appears partly present in the renderer; close the task only after explicit citation/status visibility checks.
 - Trace packs should support debugging and audit handoff without dumping raw evidence by default.

@@ -35,5 +35,16 @@ The accepted success smoke proved live gating and no-evidence behavior, but it r
 ## Dev Notes
 
 ```txt
+Completed 2026-05-22.
 
+Decision: defer a second live positive-ref scoped discovery-only smoke until a known
+respectful target/window is available.
+
+Rationale: the accepted zero-ref live smoke already proved local resolution, live gate,
+scoped zKill route construction, discovery-only execution, zero ESI expansion, zero
+killmail/activity event writes, and reviewable artifact output. Fixture/offline checks
+already cover non-empty queue behavior.
+
+Audit note:
+docs/audits/audit-2026-05-22-positive-ref-scoped-discovery-smoke-decision.md
 ```
