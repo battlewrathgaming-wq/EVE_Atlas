@@ -96,3 +96,35 @@ Supporting audit:
 - `docs/audits/audit-2026-05-22-overseer-runtime-handover-and-core-clone-readiness.md`
 
 Completed operational workflow hardening items are moved to `docs/gap/complete`.
+
+## Current Milestone: Controlled Actor/Area Operation
+
+Mission statement:
+
+Prove that an operator can move from a scoped actor or area question, through controlled collection and queue/evidence review, into observation and optional assessment memory without crossing Atlas boundaries.
+
+This milestone is narrower than a dashboard. It should prove one coherent operator loop.
+
+The milestone should leave Atlas with:
+
+- a controlled actor operation path
+- a controlled area/system/radius operation path
+- one live ESI expansion smoke where the target/window intentionally contains refs
+- explicit metadata hydration UI or a documented deferral
+- at least one additional structured report UI beyond actor, or a chosen next report target
+- renderer module/component boundaries reviewed before adding more workflow code
+- a retention compaction write/no-write decision for the next milestone
+
+Recommended order:
+
+- `renderer-modularization-review.md`
+- `controlled-actor-operation-workflow.md`
+- `controlled-area-operation-workflow.md`
+- `live-expansion-smoke.md`
+- `metadata-hydration-ui.md`
+- `structured-report-expansion.md`
+- `retention-compaction-write-decision.md`
+
+Supporting audit:
+
+- `docs/audits/audit-2026-05-22-overseer-backend-ui-boundary-handshake.md`

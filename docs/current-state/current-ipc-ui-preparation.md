@@ -32,6 +32,8 @@ Recent backend/UI-readiness work completed:
 - runtime process isolation has been reviewed and deliberately deferred; detached tasks remain acceptable for the next milestone
 - current recommended first future isolation target, if measured pressure appears, is SDE import / SDE sync-compare
 - standalone Aura core extraction has a completed brief: clone Atlas doctrine and selected utilities, not Atlas persistence/watch/report semantics
+- backend/UI boundary handoff accepted at `041a0f6`; renderer still uses the preload service bridge and service registry rather than backend imports
+- `verify:all` and `smoke:electron` were rerun during overseer boundary review and passed
 - task wrapping, detached execution, cancellation, and HTTP timeout handling are verified
 - live API gates and user-defined scope validation are centralized
 - queue selection, queue status isolation, and retention preflight are implemented
@@ -39,6 +41,7 @@ Recent backend/UI-readiness work completed:
 - report response contracts and common report-scope indexes are implemented
 - offline `verify:all` passes with 44 scripts
 - latest handover checkpoint reviewed at `34fe33e`
+- latest backend/UI boundary checkpoint reviewed at `041a0f6`
 
 Current lane:
 
@@ -186,6 +189,8 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 
 - broader visual/product polish beyond the initial shell
 - additional renderer controls for metadata hydration, actor watch, and system/radius watch execution outside the session executor
+- broader controlled actor/area operation workflow from UI scope to evidence/observation/assessment review
+- renderer modularization/component boundary review before `src/renderer/app.js` absorbs more workflow orchestration
 - executable retention/deprecation actions and actual assessment compaction writes
 - executable evidence compaction/pruning actions
 - true worker-thread/process isolation for CPU-heavy or synchronous SQLite-heavy tasks
@@ -235,5 +240,7 @@ Latest reviewed commits:
 - current report presentation polish slice - Reports view now has a clearer unloaded state, loaded actor status summary, and observation row counts while retaining backend report authority
 - current compaction preservation preflight slice - read-only typed-actor compaction preview shows what assessment memory would survive, with no evidence deletion or artifact insertion
 - current Aura core extraction brief - standalone Aura should begin as a pure parser/compute service shell with fixture tests, borrowing Atlas rigging without inheriting Atlas evidence-memory implementation
+- `041a0f6` - backend UI boundary handoff audit
+- current backend/UI boundary handshake - service/preload boundary remains healthy; next milestone should prove a narrow controlled actor/area operation workflow rather than broad dashboard expansion
 
 These commits move the earlier rigging gaps into an initial presentation checkpoint. The main remaining risk is no longer missing service vocabulary; it is preserving the service/evidence boundary while adding further executable UI actions and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.
