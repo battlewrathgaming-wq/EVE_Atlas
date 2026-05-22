@@ -30,6 +30,8 @@ Current implemented shell:
 - scoped discovery queue transitions so manual, actor, and system/radius queue rows do not overwrite each other's status
 - UI language contract for evidence, observation, assessment, queue preview, scope, and warning wording
 - bounded HTTP request timeouts and task cancellation signals for live/API-backed work
+- watch scheduling/status services for due, blocked, inactive, backoff, session-gated, and live-gated actor/system watches
+- metadata-only watch run state recording for success/failure, next poll, and backoff timing
 - native structured actor report response with text rendering retained for CLI/export
 
 ## Backend Actions Ready For IPC Wrapping
@@ -48,6 +50,8 @@ Implemented backend actions include:
 - run metadata readiness reports
 - run scoped hydration commands
 - run diagnostics reports
+- inspect watch schedule/backoff status
+- record watch run success/failure timing after a controlled task
 - invoke evidence-creating and metadata-mutating commands through the service/task boundary
 
 ## Scope Defaults And Guardrails
@@ -81,6 +85,7 @@ Offline verification now includes:
 - mutating service verification
 - background execution verification
 - HTTP timeout/cancellation verification
+- watch scheduler/backoff verification
 - native actor report response verification
 - task runner verification
 
@@ -96,6 +101,6 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 
 - renderer shell
 - UI controls for scope selection
-- session-armed watch scheduler
+- session-armed watch executor loop
 - long-running retention/deprecation policy
 - true worker-thread/process isolation for CPU-heavy or synchronous SQLite-heavy tasks

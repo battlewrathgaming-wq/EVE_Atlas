@@ -13,6 +13,7 @@ const GROUPS = {
     'verify:queue-scope-isolation',
     'verify:message-taxonomy',
     'verify:retention-preflight',
+    'verify:watch-scheduler',
     'verify:mutating-services',
     'verify:background-execution',
     'verify:http-timeouts',

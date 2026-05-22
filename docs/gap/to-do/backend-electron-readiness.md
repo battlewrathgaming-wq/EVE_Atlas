@@ -101,14 +101,21 @@ Renderer/UI should not call repositories, workers, or raw SQLite directly.
 
 ### Watch Persistence And Scheduler
 
-Collection workers exist, but the full session-armed scheduler/poll loop is not complete.
+Status: Scheduler planning/state update implemented; session-armed executor loop remains open.
+
+Collection workers exist, and due/backoff/status planning now has a service surface:
+
+- `watch.schedule`
+- `watch.recordRun`
+
+The service layer can identify due, blocked, inactive, not-due, backoff, session-gated, and live-gated watches. It can also record success/failure timing state after a run.
 
 Open questions:
 
 - how watches are armed/disarmed per session
-- how poll intervals are enforced
-- how backoff state is surfaced
 - how due runs are triggered in Electron
+- how the future executor loops over due watches without starting live collection from passive page load
+- how evidence-creating watch runs are task-wrapped by default in the UI
 
 ### Shared Scope Validation Helpers
 
@@ -154,4 +161,6 @@ Current verification:
 - `docs/gap/complete/background-worker-execution.md`
 - `docs/gap/complete/http-timeouts-and-cancellation.md`
 - `docs/gap/complete/structured-report-responses.md`
-- `docs/gap/to-do/watch-scheduler-and-backoff.md`
+- `docs/gap/complete/watch-scheduler-and-backoff.md`
+- `docs/gap/to-do/report-performance-indexes.md`
+- `docs/gap/to-do/readiness-side-effects.md`

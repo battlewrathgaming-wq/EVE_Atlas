@@ -19,6 +19,7 @@ const {
 const { SdeTopologyImporter } = require('../sde/sdeImporter');
 const { SdeInventoryImporter } = require('../sde/sdeInventoryImporter');
 const { addWatchlistEntity, listWatchlistEntities } = require('../watchlist/watchlistRepository');
+const { buildWatchScheduleStatus, recordWatchRunResult } = require('../watchlist/watchScheduler');
 
 async function runManualDiscoveryService(db, payload = {}, dependencies = {}) {
   assertLiveAllowed('manual.discovery', payload);
@@ -121,6 +122,14 @@ function runWatchListService(db) {
   };
 }
 
+function runWatchScheduleService(db, payload = {}) {
+  return buildWatchScheduleStatus(db, payload);
+}
+
+function runWatchRecordRunService(db, payload = {}) {
+  return recordWatchRunResult(db, payload);
+}
+
 async function normalizeManualDiscoveryInput(db, payload, dependencies) {
   if (String(payload.scope || '').toLowerCase() === 'actor') {
     const actor = await resolveActorInput(db, payload, dependencies);
@@ -168,5 +177,7 @@ module.exports = {
   runSdeInventoryImportService,
   runWatchCreateService,
   runWatchUpdateService,
-  runWatchListService
+  runWatchListService,
+  runWatchScheduleService,
+  runWatchRecordRunService
 };

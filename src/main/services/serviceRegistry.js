@@ -10,6 +10,8 @@ const {
   runSystemRadiusWatchService,
   runWatchCreateService,
   runWatchListService,
+  runWatchRecordRunService,
+  runWatchScheduleService,
   runWatchUpdateService
 } = require('./mutatingActionService');
 const { buildQueueExpansionSelection } = require('./queueSelectionService');
@@ -78,6 +80,16 @@ const COMMANDS = {
     classification: 'read-only',
     description: 'List watchlist entities',
     handler: ({ db }) => runWatchListService(db)
+  },
+  'watch.schedule': {
+    classification: 'read-only',
+    description: 'Return due, blocked, and backoff state for actor and system/radius watches',
+    handler: ({ db, payload }) => runWatchScheduleService(db, payload)
+  },
+  'watch.recordRun': {
+    classification: 'metadata-only',
+    description: 'Record success/failure scheduling state after a watch run',
+    handler: ({ db, payload }) => runWatchRecordRunService(db, payload)
   },
   'report.build': {
     classification: 'read-only',

@@ -18,9 +18,8 @@ The current checklist is grouped around preparing the Electron shell and rendere
 
 Recommended order:
 
-1. `watch-scheduler-and-backoff.md`
-2. `report-performance-indexes.md`
-3. `readiness-side-effects.md`
+1. `report-performance-indexes.md`
+2. `readiness-side-effects.md`
 
 Supporting current-state note:
 
@@ -28,6 +27,6 @@ Supporting current-state note:
 
 Completed items are moved to `docs/gap/complete`.
 
-`queue-status-scope-isolation.md`, `ui-language-contract.md`, `ipc-mutating-action-services.md`, `background-worker-execution.md`, `http-timeouts-and-cancellation.md`, and `structured-report-responses.md` have been completed and moved to `docs/gap/complete`.
+`queue-status-scope-isolation.md`, `ui-language-contract.md`, `ipc-mutating-action-services.md`, `background-worker-execution.md`, `http-timeouts-and-cancellation.md`, `structured-report-responses.md`, and `watch-scheduler-and-backoff.md` have been completed and moved to `docs/gap/complete`.
 
-The next implementation slice should address watch scheduler and backoff, because the service layer can now trigger collection but durable due-watch orchestration is still missing.
+The next implementation slice should address report performance indexes, because the service layer can now expose reports to UI surfaces and repeated renderer reads should stay predictable.

@@ -28,6 +28,8 @@ async function main() {
     const metadataHydrationCommand = commands.find((entry) => entry.command === 'metadata.hydration');
     const watchCreateCommand = commands.find((entry) => entry.command === 'watch.create');
     const watchListCommand = commands.find((entry) => entry.command === 'watch.list');
+    const watchScheduleCommand = commands.find((entry) => entry.command === 'watch.schedule');
+    const watchRecordRunCommand = commands.find((entry) => entry.command === 'watch.recordRun');
     assert(readinessCommand, 'app.readiness should be listed');
     assert(readinessCommand.classification === 'read-only', 'app.readiness should be read-only');
     assert(liveGateCommand, 'live.gate should be listed');
@@ -53,6 +55,8 @@ async function main() {
     assert(metadataHydrationCommand?.classification === 'metadata-only', 'metadata.hydration should be metadata-only');
     assert(watchCreateCommand?.classification === 'metadata-only', 'watch.create should be metadata-only');
     assert(watchListCommand?.classification === 'read-only', 'watch.list should be read-only');
+    assert(watchScheduleCommand?.classification === 'read-only', 'watch.schedule should be read-only');
+    assert(watchRecordRunCommand?.classification === 'metadata-only', 'watch.recordRun should be metadata-only');
 
     const readiness = await invokeServiceCommand('app.readiness', {}, {
       db,
