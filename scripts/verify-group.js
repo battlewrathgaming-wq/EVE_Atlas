@@ -18,6 +18,7 @@ const GROUPS = {
     'verify:retention-preflight',
     'verify:runtime-snapshot',
     'verify:assessment-artifacts',
+    'verify:assessment-review',
     'verify:evidence-rules',
     'verify:watch-scheduler',
     'verify:watch-executor',

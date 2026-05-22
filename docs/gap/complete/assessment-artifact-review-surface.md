@@ -46,5 +46,15 @@ Note: the renderer already has an assessment artifact list/detail surface. This 
 ## Dev Notes
 
 ```txt
+Completed 2026-05-22.
 
+Existing renderer assessment list/detail behavior was accepted with a narrow hardening patch.
+The detail surface now also displays artifact type, source report/run context, cited killmail IDs,
+and created timestamp alongside status, scores, evidence window, citation status, citation basis,
+sample count, updated timestamp, and boundary wording.
+
+Added verify:assessment-review to lock fixture-backed service create/list/get response shape,
+renderer/static citation visibility, and read-only behavior for killmails/activity_events.
+
+Assessment artifacts remain deliberate memory, not observation evidence.
 ```

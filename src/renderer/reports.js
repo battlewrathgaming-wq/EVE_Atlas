@@ -505,17 +505,22 @@ async function loadAssessmentArtifactDetail(artifactId) {
     state.selectedAssessmentArtifact = artifact;
     renderRows(els.assessmentArtifactDetail, [
       ['Artifact ID', artifact.artifact_id],
+      ['Artifact Type', artifact.artifact_type],
       ['Entity', artifactLabel(artifact)],
       ['Status', artifact.status],
       ['Reason', artifact.assessment_reason || 'none'],
       ['Summary', artifact.assessment_summary || 'none'],
       ['Scores', scoreSummary(artifact.scores)],
       ['Evidence Window', `${artifact.evidence_window?.start || 'unknown'} -> ${artifact.evidence_window?.end || 'unknown'}`],
+      ['Source Report', artifact.source_report_type || 'none'],
+      ['Source Runs', artifact.source_run_ids?.length ? artifact.source_run_ids.join(', ') : 'none'],
       ['Citation Status', artifact.citation?.status || 'not_applicable'],
       ['Sample Killmails', artifact.sample_killmail_ids?.length ?? 0],
+      ['Cited Killmail IDs', artifact.sample_killmail_ids?.length ? artifact.sample_killmail_ids.join(', ') : 'none'],
       ['Citation Basis', citationBasisLabel(artifact)],
       ['Appearances', artifact.counts?.appearances ?? 0],
       ['Boundary', artifact.boundary || 'assessment artifacts are assessment memory, not evidence'],
+      ['Created', artifact.created_at || 'unknown'],
       ['Updated', artifact.updated_at || 'unknown']
     ]);
   } catch (error) {

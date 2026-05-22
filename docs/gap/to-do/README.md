@@ -250,9 +250,8 @@ This milestone should leave Atlas with:
 
 Recommended order:
 
-1. `assessment-artifact-review-surface.md`
-2. `operator-debug-trace-pack.md`
-3. `positive-ref-scoped-discovery-smoke-decision.md`
+1. `operator-debug-trace-pack.md`
+2. `positive-ref-scoped-discovery-smoke-decision.md`
 
 Roadmap:
 
@@ -261,6 +260,7 @@ Roadmap:
 Completed:
 
 - `operator-workflow-scenario-smoke.md`
+- `assessment-artifact-review-surface.md`
 
 ## Open Discussion For Next Handoff
 
