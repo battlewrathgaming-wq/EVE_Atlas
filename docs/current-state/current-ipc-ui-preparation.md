@@ -46,6 +46,7 @@ Recent backend/UI-readiness work completed:
 - compaction preview can now be converted into a validated `evidence_compaction` assessment artifact only through explicit assessment creation; `retention.preflight` remains read-only and evidence deletion remains blocked
 - scoped system/radius discover-refs-only work is exposed through the existing Actions pane with system-name input, backend local resolution, live gate preflight, visible confirmation, and zero automatic expansion
 - live scoped zKill smoke now writes reviewable `.tmp` JSON artifacts for refusal/failure/success paths, including topology/evidence counts, route, API counts, queued ref summary, and non-evidence boundary wording
+- evidence-rule regression checks now protect core boundaries in `verify:all`: immutable raw killmail persistence, manual discovery as queue-only possible evidence, queue non-evidence wording, assessment citation validation, hydration without evidence mutation, and non-destructive retention preflight
 - assessment compaction writes are intentionally deferred; compaction remains read-only preview and evidence deletion remains blocked
 - runtime process isolation has been reviewed and deliberately deferred; detached tasks remain acceptable for the next milestone
 - current recommended first future isolation target, if measured pressure appears, is SDE import / SDE sync-compare
@@ -287,6 +288,7 @@ Latest reviewed commits:
 - current compaction preview interlock pass - read-only preview can produce an assessment-create payload, and explicit artifact creation validates citation status while preserving killmail/activity counts
 - current scoped discovery UI decision - use the existing Actions pane and `manual.discovery` service for system/radius queue-only discovery, including local system-name resolution and non-observation wording
 - current live scoped zKill smoke artifact pass - refusal path verified locally and success/failure paths now write structured review artifacts under `.tmp/live-scoped-zkill-smoke`
+- current evidence-rule regression pass - `verify:all` now runs 48 scripts including an evidence-boundary manifest and report-candidate hydration checks that assert raw ESI payloads and evidence IDs do not change during metadata hydration
 - current controlled actor workflow - fixture path proves actor scope to queued refs, ESI expansion, stored evidence, actor report, queue state, and optional assessment UI path without passive collection
 - current controlled area workflow - fixture path proves local topology radius scope to capped collection, stored evidence, radius report observations, and repeated/multi-system presence language without ownership/staging claims
 - current live expansion smoke - typed actor name resolved through ESI, zKill refs queued as possible evidence, one selected ref expanded through ESI, and reports confirmed partial sample boundaries

@@ -48,6 +48,7 @@ async function main() {
   }, { db, zkillClient, esiClient: esiKillmailClient });
 
   const repository = new EvidenceRepository(db);
+  const beforeHydrationEvidence = evidenceSnapshot(db);
   repository.insertApiRequestLog({
     run_id: summary.run_id,
     provider: 'zkill',
@@ -110,6 +111,7 @@ async function main() {
   assert(explicitHydration.resolved === 1, 'explicit report hydration should resolve supplied IDs');
   assert(explicitHydration.types_upserted === 0, 'explicit report hydration should not resolve static types');
   assert(count(db, 'metadata_runs') === 3, 'explicit report hydration should write a metadata run');
+  assertSame(evidenceSnapshot(db), beforeHydrationEvidence, 'metadata hydration must not change evidence IDs or raw ESI payloads');
 
   closeDatabase(db);
   console.log('report candidate hydration verified');
@@ -219,6 +221,28 @@ function countMetadataRun(db, runId) {
 
 function apiLogRunType(db, runId) {
   return db.prepare('SELECT run_type FROM api_request_logs WHERE run_id = ?').get(runId)?.run_type;
+}
+
+function evidenceSnapshot(db) {
+  return {
+    killmails: db.prepare(`
+      SELECT killmail_id, killmail_hash, killmail_time, solar_system_id, raw_esi_payload, raw_payload_checksum
+      FROM killmails
+      ORDER BY killmail_id
+    `).all(),
+    activityEventIds: db.prepare(`
+      SELECT event_key, killmail_id, role, entity_type, entity_id, character_id, corporation_id,
+             alliance_id, ship_type_id, weapon_type_id, solar_system_id
+      FROM activity_events
+      ORDER BY event_key
+    `).all()
+  };
+}
+
+function assertSame(actual, expected, message) {
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+    throw new Error(message);
+  }
 }
 
 main().catch((error) => {

@@ -180,7 +180,7 @@ This milestone should leave Atlas with:
 
 Recommended order:
 
-1. `evidence-rule-regression-checks.md`
+- No active Evidence-Safe Assessment And Discovery UX gap remains in this folder.
 
 Supporting audit:
 
@@ -197,3 +197,4 @@ Completed:
 - `compaction-preview-to-assessment-interlock.md`
 - `scoped-discovery-ui-path-decision.md`
 - `live-scoped-zkill-smoke-artifacts.md`
+- `evidence-rule-regression-checks.md`

@@ -17,6 +17,7 @@ const GROUPS = {
     'verify:message-taxonomy',
     'verify:retention-preflight',
     'verify:assessment-artifacts',
+    'verify:evidence-rules',
     'verify:watch-scheduler',
     'verify:watch-executor',
     'verify:mutating-services',
@@ -45,6 +46,7 @@ const GROUPS = {
     'verify:report-scope',
     'verify:operators',
     'verify:radius-report',
+    'verify:hydration',
     'verify:metadata-status'
   ],
   manual: [
