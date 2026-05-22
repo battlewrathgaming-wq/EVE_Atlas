@@ -50,7 +50,7 @@ Completed items are moved to `docs/gap/complete`.
 
 The next implementation slice comes from the refreshed audit/current-state review, not this retired checklist.
 
-## Current Milestone: Presentation Validation And Controlled Execution
+## Completed Milestone: Presentation Validation And Controlled Execution
 
 Purpose:
 
@@ -70,3 +70,32 @@ The milestone should leave Atlas with:
 Recommended order:
 
 - No active presentation-validation gap remains in this folder.
+
+## Current Milestone: Operational Workflow Hardening
+
+Mission statement:
+
+Turn the working Atlas shell into a cautious operator workflow: prove live paths under explicit control, improve report/assessment workflow usability, and keep all evidence, observation, assessment, and API boundaries visible.
+
+This milestone should leave Atlas with:
+
+- controlled live smoke notes for manual discovery and session-armed watch execution
+- manual expansion and metadata hydration UI paths, or an accepted decision to defer one
+- assessment artifact creation from report context
+- report presentation polish based on real shell usage
+- compaction/preservation preflight design before any evidence deletion
+- a clear handoff for standalone Aura core extraction
+- no speculative process isolation work unless measured UI/runtime pressure appears
+
+Recommended order:
+
+- `live-operational-smoke.md`
+- `manual-expansion-and-hydration-ui.md`
+- `assessment-report-workflow-ui.md`
+- `report-presentation-polish.md`
+- `compaction-preservation-preflight.md`
+- `aura-core-extraction-brief.md`
+
+Supporting audit:
+
+- `docs/audits/audit-2026-05-22-overseer-runtime-handover-and-core-clone-readiness.md`

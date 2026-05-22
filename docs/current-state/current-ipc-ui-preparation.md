@@ -23,13 +23,15 @@ Recent backend/UI-readiness work completed:
 - Electron was updated to `v42.2.0` so the app runtime supports the backend `node:sqlite` dependency
 - `verify:electron-runtime` now checks that Electron itself can use `node:sqlite`, closing the gap between desktop Node verification and Electron runtime behavior
 - first controlled evidence-creating UI path exists for `manual.discovery`, using scope validation, live gate preflight, explicit confirmation, and detached task execution
+- runtime process isolation has been reviewed and deliberately deferred; detached tasks remain acceptable for the next milestone
+- current recommended first future isolation target, if measured pressure appears, is SDE import / SDE sync-compare
 - task wrapping, detached execution, cancellation, and HTTP timeout handling are verified
 - live API gates and user-defined scope validation are centralized
 - queue selection, queue status isolation, and retention preflight are implemented
 - watch schedule/status planning and watch run state recording are implemented
 - report response contracts and common report-scope indexes are implemented
 - offline `verify:all` passes with 44 scripts
-- clean local checkpoint reviewed at `26f37a7`
+- latest handover checkpoint reviewed at `34fe33e`
 
 Current lane:
 
@@ -196,6 +198,13 @@ Latest reviewed commits:
 - `07b2804` - session armed watch executor contract
 - `ef495bf` - assessment compaction contract
 - `26f37a7` - retired backend electron readiness note
+- `77085a4` - Electron visual smoke
+- `e7e9e4c` - Electron runtime hardening
+- `9009558` - manual discovery UI action
+- `90ad081` - session armed watch executor
+- `8ac493c` - assessment artifact persistence
+- `1417981` - runtime isolation review
+- `34fe33e` - dev runtime-isolation handover note
 - current visual smoke slice - real Electron smoke harness, Electron runtime update, renderer global collision fix
 - current controlled action slice - manual discovery UI through validation, live gate, explicit confirmation, and detached task execution
 - current renderer shell slice - preload service bridge and initial presentation shell
@@ -209,5 +218,6 @@ Latest reviewed commits:
 - current assessment artifact slice - deliberate assessment memory persistence separate from evidence, with service access and survival verification
 - current runtime isolation review - keep current main-process service model for now; first future isolation target would be SDE import or SDE sync/compare if measured pressure appears
 - current retention design slice - evidence compaction contract before destructive pruning
+- current handover outcome - tracked presentation-validation checklist complete; next milestone should choose operational workflow hardening rather than speculative runtime refactor
 
 These commits move the earlier rigging gaps into an initial presentation checkpoint. The main remaining risk is no longer missing service vocabulary; it is preserving the service/evidence boundary while adding further executable UI actions and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.
