@@ -28,6 +28,7 @@ const {
   buildRuntimeDbSnapshotPreflight,
   createRuntimeDbSnapshot
 } = require('./runtimeSnapshotService');
+const { writeOperatorDebugTracePack } = require('../support/operatorDebugTracePack');
 const { getScopeDefaults, validateScope } = require('./scopeService');
 const { defaultTaskRunner } = require('./taskRunner');
 
@@ -201,6 +202,11 @@ const COMMANDS = {
     classification: 'exclusive',
     description: 'Create an explicit SQLite runtime DB snapshot under the approved project temp area',
     handler: ({ db, payload, databasePath }) => createRuntimeDbSnapshot(db, payload, { databasePath })
+  },
+  'support.debug_trace_pack': {
+    classification: 'metadata-only',
+    description: 'Write a bounded local operator debug trace pack without raw evidence payloads',
+    handler: ({ db, payload, databasePath }) => writeOperatorDebugTracePack(db, { ...payload, databasePath })
   },
   'queue.selection': {
     classification: 'read-only',

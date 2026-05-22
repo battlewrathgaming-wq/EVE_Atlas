@@ -44,6 +44,8 @@ const els = {
   corpusHealthFreshness: document.querySelector('#corpus-health-freshness'),
   corpusHealthIntegrity: document.querySelector('#corpus-health-integrity'),
   corpusHealthWarnings: document.querySelector('#corpus-health-warnings'),
+  createDebugTracePack: document.querySelector('#create-debug-trace-pack'),
+  debugTracePackResult: document.querySelector('#debug-trace-pack-result'),
   prepareApp: document.querySelector('#prepare-app'),
   refreshReadiness: document.querySelector('#refresh-readiness'),
   validateScope: document.querySelector('#validate-scope'),
@@ -215,6 +217,7 @@ function bindEvents() {
   els.preflightRuntimeSnapshot.addEventListener('click', preflightRuntimeSnapshot);
   els.createRuntimeSnapshot.addEventListener('click', createRuntimeSnapshot);
   els.loadCorpusHealth.addEventListener('click', loadCorpusHealth);
+  els.createDebugTracePack.addEventListener('click', createDebugTracePack);
   els.prepareApp.addEventListener('click', prepareApp);
   els.validateScope.addEventListener('click', validateScopeInput);
   els.refreshTasks.addEventListener('click', loadTasks);

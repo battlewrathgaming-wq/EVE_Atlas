@@ -67,6 +67,18 @@ async function createRuntimeSnapshot() {
   }
 }
 
+async function createDebugTracePack() {
+  setBusy(els.createDebugTracePack, true);
+  try {
+    const result = await service.invoke('support.debug_trace_pack', {});
+    renderDebugTracePackResult(result);
+  } catch (error) {
+    renderError(els.debugTracePackResult, error);
+  } finally {
+    setBusy(els.createDebugTracePack, false);
+  }
+}
+
 function renderReadiness(readiness) {
   els.readinessSummary.innerHTML = '';
   const cards = [
@@ -133,6 +145,19 @@ function renderReadiness(readiness) {
   }
   els.prepareApp.hidden = !readiness.warnings?.some((entry) => entry.code === 'RUNTIME_PATHS_MISSING');
   renderNextAction(readiness);
+}
+
+function renderDebugTracePackResult(result) {
+  const pack = result.pack || {};
+  renderRows(els.debugTracePackResult, [
+    ['Status', 'support/debug trace pack written'],
+    ['Output Path', result.output_path || 'unknown'],
+    ['Generated At', pack.generated_at || 'unknown'],
+    ['Classification', pack.classification || 'support/debug artifact; not evidence, not observation, not assessment'],
+    ['Included', 'fetch runs, API request logs, task history, warnings, queue status, corpus health, readiness, smoke artifact paths'],
+    ['Excluded', (pack.exclusions || ['raw_esi_payload']).join(', ')],
+    ['Boundary', 'No zKill/ESI calls; no evidence, observation, or assessment creation; raw expanded ESI payloads excluded.']
+  ]);
 }
 
 function renderCorpusHealth(report) {

@@ -76,6 +76,10 @@ function main() {
   assert(htmlText.includes('corpus-health-integrity'), 'readiness screen should include corpus health integrity checks');
   assert(htmlText.includes('corpus-health-warnings'), 'readiness screen should include corpus health warning groups');
   assert(htmlText.includes('not an observation report or assessment'), 'corpus health UI should distinguish readiness from observation and assessment');
+  assert(htmlText.includes('create-debug-trace-pack'), 'readiness screen should include explicit debug trace pack action');
+  assert(htmlText.includes('debug-trace-pack-result'), 'readiness screen should show debug trace pack result');
+  assert(htmlText.includes('Trace packs are support/debug artifacts'), 'debug trace UI should state support/debug boundary');
+  assert(htmlText.includes('raw expanded ESI payloads'), 'debug trace UI should state raw payload exclusion');
   assert(htmlText.includes('view-tasks'), 'renderer should include tasks view');
   assert(htmlText.includes('task-detail'), 'task view should include task detail panel');
   assert(htmlText.includes('task-progress'), 'task view should include progress timeline');
@@ -143,6 +147,9 @@ function main() {
   assert(rendererText.includes("service.invoke('report.corpus_health'"), 'renderer should call corpus health through service bridge');
   assert(rendererText.includes('renderCorpusHealth'), 'renderer should render structured corpus health response');
   assert(rendererText.includes('Local SQLite only; no zKill, ESI, SDE zip parsing, observation, or assessment.'), 'corpus health rendering should state local/no-live/no-assessment boundary');
+  assert(rendererText.includes("service.invoke('support.debug_trace_pack'"), 'renderer should create debug trace packs through service bridge');
+  assert(rendererText.includes('renderDebugTracePackResult'), 'renderer should render debug trace pack result');
+  assert(rendererText.includes('No zKill/ESI calls; no evidence, observation, or assessment creation; raw expanded ESI payloads excluded.'), 'debug trace result should state no-live/no-evidence boundary');
   assert(rendererText.includes("service.invoke('app.prepare'"), 'renderer should call app.prepare through service bridge');
   assert(rendererText.includes("service.invoke('scope.defaults'"), 'renderer should load scope defaults through service bridge');
   assert(rendererText.includes("service.invoke('scope.validate'"), 'renderer should validate scope through service bridge');

@@ -34,5 +34,16 @@ The backend/CLI trace pack exists. The app should let an operator generate the s
 ## Dev Notes
 
 ```txt
+Completed 2026-05-22.
 
+Added support.debug_trace_pack service command and a Readiness view action that writes
+the bounded local operator debug trace pack under .tmp by explicit button click.
+
+The renderer displays output path, generated timestamp, included summary areas, excluded
+raw evidence payloads, and no-live/no-evidence/no-assessment boundary wording.
+
+Added/extended verification:
+- verify:operator-debug-trace covers the service command and no-mutation behavior
+- verify:renderer-shell covers the visible renderer action and boundary wording
+- verify:service-registry covers command registration indirectly through existing registry checks
 ```

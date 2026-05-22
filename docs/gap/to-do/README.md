@@ -286,11 +286,14 @@ This milestone should leave Atlas with:
 
 Recommended order:
 
-1. `debug-trace-renderer-surface.md`
-2. `assessment-artifact-ergonomics-pass.md`
-3. `live-target-discipline-checklist.md`
-4. `positive-ref-live-smoke-candidate.md`
+1. `assessment-artifact-ergonomics-pass.md`
+2. `live-target-discipline-checklist.md`
+3. `positive-ref-live-smoke-candidate.md`
 
 Roadmap:
 
 - `docs/roadmap/operator-ui-workflow-polish.md`
+
+Completed:
+
+- `debug-trace-renderer-surface.md`

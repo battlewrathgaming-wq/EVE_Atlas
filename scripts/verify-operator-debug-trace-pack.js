@@ -3,6 +3,7 @@ const path = require('node:path');
 const fixtureKillmail = require('../fixtures/killmail-1001.json');
 const { openDatabase, migrate, closeDatabase } = require('../src/main/db/database');
 const { EvidenceRepository } = require('../src/main/db/evidenceRepository');
+const { invokeServiceCommand, listServiceCommands } = require('../src/main/services/serviceRegistry');
 const { TaskRunner, TASK_CLASSIFICATIONS } = require('../src/main/services/taskRunner');
 const {
   buildOperatorDebugTracePack,
@@ -58,6 +59,19 @@ async function main() {
 
     const afterWrite = sideEffectCounts(db);
     assertSame(afterWrite, before, 'writing trace pack must not create evidence, observations, assessments, or API logs');
+
+    const serviceResult = await invokeServiceCommand('support.debug_trace_pack', {
+      outputDir,
+      smokeRoot: path.join(outputDir, 'smoke')
+    }, {
+      db,
+      databasePath: path.join(outputDir, 'fixture.sqlite')
+    });
+    assert(fs.existsSync(serviceResult.output_path), 'service should write a trace pack artifact');
+    assert(serviceResult.pack.boundaries.includes('It does not call zKill or ESI.'), 'service trace pack should preserve no-live boundary');
+
+    const commands = listServiceCommands();
+    assert(commands.some((entry) => entry.command === 'support.debug_trace_pack' && entry.classification === 'metadata-only'), 'support.debug_trace_pack should be metadata-only');
   } finally {
     closeDatabase(db);
   }
