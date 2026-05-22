@@ -3,10 +3,16 @@ const fixtureKillmail = require('../fixtures/killmail-1001.json');
 const { openDatabase, migrate, closeDatabase } = require('../src/main/db/database');
 const { SdeTopologyImporter } = require('../src/main/sde/sdeImporter');
 const { collectSystemRadiusWatch } = require('../src/main/workers/systemRadiusCollector');
-const { assertNoRuntimeSdeZipImport } = require('./live-system-watch-runner');
+const {
+  assertNoRuntimeSdeZipImport,
+  preflightLiveLookup,
+  logLocalLookupFailure
+} = require('./live-system-watch-runner');
 
 async function main() {
   verifyRuntimeSdeZipGuard();
+  await verifyLocalLookupPreflightFailureLogging();
+  await verifyLocalLookupPreflightPassesWithFixtureSde();
   await verifyIdempotentCachedSkip();
   await verifyGradualIngestAfterCacheSkip();
   console.log('system radius collector verified');
@@ -30,6 +36,60 @@ function verifyRuntimeSdeZipGuard() {
       process.env.AURA_ATLAS_LIVE_SDE_JSONL_PATH = previous;
     }
   }
+}
+
+async function verifyLocalLookupPreflightFailureLogging() {
+  const db = openDatabase(':memory:');
+  migrate(db);
+  withEnv({
+    AURA_ATLAS_LIVE_CENTER_SYSTEM_NAME: 'Atlas Prime',
+    AURA_ATLAS_LIVE_RADIUS_JUMPS: '1'
+  }, () => {
+    let error = null;
+    try {
+      preflightLiveLookup(db);
+    } catch (caught) {
+      error = caught;
+      logLocalLookupFailure(db, caught);
+    }
+    assert(error, 'empty lookup DB should fail live preflight');
+    assert(error.message.includes('solar_systems is empty'), 'empty lookup DB should explain missing solar_systems');
+  });
+
+  const failedRun = db.prepare('SELECT * FROM fetch_runs WHERE status = ?').get('failed');
+  assert(failedRun, 'local lookup failure should create a failed fetch run');
+  assert(failedRun.error_summary.includes('solar_systems is empty'), 'failed run should record local lookup error summary');
+  const warning = db.prepare('SELECT * FROM data_quality_warnings WHERE run_id = ?').get(failedRun.run_id);
+  assert(warning.warning_type === 'LOCAL_LOOKUP_FAILURE', 'local lookup failure should write LOCAL_LOOKUP_FAILURE warning');
+
+  closeDatabase(db);
+}
+
+async function verifyLocalLookupPreflightPassesWithFixtureSde() {
+  const db = openDatabase(':memory:');
+  migrate(db);
+
+  const importer = new SdeTopologyImporter(db);
+  await importer.importFromPath(path.resolve(__dirname, '..', 'fixtures', 'sde-jsonl'), {
+    buildNumber: 'fixture-build',
+    sourceUrl: 'fixtures/sde-jsonl'
+  });
+
+  withEnv({
+    AURA_ATLAS_LIVE_CENTER_SYSTEM_NAME: 'Atlas Prime',
+    AURA_ATLAS_LIVE_RADIUS_JUMPS: '1',
+    AURA_ATLAS_LIVE_LOOKBACK_SECONDS: '86400',
+    AURA_ATLAS_LIVE_MAX_SYSTEMS: '3',
+    AURA_ATLAS_LIVE_MAX_REFS_PER_SYSTEM: '2',
+    AURA_ATLAS_LIVE_MAX_EXPANSIONS: '2'
+  }, () => {
+    const input = preflightLiveLookup(db);
+    assert(input.centerSystemId === 30000001, 'preflight should resolve fixture center system locally');
+    assert(input.radiusJumps === 1, 'preflight should preserve configured radius');
+  });
+
+  assert(count(db, 'fetch_runs') === 0, 'successful preflight should not create a fetch run');
+  closeDatabase(db);
 }
 
 async function verifyIdempotentCachedSkip() {
@@ -173,6 +233,26 @@ async function verifyGradualIngestAfterCacheSkip() {
   assert(count(db, 'killmails') === 4, 'gradual runs should store all 4 killmails');
 
   closeDatabase(db);
+}
+
+function withEnv(values, callback) {
+  const previous = {};
+  for (const [key, value] of Object.entries(values)) {
+    previous[key] = process.env[key];
+    process.env[key] = value;
+  }
+
+  try {
+    return callback();
+  } finally {
+    for (const key of Object.keys(values)) {
+      if (previous[key] === undefined) {
+        delete process.env[key];
+      } else {
+        process.env[key] = previous[key];
+      }
+    }
+  }
 }
 
 function count(db, tableName) {

@@ -1,5 +1,8 @@
 const path = require('node:path');
 const { openDatabase, migrate, closeDatabase } = require('../src/main/db/database');
+const { EvidenceRepository } = require('../src/main/db/evidenceRepository');
+const { TopologyService } = require('../src/main/sde/topologyService');
+const { planSystemRadiusWatch } = require('../src/main/workers/systemRadiusPlanner');
 const { collectSystemRadiusWatch } = require('../src/main/workers/systemRadiusCollector');
 const { auraTempRoot, projectRoot } = require('../src/main/util/tempPaths');
 
@@ -23,7 +26,13 @@ async function runLiveSystemWatch({ twice = false } = {}) {
   migrate(db);
 
   try {
-    const input = liveInput(db);
+    let input;
+    try {
+      input = preflightLiveLookup(db);
+    } catch (error) {
+      logLocalLookupFailure(db, error);
+      throw error;
+    }
     const first = await collectSystemRadiusWatch(input, { db });
     if (!twice) {
       return { db_path: dbPath, first };
@@ -76,7 +85,12 @@ function liveInput(db) {
 
 function resolveCenterSystemId(db) {
   if (process.env.AURA_ATLAS_LIVE_CENTER_SYSTEM_ID) {
-    return integerEnv('AURA_ATLAS_LIVE_CENTER_SYSTEM_ID', null);
+    const centerSystemId = integerEnv('AURA_ATLAS_LIVE_CENTER_SYSTEM_ID', null);
+    const row = db.prepare('SELECT solar_system_id FROM solar_systems WHERE solar_system_id = ?').get(centerSystemId);
+    if (!row) {
+      throw new Error(`Center system ID ${centerSystemId} was not found in local SDE topology`);
+    }
+    return centerSystemId;
   }
 
   const systemName = process.env.AURA_ATLAS_LIVE_CENTER_SYSTEM_NAME;
@@ -95,6 +109,46 @@ function resolveCenterSystemId(db) {
   }
 
   return row.solar_system_id;
+}
+
+function preflightLiveLookup(db) {
+  assertLocalTableHasRows(db, 'solar_systems', 'Local topology lookup table solar_systems is empty. Import SDE topology into this SQLite DB before live collection.');
+  const input = liveInput(db);
+  if (input.radiusJumps > 0) {
+    assertLocalTableHasRows(db, 'system_adjacency', 'Local topology lookup table system_adjacency is empty. Import SDE stargate topology into this SQLite DB before radius collection.');
+  }
+
+  try {
+    planSystemRadiusWatch(input, { topologyService: new TopologyService(db) });
+  } catch (error) {
+    throw new Error(`Local topology preflight failed: ${error.message}`);
+  }
+
+  return input;
+}
+
+function assertLocalTableHasRows(db, tableName, message) {
+  const result = db.prepare(`SELECT COUNT(*) AS count FROM ${tableName}`).get();
+  if (!result.count) {
+    throw new Error(message);
+  }
+}
+
+function logLocalLookupFailure(db, error) {
+  const repository = new EvidenceRepository(db);
+  const run = repository.createFetchRun({
+    trigger: 'manual',
+    watchType: 'system_radius',
+    watchId: process.env.AURA_ATLAS_LIVE_WATCH_ID || 'live-system-watch'
+  });
+  const message = error.message || 'Local lookup preflight failed';
+  repository.insertWarning(run.run_id, {
+    warning_type: 'LOCAL_LOOKUP_FAILURE',
+    message,
+    created_at: new Date().toISOString()
+  });
+  repository.finalizeFetchRun(run.run_id, {}, 'failed', message);
+  return run;
 }
 
 function integerEnv(name, fallback) {
@@ -131,5 +185,7 @@ function assertProjectLocalPath(targetPath, label) {
 module.exports = {
   runLiveSystemWatch,
   assertProjectLocalPath,
-  assertNoRuntimeSdeZipImport
+  assertNoRuntimeSdeZipImport,
+  preflightLiveLookup,
+  logLocalLookupFailure
 };
