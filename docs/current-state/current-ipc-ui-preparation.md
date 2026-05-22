@@ -29,6 +29,13 @@ Recent backend/UI-readiness work completed:
 - assessment workflow UI exists in Reports with loaded actor context, reason/summary requirement, score-reason guard, visible evidence/assessment boundary, and saved artifact detail inspection
 - retention preflight can preview the assessment memory that would survive future typed-actor evidence compaction without creating artifacts or deleting evidence
 - controlled live operational smoke covered manual discovery and session-armed watch dispatch against a disposable DB
+- controlled actor operation workflow is complete through deterministic fixture verification
+- controlled area operation workflow is complete through deterministic fixture verification
+- live expansion smoke completed one explicit ESI killmail expansion from queued possible evidence into stored evidence
+- actor report metadata hydration UI is implemented as readability-only metadata work
+- renderer modularization implementation is complete; `src/renderer/app.js` is now an orchestrator loaded after surface modules
+- native structured radius report response is implemented; radius report UI is the next presentation target
+- assessment compaction writes are intentionally deferred; compaction remains read-only preview and evidence deletion remains blocked
 - runtime process isolation has been reviewed and deliberately deferred; detached tasks remain acceptable for the next milestone
 - current recommended first future isolation target, if measured pressure appears, is SDE import / SDE sync-compare
 - standalone Aura core extraction has a completed brief: clone Atlas doctrine and selected utilities, not Atlas persistence/watch/report semantics
@@ -42,16 +49,17 @@ Recent backend/UI-readiness work completed:
 - offline `verify:all` passes with 44 scripts
 - latest handover checkpoint reviewed at `34fe33e`
 - latest backend/UI boundary checkpoint reviewed at `041a0f6`
+- latest controlled workflow checkpoint reviewed at `202af64`
 
 Current lane:
 
-- accept the initial presentation shell as the first renderer baseline
-- keep the current renderer mostly read-only until evidence-creating controls are deliberately wired through task services, live gates, and explicit user action
-- use the completed contracts as the source for future retention/assessment work
-- keep the session-armed watch executor loop separate from passive page load behavior
-- keep the implemented watch executor aligned with `docs/contracts/session-armed-watch-executor-contract.md`
-- keep retention/destructive evidence pruning blocked until compaction/preflight/deletion verification exists
-- defer true worker-thread/process isolation; current review recommends the detached task model for the next milestone
+- treat the initial presentation shell as a proven baseline, not the final UI structure
+- present the native structured radius report in the renderer next
+- keep watch authoring explicit and metadata-only; passive status views must not create or run watches
+- keep session-armed watch execution separate from passive page-load behavior
+- keep metadata hydration report-scoped and readability-only
+- keep retention/destructive evidence pruning blocked; compaction remains read-only preview
+- continue deferring worker-thread/process isolation until measured scale pressure appears
 - run visual/app smoke through `npm.cmd run smoke:electron` or `npm start` rather than direct `file:///F:/...` navigation; the Codex in-app browser blocks direct file navigation by policy
 
 ## What Exists
@@ -189,15 +197,18 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 
 - broader visual/product polish beyond the initial shell
 - additional renderer controls for metadata hydration, actor watch, and system/radius watch execution outside the session executor
+- radius report UI
+- explicit watch authoring UI for actor and system/radius watches
+- report-scoped metadata hydration beyond actor report contexts
 - broader controlled actor/area operation workflow from UI scope to evidence/observation/assessment review
 - controlled actor operation workflow is documented and verified offline with `Atlas Scout [characterID: 90000002]`, manual discovery, manual expansion, actor watch, reports, queue state, and renderer boundary checks
 - controlled area operation workflow is documented and verified offline with `Atlas Prime [solarSystemID: 30000001]`, local topology radius planning, capped collection, radius report observations, and multi-system presence wording
 - live expansion smoke passed against `Mr Jesterman [characterID: 1329523328]`: 5 queued refs, 1 ESI killmail expansion, 1 stored killmail, 8 activity events, 4 refs left pending in a disposable DB
 - actor report metadata hydration UI is implemented as a readability-only, live-gated, metadata-only task that excludes static type IDs from ESI hydration
-- structured report expansion is deferred by decision: radius is the next target, but only after renderer modularization and a native structured radius response
+- structured report expansion is partially complete: radius now has a native structured backend response, and renderer presentation is next
 - retention compaction writes are deferred by decision: `assessment.compact_from_evidence` remains preview-only until a real retention/pruning need exists
 - renderer modularization/component boundary review before `src/renderer/app.js` absorbs more workflow orchestration
-- renderer modularization review is complete: keep `app.js` whole for one narrow controlled actor/area proof, then split before adding another full structured report/workflow surface
+- renderer modularization implementation is complete: shared helpers, readiness, scopes, tasks, queue/watch, actions, reports, and app orchestration are separate renderer scripts
 - executable retention/deprecation actions and actual assessment compaction writes
 - executable evidence compaction/pruning actions
 - true worker-thread/process isolation for CPU-heavy or synchronous SQLite-heavy tasks
@@ -248,13 +259,22 @@ Latest reviewed commits:
 - current compaction preservation preflight slice - read-only typed-actor compaction preview shows what assessment memory would survive, with no evidence deletion or artifact insertion
 - current Aura core extraction brief - standalone Aura should begin as a pure parser/compute service shell with fixture tests, borrowing Atlas rigging without inheriting Atlas evidence-memory implementation
 - `041a0f6` - backend UI boundary handoff audit
+- `55928c9` - renderer modularization review
+- `2bafcef` - controlled actor operation workflow
+- `576c313` - controlled area operation workflow
+- `690c3b5` - live expansion smoke
+- `126c02f` - actor metadata hydration UI
+- `202af64` - controlled workflow follow-up decisions
 - current backend/UI boundary handshake - service/preload boundary remains healthy; next milestone should prove a narrow controlled actor/area operation workflow rather than broad dashboard expansion
 - current renderer modularization review - defer file split for one narrow operator-proof slice, with explicit triggers for modularization before broader workflow expansion
+- current renderer modularization implementation - split renderer surfaces into separate scripts and updated renderer-shell verification to scan all renderer modules
+- current native structured radius response - `report.radius` returns backend-owned structured scope, evidence basis, observations, provenance, warnings, raw IDs, and retained text output
 - current controlled actor workflow - fixture path proves actor scope to queued refs, ESI expansion, stored evidence, actor report, queue state, and optional assessment UI path without passive collection
 - current controlled area workflow - fixture path proves local topology radius scope to capped collection, stored evidence, radius report observations, and repeated/multi-system presence language without ownership/staging claims
 - current live expansion smoke - typed actor name resolved through ESI, zKill refs queued as possible evidence, one selected ref expanded through ESI, and reports confirmed partial sample boundaries
 - current metadata hydration UI - actor report can preview candidate entity IDs, estimate ESI name calls, run metadata-only hydration, and refresh labels without evidence mutation
-- current structured report expansion decision - next target should be radius, but implementation waits for renderer modules and native structured radius response
+- current structured report expansion decision - radius backend response is complete; implementation now waits for renderer presentation
 - current retention compaction write decision - no compaction artifact write this milestone; preview remains read-only and evidence deletion remains blocked
+- current controlled workflow checkpoint - no blocker; next milestone proceeds with radius report presentation after renderer modularization and native radius response
 
 These commits move the earlier rigging gaps into an initial presentation checkpoint. The main remaining risk is no longer missing service vocabulary; it is preserving the service/evidence boundary while adding further executable UI actions and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.

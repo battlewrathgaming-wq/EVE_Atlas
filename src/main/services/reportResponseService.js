@@ -1,7 +1,7 @@
 const { buildActorReport, buildActorReportModel, renderActorReport } = require('../reports/actorReport');
 const { buildCorporationObservationReport } = require('../reports/corporationObservationReport');
 const { buildQueueReport } = require('../reports/queueReport');
-const { buildRadiusReport } = require('../reports/radiusReport');
+const { buildRadiusReport, buildRadiusReportModel, renderRadiusReport } = require('../reports/radiusReport');
 const { buildRunReport } = require('../reports/runReport');
 const { buildSystemReport } = require('../reports/systemReport');
 const { buildEvidenceWindow, formatEvidenceWindow } = require('../reports/reportUtils');
@@ -12,6 +12,9 @@ function buildReportResponse(db, request = {}) {
   const options = request.options || {};
   if (reportType === 'actor') {
     return buildNativeActorReportResponse(db, params, options);
+  }
+  if (reportType === 'radius') {
+    return buildNativeRadiusReportResponse(db, params, options);
   }
   const text = buildReportText(db, reportType, params, options);
   const parsed = parseReportText(text);
@@ -43,6 +46,51 @@ function buildReportResponse(db, request = {}) {
     warnings: warningRows(parsed.sections.Warnings),
     labels: labelsFromText(text),
     raw_ids: rawIdsFromText(text),
+    text
+  };
+}
+
+function buildNativeRadiusReportResponse(db, params, options) {
+  const center = params.center || params.centerNameOrId || params.system || params.systemId;
+  const model = buildRadiusReportModel(db, center, {
+    ...options,
+    radiusJumps: params.radiusJumps ?? options.radiusJumps,
+    maxRadius: params.maxRadius ?? options.maxRadius,
+    maxSystems: params.maxSystems ?? options.maxSystems
+  });
+  const text = renderRadiusReport(model);
+  return {
+    report_type: 'radius',
+    generated_at: model.generated_at,
+    response_mode: 'native-structured',
+    scope: {
+      report_type: 'radius',
+      parameters: params,
+      evidence_window: model.evidence_window,
+      center: model.center,
+      radius_jumps: model.radius_jumps,
+      included_systems: model.included_systems
+    },
+    evidence_basis: {
+      lines: model.sections.evidenceBasis.lines,
+      text: model.sections.evidenceBasis.lines.join('\n'),
+      sample_status: model.sample_status,
+      source: 'zKill discovery + ESI expanded killmails',
+      evidence_range: model.evidence_range
+    },
+    observations: {
+      scope: serializeObservationSection(model.sections.scope),
+      sections: model.observations.map(serializeObservationSection)
+    },
+    collection_provenance: {
+      lines: model.sections.collectionProvenance.lines,
+      text: model.sections.collectionProvenance.lines.join('\n'),
+      collection: model.collection
+    },
+    warnings: model.warnings,
+    labels: labelsFromText(text),
+    raw_ids: model.raw_ids,
+    interpretation_warning: model.interpretation_warning,
     text
   };
 }

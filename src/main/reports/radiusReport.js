@@ -27,6 +27,10 @@ const {
 } = require('./collectionProvenance');
 
 function buildRadiusReport(db, centerNameOrId, options = {}) {
+  return renderRadiusReport(buildRadiusReportModel(db, centerNameOrId, options));
+}
+
+function buildRadiusReportModel(db, centerNameOrId, options = {}) {
   const radiusJumps = Number(options.radiusJumps ?? 0);
   const maxRadius = Number(options.maxRadius ?? 5);
   const maxSystems = Number(options.maxSystems ?? 100);
@@ -41,68 +45,69 @@ function buildRadiusReport(db, centerNameOrId, options = {}) {
   const scope = radiusScope(db, includedSystemIds, { evidenceWindow });
   const status = radiusSampleStatus(scope);
 
-  return [
-    `AURA Atlas Radius Watch Evidence Report - ${status}`,
-    `Center: ${formatSystemLabel(center.solar_system_name, center.solar_system_id)}`,
-    `Radius: ${radiusJumps} jump${radiusJumps === 1 ? '' : 's'}`,
-    `Center Geography: ${center.region_name || 'unknown'} / ${center.constellation_name || 'unknown'}`,
-    `Included systems: ${systems.length}`,
-    `Evidence window: ${formatEvidenceWindow(evidenceWindow)}`,
-    `Expanded evidence range: ${scope.killmailRange.earliest || 'none'} -> ${scope.killmailRange.latest || 'none'}`,
-    `Expanded sample: ${scope.killmailRange.count} stored killmails matching radius/time scope`,
-    `Discovery provenance window(s): ${scope.pastSecondsValues.length ? scope.pastSecondsValues.map(formatWindow).join(', ') : 'unknown'}`,
-    `Collection provenance runs: ${scope.runs.length}`,
-    `Collected at: ${scope.runs[0]?.started_at || 'none'} -> ${scope.runs[scope.runs.length - 1]?.finished_at || 'none'}`,
-    `Interpretation: repeated or multi-system presence is evidence for further investigation, not proof of staging, ownership, or affiliation.`,
-    printSection('Scope', table(systems, [
+  const sections = {
+    scope: {
+      title: 'Scope',
+      rows: systems,
+      columns: [
+        { label: 'System', value: (row) => formatSystemLabel(row.solar_system_name, row.solar_system_id) },
+        { label: 'Constellation', value: (row) => row.constellation_name || 'unknown' },
+        { label: 'Region', value: (row) => row.region_name || 'unknown' },
+        { label: 'Security', value: (row) => row.security_status ?? 'unknown' }
+      ]
+    },
+    evidenceBasis: {
+      title: 'Evidence Basis',
+      lines: [
+        `Stored evidence matching this scope: ${scope.killmailRange.count} killmails / ${scope.activityEventCount} activity events`,
+        'Source: zKill discovery + ESI expanded killmails'
+      ]
+    },
+    collectionProvenance: {
+      title: 'Collection Provenance',
+      lines: [
+        `Collection provenance systems scanned: ${scope.zkillLogs.length}`,
+        `Collection provenance zKill refs discovered: ${scope.totals.discovered}`,
+        `Collection provenance already cached: ${scope.totals.cached}`,
+        `Collection provenance expanded new: ${scope.totals.expanded}`,
+        `Collection provenance failed expansions: ${scope.totals.failed}`,
+        `Collection provenance activity events written: ${scope.totals.events}`,
+        `Collection provenance API calls: zkill ${scope.apiCalls.zkill || 0} / esi ${scope.apiCalls.esi || 0}`,
+        ...manualDiscoveryProvenanceLines(scope.manualDiscovery),
+        'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.'
+      ]
+    }
+  };
+
+  const observations = [
+    observationSection('Activity By System', scope.systemCounts, [
       { label: 'System', value: (row) => formatSystemLabel(row.solar_system_name, row.solar_system_id) },
       { label: 'Constellation', value: (row) => row.constellation_name || 'unknown' },
       { label: 'Region', value: (row) => row.region_name || 'unknown' },
-      { label: 'Security', value: (row) => row.security_status ?? 'unknown' }
-    ])),
-    printSection('Evidence Basis', [
-      `Stored evidence matching this scope: ${scope.killmailRange.count} killmails / ${scope.activityEventCount} activity events`,
-      'Source: zKill discovery + ESI expanded killmails'
-    ].join('\n')),
-    printSection('Collection Provenance', [
-      `Collection provenance systems scanned: ${scope.zkillLogs.length}`,
-      `Collection provenance zKill refs discovered: ${scope.totals.discovered}`,
-      `Collection provenance already cached: ${scope.totals.cached}`,
-      `Collection provenance expanded new: ${scope.totals.expanded}`,
-      `Collection provenance failed expansions: ${scope.totals.failed}`,
-      `Collection provenance activity events written: ${scope.totals.events}`,
-      `Collection provenance API calls: zkill ${scope.apiCalls.zkill || 0} / esi ${scope.apiCalls.esi || 0}`,
-      ...manualDiscoveryProvenanceLines(scope.manualDiscovery),
-      'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.'
-    ].join('\n')),
-    printSection('Activity By System', table(scope.systemCounts, [
-      { label: 'System', value: (row) => formatSystemLabel(row.solar_system_name, row.solar_system_id) },
+      { label: 'Killmails', value: (row) => row.killmail_count }
+    ]),
+    observationSection('Activity By Constellation', scope.constellationCounts, [
       { label: 'Constellation', value: (row) => row.constellation_name || 'unknown' },
       { label: 'Region', value: (row) => row.region_name || 'unknown' },
       { label: 'Killmails', value: (row) => row.killmail_count }
-    ])),
-    printSection('Activity By Constellation', table(scope.constellationCounts, [
-      { label: 'Constellation', value: (row) => row.constellation_name || 'unknown' },
+    ]),
+    observationSection('Activity By Region', scope.regionCounts, [
       { label: 'Region', value: (row) => row.region_name || 'unknown' },
       { label: 'Killmails', value: (row) => row.killmail_count }
-    ])),
-    printSection('Activity By Region', table(scope.regionCounts, [
-      { label: 'Region', value: (row) => row.region_name || 'unknown' },
-      { label: 'Killmails', value: (row) => row.killmail_count }
-    ])),
-    printSection('Multi-System Presence', table(scope.multiSystemOperators, operatorColumns())),
-    printSection('Observed Operators', table(scope.operatorRows, operatorColumns())),
-    printSection('Attacker/Victim Split', table(scope.roleSplit, [
+    ]),
+    observationSection('Multi-System Presence', scope.multiSystemOperators, operatorColumns()),
+    observationSection('Observed Operators', scope.operatorRows, operatorColumns()),
+    observationSection('Attacker/Victim Split', scope.roleSplit, [
       { label: 'Role', value: (row) => row.role },
       { label: 'Events', value: (row) => row.count }
-    ])),
-    printSection('Observed Activity Cadence', table(scope.cadenceRows, [
+    ]),
+    observationSection('Observed Activity Cadence', scope.cadenceRows, [
       { label: 'UTC Bucket', value: formatUtcBucket },
       { label: 'Role Mix', value: roleMix },
       { label: 'Appearances', value: (row) => row.appearances },
       { label: 'Killmails', value: (row) => row.killmails }
-    ])),
-    printSection('Observed Final Blows', table(scope.finalBlowRows, [
+    ]),
+    observationSection('Observed Final Blows', scope.finalBlowRows, [
       { label: 'Attacker', value: formatFinalBlowPilot },
       { label: 'Ship', value: formatShip },
       { label: 'Final Blows', value: (row) => row.final_blows },
@@ -110,8 +115,8 @@ function buildRadiusReport(db, centerNameOrId, options = {}) {
       { label: 'Systems', value: (row) => row.unique_systems },
       { label: 'First Observed', value: (row) => row.first_observed },
       { label: 'Last Observed', value: (row) => row.last_observed }
-    ])),
-    printSection('Recent Timeline', table(scope.timeline, [
+    ]),
+    observationSection('Recent Timeline', scope.timeline, [
       { label: 'Time', value: (row) => row.killmail_time },
       { label: 'Killmail', value: (row) => row.killmail_id },
       { label: 'System', value: (row) => formatSystemLabel(row.solar_system_name, row.solar_system_id) },
@@ -121,9 +126,128 @@ function buildRadiusReport(db, centerNameOrId, options = {}) {
       { label: 'Observed Attacker', value: (row) => row.attacker_label || 'unknown' },
       { label: 'Attacker Ship', value: (row) => row.attacker_ship_type_id ? formatTypeLabel(row.attacker_ship_name, row.attacker_ship_type_id) : 'unknown' },
       { label: 'Aggressor Detail', value: formatAggressorDetail }
-    ])),
-    printSection('Warnings', scope.warnings.length ? scope.warnings.map((warning) => `${warning.warning_type}: ${warning.message}`).join('\n') : '(none)')
+    ])
+  ];
+
+  return {
+    report_type: 'radius',
+    title: 'AURA Atlas Radius Watch Evidence Report',
+    sample_status: status,
+    generated_at: new Date().toISOString(),
+    center: {
+      solar_system_id: center.solar_system_id,
+      solar_system_name: center.solar_system_name,
+      constellation_id: center.constellation_id,
+      constellation_name: center.constellation_name,
+      region_id: center.region_id,
+      region_name: center.region_name,
+      security_status: center.security_status
+    },
+    center_label: formatSystemLabel(center.solar_system_name, center.solar_system_id),
+    radius_jumps: radiusJumps,
+    max_radius: maxRadius,
+    max_systems: maxSystems,
+    included_systems: systems,
+    evidence_window: {
+      ...evidenceWindow,
+      label: formatEvidenceWindow(evidenceWindow)
+    },
+    evidence_range: {
+      earliest: scope.killmailRange.earliest || null,
+      latest: scope.killmailRange.latest || null,
+      killmail_count: scope.killmailRange.count || 0,
+      activity_event_count: scope.activityEventCount || 0
+    },
+    discovery_windows: scope.pastSecondsValues.map((seconds) => ({
+      seconds,
+      label: formatWindow(seconds)
+    })),
+    collection: {
+      runs_count: scope.runs.length,
+      collected_start: scope.runs[0]?.started_at || null,
+      collected_end: scope.runs[scope.runs.length - 1]?.finished_at || null,
+      zkill_requests: scope.zkillLogs.length,
+      totals: scope.totals,
+      api_calls: scope.apiCalls,
+      manual_discovery: scope.manualDiscovery
+    },
+    interpretation_warning: 'Repeated or multi-system presence is evidence for further investigation, not proof of staging, ownership, or affiliation.',
+    sections,
+    observations,
+    warnings: scope.warnings.map((warning) => ({
+      code: warning.warning_type,
+      message: warning.message
+    })),
+    raw_ids: radiusRawIds(systems, scope)
+  };
+}
+
+function renderRadiusReport(model) {
+  return [
+    `${model.title} - ${model.sample_status}`,
+    `Center: ${model.center_label}`,
+    `Radius: ${model.radius_jumps} jump${model.radius_jumps === 1 ? '' : 's'}`,
+    `Center Geography: ${model.center.region_name || 'unknown'} / ${model.center.constellation_name || 'unknown'}`,
+    `Included systems: ${model.included_systems.length}`,
+    `Evidence window: ${model.evidence_window.label}`,
+    `Expanded evidence range: ${model.evidence_range.earliest || 'none'} -> ${model.evidence_range.latest || 'none'}`,
+    `Expanded sample: ${model.evidence_range.killmail_count} stored killmails matching radius/time scope`,
+    `Discovery provenance window(s): ${model.discovery_windows.length ? model.discovery_windows.map((window) => window.label).join(', ') : 'unknown'}`,
+    `Collection provenance runs: ${model.collection.runs_count}`,
+    `Collected at: ${model.collection.collected_start || 'none'} -> ${model.collection.collected_end || 'none'}`,
+    `Interpretation: ${model.interpretation_warning}`,
+    printSection(model.sections.scope.title, table(model.sections.scope.rows, model.sections.scope.columns)),
+    printSection(model.sections.evidenceBasis.title, model.sections.evidenceBasis.lines.join('\n')),
+    printSection(model.sections.collectionProvenance.title, model.sections.collectionProvenance.lines.join('\n')),
+    ...model.observations.map((section) => printSection(section.title, table(section.rows, section.columns))),
+    printSection('Warnings', model.warnings.length ? model.warnings.map((warning) => `${warning.code}: ${warning.message}`).join('\n') : '(none)')
   ].join('\n');
+}
+
+function observationSection(title, rows, columns) {
+  return {
+    title,
+    rows,
+    columns: columns.map((column) => ({
+      label: column.label,
+      value: column.value
+    }))
+  };
+}
+
+function radiusRawIds(systems, scope) {
+  return {
+    character_ids: uniqueNumbers([
+      ...scope.operatorRows.filter((row) => row.entity_type === 'character').map((row) => row.entity_id),
+      ...scope.timeline.filter((row) => row.victim_entity_type === 'character').map((row) => row.victim_entity_id),
+      ...scope.timeline.filter((row) => row.attacker_entity_type === 'character').map((row) => row.attacker_entity_id)
+    ]),
+    corporation_ids: uniqueNumbers([
+      ...scope.operatorRows.filter((row) => row.entity_type === 'corporation').map((row) => row.entity_id),
+      ...scope.timeline.filter((row) => row.victim_entity_type === 'corporation').map((row) => row.victim_entity_id),
+      ...scope.timeline.filter((row) => row.attacker_entity_type === 'corporation').map((row) => row.attacker_entity_id)
+    ]),
+    alliance_ids: uniqueNumbers([
+      ...scope.operatorRows.filter((row) => row.entity_type === 'alliance').map((row) => row.entity_id),
+      ...scope.timeline.filter((row) => row.victim_entity_type === 'alliance').map((row) => row.victim_entity_id),
+      ...scope.timeline.filter((row) => row.attacker_entity_type === 'alliance').map((row) => row.attacker_entity_id)
+    ]),
+    solar_system_ids: uniqueNumbers([
+      ...systems.map((row) => row.solar_system_id),
+      ...scope.timeline.map((row) => row.solar_system_id)
+    ]),
+    type_ids: uniqueNumbers([
+      ...scope.timeline.map((row) => row.victim_ship_type_id),
+      ...scope.timeline.map((row) => row.attacker_ship_type_id),
+      ...scope.finalBlowRows.map((row) => row.ship_type_id)
+    ]),
+    killmail_ids: uniqueNumbers(scope.timeline.map((row) => row.killmail_id))
+  };
+}
+
+function uniqueNumbers(values) {
+  return [...new Set(values.map(Number).filter((value) => Number.isInteger(value) && value > 0))]
+    .sort((a, b) => a - b);
 }
 
 function radiusScope(db, systemIds, options = {}) {
@@ -346,7 +470,11 @@ function buildTimeline(db, systemIds, evidenceWindow) {
       ...killmail,
       victim_ship_type_id: victim.ship_type_id,
       victim_ship_name: victim.ship_name,
+      victim_entity_type: victim.entity_type,
+      victim_entity_id: victim.entity_id,
       victim_label: victim ? formatEntityLabel(victim.entity_name, victim.entity_type, victim.entity_id) : null,
+      attacker_entity_type: attacker?.entity_type,
+      attacker_entity_id: attacker?.entity_id,
       attacker_label: attacker ? formatEntityLabel(attacker.entity_name, attacker.entity_type, attacker.entity_id) : null,
       attacker_ship_type_id: attacker?.ship_type_id,
       attacker_ship_name: attacker?.ship_name,
@@ -395,5 +523,7 @@ function radiusSampleStatus(scope) {
 
 module.exports = {
   buildRadiusReport,
+  buildRadiusReportModel,
+  renderRadiusReport,
   radiusScope
 };

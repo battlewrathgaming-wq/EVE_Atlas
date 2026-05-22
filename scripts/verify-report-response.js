@@ -37,6 +37,27 @@ async function main() {
     assert(actor.labels.some((label) => label.label === 'Atlas Scout' && label.id === 90000002), 'actor response should include display label');
     assert(actor.text.includes('AURA Atlas Actor Evidence Report'), 'actor response should retain text output');
 
+    const radius = buildReportResponse(db, {
+      reportType: 'radius',
+      params: {
+        center: 30000001,
+        radiusJumps: 0
+      }
+    });
+    assert(radius.report_type === 'radius', 'radius response should include report type');
+    assert(radius.response_mode === 'native-structured', 'radius response should use native structured mode');
+    assert(radius.scope.center.solar_system_id === 30000001, 'radius response should include center system');
+    assert(radius.scope.radius_jumps === 0, 'radius response should include radius jumps');
+    assert(radius.scope.included_systems.some((system) => system.solar_system_id === 30000001), 'radius response should include scoped systems');
+    assert(radius.evidence_basis.lines.some((line) => line.includes('Stored evidence matching this scope')), 'radius response should include native evidence basis lines');
+    assert(radius.observations.scope.rows.some((row) => row.raw.solar_system_id === 30000001), 'radius response should include native scope rows');
+    assert(radius.observations.sections.some((section) => section.name === 'Activity By System'), 'radius response should include activity by system');
+    assert(radius.observations.sections.some((section) => section.name === 'Recent Timeline'), 'radius response should include timeline section');
+    assert(radius.raw_ids.solar_system_ids.includes(30000001), 'radius response should preserve system ID');
+    assert(radius.raw_ids.killmail_ids.includes(7001), 'radius response should preserve killmail ID');
+    assert(radius.text.includes('AURA Atlas Radius Watch Evidence Report'), 'radius response should retain text output');
+    assert(radius.interpretation_warning.includes('not proof'), 'radius response should preserve interpretation warning');
+
     const run = buildReportResponse(db, {
       reportType: 'run',
       params: { runId }
@@ -55,6 +76,14 @@ async function main() {
       }
     }, { db });
     assert(serviceActor.raw_ids.character_ids.includes(90000002), 'service report actor should preserve IDs');
+    const serviceRadius = await invokeServiceCommand('report.radius', {
+      params: {
+        center: 30000001,
+        radiusJumps: 0
+      }
+    }, { db });
+    assert(serviceRadius.response_mode === 'native-structured', 'service report radius should use native structured mode');
+    assert(serviceRadius.raw_ids.solar_system_ids.includes(30000001), 'service report radius should preserve IDs');
   } finally {
     closeDatabase(db);
   }
@@ -95,6 +124,16 @@ function seedEvidence(db) {
     run_id: run.run_id,
     provider: 'zkill',
     endpoint: 'https://zkillboard.com/api/characterID/90000002/pastSeconds/86400/',
+    method: 'GET',
+    status_code: 200,
+    duration_ms: 1,
+    cache_status: 'fixture',
+    requested_at: new Date().toISOString()
+  });
+  repository.insertApiRequestLog({
+    run_id: run.run_id,
+    provider: 'zkill',
+    endpoint: 'https://zkillboard.com/api/systemID/30000001/pastSeconds/86400/',
     method: 'GET',
     status_code: 200,
     duration_ms: 1,

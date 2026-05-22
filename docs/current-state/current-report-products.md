@@ -17,6 +17,18 @@ AURA Atlas currently has CLI/text report products for:
 - queue status
 - metadata status
 
+The renderer currently has native structured presentation for:
+
+- actor evidence reports
+- queue/watch preview state
+- task/readiness/service status surfaces
+
+The next selected structured report target is:
+
+- radius evidence report
+
+The backend now exposes a native structured radius report response. Radius report UI is intentionally deferred until the renderer consumes that response in the next presentation slice.
+
 ## Report Structure
 
 Observation reports use:
@@ -48,8 +60,25 @@ They do not derive observations from:
 - `verify:operators`
 - `verify:radius-report`
 - `verify:actor-report`
+- `verify:report-response`
 - `verify:corporation-report`
 - `verify:metadata-status`
 - `verify:controlled-workflow`
 
 The controlled workflow check runs reports after mixed collection lanes have written to the same disposable DB. This is the current pre-UI confidence check that reports can read stored evidence without depending on how evidence was discovered.
+
+`report.actor` and `report.radius` now return native structured responses for renderer presentation while retaining text output for CLI/export.
+
+## Current Constraint
+
+Report meaning must remain backend-owned.
+
+The renderer may render structured sections and text export. It must not parse CLI text, recompute observations, infer assessment, or treat pending discovery refs as evidence.
+
+## Known Presentation Follow-Up
+
+The queue report text export path needs a small renderer fix so structured queue report responses do not display as `[object Object]`.
+
+Tracked by:
+
+- `docs/gap/to-do/queue-report-text-export-fix.md`

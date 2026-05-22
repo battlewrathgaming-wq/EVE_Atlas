@@ -122,3 +122,43 @@ Recommended order:
 Supporting audit:
 
 - `docs/audits/audit-2026-05-22-overseer-backend-ui-boundary-handshake.md`
+
+Completed Controlled Actor/Area Operation items are moved to `docs/gap/complete`.
+
+## Current Milestone: Structured Area Review And Watch Authoring
+
+Mission statement:
+
+Turn the proven controlled workflow into a maintainable operator surface: split the renderer, add native structured radius reporting, present area observations without renderer-side inference, and expose watch authoring as explicit metadata work.
+
+This milestone should leave Atlas with:
+
+- renderer modules split by app surface or workflow boundary
+- renderer-shell verification updated to scan all renderer modules
+- native structured radius report responses comparable to actor report responses
+- first radius/area report presentation in the renderer
+- explicit watch authoring UI for actor and system/radius watches
+- report-scoped metadata hydration planning for non-actor reports
+- a measured local scale/stability check before any process-isolation decision
+
+Recommended order:
+
+- `queue-report-text-export-fix.md`
+- `radius-report-presentation-ui.md`
+- `watch-authoring-ui.md`
+- `report-scoped-metadata-hydration-expansion.md`
+- `local-scale-and-stability-smoke.md`
+- `assessment-from-area-context-review.md`
+
+Supporting audit:
+
+- `docs/audits/audit-2026-05-22-overseer-controlled-workflow-checkpoint.md`
+- `docs/audits/audit-2026-05-22-overseer-complete-audit-handover.md`
+
+Completed Structured Area Review And Watch Authoring items are moved to `docs/gap/complete`.
+
+Completed:
+
+- `renderer-modularization-implementation.md`
+- `native-structured-radius-report-response.md`
+- `queue-report-text-export-fix.md`

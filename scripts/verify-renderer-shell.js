@@ -8,14 +8,20 @@ function main() {
   const preloadPath = path.join(ROOT, 'src', 'main', 'preload.js');
   const windowStatePath = path.join(ROOT, 'src', 'main', 'windowState.js');
   const htmlPath = path.join(ROOT, 'src', 'renderer', 'index.html');
-  const rendererPath = path.join(ROOT, 'src', 'renderer', 'app.js');
+  const rendererDir = path.join(ROOT, 'src', 'renderer');
+  const rendererPath = path.join(rendererDir, 'app.js');
   const stylePath = path.join(ROOT, 'src', 'renderer', 'styles.css');
 
   const mainText = read(mainPath);
   const preloadText = read(preloadPath);
   const windowStateText = read(windowStatePath);
   const htmlText = read(htmlPath);
-  const rendererText = read(rendererPath);
+  const rendererFiles = fs.readdirSync(rendererDir)
+    .filter((file) => file.endsWith('.js'))
+    .sort();
+  const rendererText = rendererFiles
+    .map((file) => read(path.join(rendererDir, file)))
+    .join('\n');
   const styleText = read(stylePath);
 
   assert(mainText.includes('preload.js'), 'BrowserWindow should use preload.js');
@@ -39,7 +45,14 @@ function main() {
   assert(windowStateText.includes('AURA_ATLAS_SETTINGS_PATH'), 'window state should support explicit settings path');
   assert(windowStateText.includes('AURA_ATLAS_DB_PATH'), 'window state should colocate with dev DB when DB override is set');
 
-  assert(htmlText.includes('./app.js'), 'renderer HTML should load app.js');
+  assert(htmlText.includes('./shared.js'), 'renderer HTML should load shared renderer helpers');
+  assert(htmlText.includes('./readiness.js'), 'renderer HTML should load readiness surface module');
+  assert(htmlText.includes('./scopes.js'), 'renderer HTML should load scope surface module');
+  assert(htmlText.includes('./tasks.js'), 'renderer HTML should load task surface module');
+  assert(htmlText.includes('./queueWatch.js'), 'renderer HTML should load queue/watch surface module');
+  assert(htmlText.includes('./actions.js'), 'renderer HTML should load controlled action surface module');
+  assert(htmlText.includes('./reports.js'), 'renderer HTML should load report surface module');
+  assert(htmlText.includes('./app.js'), 'renderer HTML should load app.js orchestrator');
   assert(htmlText.includes('window-chrome'), 'renderer should include frameless window chrome');
   assert(htmlText.includes('pin-window'), 'renderer should include always-on-top control');
   assert(htmlText.includes('view-readiness'), 'renderer should include readiness view');
@@ -149,6 +162,8 @@ function main() {
   assert(rendererText.includes('assessmentArtifactPayload'), 'renderer should build assessment artifact payload from report context');
   assert(rendererText.includes('Score fields require an assessment reason'), 'renderer should require reasons for score fields');
   assert(rendererText.includes("service.invoke('report.queue'"), 'renderer should call a report through service bridge');
+  assert(rendererText.includes('reportTextExport'), 'renderer should normalize report text exports safely');
+  assert(rendererText.includes('typeof report.text'), 'renderer should render structured report text when available');
   assert(rendererText.includes('service.list()'), 'renderer should read service command availability');
   assert(rendererText.includes('windowBridge.setAlwaysOnTop'), 'renderer should toggle always-on-top through preload bridge');
   assert(!rendererText.includes('const atlasWindow = window.atlasWindow'), 'renderer should avoid redeclaring exposed atlasWindow global');
