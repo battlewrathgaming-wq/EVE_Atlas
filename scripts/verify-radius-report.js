@@ -5,6 +5,7 @@ const { EvidenceRepository } = require('../src/main/db/evidenceRepository');
 const { SdeTopologyImporter } = require('../src/main/sde/sdeImporter');
 const { collectSystemRadiusWatch } = require('../src/main/workers/systemRadiusCollector');
 const { buildRadiusReport } = require('../src/main/reports/radiusReport');
+const { addWatchlistEntity } = require('../src/main/watchlist/watchlistRepository');
 
 async function main() {
   const db = openDatabase(':memory:');
@@ -55,6 +56,13 @@ async function main() {
   }, { db, zkillClient, esiClient });
 
   const repository = new EvidenceRepository(db);
+  const eventsBeforeWatchlist = count(db, 'activity_events');
+  addWatchlistEntity(db, {
+    entityType: 'character',
+    entityId: 90000002,
+    notes: 'Promoted from radius report fixture'
+  });
+  assert(count(db, 'activity_events') === eventsBeforeWatchlist, 'watchlist promotion should not mutate activity events');
   for (const systemId of [30000001, 30000002, 30000003]) {
     repository.insertApiRequestLog({
       run_id: summary.run_id,
@@ -87,6 +95,8 @@ async function main() {
   assertIncludes(report, 'Collection provenance may include multiple run types; intelligence sections are filtered by stored evidence scope.');
   assertIncludes(report, 'Multi-System Presence');
   assertIncludes(report, 'Atlas Scout [characterID: 90000002]');
+  assertIncludes(report, 'Watchlisted');
+  assertIncludes(report, 'yes');
   assertIncludes(report, 'candidate operator, multi-system presence');
   assertIncludes(report, 'Atlas Prime [solarSystemID: 30000001]');
   assertIncludes(report, 'Atlas Gate [solarSystemID: 30000002]');
@@ -98,6 +108,16 @@ async function main() {
 
   closeDatabase(db);
   console.log('radius report verified');
+}
+
+function count(db, tableName) {
+  return db.prepare(`SELECT COUNT(*) AS count FROM ${tableName}`).get().count;
+}
+
+function assert(condition, message) {
+  if (!condition) {
+    throw new Error(message);
+  }
 }
 
 function assertIncludes(text, expected) {

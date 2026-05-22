@@ -47,6 +47,7 @@ function buildObservedOperatorsReport(db, systemNameOrId, options = {}) {
     printSection('Observed Operators', table(repeatedRows, [
       { label: 'Type', value: (row) => row.entity_type },
       { label: 'Entity', value: (row) => formatEntityLabel(row.entity_name, row.entity_type, row.entity_id) },
+      { label: 'Watchlisted', value: (row) => row.watchlisted ? 'yes' : 'no' },
       { label: 'Label', value: (row) => labelFor(row) },
       { label: 'Role Mix', value: (row) => roleMix(row) },
       { label: 'Appearances', value: (row) => row.appearances },
@@ -132,18 +133,23 @@ function systemScope(db, systemId, options = {}) {
 function operatorRows(db, systemId, evidenceWindow = buildEvidenceWindow()) {
   const activityWindow = evidenceWindowClause(evidenceWindow, 'killmail_time');
   return db.prepare(`
-    SELECT entity_type, entity_id, MAX(entity_name) AS entity_name,
-           SUM(CASE WHEN role = 'attacker' THEN 1 ELSE 0 END) AS attacker_appearances,
-           SUM(CASE WHEN role = 'victim' THEN 1 ELSE 0 END) AS victim_appearances,
+    SELECT ae.entity_type,
+           ae.entity_id,
+           COALESCE(MAX(w.entity_name), MAX(ae.entity_name)) AS entity_name,
+           CASE WHEN MAX(w.watch_id) IS NULL THEN 0 ELSE 1 END AS watchlisted,
+           SUM(CASE WHEN ae.role = 'attacker' THEN 1 ELSE 0 END) AS attacker_appearances,
+           SUM(CASE WHEN ae.role = 'victim' THEN 1 ELSE 0 END) AS victim_appearances,
            COUNT(*) AS appearances,
-           COUNT(DISTINCT solar_system_id) AS unique_systems,
-           MIN(killmail_time) AS first_observed,
-           MAX(killmail_time) AS last_observed
-    FROM activity_events
-    WHERE solar_system_id = ?
+           COUNT(DISTINCT ae.solar_system_id) AS unique_systems,
+           MIN(ae.killmail_time) AS first_observed,
+           MAX(ae.killmail_time) AS last_observed
+    FROM activity_events ae
+    LEFT JOIN watchlist_entities w
+      ON w.entity_type = ae.entity_type AND w.entity_id = ae.entity_id
+    WHERE ae.solar_system_id = ?
       ${activityWindow.sql}
-    GROUP BY entity_type, entity_id
-    ORDER BY appearances DESC, attacker_appearances DESC, MAX(entity_name) ASC
+    GROUP BY ae.entity_type, ae.entity_id
+    ORDER BY watchlisted DESC, appearances DESC, attacker_appearances DESC, COALESCE(MAX(w.entity_name), MAX(ae.entity_name)) ASC
   `).all(systemId, ...activityWindow.params);
 }
 
@@ -162,6 +168,7 @@ function operatorReportCandidates(db, systemId, options = {}) {
       row.unique_systems > 1
     )
     .sort((a, b) =>
+      b.watchlisted - a.watchlisted ||
       b.relevance_score - a.relevance_score ||
       b.appearances - a.appearances ||
       String(a.entity_name || a.entity_id).localeCompare(String(b.entity_name || b.entity_id))

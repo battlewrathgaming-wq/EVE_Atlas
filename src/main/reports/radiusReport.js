@@ -172,6 +172,7 @@ function radiusScope(db, systemIds, options = {}) {
     }))
     .filter((row) => row.appearances > 1 || row.attacker_appearances > 1 || row.unique_systems > 1)
     .sort((a, b) =>
+      b.watchlisted - a.watchlisted ||
       b.relevance_score - a.relevance_score ||
       b.unique_systems - a.unique_systems ||
       b.appearances - a.appearances ||
@@ -241,7 +242,8 @@ function radiusOperatorRows(db, systemIds, evidenceWindow) {
   return db.prepare(`
     SELECT ae.entity_type,
            ae.entity_id,
-           MAX(ae.entity_name) AS entity_name,
+           COALESCE(MAX(w.entity_name), MAX(ae.entity_name)) AS entity_name,
+           CASE WHEN MAX(w.watch_id) IS NULL THEN 0 ELSE 1 END AS watchlisted,
            SUM(CASE WHEN ae.role = 'attacker' THEN 1 ELSE 0 END) AS attacker_appearances,
            SUM(CASE WHEN ae.role = 'victim' THEN 1 ELSE 0 END) AS victim_appearances,
            COUNT(*) AS appearances,
@@ -251,6 +253,8 @@ function radiusOperatorRows(db, systemIds, evidenceWindow) {
            MAX(ae.killmail_time) AS last_observed
     FROM activity_events ae
     LEFT JOIN solar_systems ss ON ss.solar_system_id = ae.solar_system_id
+    LEFT JOIN watchlist_entities w
+      ON w.entity_type = ae.entity_type AND w.entity_id = ae.entity_id
     WHERE ae.solar_system_id IN (${placeholders})
       ${activityWindow.sql}
     GROUP BY ae.entity_type, ae.entity_id
@@ -304,6 +308,7 @@ function operatorColumns() {
   return [
     { label: 'Type', value: (row) => row.entity_type },
     { label: 'Entity', value: (row) => formatEntityLabel(row.entity_name, row.entity_type, row.entity_id) },
+    { label: 'Watchlisted', value: (row) => row.watchlisted ? 'yes' : 'no' },
     { label: 'Label', value: (row) => row.label },
     { label: 'Role Mix', value: (row) => roleMix(row) },
     { label: 'Appearances', value: (row) => row.appearances },

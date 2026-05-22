@@ -5,6 +5,7 @@ const { EvidenceRepository } = require('../src/main/db/evidenceRepository');
 const { SdeTopologyImporter } = require('../src/main/sde/sdeImporter');
 const { collectSystemRadiusWatch } = require('../src/main/workers/systemRadiusCollector');
 const { buildObservedOperatorsReport } = require('../src/main/reports/operatorReport');
+const { addWatchlistEntity } = require('../src/main/watchlist/watchlistRepository');
 
 async function main() {
   const db = openDatabase(':memory:');
@@ -48,6 +49,13 @@ async function main() {
   }, { db, zkillClient, esiClient });
 
   const repository = new EvidenceRepository(db);
+  const eventsBeforeWatchlist = count(db, 'activity_events');
+  addWatchlistEntity(db, {
+    entityType: 'character',
+    entityId: 90000002,
+    notes: 'Promoted from observed operators fixture'
+  });
+  assert(count(db, 'activity_events') === eventsBeforeWatchlist, 'watchlist promotion should not mutate activity events');
   repository.insertApiRequestLog({
     run_id: summary.run_id,
     provider: 'zkill',
@@ -72,6 +80,9 @@ async function main() {
   assertIncludes(report, 'Stored evidence matching this scope: 3 killmails / 21 activity events');
   assertIncludes(report, 'Collection provenance may include multiple run types; intelligence sections are filtered by stored evidence scope.');
   assertIncludes(report, 'Signal Cartel Test [corporationID: 98000002]');
+  assertIncludes(report, 'Watchlisted');
+  assertIncludes(report, 'Atlas Scout [characterID: 90000002]');
+  assertIncludes(report, 'yes');
   assertIncludes(report, 'candidate operator');
   assertIncludes(report, 'not proof of staging, ownership, or affiliation');
   assertIncludes(report, 'Source: zKill discovery + ESI expanded killmails');
@@ -80,6 +91,16 @@ async function main() {
 
   closeDatabase(db);
   console.log('observed operators report verified');
+}
+
+function count(db, tableName) {
+  return db.prepare(`SELECT COUNT(*) AS count FROM ${tableName}`).get().count;
+}
+
+function assert(condition, message) {
+  if (!condition) {
+    throw new Error(message);
+  }
 }
 
 function assertIncludes(text, expected) {
