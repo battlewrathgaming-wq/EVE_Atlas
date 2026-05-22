@@ -93,6 +93,7 @@ Likely IPC-backed actions:
 - run metadata readiness report
 - run scoped hydration
 - get run diagnostics
+- trigger governed mutating actions through service commands
 
 Rule:
 
@@ -149,4 +150,5 @@ Current verification:
 - `docs/gap/complete/destructive-actions-and-retention.md`
 - `docs/gap/complete/queue-status-scope-isolation.md`
 - `docs/gap/complete/ui-language-contract.md`
-- `docs/gap/to-do/ipc-mutating-action-services.md`
+- `docs/gap/complete/ipc-mutating-action-services.md`
+- `docs/gap/to-do/background-worker-execution.md`

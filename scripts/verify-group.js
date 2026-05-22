@@ -13,6 +13,7 @@ const GROUPS = {
     'verify:queue-scope-isolation',
     'verify:message-taxonomy',
     'verify:retention-preflight',
+    'verify:mutating-services',
     'verify:fixture',
     'verify:idempotent',
     'verify:db-integrity'

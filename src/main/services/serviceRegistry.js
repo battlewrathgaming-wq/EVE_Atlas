@@ -1,5 +1,17 @@
 const { buildAppReadiness } = require('./appReadinessService');
 const { getLiveApiGateState } = require('./liveApiGateService');
+const {
+  runActorWatchService,
+  runManualDiscoveryService,
+  runManualExpansionService,
+  runMetadataHydrationService,
+  runSdeInventoryImportService,
+  runSdeTopologyImportService,
+  runSystemRadiusWatchService,
+  runWatchCreateService,
+  runWatchListService,
+  runWatchUpdateService
+} = require('./mutatingActionService');
 const { buildQueueExpansionSelection } = require('./queueSelectionService');
 const { buildReportResponse } = require('./reportResponseService');
 const { buildRetentionPreflight, listRetentionActions } = require('./retentionActionService');
@@ -16,6 +28,56 @@ const COMMANDS = {
     classification: 'read-only',
     description: 'Return live API gate state for all actions or one scoped action',
     handler: ({ payload }) => getLiveApiGateState(payload)
+  },
+  'manual.discovery': {
+    classification: 'evidence-creating',
+    description: 'Run user-led zKill discovery only and queue refs without ESI expansion',
+    handler: ({ db, payload, ...context }) => runManualDiscoveryService(db, payload, context)
+  },
+  'manual.expansion': {
+    classification: 'evidence-creating',
+    description: 'Expand selected queued refs through ESI and persist evidence',
+    handler: ({ db, payload, ...context }) => runManualExpansionService(db, payload, context)
+  },
+  'actor.watch': {
+    classification: 'evidence-creating',
+    description: 'Run an actor watch collection with scoped discovery and capped ESI expansion',
+    handler: ({ db, payload, ...context }) => runActorWatchService(db, payload, context)
+  },
+  'system.radius.watch': {
+    classification: 'evidence-creating',
+    description: 'Run a system/radius watch collection with scoped discovery and capped ESI expansion',
+    handler: ({ db, payload, ...context }) => runSystemRadiusWatchService(db, payload, context)
+  },
+  'metadata.hydration': {
+    classification: 'metadata-only',
+    description: 'Hydrate report-scoped entity labels through ESI names',
+    handler: ({ db, payload, ...context }) => runMetadataHydrationService(db, payload, context)
+  },
+  'sde.import.topology': {
+    classification: 'exclusive',
+    description: 'Import local SDE topology/geography into SQLite lookup tables',
+    handler: ({ db, payload }) => runSdeTopologyImportService(db, payload)
+  },
+  'sde.import.inventory': {
+    classification: 'exclusive',
+    description: 'Import local SDE inventory/type metadata into SQLite lookup tables',
+    handler: ({ db, payload }) => runSdeInventoryImportService(db, payload)
+  },
+  'watch.create': {
+    classification: 'metadata-only',
+    description: 'Create or update a watchlist entity from a typed actor identity',
+    handler: ({ db, payload, ...context }) => runWatchCreateService(db, payload, context)
+  },
+  'watch.update': {
+    classification: 'metadata-only',
+    description: 'Update a watchlist entity from a typed actor identity',
+    handler: ({ db, payload, ...context }) => runWatchUpdateService(db, payload, context)
+  },
+  'watch.list': {
+    classification: 'read-only',
+    description: 'List watchlist entities',
+    handler: ({ db }) => runWatchListService(db)
   },
   'report.build': {
     classification: 'read-only',

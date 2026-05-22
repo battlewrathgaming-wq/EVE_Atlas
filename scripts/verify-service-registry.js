@@ -20,6 +20,13 @@ async function main() {
     const scopeDefaultsCommand = commands.find((entry) => entry.command === 'scope.defaults');
     const scopeValidateCommand = commands.find((entry) => entry.command === 'scope.validate');
     const taskListCommand = commands.find((entry) => entry.command === 'task.list');
+    const manualDiscoveryCommand = commands.find((entry) => entry.command === 'manual.discovery');
+    const manualExpansionCommand = commands.find((entry) => entry.command === 'manual.expansion');
+    const actorWatchCommand = commands.find((entry) => entry.command === 'actor.watch');
+    const systemRadiusWatchCommand = commands.find((entry) => entry.command === 'system.radius.watch');
+    const metadataHydrationCommand = commands.find((entry) => entry.command === 'metadata.hydration');
+    const watchCreateCommand = commands.find((entry) => entry.command === 'watch.create');
+    const watchListCommand = commands.find((entry) => entry.command === 'watch.list');
     assert(readinessCommand, 'app.readiness should be listed');
     assert(readinessCommand.classification === 'read-only', 'app.readiness should be read-only');
     assert(liveGateCommand, 'live.gate should be listed');
@@ -36,6 +43,13 @@ async function main() {
     assert(scopeValidateCommand.classification === 'read-only', 'scope.validate should be read-only');
     assert(taskListCommand, 'task.list should be listed');
     assert(taskListCommand.classification === 'read-only', 'task.list should be read-only');
+    assert(manualDiscoveryCommand?.classification === 'evidence-creating', 'manual.discovery should be evidence-creating');
+    assert(manualExpansionCommand?.classification === 'evidence-creating', 'manual.expansion should be evidence-creating');
+    assert(actorWatchCommand?.classification === 'evidence-creating', 'actor.watch should be evidence-creating');
+    assert(systemRadiusWatchCommand?.classification === 'evidence-creating', 'system.radius.watch should be evidence-creating');
+    assert(metadataHydrationCommand?.classification === 'metadata-only', 'metadata.hydration should be metadata-only');
+    assert(watchCreateCommand?.classification === 'metadata-only', 'watch.create should be metadata-only');
+    assert(watchListCommand?.classification === 'read-only', 'watch.list should be read-only');
 
     const readiness = await invokeServiceCommand('app.readiness', {}, {
       db,

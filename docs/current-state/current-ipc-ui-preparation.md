@@ -16,6 +16,7 @@ Current implemented shell:
 - `scope.defaults` service command
 - `scope.validate` service command
 - `live.gate` service command
+- mutating service commands for manual discovery, manual expansion, actor watch, system/radius watch, metadata hydration, SDE import, and watchlist actions
 - `report.build` service command
 - report-specific service commands for actor, corporation, queue, radius, run, and system reports
 - `queue.selection` service command
@@ -44,6 +45,7 @@ Implemented backend actions include:
 - run metadata readiness reports
 - run scoped hydration commands
 - run diagnostics reports
+- invoke evidence-creating and metadata-mutating commands through the service/task boundary
 
 ## Scope Defaults And Guardrails
 
@@ -73,6 +75,7 @@ Offline verification now includes:
 - queue scope isolation verification
 - message taxonomy verification
 - retention preflight verification
+- mutating service verification
 - task runner verification
 
 Live smoke grouping exists separately:
@@ -89,5 +92,4 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 - UI controls for scope selection
 - session-armed watch scheduler
 - long-running retention/deprecation policy
-- IPC wrappers for evidence-creating actions
-- IPC wrappers for report products beyond app readiness
+- true background worker execution for heavy tasks
