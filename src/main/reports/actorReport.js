@@ -28,26 +28,26 @@ const {
 const VALID_ENTITY_TYPES = new Set(['character', 'corporation', 'alliance']);
 
 function buildActorReport(db, input, options = {}) {
+  return renderActorReport(buildActorReportModel(db, input, options));
+}
+
+function buildActorReportModel(db, input, options = {}) {
   const actor = resolveActor(db, input);
   const evidenceWindow = buildEvidenceWindow(options);
   const scope = actorScope(db, actor, evidenceWindow);
   const status = actorSampleStatus(scope);
 
-  return [
-    `AURA Atlas Actor Evidence Report - ${status}`,
-    `Actor: ${formatEntityLabel(actor.entity_name, actor.entity_type, actor.entity_id)}`,
-    `Evidence window: ${formatEvidenceWindow(evidenceWindow)}`,
-    `Expanded evidence range: ${scope.killmailRange.earliest || 'none'} -> ${scope.killmailRange.latest || 'none'}`,
-    `Basis: ${scope.killmailRange.count} expanded killmails / ${scope.activityEventCount} actor activity events matching actor/time scope`,
-    `Actor discovery window(s): ${scope.pastSecondsValues.length ? scope.pastSecondsValues.map(formatWindow).join(', ') : 'unknown'}`,
-    `Collection provenance runs: ${scope.runs.length}`,
-    `Collected at: ${scope.runs[0]?.started_at || 'none'} -> ${scope.runs[scope.runs.length - 1]?.finished_at || 'none'}`,
-    `Interpretation: actor appearances are stored killmail evidence within scope, not proof of current location, intent, staging, ownership, or affiliation.`,
-    printSection('Evidence Basis', [
+  const sections = {
+    evidenceBasis: {
+      title: 'Evidence Basis',
+      lines: [
       `Stored evidence matching this scope: ${scope.killmailRange.count} killmails / ${scope.activityEventCount} actor activity events`,
       'Source: zKill discovery + ESI expanded killmails'
-    ].join('\n')),
-    printSection('Collection Provenance', [
+      ]
+    },
+    collectionProvenance: {
+      title: 'Collection Provenance',
+      lines: [
       `Collection provenance zKill requests: ${scope.zkillLogs.length}`,
       `Actor-route zKill requests: ${scope.actorZkillLogs.length}`,
       `Collection provenance zKill refs discovered: ${scope.totals.discovered}`,
@@ -58,33 +58,37 @@ function buildActorReport(db, input, options = {}) {
       `Collection provenance API calls: zkill ${scope.apiCalls.zkill || 0} / esi ${scope.apiCalls.esi || 0}`,
       ...manualDiscoveryProvenanceLines(scope.manualDiscovery),
       'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.'
-    ].join('\n')),
-    printSection('Actor Role Split', table(scope.roleSplit, [
+      ]
+    }
+  };
+
+  const observations = [
+    observationSection('Actor Role Split', scope.roleSplit, [
       { label: 'Role', value: (row) => row.role },
       { label: 'Events', value: (row) => row.count }
-    ])),
-    printSection('Observed Systems', table(scope.systemRows, [
+    ]),
+    observationSection('Observed Systems', scope.systemRows, [
       { label: 'System', value: (row) => formatSystemLabel(row.solar_system_name, row.solar_system_id) },
       { label: 'Constellation', value: (row) => row.constellation_name || 'unknown' },
       { label: 'Region', value: (row) => row.region_name || 'unknown' },
       { label: 'Appearances', value: (row) => row.appearances },
       { label: 'First Observed', value: (row) => row.first_observed },
       { label: 'Last Observed', value: (row) => row.last_observed }
-    ])),
-    printSection('Observed Ships', table(scope.shipRows, [
+    ]),
+    observationSection('Observed Ships', scope.shipRows, [
       { label: 'Ship', value: (row) => formatTypeLabel(row.ship_name, row.ship_type_id) },
       { label: 'Role', value: (row) => row.role },
       { label: 'Appearances', value: (row) => row.appearances }
-    ])),
-    printSection('Event-Time Corporations', table(scope.corporationRows, associatedEntityColumns('corporation'))),
-    printSection('Event-Time Alliances', table(scope.allianceRows, associatedEntityColumns('alliance'))),
-    printSection('Observed Activity Cadence', table(scope.cadenceRows, [
+    ]),
+    observationSection('Event-Time Corporations', scope.corporationRows, associatedEntityColumns('corporation')),
+    observationSection('Event-Time Alliances', scope.allianceRows, associatedEntityColumns('alliance')),
+    observationSection('Observed Activity Cadence', scope.cadenceRows, [
       { label: 'UTC Bucket', value: formatUtcBucket },
       { label: 'Role Mix', value: roleMix },
       { label: 'Appearances', value: (row) => row.appearances },
       { label: 'Killmails', value: (row) => row.killmails }
-    ])),
-    printSection('Observed Final Blows', table(scope.finalBlowRows, [
+    ]),
+    observationSection('Observed Final Blows', scope.finalBlowRows, [
       { label: 'Actor', value: formatFinalBlowPilot },
       { label: 'Ship', value: formatShip },
       { label: 'Final Blows', value: (row) => row.final_blows },
@@ -92,8 +96,8 @@ function buildActorReport(db, input, options = {}) {
       { label: 'Systems', value: (row) => row.unique_systems },
       { label: 'First Observed', value: (row) => row.first_observed },
       { label: 'Last Observed', value: (row) => row.last_observed }
-    ])),
-    printSection('Recent Timeline', table(scope.timeline, [
+    ]),
+    observationSection('Recent Timeline', scope.timeline, [
       { label: 'Time', value: (row) => row.killmail_time },
       { label: 'Killmail', value: (row) => row.killmail_id },
       { label: 'Role', value: (row) => row.role },
@@ -103,9 +107,109 @@ function buildActorReport(db, input, options = {}) {
       { label: 'Corp', value: (row) => formatEntityLabel(row.corporation_name, 'corporation', row.corporation_id) },
       { label: 'Alliance', value: (row) => row.alliance_id ? formatEntityLabel(row.alliance_name, 'alliance', row.alliance_id) : 'none' },
       { label: 'Aggressor Detail', value: formatAggressorDetail }
-    ])),
-    printSection('Warnings', scope.warnings.length ? scope.warnings.map((warning) => `${warning.warning_type}: ${warning.message}`).join('\n') : '(none)')
+    ])
+  ];
+
+  return {
+    report_type: 'actor',
+    title: 'AURA Atlas Actor Evidence Report',
+    sample_status: status,
+    generated_at: new Date().toISOString(),
+    actor,
+    actor_label: formatEntityLabel(actor.entity_name, actor.entity_type, actor.entity_id),
+    evidence_window: {
+      ...evidenceWindow,
+      label: formatEvidenceWindow(evidenceWindow)
+    },
+    evidence_range: {
+      earliest: scope.killmailRange.earliest || null,
+      latest: scope.killmailRange.latest || null,
+      killmail_count: scope.killmailRange.count || 0,
+      activity_event_count: scope.activityEventCount || 0
+    },
+    discovery_windows: scope.pastSecondsValues.map((seconds) => ({
+      seconds,
+      label: formatWindow(seconds)
+    })),
+    collection: {
+      runs_count: scope.runs.length,
+      collected_start: scope.runs[0]?.started_at || null,
+      collected_end: scope.runs[scope.runs.length - 1]?.finished_at || null,
+      zkill_requests: scope.zkillLogs.length,
+      actor_route_zkill_requests: scope.actorZkillLogs.length,
+      totals: scope.totals,
+      api_calls: scope.apiCalls,
+      manual_discovery: scope.manualDiscovery
+    },
+    interpretation_warning: 'Actor appearances are stored killmail evidence within scope, not proof of current location, intent, staging, ownership, or affiliation.',
+    sections,
+    observations,
+    warnings: scope.warnings.map((warning) => ({
+      code: warning.warning_type,
+      message: warning.message
+    })),
+    raw_ids: actorRawIds(actor, scope)
+  };
+}
+
+function renderActorReport(model) {
+  return [
+    `${model.title} - ${model.sample_status}`,
+    `Actor: ${model.actor_label}`,
+    `Evidence window: ${model.evidence_window.label}`,
+    `Expanded evidence range: ${model.evidence_range.earliest || 'none'} -> ${model.evidence_range.latest || 'none'}`,
+    `Basis: ${model.evidence_range.killmail_count} expanded killmails / ${model.evidence_range.activity_event_count} actor activity events matching actor/time scope`,
+    `Actor discovery window(s): ${model.discovery_windows.length ? model.discovery_windows.map((window) => window.label).join(', ') : 'unknown'}`,
+    `Collection provenance runs: ${model.collection.runs_count}`,
+    `Collected at: ${model.collection.collected_start || 'none'} -> ${model.collection.collected_end || 'none'}`,
+    `Interpretation: ${model.interpretation_warning}`,
+    printSection(model.sections.evidenceBasis.title, model.sections.evidenceBasis.lines.join('\n')),
+    printSection(model.sections.collectionProvenance.title, model.sections.collectionProvenance.lines.join('\n')),
+    ...model.observations.map((section) => printSection(section.title, table(section.rows, section.columns))),
+    printSection('Warnings', model.warnings.length ? model.warnings.map((warning) => `${warning.code}: ${warning.message}`).join('\n') : '(none)')
   ].join('\n');
+}
+
+function observationSection(title, rows, columns) {
+  return {
+    title,
+    rows,
+    columns: columns.map((column) => ({
+      label: column.label,
+      value: column.value
+    }))
+  };
+}
+
+function actorRawIds(actor, scope) {
+  return {
+    character_ids: uniqueNumbers([
+      actor.entity_type === 'character' ? actor.entity_id : null,
+      ...scope.timeline.map((row) => row.character_id)
+    ]),
+    corporation_ids: uniqueNumbers([
+      actor.entity_type === 'corporation' ? actor.entity_id : null,
+      ...scope.corporationRows.map((row) => row.entity_id),
+      ...scope.timeline.map((row) => row.corporation_id)
+    ]),
+    alliance_ids: uniqueNumbers([
+      actor.entity_type === 'alliance' ? actor.entity_id : null,
+      ...scope.allianceRows.map((row) => row.entity_id),
+      ...scope.timeline.map((row) => row.alliance_id)
+    ]),
+    solar_system_ids: uniqueNumbers(scope.systemRows.map((row) => row.solar_system_id)),
+    type_ids: uniqueNumbers([
+      ...scope.shipRows.map((row) => row.ship_type_id),
+      ...scope.timeline.map((row) => row.ship_type_id),
+      ...scope.finalBlowRows.map((row) => row.ship_type_id)
+    ]),
+    killmail_ids: uniqueNumbers(scope.timeline.map((row) => row.killmail_id))
+  };
+}
+
+function uniqueNumbers(values) {
+  return [...new Set(values.map(Number).filter((value) => Number.isInteger(value) && value > 0))]
+    .sort((a, b) => a - b);
 }
 
 function actorScope(db, actor, evidenceWindow) {
@@ -387,6 +491,8 @@ function actorSampleStatus(scope) {
 
 module.exports = {
   buildActorReport,
+  buildActorReportModel,
+  renderActorReport,
   actorScope,
   resolveActor
 };

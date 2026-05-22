@@ -22,11 +22,15 @@ async function main() {
       }
     });
     assert(actor.report_type === 'actor', 'actor response should include report type');
+    assert(actor.response_mode === 'native-structured', 'actor response should use native structured mode');
     assert(actor.scope.report_type === 'actor', 'actor response should include scope');
     assert(actor.scope.evidence_window.label === 'all stored evidence', 'actor response should include evidence window label');
-    assert(actor.evidence_basis.text.includes('Stored evidence matching this scope'), 'actor response should include evidence basis text');
+    assert(actor.evidence_basis.lines.some((line) => line.includes('Stored evidence matching this scope')), 'actor response should include native evidence basis lines');
     assert(actor.collection_provenance.text.includes('Collection provenance'), 'actor response should include collection provenance text');
     assert(actor.observations.sections.some((section) => section.name === 'Actor Role Split'), 'actor response should include observation sections');
+    const timeline = actor.observations.sections.find((section) => section.name === 'Recent Timeline');
+    assert(timeline.rows.some((row) => row.raw.killmail_id === 7001), 'actor response should include native timeline rows');
+    assert(timeline.rows.some((row) => row.values.Killmail === 7001), 'actor response should include rendered timeline values');
     assert(actor.raw_ids.character_ids.includes(90000002), 'actor response should preserve character ID');
     assert(actor.raw_ids.solar_system_ids.includes(30000001), 'actor response should preserve system ID');
     assert(actor.raw_ids.type_ids.includes(603), 'actor response should preserve type ID');

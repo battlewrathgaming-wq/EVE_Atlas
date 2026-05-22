@@ -30,6 +30,7 @@ Current implemented shell:
 - scoped discovery queue transitions so manual, actor, and system/radius queue rows do not overwrite each other's status
 - UI language contract for evidence, observation, assessment, queue preview, scope, and warning wording
 - bounded HTTP request timeouts and task cancellation signals for live/API-backed work
+- native structured actor report response with text rendering retained for CLI/export
 
 ## Backend Actions Ready For IPC Wrapping
 
@@ -80,6 +81,7 @@ Offline verification now includes:
 - mutating service verification
 - background execution verification
 - HTTP timeout/cancellation verification
+- native actor report response verification
 - task runner verification
 
 Live smoke grouping exists separately:

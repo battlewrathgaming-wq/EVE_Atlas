@@ -153,4 +153,5 @@ Current verification:
 - `docs/gap/complete/ipc-mutating-action-services.md`
 - `docs/gap/complete/background-worker-execution.md`
 - `docs/gap/complete/http-timeouts-and-cancellation.md`
-- `docs/gap/to-do/structured-report-responses.md`
+- `docs/gap/complete/structured-report-responses.md`
+- `docs/gap/to-do/watch-scheduler-and-backoff.md`

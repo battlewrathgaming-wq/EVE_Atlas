@@ -1,4 +1,4 @@
-const { buildActorReport } = require('../reports/actorReport');
+const { buildActorReport, buildActorReportModel, renderActorReport } = require('../reports/actorReport');
 const { buildCorporationObservationReport } = require('../reports/corporationObservationReport');
 const { buildQueueReport } = require('../reports/queueReport');
 const { buildRadiusReport } = require('../reports/radiusReport');
@@ -10,6 +10,9 @@ function buildReportResponse(db, request = {}) {
   const reportType = normalizeReportType(request.reportType || request.type);
   const params = request.params || {};
   const options = request.options || {};
+  if (reportType === 'actor') {
+    return buildNativeActorReportResponse(db, params, options);
+  }
   const text = buildReportText(db, reportType, params, options);
   const parsed = parseReportText(text);
   const evidenceWindow = buildEvidenceWindow(options);
@@ -44,6 +47,41 @@ function buildReportResponse(db, request = {}) {
   };
 }
 
+function buildNativeActorReportResponse(db, params, options) {
+  const model = buildActorReportModel(db, params, options);
+  const text = renderActorReport(model);
+  return {
+    report_type: 'actor',
+    generated_at: model.generated_at,
+    response_mode: 'native-structured',
+    scope: {
+      report_type: 'actor',
+      parameters: params,
+      evidence_window: model.evidence_window,
+      actor: model.actor
+    },
+    evidence_basis: {
+      lines: model.sections.evidenceBasis.lines,
+      text: model.sections.evidenceBasis.lines.join('\n'),
+      sample_status: model.sample_status,
+      source: 'zKill discovery + ESI expanded killmails',
+      evidence_range: model.evidence_range
+    },
+    observations: {
+      sections: model.observations.map(serializeObservationSection)
+    },
+    collection_provenance: {
+      lines: model.sections.collectionProvenance.lines,
+      text: model.sections.collectionProvenance.lines.join('\n'),
+      collection: model.collection
+    },
+    warnings: model.warnings,
+    labels: labelsFromText(text),
+    raw_ids: model.raw_ids,
+    text
+  };
+}
+
 function buildReportText(db, reportType, params, options) {
   if (reportType === 'actor') {
     return buildActorReport(db, params, options);
@@ -69,6 +107,35 @@ function buildReportText(db, reportType, params, options) {
     return buildSystemReport(db, params.system || params.systemId || params.systemNameOrId, options);
   }
   throw new Error(`Unsupported report type: ${reportType}`);
+}
+
+function serializeObservationSection(section) {
+  return {
+    name: section.title,
+    title: section.title,
+    columns: section.columns.map((column) => column.label),
+    rows: section.rows.map((row) => {
+      const values = {};
+      for (const column of section.columns) {
+        values[column.label] = column.value(row);
+      }
+      return {
+        values,
+        raw: row
+      };
+    }),
+    text: tableText(section)
+  };
+}
+
+function tableText(section) {
+  if (!section.rows.length) {
+    return '(none)';
+  }
+  const lines = section.rows.map((row) => section.columns
+    .map((column) => `${column.label}: ${column.value(row)}`)
+    .join(' | '));
+  return lines.join('\n');
 }
 
 function parseReportText(text) {
