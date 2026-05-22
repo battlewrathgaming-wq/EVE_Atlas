@@ -40,7 +40,7 @@ function buildActorReport(db, input, options = {}) {
       `Collection provenance failed expansions: ${scope.totals.failed}`,
       `Collection provenance activity events written: ${scope.totals.events}`,
       `Collection provenance API calls: zkill ${scope.apiCalls.zkill || 0} / esi ${scope.apiCalls.esi || 0}`,
-      'Collection provenance may include multiple run types; intelligence sections are filtered by stored evidence scope.',
+      'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.',
       'Source: zKill discovery + ESI expanded killmails'
     ].join('\n')),
     printSection('Actor Role Split', table(scope.roleSplit, [
@@ -119,6 +119,18 @@ function actorScope(db, actor, evidenceWindow) {
     WHERE run_id IN (${actorRunPlaceholders})
     ORDER BY started_at
   `).all(...actorRunIds) : [];
+  const queueCounts = db.prepare(`
+    SELECT status, COUNT(*) AS count
+    FROM discovered_killmail_refs
+    WHERE discovered_by_type = 'actor'
+      AND source_actor_type = ?
+      AND source_actor_id = ?
+    GROUP BY status
+  `).all(actor.entity_type, actor.entity_id).reduce((acc, row) => {
+    acc[row.status] = row.count;
+    acc.total += row.count;
+    return acc;
+  }, { total: 0, pending: 0, expanded: 0, cached: 0, failed: 0, superseded: 0 });
   const killmailRange = db.prepare(`
     SELECT MIN(k.killmail_time) AS earliest, MAX(k.killmail_time) AS latest, COUNT(DISTINCT k.killmail_id) AS count
     FROM killmails k
@@ -219,6 +231,7 @@ function actorScope(db, actor, evidenceWindow) {
     warnings,
     apiCalls,
     totals,
+    queueCounts,
     latestDiscoveredRefs: actorRuns[actorRuns.length - 1]?.discovered_refs || 0
   };
 }
@@ -291,7 +304,10 @@ function actorSampleStatus(scope) {
   if (!scope.killmailRange.count && !scope.latestDiscoveredRefs) {
     return 'NO DISCOVERY SAMPLE';
   }
-  if (scope.totals.capSkipped || scope.totals.expanded + scope.totals.failed < scope.latestDiscoveredRefs) {
+  if (scope.queueCounts?.total && (scope.queueCounts.pending || scope.queueCounts.failed)) {
+    return 'PARTIAL SAMPLE';
+  }
+  if (!scope.queueCounts?.total && scope.totals.expanded + scope.totals.failed < scope.latestDiscoveredRefs) {
     return 'PARTIAL SAMPLE';
   }
   if (scope.killmailRange.count && !scope.latestDiscoveredRefs) {
@@ -306,5 +322,6 @@ function actorSampleStatus(scope) {
 
 module.exports = {
   buildActorReport,
-  actorScope
+  actorScope,
+  resolveActor
 };

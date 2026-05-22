@@ -81,7 +81,7 @@ async function main() {
   assertIncludes(systemReport, 'Discovery provenance window(s): 86400 seconds / 24 hours');
   assertIncludes(systemReport, 'Expanded sample: 1 stored killmails matching system/time scope');
   assertIncludes(systemReport, 'Stored evidence matching this scope: 1 killmails / 7 activity events');
-  assertIncludes(systemReport, 'Collection provenance may include multiple run types; intelligence sections are filtered by stored evidence scope.');
+  assertIncludes(systemReport, 'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.');
   assertIncludes(emptyWindowReport, 'Evidence window: 2026-05-02T00:00:00Z -> 2026-05-03T00:00:00Z');
   assertIncludes(emptyWindowReport, 'Stored evidence matching this scope: 0 killmails / 0 activity events');
 

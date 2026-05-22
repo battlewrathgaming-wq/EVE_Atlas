@@ -41,7 +41,7 @@ function buildObservedOperatorsReport(db, systemNameOrId, options = {}) {
       `Collection provenance already cached: ${scope.totals.cached}`,
       `Collection provenance expanded new: ${scope.totals.expanded}`,
       `Collection provenance failed expansions: ${scope.totals.failed}`,
-      'Collection provenance may include multiple run types; intelligence sections are filtered by stored evidence scope.',
+      'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.',
       'Source: zKill discovery + ESI expanded killmails'
     ].join('\n')),
     printSection('Observed Operators', table(repeatedRows, [

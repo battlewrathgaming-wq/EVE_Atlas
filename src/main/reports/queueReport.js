@@ -55,7 +55,7 @@ function buildQueueReport(db, options = {}) {
     ])),
     printSection('Evidence Boundary', [
       'Pending refs are not activity evidence.',
-      'Reports derive intelligence only from expanded ESI killmails and normalized activity_events.',
+      'Reports derive observations only from expanded ESI killmails and normalized activity_events.',
       'ESI expansion should drain pending refs under cap before repeating discovery for the same scope.'
     ].join('\n'))
   ].join('\n');

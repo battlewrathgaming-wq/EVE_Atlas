@@ -121,7 +121,7 @@ function buildSystemReport(db, systemNameOrId, options = {}) {
       `Collection provenance expanded new: ${totals.expanded}`,
       `Collection provenance failed expansions: ${totals.failed}`,
       `Collection provenance activity events written: ${totals.events}`,
-      'Collection provenance may include multiple run types; intelligence sections are filtered by stored evidence scope.',
+      'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.',
       'Source: zKill discovery + ESI expanded killmails'
     ].join('\n')),
     printSection('Recent Killmail Timeline', table(timeline, [

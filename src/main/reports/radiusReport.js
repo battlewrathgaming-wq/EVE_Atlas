@@ -56,7 +56,7 @@ function buildRadiusReport(db, centerNameOrId, options = {}) {
       `Collection provenance failed expansions: ${scope.totals.failed}`,
       `Collection provenance activity events written: ${scope.totals.events}`,
       `Collection provenance API calls: zkill ${scope.apiCalls.zkill || 0} / esi ${scope.apiCalls.esi || 0}`,
-      'Collection provenance may include multiple run types; intelligence sections are filtered by stored evidence scope.',
+      'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.',
       'Source: zKill discovery + ESI expanded killmails'
     ].join('\n')),
     printSection('Activity By System', table(scope.systemCounts, [

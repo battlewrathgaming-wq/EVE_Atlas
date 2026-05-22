@@ -78,7 +78,7 @@ async function main() {
   assertIncludes(report, 'Discovery provenance window(s): 86400 seconds / 24 hours');
   assertIncludes(report, 'Basis: 3 expanded killmails / 21 activity events matching system/time scope');
   assertIncludes(report, 'Stored evidence matching this scope: 3 killmails / 21 activity events');
-  assertIncludes(report, 'Collection provenance may include multiple run types; intelligence sections are filtered by stored evidence scope.');
+  assertIncludes(report, 'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.');
   assertIncludes(report, 'Signal Cartel Test [corporationID: 98000002]');
   assertIncludes(report, 'Watchlisted');
   assertIncludes(report, 'Atlas Scout [characterID: 90000002]');
