@@ -31,6 +31,7 @@ Recent backend/UI-readiness work completed:
 - controlled live operational smoke covered manual discovery and session-armed watch dispatch against a disposable DB
 - runtime process isolation has been reviewed and deliberately deferred; detached tasks remain acceptable for the next milestone
 - current recommended first future isolation target, if measured pressure appears, is SDE import / SDE sync-compare
+- standalone Aura core extraction has a completed brief: clone Atlas doctrine and selected utilities, not Atlas persistence/watch/report semantics
 - task wrapping, detached execution, cancellation, and HTTP timeout handling are verified
 - live API gates and user-defined scope validation are centralized
 - queue selection, queue status isolation, and retention preflight are implemented
@@ -233,5 +234,6 @@ Latest reviewed commits:
 - current assessment report workflow slice - actor report context can create/list/inspect assessment artifacts through the service bridge with explicit boundary confirmation and no evidence mutation
 - current report presentation polish slice - Reports view now has a clearer unloaded state, loaded actor status summary, and observation row counts while retaining backend report authority
 - current compaction preservation preflight slice - read-only typed-actor compaction preview shows what assessment memory would survive, with no evidence deletion or artifact insertion
+- current Aura core extraction brief - standalone Aura should begin as a pure parser/compute service shell with fixture tests, borrowing Atlas rigging without inheriting Atlas evidence-memory implementation
 
 These commits move the earlier rigging gaps into an initial presentation checkpoint. The main remaining risk is no longer missing service vocabulary; it is preserving the service/evidence boundary while adding further executable UI actions and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.

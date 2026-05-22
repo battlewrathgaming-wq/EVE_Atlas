@@ -89,7 +89,7 @@ This milestone should leave Atlas with:
 
 Recommended order:
 
-- `aura-core-extraction-brief.md`
+- No active operational workflow hardening gap remains in this folder.
 
 Supporting audit:
 
