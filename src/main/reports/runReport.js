@@ -28,7 +28,9 @@ function buildRunReport(db, runId) {
   `).all(runId);
   const pastSeconds = parsePastSeconds(zkillLogs[0]?.endpoint);
   const systemId = parseSystemId(zkillLogs[0]?.endpoint);
-  const actorTarget = parseActorTarget(zkillLogs[0]?.endpoint) || parseWatchActor(run);
+  const initialActorTarget = parseActorTarget(zkillLogs[0]?.endpoint) || parseWatchActor(run);
+  const inferredScope = inferDiscoveryScope(db, runId, systemId, initialActorTarget);
+  const actorTarget = initialActorTarget || actorTargetFromScope(inferredScope);
   const system = systemId ? db.prepare('SELECT * FROM solar_systems WHERE solar_system_id = ?').get(systemId) : null;
   const actor = actorTarget ? resolveActor(db, actorTarget) : null;
   const killmails = db.prepare(`
@@ -79,6 +81,7 @@ function buildRunReport(db, runId) {
   `).all(...zkillSystemIds) : [];
   const partialReasons = partialSampleReasons(run);
   const status = runSampleStatus(run);
+  const queue = discoveryQueueState(db, inferredScope);
 
   return [
     `AURA Atlas Run Report - ${status}`,
@@ -105,6 +108,15 @@ function buildRunReport(db, runId) {
       `Activity events written: ${run.activity_events_written}`,
       `API calls by provider: zkill ${zkillLogs.length} / esi ${esiLogs.length}`,
       `Error summary: ${run.error_summary || 'none'}`
+    ].join('\n')),
+    printSection('Discovery Queue State', [
+      `Scope: ${queue.scope_label}`,
+      `Queued refs for scope: ${queue.total}`,
+      `Pending refs after run: ${queue.pending}`,
+      `Failed refs after run: ${queue.failed}`,
+      `Expanded refs for scope: ${queue.expanded}`,
+      `Cached refs for scope: ${queue.cached}`,
+      `Next pending/failed refs: ${queue.next.length ? queue.next.map((row) => `${row.killmail_id} (${row.status})`).join(', ') : 'none'}`
     ].join('\n')),
     printSection('Evidence Footer', [
       `zKill requests: ${zkillLogs.length}`,
@@ -146,6 +158,93 @@ function buildRunReport(db, runId) {
     printSection('Warnings', warnings.length ? warnings.map((warning) => `${warning.warning_type}: ${warning.message}`).join('\n') : '(none)'),
     `\nStored events in this run's expanded sample: ${eventCount}`
   ].join('\n');
+}
+
+function discoveryQueueState(db, scope) {
+  if (!scope) {
+    return {
+      scope_label: 'unknown',
+      total: 0,
+      pending: 0,
+      failed: 0,
+      expanded: 0,
+      cached: 0,
+      next: []
+    };
+  }
+
+  const rows = db.prepare(`
+    SELECT status, COUNT(*) AS count
+    FROM discovered_killmail_refs
+    WHERE discovered_by_type = ?
+      AND discovered_by_id = ?
+    GROUP BY status
+  `).all(scope.discovered_by_type, String(scope.discovered_by_id));
+  const counts = rows.reduce((acc, row) => {
+    acc[row.status] = row.count;
+    acc.total += row.count;
+    return acc;
+  }, { total: 0, pending: 0, failed: 0, expanded: 0, cached: 0 });
+  const next = db.prepare(`
+    SELECT killmail_id, status
+    FROM discovered_killmail_refs
+    WHERE discovered_by_type = ?
+      AND discovered_by_id = ?
+      AND status IN ('pending', 'failed')
+    ORDER BY status = 'failed', priority ASC, discovered_at ASC, killmail_id ASC
+    LIMIT 5
+  `).all(scope.discovered_by_type, String(scope.discovered_by_id));
+
+  return {
+    scope_label: `${scope.discovered_by_type}:${scope.discovered_by_id}`,
+    total: counts.total,
+    pending: counts.pending || 0,
+    failed: counts.failed || 0,
+    expanded: counts.expanded || 0,
+    cached: counts.cached || 0,
+    next
+  };
+}
+
+function inferDiscoveryScope(db, runId, systemId, actorTarget) {
+  if (actorTarget) {
+    return {
+      discovered_by_type: 'actor',
+      discovered_by_id: actorTarget.entity_id
+    };
+  }
+  if (systemId) {
+    return {
+      discovered_by_type: 'system_radius',
+      discovered_by_id: systemId
+    };
+  }
+  return db.prepare(`
+    SELECT discovered_by_type, discovered_by_id,
+           MAX(source_actor_type) AS source_actor_type,
+           COUNT(*) AS count
+    FROM discovered_killmail_refs
+    WHERE first_seen_run_id = ?
+       OR last_seen_run_id = ?
+       OR killmail_id IN (
+         SELECT killmail_id
+         FROM ingestion_audits
+         WHERE run_id = ?
+       )
+    GROUP BY discovered_by_type, discovered_by_id
+    ORDER BY count DESC, discovered_by_type, discovered_by_id
+    LIMIT 1
+  `).get(runId, runId, runId) || null;
+}
+
+function actorTargetFromScope(scope) {
+  if (scope?.discovered_by_type !== 'actor' || !scope.source_actor_type) {
+    return null;
+  }
+  return {
+    entity_type: scope.source_actor_type,
+    entity_id: Number(scope.discovered_by_id)
+  };
 }
 
 function parseActorTarget(endpoint) {
