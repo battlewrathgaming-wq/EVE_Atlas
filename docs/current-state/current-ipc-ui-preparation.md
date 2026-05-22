@@ -11,6 +11,7 @@ Recent backend/UI-readiness work completed:
 - service registry and IPC command shell are in place
 - initial Electron renderer shell is in place and uses only the preload service bridge
 - frameless draggable shell with user-controlled persisted always-on-top state is in place
+- readiness/settings screen shows runtime paths, SDE topology, SDE inventory, live API state, User-Agent, backend messages, and next local action
 - task wrapping, detached execution, cancellation, and HTTP timeout handling are verified
 - live API gates and user-defined scope validation are centralized
 - queue selection, queue status isolation, and retention preflight are implemented
@@ -61,6 +62,7 @@ Current implemented shell:
 - compound report/query indexes for common evidence scopes and queue diagnostics
 - read-only readiness inspection separated from explicit runtime path preparation
 - initial renderer panes for readiness, task history, and queue report output
+- readiness pane exposes explicit `app.prepare` only when backend readiness reports missing runtime paths
 - frameless window controls for minimize, close, and always-on-top
 - native structured actor report response with text rendering retained for CLI/export
 
@@ -120,6 +122,7 @@ Offline verification now includes:
 - report index/query-plan verification
 - renderer shell service-boundary verification
 - frameless shell/window-control verification through `verify:renderer-shell`
+- readiness/settings screen verification through `verify:renderer-shell` and `verify:app-readiness`
 - native actor report response verification
 - task runner verification
 
@@ -148,5 +151,6 @@ Latest reviewed commits:
 - `eda3938` - readiness inspection/preparation separation
 - current renderer shell slice - preload service bridge and initial presentation shell
 - current frameless shell slice - draggable window chrome and persisted always-on-top state
+- current readiness screen slice - explicit readiness/settings presentation through service responses
 
 These commits move the earlier rigging gaps into a usable backend baseline for initial presentation work. The main remaining risk is not missing service vocabulary; it is wiring a renderer that uses these services without bypassing them, and deciding how session-armed watch execution should trigger due watches safely.

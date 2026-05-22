@@ -1,14 +1,15 @@
 ﻿# Gap To-Do: Readiness And Settings Screen
 
-Status: Open
+Status: Complete
 Priority: P1
 
-## Actionables
+## Completed
 
-- Build a renderer view for `app.readiness`.
-- Expose `app.prepare` as an explicit preparation action when runtime paths are valid but missing.
-- Show SDE topology/import state, inventory/type metadata state, runtime DB path, cache paths, live API state, and User-Agent state.
-- Use readiness blockers/warnings from the backend taxonomy rather than inventing UI-only status meanings.
+- Built a renderer view for `app.readiness`.
+- Exposed `app.prepare` as an explicit preparation action when runtime paths are valid but missing.
+- Shows SDE topology/import state, inventory/type metadata state, runtime DB path, cache paths, live API state, and User-Agent state.
+- Uses readiness blockers/warnings from the backend taxonomy rather than inventing UI-only status meanings.
+- Adds a next local action panel derived from backend readiness state.
 
 ## Task Requirements
 
@@ -34,6 +35,12 @@ The screen should show:
 ## Completion Signal
 
 A user can open the app, understand what is ready or missing, run `app.prepare` deliberately, and see the readiness state refresh without hidden filesystem writes.
+
+## Verification
+
+- `verify:renderer-shell`
+- `verify:app-readiness`
+- `verify:all`
 
 ## Related Documents
 

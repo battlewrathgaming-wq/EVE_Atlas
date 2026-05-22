@@ -16,7 +16,11 @@ const els = {
   navItems: [...document.querySelectorAll('.nav-item')],
   views: [...document.querySelectorAll('.view')],
   readinessSummary: document.querySelector('#readiness-summary'),
+  nextAction: document.querySelector('#next-action'),
+  apiState: document.querySelector('#api-state'),
   pathState: document.querySelector('#path-state'),
+  topologyState: document.querySelector('#topology-state'),
+  inventoryState: document.querySelector('#inventory-state'),
   readinessMessages: document.querySelector('#readiness-messages'),
   prepareApp: document.querySelector('#prepare-app'),
   refreshReadiness: document.querySelector('#refresh-readiness'),
@@ -152,8 +156,37 @@ function renderReadiness(readiness) {
 
   renderRows(els.pathState, (readiness.path_state || []).map((entry) => [
     entry.key,
-    `${entry.exists ? 'exists' : 'missing'}; ${entry.valid ? 'valid' : 'invalid'}; ${entry.path}`
+    `${pathStateLabel(entry)}; ${entry.path}`
   ]));
+
+  renderRows(els.apiState, [
+    ['Live API', `${readiness.live_api?.state || 'unknown'}; ${readiness.live_api?.rule || ''}`],
+    ['User-Agent', readiness.app?.user_agent || 'missing'],
+    ['Generated', readiness.generated_at || 'unknown'],
+    ['Mode', readiness.app?.mode || 'unknown']
+  ]);
+
+  renderRows(els.topologyState, [
+    ['Status', readiness.checks?.topology_lookup_ready ? 'ready' : 'missing'],
+    ['Imported', readiness.sde?.topology?.imported ? 'yes' : 'no'],
+    ['Build', readiness.sde?.topology?.build_number || 'unknown'],
+    ['Imported At', readiness.sde?.topology?.imported_at || 'unknown'],
+    ['Regions', readiness.lookup_counts?.regions ?? 0],
+    ['Constellations', readiness.lookup_counts?.constellations ?? 0],
+    ['Systems', readiness.lookup_counts?.solar_systems ?? 0],
+    ['Adjacency', readiness.lookup_counts?.system_adjacency ?? 0]
+  ]);
+
+  renderRows(els.inventoryState, [
+    ['Status', readiness.checks?.type_metadata_ready ? 'ready' : 'missing'],
+    ['Imported', readiness.sde?.inventory?.imported ? 'yes' : 'no'],
+    ['Build', readiness.sde?.inventory?.build_number || 'unknown'],
+    ['Imported At', readiness.sde?.inventory?.imported_at || 'unknown'],
+    ['Type Metadata', readiness.lookup_counts?.type_metadata ?? 0],
+    ['Entities', readiness.lookup_counts?.entities ?? 0],
+    ['Fetch Runs', readiness.lookup_counts?.fetch_runs ?? 0],
+    ['Metadata Runs', readiness.lookup_counts?.metadata_runs ?? 0]
+  ]);
 
   const messages = [
     ...(readiness.blockers || []).map((entry) => ({ ...entry, kind: 'blocker' })),
@@ -171,6 +204,7 @@ function renderReadiness(readiness) {
     });
   }
   els.prepareApp.hidden = !readiness.warnings?.some((entry) => entry.code === 'RUNTIME_PATHS_MISSING');
+  renderNextAction(readiness);
 }
 
 function renderTasks(tasks) {
@@ -189,6 +223,68 @@ function renderRows(target, rows) {
     row.innerHTML = `<span>${escapeHtml(label)}</span><span>${escapeHtml(value)}</span>`;
     target.appendChild(row);
   });
+}
+
+function renderNextAction(readiness) {
+  const action = nextActionFor(readiness);
+  els.nextAction.className = `callout ${action.kind}`;
+  els.nextAction.innerHTML = `<strong>${escapeHtml(action.title)}</strong><span>${escapeHtml(action.body)}</span>`;
+}
+
+function nextActionFor(readiness) {
+  if (readiness.blockers?.length) {
+    return {
+      kind: 'blocked',
+      title: 'Resolve readiness blockers',
+      body: readiness.blockers[0].message
+    };
+  }
+  if (readiness.warnings?.some((entry) => entry.code === 'RUNTIME_PATHS_MISSING')) {
+    return {
+      kind: 'warning',
+      title: 'Prepare runtime paths',
+      body: 'Create the approved local runtime, cache, and SDE folders.'
+    };
+  }
+  if (!readiness.checks?.topology_lookup_ready) {
+    return {
+      kind: 'warning',
+      title: 'Import SDE topology',
+      body: 'Topology-dependent system and radius actions need local SDE topology.'
+    };
+  }
+  if (!readiness.checks?.type_metadata_ready) {
+    return {
+      kind: 'warning',
+      title: 'Import SDE inventory',
+      body: 'Ship and type labels need local SDE inventory metadata.'
+    };
+  }
+  if (!readiness.live_api?.enabled) {
+    return {
+      kind: 'warning',
+      title: 'Live API disabled',
+      body: 'Local reports are available. Live zKill/ESI actions require explicit enablement.'
+    };
+  }
+  return {
+    kind: 'ready',
+    title: 'Atlas is ready',
+    body: 'Local readiness checks are clear for available actions.'
+  };
+}
+
+function pathStateLabel(entry) {
+  const parts = [];
+  parts.push(entry.exists ? 'exists' : 'missing');
+  parts.push(entry.valid ? 'valid' : 'invalid');
+  if (entry.is_directory) {
+    parts.push('directory');
+  }
+  if (entry.is_file) {
+    parts.push('file');
+  }
+  return parts.join('; ');
 }
 
 function renderWindowState() {

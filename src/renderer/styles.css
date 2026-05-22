@@ -231,6 +231,12 @@ h4 {
   gap: 12px;
 }
 
+.readiness-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+}
+
 .status-card,
 .panel {
   border: 1px solid var(--line);
@@ -291,6 +297,36 @@ h4 {
 .message span:last-child {
   color: var(--text);
   word-break: break-word;
+}
+
+.callout {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 12px;
+  border: 1px solid var(--line);
+  background: #11171b;
+  padding: 12px;
+}
+
+.callout strong {
+  color: var(--text);
+}
+
+.callout span {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.callout.ready {
+  border-color: #3f756d;
+}
+
+.callout.warning {
+  border-color: #7c6835;
+}
+
+.callout.blocked {
+  border-color: #7b3b3b;
 }
 
 .report-output {

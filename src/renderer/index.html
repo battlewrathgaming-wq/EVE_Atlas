@@ -51,15 +51,35 @@
             <button class="primary-action" type="button" id="refresh-readiness">Refresh</button>
           </div>
           <div class="status-grid" id="readiness-summary"></div>
+          <div class="readiness-layout">
+            <div class="panel">
+              <h4>Next Local Action</h4>
+              <div id="next-action" class="callout"></div>
+              <button class="secondary-action" type="button" id="prepare-app" hidden>Prepare Runtime Paths</button>
+            </div>
+            <div class="panel">
+              <h4>API And Identity</h4>
+              <div id="api-state" class="detail-list"></div>
+            </div>
+          </div>
           <div class="panel">
             <h4>Runtime Paths</h4>
             <div id="path-state" class="detail-list"></div>
+          </div>
+          <div class="readiness-layout">
+            <div class="panel">
+              <h4>SDE Topology</h4>
+              <div id="topology-state" class="detail-list"></div>
+            </div>
+            <div class="panel">
+              <h4>SDE Inventory</h4>
+              <div id="inventory-state" class="detail-list"></div>
+            </div>
           </div>
           <div class="panel">
             <h4>Backend Messages</h4>
             <div id="readiness-messages" class="message-list"></div>
           </div>
-          <button class="secondary-action" type="button" id="prepare-app" hidden>Prepare Runtime Paths</button>
         </section>
 
         <section class="view" id="view-tasks" aria-labelledby="tasks-title">

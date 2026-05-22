@@ -40,11 +40,20 @@ function main() {
   assert(htmlText.includes('window-chrome'), 'renderer should include frameless window chrome');
   assert(htmlText.includes('pin-window'), 'renderer should include always-on-top control');
   assert(htmlText.includes('view-readiness'), 'renderer should include readiness view');
+  assert(htmlText.includes('next-action'), 'readiness screen should include next local action');
+  assert(htmlText.includes('api-state'), 'readiness screen should include API and identity state');
+  assert(htmlText.includes('path-state'), 'readiness screen should include runtime path state');
+  assert(htmlText.includes('topology-state'), 'readiness screen should include SDE topology state');
+  assert(htmlText.includes('inventory-state'), 'readiness screen should include SDE inventory state');
   assert(htmlText.includes('view-tasks'), 'renderer should include tasks view');
   assert(htmlText.includes('view-reports'), 'renderer should include reports view');
 
   assert(rendererText.includes("service.invoke('app.readiness'"), 'renderer should call app.readiness through service bridge');
   assert(rendererText.includes("service.invoke('app.prepare'"), 'renderer should call app.prepare through service bridge');
+  assert(rendererText.includes('renderNextAction'), 'renderer should render readiness next action from backend state');
+  assert(rendererText.includes('RUNTIME_PATHS_MISSING'), 'renderer should expose app.prepare only for missing runtime paths');
+  assert(rendererText.includes('topology_lookup_ready'), 'renderer should show topology readiness');
+  assert(rendererText.includes('type_metadata_ready'), 'renderer should show inventory/type readiness');
   assert(rendererText.includes("service.invoke('task.list'"), 'renderer should call task.list through service bridge');
   assert(rendererText.includes("service.invoke('report.queue'"), 'renderer should call a report through service bridge');
   assert(rendererText.includes('service.list()'), 'renderer should read service command availability');
