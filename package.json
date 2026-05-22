@@ -92,6 +92,7 @@
     "report:corporation-metadata": "node scripts/report-corporation-metadata.js",
     "report:corpus-health": "node scripts/report-corpus-health.js",
     "report:debug-trace": "node scripts/operator-debug-trace-pack.js",
+    "seed:demo-db": "node scripts/seed-demo-db.js",
     "report:queue": "node scripts/report-queue.js",
     "manual:discover": "node scripts/manual-discover.js",
     "manual:expand": "node scripts/manual-expand.js",

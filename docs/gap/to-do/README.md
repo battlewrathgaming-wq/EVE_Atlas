@@ -268,7 +268,7 @@ Completed:
 - The accepted live scoped discovery smoke returned zero refs. A positive-ref discovery-only smoke is deferred until a known respectful target/window is available.
 - Evidence pruning remains blocked even though snapshot preflight now exists.
 
-## Current Milestone: Operator UI Workflow Polish
+## Completed Milestone: Operator UI Workflow Polish
 
 Mission statement:
 
@@ -284,10 +284,6 @@ This milestone should leave Atlas with:
 - no automatic queue expansion
 - no evidence pruning
 
-Recommended order:
-
-- No active Operator UI Workflow Polish gap remains in this folder.
-
 Roadmap:
 
 - `docs/roadmap/operator-ui-workflow-polish.md`
@@ -298,3 +294,47 @@ Completed:
 - `assessment-artifact-ergonomics-pass.md`
 - `live-target-discipline-checklist.md`
 - `positive-ref-live-smoke-candidate.md`
+
+## Current Milestone: Local Alpha Trial Readiness
+
+Mission statement:
+
+Prepare Atlas for a small local alpha trial: one operator, one machine, explicit actions, reviewable artifacts, no hidden live collection.
+
+This milestone should leave Atlas with:
+
+- a refreshed README and operator quickstart
+- an offline-first local alpha runbook
+- a demo/fixture DB seed decision or implementation
+- a release/tag checkpoint checklist
+- known alpha limits and feedback capture notes
+- no passive live collection
+- no automatic queue expansion
+- no evidence pruning
+
+Recommended order:
+
+- No active Local Alpha Trial Readiness gap remains in this folder.
+
+Roadmap:
+
+- `docs/roadmap/local-alpha-trial-readiness.md`
+
+Supporting audit:
+
+- `docs/audits/audit-2026-05-22-overseer-local-alpha-readiness-guidance.md`
+
+Completed:
+
+- `readme-and-operator-quickstart-refresh.md`
+- `local-alpha-runbook.md`
+- `demo-fixture-db-seed-decision.md`
+- `release-tag-checkpoint-checklist.md`
+- `alpha-known-limits-and-feedback.md`
+
+## Open Discussion For Next Handoff
+
+- The top-level README is stale compared with the current Electron/operator workflow.
+- Decide whether a reproducible demo DB is worth building now or whether fixture verification is enough.
+- Keep live trial instructions optional and gated.
+- Evidence pruning remains blocked.

@@ -57,6 +57,7 @@ Recent backend/UI-readiness work completed:
 - Assessment creation ergonomics now show loaded report context, cited killmail IDs, local citation-validation timing, and score/reason rules before save; saved status echoes citation status and cited IDs.
 - Live target discipline is documented in `docs/statements/live-target-discipline.md`: narrow targets, disposable `.tmp` DBs, explicit caps/lookbacks, discovery-only before expansion, global expansion caps, and preserved artifacts.
 - Positive-ref scoped discovery-only live smoke succeeded against ZTS-4D with one zKill call, one queued ref, zero ESI calls, zero killmails, and zero activity events.
+- Local alpha readiness docs now include refreshed README guidance, offline-first runbook, demo fixture DB seed, release tag checklist, known limits, and feedback template.
 - assessment compaction writes are intentionally deferred; compaction remains read-only preview and evidence deletion remains blocked
 - runtime process isolation has been reviewed and deliberately deferred; detached tasks remain acceptable for the next milestone
 - current recommended first future isolation target, if measured pressure appears, is SDE import / SDE sync-compare

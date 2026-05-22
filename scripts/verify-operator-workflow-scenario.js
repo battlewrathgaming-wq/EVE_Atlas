@@ -8,7 +8,8 @@ const { invokeServiceCommand } = require('../src/main/services/serviceRegistry')
 async function main() {
   const previousLive = process.env.AURA_ATLAS_LIVE_API;
   process.env.AURA_ATLAS_LIVE_API = '1';
-  const dbPath = path.join(auraTempRoot(), 'operator-workflow-scenario.sqlite');
+  const dbPath = process.env.AURA_ATLAS_OPERATOR_WORKFLOW_DB_PATH ||
+    path.join(auraTempRoot(), 'operator-workflow-scenario.sqlite');
   assertProjectLocalPath(dbPath, 'operator workflow scenario DB');
   fs.rmSync(dbPath, { force: true });
 
