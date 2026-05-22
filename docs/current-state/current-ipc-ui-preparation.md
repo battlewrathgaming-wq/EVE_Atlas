@@ -190,6 +190,7 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 - broader visual/product polish beyond the initial shell
 - additional renderer controls for metadata hydration, actor watch, and system/radius watch execution outside the session executor
 - broader controlled actor/area operation workflow from UI scope to evidence/observation/assessment review
+- controlled actor operation workflow is documented and verified offline with `Atlas Scout [characterID: 90000002]`, manual discovery, manual expansion, actor watch, reports, queue state, and renderer boundary checks
 - renderer modularization/component boundary review before `src/renderer/app.js` absorbs more workflow orchestration
 - renderer modularization review is complete: keep `app.js` whole for one narrow controlled actor/area proof, then split before adding another full structured report/workflow surface
 - executable retention/deprecation actions and actual assessment compaction writes
@@ -244,5 +245,6 @@ Latest reviewed commits:
 - `041a0f6` - backend UI boundary handoff audit
 - current backend/UI boundary handshake - service/preload boundary remains healthy; next milestone should prove a narrow controlled actor/area operation workflow rather than broad dashboard expansion
 - current renderer modularization review - defer file split for one narrow operator-proof slice, with explicit triggers for modularization before broader workflow expansion
+- current controlled actor workflow - fixture path proves actor scope to queued refs, ESI expansion, stored evidence, actor report, queue state, and optional assessment UI path without passive collection
 
 These commits move the earlier rigging gaps into an initial presentation checkpoint. The main remaining risk is no longer missing service vocabulary; it is preserving the service/evidence boundary while adding further executable UI actions and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.

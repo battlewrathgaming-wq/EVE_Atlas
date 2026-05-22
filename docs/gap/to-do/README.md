@@ -117,7 +117,6 @@ The milestone should leave Atlas with:
 
 Recommended order:
 
-- `controlled-actor-operation-workflow.md`
 - `controlled-area-operation-workflow.md`
 - `live-expansion-smoke.md`
 - `metadata-hydration-ui.md`
