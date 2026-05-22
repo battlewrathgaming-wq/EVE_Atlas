@@ -162,3 +162,38 @@ Completed:
 - `report-scoped-metadata-hydration-expansion.md`
 - `local-scale-and-stability-smoke.md`
 - `assessment-from-area-context-review.md`
+
+## Current Milestone: Evidence-Safe Assessment And Discovery UX
+
+Mission statement:
+
+Tighten the assessment layer now that Atlas can produce reports, queue refs, and deliberate assessment memory. Assessment artifacts should remain useful long-term memory, but their cited evidence basis must be validated or explicitly labelled.
+
+This milestone should leave Atlas with:
+
+- validated or explicitly labelled assessment artifact citations
+- a clear path from compaction preview to deliberate assessment memory
+- no evidence deletion
+- a decision or implementation for scoped discover-refs-only system/radius UI
+- improved live scoped zKill smoke artifacts
+- regression checks that protect the evidence rule
+
+Recommended order:
+
+1. `compaction-preview-to-assessment-interlock.md`
+2. `scoped-discovery-ui-path-decision.md`
+3. `live-scoped-zkill-smoke-artifacts.md`
+4. `evidence-rule-regression-checks.md`
+
+Supporting audit:
+
+- `docs/audits/audit-2026-05-22-scoped-zkill-discovery-handover.md`
+
+Roadmap:
+
+- `docs/roadmap/evidence-safe-assessment-and-discovery-ux.md`
+
+Completed:
+
+- `assessment-citation-validation.md`
+- `assessment-artifact-citation-status.md`

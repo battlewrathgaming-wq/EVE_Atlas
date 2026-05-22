@@ -42,6 +42,8 @@ function applyCompatibilityMigrations(db) {
   ensureColumn(db, 'solar_systems', 'security_status', 'REAL');
 
   ensureColumn(db, 'discovered_killmail_refs', 'preview_json', 'TEXT');
+  ensureColumn(db, 'assessment_artifacts', 'citation_status', "TEXT NOT NULL DEFAULT 'not_applicable'");
+  ensureColumn(db, 'assessment_artifacts', 'citation_details_json', 'TEXT');
 }
 
 function ensureColumn(db, tableName, columnName, definition) {

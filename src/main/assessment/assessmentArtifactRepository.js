@@ -6,7 +6,7 @@ const STATUSES = new Set(['active', 'cooling', 'archived', 'superseded']);
 const SCORE_FIELDS = ['interestScore', 'priorityScore', 'impactScore', 'confidence'];
 
 function createAssessmentArtifact(db, input = {}) {
-  const artifact = normalizeArtifactInput(input);
+  const artifact = normalizeArtifactInput(db, input);
   db.prepare(`
     INSERT INTO assessment_artifacts (
       artifact_id, artifact_type, entity_type, entity_id, entity_name, status,
@@ -14,10 +14,11 @@ function createAssessmentArtifact(db, input = {}) {
       assessment_reason, assessment_summary,
       evidence_window_start, evidence_window_end, evidence_scope_type, evidence_scope_json,
       source_report_type, source_report_parameters_json, source_run_ids_json,
-      sample_killmail_ids_json, appearance_count, attacker_appearance_count, victim_appearance_count,
+      sample_killmail_ids_json, citation_status, citation_details_json,
+      appearance_count, attacker_appearance_count, victim_appearance_count,
       systems_observed_json, regions_observed_json, ships_observed_json,
       created_at, updated_at, assessed_by, superseded_by_artifact_id, archived_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).run(
     artifact.artifact_id,
     artifact.artifact_type,
@@ -39,6 +40,8 @@ function createAssessmentArtifact(db, input = {}) {
     artifact.source_report_parameters_json,
     artifact.source_run_ids_json,
     artifact.sample_killmail_ids_json,
+    artifact.citation_status,
+    artifact.citation_details_json,
     artifact.appearance_count,
     artifact.attacker_appearance_count,
     artifact.victim_appearance_count,
@@ -93,7 +96,7 @@ function getAssessmentArtifact(db, artifactId) {
   return row ? deserializeArtifact(row) : null;
 }
 
-function normalizeArtifactInput(input) {
+function normalizeArtifactInput(db, input) {
   const artifactType = normalizeArtifactType(input.artifactType || input.artifact_type || 'entity_interest');
   const entityType = input.entityType || input.entity_type ? normalizeEntityType(input.entityType || input.entity_type) : null;
   const entityId = input.entityId || input.entity_id ? positiveInteger(input.entityId || input.entity_id, 'entityId') : null;
@@ -119,6 +122,16 @@ function normalizeArtifactInput(input) {
 
   const createdAt = input.createdAt || input.created_at || nowIso();
   const updatedAt = input.updatedAt || input.updated_at || createdAt;
+  const sampleKillmailIds = normalizeIdArray(input.sampleKillmailIds || input.sample_killmail_ids || input.sample_killmail_ids_json || []);
+  const citation = validateCitationBasis(db, {
+    artifactType,
+    entityType,
+    entityId,
+    sampleKillmailIds,
+    evidenceScopeType: input.evidenceScopeType || input.evidence_scope_type,
+    sourceReportType: input.sourceReportType || input.source_report_type
+  });
+
   return {
     artifact_id: input.artifactId || input.artifact_id || createArtifactId(),
     artifact_type: artifactType,
@@ -139,7 +152,9 @@ function normalizeArtifactInput(input) {
     source_report_type: textOrNull(input.sourceReportType || input.source_report_type),
     source_report_parameters_json: jsonText(input.sourceReportParameters || input.source_report_parameters || input.source_report_parameters_json),
     source_run_ids_json: jsonText(input.sourceRunIds || input.source_run_ids || input.source_run_ids_json || []),
-    sample_killmail_ids_json: jsonText(input.sampleKillmailIds || input.sample_killmail_ids || input.sample_killmail_ids_json || []),
+    sample_killmail_ids_json: jsonText(sampleKillmailIds),
+    citation_status: citation.status,
+    citation_details_json: jsonText(citation.details),
     appearance_count: nonNegativeInteger(input.appearanceCount ?? input.appearance_count ?? 0, 'appearanceCount'),
     attacker_appearance_count: nonNegativeInteger(input.attackerAppearanceCount ?? input.attacker_appearance_count ?? 0, 'attackerAppearanceCount'),
     victim_appearance_count: nonNegativeInteger(input.victimAppearanceCount ?? input.victim_appearance_count ?? 0, 'victimAppearanceCount'),
@@ -180,6 +195,10 @@ function deserializeArtifact(row) {
     source_report_parameters: parseJson(row.source_report_parameters_json, null),
     source_run_ids: parseJson(row.source_run_ids_json, []),
     sample_killmail_ids: parseJson(row.sample_killmail_ids_json, []),
+    citation: {
+      status: row.citation_status || 'not_applicable',
+      details: parseJson(row.citation_details_json, defaultCitationDetails(row.citation_status))
+    },
     counts: {
       appearances: row.appearance_count,
       attacker_appearances: row.attacker_appearance_count,
@@ -196,6 +215,129 @@ function deserializeArtifact(row) {
     superseded_by_artifact_id: row.superseded_by_artifact_id || null,
     archived_at: row.archived_at || null,
     boundary: 'assessment artifacts are assessment memory, not evidence'
+  };
+}
+
+function validateCitationBasis(db, citation) {
+  const sampleKillmailIds = citation.sampleKillmailIds || [];
+  if (!sampleKillmailIds.length) {
+    return {
+      status: 'not_applicable',
+      details: {
+        cited_killmail_ids: [],
+        verified_killmail_ids: [],
+        missing_killmail_ids: [],
+        actor_scope_verified: actorScopeStatus(db, citation),
+        note: 'No sample killmail IDs were cited.'
+      }
+    };
+  }
+
+  const verifiedKillmailIds = existingKillmailIds(db, sampleKillmailIds);
+  const verified = new Set(verifiedKillmailIds);
+  const missingKillmailIds = sampleKillmailIds.filter((id) => !verified.has(id));
+  if (missingKillmailIds.length) {
+    const error = new Error(`Assessment citation references missing local killmail IDs: ${missingKillmailIds.join(', ')}`);
+    error.code = 'ASSESSMENT_CITATION_MISSING_KILLMAILS';
+    error.citation = {
+      status: verifiedKillmailIds.length ? 'partial' : 'unverified',
+      cited_killmail_ids: sampleKillmailIds,
+      verified_killmail_ids: verifiedKillmailIds,
+      missing_killmail_ids: missingKillmailIds
+    };
+    throw error;
+  }
+
+  const actorStatus = actorScopeStatus(db, citation, sampleKillmailIds);
+  if (actorStatus.required && !actorStatus.verified) {
+    const error = new Error(`Assessment citation actor ${citation.entityType}:${citation.entityId} was not found in cited local killmail activity events`);
+    error.code = 'ASSESSMENT_CITATION_ACTOR_SCOPE_MISMATCH';
+    error.citation = {
+      status: 'unverified',
+      cited_killmail_ids: sampleKillmailIds,
+      verified_killmail_ids: verifiedKillmailIds,
+      missing_killmail_ids: [],
+      actor_scope: actorStatus
+    };
+    throw error;
+  }
+
+  return {
+    status: 'verified',
+    details: {
+      cited_killmail_ids: sampleKillmailIds,
+      verified_killmail_ids: verifiedKillmailIds,
+      missing_killmail_ids: [],
+      actor_scope_verified: actorStatus,
+      note: 'All cited sample killmail IDs existed locally when the assessment artifact was created.'
+    }
+  };
+}
+
+function existingKillmailIds(db, killmailIds) {
+  if (!killmailIds.length) {
+    return [];
+  }
+  const placeholders = killmailIds.map(() => '?').join(', ');
+  return db.prepare(`
+    SELECT killmail_id
+    FROM killmails
+    WHERE killmail_id IN (${placeholders})
+    ORDER BY killmail_id
+  `).all(...killmailIds).map((row) => row.killmail_id);
+}
+
+function actorScopeStatus(db, citation, sampleKillmailIds = []) {
+  if (!citation.entityType || !citation.entityId) {
+    return {
+      required: false,
+      verified: false,
+      reason: 'No typed entity scope supplied.'
+    };
+  }
+
+  const scopeType = String(citation.evidenceScopeType || citation.sourceReportType || '').toLowerCase();
+  const requiresActorScope = citation.artifactType === 'entity_interest' ||
+    citation.artifactType === 'evidence_compaction' ||
+    scopeType === 'actor';
+  if (!requiresActorScope) {
+    return {
+      required: false,
+      verified: false,
+      reason: 'Artifact type does not require actor scoped citation.'
+    };
+  }
+
+  const baseSql = `
+    SELECT COUNT(*) AS count
+    FROM activity_events
+    WHERE entity_type = ? AND entity_id = ?
+  `;
+  const row = sampleKillmailIds.length
+    ? db.prepare(`${baseSql} AND killmail_id IN (${sampleKillmailIds.map(() => '?').join(', ')})`).get(citation.entityType, citation.entityId, ...sampleKillmailIds)
+    : db.prepare(baseSql).get(citation.entityType, citation.entityId);
+
+  return {
+    required: true,
+    verified: row.count > 0,
+    event_count: row.count
+  };
+}
+
+function normalizeIdArray(value) {
+  const raw = typeof value === 'string' ? parseJson(value, []) : value;
+  if (!Array.isArray(raw)) {
+    throw new Error('sampleKillmailIds must be an array');
+  }
+  return [...new Set(raw.map((id) => positiveInteger(id, 'sampleKillmailIds')))].sort((a, b) => a - b);
+}
+
+function defaultCitationDetails(status) {
+  return {
+    cited_killmail_ids: [],
+    verified_killmail_ids: [],
+    missing_killmail_ids: [],
+    note: status ? 'Citation details were not stored for this artifact.' : 'Legacy artifact without citation status.'
   };
 }
 

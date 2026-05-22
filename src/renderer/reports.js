@@ -511,7 +511,9 @@ async function loadAssessmentArtifactDetail(artifactId) {
       ['Summary', artifact.assessment_summary || 'none'],
       ['Scores', scoreSummary(artifact.scores)],
       ['Evidence Window', `${artifact.evidence_window?.start || 'unknown'} -> ${artifact.evidence_window?.end || 'unknown'}`],
+      ['Citation Status', artifact.citation?.status || 'not_applicable'],
       ['Sample Killmails', artifact.sample_killmail_ids?.length ?? 0],
+      ['Citation Basis', citationBasisLabel(artifact)],
       ['Appearances', artifact.counts?.appearances ?? 0],
       ['Boundary', artifact.boundary || 'assessment artifacts are assessment memory, not evidence'],
       ['Updated', artifact.updated_at || 'unknown']
@@ -519,6 +521,17 @@ async function loadAssessmentArtifactDetail(artifactId) {
   } catch (error) {
     renderError(els.assessmentArtifactDetail, error);
   }
+}
+
+function citationBasisLabel(artifact) {
+  const details = artifact.citation?.details || {};
+  const cited = details.cited_killmail_ids?.length ?? artifact.sample_killmail_ids?.length ?? 0;
+  const verified = details.verified_killmail_ids?.length ?? 0;
+  const missing = details.missing_killmail_ids?.length ?? 0;
+  if (!cited) {
+    return 'No sample killmail IDs cited.';
+  }
+  return `${verified}/${cited} cited killmails verified locally; ${missing} missing.`;
 }
 
 function artifactLabel(artifact) {

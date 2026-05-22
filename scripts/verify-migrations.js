@@ -20,6 +20,8 @@ function main() {
   assertColumn(db, 'solar_systems', 'region_name');
   assertColumn(db, 'solar_systems', 'security_status');
   assertColumn(db, 'discovered_killmail_refs', 'preview_json');
+  assertColumn(db, 'assessment_artifacts', 'citation_status');
+  assertColumn(db, 'assessment_artifacts', 'citation_details_json');
   assertTable(db, 'metadata_runs');
   assertTable(db, 'regions');
   assertTable(db, 'constellations');

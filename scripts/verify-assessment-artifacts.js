@@ -49,6 +49,8 @@ async function main() {
     });
 
     assert(artifact.boundary.includes('not evidence'), 'artifact should declare assessment/evidence boundary');
+    assert(artifact.citation.status === 'verified', 'artifact with existing sample killmail should have verified citation status');
+    assert(artifact.citation.details.verified_killmail_ids.includes(seedResult.killmailId), 'citation details should include verified killmail ID');
     assert(artifact.scores.interest === 72, 'interest score should persist');
     assert(artifact.sample_killmail_ids.includes(seedResult.killmailId), 'sample killmail snapshot should persist');
 
@@ -83,6 +85,23 @@ async function main() {
       sourceReportParameters: { limit: 5 }
     }, { db });
     assert(serviceArtifact.artifact_type === 'analyst_note', 'service should create analyst note artifacts');
+    assert(serviceArtifact.citation.status === 'not_applicable', 'analyst notes without cited killmails should mark citation not applicable');
+
+    await assertRejects(() => createAssessmentArtifact(db, {
+      artifactType: 'entity_interest',
+      entityType: 'character',
+      entityId: 90000001,
+      assessmentReason: 'This cites a missing killmail and should fail.',
+      sampleKillmailIds: [seedResult.killmailId, 123456789]
+    }), 'assessment artifact with missing cited killmail should be rejected');
+
+    await assertRejects(() => createAssessmentArtifact(db, {
+      artifactType: 'entity_interest',
+      entityType: 'character',
+      entityId: 99999999,
+      assessmentReason: 'This actor is not in the cited killmail and should fail.',
+      sampleKillmailIds: [seedResult.killmailId]
+    }), 'assessment artifact with mismatched actor citation should be rejected');
 
     const serviceList = await invokeServiceCommand('assessment.list', {
       artifactType: 'analyst_note'
@@ -99,6 +118,7 @@ async function main() {
     const afterEvidenceRemoval = getAssessmentArtifact(db, artifact.artifact_id);
     assert(afterEvidenceRemoval.sample_killmail_ids.includes(seedResult.killmailId), 'artifact snapshot should survive evidence removal');
     assert(afterEvidenceRemoval.counts.appearances === 3, 'artifact appearance snapshot should survive evidence removal');
+    assert(afterEvidenceRemoval.citation.status === 'verified', 'artifact citation status should preserve creation-time validation after evidence removal');
   } finally {
     closeDatabase(db);
   }

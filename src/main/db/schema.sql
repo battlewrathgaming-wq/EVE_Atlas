@@ -207,6 +207,8 @@ CREATE TABLE IF NOT EXISTS assessment_artifacts (
   source_report_parameters_json TEXT,
   source_run_ids_json TEXT,
   sample_killmail_ids_json TEXT,
+  citation_status TEXT NOT NULL DEFAULT 'not_applicable' CHECK (citation_status IN ('verified', 'partial', 'unverified', 'not_applicable')),
+  citation_details_json TEXT,
   appearance_count INTEGER NOT NULL DEFAULT 0,
   attacker_appearance_count INTEGER NOT NULL DEFAULT 0,
   victim_appearance_count INTEGER NOT NULL DEFAULT 0,

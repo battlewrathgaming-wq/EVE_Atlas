@@ -42,6 +42,7 @@ Recent backend/UI-readiness work completed:
 - assessment from area context has a no-build decision for this milestone: radius reports remain observation surfaces, and future assessment must be deliberate through a selected entity or explicit analyst note
 - local system resolution is now a shared local-SDE resolver used by manual discovery and live system-watch runners; system names resolve to durable solar system IDs before scoped zKill routes are planned
 - scoped zKill discovery has a live-gated smoke harness that performs system-name resolution, plans the `/systemID/{id}/pastSeconds/{seconds}/` route, queues discovery refs only, reports trace/freshness context, and makes zero ESI expansion calls
+- assessment artifact citation validation is implemented: cited sample killmail IDs must exist locally, entity-focused citations must match cited activity events, and artifacts store creation-time citation status/details
 - assessment compaction writes are intentionally deferred; compaction remains read-only preview and evidence deletion remains blocked
 - runtime process isolation has been reviewed and deliberately deferred; detached tasks remain acceptable for the next milestone
 - current recommended first future isolation target, if measured pressure appears, is SDE import / SDE sync-compare
@@ -279,6 +280,7 @@ Latest reviewed commits:
 - current local scale/stability smoke - synthetic fixture corpus confirmed report paths remain fast and detached tasks remain acceptable; prepared-corpus Electron smoke is deferred because the current visual smoke contract intentionally asserts zero evidence at startup
 - current assessment from area context review - do not add broad radius assessment creation yet; future path should be selected-entity assessment or explicit area analyst note with source radius snapshot and boundary confirmation
 - current scoped zKill/live trace pass - local system resolver and scoped route builder verified offline; live smoke path now prints DB path, resolved system, route, live gate estimate, queued refs, API counts, preview time range, and the non-evidence freshness boundary
+- current assessment citation validation/status pass - assessment memory now records citation status/details and rejects missing cited killmail IDs or actor-scope citation mismatches without mutating evidence
 - current controlled actor workflow - fixture path proves actor scope to queued refs, ESI expansion, stored evidence, actor report, queue state, and optional assessment UI path without passive collection
 - current controlled area workflow - fixture path proves local topology radius scope to capped collection, stored evidence, radius report observations, and repeated/multi-system presence language without ownership/staging claims
 - current live expansion smoke - typed actor name resolved through ESI, zKill refs queued as possible evidence, one selected ref expanded through ESI, and reports confirmed partial sample boundaries
