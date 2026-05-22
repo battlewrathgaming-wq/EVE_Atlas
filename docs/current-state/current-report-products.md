@@ -20,14 +20,11 @@ AURA Atlas currently has CLI/text report products for:
 The renderer currently has native structured presentation for:
 
 - actor evidence reports
+- radius evidence reports
 - queue/watch preview state
 - task/readiness/service status surfaces
 
-The next selected structured report target is:
-
-- radius evidence report
-
-The backend now exposes a native structured radius report response. Radius report UI is intentionally deferred until the renderer consumes that response in the next presentation slice.
+The backend exposes native structured actor and radius report responses. The renderer consumes those responses without parsing CLI text or recomputing observations.
 
 ## Report Structure
 

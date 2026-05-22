@@ -101,6 +101,11 @@ const els = {
   actorReportId: document.querySelector('#actor-report-id'),
   actorReportName: document.querySelector('#actor-report-name'),
   actorReportLookback: document.querySelector('#actor-report-lookback'),
+  loadRadiusReport: document.querySelector('#load-radius-report'),
+  radiusReportCenter: document.querySelector('#radius-report-center'),
+  radiusReportJumps: document.querySelector('#radius-report-jumps'),
+  radiusReportLookback: document.querySelector('#radius-report-lookback'),
+  radiusReportMaxSystems: document.querySelector('#radius-report-max-systems'),
   reportStatus: document.querySelector('#report-status'),
   actorEvidence: document.querySelector('#actor-evidence'),
   actorProvenance: document.querySelector('#actor-provenance'),
@@ -189,6 +194,7 @@ function bindEvents() {
   els.preflightManualDiscovery.addEventListener('click', preflightManualDiscovery);
   els.runManualDiscovery.addEventListener('click', runManualDiscovery);
   els.loadActorReport.addEventListener('click', loadActorReport);
+  els.loadRadiusReport.addEventListener('click', loadRadiusReport);
   els.preflightMetadataHydration.addEventListener('click', preflightMetadataHydration);
   els.runMetadataHydration.addEventListener('click', runMetadataHydration);
   els.saveAssessmentArtifact.addEventListener('click', saveAssessmentArtifact);

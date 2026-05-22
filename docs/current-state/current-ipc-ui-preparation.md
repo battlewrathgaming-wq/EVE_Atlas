@@ -35,6 +35,7 @@ Recent backend/UI-readiness work completed:
 - actor report metadata hydration UI is implemented as readability-only metadata work
 - renderer modularization implementation is complete; `src/renderer/app.js` is now an orchestrator loaded after surface modules
 - native structured radius report response is implemented; radius report UI is the next presentation target
+- radius report presentation UI is implemented through structured `report.radius` responses without renderer-side report inference
 - assessment compaction writes are intentionally deferred; compaction remains read-only preview and evidence deletion remains blocked
 - runtime process isolation has been reviewed and deliberately deferred; detached tasks remain acceptable for the next milestone
 - current recommended first future isolation target, if measured pressure appears, is SDE import / SDE sync-compare
@@ -54,7 +55,6 @@ Recent backend/UI-readiness work completed:
 Current lane:
 
 - treat the initial presentation shell as a proven baseline, not the final UI structure
-- present the native structured radius report in the renderer next
 - keep watch authoring explicit and metadata-only; passive status views must not create or run watches
 - keep session-armed watch execution separate from passive page-load behavior
 - keep metadata hydration report-scoped and readability-only
@@ -197,7 +197,6 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 
 - broader visual/product polish beyond the initial shell
 - additional renderer controls for metadata hydration, actor watch, and system/radius watch execution outside the session executor
-- radius report UI
 - explicit watch authoring UI for actor and system/radius watches
 - report-scoped metadata hydration beyond actor report contexts
 - broader controlled actor/area operation workflow from UI scope to evidence/observation/assessment review
@@ -269,12 +268,13 @@ Latest reviewed commits:
 - current renderer modularization review - defer file split for one narrow operator-proof slice, with explicit triggers for modularization before broader workflow expansion
 - current renderer modularization implementation - split renderer surfaces into separate scripts and updated renderer-shell verification to scan all renderer modules
 - current native structured radius response - `report.radius` returns backend-owned structured scope, evidence basis, observations, provenance, warnings, raw IDs, and retained text output
+- current radius report presentation UI - Reports pane can load area/radius observations through `report.radius` without collection or text parsing
 - current controlled actor workflow - fixture path proves actor scope to queued refs, ESI expansion, stored evidence, actor report, queue state, and optional assessment UI path without passive collection
 - current controlled area workflow - fixture path proves local topology radius scope to capped collection, stored evidence, radius report observations, and repeated/multi-system presence language without ownership/staging claims
 - current live expansion smoke - typed actor name resolved through ESI, zKill refs queued as possible evidence, one selected ref expanded through ESI, and reports confirmed partial sample boundaries
 - current metadata hydration UI - actor report can preview candidate entity IDs, estimate ESI name calls, run metadata-only hydration, and refresh labels without evidence mutation
 - current structured report expansion decision - radius backend response is complete; implementation now waits for renderer presentation
 - current retention compaction write decision - no compaction artifact write this milestone; preview remains read-only and evidence deletion remains blocked
-- current controlled workflow checkpoint - no blocker; next milestone proceeds with radius report presentation after renderer modularization and native radius response
+- current controlled workflow checkpoint - no blocker; next milestone proceeds with watch authoring after renderer modularization and radius presentation
 
 These commits move the earlier rigging gaps into an initial presentation checkpoint. The main remaining risk is no longer missing service vocabulary; it is preserving the service/evidence boundary while adding further executable UI actions and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.

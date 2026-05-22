@@ -94,8 +94,13 @@ function main() {
   assert(htmlText.includes('view-reports'), 'renderer should include reports view');
   assert(htmlText.includes('report-status'), 'report view should include a report status/empty-state callout');
   assert(htmlText.includes('load-actor-report'), 'report view should include actor report action');
+  assert(htmlText.includes('load-radius-report'), 'report view should include radius report action');
   assert(htmlText.includes('actor-report-type'), 'report view should include actor type control');
   assert(htmlText.includes('actor-report-id'), 'report view should include actor ID control');
+  assert(htmlText.includes('radius-report-center'), 'report view should include radius center control');
+  assert(htmlText.includes('radius-report-jumps'), 'report view should include radius jump control');
+  assert(htmlText.includes('radius-report-lookback'), 'report view should include radius evidence window control');
+  assert(htmlText.includes('radius-report-max-systems'), 'report view should include radius max systems guard control');
   assert(htmlText.includes('actor-evidence'), 'report view should include actor evidence section');
   assert(htmlText.includes('actor-provenance'), 'report view should include actor provenance section');
   assert(htmlText.includes('actor-observations'), 'report view should include actor observations section');
@@ -146,6 +151,9 @@ function main() {
   assert(rendererText.includes('detachedTask: true'), 'manual discovery should run as a detached task');
   assert(rendererText.includes('actionConfirmLive.checked'), 'manual discovery should require visible confirmation');
   assert(rendererText.includes("service.invoke('report.actor'"), 'renderer should call report.actor through service bridge');
+  assert(rendererText.includes("service.invoke('report.radius'"), 'renderer should call report.radius through service bridge');
+  assert(rendererText.includes('radiusReportRequest'), 'renderer should build radius report payload explicitly');
+  assert(rendererText.includes('renderRadiusReport'), 'renderer should render native radius report response');
   assert(rendererText.includes('renderReportEmptyState'), 'renderer should initialize report empty states');
   assert(rendererText.includes('renderReportStatus'), 'renderer should render loaded report status');
   assert(rendererText.includes('renderActorReport'), 'renderer should render native actor report response');

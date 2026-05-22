@@ -144,7 +144,6 @@ This milestone should leave Atlas with:
 Recommended order:
 
 - `queue-report-text-export-fix.md`
-- `radius-report-presentation-ui.md`
 - `watch-authoring-ui.md`
 - `report-scoped-metadata-hydration-expansion.md`
 - `local-scale-and-stability-smoke.md`
@@ -162,3 +161,4 @@ Completed:
 - `renderer-modularization-implementation.md`
 - `native-structured-radius-report-response.md`
 - `queue-report-text-export-fix.md`
+- `radius-report-presentation-ui.md`

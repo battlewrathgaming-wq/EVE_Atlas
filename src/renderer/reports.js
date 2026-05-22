@@ -41,6 +41,22 @@ async function loadActorReport() {
   }
 }
 
+async function loadRadiusReport() {
+  setBusy(els.loadRadiusReport, true);
+  try {
+    const request = radiusReportRequest();
+    const report = await service.invoke('report.radius', request);
+    state.actorReport = null;
+    state.actorReportRequest = null;
+    renderRadiusReport(report);
+  } catch (error) {
+    renderError(els.actorEvidence, error);
+    els.reportOutput.textContent = `Radius report unavailable: ${error.message}`;
+  } finally {
+    setBusy(els.loadRadiusReport, false);
+  }
+}
+
 function actorReportRequest() {
   const entityType = els.actorReportType.value;
   const entityId = Number(els.actorReportId.value);
@@ -59,6 +75,29 @@ function actorReportRequest() {
       entityName: entityName || undefined
     },
     options
+  };
+}
+
+function radiusReportRequest() {
+  const center = els.radiusReportCenter.value.trim();
+  if (!center) {
+    throw new Error('Radius report requires a center system ID or name');
+  }
+  const radiusJumps = Number(els.radiusReportJumps.value);
+  if (!Number.isInteger(radiusJumps) || radiusJumps < 0) {
+    throw new Error('Radius report requires a non-negative radius');
+  }
+  const lookbackSeconds = Number(els.radiusReportLookback.value);
+  const maxSystems = Number(els.radiusReportMaxSystems.value);
+  return {
+    params: cleanObject({
+      center,
+      radiusJumps,
+      maxSystems: Number.isInteger(maxSystems) && maxSystems > 0 ? maxSystems : undefined
+    }),
+    options: cleanObject({
+      lookbackSeconds: Number.isInteger(lookbackSeconds) && lookbackSeconds > 0 ? lookbackSeconds : undefined
+    })
   };
 }
 
@@ -84,11 +123,40 @@ function renderActorReport(report) {
   renderAssessmentContext();
 }
 
+function renderRadiusReport(report) {
+  renderReportStatus(report);
+  els.reportOutput.textContent = report.text || 'No text export returned.';
+  renderRows(els.actorEvidence, [
+    ['Report Type', report.report_type || 'radius'],
+    ['Mode', report.response_mode || 'unknown'],
+    ['Sample Status', report.evidence_basis?.sample_status || 'unknown'],
+    ['Evidence Window', report.scope?.evidence_window?.label || 'unknown'],
+    ['Center', radiusLabel(report)],
+    ['Radius', `${report.scope?.radius_jumps ?? 0} jumps`],
+    ['Included Systems', report.scope?.included_systems?.length ?? 0],
+    ['Killmails', report.evidence_basis?.evidence_range?.killmail_count ?? 0],
+    ['Activity Events', report.evidence_basis?.evidence_range?.activity_event_count ?? 0],
+    ['Source', report.evidence_basis?.source || 'unknown']
+  ]);
+  renderRows(els.actorProvenance, linesAsRows(report.collection_provenance?.lines || []));
+  renderObservationSections([
+    ...(report.observations?.scope ? [report.observations.scope] : []),
+    ...(report.observations?.sections || [])
+  ]);
+  renderWarnings(report.warnings || []);
+  renderRawIds(report.raw_ids || {});
+  renderRows(els.assessmentContext, [
+    ['Context', 'Radius report loaded. Area-context assessment memory is still a later design task.'],
+    ['Boundary', report.interpretation_warning || 'Area observations are not proof of staging, ownership, affiliation, or intent.']
+  ]);
+  renderMetadataHydrationContext();
+}
+
 function renderReportEmptyState() {
   els.reportStatus.className = 'callout report-status warning';
   els.reportStatus.innerHTML = [
     '<strong>No report loaded</strong>',
-    '<span>Load an actor report to inspect stored evidence, observations, provenance, warnings, and raw IDs. Queue previews are not evidence.</span>'
+    '<span>Load an actor or radius report to inspect stored evidence, observations, provenance, warnings, and raw IDs. Queue previews are not evidence.</span>'
   ].join('');
   renderRows(els.actorEvidence, [
     ['Evidence Basis', 'No actor report loaded.'],
@@ -112,7 +180,7 @@ function renderReportStatus(report) {
   els.reportStatus.className = `callout report-status ${kind}`;
   els.reportStatus.innerHTML = [
     `<strong>${escapeHtml(status)}</strong>`,
-    `<span>${escapeHtml(actorLabel(report))} - ${escapeHtml(report.scope?.evidence_window?.label || 'unknown window')} - ${escapeHtml(counts.killmail_count ?? 0)} killmails / ${escapeHtml(counts.activity_event_count ?? 0)} activity events. Observations are scoped presentations of stored evidence, not assessment.</span>`
+    `<span>${escapeHtml(reportLabel(report))} - ${escapeHtml(report.scope?.evidence_window?.label || 'unknown window')} - ${escapeHtml(counts.killmail_count ?? 0)} killmails / ${escapeHtml(counts.activity_event_count ?? 0)} activity events. Observations are scoped presentations of stored evidence, not assessment.</span>`
   ].join('');
 }
 
@@ -453,6 +521,22 @@ function actorLabel(report) {
   }
   const label = actor.entity_name || '[Resolve with ESI]';
   return `${label} [${actor.entity_type}: ${actor.entity_id}]`;
+}
+
+function radiusLabel(report) {
+  const center = report.scope?.center;
+  if (!center) {
+    return 'unknown radius scope';
+  }
+  const label = center.solar_system_name || '[Resolve with ESI]';
+  return `${label} [solarSystemID: ${center.solar_system_id}]`;
+}
+
+function reportLabel(report) {
+  if (report.report_type === 'radius') {
+    return radiusLabel(report);
+  }
+  return actorLabel(report);
 }
 
 function linesAsRows(lines) {

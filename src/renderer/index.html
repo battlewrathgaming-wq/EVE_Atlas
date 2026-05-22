@@ -402,34 +402,61 @@
               <h3 id="reports-title">Report Surface</h3>
               <p>Structured report presentation from stored evidence services.</p>
             </div>
-            <button class="primary-action" type="button" id="load-actor-report">Load Actor Report</button>
+            <div class="action-row">
+              <button class="primary-action" type="button" id="load-actor-report">Load Actor Report</button>
+              <button class="secondary-action" type="button" id="load-radius-report">Load Radius Report</button>
+            </div>
           </div>
           <div id="report-status" class="callout report-status"></div>
-          <div class="panel">
-            <h4>Actor Scope</h4>
-            <div class="form-grid">
-              <label>
-                <span>Actor Type</span>
-                <select id="actor-report-type">
-                  <option value="character">Character</option>
-                  <option value="corporation">Corporation</option>
-                  <option value="alliance">Alliance</option>
-                </select>
-              </label>
-              <label>
-                <span>Actor ID</span>
-                <input id="actor-report-id" type="number" min="1" placeholder="90000002" />
-              </label>
-              <label>
-                <span>Display Label</span>
-                <input id="actor-report-name" type="text" placeholder="Optional cached label" />
-              </label>
-              <label>
-                <span>Lookback Seconds</span>
-                <input id="actor-report-lookback" type="number" min="1" placeholder="All stored evidence" />
-              </label>
+          <div class="report-grid">
+            <div class="panel">
+              <h4>Actor Scope</h4>
+              <div class="form-grid compact-form">
+                <label>
+                  <span>Actor Type</span>
+                  <select id="actor-report-type">
+                    <option value="character">Character</option>
+                    <option value="corporation">Corporation</option>
+                    <option value="alliance">Alliance</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Actor ID</span>
+                  <input id="actor-report-id" type="number" min="1" placeholder="90000002" />
+                </label>
+                <label>
+                  <span>Display Label</span>
+                  <input id="actor-report-name" type="text" placeholder="Optional cached label" />
+                </label>
+                <label>
+                  <span>Lookback Seconds</span>
+                  <input id="actor-report-lookback" type="number" min="1" placeholder="All stored evidence" />
+                </label>
+              </div>
+              <p class="form-note">Actor reports require a durable ID. Names are labels unless resolved by backend workflows.</p>
             </div>
-            <p class="form-note">Actor reports require a durable ID. Names are labels unless resolved by backend workflows.</p>
+            <div class="panel">
+              <h4>Radius Scope</h4>
+              <div class="form-grid compact-form">
+                <label>
+                  <span>Center System</span>
+                  <input id="radius-report-center" type="text" placeholder="30004660 or ZTS-4D" />
+                </label>
+                <label>
+                  <span>Radius Jumps</span>
+                  <input id="radius-report-jumps" type="number" min="0" max="5" value="0" />
+                </label>
+                <label>
+                  <span>Lookback Seconds</span>
+                  <input id="radius-report-lookback" type="number" min="1" placeholder="All stored evidence" />
+                </label>
+                <label>
+                  <span>Max Systems</span>
+                  <input id="radius-report-max-systems" type="number" min="1" placeholder="Backend guard" />
+                </label>
+              </div>
+              <p class="form-note">Radius reports read stored evidence for the scoped systems and time window. Loading this report does not run collection.</p>
+            </div>
           </div>
           <div class="report-grid">
             <div class="panel">
