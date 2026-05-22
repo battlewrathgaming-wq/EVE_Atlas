@@ -67,6 +67,10 @@ function main() {
   assert(htmlText.includes('path-state'), 'readiness screen should include runtime path state');
   assert(htmlText.includes('topology-state'), 'readiness screen should include SDE topology state');
   assert(htmlText.includes('inventory-state'), 'readiness screen should include SDE inventory state');
+  assert(htmlText.includes('preflight-runtime-snapshot'), 'readiness screen should include runtime snapshot preflight action');
+  assert(htmlText.includes('create-runtime-snapshot'), 'readiness screen should include explicit runtime snapshot create action');
+  assert(htmlText.includes('runtime-snapshot-confirm'), 'runtime snapshot creation should require visible confirmation');
+  assert(htmlText.includes('does not restore, prune, compact, delete evidence, or call live APIs'), 'runtime snapshot UI should state safety boundary');
   assert(htmlText.includes('load-corpus-health'), 'readiness screen should include corpus health action');
   assert(htmlText.includes('corpus-health-counts'), 'readiness screen should include corpus health counts');
   assert(htmlText.includes('corpus-health-integrity'), 'readiness screen should include corpus health integrity checks');
@@ -131,6 +135,11 @@ function main() {
   assert(htmlText.includes('assessment-artifact-detail'), 'assessment workflow should include saved artifact detail');
 
   assert(rendererText.includes("service.invoke('app.readiness'"), 'renderer should call app.readiness through service bridge');
+  assert(rendererText.includes("service.invoke('runtime.db_snapshot.preflight'"), 'renderer should call runtime snapshot preflight through service bridge');
+  assert(rendererText.includes("service.invoke('runtime.db_snapshot.create'"), 'renderer should call runtime snapshot create through service bridge');
+  assert(rendererText.includes('runtimeSnapshotConfirm.checked'), 'runtime snapshot creation should require visible confirmation');
+  assert(rendererText.includes('renderRuntimeSnapshotPreflight'), 'renderer should render structured runtime snapshot preflight');
+  assert(rendererText.includes('Snapshot creation does not prune, compact, or delete evidence.'), 'runtime snapshot rendering should state no pruning/deletion boundary');
   assert(rendererText.includes("service.invoke('report.corpus_health'"), 'renderer should call corpus health through service bridge');
   assert(rendererText.includes('renderCorpusHealth'), 'renderer should render structured corpus health response');
   assert(rendererText.includes('Local SQLite only; no zKill, ESI, SDE zip parsing, observation, or assessment.'), 'corpus health rendering should state local/no-live/no-assessment boundary');

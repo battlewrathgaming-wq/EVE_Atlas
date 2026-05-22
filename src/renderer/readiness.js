@@ -37,6 +37,36 @@ async function loadCorpusHealth() {
   }
 }
 
+async function preflightRuntimeSnapshot() {
+  setBusy(els.preflightRuntimeSnapshot, true);
+  try {
+    const preflight = await service.invoke('runtime.db_snapshot.preflight');
+    state.runtimeSnapshotPreflight = preflight;
+    renderRuntimeSnapshotPreflight(preflight);
+  } catch (error) {
+    renderError(els.runtimeSnapshotPreflight, error);
+  } finally {
+    setBusy(els.preflightRuntimeSnapshot, false);
+  }
+}
+
+async function createRuntimeSnapshot() {
+  setBusy(els.createRuntimeSnapshot, true);
+  try {
+    if (!els.runtimeSnapshotConfirm.checked) {
+      throw new Error('Runtime snapshot creation requires visible confirmation');
+    }
+    const result = await service.invoke('runtime.db_snapshot.create', {});
+    renderRuntimeSnapshotResult(result);
+    els.runtimeSnapshotConfirm.checked = false;
+    await preflightRuntimeSnapshot();
+  } catch (error) {
+    renderError(els.runtimeSnapshotResult, error);
+  } finally {
+    setBusy(els.createRuntimeSnapshot, false);
+  }
+}
+
 function renderReadiness(readiness) {
   els.readinessSummary.innerHTML = '';
   const cards = [
@@ -128,6 +158,40 @@ function renderCorpusHealth(report) {
   ]);
   renderCorpusIntegrity(health.integrity || []);
   renderCorpusWarnings(health.warnings_by_type || []);
+}
+
+function renderRuntimeSnapshotPreflight(preflight) {
+  renderRows(els.runtimeSnapshotPreflight, [
+    ['Source DB', preflight.database_path || 'unknown'],
+    ['Destination', preflight.destination_path || 'unknown'],
+    ['DB Size', `${preflight.database?.size_bytes ?? 0} bytes`],
+    ['WAL', preflight.journal_files?.wal?.exists ? `${preflight.journal_files.wal.size_bytes} bytes` : 'none'],
+    ['SHM', preflight.journal_files?.shm?.exists ? `${preflight.journal_files.shm.size_bytes} bytes` : 'none'],
+    ['Killmails', preflight.table_counts?.killmails ?? 0],
+    ['Activity Events', preflight.table_counts?.activity_events ?? 0],
+    ['Latest Fetch Run', preflight.latest_fetch_run?.run_id || 'none'],
+    ['Latest Evidence', preflight.latest_evidence_timestamp || 'none'],
+    ['Assessment Artifacts', assessmentCountSummary(preflight.assessment_artifacts || [])],
+    ['Boundary', preflight.boundary || 'Preflight is read-only and does not write files.']
+  ]);
+}
+
+function renderRuntimeSnapshotResult(result) {
+  renderRows(els.runtimeSnapshotResult, [
+    ['Status', result.status || 'unknown'],
+    ['Snapshot Path', result.snapshot_path || 'unknown'],
+    ['Snapshot Size', `${result.snapshot?.size_bytes ?? 0} bytes`],
+    ['Created At', result.created_at || 'unknown'],
+    ['Killmails', result.table_counts?.killmails ?? 0],
+    ['Activity Events', result.table_counts?.activity_events ?? 0],
+    ['Boundary', result.boundary || 'Snapshot creation does not prune, compact, or delete evidence.']
+  ]);
+}
+
+function assessmentCountSummary(rows) {
+  return rows.length
+    ? rows.map((row) => `${row.status}: ${row.count}`).join('; ')
+    : 'none';
 }
 
 function renderCorpusIntegrity(rows) {

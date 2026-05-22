@@ -85,6 +85,30 @@
           </div>
           <div class="panel">
             <div class="task-detail-heading">
+              <h4>Runtime DB Snapshot</h4>
+              <div class="action-row">
+                <button class="secondary-action" type="button" id="preflight-runtime-snapshot">Preflight Snapshot</button>
+                <button class="primary-action" type="button" id="create-runtime-snapshot">Create Snapshot</button>
+              </div>
+            </div>
+            <p class="form-note">Snapshot safety is explicit local file work. It does not restore, prune, compact, delete evidence, or call live APIs.</p>
+            <label class="checkbox-row">
+              <input id="runtime-snapshot-confirm" type="checkbox" />
+              <span>I understand snapshot creation writes a local SQLite copy and does not change stored evidence.</span>
+            </label>
+            <div class="report-grid">
+              <div>
+                <h4>Preflight</h4>
+                <div id="runtime-snapshot-preflight" class="detail-list"></div>
+              </div>
+              <div>
+                <h4>Created Snapshot</h4>
+                <div id="runtime-snapshot-result" class="detail-list"></div>
+              </div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="task-detail-heading">
               <h4>Evidence Corpus Health</h4>
               <button class="secondary-action" type="button" id="load-corpus-health">Load Corpus Health</button>
             </div>

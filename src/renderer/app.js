@@ -34,6 +34,11 @@ const els = {
   topologyState: document.querySelector('#topology-state'),
   inventoryState: document.querySelector('#inventory-state'),
   readinessMessages: document.querySelector('#readiness-messages'),
+  preflightRuntimeSnapshot: document.querySelector('#preflight-runtime-snapshot'),
+  createRuntimeSnapshot: document.querySelector('#create-runtime-snapshot'),
+  runtimeSnapshotConfirm: document.querySelector('#runtime-snapshot-confirm'),
+  runtimeSnapshotPreflight: document.querySelector('#runtime-snapshot-preflight'),
+  runtimeSnapshotResult: document.querySelector('#runtime-snapshot-result'),
   loadCorpusHealth: document.querySelector('#load-corpus-health'),
   corpusHealthCounts: document.querySelector('#corpus-health-counts'),
   corpusHealthFreshness: document.querySelector('#corpus-health-freshness'),
@@ -207,6 +212,8 @@ function bindEvents() {
     item.addEventListener('click', () => selectView(item.dataset.view));
   });
   els.refreshReadiness.addEventListener('click', loadReadiness);
+  els.preflightRuntimeSnapshot.addEventListener('click', preflightRuntimeSnapshot);
+  els.createRuntimeSnapshot.addEventListener('click', createRuntimeSnapshot);
   els.loadCorpusHealth.addEventListener('click', loadCorpusHealth);
   els.prepareApp.addEventListener('click', prepareApp);
   els.validateScope.addEventListener('click', validateScopeInput);
