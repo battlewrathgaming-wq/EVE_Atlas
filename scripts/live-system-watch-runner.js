@@ -7,6 +7,7 @@ const { collectSystemRadiusWatch } = require('../src/main/workers/systemRadiusCo
 const { auraTempRoot, projectRoot } = require('../src/main/util/tempPaths');
 const { buildSystemRadiusQueuePreflight } = require('../src/main/queue/queuePreflight');
 const { normalizeSystemRadiusWatchScope } = require('../src/main/scopes/scopeControls');
+const { resolveSystemIdentity } = require('../src/main/resolution/systemResolver');
 
 async function runLiveSystemWatch({ twice = false } = {}) {
   assertLiveEnabled();
@@ -91,31 +92,13 @@ function liveInput(db) {
 }
 
 function resolveCenterSystemId(db) {
-  if (process.env.AURA_ATLAS_LIVE_CENTER_SYSTEM_ID) {
-    const centerSystemId = integerEnv('AURA_ATLAS_LIVE_CENTER_SYSTEM_ID', null);
-    const row = db.prepare('SELECT solar_system_id FROM solar_systems WHERE solar_system_id = ?').get(centerSystemId);
-    if (!row) {
-      throw new Error(`Center system ID ${centerSystemId} was not found in local SDE topology`);
-    }
-    return centerSystemId;
-  }
-
-  const systemName = process.env.AURA_ATLAS_LIVE_CENTER_SYSTEM_NAME;
-  if (!systemName) {
+  if (!process.env.AURA_ATLAS_LIVE_CENTER_SYSTEM_ID && !process.env.AURA_ATLAS_LIVE_CENTER_SYSTEM_NAME) {
     throw new Error('AURA_ATLAS_LIVE_CENTER_SYSTEM_ID or AURA_ATLAS_LIVE_CENTER_SYSTEM_NAME is required');
   }
-
-  const row = db.prepare(`
-    SELECT solar_system_id
-    FROM solar_systems
-    WHERE lower(solar_system_name) = lower(?)
-  `).get(systemName.trim());
-
-  if (!row) {
-    throw new Error(`Center system "${systemName}" was not found in local SDE topology`);
-  }
-
-  return row.solar_system_id;
+  return resolveSystemIdentity(db, {
+    systemId: process.env.AURA_ATLAS_LIVE_CENTER_SYSTEM_ID,
+    systemName: process.env.AURA_ATLAS_LIVE_CENTER_SYSTEM_NAME
+  }).solar_system_id;
 }
 
 function preflightLiveLookup(db) {

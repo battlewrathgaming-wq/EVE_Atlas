@@ -6,8 +6,7 @@ class ZKillDiscoveryClient {
   }
 
   async discoverRefs({ targetType, targetId, pastSeconds, maxRefs = 100, includePreview = false }) {
-    const modifier = modifierForTarget(targetType);
-    const endpoint = `${ZKILL_BASE_URL}/${modifier}/${targetId}/pastSeconds/${pastSeconds}/`;
+    const endpoint = buildZkillDiscoveryEndpoint({ targetType, targetId, pastSeconds });
     const data = await this.httpClient.json('zkill', endpoint);
     const refs = [];
     const seen = new Set();
@@ -38,6 +37,19 @@ class ZKillDiscoveryClient {
 
     return refs;
   }
+}
+
+function buildZkillDiscoveryEndpoint({ targetType, targetId, pastSeconds }) {
+  const modifier = modifierForTarget(targetType);
+  const id = Number(targetId);
+  const seconds = Number(pastSeconds);
+  if (!Number.isInteger(id) || id <= 0) {
+    throw new Error('zKill discovery targetId must be a positive integer');
+  }
+  if (!Number.isInteger(seconds) || seconds <= 0) {
+    throw new Error('zKill discovery pastSeconds must be a positive integer');
+  }
+  return `${ZKILL_BASE_URL}/${modifier}/${id}/pastSeconds/${seconds}/`;
 }
 
 function discoveryPreview(row) {
@@ -79,5 +91,6 @@ function modifierForTarget(targetType) {
 module.exports = {
   ZKillDiscoveryClient,
   modifierForTarget,
+  buildZkillDiscoveryEndpoint,
   discoveryPreview
 };

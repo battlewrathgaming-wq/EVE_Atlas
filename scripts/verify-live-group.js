@@ -1,9 +1,10 @@
 const { spawnSync } = require('node:child_process');
 
 const GROUPS = {
+  'scoped-zkill': ['verify:live-scoped-zkill'],
   'actor-smoke': ['verify:actor-watch-live'],
   'radius-smoke': ['verify:system-watch-live'],
-  smoke: ['verify:actor-watch-live', 'verify:system-watch-live']
+  smoke: ['verify:live-scoped-zkill', 'verify:actor-watch-live', 'verify:system-watch-live']
 };
 
 function main() {

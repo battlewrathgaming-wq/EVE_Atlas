@@ -30,6 +30,7 @@ const GROUPS = {
     'verify:sde-fixture',
     'verify:radius',
     'verify:planner',
+    'verify:system-resolution',
     'verify:metadata-lookup'
   ],
   'sde-heavy': [
