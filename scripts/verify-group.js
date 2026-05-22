@@ -9,6 +9,7 @@ const GROUPS = {
     'verify:task-runner',
     'verify:live-api-gate',
     'verify:report-response',
+    'verify:queue-selection',
     'verify:fixture',
     'verify:idempotent',
     'verify:db-integrity'

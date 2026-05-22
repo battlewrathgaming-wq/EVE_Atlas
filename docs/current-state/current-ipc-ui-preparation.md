@@ -18,6 +18,7 @@ Current implemented shell:
 - `live.gate` service command
 - `report.build` service command
 - report-specific service commands for actor, corporation, queue, radius, run, and system reports
+- `queue.selection` service command
 - `task.list` service command
 - `task.get` service command
 - task-wrapped service invocation with `asTask: true`
@@ -63,6 +64,7 @@ Offline verification now includes:
 - scope defaults/validation verification
 - live API gate verification
 - report response verification
+- queue expansion selection verification
 - task runner verification
 
 Live smoke grouping exists separately:

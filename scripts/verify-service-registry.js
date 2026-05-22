@@ -15,6 +15,7 @@ async function main() {
     const readinessCommand = commands.find((entry) => entry.command === 'app.readiness');
     const liveGateCommand = commands.find((entry) => entry.command === 'live.gate');
     const reportActorCommand = commands.find((entry) => entry.command === 'report.actor');
+    const queueSelectionCommand = commands.find((entry) => entry.command === 'queue.selection');
     const scopeDefaultsCommand = commands.find((entry) => entry.command === 'scope.defaults');
     const scopeValidateCommand = commands.find((entry) => entry.command === 'scope.validate');
     const taskListCommand = commands.find((entry) => entry.command === 'task.list');
@@ -24,6 +25,8 @@ async function main() {
     assert(liveGateCommand.classification === 'read-only', 'live.gate should be read-only');
     assert(reportActorCommand, 'report.actor should be listed');
     assert(reportActorCommand.classification === 'read-only', 'report.actor should be read-only');
+    assert(queueSelectionCommand, 'queue.selection should be listed');
+    assert(queueSelectionCommand.classification === 'read-only', 'queue.selection should be read-only');
     assert(scopeDefaultsCommand, 'scope.defaults should be listed');
     assert(scopeDefaultsCommand.classification === 'read-only', 'scope.defaults should be read-only');
     assert(scopeValidateCommand, 'scope.validate should be listed');

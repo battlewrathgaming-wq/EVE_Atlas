@@ -25,6 +25,7 @@
     "verify:task-runner": "node scripts/verify-task-runner.js",
     "verify:live-api-gate": "node scripts/verify-live-api-gate.js",
     "verify:report-response": "node scripts/verify-report-response.js",
+    "verify:queue-selection": "node scripts/verify-queue-selection.js",
     "verify:idempotent": "node scripts/verify-idempotent-ingestion.js",
     "verify:sde-fixture": "node scripts/verify-sde-fixture.js",
     "verify:sde-real-local": "node scripts/verify-sde-real-local.js",

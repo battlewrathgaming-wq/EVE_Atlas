@@ -1,5 +1,6 @@
 const { buildAppReadiness } = require('./appReadinessService');
 const { getLiveApiGateState } = require('./liveApiGateService');
+const { buildQueueExpansionSelection } = require('./queueSelectionService');
 const { buildReportResponse } = require('./reportResponseService');
 const { getScopeDefaults, validateScope } = require('./scopeService');
 const { defaultTaskRunner } = require('./taskRunner');
@@ -49,6 +50,11 @@ const COMMANDS = {
     classification: 'read-only',
     description: 'Build a structured system evidence report response',
     handler: ({ db, payload }) => buildReportResponse(db, { ...payload, reportType: 'system' })
+  },
+  'queue.selection': {
+    classification: 'read-only',
+    description: 'Preview queued discovery refs selected for explicit ESI expansion',
+    handler: ({ db, payload }) => buildQueueExpansionSelection(db, payload)
   },
   'scope.defaults': {
     classification: 'read-only',
