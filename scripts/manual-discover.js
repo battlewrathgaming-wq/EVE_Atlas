@@ -3,6 +3,7 @@ const { openDatabase, migrate, closeDatabase } = require('../src/main/db/databas
 const { auraTempRoot } = require('../src/main/util/tempPaths');
 const { discoverManualRefs } = require('../src/main/workers/manualDiscoveryWorker');
 const { resolveActorIdentity } = require('../src/main/resolution/actorResolver');
+const { normalizeManualDiscoveryScope } = require('../src/main/scopes/scopeControls');
 
 const args = process.argv.slice(2);
 
@@ -39,18 +40,18 @@ async function inputFromArgs(db) {
       entityId,
       entityName
     });
-    return {
+    return normalizeManualDiscoveryScope({
       ...base,
       entityType: actor.entity_type,
       entityId: actor.entity_id,
       entityName: actor.entity_name,
       maxRefs: integerArg('--max-refs', 20)
-    };
+    });
   }
 
   if (scope === 'system' || scope === 'radius') {
     const centerSystemId = resolveSystemId(db, valueFor('--system-id'), valueFor('--system'));
-    return {
+    return normalizeManualDiscoveryScope({
       ...base,
       centerSystemId,
       radiusJumps: scope === 'system' ? 0 : integerArg('--radius', 1),
@@ -58,7 +59,7 @@ async function inputFromArgs(db) {
       maxRefsPerSystem: integerArg('--max-refs-per-system', 10),
       maxRadius: integerArg('--max-radius', 5),
       maxTopologySystems: integerArg('--max-topology-systems', 100)
-    };
+    });
   }
 
   throw new Error('--scope must be actor, system, or radius');

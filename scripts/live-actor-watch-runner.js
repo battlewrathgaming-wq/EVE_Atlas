@@ -4,6 +4,7 @@ const { collectActorWatch } = require('../src/main/workers/actorWatchCollector')
 const { auraTempRoot } = require('../src/main/util/tempPaths');
 const { buildActorQueuePreflight } = require('../src/main/queue/queuePreflight');
 const { resolveActorIdentity } = require('../src/main/resolution/actorResolver');
+const { normalizeActorWatchScope } = require('../src/main/scopes/scopeControls');
 const {
   assertProjectLocalPath,
   assertNoRuntimeSdeZipImport
@@ -46,13 +47,16 @@ function assertLiveEnabled() {
 
 async function liveActorInput(db) {
   const actor = await resolveActorInput(db);
-  return {
+  const scope = normalizeActorWatchScope({
     entityType: actor.entity_type,
     entityId: actor.entity_id,
     entityName: actor.entity_name,
     lookbackSeconds: integerEnv('AURA_ATLAS_LIVE_ACTOR_LOOKBACK_SECONDS', 86400),
     maxRefs: integerEnv('AURA_ATLAS_LIVE_ACTOR_MAX_REFS', 10),
-    maxExpansions: integerEnv('AURA_ATLAS_LIVE_ACTOR_MAX_EXPANSIONS', 2),
+    maxExpansions: integerEnv('AURA_ATLAS_LIVE_ACTOR_MAX_EXPANSIONS', 2)
+  });
+  return {
+    ...scope,
     trigger: 'manual',
     watchId: process.env.AURA_ATLAS_LIVE_ACTOR_WATCH_ID || `actor:${actor.entity_type}:${actor.entity_id}`
   };

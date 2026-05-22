@@ -2,6 +2,7 @@ const path = require('node:path');
 const { openDatabase, migrate, closeDatabase } = require('../src/main/db/database');
 const { auraTempRoot } = require('../src/main/util/tempPaths');
 const { expandManualRefs } = require('../src/main/workers/manualExpansionWorker');
+const { normalizeManualExpansionScope } = require('../src/main/scopes/scopeControls');
 
 const args = process.argv.slice(2);
 
@@ -30,13 +31,13 @@ function inputFromArgs() {
   if ((!discoveredByType || !discoveredById) && !killmailIds.length) {
     throw new Error('Manual expansion requires --type/--id or --killmail-ids');
   }
-  return {
+  return normalizeManualExpansionScope({
     discoveredByType,
     discoveredById,
     killmailIds,
     maxExpansions: integerArg('--max-expansions', 2),
     trigger: 'manual'
-  };
+  });
 }
 
 function assertLiveEnabled() {

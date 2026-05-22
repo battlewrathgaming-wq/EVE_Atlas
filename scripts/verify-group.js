@@ -3,6 +3,7 @@ const { spawnSync } = require('node:child_process');
 const GROUPS = {
   core: [
     'verify:migrations',
+    'verify:scope-controls',
     'verify:fixture',
     'verify:idempotent',
     'verify:db-integrity'
@@ -42,7 +43,8 @@ const GROUPS = {
   ],
   bulk: [
     'verify:bulk-synthetic',
-    'verify:actor-bulk'
+    'verify:actor-bulk',
+    'verify:controlled-workflow'
   ]
 };
 

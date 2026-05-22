@@ -6,6 +6,7 @@ const { planSystemRadiusWatch } = require('../src/main/workers/systemRadiusPlann
 const { collectSystemRadiusWatch } = require('../src/main/workers/systemRadiusCollector');
 const { auraTempRoot, projectRoot } = require('../src/main/util/tempPaths');
 const { buildSystemRadiusQueuePreflight } = require('../src/main/queue/queuePreflight');
+const { normalizeSystemRadiusWatchScope } = require('../src/main/scopes/scopeControls');
 
 async function runLiveSystemWatch({ twice = false } = {}) {
   assertLiveEnabled();
@@ -72,7 +73,7 @@ function assertNoRuntimeSdeZipImport() {
 
 function liveInput(db) {
   const centerSystemId = resolveCenterSystemId(db);
-  return {
+  const scope = normalizeSystemRadiusWatchScope({
     centerSystemId,
     radiusJumps: integerEnv('AURA_ATLAS_LIVE_RADIUS_JUMPS', 0),
     lookbackSeconds: integerEnv('AURA_ATLAS_LIVE_LOOKBACK_SECONDS', 3600),
@@ -80,7 +81,10 @@ function liveInput(db) {
     maxRefsPerSystem: integerEnv('AURA_ATLAS_LIVE_MAX_REFS_PER_SYSTEM', 2),
     maxExpansions: integerEnv('AURA_ATLAS_LIVE_MAX_EXPANSIONS', 2),
     maxRadius: integerEnv('AURA_ATLAS_LIVE_MAX_RADIUS', 2),
-    maxTopologySystems: integerEnv('AURA_ATLAS_LIVE_MAX_TOPOLOGY_SYSTEMS', 10),
+    maxTopologySystems: integerEnv('AURA_ATLAS_LIVE_MAX_TOPOLOGY_SYSTEMS', 10)
+  });
+  return {
+    ...scope,
     trigger: 'manual',
     watchId: process.env.AURA_ATLAS_LIVE_WATCH_ID || 'live-system-watch'
   };
