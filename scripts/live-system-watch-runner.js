@@ -1,11 +1,11 @@
 const path = require('node:path');
 const { openDatabase, migrate, closeDatabase } = require('../src/main/db/database');
-const { SdeTopologyImporter } = require('../src/main/sde/sdeImporter');
 const { collectSystemRadiusWatch } = require('../src/main/workers/systemRadiusCollector');
 const { auraTempRoot, projectRoot } = require('../src/main/util/tempPaths');
 
 async function runLiveSystemWatch({ twice = false } = {}) {
   assertLiveEnabled();
+  assertNoRuntimeSdeZipImport();
   const tempRoot = auraTempRoot();
   process.env.AURA_ATLAS_TEST_TMP = process.env.AURA_ATLAS_TEST_TMP || tempRoot;
   process.env.AURA_ATLAS_CACHE_DIR = process.env.AURA_ATLAS_CACHE_DIR || path.join(tempRoot, 'cache');
@@ -23,17 +23,6 @@ async function runLiveSystemWatch({ twice = false } = {}) {
   migrate(db);
 
   try {
-    if (process.env.AURA_ATLAS_LIVE_SDE_JSONL_PATH) {
-      const importer = new SdeTopologyImporter(db);
-      await importer.importFromPath(process.env.AURA_ATLAS_LIVE_SDE_JSONL_PATH, {
-        buildNumber: process.env.AURA_ATLAS_LIVE_SDE_BUILD_NUMBER || null,
-        sourceUrl: process.env.AURA_ATLAS_LIVE_SDE_JSONL_PATH,
-        etag: process.env.AURA_ATLAS_LIVE_SDE_ETAG || null,
-        lastModified: process.env.AURA_ATLAS_LIVE_SDE_LAST_MODIFIED || null,
-        tempRoot: process.env.AURA_ATLAS_SDE_CACHE_DIR
-      });
-    }
-
     const input = liveInput(db);
     const first = await collectSystemRadiusWatch(input, { db });
     if (!twice) {
@@ -60,6 +49,12 @@ async function runLiveSystemWatch({ twice = false } = {}) {
 function assertLiveEnabled() {
   if (process.env.AURA_ATLAS_LIVE_API !== '1') {
     throw new Error('Refusing live system watch: set AURA_ATLAS_LIVE_API=1 to allow zKill/ESI calls');
+  }
+}
+
+function assertNoRuntimeSdeZipImport() {
+  if (process.env.AURA_ATLAS_LIVE_SDE_JSONL_PATH) {
+    throw new Error('Refusing live system watch: AURA_ATLAS_LIVE_SDE_JSONL_PATH is import material only. Import SDE into SQLite first, then run live collection from lookup tables.');
   }
 }
 
@@ -135,5 +130,6 @@ function assertProjectLocalPath(targetPath, label) {
 
 module.exports = {
   runLiveSystemWatch,
-  assertProjectLocalPath
+  assertProjectLocalPath,
+  assertNoRuntimeSdeZipImport
 };

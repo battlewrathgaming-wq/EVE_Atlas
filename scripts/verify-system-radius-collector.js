@@ -3,11 +3,33 @@ const fixtureKillmail = require('../fixtures/killmail-1001.json');
 const { openDatabase, migrate, closeDatabase } = require('../src/main/db/database');
 const { SdeTopologyImporter } = require('../src/main/sde/sdeImporter');
 const { collectSystemRadiusWatch } = require('../src/main/workers/systemRadiusCollector');
+const { assertNoRuntimeSdeZipImport } = require('./live-system-watch-runner');
 
 async function main() {
+  verifyRuntimeSdeZipGuard();
   await verifyIdempotentCachedSkip();
   await verifyGradualIngestAfterCacheSkip();
   console.log('system radius collector verified');
+}
+
+function verifyRuntimeSdeZipGuard() {
+  const previous = process.env.AURA_ATLAS_LIVE_SDE_JSONL_PATH;
+  process.env.AURA_ATLAS_LIVE_SDE_JSONL_PATH = 'F:\\Projects\\AURA-Atlas\\.tmp\\sde\\eve-online-static-data-3351823-jsonl.zip';
+  try {
+    let blocked = false;
+    try {
+      assertNoRuntimeSdeZipImport();
+    } catch (error) {
+      blocked = error.message.includes('import material only');
+    }
+    assert(blocked, 'live runner should reject runtime SDE zip import configuration');
+  } finally {
+    if (previous === undefined) {
+      delete process.env.AURA_ATLAS_LIVE_SDE_JSONL_PATH;
+    } else {
+      process.env.AURA_ATLAS_LIVE_SDE_JSONL_PATH = previous;
+    }
+  }
 }
 
 async function verifyIdempotentCachedSkip() {
