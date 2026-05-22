@@ -229,6 +229,29 @@ CREATE TABLE IF NOT EXISTS metadata_runs (
   error_summary TEXT
 );
 
+CREATE TABLE IF NOT EXISTS discovered_killmail_refs (
+  killmail_id INTEGER NOT NULL,
+  killmail_hash TEXT NOT NULL,
+  discovered_by_type TEXT NOT NULL,
+  discovered_by_id TEXT NOT NULL,
+  source_scope TEXT,
+  source_system_id INTEGER,
+  source_actor_type TEXT,
+  source_actor_id INTEGER,
+  discovered_at TEXT NOT NULL,
+  first_seen_run_id TEXT,
+  last_seen_run_id TEXT,
+  last_seen_at TEXT NOT NULL,
+  status TEXT NOT NULL CHECK (status IN ('pending', 'expanded', 'cached', 'failed', 'superseded')),
+  selected_for_expansion_at TEXT,
+  expanded_at TEXT,
+  failed_at TEXT,
+  failure_count INTEGER NOT NULL DEFAULT 0,
+  last_error TEXT,
+  priority INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (killmail_id, killmail_hash, discovered_by_type, discovered_by_id)
+);
+
 CREATE TABLE IF NOT EXISTS api_request_logs (
   request_id TEXT PRIMARY KEY,
   run_id TEXT,
@@ -280,6 +303,9 @@ CREATE INDEX IF NOT EXISTS idx_constellations_region ON constellations(region_id
 CREATE INDEX IF NOT EXISTS idx_type_metadata_category ON type_metadata(category_name);
 CREATE INDEX IF NOT EXISTS idx_type_metadata_group ON type_metadata(group_id);
 CREATE INDEX IF NOT EXISTS idx_type_metadata_type_name ON type_metadata(type_name);
+CREATE INDEX IF NOT EXISTS idx_discovered_refs_status_scope ON discovered_killmail_refs(status, discovered_by_type, discovered_by_id);
+CREATE INDEX IF NOT EXISTS idx_discovered_refs_actor ON discovered_killmail_refs(source_actor_type, source_actor_id);
+CREATE INDEX IF NOT EXISTS idx_discovered_refs_system ON discovered_killmail_refs(source_system_id);
 
 CREATE VIEW IF NOT EXISTS ship_types AS
 SELECT *

@@ -28,8 +28,26 @@ async function collectActorWatch(input, dependencies = {}) {
   const esiClient = dependencies.esiClient || new EsiClient(httpClient);
 
   try {
-    const discovery = await discoverActorRefs(plannerOutput, zkillClient);
+    const pendingRefs = repository.pendingDiscoveryRefs({
+      discoveredByType: 'actor',
+      discoveredById: plannerOutput.actor.entity_id,
+      limit: plannerOutput.caps.maxExpansions
+    });
+    const discovery = pendingRefs.length
+      ? pendingActorDiscovery(pendingRefs, plannerOutput)
+      : await discoverActorRefs(plannerOutput, zkillClient);
+    if (!pendingRefs.length) {
+      repository.upsertDiscoveredKillmailRefs(discovery.expansionQueue, {
+        runId: fetchRun.run_id,
+        discoveredByType: 'actor',
+        discoveredById: plannerOutput.actor.entity_id,
+        sourceScope: `${plannerOutput.actor.entity_type}:${plannerOutput.actor.entity_id}`,
+        sourceActorType: plannerOutput.actor.entity_type,
+        sourceActorId: plannerOutput.actor.entity_id
+      });
+    }
     const selection = selectExpansionCandidates(discovery.expansionQueue, repository, plannerOutput.caps.maxExpansions);
+    repository.markDiscoveryRefsSelected(selection.selectedRefs);
     const evidencePackage = await buildEvidencePackageFromRefs({
       refs: selection.selectedRefs,
       repository,
@@ -47,8 +65,16 @@ async function collectActorWatch(input, dependencies = {}) {
     });
     markFailedExpansionCandidates(selection.expansionQueue, evidencePackage.warnings);
     selection.skipCounts = summarizeExpansionQueue(selection.expansionQueue);
+    repository.markDiscoveryRefsFailed(evidencePackage.warnings);
 
     const persistResult = repository.persistEvidencePackage(evidencePackage);
+    repository.markDiscoveryRefsExpanded(evidencePackage.killmails.map((killmail) => ({
+      killmail_id: killmail.killmail_id,
+      hash: killmail.killmail_hash
+    })));
+    repository.markDiscoveryRefsCached(selection.expansionQueue
+      .filter((candidate) => candidate.skip_reason === 'cached')
+      .map((candidate) => ({ killmail_id: candidate.killmail_id, hash: candidate.hash })));
     const apiCounts = apiCountsForRun(db, fetchRun.run_id);
     const collectionWarnings = [
       ...plannerOutput.guardrailWarnings,
@@ -74,6 +100,7 @@ async function collectActorWatch(input, dependencies = {}) {
       duplicate_refs_removed: discovery.duplicateRefsRemoved,
       malformed_refs_removed: discovery.malformedRefsRemoved,
       unique_refs_after_dedupe: discovery.uniqueRefs.length,
+      pending_refs_considered: discovery.pendingRefsConsidered || 0,
       already_cached_killmails: selection.skipCounts.cached + evidencePackage.run.already_cached,
       expansion_attempted: selection.selectedRefs.length,
       expansion_cap_skipped: selection.skipCounts.cap_skipped,
@@ -88,6 +115,7 @@ async function collectActorWatch(input, dependencies = {}) {
         ...evidencePackage.warnings.map((entry) => entry.message)
       ],
       planned_zkill_requests: plannerOutput.plannedZkillRequests.length,
+      zkill_discovery_skipped: Boolean(pendingRefs.length),
       collection_plan: buildActorCollectionPlanSummary(plannerOutput, selection),
       expansion_queue: selection.expansionQueue,
       expansion_queue_summary: selection.skipCounts
@@ -112,6 +140,29 @@ async function collectActorWatch(input, dependencies = {}) {
     }, 'failed', error.message);
     throw error;
   }
+}
+
+function pendingActorDiscovery(pendingRefs, plannerOutput) {
+  const expansionQueue = pendingRefs.map((ref, index) => ({
+    killmail_id: ref.killmail_id,
+    hash: ref.hash,
+    source_actor_type: plannerOutput.actor.entity_type,
+    source_actor_id: plannerOutput.actor.entity_id,
+    discovered_at: new Date().toISOString(),
+    priority: ref.priority || index + 1,
+    already_cached: false,
+    selected_for_expansion: false,
+    skip_reason: null
+  }));
+  return {
+    discoveredRefs: 0,
+    duplicateRefsRemoved: 0,
+    malformedRefsRemoved: 0,
+    uniqueRefs: pendingRefs.map((ref) => ({ killmail_id: ref.killmail_id, hash: ref.hash })),
+    pendingRefsConsidered: pendingRefs.length,
+    expansionQueue,
+    warnings: ['zKill discovery skipped; draining pending actor discovery refs from local queue']
+  };
 }
 
 async function discoverActorRefs(plannerOutput, zkillClient) {

@@ -28,7 +28,7 @@ function buildRunReport(db, runId) {
   `).all(runId);
   const pastSeconds = parsePastSeconds(zkillLogs[0]?.endpoint);
   const systemId = parseSystemId(zkillLogs[0]?.endpoint);
-  const actorTarget = parseActorTarget(zkillLogs[0]?.endpoint);
+  const actorTarget = parseActorTarget(zkillLogs[0]?.endpoint) || parseWatchActor(run);
   const system = systemId ? db.prepare('SELECT * FROM solar_systems WHERE solar_system_id = ?').get(systemId) : null;
   const actor = actorTarget ? resolveActor(db, actorTarget) : null;
   const killmails = db.prepare(`
@@ -165,6 +165,20 @@ function parseActorTarget(endpoint) {
   };
 }
 
+function parseWatchActor(run) {
+  if (run.watch_type !== 'actor') {
+    return null;
+  }
+  const match = String(run.watch_id || '').match(/^actor:(character|corporation|alliance):(\d+)$/);
+  if (!match) {
+    return null;
+  }
+  return {
+    entity_type: match[1],
+    entity_id: Number(match[2])
+  };
+}
+
 function resolveActor(db, actorTarget) {
   const known = db.prepare(`
     SELECT entity_name
@@ -242,6 +256,9 @@ function coverageNote(run, partialReasons) {
   if (partialReasons.length) {
     return partialReasons.join('; ');
   }
+  if (!run.discovered_refs && run.expanded_new > 0) {
+    return 'expanded refs from local pending discovery queue; no live zKill discovery was needed for this run';
+  }
   if (run.already_cached > 0) {
     return 'all discovered refs are represented by cached or newly expanded evidence for this run';
   }
@@ -250,6 +267,9 @@ function coverageNote(run, partialReasons) {
 
 function runSampleStatus(run) {
   if (!run.discovered_refs) {
+    if (run.expanded_new > 0 || run.already_cached > 0) {
+      return 'PENDING REF EXPANSION';
+    }
     return 'NO DISCOVERY SAMPLE';
   }
   if (run.failed_expansions > 0) {

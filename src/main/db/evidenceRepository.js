@@ -102,6 +102,23 @@ class EvidenceRepository {
           duration_ms, cache_status, retry_count, rate_limited,
           error_message, requested_at
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `),
+      upsertDiscoveredKillmailRef: this.db.prepare(`
+        INSERT INTO discovered_killmail_refs (
+          killmail_id, killmail_hash, discovered_by_type, discovered_by_id,
+          source_scope, source_system_id, source_actor_type, source_actor_id,
+          discovered_at, first_seen_run_id, last_seen_run_id, last_seen_at,
+          status, priority
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(killmail_id, killmail_hash, discovered_by_type, discovered_by_id) DO UPDATE SET
+          last_seen_run_id = excluded.last_seen_run_id,
+          last_seen_at = excluded.last_seen_at,
+          priority = excluded.priority,
+          status = CASE
+            WHEN discovered_killmail_refs.status IN ('expanded', 'cached') THEN discovered_killmail_refs.status
+            WHEN discovered_killmail_refs.status = 'failed' THEN discovered_killmail_refs.status
+            ELSE excluded.status
+          END
       `)
     };
   }
@@ -347,6 +364,99 @@ class EvidenceRepository {
       log.error_message || null,
       log.requested_at || nowIso()
     );
+  }
+
+  upsertDiscoveredKillmailRefs(candidates, context) {
+    let written = 0;
+    const timestamp = nowIso();
+    for (const candidate of candidates || []) {
+      if (!candidate.killmail_id || !candidate.hash || ['malformed', 'duplicate'].includes(candidate.skip_reason)) {
+        continue;
+      }
+      const discoveredByType = context.discoveredByType;
+      const discoveredById = String(context.discoveredById);
+      this.statements.upsertDiscoveredKillmailRef.run(
+        candidate.killmail_id,
+        candidate.hash,
+        discoveredByType,
+        discoveredById,
+        context.sourceScope || null,
+        candidate.source_system_id || context.sourceSystemId || null,
+        candidate.source_actor_type || context.sourceActorType || null,
+        candidate.source_actor_id || context.sourceActorId || null,
+        candidate.discovered_at || timestamp,
+        context.runId || null,
+        context.runId || null,
+        timestamp,
+        this.hasKillmail(candidate.killmail_id) ? 'cached' : 'pending',
+        candidate.priority || 0
+      );
+      written += 1;
+    }
+    return written;
+  }
+
+  pendingDiscoveryRefs({ discoveredByType, discoveredById, limit }) {
+    return this.db.prepare(`
+      SELECT killmail_id, killmail_hash AS hash, priority
+      FROM discovered_killmail_refs
+      WHERE discovered_by_type = ?
+        AND discovered_by_id = ?
+        AND status IN ('pending', 'failed')
+      ORDER BY status = 'failed', priority ASC, discovered_at ASC, killmail_id ASC
+      LIMIT ?
+    `).all(discoveredByType, String(discoveredById), limit);
+  }
+
+  markDiscoveryRefsSelected(refs, selectedAt = nowIso()) {
+    const statement = this.db.prepare(`
+      UPDATE discovered_killmail_refs
+      SET selected_for_expansion_at = ?
+      WHERE killmail_id = ? AND killmail_hash = ?
+    `);
+    for (const ref of refs || []) {
+      statement.run(selectedAt, ref.killmail_id, ref.hash);
+    }
+  }
+
+  markDiscoveryRefsExpanded(refs, expandedAt = nowIso()) {
+    const statement = this.db.prepare(`
+      UPDATE discovered_killmail_refs
+      SET status = 'expanded', expanded_at = ?, last_error = NULL
+      WHERE killmail_id = ? AND killmail_hash = ?
+    `);
+    for (const ref of refs || []) {
+      statement.run(expandedAt, ref.killmail_id, ref.hash);
+    }
+  }
+
+  markDiscoveryRefsCached(refs) {
+    const statement = this.db.prepare(`
+      UPDATE discovered_killmail_refs
+      SET status = 'cached'
+      WHERE killmail_id = ? AND killmail_hash = ?
+        AND status != 'expanded'
+    `);
+    for (const ref of refs || []) {
+      statement.run(ref.killmail_id, ref.hash);
+    }
+  }
+
+  markDiscoveryRefsFailed(warnings, failedAt = nowIso()) {
+    const statement = this.db.prepare(`
+      UPDATE discovered_killmail_refs
+      SET status = 'failed',
+          failed_at = ?,
+          failure_count = failure_count + 1,
+          last_error = ?
+      WHERE killmail_id = ?
+    `);
+    for (const warning of warnings || []) {
+      if (warning.warning_type !== 'failed_expansion' || !warning.killmail_id) {
+        continue;
+      }
+      statement.run(failedAt, warning.message || 'ESI expansion failed', warning.killmail_id);
+    }
   }
 
   count(tableName) {

@@ -106,6 +106,11 @@ async function verifyActorCollectorStaging() {
   assert(count(db, 'killmails') === 3, 'actor run should leave cached plus two new killmails');
   assert(count(db, 'activity_events') === 21, 'actor run should have cached plus two new event sets');
   assert(count(db, 'fetch_runs') === 2, 'actor run should record precache and actor runs');
+  assert(count(db, 'discovered_killmail_refs') === 5, 'actor run should persist valid unique discovered refs');
+  assert(discoveryRefStatus(db, 3001) === 'expanded', 'expanded actor ref should be marked expanded');
+  assert(discoveryRefStatus(db, 3002) === 'cached', 'cached actor ref should be marked cached');
+  assert(discoveryRefStatus(db, 3003) === 'failed', 'failed actor ref should be marked failed');
+  assert(discoveryRefStatus(db, 3005) === 'pending', 'cap-skipped actor ref should remain pending');
 
   closeDatabase(db);
 }
@@ -151,6 +156,14 @@ function syntheticKillmail(killmailId) {
 
 function count(db, tableName) {
   return db.prepare(`SELECT COUNT(*) AS count FROM ${tableName}`).get().count;
+}
+
+function discoveryRefStatus(db, killmailId) {
+  return db.prepare(`
+    SELECT status
+    FROM discovered_killmail_refs
+    WHERE killmail_id = ?
+  `).get(killmailId)?.status;
 }
 
 function assert(condition, message) {
