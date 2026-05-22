@@ -2,6 +2,7 @@ const path = require('node:path');
 const { openDatabase, migrate, closeDatabase } = require('../src/main/db/database');
 const { collectActorWatch } = require('../src/main/workers/actorWatchCollector');
 const { auraTempRoot } = require('../src/main/util/tempPaths');
+const { buildActorQueuePreflight } = require('../src/main/queue/queuePreflight');
 const {
   assertProjectLocalPath,
   assertNoRuntimeSdeZipImport
@@ -28,8 +29,9 @@ async function runLiveActorWatch() {
 
   try {
     const input = liveActorInput(db);
+    const preflight = buildActorQueuePreflight(db, input);
     const first = await collectActorWatch(input, { db });
-    return { db_path: dbPath, first };
+    return { db_path: dbPath, preflight, first };
   } finally {
     closeDatabase(db);
   }

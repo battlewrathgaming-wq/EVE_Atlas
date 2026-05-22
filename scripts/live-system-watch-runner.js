@@ -5,6 +5,7 @@ const { TopologyService } = require('../src/main/sde/topologyService');
 const { planSystemRadiusWatch } = require('../src/main/workers/systemRadiusPlanner');
 const { collectSystemRadiusWatch } = require('../src/main/workers/systemRadiusCollector');
 const { auraTempRoot, projectRoot } = require('../src/main/util/tempPaths');
+const { buildSystemRadiusQueuePreflight } = require('../src/main/queue/queuePreflight');
 
 async function runLiveSystemWatch({ twice = false } = {}) {
   assertLiveEnabled();
@@ -33,9 +34,11 @@ async function runLiveSystemWatch({ twice = false } = {}) {
       logLocalLookupFailure(db, error);
       throw error;
     }
+    const plannerOutput = planSystemRadiusWatch(input, { topologyService: new TopologyService(db) });
+    const preflight = buildSystemRadiusQueuePreflight(db, input, plannerOutput);
     const first = await collectSystemRadiusWatch(input, { db });
     if (!twice) {
-      return { db_path: dbPath, first };
+      return { db_path: dbPath, preflight, first };
     }
 
     const second = await collectSystemRadiusWatch({ ...input, trigger: 'fixture_test' }, { db });
@@ -49,7 +52,7 @@ async function runLiveSystemWatch({ twice = false } = {}) {
       throw new Error(`Idempotent live rerun wrote ${second.activity_events_written} duplicate activity events`);
     }
 
-    return { db_path: dbPath, first, second, counts };
+    return { db_path: dbPath, preflight, first, second, counts };
   } finally {
     closeDatabase(db);
   }
