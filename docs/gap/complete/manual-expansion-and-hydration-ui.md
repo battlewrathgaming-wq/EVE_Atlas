@@ -1,6 +1,6 @@
 # Gap To-Do: Manual Expansion And Hydration UI
 
-Status: Open
+Status: Complete
 Priority: P1
 Milestone: Operational Workflow Hardening
 
@@ -35,6 +35,28 @@ Verification should include:
 - `verify:renderer-shell`
 - `verify:mutating-services`
 - relevant manual/queue verification
+
+## Completion Notes
+
+Implemented manual expansion in the Queue / Watches view:
+
+- queue selection preview remains read-only
+- manual expansion has an explicit preflight
+- selected queued refs and expansion cap are shown before execution
+- expected ESI calls are shown from queue selection/live gate state
+- manual expansion requires a visible confirmation checkbox
+- execution uses `manual.expansion` through the service/task boundary with `asTask` and `detachedTask`
+- selected killmail IDs from the preflight are submitted explicitly
+- task results, warnings, and errors route through the task UI
+
+Metadata hydration UI is deferred from this slice. Reason: manual expansion is evidence-creating and deserved a small focused control path first. Hydration remains backend/service available as metadata-only work, but it should get its own UI wording so users do not confuse label readability with evidence ingestion.
+
+Verification:
+
+- `verify:renderer-shell`
+- `verify:mutating-services`
+- `verify:manual-discovery`
+- `verify:queue-selection`
 
 ## Related Documents
 

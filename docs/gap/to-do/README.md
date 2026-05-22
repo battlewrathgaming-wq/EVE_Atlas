@@ -89,7 +89,6 @@ This milestone should leave Atlas with:
 
 Recommended order:
 
-- `manual-expansion-and-hydration-ui.md`
 - `assessment-report-workflow-ui.md`
 - `report-presentation-polish.md`
 - `compaction-preservation-preflight.md`

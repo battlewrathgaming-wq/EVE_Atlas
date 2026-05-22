@@ -60,7 +60,13 @@ const els = {
   queueSelectionMode: document.querySelector('#queue-selection-mode'),
   queueMaxExpansions: document.querySelector('#queue-max-expansions'),
   queueKillmailIds: document.querySelector('#queue-killmail-ids'),
+  queueConfirmExpansion: document.querySelector('#queue-confirm-expansion'),
+  preflightManualExpansion: document.querySelector('#preflight-manual-expansion'),
+  runManualExpansion: document.querySelector('#run-manual-expansion'),
   queueSelectionSummary: document.querySelector('#queue-selection-summary'),
+  manualExpansionPreflight: document.querySelector('#manual-expansion-preflight'),
+  manualExpansionNormalized: document.querySelector('#manual-expansion-normalized'),
+  manualExpansionTask: document.querySelector('#manual-expansion-task'),
   queueRefList: document.querySelector('#queue-ref-list'),
   refreshWatchStatus: document.querySelector('#refresh-watch-status'),
   watchSessionArmed: document.querySelector('#watch-session-armed'),
@@ -146,6 +152,8 @@ function bindEvents() {
   els.refreshTasks.addEventListener('click', loadTasks);
   els.cancelTask.addEventListener('click', cancelSelectedTask);
   els.previewQueueSelection.addEventListener('click', loadQueueSelection);
+  els.preflightManualExpansion.addEventListener('click', preflightManualExpansion);
+  els.runManualExpansion.addEventListener('click', runManualExpansion);
   els.refreshWatchStatus.addEventListener('click', loadWatchSchedule);
   els.armWatchSession.addEventListener('click', armWatchSession);
   els.disarmWatchSession.addEventListener('click', disarmWatchSession);
@@ -328,6 +336,123 @@ function queueSelectionPayload() {
     maxExpansions: numberOrUndefined(els.queueMaxExpansions.value) || 2,
     killmailIds: parseIdList(els.queueKillmailIds.value)
   });
+}
+
+function manualExpansionInput() {
+  return cleanObject({
+    discoveredByType: textOrUndefined(els.queueDiscoveredByType.value),
+    discoveredById: textOrUndefined(els.queueDiscoveredById.value),
+    mode: els.queueSelectionMode.value,
+    maxExpansions: numberOrUndefined(els.queueMaxExpansions.value) || 2,
+    killmailIds: parseIdList(els.queueKillmailIds.value)
+  });
+}
+
+async function manualExpansionPreflight() {
+  const validation = await service.invoke('scope.validate', {
+    kind: 'manual_expansion',
+    input: manualExpansionInput()
+  });
+  const selection = await service.invoke('queue.selection', {
+    ...manualExpansionInput(),
+    ...validation.normalized
+  });
+  const gate = await service.invoke('live.gate', {
+    action: 'manual.expansion',
+    input: {
+      ...validation.normalized,
+      maxExpansions: selection.counts?.selected_for_expansion ?? validation.normalized.maxExpansions
+    }
+  });
+  return { validation, selection, gate };
+}
+
+async function preflightManualExpansion() {
+  setBusy(els.preflightManualExpansion, true);
+  try {
+    const result = await manualExpansionPreflight();
+    state.queueSelection = result.selection;
+    renderQueueSelection(result.selection);
+    renderManualExpansionPreflight(result);
+  } catch (error) {
+    renderError(els.manualExpansionPreflight, error);
+    els.manualExpansionNormalized.textContent = `Manual expansion preflight failed: ${error.message}`;
+  } finally {
+    setBusy(els.preflightManualExpansion, false);
+  }
+}
+
+function renderManualExpansionPreflight(result) {
+  const { validation, selection, gate } = result;
+  const counts = selection.counts || {};
+  renderRows(els.manualExpansionPreflight, [
+    ['Scope Valid', validation.valid ? 'yes' : 'no'],
+    ['Live Gate', gate.display?.label || gate.state || 'unknown'],
+    ['Allowed', gate.allowed ? 'yes' : 'no'],
+    ['Providers', gate.providers?.join(', ') || 'none'],
+    ['Selected Killmail IDs', selectedKillmailIds(selection).join(', ') || 'none'],
+    ['Expansion Cap', validation.normalized.maxExpansions ?? 0],
+    ['Selected For Expansion', counts.selected_for_expansion ?? 0],
+    ['Expected ESI Calls', counts.expected_esi_calls ?? gate.estimated_api_calls?.esi ?? 0],
+    ['Pending Refs', counts.pending ?? 0],
+    ['Cached Refs', counts.cached ?? 0],
+    ['Evidence Boundary', 'ESI expansion creates stored killmail evidence from queued refs']
+  ]);
+  els.manualExpansionNormalized.textContent = JSON.stringify({
+    normalized: validation.normalized,
+    selected_killmail_ids: selectedKillmailIds(selection),
+    live_gate: {
+      state: gate.state,
+      allowed: gate.allowed,
+      blockers: gate.blockers || [],
+      warnings: gate.warnings || []
+    }
+  }, null, 2);
+}
+
+function selectedKillmailIds(selection) {
+  return (selection.refs || [])
+    .filter((ref) => ref.selected_for_expansion)
+    .map((ref) => ref.killmail_id);
+}
+
+async function runManualExpansion() {
+  setBusy(els.runManualExpansion, true);
+  try {
+    if (!els.queueConfirmExpansion.checked) {
+      throw new Error('Manual expansion requires the live ESI confirmation checkbox');
+    }
+    const preflight = await manualExpansionPreflight();
+    state.queueSelection = preflight.selection;
+    renderQueueSelection(preflight.selection);
+    renderManualExpansionPreflight(preflight);
+    if (!preflight.gate.allowed) {
+      throw new Error(preflight.gate.blockers?.[0]?.message || 'Manual expansion is blocked by live API gate');
+    }
+    if (!selectedKillmailIds(preflight.selection).length) {
+      throw new Error('Manual expansion requires at least one selected queued ref');
+    }
+    const task = await service.invoke('manual.expansion', {
+      ...preflight.validation.normalized,
+      killmailIds: selectedKillmailIds(preflight.selection)
+    }, {
+      asTask: true,
+      detachedTask: true
+    });
+    renderRows(els.manualExpansionTask, [
+      ['Task ID', task.task_id],
+      ['Status', task.status],
+      ['Classification', task.classification],
+      ['Scope', task.scope_key || 'manual.expansion']
+    ]);
+    state.selectedTaskId = task.task_id;
+    await loadTasks();
+    selectView('tasks');
+  } catch (error) {
+    renderError(els.manualExpansionTask, error);
+  } finally {
+    setBusy(els.runManualExpansion, false);
+  }
 }
 
 function renderQueueSelection(selection) {

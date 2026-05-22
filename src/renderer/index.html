@@ -255,11 +255,28 @@
                 </label>
               </div>
               <p class="form-note">Queue previews are zKill discovery context only. Activity observations begin after ESI expansion.</p>
+              <label class="checkbox-row">
+                <input id="queue-confirm-expansion" type="checkbox" />
+                <span>I understand manual expansion calls ESI and turns selected queued refs into stored evidence.</span>
+              </label>
+              <div class="action-row stacked-actions">
+                <button class="secondary-action" type="button" id="preflight-manual-expansion">Preflight Expansion</button>
+                <button class="primary-action" type="button" id="run-manual-expansion">Expand Selected Refs</button>
+              </div>
             </div>
             <div class="panel">
               <h4>Selection Summary</h4>
               <div id="queue-selection-summary" class="detail-list"></div>
             </div>
+          </div>
+          <div class="panel">
+            <h4>Manual Expansion Preflight</h4>
+            <div id="manual-expansion-preflight" class="detail-list"></div>
+            <pre class="task-output" id="manual-expansion-normalized">Preview a queue selection before expansion.</pre>
+          </div>
+          <div class="panel">
+            <h4>Manual Expansion Task</h4>
+            <div id="manual-expansion-task" class="detail-list"></div>
           </div>
           <div class="panel">
             <h4>Queued References</h4>

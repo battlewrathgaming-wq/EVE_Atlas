@@ -62,6 +62,10 @@ function main() {
   assert(htmlText.includes('preview-queue-selection'), 'queue view should include selection preview action');
   assert(htmlText.includes('queue-selection-summary'), 'queue view should include selection summary');
   assert(htmlText.includes('queue-ref-list'), 'queue view should include queued ref list');
+  assert(htmlText.includes('preflight-manual-expansion'), 'queue view should include manual expansion preflight');
+  assert(htmlText.includes('run-manual-expansion'), 'queue view should include explicit manual expansion start');
+  assert(htmlText.includes('queue-confirm-expansion'), 'manual expansion should require visible live ESI confirmation control');
+  assert(htmlText.includes('manual-expansion-normalized'), 'manual expansion should show normalized backend payload');
   assert(htmlText.includes('refresh-watch-status'), 'watch view should include refresh action');
   assert(htmlText.includes('watch-session-armed'), 'watch view should include session gate preview');
   assert(htmlText.includes('watch-live-api-enabled'), 'watch view should include live API gate preview');
@@ -100,6 +104,10 @@ function main() {
   assert(rendererText.includes('renderTaskOutput'), 'renderer should render task warnings/errors/results');
   assert(rendererText.includes("service.invoke('queue.selection'"), 'renderer should call queue.selection through service bridge');
   assert(rendererText.includes('renderQueueSelection'), 'renderer should render queue selection preview');
+  assert(rendererText.includes("service.invoke('manual.expansion'"), 'renderer should start manual expansion through service bridge');
+  assert(rendererText.includes('manualExpansionPreflight'), 'renderer should preflight manual expansion before execution');
+  assert(rendererText.includes('queueConfirmExpansion.checked'), 'manual expansion should require visible confirmation');
+  assert(rendererText.includes('selectedKillmailIds'), 'manual expansion should submit selected queue refs explicitly');
   assert(rendererText.includes("service.invoke('watch.schedule'"), 'renderer should call watch.schedule through service bridge');
   assert(rendererText.includes("service.invoke('watch.executor.status'"), 'renderer should read watch executor state through service bridge');
   assert(rendererText.includes("service.invoke('watch.executor.arm'"), 'renderer should explicitly arm watch executor through service bridge');
@@ -119,7 +127,6 @@ function main() {
   assert(rendererText.includes('windowBridge.setAlwaysOnTop'), 'renderer should toggle always-on-top through preload bridge');
   assert(!rendererText.includes('const atlasWindow = window.atlasWindow'), 'renderer should avoid redeclaring exposed atlasWindow global');
   assert(!/const\s+(atlasServices|atlasWindow)\s*=/.test(rendererText), 'renderer should not redeclare preload-exposed global names');
-  assert(!rendererText.includes("service.invoke('manual.expansion'"), 'renderer should not trigger manual expansion from passive views');
   assert(!rendererText.includes("service.invoke('actor.watch'"), 'renderer should not trigger actor collection from passive views');
   assert(!rendererText.includes("service.invoke('system.radius.watch'"), 'renderer should not trigger system/radius collection from passive views');
   assert(!/require\s*\(/.test(rendererText), 'renderer should not require backend modules');
