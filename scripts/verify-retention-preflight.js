@@ -39,6 +39,39 @@ async function main() {
     assert(evidenceAllowed.allowed === true, 'matching confirmation token should allow preflight');
     assert(evidenceAllowed.preservation.assessment_recommended === true, 'evidence prune should carry preservation policy');
 
+    const actor = db.prepare(`
+      SELECT entity_type, entity_id, entity_name
+      FROM activity_events
+      WHERE entity_type = 'character'
+      LIMIT 1
+    `).get();
+    const beforeCounts = tableCounts(db);
+    const compactionPreview = buildRetentionPreflight(db, {
+      action: 'assessment.compact_from_evidence',
+      scope: {
+        entityType: actor.entity_type,
+        entityId: actor.entity_id,
+        entityName: actor.entity_name,
+        systemId: 30000001,
+        before: '2026-05-02T00:00:00Z'
+      },
+      assessment: {
+        assessmentReason: 'Preserve the observed actor sample before any future pruning.'
+      }
+    });
+    const afterCounts = tableCounts(db);
+    assert(compactionPreview.assessment_preview.ready === true, 'compaction preview should be ready for scoped actor evidence');
+    assert(compactionPreview.assessment_preview.artifact_type === 'evidence_compaction', 'compaction preview should describe evidence_compaction artifact');
+    assert(compactionPreview.assessment_preview.entity_id === actor.entity_id, 'compaction preview should preserve actor ID');
+    assert(compactionPreview.assessment_preview.creation_ready === true, 'assessment reason should mark preview ready for deliberate creation');
+    assert(compactionPreview.assessment_preview.counts.appearances > 0, 'compaction preview should include appearance count');
+    assert(compactionPreview.assessment_preview.sample_killmail_ids.includes(8801), 'compaction preview should include sample killmail IDs');
+    assert(compactionPreview.assessment_preview.systems_observed.length > 0, 'compaction preview should include observed systems');
+    assert(compactionPreview.assessment_preview.boundary.includes('does not delete'), 'compaction preview should declare non-destructive boundary');
+    assert(afterCounts.killmails === beforeCounts.killmails, 'compaction preflight must not delete killmails');
+    assert(afterCounts.activity_events === beforeCounts.activity_events, 'compaction preflight must not delete activity events');
+    assert(afterCounts.assessment_artifacts === beforeCounts.assessment_artifacts, 'compaction preflight must not create assessment artifacts');
+
     const diagnostics = buildRetentionPreflight(db, {
       action: 'diagnostics.prune_api_logs',
       confirmation: 'diagnostics.prune_api_logs',
@@ -65,6 +98,14 @@ async function main() {
   }
 
   console.log('retention preflight verified');
+}
+
+function tableCounts(db) {
+  return {
+    killmails: db.prepare('SELECT COUNT(*) AS count FROM killmails').get().count,
+    activity_events: db.prepare('SELECT COUNT(*) AS count FROM activity_events').get().count,
+    assessment_artifacts: db.prepare('SELECT COUNT(*) AS count FROM assessment_artifacts').get().count
+  };
 }
 
 function seed(db) {

@@ -89,7 +89,6 @@ This milestone should leave Atlas with:
 
 Recommended order:
 
-- `compaction-preservation-preflight.md`
 - `aura-core-extraction-brief.md`
 
 Supporting audit:

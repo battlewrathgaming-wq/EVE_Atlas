@@ -77,6 +77,9 @@ function buildRetentionPreflight(db, input = {}) {
       { source: 'retention.preflight' }
     ));
   }
+  const assessmentPreview = action === 'assessment.compact_from_evidence'
+    ? buildAssessmentCompactionPreview(db, scope, input.assessment || {})
+    : null;
 
   return {
     action,
@@ -91,12 +94,87 @@ function buildRetentionPreflight(db, input = {}) {
     },
     preservation: {
       policy: definition.preservation,
-      assessment_recommended: definition.preservation === 'assessment_recommended'
+      assessment_recommended: definition.preservation === 'assessment_recommended',
+      creates_assessment: definition.preservation === 'creates_assessment'
     },
+    assessment_preview: assessmentPreview,
     scope,
     impact,
     blockers,
     warnings
+  };
+}
+
+function buildAssessmentCompactionPreview(db, scope = {}, assessment = {}) {
+  const entityType = String(scope.entityType || scope.entity_type || scope.actorType || scope.actor_type || '').toLowerCase();
+  const entityId = Number(scope.entityId ?? scope.entity_id ?? scope.actorId ?? scope.actor_id);
+  if (!['character', 'corporation', 'alliance'].includes(entityType) || !Number.isInteger(entityId) || entityId <= 0) {
+    return {
+      ready: false,
+      reason: 'assessment.compact_from_evidence preview requires typed actor scope',
+      boundary: 'compaction preview is read-only assessment memory, not evidence deletion'
+    };
+  }
+
+  const eventWindow = evidenceWindowWhere('ae.killmail_time', scope);
+  const events = db.prepare(`
+    SELECT ae.killmail_id, ae.killmail_time, ae.role, ae.entity_name,
+           ae.solar_system_id, COALESCE(ss.solar_system_name, ae.solar_system_name) AS solar_system_name,
+           COALESCE(ss.region_name, ae.region_name) AS region_name,
+           ae.ship_type_id, COALESCE(ae.ship_type_name, tm.type_name) AS ship_type_name
+    FROM activity_events ae
+    LEFT JOIN solar_systems ss ON ss.solar_system_id = ae.solar_system_id
+    LEFT JOIN type_metadata tm ON tm.type_id = ae.ship_type_id
+    WHERE ae.entity_type = ? AND ae.entity_id = ?
+      ${eventWindow.sql}
+    ORDER BY ae.killmail_time DESC, ae.killmail_id DESC
+  `).all(entityType, entityId, ...eventWindow.params);
+
+  const killmailIds = uniqueNumbers(events.map((event) => event.killmail_id));
+  const roleCounts = events.reduce((acc, event) => {
+    acc[event.role] = (acc[event.role] || 0) + 1;
+    return acc;
+  }, {});
+  const evidenceRange = evidenceRangeForEvents(events, scope);
+  const sourceRunIds = sourceRunIdsForKillmails(db, killmailIds);
+
+  return {
+    ready: events.length > 0,
+    artifact_type: 'evidence_compaction',
+    entity_type: entityType,
+    entity_id: entityId,
+    entity_name: scope.entityName || scope.entity_name || events.find((event) => event.entity_name)?.entity_name || cachedEntityName(db, entityType, entityId),
+    status: 'preview_only',
+    creation_ready: Boolean(textOrNull(assessment.assessmentReason || assessment.reason) || textOrNull(assessment.assessmentSummary || assessment.summary)),
+    assessment_reason: textOrNull(assessment.assessmentReason || assessment.reason),
+    assessment_summary: textOrNull(assessment.assessmentSummary || assessment.summary),
+    evidence_window: evidenceRange,
+    evidence_scope_type: 'actor',
+    evidence_scope: {
+      ...scope,
+      entityType,
+      entityId
+    },
+    source_report_type: 'actor',
+    source_report_parameters: {
+      entityType,
+      entityId,
+      lookbackSeconds: scope.lookbackSeconds || null,
+      after: scope.after || null,
+      before: scope.before || null
+    },
+    source_run_ids: sourceRunIds,
+    sample_killmail_ids: killmailIds.slice(0, 20),
+    counts: {
+      killmails: killmailIds.length,
+      appearances: events.length,
+      attacker_appearances: roleCounts.attacker || 0,
+      victim_appearances: roleCounts.victim || 0
+    },
+    systems_observed: groupedSystems(events),
+    regions_observed: uniqueText(events.map((event) => event.region_name)),
+    ships_observed: groupedShips(events),
+    boundary: 'compaction preview is read-only assessment memory; it does not delete or replace expanded ESI killmail evidence'
   };
 }
 
@@ -131,22 +209,30 @@ function impactFor(db, action, scope) {
 function evidenceScopeImpact(db, scope = {}) {
   const where = [];
   const params = [];
-  if (scope.systemId) {
-    where.push('solar_system_id = ?');
-    params.push(Number(scope.systemId));
+  const entityType = String(scope.entityType || scope.entity_type || scope.actorType || scope.actor_type || '').toLowerCase();
+  const entityId = Number(scope.entityId ?? scope.entity_id ?? scope.actorId ?? scope.actor_id);
+  const hasActorScope = ['character', 'corporation', 'alliance'].includes(entityType) && Number.isInteger(entityId) && entityId > 0;
+  if (hasActorScope) {
+    where.push('ae.entity_type = ? AND ae.entity_id = ?');
+    params.push(entityType, entityId);
+  }
+  if (scope.systemId || scope.system_id) {
+    where.push('k.solar_system_id = ?');
+    params.push(Number(scope.systemId || scope.system_id));
   }
   if (scope.before) {
-    where.push('killmail_time < ?');
+    where.push('k.killmail_time < ?');
     params.push(scope.before);
   }
   if (scope.after) {
-    where.push('killmail_time >= ?');
+    where.push('k.killmail_time >= ?');
     params.push(scope.after);
   }
   const whereSql = where.length ? `WHERE ${where.join(' AND ')}` : '';
   const killmailIds = db.prepare(`
-    SELECT killmail_id
-    FROM killmails
+    SELECT DISTINCT k.killmail_id
+    FROM killmails k
+    ${hasActorScope ? 'JOIN activity_events ae ON ae.killmail_id = k.killmail_id' : ''}
     ${whereSql}
   `).all(...params).map((row) => row.killmail_id);
   if (!killmailIds.length) {
@@ -204,7 +290,106 @@ function countOlderThan(db, tableName, columnName, before) {
   return db.prepare(`SELECT COUNT(*) AS count FROM ${tableName} WHERE ${columnName} < ?`).get(before).count;
 }
 
+function evidenceWindowWhere(column, scope = {}) {
+  const where = [];
+  const params = [];
+  if (scope.systemId || scope.system_id) {
+    where.push('ae.solar_system_id = ?');
+    params.push(Number(scope.systemId || scope.system_id));
+  }
+  if (scope.before) {
+    where.push(`${column} < ?`);
+    params.push(scope.before);
+  }
+  if (scope.after) {
+    where.push(`${column} >= ?`);
+    params.push(scope.after);
+  }
+  return {
+    sql: where.length ? `AND ${where.join(' AND ')}` : '',
+    params
+  };
+}
+
+function evidenceRangeForEvents(events, scope = {}) {
+  const times = events.map((event) => event.killmail_time).filter(Boolean).sort();
+  return {
+    start: scope.after || times[0] || null,
+    end: scope.before || times[times.length - 1] || null,
+    earliest_observed: times[0] || null,
+    latest_observed: times[times.length - 1] || null
+  };
+}
+
+function sourceRunIdsForKillmails(db, killmailIds) {
+  if (!killmailIds.length) {
+    return [];
+  }
+  return db.prepare(`
+    SELECT DISTINCT run_id
+    FROM ingestion_audits
+    WHERE killmail_id IN (${killmailIds.map(() => '?').join(', ')})
+    ORDER BY run_id
+  `).all(...killmailIds).map((row) => row.run_id);
+}
+
+function cachedEntityName(db, entityType, entityId) {
+  const known = db.prepare(`
+    SELECT entity_name
+    FROM entities
+    WHERE entity_type = ? AND entity_id = ?
+  `).get(entityType, entityId);
+  return known?.entity_name || null;
+}
+
+function groupedSystems(events) {
+  const bySystem = new Map();
+  events.forEach((event) => {
+    const key = event.solar_system_id || 'unknown';
+    const current = bySystem.get(key) || {
+      solar_system_id: event.solar_system_id || null,
+      solar_system_name: event.solar_system_name || null,
+      region_name: event.region_name || null,
+      appearances: 0
+    };
+    current.appearances += 1;
+    bySystem.set(key, current);
+  });
+  return [...bySystem.values()].sort((a, b) => b.appearances - a.appearances);
+}
+
+function groupedShips(events) {
+  const byShip = new Map();
+  events.filter((event) => event.ship_type_id).forEach((event) => {
+    const key = `${event.role}:${event.ship_type_id}`;
+    const current = byShip.get(key) || {
+      role: event.role,
+      type_id: event.ship_type_id,
+      type_name: event.ship_type_name || null,
+      appearances: 0
+    };
+    current.appearances += 1;
+    byShip.set(key, current);
+  });
+  return [...byShip.values()].sort((a, b) => b.appearances - a.appearances);
+}
+
+function uniqueNumbers(values) {
+  return [...new Set(values.map(Number).filter((value) => Number.isInteger(value) && value > 0))]
+    .sort((a, b) => a - b);
+}
+
+function uniqueText(values) {
+  return [...new Set(values.filter(Boolean))].sort((a, b) => String(a).localeCompare(String(b)));
+}
+
+function textOrNull(value) {
+  const text = String(value || '').trim();
+  return text || null;
+}
+
 module.exports = {
   listRetentionActions,
-  buildRetentionPreflight
+  buildRetentionPreflight,
+  buildAssessmentCompactionPreview
 };

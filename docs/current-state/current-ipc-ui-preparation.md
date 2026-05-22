@@ -27,6 +27,7 @@ Recent backend/UI-readiness work completed:
 - first controlled evidence-creating UI path exists for `manual.discovery`, using scope validation, live gate preflight, explicit confirmation, and detached task execution
 - manual expansion UI exists in Queue / Watches with preflight, selected ref IDs, ESI call estimate, confirmation, and detached task execution
 - assessment workflow UI exists in Reports with loaded actor context, reason/summary requirement, score-reason guard, visible evidence/assessment boundary, and saved artifact detail inspection
+- retention preflight can preview the assessment memory that would survive future typed-actor evidence compaction without creating artifacts or deleting evidence
 - controlled live operational smoke covered manual discovery and session-armed watch dispatch against a disposable DB
 - runtime process isolation has been reviewed and deliberately deferred; detached tasks remain acceptable for the next milestone
 - current recommended first future isolation target, if measured pressure appears, is SDE import / SDE sync-compare
@@ -77,6 +78,7 @@ Current implemented shell:
 - shared message taxonomy for readiness, live gate, and task responses
 - task locking for read-only, metadata, evidence-creating, destructive, and exclusive work
 - retention/destructive action preflight for confirmation and impact summaries
+- `assessment.compact_from_evidence` preflight includes a read-only `assessment_preview` snapshot for typed actor scopes
 - assessment artifact services for deliberate assessment memory creation/listing/inspection separate from evidence
 - scoped discovery queue transitions so manual, actor, and system/radius queue rows do not overwrite each other's status
 - UI language contract for evidence, observation, assessment, queue preview, scope, and warning wording
@@ -183,7 +185,7 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 
 - broader visual/product polish beyond the initial shell
 - additional renderer controls for metadata hydration, actor watch, and system/radius watch execution outside the session executor
-- executable retention/deprecation actions and assessment compaction
+- executable retention/deprecation actions and actual assessment compaction writes
 - executable evidence compaction/pruning actions
 - true worker-thread/process isolation for CPU-heavy or synchronous SQLite-heavy tasks
 - broader manual visual polish beyond the automated Electron smoke harness
@@ -230,5 +232,6 @@ Latest reviewed commits:
 - current manual expansion UI slice - explicit queue-ref expansion path added; report-scoped hydration UI deferred for separate metadata-only wording
 - current assessment report workflow slice - actor report context can create/list/inspect assessment artifacts through the service bridge with explicit boundary confirmation and no evidence mutation
 - current report presentation polish slice - Reports view now has a clearer unloaded state, loaded actor status summary, and observation row counts while retaining backend report authority
+- current compaction preservation preflight slice - read-only typed-actor compaction preview shows what assessment memory would survive, with no evidence deletion or artifact insertion
 
 These commits move the earlier rigging gaps into an initial presentation checkpoint. The main remaining risk is no longer missing service vocabulary; it is preserving the service/evidence boundary while adding further executable UI actions and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.

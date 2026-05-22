@@ -1,6 +1,6 @@
 # Gap To-Do: Compaction Preservation Preflight
 
-Status: Open
+Status: Complete
 Priority: P2
 Milestone: Operational Workflow Hardening
 
@@ -29,6 +29,15 @@ Design and implement the preservation preview that must exist before Atlas can e
 ## Completion Signal
 
 Atlas can preview a would-be assessment artifact from scoped evidence, and the user can understand what memory would survive future pruning, while no evidence is deleted.
+
+Completed:
+
+- `retention.preflight` now returns an `assessment_preview` for `assessment.compact_from_evidence`.
+- Preview requires typed actor scope to produce a ready snapshot.
+- Preview includes entity ID/name, evidence window, sample killmail IDs, appearance counts, attacker/victim counts, observed systems, regions, ships, source report parameters, source run IDs, and boundary wording.
+- User reason/summary is represented as preview metadata and `creation_ready`; no artifact is created by preflight.
+- Evidence deletion remains unimplemented.
+- Verification proves compaction preflight does not delete killmails/activity events and does not insert assessment artifacts.
 
 Verification should include:
 
