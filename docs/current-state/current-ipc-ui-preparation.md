@@ -26,6 +26,7 @@ Current implemented shell:
 - task locking for read-only, metadata, evidence-creating, destructive, and exclusive work
 - retention/destructive action preflight for confirmation and impact summaries
 - scoped discovery queue transitions so manual, actor, and system/radius queue rows do not overwrite each other's status
+- UI language contract for evidence, observation, assessment, queue preview, scope, and warning wording
 
 ## Backend Actions Ready For IPC Wrapping
 

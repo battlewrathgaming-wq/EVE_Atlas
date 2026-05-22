@@ -148,4 +148,5 @@ Current verification:
 - `docs/gap/complete/concurrency-and-locking.md`
 - `docs/gap/complete/destructive-actions-and-retention.md`
 - `docs/gap/complete/queue-status-scope-isolation.md`
-- `docs/gap/to-do/ui-language-contract.md`
+- `docs/gap/complete/ui-language-contract.md`
+- `docs/gap/to-do/ipc-mutating-action-services.md`

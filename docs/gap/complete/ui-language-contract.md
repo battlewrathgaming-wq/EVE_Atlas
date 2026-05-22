@@ -1,8 +1,6 @@
-# TODO: UI Language Contract
+# Complete: UI Language Contract
 
-Status: Drafted In Place
-
-This file remains in `docs/gap/to-do` while the overseer reviews it.
+Status: Complete
 
 ## Actionables
 
