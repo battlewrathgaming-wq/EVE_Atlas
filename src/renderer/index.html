@@ -28,6 +28,7 @@
         </div>
         <nav class="nav-list" aria-label="Primary">
           <button class="nav-item active" type="button" data-view="readiness">Readiness</button>
+          <button class="nav-item" type="button" data-view="scopes">Scopes</button>
           <button class="nav-item" type="button" data-view="tasks">Tasks</button>
           <button class="nav-item" type="button" data-view="reports">Reports</button>
         </nav>
@@ -80,6 +81,106 @@
             <h4>Backend Messages</h4>
             <div id="readiness-messages" class="message-list"></div>
           </div>
+        </section>
+
+        <section class="view" id="view-scopes" aria-labelledby="scopes-title">
+          <div class="section-heading">
+            <div>
+              <h3 id="scopes-title">Scope Controls</h3>
+              <p>Validate user-defined action scope through the backend contract.</p>
+            </div>
+            <button class="primary-action" type="button" id="validate-scope">Validate Scope</button>
+          </div>
+          <div class="panel">
+            <h4>Scope Input</h4>
+            <div class="form-grid">
+              <label>
+                <span>Scope Kind</span>
+                <select id="scope-kind">
+                  <option value="manual_discovery">Manual Discovery</option>
+                  <option value="manual_expansion">Manual Expansion</option>
+                  <option value="actor_watch">Actor Watch</option>
+                  <option value="system_radius_watch">System Radius Watch</option>
+                </select>
+              </label>
+              <label>
+                <span>Discovery Scope</span>
+                <select id="scope-discovery-type">
+                  <option value="actor">Actor</option>
+                  <option value="system">System</option>
+                  <option value="radius">Radius</option>
+                </select>
+              </label>
+              <label>
+                <span>Actor Type</span>
+                <select id="scope-actor-type">
+                  <option value="character">Character</option>
+                  <option value="corporation">Corporation</option>
+                  <option value="alliance">Alliance</option>
+                </select>
+              </label>
+              <label>
+                <span>Actor ID</span>
+                <input id="scope-actor-id" type="number" min="1" placeholder="90000002" />
+              </label>
+              <label>
+                <span>Actor Name</span>
+                <input id="scope-actor-name" type="text" placeholder="Optional label or resolver input" />
+              </label>
+              <label>
+                <span>Center System ID</span>
+                <input id="scope-system-id" type="number" min="1" placeholder="30004660" />
+              </label>
+              <label>
+                <span>Center System Name</span>
+                <input id="scope-system-name" type="text" placeholder="ZTS-4D" />
+              </label>
+              <label>
+                <span>Radius Jumps</span>
+                <input id="scope-radius" type="number" min="0" placeholder="Backend default" />
+              </label>
+              <label>
+                <span>Lookback Seconds</span>
+                <input id="scope-lookback" type="number" min="1" placeholder="Backend default" />
+              </label>
+              <label>
+                <span>Max Refs</span>
+                <input id="scope-max-refs" type="number" min="1" placeholder="Backend default" />
+              </label>
+              <label>
+                <span>Max Systems</span>
+                <input id="scope-max-systems" type="number" min="1" placeholder="Backend default" />
+              </label>
+              <label>
+                <span>Max Expansions</span>
+                <input id="scope-max-expansions" type="number" min="1" placeholder="Backend default" />
+              </label>
+              <label>
+                <span>Discovery Queue Type</span>
+                <input id="scope-discovered-by-type" type="text" placeholder="manual_actor" />
+              </label>
+              <label>
+                <span>Discovery Queue ID</span>
+                <input id="scope-discovered-by-id" type="text" placeholder="character:90000002" />
+              </label>
+              <label>
+                <span>Selected Killmail IDs</span>
+                <input id="scope-killmail-ids" type="text" placeholder="123, 456" />
+              </label>
+            </div>
+            <p class="form-note">Validation is read-only. Backend scope helpers remain authoritative for defaults and allowed values.</p>
+          </div>
+          <div class="report-grid">
+            <div class="panel">
+              <h4>Backend Defaults</h4>
+              <div id="scope-defaults" class="detail-list"></div>
+            </div>
+            <div class="panel">
+              <h4>Validation Result</h4>
+              <div id="scope-validation" class="detail-list"></div>
+            </div>
+          </div>
+          <pre class="task-output" id="scope-normalized">No scope validated.</pre>
         </section>
 
         <section class="view" id="view-tasks" aria-labelledby="tasks-title">

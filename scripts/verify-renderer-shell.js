@@ -40,6 +40,12 @@ function main() {
   assert(htmlText.includes('window-chrome'), 'renderer should include frameless window chrome');
   assert(htmlText.includes('pin-window'), 'renderer should include always-on-top control');
   assert(htmlText.includes('view-readiness'), 'renderer should include readiness view');
+  assert(htmlText.includes('view-scopes'), 'renderer should include scope controls view');
+  assert(htmlText.includes('scope-kind'), 'scope view should include scope kind selector');
+  assert(htmlText.includes('scope-actor-id'), 'scope view should include actor ID control');
+  assert(htmlText.includes('scope-system-id'), 'scope view should include system ID control');
+  assert(htmlText.includes('scope-max-expansions'), 'scope view should expose expansion cap');
+  assert(htmlText.includes('scope-normalized'), 'scope view should show normalized backend payload');
   assert(htmlText.includes('next-action'), 'readiness screen should include next local action');
   assert(htmlText.includes('api-state'), 'readiness screen should include API and identity state');
   assert(htmlText.includes('path-state'), 'readiness screen should include runtime path state');
@@ -60,6 +66,9 @@ function main() {
 
   assert(rendererText.includes("service.invoke('app.readiness'"), 'renderer should call app.readiness through service bridge');
   assert(rendererText.includes("service.invoke('app.prepare'"), 'renderer should call app.prepare through service bridge');
+  assert(rendererText.includes("service.invoke('scope.defaults'"), 'renderer should load scope defaults through service bridge');
+  assert(rendererText.includes("service.invoke('scope.validate'"), 'renderer should validate scope through service bridge');
+  assert(rendererText.includes('scopeInputPayload'), 'renderer should build scope payload before backend validation');
   assert(rendererText.includes('renderNextAction'), 'renderer should render readiness next action from backend state');
   assert(rendererText.includes('RUNTIME_PATHS_MISSING'), 'renderer should expose app.prepare only for missing runtime paths');
   assert(rendererText.includes('topology_lookup_ready'), 'renderer should show topology readiness');

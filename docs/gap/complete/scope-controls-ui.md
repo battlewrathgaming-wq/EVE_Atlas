@@ -1,14 +1,14 @@
 ﻿# Gap To-Do: Scope Controls UI
 
-Status: Open
+Status: Complete
 Priority: P1
 
-## Actionables
+## Completed
 
-- Build UI controls from `scope.defaults`.
-- Validate scope input through `scope.validate` before running reports, discovery, or watch actions.
-- Support actor, system, radius, manual discovery, manual expansion, and report scope inputs where needed.
-- Show lookback windows, caps, radius, max systems, max refs, and max expansions before live actions.
+- Built UI controls from `scope.defaults`.
+- Validates scope input through `scope.validate`.
+- Supports actor, system, radius, manual discovery, manual expansion, actor watch, and system/radius watch scope inputs.
+- Shows lookback windows, caps, radius, max systems, max refs, and max expansions before future live actions.
 
 ## Task Requirements
 
@@ -36,6 +36,12 @@ Initial controls should cover:
 ## Completion Signal
 
 The renderer can build a valid backend scope payload, show validation errors, and pass normalized scope into report/discovery/watch service commands without duplicating validation logic.
+
+## Verification
+
+- `verify:renderer-shell`
+- `verify:scope-controls`
+- `verify:all`
 
 ## Related Documents
 

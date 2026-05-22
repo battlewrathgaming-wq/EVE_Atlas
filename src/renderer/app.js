@@ -4,6 +4,7 @@ const atlasWindow = window.atlasWindow;
 const state = {
   commands: [],
   readiness: null,
+  scopeDefaults: null,
   tasks: [],
   selectedTaskId: null,
   selectedTask: null,
@@ -26,6 +27,25 @@ const els = {
   readinessMessages: document.querySelector('#readiness-messages'),
   prepareApp: document.querySelector('#prepare-app'),
   refreshReadiness: document.querySelector('#refresh-readiness'),
+  validateScope: document.querySelector('#validate-scope'),
+  scopeKind: document.querySelector('#scope-kind'),
+  scopeDiscoveryType: document.querySelector('#scope-discovery-type'),
+  scopeActorType: document.querySelector('#scope-actor-type'),
+  scopeActorId: document.querySelector('#scope-actor-id'),
+  scopeActorName: document.querySelector('#scope-actor-name'),
+  scopeSystemId: document.querySelector('#scope-system-id'),
+  scopeSystemName: document.querySelector('#scope-system-name'),
+  scopeRadius: document.querySelector('#scope-radius'),
+  scopeLookback: document.querySelector('#scope-lookback'),
+  scopeMaxRefs: document.querySelector('#scope-max-refs'),
+  scopeMaxSystems: document.querySelector('#scope-max-systems'),
+  scopeMaxExpansions: document.querySelector('#scope-max-expansions'),
+  scopeDiscoveredByType: document.querySelector('#scope-discovered-by-type'),
+  scopeDiscoveredById: document.querySelector('#scope-discovered-by-id'),
+  scopeKillmailIds: document.querySelector('#scope-killmail-ids'),
+  scopeDefaults: document.querySelector('#scope-defaults'),
+  scopeValidation: document.querySelector('#scope-validation'),
+  scopeNormalized: document.querySelector('#scope-normalized'),
   refreshTasks: document.querySelector('#refresh-tasks'),
   taskList: document.querySelector('#task-list'),
   taskDetail: document.querySelector('#task-detail'),
@@ -69,6 +89,7 @@ async function init() {
     bindEvents();
     await Promise.all([
       loadReadiness(),
+      loadScopeDefaults(),
       loadTasks(),
       loadQueueReport()
     ]);
@@ -84,6 +105,7 @@ function bindEvents() {
   });
   els.refreshReadiness.addEventListener('click', loadReadiness);
   els.prepareApp.addEventListener('click', prepareApp);
+  els.validateScope.addEventListener('click', validateScopeInput);
   els.refreshTasks.addEventListener('click', loadTasks);
   els.cancelTask.addEventListener('click', cancelSelectedTask);
   els.loadActorReport.addEventListener('click', loadActorReport);
@@ -121,6 +143,81 @@ async function prepareApp() {
   } finally {
     setBusy(els.prepareApp, false);
   }
+}
+
+async function loadScopeDefaults() {
+  state.scopeDefaults = await service.invoke('scope.defaults');
+  renderRows(els.scopeDefaults, Object.entries(state.scopeDefaults).map(([key, value]) => [
+    key,
+    defaultSummary(value)
+  ]));
+}
+
+async function validateScopeInput() {
+  setBusy(els.validateScope, true);
+  try {
+    const payload = {
+      kind: els.scopeKind.value,
+      input: scopeInputPayload()
+    };
+    const result = await service.invoke('scope.validate', payload);
+    renderRows(els.scopeValidation, [
+      ['Kind', result.kind],
+      ['Valid', result.valid ? 'yes' : 'no']
+    ]);
+    els.scopeNormalized.textContent = JSON.stringify(result.normalized, null, 2);
+  } catch (error) {
+    renderError(els.scopeValidation, error);
+    els.scopeNormalized.textContent = `Scope validation failed: ${error.message}`;
+  } finally {
+    setBusy(els.validateScope, false);
+  }
+}
+
+function scopeInputPayload() {
+  const kind = els.scopeKind.value;
+  if (kind === 'manual_discovery') {
+    return cleanObject({
+      scope: els.scopeDiscoveryType.value,
+      entityType: els.scopeActorType.value,
+      entityId: numberOrUndefined(els.scopeActorId.value),
+      entityName: textOrUndefined(els.scopeActorName.value),
+      centerSystemId: numberOrUndefined(els.scopeSystemId.value),
+      centerSystemName: textOrUndefined(els.scopeSystemName.value),
+      radiusJumps: numberOrUndefined(els.scopeRadius.value),
+      lookbackSeconds: numberOrUndefined(els.scopeLookback.value),
+      maxRefs: numberOrUndefined(els.scopeMaxRefs.value),
+      maxRefsPerSystem: numberOrUndefined(els.scopeMaxRefs.value),
+      maxSystems: numberOrUndefined(els.scopeMaxSystems.value)
+    });
+  }
+  if (kind === 'manual_expansion') {
+    return cleanObject({
+      discoveredByType: textOrUndefined(els.scopeDiscoveredByType.value),
+      discoveredById: textOrUndefined(els.scopeDiscoveredById.value),
+      killmailIds: killmailIds(),
+      maxExpansions: numberOrUndefined(els.scopeMaxExpansions.value)
+    });
+  }
+  if (kind === 'actor_watch') {
+    return cleanObject({
+      entityType: els.scopeActorType.value,
+      entityId: numberOrUndefined(els.scopeActorId.value),
+      entityName: textOrUndefined(els.scopeActorName.value),
+      lookbackSeconds: numberOrUndefined(els.scopeLookback.value),
+      maxRefs: numberOrUndefined(els.scopeMaxRefs.value),
+      maxExpansions: numberOrUndefined(els.scopeMaxExpansions.value)
+    });
+  }
+  return cleanObject({
+    centerSystemId: numberOrUndefined(els.scopeSystemId.value),
+    centerSystemName: textOrUndefined(els.scopeSystemName.value),
+    radiusJumps: numberOrUndefined(els.scopeRadius.value),
+    lookbackSeconds: numberOrUndefined(els.scopeLookback.value),
+    maxSystems: numberOrUndefined(els.scopeMaxSystems.value),
+    maxRefsPerSystem: numberOrUndefined(els.scopeMaxRefs.value),
+    maxExpansions: numberOrUndefined(els.scopeMaxExpansions.value)
+  });
 }
 
 async function loadTasks() {
@@ -314,6 +411,36 @@ function renderRawIds(rawIds) {
     key,
     Array.isArray(values) && values.length ? values.join(', ') : 'none'
   ]));
+}
+
+function defaultSummary(value) {
+  return Object.entries(value || {})
+    .map(([key, item]) => `${key}: ${item}`)
+    .join('; ');
+}
+
+function killmailIds() {
+  return els.scopeKillmailIds.value
+    .split(',')
+    .map((value) => Number(value.trim()))
+    .filter((value) => Number.isInteger(value) && value > 0);
+}
+
+function numberOrUndefined(value) {
+  const number = Number(value);
+  return Number.isFinite(number) && value !== '' ? number : undefined;
+}
+
+function textOrUndefined(value) {
+  const text = String(value || '').trim();
+  return text || undefined;
+}
+
+function cleanObject(value) {
+  return Object.fromEntries(Object.entries(value).filter(([, item]) => (
+    item !== undefined &&
+    !(Array.isArray(item) && item.length === 0)
+  )));
 }
 
 async function toggleAlwaysOnTop() {
