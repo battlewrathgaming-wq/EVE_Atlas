@@ -42,6 +42,8 @@ async function collectSystemRadiusWatch(input, dependencies = {}) {
         id: Number(input.centerSystemId)
       }
     });
+    markFailedExpansionCandidates(selection.expansionQueue, evidencePackage.warnings);
+    selection.skipCounts = summarizeExpansionQueue(selection.expansionQueue);
 
     const persistResult = repository.persistEvidencePackage(evidencePackage);
     const apiCounts = apiCountsForRun(db, fetchRun.run_id);
@@ -223,6 +225,28 @@ function selectExpansionCandidates(expansionQueue, repository, maxExpansions) {
   };
 }
 
+function markFailedExpansionCandidates(expansionQueue, warnings) {
+  const failedByKillmailId = new Map();
+  for (const warning of warnings || []) {
+    if (warning.warning_type !== 'failed_expansion' || !warning.killmail_id) {
+      continue;
+    }
+    failedByKillmailId.set(Number(warning.killmail_id), warning.message || 'ESI expansion failed');
+  }
+
+  if (!failedByKillmailId.size) {
+    return;
+  }
+
+  for (const candidate of expansionQueue) {
+    if (!candidate.selected_for_expansion || !failedByKillmailId.has(candidate.killmail_id)) {
+      continue;
+    }
+    candidate.skip_reason = 'failed';
+    candidate.error_message = failedByKillmailId.get(candidate.killmail_id);
+  }
+}
+
 function summarizeExpansionQueue(expansionQueue) {
   const summary = {
     total: expansionQueue.length,
@@ -279,5 +303,6 @@ module.exports = {
   collectSystemRadiusWatch,
   discoverRefs,
   selectExpansionCandidates,
+  markFailedExpansionCandidates,
   summarizeExpansionQueue
 };

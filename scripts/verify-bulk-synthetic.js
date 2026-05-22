@@ -207,7 +207,13 @@ function assertCollectionSummary(summary, expanded, failed) {
   assert(summary.expansion_queue_summary.malformed === 2, 'bulk queue should explain malformed skips');
   assert(summary.expansion_queue_summary.cached === 1, 'bulk queue should explain cached skip');
   assert(summary.expansion_queue_summary.cap_skipped === 2, 'bulk queue should explain cap skips');
+  assert(summary.expansion_queue_summary.failed === 1, 'bulk queue should explain failed expansion');
   assert(summary.expansion_queue_summary.selected === 5, 'bulk queue should select 5 refs');
+  const failedCandidate = summary.expansion_queue.find((candidate) => candidate.killmail_id === 2006);
+  assert(failedCandidate, 'bulk queue should retain failed candidate');
+  assert(failedCandidate.selected_for_expansion === true, 'failed candidate should remain marked as selected for expansion');
+  assert(failedCandidate.skip_reason === 'failed', 'failed candidate should be marked with failed skip reason');
+  assert(failedCandidate.error_message === 'fixture ESI expansion failure', 'failed candidate should include error message');
   assertSame(expanded, [2001, 2002, 2005, 2006, 2007], 'bulk run should expand selected uncached refs in priority order');
   assertSame(failed, [2006], 'bulk run should fail only the configured fixture expansion');
   assert(summary.warnings.some((message) => message.includes('Expansion cap skipped 2')), 'bulk run should warn about capped coverage');

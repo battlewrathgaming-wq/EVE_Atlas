@@ -65,8 +65,15 @@ async function main() {
   assertIncludes(runReport, 'PARTIAL SAMPLE');
   assertIncludes(runReport, 'Atlas Prime [solarSystemID: 30000001]');
   assertIncludes(runReport, 'Discovery window: 86400 seconds / 24 hours');
-  assertIncludes(runReport, 'zKill route:');
+  assertIncludes(runReport, 'Run status: success');
+  assertIncludes(runReport, 'zKill route(s): 1');
   assertIncludes(runReport, 'Expanded sample: 1 expanded / 3 discovered refs; 0 failed');
+  assertIncludes(runReport, 'Coverage note: expansion cap skipped refs; not all discovered refs are represented in this run sample');
+  assertIncludes(runReport, 'Diagnostics Summary');
+  assertIncludes(runReport, 'API calls by provider: zkill 1 / esi 0');
+  assertIncludes(runReport, 'Systems Scanned');
+  assertIncludes(runReport, 'zKill Requests');
+  assertIncludes(runReport, 'ESI Requests');
   assertIncludes(runReport, 'Source: zKill discovery + ESI expanded killmails');
   assertIncludes(systemReport, 'PARTIAL SAMPLE');
   assertIncludes(systemReport, 'Atlas Prime [solarSystemID: 30000001]');
