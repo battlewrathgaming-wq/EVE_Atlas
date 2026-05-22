@@ -2,6 +2,7 @@ const fixtureKillmail = require('../fixtures/killmail-1001.json');
 const { openDatabase, migrate, closeDatabase } = require('../src/main/db/database');
 const { EvidenceRepository } = require('../src/main/db/evidenceRepository');
 const { collectActorWatch } = require('../src/main/workers/actorWatchCollector');
+const { evidencePackageFromExpandedKillmails } = require('../src/main/workers/killmailIngestionWorker');
 const { buildActorReport } = require('../src/main/reports/actorReport');
 const { addWatchlistEntity } = require('../src/main/watchlist/watchlistRepository');
 
@@ -20,6 +21,8 @@ async function main() {
     entityId: 90000002,
     notes: 'Actor report fixture'
   });
+  const repository = new EvidenceRepository(db);
+  persistSystemDiscoveredKillmail(db, repository);
 
   const zkillClient = {
     async discoverRefs() {
@@ -52,7 +55,6 @@ async function main() {
     watchId: 'actor-report-fixture'
   }, { db, zkillClient, esiClient });
 
-  const repository = new EvidenceRepository(db);
   repository.insertApiRequestLog({
     run_id: summary.run_id,
     provider: 'zkill',
@@ -79,11 +81,13 @@ async function main() {
   assertIncludes(report, 'AURA Atlas Actor Evidence Report - PARTIAL SAMPLE');
   assertIncludes(report, 'Actor: Atlas Scout [characterID: 90000002]');
   assertIncludes(report, 'Evidence window: all stored evidence');
-  assertIncludes(report, 'Basis: 2 expanded killmails / 2 actor activity events matching actor/time scope');
-  assertIncludes(report, 'Discovery provenance window(s): 86400 seconds / 24 hours');
-  assertIncludes(report, 'Stored evidence matching this scope: 2 killmails / 2 actor activity events');
-  assertIncludes(report, 'Collection provenance zKill refs discovered: 3');
-  assertIncludes(report, 'Collection provenance expanded new: 2');
+  assertIncludes(report, 'Basis: 3 expanded killmails / 3 actor activity events matching actor/time scope');
+  assertIncludes(report, 'Actor discovery window(s): 86400 seconds / 24 hours');
+  assertIncludes(report, 'Stored evidence matching this scope: 3 killmails / 3 actor activity events');
+  assertIncludes(report, 'Collection provenance zKill requests: 2');
+  assertIncludes(report, 'Actor-route zKill requests: 1');
+  assertIncludes(report, 'Collection provenance zKill refs discovered: 4');
+  assertIncludes(report, 'Collection provenance expanded new: 3');
   assertIncludes(report, 'Actor Role Split');
   assertIncludes(report, 'attacker');
   assertIncludes(report, 'Observed Systems');
@@ -101,6 +105,51 @@ async function main() {
 
   closeDatabase(db);
   console.log('actor evidence report verified');
+}
+
+function persistSystemDiscoveredKillmail(db, repository) {
+  const run = repository.createFetchRun({
+    trigger: 'fixture_test',
+    watchType: 'system_radius',
+    watchId: 'system-report-fixture'
+  });
+  const packageToPersist = evidencePackageFromExpandedKillmails({
+    killmails: [{
+      raw: {
+        ...fixtureKillmail,
+        killmail_id: 3999,
+        killmail_time: '2026-05-01T19:59:00Z',
+        solar_system_id: 30000001
+      },
+      hash: 'fixture_hash_3999'
+    }],
+    run: {
+      run_id: run.run_id,
+      source_type: 'system_radius',
+      source_id: '30000001:0',
+      started_at: run.started_at
+    },
+    discoveredBy: {
+      type: 'system_radius',
+      id: 30000001
+    }
+  });
+  const result = repository.persistEvidencePackage(packageToPersist);
+  repository.insertApiRequestLog({
+    run_id: run.run_id,
+    provider: 'zkill',
+    endpoint: 'https://zkillboard.com/api/systemID/30000001/pastSeconds/86400/',
+    method: 'GET',
+    status_code: 200,
+    duration_ms: 1,
+    cache_status: 'fixture',
+    requested_at: new Date().toISOString()
+  });
+  repository.finalizeFetchRun(run.run_id, {
+    discovered_refs: 1,
+    expanded_new: result.killmailsWritten,
+    activity_events_written: result.eventsWritten
+  }, 'success', null);
 }
 
 function seedSystem(db) {

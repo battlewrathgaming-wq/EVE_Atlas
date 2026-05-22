@@ -26,13 +26,14 @@ function buildActorReport(db, input, options = {}) {
     `Evidence window: ${formatEvidenceWindow(evidenceWindow)}`,
     `Expanded evidence range: ${scope.killmailRange.earliest || 'none'} -> ${scope.killmailRange.latest || 'none'}`,
     `Basis: ${scope.killmailRange.count} expanded killmails / ${scope.activityEventCount} actor activity events matching actor/time scope`,
-    `Discovery provenance window(s): ${scope.pastSecondsValues.length ? scope.pastSecondsValues.map(formatWindow).join(', ') : 'unknown'}`,
+    `Actor discovery window(s): ${scope.pastSecondsValues.length ? scope.pastSecondsValues.map(formatWindow).join(', ') : 'unknown'}`,
     `Collection provenance runs: ${scope.runs.length}`,
     `Collected at: ${scope.runs[0]?.started_at || 'none'} -> ${scope.runs[scope.runs.length - 1]?.finished_at || 'none'}`,
     `Interpretation: actor appearances are stored killmail evidence within scope, not proof of current location, intent, staging, ownership, or affiliation.`,
     printSection('Evidence Footer', [
       `Stored evidence matching this scope: ${scope.killmailRange.count} killmails / ${scope.activityEventCount} actor activity events`,
       `Collection provenance zKill requests: ${scope.zkillLogs.length}`,
+      `Actor-route zKill requests: ${scope.actorZkillLogs.length}`,
       `Collection provenance zKill refs discovered: ${scope.totals.discovered}`,
       `Collection provenance already cached: ${scope.totals.cached}`,
       `Collection provenance expanded new: ${scope.totals.expanded}`,
@@ -77,26 +78,47 @@ function actorScope(db, actor, evidenceWindow) {
   const endpointPattern = `%/${routeModifier(actor.entity_type)}/${actor.entity_id}/%`;
   const activityWindow = evidenceWindowClause(evidenceWindow, 'ae.killmail_time');
   const killmailWindow = evidenceWindowClause(evidenceWindow, 'k.killmail_time');
-  const runs = db.prepare(`
-    SELECT fr.*
+  const killmailIds = db.prepare(`
+    SELECT DISTINCT ae.killmail_id
+    FROM activity_events ae
+    JOIN killmails k ON k.killmail_id = ae.killmail_id
+    WHERE ae.entity_type = ? AND ae.entity_id = ?
+      ${activityWindow.sql}
+      ${killmailWindow.sql}
+    ORDER BY ae.killmail_id
+  `).all(actor.entity_type, actor.entity_id, ...activityWindow.params, ...killmailWindow.params)
+    .map((row) => row.killmail_id);
+  const killmailPlaceholders = killmailIds.map(() => '?').join(', ');
+  const runs = killmailIds.length ? db.prepare(`
+    SELECT DISTINCT fr.*
     FROM fetch_runs fr
-    WHERE EXISTS (
-      SELECT 1
-      FROM api_request_logs arl
-      WHERE arl.run_id = fr.run_id
-        AND arl.provider = 'zkill'
-        AND arl.endpoint LIKE ?
-    )
+    JOIN ingestion_audits ia ON ia.run_id = fr.run_id
+    WHERE ia.killmail_id IN (${killmailPlaceholders})
     ORDER BY fr.started_at
-  `).all(endpointPattern);
+  `).all(...killmailIds) : [];
   const runIds = runs.map((run) => run.run_id);
-  const zkillLogs = db.prepare(`
+  const runPlaceholders = runIds.map(() => '?').join(', ');
+  const zkillLogs = runIds.length ? db.prepare(`
+    SELECT *
+    FROM api_request_logs
+    WHERE provider = 'zkill' AND run_id IN (${runPlaceholders})
+    ORDER BY requested_at
+  `).all(...runIds) : [];
+  const actorZkillLogs = db.prepare(`
     SELECT *
     FROM api_request_logs
     WHERE provider = 'zkill' AND endpoint LIKE ?
     ORDER BY requested_at
   `).all(endpointPattern);
-  const pastSecondsValues = [...new Set(zkillLogs.map((log) => parsePastSeconds(log.endpoint)).filter(Boolean))];
+  const pastSecondsValues = [...new Set(actorZkillLogs.map((log) => parsePastSeconds(log.endpoint)).filter(Boolean))];
+  const actorRunIds = [...new Set(actorZkillLogs.map((log) => log.run_id).filter(Boolean))];
+  const actorRunPlaceholders = actorRunIds.map(() => '?').join(', ');
+  const actorRuns = actorRunIds.length ? db.prepare(`
+    SELECT *
+    FROM fetch_runs
+    WHERE run_id IN (${actorRunPlaceholders})
+    ORDER BY started_at
+  `).all(...actorRunIds) : [];
   const killmailRange = db.prepare(`
     SELECT MIN(k.killmail_time) AS earliest, MAX(k.killmail_time) AS latest, COUNT(DISTINCT k.killmail_id) AS count
     FROM killmails k
@@ -184,6 +206,7 @@ function actorScope(db, actor, evidenceWindow) {
   return {
     runs,
     zkillLogs,
+    actorZkillLogs,
     pastSecondsValues,
     killmailRange,
     activityEventCount,
@@ -196,7 +219,7 @@ function actorScope(db, actor, evidenceWindow) {
     warnings,
     apiCalls,
     totals,
-    latestDiscoveredRefs: runs[runs.length - 1]?.discovered_refs || 0
+    latestDiscoveredRefs: actorRuns[actorRuns.length - 1]?.discovered_refs || 0
   };
 }
 
