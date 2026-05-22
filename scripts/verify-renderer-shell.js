@@ -175,6 +175,8 @@ function main() {
   assert(rendererText.includes("service.invoke('metadata.hydration'"), 'renderer should run metadata hydration through service bridge');
   assert(rendererText.includes('metadataHydrationConfirm.checked'), 'metadata hydration should require visible confirmation');
   assert(rendererText.includes('metadataHydrationCandidateIds'), 'renderer should show report-scoped hydration candidate IDs');
+  assert(rendererText.includes("target: 'radius'"), 'metadata hydration should support radius report-scoped IDs');
+  assert(rendererText.includes('currentLoadedReport'), 'metadata hydration should use the currently loaded report context');
   assert(rendererText.includes('Use local SDE metadata, not live ESI'), 'metadata hydration should not hydrate static type labels through ESI');
   assert(rendererText.includes('assessmentConfirm.checked'), 'assessment save should require visible boundary confirmation');
   assert(rendererText.includes('assessmentArtifactPayload'), 'renderer should build assessment artifact payload from report context');

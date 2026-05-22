@@ -48,6 +48,7 @@ async function loadRadiusReport() {
     const report = await service.invoke('report.radius', request);
     state.actorReport = null;
     state.actorReportRequest = null;
+    state.radiusReportRequest = request;
     renderRadiusReport(report);
   } catch (error) {
     renderError(els.actorEvidence, error);
@@ -103,6 +104,8 @@ function radiusReportRequest() {
 
 function renderActorReport(report) {
   state.actorReport = report;
+  state.radiusReport = null;
+  state.loadedReportType = 'actor';
   renderReportStatus(report);
   els.reportOutput.textContent = report.text || 'No text export returned.';
   renderRows(els.actorEvidence, [
@@ -124,6 +127,8 @@ function renderActorReport(report) {
 }
 
 function renderRadiusReport(report) {
+  state.radiusReport = report;
+  state.loadedReportType = 'radius';
   renderReportStatus(report);
   els.reportOutput.textContent = report.text || 'No text export returned.';
   renderRows(els.actorEvidence, [
@@ -207,32 +212,33 @@ function renderAssessmentContext() {
 
 function renderMetadataHydrationContext() {
   const ids = metadataHydrationCandidateIds();
-  if (!state.actorReport) {
+  const report = currentLoadedReport();
+  if (!report) {
     renderRows(els.metadataHydrationCandidates, [
-      ['Context', 'Load an actor report before previewing hydration.'],
+      ['Context', 'Load an actor or radius report before previewing hydration.'],
       ['Boundary', 'Hydration patches cached labels only.']
     ]);
-    els.metadataHydrationNormalized.textContent = 'Load an actor report to preview hydration candidates.';
+    els.metadataHydrationNormalized.textContent = 'Load a report to preview hydration candidates.';
     return;
   }
   renderRows(els.metadataHydrationCandidates, [
-    ['Actor', actorLabel(state.actorReport)],
+    ['Report', reportLabel(report)],
     ['Candidate Entity IDs', ids.length ? ids.join(', ') : 'none'],
     ['Expected ESI Name Calls', ids.length ? '1' : '0'],
-    ['Static Type IDs', (state.actorReport.raw_ids?.type_ids || []).length ? 'Use local SDE metadata, not live ESI.' : 'none in report'],
+    ['Static Type IDs', (report.raw_ids?.type_ids || []).length ? 'Use local SDE metadata, not live ESI.' : 'none in report'],
     ['Boundary', 'Metadata hydration improves readability only; evidence IDs and raw killmails are unchanged.']
   ]);
   els.metadataHydrationNormalized.textContent = JSON.stringify({
-    target: 'actor',
-    actor: state.actorReport.scope?.actor || null,
+    target: state.loadedReportType || report.report_type,
+    scope: report.scope || null,
     candidate_entity_ids: ids,
-    excluded_type_ids: state.actorReport.raw_ids?.type_ids || [],
+    excluded_type_ids: report.raw_ids?.type_ids || [],
     expected_esi_name_calls: ids.length ? 1 : 0
   }, null, 2);
 }
 
 function metadataHydrationCandidateIds() {
-  const rawIds = state.actorReport?.raw_ids || {};
+  const rawIds = currentLoadedReport()?.raw_ids || {};
   return [...new Set([
     ...(rawIds.character_ids || []),
     ...(rawIds.corporation_ids || []),
@@ -242,8 +248,8 @@ function metadataHydrationCandidateIds() {
 }
 
 async function metadataHydrationPreflight() {
-  if (!state.actorReport) {
-    throw new Error('Load an actor report before metadata hydration');
+  if (!currentLoadedReport()) {
+    throw new Error('Load an actor or radius report before metadata hydration');
   }
   const ids = metadataHydrationCandidateIds();
   const gate = await service.invoke('live.gate', {
@@ -285,7 +291,7 @@ function renderMetadataHydrationPreflight(result) {
       blockers: result.gate.blockers || [],
       warnings: result.gate.warnings || []
     },
-    excluded_type_ids: state.actorReport?.raw_ids?.type_ids || []
+    excluded_type_ids: currentLoadedReport()?.raw_ids?.type_ids || []
   }, null, 2);
 }
 
@@ -311,7 +317,11 @@ async function runMetadataHydration() {
     ]);
     state.selectedTaskId = task.task_id;
     await loadTasks();
-    await loadActorReport();
+    if (state.loadedReportType === 'radius') {
+      await loadRadiusReport();
+    } else {
+      await loadActorReport();
+    }
     els.metadataHydrationConfirm.checked = false;
   } catch (error) {
     renderError(els.metadataHydrationStatus, error);
@@ -321,6 +331,15 @@ async function runMetadataHydration() {
 }
 
 function metadataHydrationPayload() {
+  const report = currentLoadedReport();
+  if (state.loadedReportType === 'radius') {
+    return cleanObject({
+      target: 'radius',
+      targetId: report?.scope?.center?.solar_system_id,
+      centerSystemId: report?.scope?.center?.solar_system_id,
+      entityIds: metadataHydrationCandidateIds()
+    });
+  }
   const actor = state.actorReport?.scope?.actor || {};
   return cleanObject({
     target: 'actor',
@@ -328,6 +347,10 @@ function metadataHydrationPayload() {
     entityId: actor.entity_id,
     entityName: actor.entity_name
   });
+}
+
+function currentLoadedReport() {
+  return state.loadedReportType === 'radius' ? state.radiusReport : state.actorReport;
 }
 
 async function saveAssessmentArtifact() {

@@ -144,7 +144,6 @@ This milestone should leave Atlas with:
 Recommended order:
 
 - `queue-report-text-export-fix.md`
-- `report-scoped-metadata-hydration-expansion.md`
 - `local-scale-and-stability-smoke.md`
 - `assessment-from-area-context-review.md`
 
@@ -162,3 +161,4 @@ Completed:
 - `queue-report-text-export-fix.md`
 - `radius-report-presentation-ui.md`
 - `watch-authoring-ui.md`
+- `report-scoped-metadata-hydration-expansion.md`

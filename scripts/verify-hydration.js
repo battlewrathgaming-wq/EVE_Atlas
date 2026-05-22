@@ -5,7 +5,7 @@ const { EvidenceRepository } = require('../src/main/db/evidenceRepository');
 const { SdeTopologyImporter } = require('../src/main/sde/sdeImporter');
 const { collectSystemRadiusWatch } = require('../src/main/workers/systemRadiusCollector');
 const { buildObservedOperatorsReport } = require('../src/main/reports/operatorReport');
-const { hydrateActorReportCandidates, hydrateOperatorReportCandidates } = require('../src/main/metadata/reportHydrator');
+const { hydrateActorReportCandidates, hydrateExplicitEntityIds, hydrateOperatorReportCandidates } = require('../src/main/metadata/reportHydrator');
 
 async function main() {
   const db = openDatabase(':memory:');
@@ -97,6 +97,19 @@ async function main() {
   assert(actorHydration.types_upserted === 0, 'actor hydration should not resolve inventory types through live ESI');
   assert(actorHydration.activity_events_patched === 0, 'actor hydration should not repatch already labeled fixture events');
   assert(count(db, 'metadata_runs') === 2, 'actor hydration should write a metadata run');
+
+  const explicitHydration = await hydrateExplicitEntityIds(db, {
+    entityIds: [90000004],
+    targetType: 'radius',
+    targetId: '30000001'
+  }, {
+    httpClient: fakeHttpClient()
+  });
+  assert(explicitHydration.ids_discovered === 1, 'explicit report hydration should use supplied report-scoped IDs');
+  assert(explicitHydration.requested_from_esi === 1, 'explicit report hydration should request unknown supplied IDs');
+  assert(explicitHydration.resolved === 1, 'explicit report hydration should resolve supplied IDs');
+  assert(explicitHydration.types_upserted === 0, 'explicit report hydration should not resolve static types');
+  assert(count(db, 'metadata_runs') === 3, 'explicit report hydration should write a metadata run');
 
   closeDatabase(db);
   console.log('report candidate hydration verified');

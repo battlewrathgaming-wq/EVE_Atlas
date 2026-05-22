@@ -196,6 +196,69 @@ async function hydrateCorporationReportCandidates(db, input, dependencies = {}) 
   }
 }
 
+async function hydrateExplicitEntityIds(db, input, dependencies = {}) {
+  const repository = dependencies.repository || new EvidenceRepository(db);
+  const ids = [...new Set((input.entityIds || input.entity_ids || [])
+    .map(Number)
+    .filter((id) => Number.isInteger(id) && id > 0))]
+    .sort((a, b) => a - b)
+    .slice(0, dependencies.maxIds || 50);
+  const targetType = input.targetType || input.target_type || 'report';
+  const targetId = input.targetId || input.target_id || 'scoped';
+  const run = repository.createMetadataRun({
+    trigger: 'manual',
+    runType: 'report_scoped_ids',
+    targetType,
+    targetId: String(targetId)
+  });
+  const httpClient = dependencies.httpClient || new HttpClient({
+    repository,
+    runId: run.run_id,
+    runType: 'metadata',
+    signal: dependencies.signal,
+    timeoutMs: dependencies.timeoutMs
+  });
+  httpClient.repository = httpClient.repository || repository;
+  httpClient.runId = httpClient.runId || run.run_id;
+  httpClient.runType = httpClient.runType || 'metadata';
+  const esiClient = dependencies.esiClient || new EsiClient(httpClient);
+
+  try {
+    const alreadyKnown = countKnown(db, ids);
+    const knownPatchResult = patchKnownEntityNames(db, alreadyKnown.rows);
+    const unresolvedIds = ids.filter((id) => !alreadyKnown.knownIds.has(id));
+    const resolved = await resolveInChunks(esiClient, unresolvedIds, dependencies.chunkSize || 500);
+    const applyResult = applyResolvedNames(db, resolved);
+    const apiCounts = apiCountsForRun(db, run.run_id);
+    const unresolvedCount = unresolvedIds.length - resolved.length;
+    const summary = {
+      run_id: run.run_id,
+      target_type: targetType,
+      target_id: String(targetId),
+      candidates_considered: ids.length,
+      ids_discovered: ids.length,
+      already_known: alreadyKnown.count,
+      requested_from_esi: unresolvedIds.length,
+      resolved: resolved.length,
+      unresolved: unresolvedCount,
+      entities_upserted: applyResult.entitiesUpserted,
+      types_upserted: applyResult.typesUpserted,
+      activity_events_patched: knownPatchResult.activityEventsPatched + applyResult.activityEventsPatched,
+      api_calls_esi: apiCounts.esi,
+      warnings: unresolvedCount > 0 ? [`${unresolvedCount} IDs were not resolved by ESI /universe/names/`] : []
+    };
+
+    repository.finalizeMetadataRun(run.run_id, summary, 'success', summary.warnings.join('; ') || null);
+    return summary;
+  } catch (error) {
+    const apiCounts = apiCountsForRun(db, run.run_id);
+    repository.finalizeMetadataRun(run.run_id, {
+      api_calls_esi: apiCounts.esi
+    }, 'failed', null, error.message);
+    throw error;
+  }
+}
+
 function resolveActor(db, input) {
   const entityType = String(input?.entityType || input?.entity_type || '').toLowerCase();
   if (!['character', 'corporation', 'alliance'].includes(entityType)) {
@@ -470,6 +533,7 @@ function apiCountsForRun(db, runId) {
 module.exports = {
   hydrateActorReportCandidates,
   hydrateCorporationReportCandidates,
+  hydrateExplicitEntityIds,
   hydrateOperatorReportCandidates,
   collectHydrationIds,
   collectActorHydrationIds,

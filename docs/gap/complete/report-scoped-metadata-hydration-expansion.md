@@ -1,6 +1,6 @@
 # Gap To-Do: Report-Scoped Metadata Hydration Expansion
 
-Status: Open
+Status: Complete
 Priority: P2
 Milestone: Structured Area Review And Watch Authoring
 
@@ -31,10 +31,21 @@ Hydration should remain scoped to the report or selected work product, not the e
 
 At least one non-actor report context can run explicit, report-scoped metadata hydration and become more readable without changing evidence counts.
 
+## Completion Notes
+
+Completed on 2026-05-22.
+
+Radius report hydration now uses the loaded structured report's report-relevant entity IDs. The UI shows candidate IDs and expected ESI name calls, excludes static inventory type IDs, runs metadata-only `metadata.hydration`, and refreshes the loaded radius report afterward. The backend records this as a metadata run and does not create evidence.
+
+Verification:
+
+- `npm.cmd run verify:hydration`
+- `npm.cmd run verify:renderer-shell`
+- `npm.cmd run smoke:electron`
+
 ## Related Documents
 
 - `docs/gap/complete/metadata-hydration-ui.md`
 - `docs/contracts/metadata-hydration-contract.md`
 - `docs/schemas/metadata-run.md`
 - `src/main/metadata/reportHydrator.js`
-

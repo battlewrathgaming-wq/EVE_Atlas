@@ -12,6 +12,9 @@ const state = {
   selectedTask: null,
   actorReport: null,
   actorReportRequest: null,
+  radiusReport: null,
+  radiusReportRequest: null,
+  loadedReportType: null,
   assessmentArtifacts: [],
   selectedAssessmentArtifact: null,
   window: {

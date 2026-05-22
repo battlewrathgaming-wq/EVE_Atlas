@@ -7,6 +7,7 @@ const { collectSystemRadiusWatch } = require('../workers/systemRadiusCollector')
 const {
   hydrateActorReportCandidates,
   hydrateCorporationReportCandidates,
+  hydrateExplicitEntityIds,
   hydrateOperatorReportCandidates
 } = require('../metadata/reportHydrator');
 const { resolveActorIdentity } = require('../resolution/actorResolver');
@@ -82,6 +83,13 @@ async function runMetadataHydrationService(db, payload = {}, dependencies = {}) 
       entityName: corporation.entity_name
     }, dependencies);
   }
+  if (target === 'radius' || target === 'report_ids') {
+    return hydrateExplicitEntityIds(db, {
+      entityIds: payload.entityIds || payload.entity_ids || [],
+      targetType: target,
+      targetId: payload.targetId || payload.target_id || payload.centerSystemId || payload.center_system_id || 'scoped'
+    }, dependencies);
+  }
   if (target === 'operators' || target === 'system') {
     const systemNameOrId = payload.systemNameOrId || payload.systemName || payload.systemId;
     if (!systemNameOrId) {
@@ -89,7 +97,7 @@ async function runMetadataHydrationService(db, payload = {}, dependencies = {}) 
     }
     return hydrateOperatorReportCandidates(db, systemNameOrId, dependencies);
   }
-  throw new Error('metadata.hydration target must be actor, corporation, operators, or system');
+  throw new Error('metadata.hydration target must be actor, corporation, radius, report_ids, operators, or system');
 }
 
 async function runSdeTopologyImportService(db, payload = {}) {
