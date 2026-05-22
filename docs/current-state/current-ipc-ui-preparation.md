@@ -17,6 +17,7 @@ Recent backend/UI-readiness work completed:
 - scope controls UI loads backend defaults and validates manual discovery, manual expansion, actor watch, and system/radius watch inputs through `scope.validate`
 - queue/watch status UI previews discovery queue selections through `queue.selection` and watch due/blocked/backoff/session/live-gate state through `watch.schedule`
 - session-armed watch executor behavior is contracted before implementation; startup remains disarmed and passive views cannot trigger collection
+- assessment artifact and evidence compaction behavior is contracted; executable evidence pruning remains blocked until artifact persistence and verification exist
 - task wrapping, detached execution, cancellation, and HTTP timeout handling are verified
 - live API gates and user-defined scope validation are centralized
 - queue selection, queue status isolation, and retention preflight are implemented
@@ -63,6 +64,7 @@ Current implemented shell:
 - scoped discovery queue transitions so manual, actor, and system/radius queue rows do not overwrite each other's status
 - UI language contract for evidence, observation, assessment, queue preview, scope, and warning wording
 - session-armed watch executor contract covering arm/disarm semantics, polling cadence, dispatch gates, task execution, completion recording, and restart behavior
+- assessment compaction contract covering artifact storage shape, score/reason requirements, retention by data class, and blockers before evidence pruning
 - bounded HTTP request timeouts and task cancellation signals for live/API-backed work
 - watch scheduling/status services for due, blocked, inactive, backoff, session-gated, and live-gated actor/system watches
 - metadata-only watch run state recording for success/failure, next poll, and backoff timing
@@ -154,6 +156,7 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 - dedicated readiness/settings screen polish
 - session-armed watch executor loop
 - executable retention/deprecation actions and assessment compaction
+- assessment artifact schema/persistence
 - true worker-thread/process isolation for CPU-heavy or synchronous SQLite-heavy tasks
 
 ## Current Review Notes
@@ -171,5 +174,6 @@ Latest reviewed commits:
 - current scope controls slice - backend-defaulted, backend-validated scope payload preview
 - current queue/watch slice - passive discovery queue selection preview and watch schedule status
 - current session-armed executor contract slice - volatile user-armed watch execution semantics before implementation
+- current retention design slice - assessment artifacts and evidence compaction contract before destructive pruning
 
-These commits move the earlier rigging gaps into a usable backend baseline for initial presentation work. The main remaining risk is not missing service vocabulary; it is continuing to wire a renderer that uses these services without bypassing them, then implementing the contracted session-armed executor without turning passive status views into hidden collection triggers.
+These commits move the earlier rigging gaps into a usable backend baseline for initial presentation work. The main remaining risk is not missing service vocabulary; it is continuing to wire a renderer that uses these services without bypassing them, then implementing the contracted session-armed executor and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.

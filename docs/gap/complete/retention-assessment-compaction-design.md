@@ -1,6 +1,6 @@
 ﻿# Gap To-Do: Retention Assessment Compaction Design
 
-Status: Open
+Status: Complete
 Priority: P3
 
 ## Actionables
@@ -35,6 +35,10 @@ Design should cover:
 ## Completion Signal
 
 A design/contract exists for assessment artifacts and evidence compaction, and retention execution remains blocked until that design is implemented and verified.
+
+Completed by:
+
+- `docs/contracts/assessment-compaction-contract.md`
 
 ## Related Documents
 
