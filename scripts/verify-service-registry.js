@@ -20,6 +20,7 @@ async function main() {
     const scopeDefaultsCommand = commands.find((entry) => entry.command === 'scope.defaults');
     const scopeValidateCommand = commands.find((entry) => entry.command === 'scope.validate');
     const taskListCommand = commands.find((entry) => entry.command === 'task.list');
+    const taskCancelCommand = commands.find((entry) => entry.command === 'task.cancel');
     const manualDiscoveryCommand = commands.find((entry) => entry.command === 'manual.discovery');
     const manualExpansionCommand = commands.find((entry) => entry.command === 'manual.expansion');
     const actorWatchCommand = commands.find((entry) => entry.command === 'actor.watch');
@@ -43,6 +44,8 @@ async function main() {
     assert(scopeValidateCommand.classification === 'read-only', 'scope.validate should be read-only');
     assert(taskListCommand, 'task.list should be listed');
     assert(taskListCommand.classification === 'read-only', 'task.list should be read-only');
+    assert(taskCancelCommand, 'task.cancel should be listed');
+    assert(taskCancelCommand.classification === 'read-only', 'task.cancel should be read-only');
     assert(manualDiscoveryCommand?.classification === 'evidence-creating', 'manual.discovery should be evidence-creating');
     assert(manualExpansionCommand?.classification === 'evidence-creating', 'manual.expansion should be evidence-creating');
     assert(actorWatchCommand?.classification === 'evidence-creating', 'actor.watch should be evidence-creating');

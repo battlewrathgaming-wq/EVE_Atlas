@@ -148,6 +148,11 @@ const COMMANDS = {
     classification: 'read-only',
     description: 'Return one backend task by task_id',
     handler: ({ payload }) => defaultTaskRunner.getTask(payload.task_id)
+  },
+  'task.cancel': {
+    classification: 'read-only',
+    description: 'Request cancellation for one running backend task',
+    handler: ({ payload }) => defaultTaskRunner.cancelTask(payload.task_id, payload.reason || 'User requested cancellation')
   }
 };
 
@@ -179,7 +184,7 @@ async function invokeServiceCommand(command, payload = {}, context = {}) {
     };
     const taskHandler = async (task) => {
       task.progress({ stage: 'start', message: `Running ${command}` });
-      const data = await definition.handler({ ...context, payload });
+      const data = await definition.handler({ ...context, payload, signal: task.signal });
       task.progress({ stage: 'finish', message: `Finished ${command}` });
       return { status: 'succeeded', data };
     };

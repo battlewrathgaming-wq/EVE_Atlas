@@ -20,7 +20,12 @@ async function expandManualRefs(input, dependencies = {}) {
     watchType: 'manual_expand',
     watchId: expansionWatchId(input)
   });
-  const httpClient = dependencies.httpClient || new HttpClient({ repository, runId: fetchRun.run_id });
+  const httpClient = dependencies.httpClient || new HttpClient({
+    repository,
+    runId: fetchRun.run_id,
+    signal: dependencies.signal,
+    timeoutMs: dependencies.timeoutMs
+  });
   const esiClient = dependencies.esiClient || new EsiClient(httpClient);
 
   try {

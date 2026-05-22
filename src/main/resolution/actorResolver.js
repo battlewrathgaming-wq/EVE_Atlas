@@ -97,7 +97,9 @@ async function resolveByEsiName(db, entityType, entityName, dependencies) {
   const esiClient = dependencies.esiClient || new EsiClient(new HttpClient({
     repository,
     runId: metadataRun.run_id,
-    runType: 'metadata'
+    runType: 'metadata',
+    signal: dependencies.signal,
+    timeoutMs: dependencies.timeoutMs
   }));
 
   try {

@@ -29,6 +29,7 @@ Current implemented shell:
 - retention/destructive action preflight for confirmation and impact summaries
 - scoped discovery queue transitions so manual, actor, and system/radius queue rows do not overwrite each other's status
 - UI language contract for evidence, observation, assessment, queue preview, scope, and warning wording
+- bounded HTTP request timeouts and task cancellation signals for live/API-backed work
 
 ## Backend Actions Ready For IPC Wrapping
 
@@ -78,6 +79,7 @@ Offline verification now includes:
 - retention preflight verification
 - mutating service verification
 - background execution verification
+- HTTP timeout/cancellation verification
 - task runner verification
 
 Live smoke grouping exists separately:

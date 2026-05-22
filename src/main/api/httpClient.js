@@ -2,25 +2,43 @@ const { USER_AGENT } = require('../../shared/constants');
 const { createRunId, nowIso } = require('../db/evidenceRepository');
 
 const RETRY_STATUSES = new Set([420, 429, 503]);
+const DEFAULT_TIMEOUT_MS = 30000;
+const DEFAULT_MAX_ATTEMPTS = 3;
 
 class HttpClient {
-  constructor({ userAgent = USER_AGENT, repository = null, runId = null, runType = null } = {}) {
+  constructor({
+    userAgent = USER_AGENT,
+    repository = null,
+    runId = null,
+    runType = null,
+    timeoutMs = DEFAULT_TIMEOUT_MS,
+    signal = null,
+    fetchImpl = fetch,
+    maxAttempts = DEFAULT_MAX_ATTEMPTS
+  } = {}) {
     this.userAgent = userAgent;
     this.repository = repository;
     this.runId = runId;
     this.runType = runType || (runId ? 'collection' : 'unscoped');
+    this.timeoutMs = timeoutMs;
+    this.signal = signal;
+    this.fetchImpl = fetchImpl;
+    this.maxAttempts = maxAttempts;
   }
 
   async json(provider, endpoint, options = {}) {
     const method = options.method || 'GET';
     const started = Date.now();
     let retryCount = 0;
+    const timeoutMs = options.timeoutMs ?? this.timeoutMs;
 
-    for (let attempt = 0; attempt < 3; attempt += 1) {
+    for (let attempt = 0; attempt < this.maxAttempts; attempt += 1) {
+      const requestSignal = combinedSignal([this.signal, options.signal], timeoutMs);
       try {
-        const response = await fetch(endpoint, {
+        const response = await this.fetchImpl(endpoint, {
           ...options,
           method,
+          signal: requestSignal.signal,
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -32,12 +50,13 @@ class HttpClient {
         if (response.ok) {
           this.log({ provider, endpoint, method, statusCode: response.status, durationMs: Date.now() - started, retryCount });
           const text = await response.text();
+          requestSignal.cleanup();
           return text ? JSON.parse(text) : null;
         }
 
-        if (RETRY_STATUSES.has(response.status) && attempt < 2) {
+        if (RETRY_STATUSES.has(response.status) && attempt < this.maxAttempts - 1) {
           retryCount += 1;
-          await delay(retryDelay(response, attempt));
+          await delay(retryDelay(response, attempt), requestSignal.signal);
           continue;
         }
 
@@ -53,9 +72,26 @@ class HttpClient {
         });
         throw new Error(`${provider} ${response.status} for ${endpoint}`);
       } catch (error) {
-        if (attempt < 2) {
+        const normalized = normalizeRequestError(error, requestSignal);
+        if (normalized.nonRetryable) {
+          this.log({
+            provider,
+            endpoint,
+            method,
+            durationMs: Date.now() - started,
+            retryCount,
+            errorMessage: normalized.error.message
+          });
+          throw normalized.error;
+        }
+
+        if (attempt < this.maxAttempts - 1) {
           retryCount += 1;
-          await delay(1000 * (attempt + 1));
+          try {
+            await delay(1000 * (attempt + 1), requestSignal.signal);
+          } finally {
+            requestSignal.cleanup();
+          }
           continue;
         }
 
@@ -67,7 +103,9 @@ class HttpClient {
           retryCount,
           errorMessage: error.message
         });
-        throw error;
+        throw normalized.error;
+      } finally {
+        requestSignal.cleanup();
       }
     }
 
@@ -101,10 +139,87 @@ function retryDelay(response, attempt) {
   return Math.min(30000, 1500 * (attempt + 1) * (attempt + 1));
 }
 
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+function delay(ms, signal = null) {
+  if (signal?.aborted) {
+    return Promise.reject(abortError('HTTP_CANCELLED', 'HTTP request cancelled'));
+  }
+  return new Promise((resolve, reject) => {
+    const timeout = setTimeout(resolve, ms);
+    if (signal) {
+      signal.addEventListener('abort', () => {
+        clearTimeout(timeout);
+        reject(abortError('HTTP_CANCELLED', 'HTTP request cancelled'));
+      }, { once: true });
+    }
+  });
+}
+
+function combinedSignal(signals, timeoutMs) {
+  const controller = new AbortController();
+  let timedOut = false;
+  const onAbort = () => controller.abort();
+  const validSignals = signals.filter(Boolean);
+
+  for (const signal of validSignals) {
+    if (signal.aborted) {
+      controller.abort();
+      break;
+    }
+    signal.addEventListener('abort', onAbort, { once: true });
+  }
+
+  const timeout = Number(timeoutMs) > 0
+    ? setTimeout(() => {
+      timedOut = true;
+      controller.abort();
+    }, Number(timeoutMs))
+    : null;
+
+  const cleanup = () => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    for (const signal of validSignals) {
+      signal.removeEventListener('abort', onAbort);
+    }
+  };
+
+  controller.signal.addEventListener('abort', cleanup, { once: true });
+
+  return {
+    signal: controller.signal,
+    timedOut: () => timedOut,
+    cleanup
+  };
+}
+
+function normalizeRequestError(error, requestSignal) {
+  if (requestSignal.timedOut()) {
+    return {
+      nonRetryable: true,
+      error: abortError('HTTP_TIMEOUT', 'HTTP request timed out')
+    };
+  }
+  if (error?.name === 'AbortError' || error?.code === 'HTTP_CANCELLED') {
+    return {
+      nonRetryable: true,
+      error: abortError('HTTP_CANCELLED', 'HTTP request cancelled')
+    };
+  }
+  return {
+    nonRetryable: false,
+    error
+  };
+}
+
+function abortError(code, message) {
+  const error = new Error(message);
+  error.code = code;
+  error.name = code === 'HTTP_TIMEOUT' ? 'TimeoutError' : 'AbortError';
+  return error;
 }
 
 module.exports = {
-  HttpClient
+  HttpClient,
+  DEFAULT_TIMEOUT_MS
 };

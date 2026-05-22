@@ -13,7 +13,13 @@ async function hydrateActorReportCandidates(db, input, dependencies = {}) {
     targetType: actor.entity_type,
     targetId: String(actor.entity_id)
   });
-  const httpClient = dependencies.httpClient || new HttpClient({ repository, runId: run.run_id, runType: 'metadata' });
+  const httpClient = dependencies.httpClient || new HttpClient({
+    repository,
+    runId: run.run_id,
+    runType: 'metadata',
+    signal: dependencies.signal,
+    timeoutMs: dependencies.timeoutMs
+  });
   httpClient.repository = httpClient.repository || repository;
   httpClient.runId = httpClient.runId || run.run_id;
   httpClient.runType = httpClient.runType || 'metadata';
@@ -66,7 +72,13 @@ async function hydrateOperatorReportCandidates(db, systemNameOrId, dependencies 
     targetType: 'system',
     targetId: String(systemNameOrId)
   });
-  const httpClient = dependencies.httpClient || new HttpClient({ repository, runId: run.run_id, runType: 'metadata' });
+  const httpClient = dependencies.httpClient || new HttpClient({
+    repository,
+    runId: run.run_id,
+    runType: 'metadata',
+    signal: dependencies.signal,
+    timeoutMs: dependencies.timeoutMs
+  });
   httpClient.repository = httpClient.repository || repository;
   httpClient.runId = httpClient.runId || run.run_id;
   httpClient.runType = httpClient.runType || 'metadata';
@@ -133,7 +145,13 @@ async function hydrateCorporationReportCandidates(db, input, dependencies = {}) 
     targetType: 'corporation',
     targetId: String(corporation.entity_id)
   });
-  const httpClient = dependencies.httpClient || new HttpClient({ repository, runId: run.run_id, runType: 'metadata' });
+  const httpClient = dependencies.httpClient || new HttpClient({
+    repository,
+    runId: run.run_id,
+    runType: 'metadata',
+    signal: dependencies.signal,
+    timeoutMs: dependencies.timeoutMs
+  });
   httpClient.repository = httpClient.repository || repository;
   httpClient.runId = httpClient.runId || run.run_id;
   httpClient.runType = httpClient.runType || 'metadata';

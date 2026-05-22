@@ -23,6 +23,7 @@ class TaskRunner {
     this.historyLimit = historyLimit;
     this.tasks = new Map();
     this.activeLocks = new Map();
+    this.abortControllers = new Map();
   }
 
   async runTask(definition, handler) {
@@ -76,6 +77,8 @@ class TaskRunner {
     for (const lockKey of lockKeys) {
       this.activeLocks.set(lockKey, task.task_id);
     }
+    const abortController = new AbortController();
+    this.abortControllers.set(task.task_id, abortController);
 
     this.updateTask(task.task_id, {
       status: TASK_STATES.RUNNING,
@@ -87,8 +90,10 @@ class TaskRunner {
 
   async executeTask(task, lockKeys, handler) {
     try {
+      const abortController = this.abortControllers.get(task.task_id);
       const context = {
         task_id: task.task_id,
+        signal: abortController?.signal || null,
         progress: (event) => this.addProgress(task.task_id, event),
         warn: (warning) => this.addWarning(task.task_id, warning)
       };
@@ -101,6 +106,16 @@ class TaskRunner {
       });
       return this.getTask(task.task_id);
     } catch (error) {
+      if (isCancelledError(error)) {
+        this.updateTask(task.task_id, {
+          status: TASK_STATES.CANCELLED,
+          error: {
+            ...taxonomyMessage('TASK_CANCELLED', error.message || 'Task cancelled', { source: 'task.runner' })
+          },
+          finished_at: nowIso()
+        });
+        return this.getTask(task.task_id);
+      }
       this.updateTask(task.task_id, {
         status: TASK_STATES.FAILED,
         error: {
@@ -115,6 +130,7 @@ class TaskRunner {
           this.activeLocks.delete(lockKey);
         }
       }
+      this.abortControllers.delete(task.task_id);
     }
   }
 
@@ -129,6 +145,8 @@ class TaskRunner {
       queued_at: nowIso(),
       started_at: null,
       finished_at: null,
+      cancel_requested_at: null,
+      cancel_reason: null,
       progress: [],
       warnings: [],
       result: null,
@@ -169,6 +187,20 @@ class TaskRunner {
   getTask(taskId) {
     const task = this.tasks.get(taskId);
     return task ? clone(task) : null;
+  }
+
+  cancelTask(taskId, reason = 'Task cancelled') {
+    const task = this.requireTask(taskId);
+    if (![TASK_STATES.QUEUED, TASK_STATES.RUNNING].includes(task.status)) {
+      return this.getTask(taskId);
+    }
+    task.cancel_requested_at = nowIso();
+    task.cancel_reason = reason;
+    const controller = this.abortControllers.get(taskId);
+    if (controller && !controller.signal.aborted) {
+      controller.abort(reason);
+    }
+    return this.getTask(taskId);
   }
 
   listTasks({ limit = 20 } = {}) {
@@ -244,6 +276,12 @@ function normalizeFinalStatus(status) {
     throw new Error(`Invalid task status: ${status}`);
   }
   return value;
+}
+
+function isCancelledError(error) {
+  return error?.code === 'TASK_CANCELLED' ||
+    error?.code === 'HTTP_CANCELLED' ||
+    error?.name === 'AbortError';
 }
 
 function createTaskId() {

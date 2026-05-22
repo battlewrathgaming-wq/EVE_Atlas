@@ -19,7 +19,12 @@ async function collectSystemRadiusWatch(input, dependencies = {}) {
     watchType: 'system_radius',
     watchId: input.watchId || `system:${input.centerSystemId}:radius:${input.radiusJumps ?? 0}`
   });
-  const httpClient = dependencies.httpClient || new HttpClient({ repository, runId: fetchRun.run_id });
+  const httpClient = dependencies.httpClient || new HttpClient({
+    repository,
+    runId: fetchRun.run_id,
+    signal: dependencies.signal,
+    timeoutMs: dependencies.timeoutMs
+  });
   const zkillClient = dependencies.zkillClient || new ZKillDiscoveryClient(httpClient);
   const esiClient = dependencies.esiClient || new EsiClient(httpClient);
 

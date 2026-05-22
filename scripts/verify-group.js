@@ -15,6 +15,7 @@ const GROUPS = {
     'verify:retention-preflight',
     'verify:mutating-services',
     'verify:background-execution',
+    'verify:http-timeouts',
     'verify:fixture',
     'verify:idempotent',
     'verify:db-integrity'

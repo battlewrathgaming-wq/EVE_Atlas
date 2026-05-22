@@ -24,6 +24,9 @@ async function buildEvidencePackageFromRefs({ refs, repository, esiClient, run, 
       output.warnings.push(...normalized.warnings);
       output.run.expanded_count += 1;
     } catch (error) {
+      if (error?.code === 'HTTP_CANCELLED' || error?.code === 'TASK_CANCELLED' || error?.name === 'AbortError') {
+        throw error;
+      }
       output.run.failed_count += 1;
       output.warnings.push({
         killmail_id: ref.killmail_id,

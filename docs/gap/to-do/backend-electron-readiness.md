@@ -152,4 +152,5 @@ Current verification:
 - `docs/gap/complete/ui-language-contract.md`
 - `docs/gap/complete/ipc-mutating-action-services.md`
 - `docs/gap/complete/background-worker-execution.md`
-- `docs/gap/to-do/http-timeouts-and-cancellation.md`
+- `docs/gap/complete/http-timeouts-and-cancellation.md`
+- `docs/gap/to-do/structured-report-responses.md`

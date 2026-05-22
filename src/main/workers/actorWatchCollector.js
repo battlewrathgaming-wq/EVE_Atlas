@@ -23,7 +23,12 @@ async function collectActorWatch(input, dependencies = {}) {
     watchType: 'actor',
     watchId: input.watchId || `${plannerOutput.actor.entity_type}:${plannerOutput.actor.entity_id}`
   });
-  const httpClient = dependencies.httpClient || new HttpClient({ repository, runId: fetchRun.run_id });
+  const httpClient = dependencies.httpClient || new HttpClient({
+    repository,
+    runId: fetchRun.run_id,
+    signal: dependencies.signal,
+    timeoutMs: dependencies.timeoutMs
+  });
   const zkillClient = dependencies.zkillClient || new ZKillDiscoveryClient(httpClient);
   const esiClient = dependencies.esiClient || new EsiClient(httpClient);
 

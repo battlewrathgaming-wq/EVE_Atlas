@@ -20,7 +20,12 @@ async function discoverManualRefs(input, dependencies = {}) {
     watchType: 'manual_discovery',
     watchId: plan.watchId
   });
-  const httpClient = dependencies.httpClient || new HttpClient({ repository, runId: fetchRun.run_id });
+  const httpClient = dependencies.httpClient || new HttpClient({
+    repository,
+    runId: fetchRun.run_id,
+    signal: dependencies.signal,
+    timeoutMs: dependencies.timeoutMs
+  });
   const zkillClient = dependencies.zkillClient || new ZKillDiscoveryClient(httpClient);
 
   try {

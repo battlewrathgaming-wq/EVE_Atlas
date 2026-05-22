@@ -31,6 +31,7 @@
     "verify:retention-preflight": "node scripts/verify-retention-preflight.js",
     "verify:mutating-services": "node scripts/verify-mutating-services.js",
     "verify:background-execution": "node scripts/verify-background-execution.js",
+    "verify:http-timeouts": "node scripts/verify-http-timeouts.js",
     "verify:idempotent": "node scripts/verify-idempotent-ingestion.js",
     "verify:sde-fixture": "node scripts/verify-sde-fixture.js",
     "verify:sde-real-local": "node scripts/verify-sde-real-local.js",
