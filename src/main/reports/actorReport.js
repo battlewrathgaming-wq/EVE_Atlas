@@ -20,6 +20,10 @@ const {
   formatUtcBucket,
   roleMix
 } = require('./observationMetrics');
+const {
+  manualActorDiscoverySummary,
+  manualDiscoveryProvenanceLines
+} = require('./collectionProvenance');
 
 const VALID_ENTITY_TYPES = new Set(['character', 'corporation', 'alliance']);
 
@@ -52,6 +56,7 @@ function buildActorReport(db, input, options = {}) {
       `Collection provenance failed expansions: ${scope.totals.failed}`,
       `Collection provenance activity events written: ${scope.totals.events}`,
       `Collection provenance API calls: zkill ${scope.apiCalls.zkill || 0} / esi ${scope.apiCalls.esi || 0}`,
+      ...manualDiscoveryProvenanceLines(scope.manualDiscovery),
       'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.'
     ].join('\n')),
     printSection('Actor Role Split', table(scope.roleSplit, [
@@ -289,6 +294,7 @@ function actorScope(db, actor, evidenceWindow) {
     totals,
     actorRouteTotals,
     queueCounts,
+    manualDiscovery: manualActorDiscoverySummary(db, actor),
     latestDiscoveredRefs: actorRuns[actorRuns.length - 1]?.discovered_refs || 0
   };
 }

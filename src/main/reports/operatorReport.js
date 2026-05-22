@@ -11,6 +11,10 @@ const {
   evidenceWindowClause,
   formatEvidenceWindow
 } = require('./reportUtils');
+const {
+  manualSystemDiscoverySummary,
+  manualDiscoveryProvenanceLines
+} = require('./collectionProvenance');
 
 function buildObservedOperatorsReport(db, systemNameOrId, options = {}) {
   const system = resolveSystem(db, systemNameOrId);
@@ -44,6 +48,7 @@ function buildObservedOperatorsReport(db, systemNameOrId, options = {}) {
       `Collection provenance already cached: ${scope.totals.cached}`,
       `Collection provenance expanded new: ${scope.totals.expanded}`,
       `Collection provenance failed expansions: ${scope.totals.failed}`,
+      ...manualDiscoveryProvenanceLines(scope.manualDiscovery),
       'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.'
     ].join('\n')),
     printSection('Observed Operators', table(repeatedRows, [
@@ -128,6 +133,7 @@ function systemScope(db, systemId, options = {}) {
     activityEventCount,
     warnings,
     totals,
+    manualDiscovery: manualSystemDiscoverySummary(db, systemId),
     latestDiscoveredRefs: runs[runs.length - 1]?.discovered_refs || 0
   };
 }

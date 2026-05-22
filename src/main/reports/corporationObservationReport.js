@@ -20,6 +20,7 @@ const {
   formatUtcBucket,
   roleMix
 } = require('./observationMetrics');
+const { manualDiscoveryProvenanceLines } = require('./collectionProvenance');
 
 function buildCorporationObservationReport(db, input, options = {}) {
   const corporation = resolveActor(db, {
@@ -58,6 +59,7 @@ function buildCorporationObservationReport(db, input, options = {}) {
       `Actor-route failed expansions: ${scope.actorRouteTotals.failed}`,
       `Actor-route activity events written: ${scope.actorRouteTotals.events}`,
       `Current discovery queue: ${scope.queueCounts.expanded} expanded / ${scope.queueCounts.cached} cached / ${scope.queueCounts.pending} pending / ${scope.queueCounts.failed} failed`,
+      ...manualDiscoveryProvenanceLines(scope.manualDiscovery),
       'Observation sections are filtered by stored evidence scope; collection provenance explains how evidence entered storage.'
     ].join('\n')),
     printSection('Corporation Role Split', table(scope.roleSplit, [

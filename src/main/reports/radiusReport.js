@@ -21,6 +21,10 @@ const {
   formatUtcBucket,
   roleMix
 } = require('./observationMetrics');
+const {
+  manualSystemDiscoverySummary,
+  manualDiscoveryProvenanceLines
+} = require('./collectionProvenance');
 
 function buildRadiusReport(db, centerNameOrId, options = {}) {
   const radiusJumps = Number(options.radiusJumps ?? 0);
@@ -68,6 +72,7 @@ function buildRadiusReport(db, centerNameOrId, options = {}) {
       `Collection provenance failed expansions: ${scope.totals.failed}`,
       `Collection provenance activity events written: ${scope.totals.events}`,
       `Collection provenance API calls: zkill ${scope.apiCalls.zkill || 0} / esi ${scope.apiCalls.esi || 0}`,
+      ...manualDiscoveryProvenanceLines(scope.manualDiscovery),
       'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.'
     ].join('\n')),
     printSection('Activity By System', table(scope.systemCounts, [
@@ -257,6 +262,7 @@ function radiusScope(db, systemIds, options = {}) {
     warnings,
     apiCalls,
     totals,
+    manualDiscovery: manualSystemDiscoverySummary(db, systemIds),
     latestDiscoveredRefs: runs[runs.length - 1]?.discovered_refs || 0
   };
 }

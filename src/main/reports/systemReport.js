@@ -20,6 +20,10 @@ const {
   formatUtcBucket,
   roleMix
 } = require('./observationMetrics');
+const {
+  manualSystemDiscoverySummary,
+  manualDiscoveryProvenanceLines
+} = require('./collectionProvenance');
 
 function buildSystemReport(db, systemNameOrId, options = {}) {
   const system = resolveSystem(db, systemNameOrId);
@@ -132,6 +136,7 @@ function buildSystemReport(db, systemNameOrId, options = {}) {
       `Collection provenance expanded new: ${totals.expanded}`,
       `Collection provenance failed expansions: ${totals.failed}`,
       `Collection provenance activity events written: ${totals.events}`,
+      ...manualDiscoveryProvenanceLines(manualSystemDiscoverySummary(db, system.solar_system_id)),
       'Collection provenance may include multiple run types; observation sections are filtered by stored evidence scope.'
     ].join('\n')),
     printSection('Recent Killmail Timeline', table(timeline, [

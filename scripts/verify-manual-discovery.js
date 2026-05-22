@@ -3,6 +3,7 @@ const { openDatabase, migrate, closeDatabase } = require('../src/main/db/databas
 const { discoverManualRefs } = require('../src/main/workers/manualDiscoveryWorker');
 const { expandManualRefs } = require('../src/main/workers/manualExpansionWorker');
 const { buildQueueReport } = require('../src/main/reports/queueReport');
+const { buildActorReport } = require('../src/main/reports/actorReport');
 
 async function main() {
   const db = openDatabase(':memory:');
@@ -75,6 +76,15 @@ async function main() {
   assert(count(db, 'killmails') === 1, 'manual expansion should write one killmail');
   assert(queueStatus(db, 7001) === 'expanded', 'expanded ref should be marked expanded');
   assert(queueStatus(db, 7002) === 'pending', 'unselected ref should remain pending');
+
+  const actorReport = buildActorReport(db, {
+    entityType: 'character',
+    entityId: 90000002,
+    entityName: 'Atlas Scout'
+  });
+  assertIncludes(actorReport, 'Manual discovery route(s): manual_actor');
+  assertIncludes(actorReport, 'Manual discovery refs queued: 2');
+  assertIncludes(actorReport, 'Manual discovery queue: 1 expanded / 0 cached / 1 pending / 0 failed');
 
   const run = db.prepare(`
     SELECT discovered_refs, expanded_new, activity_events_written, api_calls_zkill, api_calls_esi
