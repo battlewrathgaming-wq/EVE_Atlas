@@ -25,6 +25,9 @@ function main() {
   assert(mainText.includes('alwaysOnTop: windowState.alwaysOnTop'), 'BrowserWindow should restore always-on-top state');
   assert(mainText.includes("ipc.handle('atlas:window:get-state'"), 'main should expose window state IPC');
   assert(mainText.includes("ipc.handle('atlas:window:set-always-on-top'"), 'main should expose always-on-top IPC');
+  assert(mainText.includes('AURA_ATLAS_ELECTRON_VISUAL_SMOKE'), 'main should support explicit Electron visual smoke mode');
+  assert(mainText.includes('capturePage()'), 'visual smoke should capture Electron window screenshots');
+  assert(mainText.includes('fetchRuns === 0'), 'visual smoke should verify startup does not create fetch runs');
 
   assert(preloadText.includes('contextBridge.exposeInMainWorld'), 'preload should expose a controlled bridge');
   assert(preloadText.includes('atlasServices'), 'preload should expose atlasServices');
@@ -97,7 +100,8 @@ function main() {
   assert(rendererText.includes('renderRawIds'), 'renderer should show raw IDs from backend response');
   assert(rendererText.includes("service.invoke('report.queue'"), 'renderer should call a report through service bridge');
   assert(rendererText.includes('service.list()'), 'renderer should read service command availability');
-  assert(rendererText.includes('atlasWindow.setAlwaysOnTop'), 'renderer should toggle always-on-top through preload bridge');
+  assert(rendererText.includes('windowBridge.setAlwaysOnTop'), 'renderer should toggle always-on-top through preload bridge');
+  assert(!rendererText.includes('const atlasWindow = window.atlasWindow'), 'renderer should avoid redeclaring exposed atlasWindow global');
   assert(!rendererText.includes("service.invoke('manual.expansion'"), 'renderer should not trigger manual expansion from passive views');
   assert(!rendererText.includes("service.invoke('actor.watch'"), 'renderer should not trigger actor collection from passive views');
   assert(!rendererText.includes("service.invoke('system.radius.watch'"), 'renderer should not trigger system/radius collection from passive views');
@@ -117,6 +121,14 @@ function main() {
   assert(styleText.includes('.observation-table'), 'renderer styles should define actor observation tables');
   assert(styleText.includes('.form-grid'), 'renderer styles should define actor report controls');
   assert(styleText.includes('.report-output'), 'renderer styles should define report output');
+
+  const packageText = read(path.join(ROOT, 'package.json'));
+  const smokeScriptText = read(path.join(ROOT, 'scripts', 'electron-visual-smoke.ps1'));
+  assert(packageText.includes('"smoke:electron"'), 'package should expose Electron visual smoke script');
+  assert(smokeScriptText.includes('F:') === false, 'visual smoke script should derive project paths instead of hardcoding a drive');
+  assert(smokeScriptText.includes('AURA_ATLAS_DB_PATH'), 'visual smoke should set explicit DB path');
+  assert(smokeScriptText.includes('.tmp'), 'visual smoke should keep artifacts under project .tmp');
+  assert(smokeScriptText.includes('AURA_ATLAS_ELECTRON_VISUAL_SMOKE'), 'visual smoke should enable explicit smoke mode');
 
   console.log('renderer shell service boundary verified');
 }

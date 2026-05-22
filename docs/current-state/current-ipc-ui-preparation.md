@@ -4,7 +4,7 @@ Date: 2026-05-22
 
 ## Progress Snapshot
 
-Recorded: 2026-05-22 13:32:29 +01:00
+Recorded: 2026-05-22 post-checkpoint review
 
 Recent backend/UI-readiness work completed:
 
@@ -18,24 +18,31 @@ Recent backend/UI-readiness work completed:
 - queue/watch status UI previews discovery queue selections through `queue.selection` and watch due/blocked/backoff/session/live-gate state through `watch.schedule`
 - session-armed watch executor behavior is contracted before implementation; startup remains disarmed and passive views cannot trigger collection
 - assessment artifact and evidence compaction behavior is contracted; executable evidence pruning remains blocked until artifact persistence and verification exist
+- `docs/gap/to-do` is cleared except for its README; completed rigging items are now in `docs/gap/complete`
+- Electron visual smoke now runs through `npm.cmd run smoke:electron`, writes screenshots/results under `F:\Projects\AURA-Atlas\.tmp\electron-visual-smoke`, and verifies startup creates no evidence/fetch runs
+- Electron was updated to `v42.2.0` so the app runtime supports the backend `node:sqlite` dependency
 - task wrapping, detached execution, cancellation, and HTTP timeout handling are verified
 - live API gates and user-defined scope validation are centralized
 - queue selection, queue status isolation, and retention preflight are implemented
 - watch schedule/status planning and watch run state recording are implemented
 - report response contracts and common report-scope indexes are implemented
-- offline `verify:all` passes with 40 scripts
+- offline `verify:all` passes with 41 scripts
+- clean local checkpoint reviewed at `26f37a7`
 
 Current lane:
 
-- accept the backend rigging checkpoint as the first renderer-ready service baseline
-- build out the initial renderer shell against service responses instead of repositories or CLI scripts
+- accept the initial presentation shell as the first renderer baseline
+- keep the current renderer mostly read-only until evidence-creating controls are deliberately wired through task services, live gates, and explicit user action
+- use the completed contracts as the source for future session-armed execution and retention/assessment work
 - keep the session-armed watch executor loop separate from passive page load behavior
 - implement any future watch executor from `docs/contracts/session-armed-watch-executor-contract.md`
+- keep retention/destructive actions blocked until assessment artifact persistence exists
 - defer true worker-thread/process isolation until heavier batch/runtime testing proves it is needed
+- run visual/app smoke through `npm.cmd run smoke:electron` or `npm start` rather than direct `file:///F:/...` navigation; the Codex in-app browser blocks direct file navigation by policy
 
 ## What Exists
 
-AURA Atlas is currently backend-first and CLI-verifiable.
+AURA Atlas is currently backend-first, service-boundary-first, and renderer-smoke-verifiable.
 
 The project now has the first Electron IPC service shell around backend services. The renderer/UI should call a controlled backend interface rather than repositories, workers, or SQLite directly.
 
@@ -78,6 +85,9 @@ Current implemented shell:
 - queue/watch pane exposes queued discovery refs, non-evidence preview fields, expected ESI calls, selected/skipped/cached/failed state, and passive watch schedule status
 - frameless window controls for minimize, close, and always-on-top
 - native structured actor report response with text rendering retained for CLI/export
+- Electron visual smoke harness captures readiness, scopes, tasks, queue/watch, and reports screenshots from the real app window
+
+The current renderer is intentionally an initial shell. It proves service consumption, status presentation, scoped previews, and actor-report rendering. It is not yet the final interaction model for live collection or assessment workflows.
 
 ## Backend Actions Ready For IPC Wrapping
 
@@ -153,11 +163,13 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 
 ## Not Yet Implemented
 
-- dedicated readiness/settings screen polish
+- broader visual/product polish beyond the initial shell
+- renderer controls that execute evidence-creating collection actions; these should remain behind task services, live gates, scope validation, and explicit user confirmation
 - session-armed watch executor loop
 - executable retention/deprecation actions and assessment compaction
 - assessment artifact schema/persistence
 - true worker-thread/process isolation for CPU-heavy or synchronous SQLite-heavy tasks
+- broader manual visual polish beyond the automated Electron smoke harness
 
 ## Current Review Notes
 
@@ -166,6 +178,17 @@ Latest reviewed commits:
 - `e059924` - watch scheduler status service
 - `fa34b9a` - report performance indexes
 - `eda3938` - readiness inspection/preparation separation
+- `2574906` - initial renderer service shell
+- `99306be` - frameless widget shell controls
+- `fabb07c` - readiness settings screen
+- `4e8486d` - task progress UI
+- `fca00e1` - actor report presentation
+- `f8c1b51` - scope controls UI
+- `28a8aef` - queue and watch status views
+- `07b2804` - session armed watch executor contract
+- `ef495bf` - assessment compaction contract
+- `26f37a7` - retired backend electron readiness note
+- current visual smoke slice - real Electron smoke harness, Electron runtime update, renderer global collision fix
 - current renderer shell slice - preload service bridge and initial presentation shell
 - current frameless shell slice - draggable window chrome and persisted always-on-top state
 - current readiness screen slice - explicit readiness/settings presentation through service responses
@@ -176,4 +199,4 @@ Latest reviewed commits:
 - current session-armed executor contract slice - volatile user-armed watch execution semantics before implementation
 - current retention design slice - assessment artifacts and evidence compaction contract before destructive pruning
 
-These commits move the earlier rigging gaps into a usable backend baseline for initial presentation work. The main remaining risk is not missing service vocabulary; it is continuing to wire a renderer that uses these services without bypassing them, then implementing the contracted session-armed executor and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.
+These commits move the earlier rigging gaps into an initial presentation checkpoint. The main remaining risk is no longer missing service vocabulary; it is preserving the service/evidence boundary while adding executable UI actions, then implementing the contracted session-armed executor and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.

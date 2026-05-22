@@ -1,5 +1,5 @@
 const service = window.atlasServices;
-const atlasWindow = window.atlasWindow;
+const windowBridge = window.atlasWindow;
 
 const state = {
   commands: [],
@@ -88,7 +88,7 @@ function assertServiceBridge() {
   if (!service?.list || !service?.invoke) {
     throw new Error('Atlas service bridge is unavailable');
   }
-  if (!atlasWindow?.getState || !atlasWindow?.setAlwaysOnTop) {
+  if (!windowBridge?.getState || !windowBridge?.setAlwaysOnTop) {
     throw new Error('Atlas window bridge is unavailable');
   }
 }
@@ -98,7 +98,7 @@ async function init() {
     assertServiceBridge();
     setServiceState('Connecting');
     state.commands = await service.list();
-    state.window = await atlasWindow.getState();
+    state.window = await windowBridge.getState();
     renderWindowState();
     setServiceState(`${state.commands.length} services`);
     bindEvents();
@@ -130,8 +130,8 @@ function bindEvents() {
   els.loadActorReport.addEventListener('click', loadActorReport);
   els.loadQueueReport.addEventListener('click', loadQueueReport);
   els.pinWindow.addEventListener('click', toggleAlwaysOnTop);
-  els.minimizeWindow.addEventListener('click', () => atlasWindow.minimize());
-  els.closeWindow.addEventListener('click', () => atlasWindow.close());
+  els.minimizeWindow.addEventListener('click', () => windowBridge.minimize());
+  els.closeWindow.addEventListener('click', () => windowBridge.close());
 }
 
 function selectView(name) {
@@ -611,7 +611,7 @@ function cleanObject(value) {
 async function toggleAlwaysOnTop() {
   els.pinWindow.disabled = true;
   try {
-    state.window = await atlasWindow.setAlwaysOnTop(!state.window.alwaysOnTop);
+    state.window = await windowBridge.setAlwaysOnTop(!state.window.alwaysOnTop);
     renderWindowState();
   } finally {
     els.pinWindow.disabled = false;

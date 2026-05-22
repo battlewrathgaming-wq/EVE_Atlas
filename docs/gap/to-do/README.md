@@ -20,7 +20,7 @@ Recommended order:
 
 - No active IPC/UI checklist item remains in this folder.
 
-## Milestone Todo
+## Completed Milestone: Initial Presentation Shell
 
 Current milestone: initial presentation shell.
 
@@ -41,10 +41,35 @@ The milestone should leave Atlas with:
 ## Supporting Notes
 
 - `docs/current-state/current-ipc-ui-preparation.md`
+- `docs/audits/audit-2026-05-22-initial-presentation-checkpoint-review.md`
 - `docs/audits/audit-2026-05-22-rigging-checkpoint-review.md`
 
 Completed items are moved to `docs/gap/complete`.
 
 `backend-electron-readiness.md`, `queue-status-scope-isolation.md`, `ui-language-contract.md`, `ipc-mutating-action-services.md`, `background-worker-execution.md`, `http-timeouts-and-cancellation.md`, `structured-report-responses.md`, `watch-scheduler-and-backoff.md`, `report-performance-indexes.md`, `readiness-side-effects.md`, `renderer-shell-service-boundary.md`, `frameless-widget-shell.md`, `readiness-settings-screen.md`, `task-progress-and-cancellation-ui.md`, `report-presentation-actor-first.md`, `scope-controls-ui.md`, `queue-and-watch-status-views.md`, `session-armed-watch-executor-contract.md`, and `retention-assessment-compaction-design.md` have been completed and moved to `docs/gap/complete`.
 
-The next implementation slice should come from the refreshed audit/current-state review, not this checklist.
+The next implementation slice comes from the refreshed audit/current-state review, not this retired checklist.
+
+## Current Milestone: Presentation Validation And Controlled Execution
+
+Purpose:
+
+Prove the Electron shell as an actual app experience, then add controlled execution paths without weakening Atlas doctrine.
+
+This milestone is not a redesign milestone. It is a validation and controlled-action milestone.
+
+The milestone should leave Atlas with:
+
+- one documented Electron visual smoke path
+- clear resolution for the blocked `file:///F:/...` browser smoke issue
+- first evidence-creating UI actions wired through services/tasks/live gates
+- session-armed watch execution implemented only from its contract
+- assessment artifact persistence designed and started before evidence pruning
+- a runtime process-isolation review based on real performance pressure, not assumption
+
+Recommended order:
+
+1. `evidence-creating-ui-actions.md`
+2. `session-armed-watch-executor-implementation.md`
+3. `assessment-artifact-persistence.md`
+4. `runtime-process-isolation-review.md`
