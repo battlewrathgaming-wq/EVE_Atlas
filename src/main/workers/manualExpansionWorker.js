@@ -27,7 +27,9 @@ async function expandManualRefs(input, dependencies = {}) {
     const candidates = manualExpansionCandidates(db, input, maxExpansions);
     const selectedRefs = candidates.map((candidate) => ({
       killmail_id: candidate.killmail_id,
-      hash: candidate.hash
+      hash: candidate.hash,
+      discovered_by_type: candidate.discovered_by_type,
+      discovered_by_id: candidate.discovered_by_id
     }));
     repository.markDiscoveryRefsSelected(selectedRefs);
 
@@ -44,16 +46,22 @@ async function expandManualRefs(input, dependencies = {}) {
       discoveredBy: evidenceDiscoveredBy(input, candidates)
     });
     markFailedExpansionCandidates(candidates, evidencePackage.warnings);
-    repository.markDiscoveryRefsFailed(evidencePackage.warnings);
+    repository.markDiscoveryRefsFailed(candidates.filter((candidate) => candidate.skip_reason === 'failed'));
 
     const persistResult = repository.persistEvidencePackage(evidencePackage);
     repository.markDiscoveryRefsExpanded(evidencePackage.killmails.map((killmail) => ({
       killmail_id: killmail.killmail_id,
-      hash: killmail.killmail_hash
+      hash: killmail.killmail_hash,
+      ...scopeForKillmail(candidates, killmail.killmail_id)
     })));
     repository.markDiscoveryRefsCached(candidates
       .filter((candidate) => repository.hasKillmail(candidate.killmail_id))
-      .map((candidate) => ({ killmail_id: candidate.killmail_id, hash: candidate.hash })));
+      .map((candidate) => ({
+        killmail_id: candidate.killmail_id,
+        hash: candidate.hash,
+        discovered_by_type: candidate.discovered_by_type,
+        discovered_by_id: candidate.discovered_by_id
+      })));
 
     const apiCounts = apiCountsForRun(db, fetchRun.run_id);
     const summary = summarizeExpansionQueue(candidates);
@@ -112,7 +120,8 @@ function manualExpansionCandidates(db, input, limit) {
   }
 
   return db.prepare(`
-    SELECT killmail_id, killmail_hash AS hash, priority, discovered_at,
+    SELECT killmail_id, killmail_hash AS hash, discovered_by_type, discovered_by_id,
+           priority, discovered_at,
            source_system_id, source_actor_type, source_actor_id
     FROM discovered_killmail_refs
     WHERE ${where.join(' AND ')}
@@ -125,6 +134,17 @@ function manualExpansionCandidates(db, input, limit) {
       already_cached: false,
       skip_reason: null
     }));
+}
+
+function scopeForKillmail(candidates, killmailId) {
+  const match = candidates.find((candidate) => candidate.killmail_id === killmailId);
+  if (!match) {
+    return {};
+  }
+  return {
+    discovered_by_type: match.discovered_by_type,
+    discovered_by_id: match.discovered_by_id
+  };
 }
 
 function expansionWatchId(input) {

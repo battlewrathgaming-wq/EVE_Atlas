@@ -25,6 +25,7 @@ Current implemented shell:
 - shared message taxonomy for readiness, live gate, and task responses
 - task locking for read-only, metadata, evidence-creating, destructive, and exclusive work
 - retention/destructive action preflight for confirmation and impact summaries
+- scoped discovery queue transitions so manual, actor, and system/radius queue rows do not overwrite each other's status
 
 ## Backend Actions Ready For IPC Wrapping
 
@@ -68,6 +69,7 @@ Offline verification now includes:
 - live API gate verification
 - report response verification
 - queue expansion selection verification
+- queue scope isolation verification
 - message taxonomy verification
 - retention preflight verification
 - task runner verification

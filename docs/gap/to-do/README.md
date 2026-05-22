@@ -19,6 +19,13 @@ The current checklist is grouped around preparing the Electron shell and rendere
 Recommended order:
 
 1. `ui-language-contract.md`
+2. `ipc-mutating-action-services.md`
+3. `background-worker-execution.md`
+4. `http-timeouts-and-cancellation.md`
+5. `structured-report-responses.md`
+6. `watch-scheduler-and-backoff.md`
+7. `report-performance-indexes.md`
+8. `readiness-side-effects.md`
 
 Supporting current-state note:
 
@@ -26,4 +33,6 @@ Supporting current-state note:
 
 Completed items are moved to `docs/gap/complete`.
 
-The next implementation slice should lock down UI language, because the renderer needs evidence/observation/assessment wording before screens are built.
+`queue-status-scope-isolation.md` has been completed and moved to `docs/gap/complete`.
+
+The next implementation slice should expose governed IPC service commands for mutating actions, because the renderer needs a controlled boundary before it can trigger discovery, expansion, collection, hydration, or watch changes.

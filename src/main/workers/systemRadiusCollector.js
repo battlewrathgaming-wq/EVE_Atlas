@@ -25,9 +25,12 @@ async function collectSystemRadiusWatch(input, dependencies = {}) {
 
   try {
     const plannerOutput = dependencies.plannerOutput || planSystemRadiusWatch(input, { topologyService });
-    const pendingRefs = repository.pendingDiscoveryRefs({
+    const queueScope = {
       discoveredByType: 'system_radius',
-      discoveredById: input.centerSystemId,
+      discoveredById: input.centerSystemId
+    };
+    const pendingRefs = repository.pendingDiscoveryRefs({
+      ...queueScope,
       limit: plannerOutput.caps.maxExpansions
     });
     const discovery = pendingRefs.length
@@ -42,7 +45,7 @@ async function collectSystemRadiusWatch(input, dependencies = {}) {
       });
     }
     const selection = selectExpansionCandidates(discovery.expansionQueue, repository, plannerOutput.caps.maxExpansions);
-    repository.markDiscoveryRefsSelected(selection.selectedRefs);
+    repository.markDiscoveryRefsSelected(selection.selectedRefs, undefined, queueScope);
     const evidencePackage = await buildEvidencePackageFromRefs({
       refs: selection.selectedRefs,
       repository,
@@ -60,16 +63,16 @@ async function collectSystemRadiusWatch(input, dependencies = {}) {
     });
     markFailedExpansionCandidates(selection.expansionQueue, evidencePackage.warnings);
     selection.skipCounts = summarizeExpansionQueue(selection.expansionQueue);
-    repository.markDiscoveryRefsFailed(evidencePackage.warnings);
+    repository.markDiscoveryRefsFailed(selection.expansionQueue.filter((candidate) => candidate.skip_reason === 'failed'), undefined, queueScope);
 
     const persistResult = repository.persistEvidencePackage(evidencePackage);
     repository.markDiscoveryRefsExpanded(evidencePackage.killmails.map((killmail) => ({
       killmail_id: killmail.killmail_id,
       hash: killmail.killmail_hash
-    })));
+    })), undefined, queueScope);
     repository.markDiscoveryRefsCached(selection.expansionQueue
       .filter((candidate) => candidate.skip_reason === 'cached')
-      .map((candidate) => ({ killmail_id: candidate.killmail_id, hash: candidate.hash })));
+      .map((candidate) => ({ killmail_id: candidate.killmail_id, hash: candidate.hash })), queueScope);
     const apiCounts = apiCountsForRun(db, fetchRun.run_id);
     const collectionWarnings = [
       ...plannerOutput.guardrailWarnings,
@@ -144,6 +147,8 @@ function pendingSystemRadiusDiscovery(pendingRefs) {
   const expansionQueue = pendingRefs.map((ref, index) => ({
     killmail_id: ref.killmail_id,
     hash: ref.hash,
+    discovered_by_type: ref.discovered_by_type,
+    discovered_by_id: ref.discovered_by_id,
     source_system_id: ref.source_system_id || null,
     discovered_at: new Date().toISOString(),
     priority: ref.priority || index + 1,
@@ -265,7 +270,9 @@ function selectExpansionCandidates(expansionQueue, repository, maxExpansions) {
     candidate.selected_for_expansion = true;
     selectedRefs.push({
       killmail_id: candidate.killmail_id,
-      hash: candidate.hash
+      hash: candidate.hash,
+      discovered_by_type: candidate.discovered_by_type,
+      discovered_by_id: candidate.discovered_by_id
     });
   }
 

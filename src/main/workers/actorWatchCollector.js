@@ -28,9 +28,12 @@ async function collectActorWatch(input, dependencies = {}) {
   const esiClient = dependencies.esiClient || new EsiClient(httpClient);
 
   try {
-    const pendingRefs = repository.pendingDiscoveryRefs({
+    const queueScope = {
       discoveredByType: 'actor',
-      discoveredById: plannerOutput.actor.entity_id,
+      discoveredById: plannerOutput.actor.entity_id
+    };
+    const pendingRefs = repository.pendingDiscoveryRefs({
+      ...queueScope,
       limit: plannerOutput.caps.maxExpansions
     });
     const discovery = pendingRefs.length
@@ -47,7 +50,7 @@ async function collectActorWatch(input, dependencies = {}) {
       });
     }
     const selection = selectExpansionCandidates(discovery.expansionQueue, repository, plannerOutput.caps.maxExpansions);
-    repository.markDiscoveryRefsSelected(selection.selectedRefs);
+    repository.markDiscoveryRefsSelected(selection.selectedRefs, undefined, queueScope);
     const evidencePackage = await buildEvidencePackageFromRefs({
       refs: selection.selectedRefs,
       repository,
@@ -65,16 +68,16 @@ async function collectActorWatch(input, dependencies = {}) {
     });
     markFailedExpansionCandidates(selection.expansionQueue, evidencePackage.warnings);
     selection.skipCounts = summarizeExpansionQueue(selection.expansionQueue);
-    repository.markDiscoveryRefsFailed(evidencePackage.warnings);
+    repository.markDiscoveryRefsFailed(selection.expansionQueue.filter((candidate) => candidate.skip_reason === 'failed'), undefined, queueScope);
 
     const persistResult = repository.persistEvidencePackage(evidencePackage);
     repository.markDiscoveryRefsExpanded(evidencePackage.killmails.map((killmail) => ({
       killmail_id: killmail.killmail_id,
       hash: killmail.killmail_hash
-    })));
+    })), undefined, queueScope);
     repository.markDiscoveryRefsCached(selection.expansionQueue
       .filter((candidate) => candidate.skip_reason === 'cached')
-      .map((candidate) => ({ killmail_id: candidate.killmail_id, hash: candidate.hash })));
+      .map((candidate) => ({ killmail_id: candidate.killmail_id, hash: candidate.hash })), queueScope);
     const apiCounts = apiCountsForRun(db, fetchRun.run_id);
     const collectionWarnings = [
       ...plannerOutput.guardrailWarnings,
@@ -146,6 +149,8 @@ function pendingActorDiscovery(pendingRefs, plannerOutput) {
   const expansionQueue = pendingRefs.map((ref, index) => ({
     killmail_id: ref.killmail_id,
     hash: ref.hash,
+    discovered_by_type: ref.discovered_by_type,
+    discovered_by_id: ref.discovered_by_id,
     source_actor_type: plannerOutput.actor.entity_type,
     source_actor_id: plannerOutput.actor.entity_id,
     discovered_at: new Date().toISOString(),

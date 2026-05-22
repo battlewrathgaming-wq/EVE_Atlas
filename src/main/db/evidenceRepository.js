@@ -400,7 +400,8 @@ class EvidenceRepository {
 
   pendingDiscoveryRefs({ discoveredByType, discoveredById, limit }) {
     return this.db.prepare(`
-      SELECT killmail_id, killmail_hash AS hash, source_system_id, priority
+      SELECT killmail_id, killmail_hash AS hash, discovered_by_type, discovered_by_id,
+             source_system_id, priority
       FROM discovered_killmail_refs
       WHERE discovered_by_type = ?
         AND discovered_by_id = ?
@@ -410,42 +411,85 @@ class EvidenceRepository {
     `).all(discoveredByType, String(discoveredById), limit);
   }
 
-  markDiscoveryRefsSelected(refs, selectedAt = nowIso()) {
-    const statement = this.db.prepare(`
+  markDiscoveryRefsSelected(refs, selectedAt = nowIso(), scope = {}) {
+    const scopedStatement = this.db.prepare(`
+      UPDATE discovered_killmail_refs
+      SET selected_for_expansion_at = ?
+      WHERE killmail_id = ? AND killmail_hash = ?
+        AND discovered_by_type = ? AND discovered_by_id = ?
+    `);
+    const legacyStatement = this.db.prepare(`
       UPDATE discovered_killmail_refs
       SET selected_for_expansion_at = ?
       WHERE killmail_id = ? AND killmail_hash = ?
     `);
     for (const ref of refs || []) {
-      statement.run(selectedAt, ref.killmail_id, ref.hash);
+      const identity = queueScopeIdentity(ref, scope);
+      if (identity) {
+        scopedStatement.run(selectedAt, ref.killmail_id, ref.hash, identity.discoveredByType, identity.discoveredById);
+      } else {
+        legacyStatement.run(selectedAt, ref.killmail_id, ref.hash);
+      }
     }
   }
 
-  markDiscoveryRefsExpanded(refs, expandedAt = nowIso()) {
-    const statement = this.db.prepare(`
+  markDiscoveryRefsExpanded(refs, expandedAt = nowIso(), scope = {}) {
+    const scopedStatement = this.db.prepare(`
+      UPDATE discovered_killmail_refs
+      SET status = 'expanded', expanded_at = ?, last_error = NULL
+      WHERE killmail_id = ? AND killmail_hash = ?
+        AND discovered_by_type = ? AND discovered_by_id = ?
+    `);
+    const legacyStatement = this.db.prepare(`
       UPDATE discovered_killmail_refs
       SET status = 'expanded', expanded_at = ?, last_error = NULL
       WHERE killmail_id = ? AND killmail_hash = ?
     `);
     for (const ref of refs || []) {
-      statement.run(expandedAt, ref.killmail_id, ref.hash);
+      const identity = queueScopeIdentity(ref, scope);
+      if (identity) {
+        scopedStatement.run(expandedAt, ref.killmail_id, ref.hash, identity.discoveredByType, identity.discoveredById);
+      } else {
+        legacyStatement.run(expandedAt, ref.killmail_id, ref.hash);
+      }
     }
   }
 
-  markDiscoveryRefsCached(refs) {
-    const statement = this.db.prepare(`
+  markDiscoveryRefsCached(refs, scope = {}) {
+    const scopedStatement = this.db.prepare(`
+      UPDATE discovered_killmail_refs
+      SET status = 'cached'
+      WHERE killmail_id = ? AND killmail_hash = ?
+        AND discovered_by_type = ? AND discovered_by_id = ?
+        AND status != 'expanded'
+    `);
+    const legacyStatement = this.db.prepare(`
       UPDATE discovered_killmail_refs
       SET status = 'cached'
       WHERE killmail_id = ? AND killmail_hash = ?
         AND status != 'expanded'
     `);
     for (const ref of refs || []) {
-      statement.run(ref.killmail_id, ref.hash);
+      const identity = queueScopeIdentity(ref, scope);
+      if (identity) {
+        scopedStatement.run(ref.killmail_id, ref.hash, identity.discoveredByType, identity.discoveredById);
+      } else {
+        legacyStatement.run(ref.killmail_id, ref.hash);
+      }
     }
   }
 
-  markDiscoveryRefsFailed(warnings, failedAt = nowIso()) {
-    const statement = this.db.prepare(`
+  markDiscoveryRefsFailed(refs, failedAt = nowIso(), scope = {}) {
+    const scopedStatement = this.db.prepare(`
+      UPDATE discovered_killmail_refs
+      SET status = 'failed',
+          failed_at = ?,
+          failure_count = failure_count + 1,
+          last_error = ?
+      WHERE killmail_id = ? AND killmail_hash = ?
+        AND discovered_by_type = ? AND discovered_by_id = ?
+    `);
+    const legacyStatement = this.db.prepare(`
       UPDATE discovered_killmail_refs
       SET status = 'failed',
           failed_at = ?,
@@ -453,17 +497,38 @@ class EvidenceRepository {
           last_error = ?
       WHERE killmail_id = ?
     `);
-    for (const warning of warnings || []) {
-      if (warning.warning_type !== 'failed_expansion' || !warning.killmail_id) {
+    for (const ref of refs || []) {
+      if (ref.warning_type && ref.warning_type !== 'failed_expansion') {
         continue;
       }
-      statement.run(failedAt, warning.message || 'ESI expansion failed', warning.killmail_id);
+      if (!ref.killmail_id) {
+        continue;
+      }
+      const message = ref.message || ref.error_message || 'ESI expansion failed';
+      const identity = queueScopeIdentity(ref, scope);
+      if (identity && ref.hash) {
+        scopedStatement.run(failedAt, message, ref.killmail_id, ref.hash, identity.discoveredByType, identity.discoveredById);
+      } else {
+        legacyStatement.run(failedAt, message, ref.killmail_id);
+      }
     }
   }
 
   count(tableName) {
     return this.db.prepare(`SELECT COUNT(*) AS count FROM ${tableName}`).get().count;
   }
+}
+
+function queueScopeIdentity(ref, scope = {}) {
+  const discoveredByType = ref.discovered_by_type || ref.discoveredByType || scope.discoveredByType;
+  const discoveredById = ref.discovered_by_id || ref.discoveredById || scope.discoveredById;
+  if (!discoveredByType || discoveredById === undefined || discoveredById === null) {
+    return null;
+  }
+  return {
+    discoveredByType,
+    discoveredById: String(discoveredById)
+  };
 }
 
 module.exports = {

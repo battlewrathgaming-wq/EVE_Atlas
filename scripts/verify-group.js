@@ -10,6 +10,7 @@ const GROUPS = {
     'verify:live-api-gate',
     'verify:report-response',
     'verify:queue-selection',
+    'verify:queue-scope-isolation',
     'verify:message-taxonomy',
     'verify:retention-preflight',
     'verify:fixture',

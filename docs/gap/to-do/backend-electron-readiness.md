@@ -147,4 +147,5 @@ Current verification:
 - `docs/gap/complete/error-warning-taxonomy.md`
 - `docs/gap/complete/concurrency-and-locking.md`
 - `docs/gap/complete/destructive-actions-and-retention.md`
+- `docs/gap/complete/queue-status-scope-isolation.md`
 - `docs/gap/to-do/ui-language-contract.md`
