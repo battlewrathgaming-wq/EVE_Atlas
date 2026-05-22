@@ -4,6 +4,7 @@ const { EvidenceRepository } = require('../src/main/db/evidenceRepository');
 const { collectActorWatch } = require('../src/main/workers/actorWatchCollector');
 const { evidencePackageFromExpandedKillmails } = require('../src/main/workers/killmailIngestionWorker');
 const { buildActorReport } = require('../src/main/reports/actorReport');
+const { buildRunReport } = require('../src/main/reports/runReport');
 const { addWatchlistEntity } = require('../src/main/watchlist/watchlistRepository');
 
 async function main() {
@@ -70,6 +71,7 @@ async function main() {
     entityType: 'character',
     entityId: 90000002
   });
+  const runReport = buildRunReport(db, summary.run_id);
   const emptyWindowReport = buildActorReport(db, {
     entityType: 'character',
     entityId: 90000002
@@ -100,6 +102,12 @@ async function main() {
   assertIncludes(report, 'Observed Operators [allianceID: 99000002]');
   assertIncludes(report, 'not proof of current location, intent, staging, ownership, or affiliation');
   assertIncludes(report, 'Source: zKill discovery + ESI expanded killmails');
+  assertIncludes(runReport, 'Watch: actor / actor-report-fixture');
+  assertIncludes(runReport, 'Collection target: Atlas Scout [characterID: 90000002]');
+  assertIncludes(runReport, 'First zKill actor: Atlas Scout [characterID: 90000002]');
+  assertIncludes(runReport, 'Collection Routes');
+  assertIncludes(runReport, 'character');
+  assertIncludes(runReport, 'Atlas Scout [characterID: 90000002]');
   assertIncludes(emptyWindowReport, 'Evidence window: 2026-05-02T00:00:00Z -> 2026-05-03T00:00:00Z');
   assertIncludes(emptyWindowReport, 'Stored evidence matching this scope: 0 killmails / 0 actor activity events');
 

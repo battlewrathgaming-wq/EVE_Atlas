@@ -5,7 +5,8 @@ const {
   table,
   printSection,
   sampleStatus,
-  formatSystemLabel
+  formatSystemLabel,
+  formatEntityLabel
 } = require('./reportUtils');
 
 function buildRunReport(db, runId) {
@@ -28,7 +29,9 @@ function buildRunReport(db, runId) {
   `).all(runId);
   const pastSeconds = parsePastSeconds(zkillLogs[0]?.endpoint);
   const systemId = parseSystemId(zkillLogs[0]?.endpoint);
+  const actorTarget = parseActorTarget(zkillLogs[0]?.endpoint);
   const system = systemId ? db.prepare('SELECT * FROM solar_systems WHERE solar_system_id = ?').get(systemId) : null;
+  const actor = actorTarget ? resolveActor(db, actorTarget) : null;
   const killmails = db.prepare(`
     SELECT k.killmail_id, k.killmail_time, k.solar_system_id, ss.solar_system_name, ss.region_name
     FROM killmails k
@@ -87,7 +90,9 @@ function buildRunReport(db, runId) {
     `Run ID: ${run.run_id}`,
     `Run status: ${run.status}`,
     `Watch: ${run.watch_type} / ${run.watch_id || 'n/a'}`,
+    `Collection target: ${collectionTargetLabel(system, systemId, actor, actorTarget)}`,
     `First zKill system: ${system ? formatSystemLabel(system.solar_system_name, system.solar_system_id) : systemId ? formatSystemLabel(null, systemId) : 'unknown'}`,
+    `First zKill actor: ${actor ? formatEntityLabel(actor.entity_name, actor.entity_type, actor.entity_id) : actorTarget ? formatEntityLabel(null, actorTarget.entity_type, actorTarget.entity_id) : 'unknown'}`,
     `First zKill geography: ${system?.region_name || 'unknown'} / ${system?.constellation_name || 'unknown'}`,
     `Discovery window: ${formatWindow(pastSeconds)}`,
     `Collection run timestamp: ${run.started_at} -> ${run.finished_at || 'not finished'}`,
@@ -135,11 +140,93 @@ function buildRunReport(db, runId) {
       { label: 'Calls', value: (row) => row.count },
       { label: 'Duration ms', value: (row) => row.duration_ms || 0 }
     ])),
+    printSection('Collection Routes', table(routeRows(db, zkillLogs), [
+      { label: 'Route Type', value: (row) => row.route_type },
+      { label: 'Target', value: (row) => row.target },
+      { label: 'Window', value: (row) => formatWindow(row.past_seconds) },
+      { label: 'Requests', value: (row) => row.requests }
+    ])),
     printSection('zKill Requests', table(zkillLogs, requestColumns())),
     printSection('ESI Requests', table(esiLogs, requestColumns())),
     printSection('Warnings', warnings.length ? warnings.map((warning) => `${warning.warning_type}: ${warning.message}`).join('\n') : '(none)'),
     `\nStored events in this run's expanded sample: ${eventCount}`
   ].join('\n');
+}
+
+function parseActorTarget(endpoint) {
+  const text = String(endpoint || '');
+  const match = text.match(/\/(characterID|corporationID|allianceID)\/(\d+)\//);
+  if (!match) {
+    return null;
+  }
+  const entityType = {
+    characterID: 'character',
+    corporationID: 'corporation',
+    allianceID: 'alliance'
+  }[match[1]];
+  return {
+    entity_type: entityType,
+    entity_id: Number(match[2])
+  };
+}
+
+function resolveActor(db, actorTarget) {
+  const known = db.prepare(`
+    SELECT entity_name
+    FROM entities
+    WHERE entity_type = ? AND entity_id = ?
+  `).get(actorTarget.entity_type, actorTarget.entity_id);
+  const watchlisted = db.prepare(`
+    SELECT entity_name
+    FROM watchlist_entities
+    WHERE entity_type = ? AND entity_id = ?
+  `).get(actorTarget.entity_type, actorTarget.entity_id);
+
+  return {
+    ...actorTarget,
+    entity_name: known?.entity_name || watchlisted?.entity_name || null
+  };
+}
+
+function collectionTargetLabel(system, systemId, actor, actorTarget) {
+  if (actor) {
+    return formatEntityLabel(actor.entity_name, actor.entity_type, actor.entity_id);
+  }
+  if (actorTarget) {
+    return formatEntityLabel(null, actorTarget.entity_type, actorTarget.entity_id);
+  }
+  if (system) {
+    return formatSystemLabel(system.solar_system_name, system.solar_system_id);
+  }
+  if (systemId) {
+    return formatSystemLabel(null, systemId);
+  }
+  return 'unknown';
+}
+
+function routeRows(db, zkillLogs) {
+  const grouped = new Map();
+  for (const log of zkillLogs) {
+    const systemId = parseSystemId(log.endpoint);
+    const actorTarget = parseActorTarget(log.endpoint);
+    const actor = actorTarget ? resolveActor(db, actorTarget) : null;
+    const system = systemId ? db.prepare('SELECT solar_system_name FROM solar_systems WHERE solar_system_id = ?').get(systemId) : null;
+    const pastSeconds = parsePastSeconds(log.endpoint);
+    const routeType = actorTarget?.entity_type || (systemId ? 'system' : 'unknown');
+    const target = actor
+      ? formatEntityLabel(actor.entity_name, actor.entity_type, actor.entity_id)
+      : systemId ? formatSystemLabel(system?.solar_system_name, systemId) : 'unknown';
+    const key = `${routeType}:${target}:${pastSeconds || 'unknown'}`;
+    const existing = grouped.get(key) || {
+      route_type: routeType,
+      target,
+      past_seconds: pastSeconds,
+      requests: 0
+    };
+    existing.requests += 1;
+    grouped.set(key, existing);
+  }
+  return [...grouped.values()];
 }
 
 function partialSampleReasons(run) {
