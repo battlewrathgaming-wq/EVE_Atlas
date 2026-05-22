@@ -53,6 +53,7 @@
     "verify:metadata-lookup": "node scripts/verify-metadata-lookup.js",
     "verify:metadata-status": "node scripts/verify-metadata-status.js",
     "verify:bulk-synthetic": "node scripts/verify-bulk-synthetic.js",
+    "verify:local-scale-smoke": "node scripts/verify-local-scale-smoke.js",
     "verify:migrations": "node scripts/verify-migrations.js",
     "verify:db-integrity": "node scripts/verify-db-integrity.js",
     "verify:watchlist": "node scripts/verify-watchlist.js",

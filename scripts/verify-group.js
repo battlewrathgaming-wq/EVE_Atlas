@@ -61,6 +61,7 @@ const GROUPS = {
   ],
   bulk: [
     'verify:bulk-synthetic',
+    'verify:local-scale-smoke',
     'verify:actor-bulk',
     'verify:controlled-workflow'
   ]
