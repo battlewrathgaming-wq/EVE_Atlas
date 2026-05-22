@@ -23,6 +23,9 @@ The documentation library exists to preserve why the system behaves a certain wa
 
 | Folder | Purpose | Change Frequency |
 | --- | --- | --- |
+| `current-state/` | Grounded description of what currently exists | As implementation changes |
+| `research/` | Exploratory findings and non-authoritative investigation notes | As discoveries are made |
+| `contracts/` | Stable rules, ownership boundaries, and interface expectations | Carefully and intentionally |
 | `tenets/` | Foundational truths and architectural invariants | Rare |
 | `statements/` | Operational doctrine and emerging philosophy | Occasional |
 | `audits/` | Current-state technical understanding | As implementation changes |

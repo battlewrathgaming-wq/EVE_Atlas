@@ -21,6 +21,7 @@
     "verify:hydration": "node scripts/verify-hydration.js",
     "verify:metadata-lookup": "node scripts/verify-metadata-lookup.js",
     "verify:bulk-synthetic": "node scripts/verify-bulk-synthetic.js",
+    "verify:migrations": "node scripts/verify-migrations.js",
     "verify:system-watch-live": "node scripts/verify-system-watch-live.js",
     "verify:system-watch-idempotent-live": "node scripts/verify-system-watch-idempotent-live.js",
     "report:run": "node scripts/report-run.js",
