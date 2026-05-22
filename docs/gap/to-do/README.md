@@ -18,10 +18,9 @@ The current checklist is grouped around preparing the Electron shell and rendere
 
 Recommended order:
 
-1. `error-warning-taxonomy.md`
-2. `concurrency-and-locking.md`
-3. `destructive-actions-and-retention.md`
-4. `ui-language-contract.md`
+1. `concurrency-and-locking.md`
+2. `destructive-actions-and-retention.md`
+3. `ui-language-contract.md`
 
 Supporting current-state note:
 
@@ -29,4 +28,4 @@ Supporting current-state note:
 
 Completed items are moved to `docs/gap/complete`.
 
-The next implementation slice should standardize error and warning codes/severity, because task, readiness, report, queue, and live-gate responses now need one presentation vocabulary.
+The next implementation slice should tighten concurrency and locking rules, because evidence-creating and destructive actions need predictable task overlap behavior before UI triggers exist.

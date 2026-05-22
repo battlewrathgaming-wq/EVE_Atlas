@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { USER_AGENT } = require('../../shared/constants');
 const { auraTempRoot, projectRoot } = require('../util/tempPaths');
+const { taxonomyMessage } = require('./messageTaxonomy');
 
 function buildAppReadiness(db, options = {}) {
   const databasePath = options.databasePath || process.env.AURA_ATLAS_DB_PATH || null;
@@ -190,11 +191,11 @@ function count(db, tableName) {
 }
 
 function blocker(code, message) {
-  return { severity: 'blocked', code, message };
+  return taxonomyMessage(code, message, { source: 'app.readiness' });
 }
 
 function warning(code, message) {
-  return { severity: 'warning', code, message };
+  return taxonomyMessage(code, message, { source: 'app.readiness' });
 }
 
 module.exports = {

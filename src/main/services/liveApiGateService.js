@@ -1,4 +1,5 @@
 const { USER_AGENT } = require('../../shared/constants');
+const { taxonomyMessage } = require('./messageTaxonomy');
 
 const ACTIONS = {
   'report.view': {
@@ -73,20 +74,17 @@ function actionGate(action, input = {}) {
   const warnings = [];
   if (definition.mode === 'live-required' && !liveEnabled()) {
     blockers.push({
-      code: 'LIVE_API_DISABLED',
-      message: 'This action requires explicit live API enablement'
+      ...taxonomyMessage('LIVE_API_DISABLED', 'This action requires explicit live API enablement', { source: 'live.gate' })
     });
   }
   if (definition.mode === 'live-required' && !userAgentConfigured()) {
     blockers.push({
-      code: 'USER_AGENT_MISSING',
-      message: 'Live API actions require a clear User-Agent'
+      ...taxonomyMessage('USER_AGENT_MISSING', 'Live API actions require a clear User-Agent', { source: 'live.gate' })
     });
   }
   if (definition.mode === 'live-required' && estimate.total === 0) {
     warnings.push({
-      code: 'API_ESTIMATE_UNKNOWN',
-      message: 'API estimate is unknown until scope planning/discovery is available'
+      ...taxonomyMessage('API_ESTIMATE_UNKNOWN', 'API estimate is unknown until scope planning/discovery is available', { source: 'live.gate' })
     });
   }
 

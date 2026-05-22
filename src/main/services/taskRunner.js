@@ -1,3 +1,5 @@
+const { normalizeMessage, taxonomyMessage } = require('./messageTaxonomy');
+
 const TASK_STATES = Object.freeze({
   QUEUED: 'queued',
   RUNNING: 'running',
@@ -37,8 +39,7 @@ class TaskRunner {
       task.status = TASK_STATES.FAILED;
       task.finished_at = nowIso();
       task.error = {
-        code: 'TASK_LOCKED',
-        message: `Task lock is already active for ${lockKey}`
+        ...taxonomyMessage('TASK_LOCKED', `Task lock is already active for ${lockKey}`, { source: 'task.runner' })
       };
       return task;
     }
@@ -69,8 +70,7 @@ class TaskRunner {
       this.updateTask(task.task_id, {
         status: TASK_STATES.FAILED,
         error: {
-          code: error.code || 'TASK_FAILED',
-          message: error.message
+          ...taxonomyMessage(error.code || 'TASK_FAILED', error.message, { source: 'task.runner' })
         },
         finished_at: nowIso()
       });
@@ -118,9 +118,7 @@ class TaskRunner {
     const task = this.requireTask(taskId);
     const entry = {
       at: nowIso(),
-      severity: warning.severity || 'warning',
-      code: warning.code || 'TASK_WARNING',
-      message: warning.message || String(warning)
+      ...normalizeMessage(warning, { code: 'TASK_WARNING', source: 'task.runner' })
     };
     task.warnings.push(entry);
     return entry;

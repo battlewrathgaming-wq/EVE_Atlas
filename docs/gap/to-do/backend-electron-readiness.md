@@ -144,7 +144,7 @@ Current verification:
 - `docs/gap/complete/live-api-gate-ux.md`
 - `docs/gap/complete/report-response-contract.md`
 - `docs/gap/complete/queue-expansion-selection.md`
-- `docs/gap/to-do/error-warning-taxonomy.md`
+- `docs/gap/complete/error-warning-taxonomy.md`
 - `docs/gap/to-do/concurrency-and-locking.md`
 - `docs/gap/to-do/destructive-actions-and-retention.md`
 - `docs/gap/to-do/ui-language-contract.md`

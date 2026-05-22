@@ -1,4 +1,6 @@
-# TODO: Error And Warning Taxonomy
+# Complete: Error And Warning Taxonomy
+
+Status: Complete For IPC Shell Preparation
 
 ## Actionables
 
@@ -39,3 +41,17 @@ Suggested severity levels:
 
 Warnings and errors have stable codes/severity and can be rendered consistently across reports, tasks, and readiness views.
 
+## Current Implementation
+
+- Shared taxonomy module defines severity levels and categories.
+- Shared message shape includes severity, code, message, category, source, and actionable.
+- Readiness warnings/blockers use taxonomy messages.
+- Live API gate blockers/warnings use taxonomy messages.
+- Task runner warnings/errors use taxonomy messages.
+- Verified by `verify:message-taxonomy`, `verify:app-readiness`, `verify:live-api-gate`, and `verify:task-runner`.
+
+## Remaining Follow-On Work
+
+- Legacy ingestion/data-quality warning rows still retain their existing database warning types.
+- Future UI should map taxonomy severity/category to consistent presentation.
+- Future worker refactors can progressively emit taxonomy codes for more warning paths.

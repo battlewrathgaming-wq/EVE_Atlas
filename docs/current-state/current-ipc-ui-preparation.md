@@ -22,6 +22,7 @@ Current implemented shell:
 - `task.list` service command
 - `task.get` service command
 - task-wrapped service invocation with `asTask: true`
+- shared message taxonomy for readiness, live gate, and task responses
 
 ## Backend Actions Ready For IPC Wrapping
 
@@ -65,6 +66,7 @@ Offline verification now includes:
 - live API gate verification
 - report response verification
 - queue expansion selection verification
+- message taxonomy verification
 - task runner verification
 
 Live smoke grouping exists separately:
