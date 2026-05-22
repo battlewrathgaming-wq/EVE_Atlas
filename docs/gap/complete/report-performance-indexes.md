@@ -1,15 +1,25 @@
 ﻿# Gap To-Do: Report Performance Indexes
 
-Status: Open
+Status: Complete
 Priority: P2
 
-## Actionables
+## Completed
 
-- Review report query patterns and add compound SQLite indexes for common evidence scopes.
-- Verify report performance on synthetic larger datasets.
-- Add a performance-oriented verification script or benchmark fixture before UI-scale use.
+- Reviewed report and queue query patterns.
+- Added compound SQLite indexes for common evidence scopes:
+  - actor/entity plus time
+  - system plus time
+  - corporation plus time
+  - alliance plus time
+  - killmail plus role
+  - killmail system plus time
+  - scoped queue selection and recent queue activity
+  - API logs by run/provider/request time
+  - data quality warnings by run/killmail
+- Replaced the older narrow queue status/scope index with a broader scoped queue index.
+- Added synthetic query-plan verification before UI-scale report reads.
 
-## Task Requirements
+## Task Requirements Addressed
 
 Current indexes are mostly single-column. Reports commonly filter and group by combined scope/time fields.
 
@@ -25,7 +35,7 @@ Likely useful index areas:
 - `api_request_logs(run_id, provider, requested_at)`
 - `data_quality_warnings(run_id, killmail_id)`
 
-Exact index choices should follow observed query plans and batch tests.
+Exact index choices now follow observed report query patterns and are verified with SQLite `EXPLAIN QUERY PLAN`.
 
 ## Guardrails
 
@@ -34,9 +44,12 @@ Exact index choices should follow observed query plans and batch tests.
 - Keep indexes aligned with actual report/filter use.
 - Large synthetic tests should stay under the project `.tmp` path.
 
-## Completion Signal
+## Verification
 
-A batch fixture demonstrates report queries remain responsive at a larger evidence volume, and query plans use intended indexes for main report scopes.
+- `verify:report-indexes`
+- `verify:all`
+
+The verifier seeds synthetic evidence, queue refs, API logs, and warning rows in an in-memory DB and checks that core report-scope query plans use the intended indexes.
 
 ## Related Files
 

@@ -296,17 +296,28 @@ CREATE TABLE IF NOT EXISTS data_quality_warnings (
 
 CREATE INDEX IF NOT EXISTS idx_activity_events_killmail_time ON activity_events(killmail_time);
 CREATE INDEX IF NOT EXISTS idx_activity_events_entity ON activity_events(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_activity_events_entity_time ON activity_events(entity_type, entity_id, killmail_time);
 CREATE INDEX IF NOT EXISTS idx_activity_events_system ON activity_events(solar_system_id);
+CREATE INDEX IF NOT EXISTS idx_activity_events_system_time ON activity_events(solar_system_id, killmail_time);
+CREATE INDEX IF NOT EXISTS idx_activity_events_corporation_time ON activity_events(corporation_id, killmail_time);
+CREATE INDEX IF NOT EXISTS idx_activity_events_alliance_time ON activity_events(alliance_id, killmail_time);
+CREATE INDEX IF NOT EXISTS idx_activity_events_killmail_role ON activity_events(killmail_id, role);
 CREATE INDEX IF NOT EXISTS idx_killmails_time ON killmails(killmail_time);
+CREATE INDEX IF NOT EXISTS idx_killmails_system_time ON killmails(solar_system_id, killmail_time);
 CREATE INDEX IF NOT EXISTS idx_solar_systems_region ON solar_systems(region_id);
 CREATE INDEX IF NOT EXISTS idx_solar_systems_constellation ON solar_systems(constellation_id);
 CREATE INDEX IF NOT EXISTS idx_constellations_region ON constellations(region_id);
 CREATE INDEX IF NOT EXISTS idx_type_metadata_category ON type_metadata(category_name);
 CREATE INDEX IF NOT EXISTS idx_type_metadata_group ON type_metadata(group_id);
 CREATE INDEX IF NOT EXISTS idx_type_metadata_type_name ON type_metadata(type_name);
-CREATE INDEX IF NOT EXISTS idx_discovered_refs_status_scope ON discovered_killmail_refs(status, discovered_by_type, discovered_by_id);
+DROP INDEX IF EXISTS idx_discovered_refs_status_scope;
+DROP INDEX IF EXISTS idx_discovered_refs_status_scope_priority_time;
+CREATE INDEX IF NOT EXISTS idx_discovered_refs_scope_status_priority_time ON discovered_killmail_refs(discovered_by_type, discovered_by_id, status, priority, discovered_at);
+CREATE INDEX IF NOT EXISTS idx_discovered_refs_scope_last_seen ON discovered_killmail_refs(discovered_by_type, discovered_by_id, last_seen_at);
 CREATE INDEX IF NOT EXISTS idx_discovered_refs_actor ON discovered_killmail_refs(source_actor_type, source_actor_id);
 CREATE INDEX IF NOT EXISTS idx_discovered_refs_system ON discovered_killmail_refs(source_system_id);
+CREATE INDEX IF NOT EXISTS idx_api_request_logs_run_provider_requested ON api_request_logs(run_id, provider, requested_at);
+CREATE INDEX IF NOT EXISTS idx_data_quality_warnings_run_killmail ON data_quality_warnings(run_id, killmail_id);
 
 CREATE VIEW IF NOT EXISTS ship_types AS
 SELECT *

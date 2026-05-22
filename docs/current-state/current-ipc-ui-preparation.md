@@ -32,6 +32,7 @@ Current implemented shell:
 - bounded HTTP request timeouts and task cancellation signals for live/API-backed work
 - watch scheduling/status services for due, blocked, inactive, backoff, session-gated, and live-gated actor/system watches
 - metadata-only watch run state recording for success/failure, next poll, and backoff timing
+- compound report/query indexes for common evidence scopes and queue diagnostics
 - native structured actor report response with text rendering retained for CLI/export
 
 ## Backend Actions Ready For IPC Wrapping
@@ -86,6 +87,7 @@ Offline verification now includes:
 - background execution verification
 - HTTP timeout/cancellation verification
 - watch scheduler/backoff verification
+- report index/query-plan verification
 - native actor report response verification
 - task runner verification
 

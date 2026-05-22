@@ -137,6 +137,25 @@ Current verification:
 - `verify:scope-controls`
 - included in `verify:all`
 
+### Report Performance Indexes
+
+Status: Implemented
+
+Report/query performance hardening now includes compound indexes for common evidence scopes:
+
+- actor/entity plus time
+- system plus time
+- corporation plus time
+- alliance plus time
+- killmail plus role
+- scoped queue selection and recent queue activity
+- API logs and data quality warnings used by diagnostics/provenance
+
+Current verification:
+
+- `verify:report-indexes`
+- included in `verify:all`
+
 ## Related Documents
 
 - `docs/contracts/scope-definition-contract.md`
@@ -162,5 +181,5 @@ Current verification:
 - `docs/gap/complete/http-timeouts-and-cancellation.md`
 - `docs/gap/complete/structured-report-responses.md`
 - `docs/gap/complete/watch-scheduler-and-backoff.md`
-- `docs/gap/to-do/report-performance-indexes.md`
+- `docs/gap/complete/report-performance-indexes.md`
 - `docs/gap/to-do/readiness-side-effects.md`
