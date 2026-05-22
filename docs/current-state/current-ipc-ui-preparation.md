@@ -191,6 +191,7 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 - additional renderer controls for metadata hydration, actor watch, and system/radius watch execution outside the session executor
 - broader controlled actor/area operation workflow from UI scope to evidence/observation/assessment review
 - renderer modularization/component boundary review before `src/renderer/app.js` absorbs more workflow orchestration
+- renderer modularization review is complete: keep `app.js` whole for one narrow controlled actor/area proof, then split before adding another full structured report/workflow surface
 - executable retention/deprecation actions and actual assessment compaction writes
 - executable evidence compaction/pruning actions
 - true worker-thread/process isolation for CPU-heavy or synchronous SQLite-heavy tasks
@@ -242,5 +243,6 @@ Latest reviewed commits:
 - current Aura core extraction brief - standalone Aura should begin as a pure parser/compute service shell with fixture tests, borrowing Atlas rigging without inheriting Atlas evidence-memory implementation
 - `041a0f6` - backend UI boundary handoff audit
 - current backend/UI boundary handshake - service/preload boundary remains healthy; next milestone should prove a narrow controlled actor/area operation workflow rather than broad dashboard expansion
+- current renderer modularization review - defer file split for one narrow operator-proof slice, with explicit triggers for modularization before broader workflow expansion
 
 These commits move the earlier rigging gaps into an initial presentation checkpoint. The main remaining risk is no longer missing service vocabulary; it is preserving the service/evidence boundary while adding further executable UI actions and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.
