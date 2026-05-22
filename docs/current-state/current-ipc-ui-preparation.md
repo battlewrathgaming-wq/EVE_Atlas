@@ -18,9 +18,10 @@ Recent backend/UI-readiness work completed:
 
 Current lane:
 
-- finish the remaining readiness side-effects gap
-- keep readiness checks clear for the future renderer shell
-- avoid UI work until backend service semantics are stable
+- accept the backend rigging checkpoint as the first renderer-ready service baseline
+- design the initial renderer shell against service responses instead of repositories or CLI scripts
+- keep the session-armed watch executor loop separate from passive page load behavior
+- defer true worker-thread/process isolation until heavier batch/runtime testing proves it is needed
 
 ## What Exists
 
@@ -127,5 +128,15 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 - renderer shell
 - UI controls for scope selection
 - session-armed watch executor loop
-- long-running retention/deprecation policy
+- executable retention/deprecation actions and assessment compaction
 - true worker-thread/process isolation for CPU-heavy or synchronous SQLite-heavy tasks
+
+## Current Review Notes
+
+Latest reviewed commits:
+
+- `e059924` - watch scheduler status service
+- `fa34b9a` - report performance indexes
+- `eda3938` - readiness inspection/preparation separation
+
+These commits move the earlier rigging gaps into a usable backend baseline for initial presentation work. The main remaining risk is not missing service vocabulary; it is wiring a renderer that uses these services without bypassing them, and deciding how session-armed watch execution should trigger due watches safely.

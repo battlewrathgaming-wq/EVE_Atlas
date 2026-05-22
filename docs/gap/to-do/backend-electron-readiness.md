@@ -66,6 +66,8 @@ Rules:
 
 ### Retention And Deprecation Policy
 
+Status: Policy and preflight implemented; executable pruning/compaction actions remain open.
+
 Retention rules are not finalized for:
 
 - `api_request_logs`
@@ -76,11 +78,19 @@ Retention rules are not finalized for:
 
 This should become a dedicated policy/implementation slice before long-running use.
 
+Current guardrail:
+
+- `retention.actions` lists destructive/retention action definitions.
+- `retention.preflight` previews impact and confirmation requirements.
+- No actual pruning/deletion action should be exposed until assessment preservation/compaction behavior is implemented.
+
 ### Electron IPC / Backend API Boundary
 
-Before UI work, the renderer needs a controlled backend interface.
+Status: Implemented for the first renderer baseline; renderer consumption remains open.
 
-Likely IPC-backed actions:
+The renderer now has a controlled backend interface through `atlas:service:list` and `atlas:service:invoke`.
+
+Implemented service-backed actions include:
 
 - plan radius scope
 - run routine system/radius watch
@@ -94,10 +104,20 @@ Likely IPC-backed actions:
 - run scoped hydration
 - get run diagnostics
 - trigger governed mutating actions through service commands
+- prepare runtime paths with `app.prepare`
+- inspect watch schedule/backoff state
+- record watch run scheduling state
+- cancel running tasks
 
 Rule:
 
 Renderer/UI should not call repositories, workers, or raw SQLite directly.
+
+Remaining work:
+
+- build renderer components against these service responses
+- avoid introducing direct renderer access to repositories, workers, CLI scripts, or SQLite
+- decide which actions should default to detached task execution in the UI
 
 ### Watch Persistence And Scheduler
 
