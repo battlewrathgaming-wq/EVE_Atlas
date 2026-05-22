@@ -16,6 +16,7 @@ Recent backend/UI-readiness work completed:
 - actor-first report UI renders native structured `report.actor` responses with evidence, observation, provenance, warnings, raw IDs, and text export separated
 - scope controls UI loads backend defaults and validates manual discovery, manual expansion, actor watch, and system/radius watch inputs through `scope.validate`
 - queue/watch status UI previews discovery queue selections through `queue.selection` and watch due/blocked/backoff/session/live-gate state through `watch.schedule`
+- session-armed watch executor behavior is contracted before implementation; startup remains disarmed and passive views cannot trigger collection
 - task wrapping, detached execution, cancellation, and HTTP timeout handling are verified
 - live API gates and user-defined scope validation are centralized
 - queue selection, queue status isolation, and retention preflight are implemented
@@ -28,6 +29,7 @@ Current lane:
 - accept the backend rigging checkpoint as the first renderer-ready service baseline
 - build out the initial renderer shell against service responses instead of repositories or CLI scripts
 - keep the session-armed watch executor loop separate from passive page load behavior
+- implement any future watch executor from `docs/contracts/session-armed-watch-executor-contract.md`
 - defer true worker-thread/process isolation until heavier batch/runtime testing proves it is needed
 
 ## What Exists
@@ -60,6 +62,7 @@ Current implemented shell:
 - retention/destructive action preflight for confirmation and impact summaries
 - scoped discovery queue transitions so manual, actor, and system/radius queue rows do not overwrite each other's status
 - UI language contract for evidence, observation, assessment, queue preview, scope, and warning wording
+- session-armed watch executor contract covering arm/disarm semantics, polling cadence, dispatch gates, task execution, completion recording, and restart behavior
 - bounded HTTP request timeouts and task cancellation signals for live/API-backed work
 - watch scheduling/status services for due, blocked, inactive, backoff, session-gated, and live-gated actor/system watches
 - metadata-only watch run state recording for success/failure, next poll, and backoff timing
@@ -167,5 +170,6 @@ Latest reviewed commits:
 - current actor report slice - first structured report presentation surface
 - current scope controls slice - backend-defaulted, backend-validated scope payload preview
 - current queue/watch slice - passive discovery queue selection preview and watch schedule status
+- current session-armed executor contract slice - volatile user-armed watch execution semantics before implementation
 
-These commits move the earlier rigging gaps into a usable backend baseline for initial presentation work. The main remaining risk is not missing service vocabulary; it is wiring a renderer that uses these services without bypassing them, and deciding how session-armed watch execution should trigger due watches safely.
+These commits move the earlier rigging gaps into a usable backend baseline for initial presentation work. The main remaining risk is not missing service vocabulary; it is continuing to wire a renderer that uses these services without bypassing them, then implementing the contracted session-armed executor without turning passive status views into hidden collection triggers.

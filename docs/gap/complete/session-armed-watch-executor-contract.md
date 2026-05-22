@@ -1,6 +1,6 @@
 ﻿# Gap To-Do: Session-Armed Watch Executor Contract
 
-Status: Open
+Status: Complete
 Priority: P2
 
 ## Actionables
@@ -35,6 +35,10 @@ The contract should answer:
 ## Completion Signal
 
 A contract or current-state document defines the executor behavior clearly enough that implementation can proceed without inventing polling semantics in UI code.
+
+Completed by:
+
+- `docs/contracts/session-armed-watch-executor-contract.md`
 
 ## Related Documents
 
