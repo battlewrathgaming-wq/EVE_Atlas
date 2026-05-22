@@ -18,12 +18,11 @@ The current checklist is grouped around preparing the Electron shell and rendere
 
 Recommended order:
 
-1. `report-response-contract.md`
-2. `queue-expansion-selection.md`
-3. `error-warning-taxonomy.md`
-4. `concurrency-and-locking.md`
-5. `destructive-actions-and-retention.md`
-6. `ui-language-contract.md`
+1. `queue-expansion-selection.md`
+2. `error-warning-taxonomy.md`
+3. `concurrency-and-locking.md`
+4. `destructive-actions-and-retention.md`
+5. `ui-language-contract.md`
 
 Supporting current-state note:
 
@@ -31,4 +30,4 @@ Supporting current-state note:
 
 Completed items are moved to `docs/gap/complete`.
 
-The next implementation slice should define stable report response objects, because renderer components should not parse CLI text or re-derive evidence meaning.
+The next implementation slice should define queue expansion selection behavior, because manual discovery needs a renderer-safe way to choose which queued refs become evidence.

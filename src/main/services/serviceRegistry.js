@@ -1,5 +1,6 @@
 const { buildAppReadiness } = require('./appReadinessService');
 const { getLiveApiGateState } = require('./liveApiGateService');
+const { buildReportResponse } = require('./reportResponseService');
 const { getScopeDefaults, validateScope } = require('./scopeService');
 const { defaultTaskRunner } = require('./taskRunner');
 
@@ -13,6 +14,41 @@ const COMMANDS = {
     classification: 'read-only',
     description: 'Return live API gate state for all actions or one scoped action',
     handler: ({ payload }) => getLiveApiGateState(payload)
+  },
+  'report.build': {
+    classification: 'read-only',
+    description: 'Build a structured report response by report type',
+    handler: ({ db, payload }) => buildReportResponse(db, payload)
+  },
+  'report.actor': {
+    classification: 'read-only',
+    description: 'Build a structured actor evidence report response',
+    handler: ({ db, payload }) => buildReportResponse(db, { ...payload, reportType: 'actor' })
+  },
+  'report.corporation': {
+    classification: 'read-only',
+    description: 'Build a structured corporation observation report response',
+    handler: ({ db, payload }) => buildReportResponse(db, { ...payload, reportType: 'corporation' })
+  },
+  'report.queue': {
+    classification: 'read-only',
+    description: 'Build a structured discovery queue report response',
+    handler: ({ db, payload }) => buildReportResponse(db, { ...payload, reportType: 'queue' })
+  },
+  'report.radius': {
+    classification: 'read-only',
+    description: 'Build a structured radius evidence report response',
+    handler: ({ db, payload }) => buildReportResponse(db, { ...payload, reportType: 'radius' })
+  },
+  'report.run': {
+    classification: 'read-only',
+    description: 'Build a structured run diagnostics report response',
+    handler: ({ db, payload }) => buildReportResponse(db, { ...payload, reportType: 'run' })
+  },
+  'report.system': {
+    classification: 'read-only',
+    description: 'Build a structured system evidence report response',
+    handler: ({ db, payload }) => buildReportResponse(db, { ...payload, reportType: 'system' })
   },
   'scope.defaults': {
     classification: 'read-only',

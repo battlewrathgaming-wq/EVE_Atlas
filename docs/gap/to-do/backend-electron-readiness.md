@@ -142,7 +142,7 @@ Current verification:
 - `docs/gap/complete/scope-controls-contract.md`
 - `docs/gap/complete/task-runner-and-progress.md`
 - `docs/gap/complete/live-api-gate-ux.md`
-- `docs/gap/to-do/report-response-contract.md`
+- `docs/gap/complete/report-response-contract.md`
 - `docs/gap/to-do/scope-controls-contract.md`
 - `docs/gap/to-do/queue-expansion-selection.md`
 - `docs/gap/to-do/error-warning-taxonomy.md`

@@ -16,6 +16,8 @@ Current implemented shell:
 - `scope.defaults` service command
 - `scope.validate` service command
 - `live.gate` service command
+- `report.build` service command
+- report-specific service commands for actor, corporation, queue, radius, run, and system reports
 - `task.list` service command
 - `task.get` service command
 - task-wrapped service invocation with `asTask: true`
@@ -60,6 +62,7 @@ Offline verification now includes:
 - service registry / IPC handler verification
 - scope defaults/validation verification
 - live API gate verification
+- report response verification
 - task runner verification
 
 Live smoke grouping exists separately:

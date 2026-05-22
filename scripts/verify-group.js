@@ -8,6 +8,7 @@ const GROUPS = {
     'verify:service-registry',
     'verify:task-runner',
     'verify:live-api-gate',
+    'verify:report-response',
     'verify:fixture',
     'verify:idempotent',
     'verify:db-integrity'
