@@ -286,7 +286,7 @@ This milestone should leave Atlas with:
 
 Recommended order:
 
-1. `positive-ref-live-smoke-candidate.md`
+- No active Operator UI Workflow Polish gap remains in this folder.
 
 Roadmap:
 
@@ -297,3 +297,4 @@ Completed:
 - `debug-trace-renderer-surface.md`
 - `assessment-artifact-ergonomics-pass.md`
 - `live-target-discipline-checklist.md`
+- `positive-ref-live-smoke-candidate.md`
