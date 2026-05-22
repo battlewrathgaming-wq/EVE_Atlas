@@ -32,5 +32,13 @@ Atlas is now capable enough that accidental broad collection is the main practic
 ## Dev Notes
 
 ```txt
+Completed 2026-05-22.
 
+Added docs/statements/live-target-discipline.md as an operational statement.
+
+The statement covers target selection, disposable .tmp DBs, explicit lookback/caps,
+discovery-only before expansion, global expansion caps, high-volume target avoidance,
+artifact preservation, and the distinction between zKill discovery and ESI expansion.
+
+No script behavior change was needed in this slice.
 ```
