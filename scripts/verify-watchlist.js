@@ -1,7 +1,8 @@
 const { openDatabase, migrate, closeDatabase } = require('../src/main/db/database');
+const { resolveActorIdentity } = require('../src/main/resolution/actorResolver');
 const { addWatchlistEntity, listWatchlistEntities } = require('../src/main/watchlist/watchlistRepository');
 
-function main() {
+async function main() {
   const db = openDatabase(':memory:');
   migrate(db);
 
@@ -40,6 +41,27 @@ function main() {
   assert(rows[0].poll_interval_minutes === 120, 'watchlist upsert should update poll interval');
   assert(rows[0].notes === 'Updated watch settings', 'watchlist upsert should update notes');
 
+  const resolved = await resolveActorIdentity(db, {
+    entityType: 'character',
+    entityName: 'Jangalanng'
+  });
+  const named = addWatchlistEntity(db, {
+    entityType: resolved.entity_type,
+    entityId: resolved.entity_id,
+    entityName: resolved.entity_name,
+    lookbackDays: 14,
+    maxKillmailsPerRun: 30,
+    notes: 'Added by typed actor name'
+  });
+  assert(named.entity_id === 2123964283, 'watchlist typed name path should resolve to durable entity ID');
+  assert(named.entity_name === 'Jangalanng', 'watchlist typed name path should preserve cached label');
+
+  const afterNamedAdd = listWatchlistEntities(db);
+  assert(afterNamedAdd.length === 1, 'watchlist typed name add should remain idempotent by entity type/id');
+  assert(afterNamedAdd[0].lookback_days === 14, 'watchlist typed name add should update lookback');
+  assert(afterNamedAdd[0].max_killmails_per_run === 30, 'watchlist typed name add should update cap');
+  assert(afterNamedAdd[0].notes === 'Added by typed actor name', 'watchlist typed name add should update notes');
+
   closeDatabase(db);
   console.log('watchlist promotion verified');
 }
@@ -50,4 +72,7 @@ function assert(condition, message) {
   }
 }
 
-main();
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

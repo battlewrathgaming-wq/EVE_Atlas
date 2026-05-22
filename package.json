@@ -27,6 +27,7 @@
     "verify:actor-report": "node scripts/verify-actor-report.js",
     "verify:queue-report": "node scripts/verify-queue-report.js",
     "verify:queue-preflight": "node scripts/verify-queue-preflight.js",
+    "verify:actor-resolution": "node scripts/verify-actor-resolution.js",
     "verify:actor-watch-live": "node scripts/verify-actor-watch-live.js",
     "verify:system-watch-live": "node scripts/verify-system-watch-live.js",
     "verify:system-watch-idempotent-live": "node scripts/verify-system-watch-idempotent-live.js",

@@ -3,6 +3,7 @@ const { openDatabase, migrate, closeDatabase } = require('../src/main/db/databas
 const { collectActorWatch } = require('../src/main/workers/actorWatchCollector');
 const { auraTempRoot } = require('../src/main/util/tempPaths');
 const { buildActorQueuePreflight } = require('../src/main/queue/queuePreflight');
+const { resolveActorIdentity } = require('../src/main/resolution/actorResolver');
 const {
   assertProjectLocalPath,
   assertNoRuntimeSdeZipImport
@@ -28,7 +29,7 @@ async function runLiveActorWatch() {
   migrate(db);
 
   try {
-    const input = liveActorInput(db);
+    const input = await liveActorInput(db);
     const preflight = buildActorQueuePreflight(db, input);
     const first = await collectActorWatch(input, { db });
     return { db_path: dbPath, preflight, first };
@@ -43,8 +44,8 @@ function assertLiveEnabled() {
   }
 }
 
-function liveActorInput(db) {
-  const actor = resolveActorInput(db);
+async function liveActorInput(db) {
+  const actor = await resolveActorInput(db);
   return {
     entityType: actor.entity_type,
     entityId: actor.entity_id,
@@ -57,7 +58,7 @@ function liveActorInput(db) {
   };
 }
 
-function resolveActorInput(db) {
+async function resolveActorInput(db) {
   const watchId = process.env.AURA_ATLAS_LIVE_ACTOR_WATCH_ID;
   if (watchId && !process.env.AURA_ATLAS_LIVE_ACTOR_TYPE && !process.env.AURA_ATLAS_LIVE_ACTOR_ID) {
     const row = db.prepare(`
@@ -76,23 +77,11 @@ function resolveActorInput(db) {
     throw new Error('AURA_ATLAS_LIVE_ACTOR_TYPE must be character, corporation, or alliance');
   }
 
-  const entityId = integerEnv('AURA_ATLAS_LIVE_ACTOR_ID', null);
-  const known = db.prepare(`
-    SELECT entity_name
-    FROM entities
-    WHERE entity_type = ? AND entity_id = ?
-  `).get(entityType, entityId);
-  const watch = db.prepare(`
-    SELECT entity_name
-    FROM watchlist_entities
-    WHERE entity_type = ? AND entity_id = ?
-  `).get(entityType, entityId);
-
-  return {
-    entity_type: entityType,
-    entity_id: entityId,
-    entity_name: process.env.AURA_ATLAS_LIVE_ACTOR_NAME || watch?.entity_name || known?.entity_name || null
-  };
+  return resolveActorIdentity(db, {
+    entityType,
+    entityId: process.env.AURA_ATLAS_LIVE_ACTOR_ID || null,
+    entityName: process.env.AURA_ATLAS_LIVE_ACTOR_NAME || null
+  });
 }
 
 function integerEnv(name, fallback) {
