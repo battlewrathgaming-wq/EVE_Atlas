@@ -178,6 +178,46 @@ function buildAssessmentCompactionPreview(db, scope = {}, assessment = {}) {
   };
 }
 
+function assessmentArtifactInputFromCompactionPreview(preview = {}, overrides = {}) {
+  if (!preview.ready) {
+    throw new Error(preview.reason || 'Compaction preview is not ready for assessment artifact creation');
+  }
+  const assessmentReason = textOrNull(overrides.assessmentReason || overrides.reason || preview.assessment_reason);
+  const assessmentSummary = textOrNull(overrides.assessmentSummary || overrides.summary || preview.assessment_summary);
+  if (!assessmentReason && !assessmentSummary) {
+    throw new Error('Compaction assessment creation requires assessmentReason or assessmentSummary');
+  }
+
+  return {
+    artifactType: 'evidence_compaction',
+    entityType: preview.entity_type,
+    entityId: preview.entity_id,
+    entityName: preview.entity_name,
+    status: overrides.status || 'active',
+    interestScore: overrides.interestScore,
+    priorityScore: overrides.priorityScore,
+    impactScore: overrides.impactScore,
+    confidence: overrides.confidence,
+    assessmentReason,
+    assessmentSummary,
+    evidenceWindowStart: preview.evidence_window?.start,
+    evidenceWindowEnd: preview.evidence_window?.end,
+    evidenceScopeType: preview.evidence_scope_type,
+    evidenceScope: preview.evidence_scope,
+    sourceReportType: preview.source_report_type,
+    sourceReportParameters: preview.source_report_parameters,
+    sourceRunIds: preview.source_run_ids || [],
+    sampleKillmailIds: preview.sample_killmail_ids || [],
+    appearanceCount: preview.counts?.appearances || 0,
+    attackerAppearanceCount: preview.counts?.attacker_appearances || 0,
+    victimAppearanceCount: preview.counts?.victim_appearances || 0,
+    systemsObserved: preview.systems_observed || [],
+    regionsObserved: preview.regions_observed || [],
+    shipsObserved: preview.ships_observed || [],
+    assessedBy: overrides.assessedBy || overrides.assessed_by || 'local-operator'
+  };
+}
+
 function impactFor(db, action, scope) {
   if (action === 'diagnostics.prune_api_logs') {
     return {
@@ -391,5 +431,6 @@ function textOrNull(value) {
 module.exports = {
   listRetentionActions,
   buildRetentionPreflight,
-  buildAssessmentCompactionPreview
+  buildAssessmentCompactionPreview,
+  assessmentArtifactInputFromCompactionPreview
 };

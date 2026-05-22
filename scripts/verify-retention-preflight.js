@@ -1,7 +1,12 @@
 const fixtureKillmail = require('../fixtures/killmail-1001.json');
 const { openDatabase, migrate, closeDatabase } = require('../src/main/db/database');
 const { EvidenceRepository } = require('../src/main/db/evidenceRepository');
-const { buildRetentionPreflight, listRetentionActions } = require('../src/main/services/retentionActionService');
+const { createAssessmentArtifact } = require('../src/main/assessment/assessmentArtifactRepository');
+const {
+  assessmentArtifactInputFromCompactionPreview,
+  buildRetentionPreflight,
+  listRetentionActions
+} = require('../src/main/services/retentionActionService');
 const { invokeServiceCommand, listServiceCommands } = require('../src/main/services/serviceRegistry');
 const { evidencePackageFromExpandedKillmails } = require('../src/main/workers/killmailIngestionWorker');
 
@@ -71,6 +76,20 @@ async function main() {
     assert(afterCounts.killmails === beforeCounts.killmails, 'compaction preflight must not delete killmails');
     assert(afterCounts.activity_events === beforeCounts.activity_events, 'compaction preflight must not delete activity events');
     assert(afterCounts.assessment_artifacts === beforeCounts.assessment_artifacts, 'compaction preflight must not create assessment artifacts');
+
+    const artifactInput = assessmentArtifactInputFromCompactionPreview(compactionPreview.assessment_preview, {
+      assessmentReason: 'Deliberately preserve the scoped actor sample as assessment memory.',
+      confidence: 70,
+      assessedBy: 'fixture'
+    });
+    const artifact = createAssessmentArtifact(db, artifactInput);
+    const afterArtifactCounts = tableCounts(db);
+    assert(artifact.artifact_type === 'evidence_compaction', 'explicit conversion should create evidence_compaction artifact input');
+    assert(artifact.citation.status === 'verified', 'compaction artifact citation should validate against local evidence');
+    assert(artifact.sample_killmail_ids.includes(8801), 'compaction artifact should cite preview sample killmail IDs');
+    assert(afterArtifactCounts.killmails === beforeCounts.killmails, 'compaction artifact creation must not delete killmails');
+    assert(afterArtifactCounts.activity_events === beforeCounts.activity_events, 'compaction artifact creation must not delete activity events');
+    assert(afterArtifactCounts.assessment_artifacts === beforeCounts.assessment_artifacts + 1, 'explicit conversion should write one assessment artifact');
 
     const diagnostics = buildRetentionPreflight(db, {
       action: 'diagnostics.prune_api_logs',
