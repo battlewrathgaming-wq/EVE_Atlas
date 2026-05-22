@@ -1,6 +1,6 @@
 # Gap To-Do: Live Operational Smoke
 
-Status: Open
+Status: Complete
 Priority: P1
 Milestone: Operational Workflow Hardening
 
@@ -38,6 +38,23 @@ A short smoke note or audit entry records:
 - queued refs / expanded killmails / activity events
 - warnings/errors
 - whether passive views remained non-collecting
+
+## Completion Notes
+
+Recorded in:
+
+- `docs/audits/audit-2026-05-22-live-operational-smoke.md`
+
+Smoke coverage:
+
+- controlled manual discovery against ZTS-4D
+- controlled session-armed watch executor dispatch against a radius-0 ZTS-4D system watch
+- disposable DB under `F:\Projects\AURA-Atlas\.tmp`
+- explicit `AURA_ATLAS_LIVE_API=1`
+- one zKill call per successful path
+- zero ESI calls because no refs were discovered in the selected one-hour window
+- zero killmails and zero activity events written
+- passive view boundary preserved
 
 ## Related Documents
 
