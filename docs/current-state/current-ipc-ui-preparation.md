@@ -23,6 +23,7 @@ Current implemented shell:
 - `task.list` service command
 - `task.get` service command
 - task-wrapped service invocation with `asTask: true`
+- detached/background task invocation with `asTask: true` and `detachedTask: true`
 - shared message taxonomy for readiness, live gate, and task responses
 - task locking for read-only, metadata, evidence-creating, destructive, and exclusive work
 - retention/destructive action preflight for confirmation and impact summaries
@@ -76,6 +77,7 @@ Offline verification now includes:
 - message taxonomy verification
 - retention preflight verification
 - mutating service verification
+- background execution verification
 - task runner verification
 
 Live smoke grouping exists separately:
@@ -92,4 +94,4 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 - UI controls for scope selection
 - session-armed watch scheduler
 - long-running retention/deprecation policy
-- true background worker execution for heavy tasks
+- true worker-thread/process isolation for CPU-heavy or synchronous SQLite-heavy tasks

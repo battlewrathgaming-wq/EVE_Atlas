@@ -30,6 +30,34 @@ class TaskRunner {
       throw new Error('runTask requires a handler function');
     }
 
+    const { task, lockKeys, locked } = this.prepareTask(definition);
+    if (!locked) {
+      return task;
+    }
+
+    return this.executeTask(task, lockKeys, handler);
+  }
+
+  runDetachedTask(definition, handler) {
+    if (typeof handler !== 'function') {
+      throw new Error('runDetachedTask requires a handler function');
+    }
+
+    const { task, lockKeys, locked } = this.prepareTask(definition);
+    if (!locked) {
+      return task;
+    }
+
+    setImmediate(() => {
+      this.executeTask(task, lockKeys, handler).catch(() => {
+        // executeTask records failure state; this catch prevents an unhandled rejection.
+      });
+    });
+
+    return this.getTask(task.task_id);
+  }
+
+  prepareTask(definition = {}) {
     const task = this.createTask(definition);
     this.tasks.set(task.task_id, task);
     this.pruneHistory();
@@ -42,18 +70,23 @@ class TaskRunner {
       task.error = {
         ...taxonomyMessage('TASK_LOCKED', `Task lock is already active for ${conflict}`, { source: 'task.runner' })
       };
-      return task;
+      return { task, lockKeys: [], locked: false };
     }
 
     for (const lockKey of lockKeys) {
       this.activeLocks.set(lockKey, task.task_id);
     }
 
+    this.updateTask(task.task_id, {
+      status: TASK_STATES.RUNNING,
+      started_at: nowIso()
+    });
+
+    return { task: this.getTask(task.task_id), lockKeys, locked: true };
+  }
+
+  async executeTask(task, lockKeys, handler) {
     try {
-      this.updateTask(task.task_id, {
-        status: TASK_STATES.RUNNING,
-        started_at: nowIso()
-      });
       const context = {
         task_id: task.task_id,
         progress: (event) => this.addProgress(task.task_id, event),

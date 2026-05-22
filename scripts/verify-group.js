@@ -14,6 +14,7 @@ const GROUPS = {
     'verify:message-taxonomy',
     'verify:retention-preflight',
     'verify:mutating-services',
+    'verify:background-execution',
     'verify:fixture',
     'verify:idempotent',
     'verify:db-integrity'

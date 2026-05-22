@@ -18,12 +18,11 @@ The current checklist is grouped around preparing the Electron shell and rendere
 
 Recommended order:
 
-1. `background-worker-execution.md`
-2. `http-timeouts-and-cancellation.md`
-3. `structured-report-responses.md`
-4. `watch-scheduler-and-backoff.md`
-5. `report-performance-indexes.md`
-6. `readiness-side-effects.md`
+1. `http-timeouts-and-cancellation.md`
+2. `structured-report-responses.md`
+3. `watch-scheduler-and-backoff.md`
+4. `report-performance-indexes.md`
+5. `readiness-side-effects.md`
 
 Supporting current-state note:
 
@@ -31,6 +30,6 @@ Supporting current-state note:
 
 Completed items are moved to `docs/gap/complete`.
 
-`queue-status-scope-isolation.md`, `ui-language-contract.md`, and `ipc-mutating-action-services.md` have been completed and moved to `docs/gap/complete`.
+`queue-status-scope-isolation.md`, `ui-language-contract.md`, `ipc-mutating-action-services.md`, and `background-worker-execution.md` have been completed and moved to `docs/gap/complete`.
 
-The next implementation slice should address background worker execution, because the service boundary can now trigger heavier work and the Electron main process must remain responsive.
+The next implementation slice should address HTTP timeouts and cancellation, because live API and detached background tasks need bounded request behavior.

@@ -172,16 +172,21 @@ async function invokeServiceCommand(command, payload = {}, context = {}) {
     throw error;
   }
   if (context.asTask) {
-    return defaultTaskRunner.runTask({
+    const taskDefinition = {
       type: command,
       classification: definition.classification,
       scopeKey: payload.scopeKey || command
-    }, async (task) => {
+    };
+    const taskHandler = async (task) => {
       task.progress({ stage: 'start', message: `Running ${command}` });
       const data = await definition.handler({ ...context, payload });
       task.progress({ stage: 'finish', message: `Finished ${command}` });
       return { status: 'succeeded', data };
-    });
+    };
+    if (context.detachedTask) {
+      return defaultTaskRunner.runDetachedTask(taskDefinition, taskHandler);
+    }
+    return defaultTaskRunner.runTask(taskDefinition, taskHandler);
   }
   return definition.handler({ ...context, payload });
 }
@@ -200,7 +205,8 @@ function registerIpcServiceHandlers(ipcMain, contextProvider) {
     const payload = request?.payload || {};
     return invokeServiceCommand(command, payload, {
       ...contextProvider(),
-      asTask: request?.asTask === true
+      asTask: request?.asTask === true,
+      detachedTask: request?.detachedTask === true || request?.background === true
     });
   });
 }
