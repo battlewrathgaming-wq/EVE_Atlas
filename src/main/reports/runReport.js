@@ -4,7 +4,6 @@ const {
   formatWindow,
   table,
   printSection,
-  sampleStatus,
   formatSystemLabel,
   formatEntityLabel
 } = require('./reportUtils');
@@ -79,11 +78,7 @@ function buildRunReport(db, runId) {
     ORDER BY solar_system_name
   `).all(...zkillSystemIds) : [];
   const partialReasons = partialSampleReasons(run);
-  const status = sampleStatus({
-    expandedCount: run.expanded_new,
-    discoveredRefs: run.discovered_refs,
-    failedExpansions: run.failed_expansions
-  });
+  const status = runSampleStatus(run);
 
   return [
     `AURA Atlas Run Report - ${status}`,
@@ -100,7 +95,7 @@ function buildRunReport(db, runId) {
     `zKill route(s): ${zkillLogs.length || 0}`,
     `Expanded evidence range: ${range.earliest || 'none'} -> ${range.latest || 'none'}`,
     `Expanded sample: ${run.expanded_new} expanded / ${run.discovered_refs} discovered refs; ${run.failed_expansions} failed`,
-    `Coverage note: ${partialReasons.length ? partialReasons.join('; ') : 'all discovered refs expanded successfully for this run'}`,
+    `Coverage note: ${coverageNote(run, partialReasons)}`,
     printSection('Diagnostics Summary', [
       `zKill requests: ${zkillLogs.length}`,
       `zKill refs discovered: ${run.discovered_refs}`,
@@ -241,6 +236,32 @@ function partialSampleReasons(run) {
     reasons.push('not all discovered refs are represented in this run sample');
   }
   return reasons;
+}
+
+function coverageNote(run, partialReasons) {
+  if (partialReasons.length) {
+    return partialReasons.join('; ');
+  }
+  if (run.already_cached > 0) {
+    return 'all discovered refs are represented by cached or newly expanded evidence for this run';
+  }
+  return 'all discovered refs expanded successfully for this run';
+}
+
+function runSampleStatus(run) {
+  if (!run.discovered_refs) {
+    return 'NO DISCOVERY SAMPLE';
+  }
+  if (run.failed_expansions > 0) {
+    return 'PARTIAL SAMPLE';
+  }
+  if (run.expanded_new + run.already_cached < run.discovered_refs) {
+    return 'PARTIAL SAMPLE';
+  }
+  if (run.already_cached > 0) {
+    return 'COMPLETE LOCAL SAMPLE';
+  }
+  return 'COMPLETE EXPANDED SAMPLE';
 }
 
 function requestColumns() {

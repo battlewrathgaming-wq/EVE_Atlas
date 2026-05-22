@@ -72,6 +72,42 @@ async function main() {
     entityId: 90000002
   });
   const runReport = buildRunReport(db, summary.run_id);
+  const cachedSummary = await collectActorWatch({
+    entityType: 'character',
+    entityId: 90000002,
+    entityName: 'Atlas Scout',
+    lookbackSeconds: 86400,
+    maxRefs: 2,
+    maxExpansions: 2,
+    trigger: 'fixture_test',
+    watchId: 'actor-report-cached-fixture'
+  }, {
+    db,
+    zkillClient: {
+      async discoverRefs() {
+        return [
+          { killmail_id: 4001, hash: 'fixture_hash_4001' },
+          { killmail_id: 4002, hash: 'fixture_hash_4002' }
+        ];
+      }
+    },
+    esiClient: {
+      async expandKillmail() {
+        throw new Error('cached actor verifier should not expand ESI killmails');
+      }
+    }
+  });
+  repository.insertApiRequestLog({
+    run_id: cachedSummary.run_id,
+    provider: 'zkill',
+    endpoint: 'https://zkillboard.com/api/characterID/90000002/pastSeconds/86400/',
+    method: 'GET',
+    status_code: 200,
+    duration_ms: 1,
+    cache_status: 'fixture',
+    requested_at: new Date().toISOString()
+  });
+  const cachedRunReport = buildRunReport(db, cachedSummary.run_id);
   const emptyWindowReport = buildActorReport(db, {
     entityType: 'character',
     entityId: 90000002
@@ -108,6 +144,10 @@ async function main() {
   assertIncludes(runReport, 'Collection Routes');
   assertIncludes(runReport, 'character');
   assertIncludes(runReport, 'Atlas Scout [characterID: 90000002]');
+  assertIncludes(cachedRunReport, 'AURA Atlas Run Report - COMPLETE LOCAL SAMPLE');
+  assertIncludes(cachedRunReport, 'Already cached killmails: 2');
+  assertIncludes(cachedRunReport, 'New ESI expansions: 0');
+  assertIncludes(cachedRunReport, 'Coverage note: all discovered refs are represented by cached or newly expanded evidence for this run');
   assertIncludes(emptyWindowReport, 'Evidence window: 2026-05-02T00:00:00Z -> 2026-05-03T00:00:00Z');
   assertIncludes(emptyWindowReport, 'Stored evidence matching this scope: 0 killmails / 0 actor activity events');
 
