@@ -337,5 +337,6 @@ function corporationSampleStatus(scope) {
 
 module.exports = {
   buildCorporationObservationReport,
-  corporationObservationScope
+  corporationObservationScope,
+  scopedKillmailIds
 };

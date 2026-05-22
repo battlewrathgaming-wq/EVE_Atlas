@@ -2,6 +2,7 @@ const { EvidenceRepository } = require('../db/evidenceRepository');
 const { HttpClient } = require('../api/httpClient');
 const { EsiClient } = require('../api/esiClient');
 const { operatorReportCandidates, resolveSystem } = require('../reports/operatorReport');
+const { scopedKillmailIds } = require('../reports/corporationObservationReport');
 
 async function hydrateActorReportCandidates(db, input, dependencies = {}) {
   const repository = dependencies.repository || new EvidenceRepository(db);
@@ -116,6 +117,67 @@ async function hydrateOperatorReportCandidates(db, systemNameOrId, dependencies 
   }
 }
 
+async function hydrateCorporationReportCandidates(db, input, dependencies = {}) {
+  const repository = dependencies.repository || new EvidenceRepository(db);
+  const corporation = resolveActor(db, {
+    ...input,
+    entityType: 'corporation',
+    entity_type: 'corporation'
+  });
+  if (corporation.entity_type !== 'corporation') {
+    throw new Error('Corporation report hydration requires a corporation actor');
+  }
+  const run = repository.createMetadataRun({
+    trigger: 'manual',
+    runType: 'report_corporation_candidates',
+    targetType: 'corporation',
+    targetId: String(corporation.entity_id)
+  });
+  const httpClient = dependencies.httpClient || new HttpClient({ repository, runId: run.run_id, runType: 'metadata' });
+  httpClient.repository = httpClient.repository || repository;
+  httpClient.runId = httpClient.runId || run.run_id;
+  httpClient.runType = httpClient.runType || 'metadata';
+  const esiClient = dependencies.esiClient || new EsiClient(httpClient);
+
+  try {
+    const ids = collectCorporationHydrationIds(db, corporation, {
+      topN: dependencies.topN || 25,
+      threshold: dependencies.threshold || 1
+    });
+    const alreadyKnown = countKnown(db, ids);
+    const knownPatchResult = patchKnownEntityNames(db, alreadyKnown.rows);
+    const unresolvedIds = ids.filter((id) => !alreadyKnown.knownIds.has(id));
+    const resolved = await resolveInChunks(esiClient, unresolvedIds, dependencies.chunkSize || 500);
+    const applyResult = applyResolvedNames(db, resolved);
+    const apiCounts = apiCountsForRun(db, run.run_id);
+    const unresolvedCount = unresolvedIds.length - resolved.length;
+    const summary = {
+      run_id: run.run_id,
+      corporation,
+      candidates_considered: ids.length,
+      ids_discovered: ids.length,
+      already_known: alreadyKnown.count,
+      requested_from_esi: unresolvedIds.length,
+      resolved: resolved.length,
+      unresolved: unresolvedCount,
+      entities_upserted: applyResult.entitiesUpserted,
+      types_upserted: applyResult.typesUpserted,
+      activity_events_patched: knownPatchResult.activityEventsPatched + applyResult.activityEventsPatched,
+      api_calls_esi: apiCounts.esi,
+      warnings: unresolvedCount > 0 ? [`${unresolvedCount} IDs were not resolved by ESI /universe/names/`] : []
+    };
+
+    repository.finalizeMetadataRun(run.run_id, summary, 'success', summary.warnings.join('; ') || null);
+    return summary;
+  } catch (error) {
+    const apiCounts = apiCountsForRun(db, run.run_id);
+    repository.finalizeMetadataRun(run.run_id, {
+      api_calls_esi: apiCounts.esi
+    }, 'failed', null, error.message);
+    throw error;
+  }
+}
+
 function resolveActor(db, input) {
   const entityType = String(input?.entityType || input?.entity_type || '').toLowerCase();
   if (!['character', 'corporation', 'alliance'].includes(entityType)) {
@@ -159,6 +221,71 @@ function collectActorHydrationIds(db, actor, options = {}) {
       if (value) {
         ids.add(Number(value));
       }
+    }
+  }
+
+  return [...ids].filter((id) => Number.isInteger(id) && id > 0).sort((a, b) => a - b);
+}
+
+function collectCorporationHydrationIds(db, corporation, options = {}) {
+  const ids = new Set([corporation.entity_id]);
+  const killmailIds = scopedKillmailIds(db, corporation, {});
+  if (!killmailIds.length) {
+    return [...ids];
+  }
+
+  const placeholders = killmailIds.map(() => '?').join(', ');
+  const threshold = options.threshold || 1;
+  const topN = options.topN || 25;
+  const memberRows = db.prepare(`
+    SELECT character_id AS id, COUNT(*) AS appearances
+    FROM activity_events
+    WHERE entity_type = 'character'
+      AND corporation_id = ?
+      AND character_id IS NOT NULL
+      AND killmail_id IN (${placeholders})
+    GROUP BY character_id
+    HAVING COUNT(*) >= ?
+    ORDER BY appearances DESC, character_id
+    LIMIT ?
+  `).all(corporation.entity_id, ...killmailIds, threshold, topN);
+  const counterpartCorpRows = db.prepare(`
+    SELECT corporation_id AS id, COUNT(*) AS appearances
+    FROM activity_events
+    WHERE corporation_id IS NOT NULL
+      AND corporation_id != ?
+      AND killmail_id IN (${placeholders})
+    GROUP BY corporation_id
+    HAVING COUNT(*) >= ?
+    ORDER BY appearances DESC, corporation_id
+    LIMIT ?
+  `).all(corporation.entity_id, ...killmailIds, threshold, topN);
+  const corporationAllianceIds = db.prepare(`
+    SELECT DISTINCT alliance_id
+    FROM activity_events
+    WHERE entity_type = 'corporation'
+      AND entity_id = ?
+      AND alliance_id IS NOT NULL
+      AND killmail_id IN (${placeholders})
+  `).all(corporation.entity_id, ...killmailIds).map((row) => row.alliance_id);
+  const excludedAllianceSql = corporationAllianceIds.length
+    ? `AND alliance_id NOT IN (${corporationAllianceIds.map(() => '?').join(', ')})`
+    : '';
+  const counterpartAllianceRows = db.prepare(`
+    SELECT alliance_id AS id, COUNT(*) AS appearances
+    FROM activity_events
+    WHERE alliance_id IS NOT NULL
+      AND killmail_id IN (${placeholders})
+      ${excludedAllianceSql}
+    GROUP BY alliance_id
+    HAVING COUNT(*) >= ?
+    ORDER BY appearances DESC, alliance_id
+    LIMIT ?
+  `).all(...killmailIds, ...corporationAllianceIds, threshold, topN);
+
+  for (const row of [...memberRows, ...counterpartCorpRows, ...counterpartAllianceRows]) {
+    if (row.id) {
+      ids.add(Number(row.id));
     }
   }
 
@@ -324,8 +451,10 @@ function apiCountsForRun(db, runId) {
 
 module.exports = {
   hydrateActorReportCandidates,
+  hydrateCorporationReportCandidates,
   hydrateOperatorReportCandidates,
   collectHydrationIds,
   collectActorHydrationIds,
+  collectCorporationHydrationIds,
   applyResolvedNames
 };
