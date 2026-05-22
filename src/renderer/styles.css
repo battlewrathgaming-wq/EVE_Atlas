@@ -444,6 +444,12 @@ h4 {
   font-size: 14px;
 }
 
+.observation-section h5 span {
+  margin-left: 8px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
 .empty-note {
   color: var(--muted);
 }
@@ -606,6 +612,10 @@ h4 {
 
 .callout.blocked {
   border-color: #7b3b3b;
+}
+
+.report-status {
+  margin-bottom: 16px;
 }
 
 .report-output {

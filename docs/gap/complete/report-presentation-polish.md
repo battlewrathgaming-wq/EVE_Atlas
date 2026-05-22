@@ -1,6 +1,6 @@
 # Gap To-Do: Report Presentation Polish
 
-Status: Open
+Status: Complete
 Priority: P2
 Milestone: Operational Workflow Hardening
 
@@ -29,6 +29,21 @@ Make Atlas reports more useful to an operator without changing their meaning: im
 ## Completion Signal
 
 At least one report view is materially easier to inspect, with screenshots or notes showing before/after behavior, while renderer-shell verification remains green.
+
+Completed:
+
+- Reviewed the `smoke:electron` reports screenshot from `F:\Projects\AURA-Atlas\.tmp\electron-visual-smoke\reports.png`.
+- Added a report status / empty-state callout so blank report panels are not ambiguous.
+- Actor report load now summarizes sample status, actor, evidence window, killmail count, and activity event count at the top of the Reports view.
+- Observation section headings now show row counts for faster scanning.
+- Evidence basis, observations, collection provenance, warnings, raw IDs, assessment memory, and text export remain visually distinct.
+- Text export remains available for audit/export.
+- Renderer still consumes backend report sections and does not recompute report meaning.
+
+Next structured report UI candidate:
+
+- Queue is already partly structured in Queue / Watches.
+- Corporation or radius should be the next native structured report surface when the workflow needs a second full report view.
 
 ## Related Documents
 

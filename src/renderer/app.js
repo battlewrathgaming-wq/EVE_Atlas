@@ -101,6 +101,7 @@ const els = {
   actorReportId: document.querySelector('#actor-report-id'),
   actorReportName: document.querySelector('#actor-report-name'),
   actorReportLookback: document.querySelector('#actor-report-lookback'),
+  reportStatus: document.querySelector('#report-status'),
   actorEvidence: document.querySelector('#actor-evidence'),
   actorProvenance: document.querySelector('#actor-provenance'),
   actorObservations: document.querySelector('#actor-observations'),
@@ -145,6 +146,7 @@ async function init() {
     renderWindowState();
     setServiceState(`${state.commands.length} services`);
     bindEvents();
+    renderReportEmptyState();
     renderAssessmentContext();
     await Promise.all([
       loadReadiness(),
@@ -803,6 +805,7 @@ function actorReportRequest() {
 
 function renderActorReport(report) {
   state.actorReport = report;
+  renderReportStatus(report);
   els.reportOutput.textContent = report.text || 'No text export returned.';
   renderRows(els.actorEvidence, [
     ['Report Type', report.report_type || 'actor'],
@@ -819,6 +822,38 @@ function renderActorReport(report) {
   renderWarnings(report.warnings || []);
   renderRawIds(report.raw_ids || {});
   renderAssessmentContext();
+}
+
+function renderReportEmptyState() {
+  els.reportStatus.className = 'callout report-status warning';
+  els.reportStatus.innerHTML = [
+    '<strong>No report loaded</strong>',
+    '<span>Load an actor report to inspect stored evidence, observations, provenance, warnings, and raw IDs. Queue previews are not evidence.</span>'
+  ].join('');
+  renderRows(els.actorEvidence, [
+    ['Evidence Basis', 'No actor report loaded.'],
+    ['Boundary', 'Stored expanded ESI killmails become evidence; zKill refs are discovery context only.']
+  ]);
+  renderRows(els.actorProvenance, [
+    ['Collection Provenance', 'No loaded report context.']
+  ]);
+  els.actorObservations.textContent = 'Load a report to view observation sections derived from stored activity events.';
+  els.actorWarnings.textContent = 'No report warnings loaded.';
+  renderRows(els.actorRawIds, [
+    ['Raw IDs', 'No report loaded.']
+  ]);
+  els.reportOutput.textContent = 'No report loaded.';
+}
+
+function renderReportStatus(report) {
+  const counts = report.evidence_basis?.evidence_range || {};
+  const status = String(report.evidence_basis?.sample_status || 'unknown');
+  const kind = status.includes('PARTIAL') || status.includes('NO ') ? 'warning' : 'ready';
+  els.reportStatus.className = `callout report-status ${kind}`;
+  els.reportStatus.innerHTML = [
+    `<strong>${escapeHtml(status)}</strong>`,
+    `<span>${escapeHtml(actorLabel(report))} - ${escapeHtml(report.scope?.evidence_window?.label || 'unknown window')} - ${escapeHtml(counts.killmail_count ?? 0)} killmails / ${escapeHtml(counts.activity_event_count ?? 0)} activity events. Observations are scoped presentations of stored evidence, not assessment.</span>`
+  ].join('');
 }
 
 function renderAssessmentContext() {
@@ -1051,7 +1086,8 @@ function renderObservationSections(sections) {
   sections.forEach((section) => {
     const article = document.createElement('article');
     article.className = 'observation-section';
-    article.innerHTML = `<h5>${escapeHtml(section.title || section.name)}</h5>`;
+    const rowCount = section.rows?.length || 0;
+    article.innerHTML = `<h5>${escapeHtml(section.title || section.name)} <span>${escapeHtml(rowCount)} rows</span></h5>`;
     if (!section.rows?.length) {
       const empty = document.createElement('p');
       empty.className = 'empty-note';

@@ -14,6 +14,7 @@ Recent backend/UI-readiness work completed:
 - readiness/settings screen shows runtime paths, SDE topology, SDE inventory, live API state, User-Agent, backend messages, and next local action
 - task progress/cancellation UI shows task history, selected task details, progress events, warnings, result/error payloads, and cancel action for running tasks
 - actor-first report UI renders native structured `report.actor` responses with evidence, observation, provenance, warnings, raw IDs, and text export separated
+- report presentation now includes explicit empty-state/status language and row counts for actor observation sections
 - scope controls UI loads backend defaults and validates manual discovery, manual expansion, actor watch, and system/radius watch inputs through `scope.validate`
 - queue/watch status UI previews discovery queue selections through `queue.selection` and watch due/blocked/backoff/session/live-gate state through `watch.schedule`
 - session-armed watch executor is implemented as volatile app-session state with explicit Arm/Disarm controls, one due-watch dispatch per tick, and task-backed execution
@@ -97,6 +98,7 @@ Current implemented shell:
 - actions pane exposes manual discovery as the first controlled execution path; it queues zKill refs only and routes execution through task services
 - frameless window controls for minimize, close, and always-on-top
 - reports pane can create assessment memory from actor report context through `assessment.create`, then list/inspect artifacts through `assessment.list` and `assessment.get`
+- reports pane shows a status callout for loaded actor reports with sample status, evidence window, killmail count, activity event count, and layer boundary wording
 - native structured actor report response with text rendering retained for CLI/export
 - Electron visual smoke harness captures readiness, scopes, tasks, queue/watch, and reports screenshots from the real app window
 
@@ -227,5 +229,6 @@ Latest reviewed commits:
 - current live operational smoke - explicit manual discovery and session-armed watch executor smoke completed with one zKill call per successful path, zero ESI calls, and zero evidence writes in the selected one-hour ZTS-4D window
 - current manual expansion UI slice - explicit queue-ref expansion path added; report-scoped hydration UI deferred for separate metadata-only wording
 - current assessment report workflow slice - actor report context can create/list/inspect assessment artifacts through the service bridge with explicit boundary confirmation and no evidence mutation
+- current report presentation polish slice - Reports view now has a clearer unloaded state, loaded actor status summary, and observation row counts while retaining backend report authority
 
 These commits move the earlier rigging gaps into an initial presentation checkpoint. The main remaining risk is no longer missing service vocabulary; it is preserving the service/evidence boundary while adding further executable UI actions and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.

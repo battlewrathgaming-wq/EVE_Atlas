@@ -89,7 +89,6 @@ This milestone should leave Atlas with:
 
 Recommended order:
 
-- `report-presentation-polish.md`
 - `compaction-preservation-preflight.md`
 - `aura-core-extraction-brief.md`
 

@@ -79,6 +79,7 @@ function main() {
   assert(htmlText.includes('action-confirm-live'), 'manual discovery should require visible live confirmation control');
   assert(htmlText.includes('manual-discovery-normalized'), 'manual discovery should show normalized backend payload');
   assert(htmlText.includes('view-reports'), 'renderer should include reports view');
+  assert(htmlText.includes('report-status'), 'report view should include a report status/empty-state callout');
   assert(htmlText.includes('load-actor-report'), 'report view should include actor report action');
   assert(htmlText.includes('actor-report-type'), 'report view should include actor type control');
   assert(htmlText.includes('actor-report-id'), 'report view should include actor ID control');
@@ -127,6 +128,8 @@ function main() {
   assert(rendererText.includes('detachedTask: true'), 'manual discovery should run as a detached task');
   assert(rendererText.includes('actionConfirmLive.checked'), 'manual discovery should require visible confirmation');
   assert(rendererText.includes("service.invoke('report.actor'"), 'renderer should call report.actor through service bridge');
+  assert(rendererText.includes('renderReportEmptyState'), 'renderer should initialize report empty states');
+  assert(rendererText.includes('renderReportStatus'), 'renderer should render loaded report status');
   assert(rendererText.includes('renderActorReport'), 'renderer should render native actor report response');
   assert(rendererText.includes('renderObservationSections'), 'renderer should render backend observation sections');
   assert(rendererText.includes('renderRawIds'), 'renderer should show raw IDs from backend response');
@@ -157,6 +160,7 @@ function main() {
   assert(styleText.includes('.watch-list'), 'renderer styles should define watch list');
   assert(styleText.includes('.status-badge'), 'renderer styles should define queue/watch status badges');
   assert(styleText.includes('.observation-table'), 'renderer styles should define actor observation tables');
+  assert(styleText.includes('.report-status'), 'renderer styles should define report status callout');
   assert(styleText.includes('.form-grid'), 'renderer styles should define actor report controls');
   assert(styleText.includes('.form-grid textarea'), 'renderer styles should define assessment text areas');
   assert(styleText.includes('.report-output'), 'renderer styles should define report output');
