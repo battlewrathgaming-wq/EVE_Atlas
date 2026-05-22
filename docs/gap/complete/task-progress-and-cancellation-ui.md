@@ -1,14 +1,14 @@
 ﻿# Gap To-Do: Task Progress And Cancellation UI
 
-Status: Open
+Status: Complete
 Priority: P1
 
-## Actionables
+## Completed
 
-- Build UI for `task.list`, `task.get`, and `task.cancel`.
-- Show task state, classification, scope key, progress events, warnings, result summary, and error details.
-- Support polling or refreshing task state without starting new backend work.
-- Make cancellation available only for cancellable running tasks.
+- Built UI for `task.list`, `task.get`, and `task.cancel`.
+- Shows task state, classification, scope key, progress events, warnings, result summary, and error details.
+- Supports refreshing task state without starting new backend work.
+- Makes cancellation available only for queued/running tasks.
 
 ## Task Requirements
 
@@ -33,6 +33,12 @@ Task view should support:
 ## Completion Signal
 
 A detached service task can be started, inspected while running, cancelled when supported, and reviewed after completion/failure from the renderer.
+
+## Verification
+
+- `verify:renderer-shell`
+- `verify:task-runner`
+- `verify:all`
 
 ## Related Documents
 

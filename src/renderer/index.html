@@ -90,8 +90,22 @@
             </div>
             <button class="primary-action" type="button" id="refresh-tasks">Refresh</button>
           </div>
-          <div class="panel">
-            <div id="task-list" class="detail-list"></div>
+          <div class="task-layout">
+            <div class="panel">
+              <h4>Recent Tasks</h4>
+              <div id="task-list" class="task-list"></div>
+            </div>
+            <div class="panel">
+              <div class="task-detail-heading">
+                <h4>Task Detail</h4>
+                <button class="secondary-action danger-action" type="button" id="cancel-task" hidden>Cancel Task</button>
+              </div>
+              <div id="task-detail" class="detail-list"></div>
+              <h4 class="subheading">Progress</h4>
+              <div id="task-progress" class="timeline"></div>
+              <h4 class="subheading">Warnings And Result</h4>
+              <pre class="task-output" id="task-output">Select a task to inspect details.</pre>
+            </div>
           </div>
         </section>
 

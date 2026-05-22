@@ -46,6 +46,9 @@ function main() {
   assert(htmlText.includes('topology-state'), 'readiness screen should include SDE topology state');
   assert(htmlText.includes('inventory-state'), 'readiness screen should include SDE inventory state');
   assert(htmlText.includes('view-tasks'), 'renderer should include tasks view');
+  assert(htmlText.includes('task-detail'), 'task view should include task detail panel');
+  assert(htmlText.includes('task-progress'), 'task view should include progress timeline');
+  assert(htmlText.includes('cancel-task'), 'task view should include cancellation control');
   assert(htmlText.includes('view-reports'), 'renderer should include reports view');
 
   assert(rendererText.includes("service.invoke('app.readiness'"), 'renderer should call app.readiness through service bridge');
@@ -55,6 +58,11 @@ function main() {
   assert(rendererText.includes('topology_lookup_ready'), 'renderer should show topology readiness');
   assert(rendererText.includes('type_metadata_ready'), 'renderer should show inventory/type readiness');
   assert(rendererText.includes("service.invoke('task.list'"), 'renderer should call task.list through service bridge');
+  assert(rendererText.includes("service.invoke('task.get'"), 'renderer should call task.get through service bridge');
+  assert(rendererText.includes("service.invoke('task.cancel'"), 'renderer should call task.cancel through service bridge');
+  assert(rendererText.includes('isCancellable'), 'renderer should gate cancellation by task state');
+  assert(rendererText.includes('renderProgress'), 'renderer should render task progress events');
+  assert(rendererText.includes('renderTaskOutput'), 'renderer should render task warnings/errors/results');
   assert(rendererText.includes("service.invoke('report.queue'"), 'renderer should call a report through service bridge');
   assert(rendererText.includes('service.list()'), 'renderer should read service command availability');
   assert(rendererText.includes('atlasWindow.setAlwaysOnTop'), 'renderer should toggle always-on-top through preload bridge');
@@ -66,6 +74,8 @@ function main() {
   assert(styleText.includes('.app-shell'), 'renderer styles should define app shell');
   assert(styleText.includes('-webkit-app-region: drag'), 'renderer styles should define draggable region');
   assert(styleText.includes('-webkit-app-region: no-drag'), 'renderer styles should protect controls from drag');
+  assert(styleText.includes('.task-layout'), 'renderer styles should define task layout');
+  assert(styleText.includes('.timeline-row'), 'renderer styles should define progress timeline rows');
   assert(styleText.includes('.report-output'), 'renderer styles should define report output');
 
   console.log('renderer shell service boundary verified');

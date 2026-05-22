@@ -277,6 +277,92 @@ h4 {
   gap: 8px;
 }
 
+.task-layout {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.task-list {
+  display: grid;
+  gap: 8px;
+}
+
+.task-item {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #12181c;
+  color: var(--text);
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.task-item:hover,
+.task-item.active {
+  border-color: var(--accent);
+}
+
+.task-item span,
+.task-item small {
+  color: var(--muted);
+}
+
+.task-item.failed,
+.task-item.cancelled {
+  border-color: #5f3333;
+}
+
+.task-item.running {
+  border-color: #3f756d;
+}
+
+.task-detail-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.danger-action {
+  border-color: #693737;
+}
+
+.subheading {
+  margin-top: 16px;
+}
+
+.timeline {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+}
+
+.timeline-row {
+  display: grid;
+  grid-template-columns: 176px 120px 1fr;
+  gap: 10px;
+  border-top: 1px solid #263039;
+  padding-top: 8px;
+}
+
+.timeline-row:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.timeline-row strong {
+  color: var(--text);
+}
+
+.timeline-row p {
+  color: var(--muted);
+}
+
 .detail-row,
 .message {
   display: grid;
@@ -339,4 +425,16 @@ h4 {
   overflow: auto;
   white-space: pre-wrap;
   font: 13px/1.5 Consolas, monospace;
+}
+
+.task-output {
+  min-height: 160px;
+  margin: 0;
+  border: 1px solid var(--line);
+  background: #0c1114;
+  color: var(--text);
+  padding: 12px;
+  overflow: auto;
+  white-space: pre-wrap;
+  font: 12px/1.45 Consolas, monospace;
 }
