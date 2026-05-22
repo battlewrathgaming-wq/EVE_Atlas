@@ -109,11 +109,11 @@ function buildRunReport(db, runId) {
       `API calls by provider: zkill ${zkillLogs.length} / esi ${esiLogs.length}`,
       `Error summary: ${run.error_summary || 'none'}`
     ].join('\n')),
-    printSection('Discovery Queue State', [
+    printSection('Current Discovery Queue State', [
       `Scope: ${queue.scope_label}`,
       `Queued refs for scope: ${queue.total}`,
-      `Pending refs after run: ${queue.pending}`,
-      `Failed refs after run: ${queue.failed}`,
+      `Pending refs now: ${queue.pending}`,
+      `Failed refs now: ${queue.failed}`,
       `Expanded refs for scope: ${queue.expanded}`,
       `Cached refs for scope: ${queue.cached}`,
       `Next pending/failed refs: ${queue.next.length ? queue.next.map((row) => `${row.killmail_id} (${row.status})`).join(', ') : 'none'}`

@@ -138,16 +138,16 @@ async function main() {
   assertIncludes(secondScoutRunReport, 'AURA Atlas Run Report - PENDING REF EXPANSION');
   assertIncludes(secondScoutRunReport, 'Collection target: Atlas Scout [characterID: 90000002]');
   assertIncludes(secondScoutRunReport, 'zKill requests: 0');
-  assertIncludes(secondScoutRunReport, 'Discovery Queue State');
+  assertIncludes(secondScoutRunReport, 'Current Discovery Queue State');
   assertIncludes(secondScoutRunReport, 'Scope: actor:90000002');
   assertIncludes(secondScoutRunReport, 'Queued refs for scope: 4');
-  assertIncludes(secondScoutRunReport, 'Pending refs after run: 0');
+  assertIncludes(secondScoutRunReport, 'Pending refs now: 0');
   assertIncludes(secondScoutRunReport, 'Next pending/failed refs: none');
 
   const wingRunReport = buildRunReport(db, wingRun.run_id);
   assertIncludes(wingRunReport, 'Scope: actor:90000003');
   assertIncludes(wingRunReport, 'Queued refs for scope: 2');
-  assertIncludes(wingRunReport, 'Pending refs after run: 1');
+  assertIncludes(wingRunReport, 'Pending refs now: 1');
   assertIncludes(wingRunReport, 'Next pending/failed refs: 6002 (pending)');
 
   assert(count(db, 'killmails') === 5, 'bulk workflow should persist five expanded killmails');

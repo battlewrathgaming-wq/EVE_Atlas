@@ -139,17 +139,17 @@ async function main() {
   assertIncludes(runReport, 'Collection Routes');
   assertIncludes(runReport, 'character');
   assertIncludes(runReport, 'Atlas Scout [characterID: 90000002]');
-  assertIncludes(runReport, 'Discovery Queue State');
+  assertIncludes(runReport, 'Current Discovery Queue State');
   assertIncludes(runReport, 'Scope: actor:90000002');
   assertIncludes(runReport, 'Queued refs for scope: 3');
-  assertIncludes(runReport, 'Pending refs after run: 1');
+  assertIncludes(runReport, 'Pending refs now: 1');
   assertIncludes(cachedRunReport, 'AURA Atlas Run Report - PENDING REF EXPANSION');
   assertIncludes(cachedRunReport, 'Collection target: Atlas Scout [characterID: 90000002]');
   assertIncludes(cachedRunReport, 'zKill requests: 0');
   assertIncludes(cachedRunReport, 'New ESI expansions: 1');
   assertIncludes(cachedRunReport, 'Coverage note: expanded refs from local pending discovery queue; no live zKill discovery was needed for this run');
   assertIncludes(cachedRunReport, 'Queued refs for scope: 3');
-  assertIncludes(cachedRunReport, 'Pending refs after run: 0');
+  assertIncludes(cachedRunReport, 'Pending refs now: 0');
   assertIncludes(emptyWindowReport, 'Evidence window: 2026-05-02T00:00:00Z -> 2026-05-03T00:00:00Z');
   assertIncludes(emptyWindowReport, 'Stored evidence matching this scope: 0 killmails / 0 actor activity events');
 
