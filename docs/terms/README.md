@@ -15,5 +15,7 @@ Use this folder when a term becomes important enough that misunderstanding it co
 - `evidence-report.md`
 - `expanded-killmail.md`
 - `metadata.md`
+- `watchlist.md`
+- `actor-watch.md`
 - `system-radius-watch.md`
 - `work-products.md`

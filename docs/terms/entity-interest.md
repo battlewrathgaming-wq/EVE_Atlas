@@ -28,14 +28,17 @@ Entity interest helps separate:
 
 ## Important Distinction
 
-Interest is not the same as a watchlist.
+Interest is broader than a watchlist.
 
 ```txt
-watchlist = actively collect on this entity
-interest = remember that this entity matters
+interest = this entity matters
+watchlist = remember this entity as interesting enough to inspect or collect later
+actor watch = run a scoped lookback collection for this entity
 ```
 
-An entity can be interesting without being actively watched.
+An entity can be interesting without being watchlisted.
+
+An entity can be watchlisted without an actor watch currently running.
 
 ## What It Is Not
 
