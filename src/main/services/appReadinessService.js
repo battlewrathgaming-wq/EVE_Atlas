@@ -118,6 +118,7 @@ function lookupCounts(db) {
     entities: count(db, 'entities'),
     killmails: count(db, 'killmails'),
     activity_events: count(db, 'activity_events'),
+    assessment_artifacts: count(db, 'assessment_artifacts'),
     fetch_runs: count(db, 'fetch_runs'),
     metadata_runs: count(db, 'metadata_runs')
   };

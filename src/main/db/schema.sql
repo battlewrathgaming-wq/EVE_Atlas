@@ -186,6 +186,46 @@ CREATE TABLE IF NOT EXISTS entity_dispositions (
   PRIMARY KEY (entity_type, entity_id)
 );
 
+CREATE TABLE IF NOT EXISTS assessment_artifacts (
+  artifact_id TEXT PRIMARY KEY,
+  artifact_type TEXT NOT NULL CHECK (artifact_type IN ('entity_interest', 'evidence_compaction', 'analyst_note')),
+  entity_type TEXT CHECK (entity_type IN ('character', 'corporation', 'alliance')),
+  entity_id INTEGER,
+  entity_name TEXT,
+  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'cooling', 'archived', 'superseded')),
+  interest_score INTEGER CHECK (interest_score IS NULL OR (interest_score >= 0 AND interest_score <= 100)),
+  priority_score INTEGER CHECK (priority_score IS NULL OR (priority_score >= 0 AND priority_score <= 100)),
+  impact_score INTEGER CHECK (impact_score IS NULL OR (impact_score >= 0 AND impact_score <= 100)),
+  confidence INTEGER CHECK (confidence IS NULL OR (confidence >= 0 AND confidence <= 100)),
+  assessment_reason TEXT,
+  assessment_summary TEXT,
+  evidence_window_start TEXT,
+  evidence_window_end TEXT,
+  evidence_scope_type TEXT,
+  evidence_scope_json TEXT,
+  source_report_type TEXT,
+  source_report_parameters_json TEXT,
+  source_run_ids_json TEXT,
+  sample_killmail_ids_json TEXT,
+  appearance_count INTEGER NOT NULL DEFAULT 0,
+  attacker_appearance_count INTEGER NOT NULL DEFAULT 0,
+  victim_appearance_count INTEGER NOT NULL DEFAULT 0,
+  systems_observed_json TEXT,
+  regions_observed_json TEXT,
+  ships_observed_json TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  assessed_by TEXT,
+  superseded_by_artifact_id TEXT,
+  archived_at TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_assessment_artifacts_entity
+ON assessment_artifacts(entity_type, entity_id, status);
+
+CREATE INDEX IF NOT EXISTS idx_assessment_artifacts_type_status
+ON assessment_artifacts(artifact_type, status);
+
 CREATE TABLE IF NOT EXISTS fetch_runs (
   run_id TEXT PRIMARY KEY,
   trigger TEXT NOT NULL,

@@ -16,6 +16,7 @@ const GROUPS = {
     'verify:queue-scope-isolation',
     'verify:message-taxonomy',
     'verify:retention-preflight',
+    'verify:assessment-artifacts',
     'verify:watch-scheduler',
     'verify:watch-executor',
     'verify:mutating-services',

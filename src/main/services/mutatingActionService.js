@@ -18,6 +18,11 @@ const {
 } = require('../scopes/scopeControls');
 const { SdeTopologyImporter } = require('../sde/sdeImporter');
 const { SdeInventoryImporter } = require('../sde/sdeInventoryImporter');
+const {
+  createAssessmentArtifact,
+  getAssessmentArtifact,
+  listAssessmentArtifacts
+} = require('../assessment/assessmentArtifactRepository');
 const { addWatchlistEntity, listWatchlistEntities } = require('../watchlist/watchlistRepository');
 const { buildWatchScheduleStatus, recordWatchRunResult } = require('../watchlist/watchScheduler');
 const { defaultWatchSessionExecutor } = require('../watchlist/watchExecutor');
@@ -147,6 +152,26 @@ function runWatchExecutorTickService(db, payload = {}, dependencies = {}) {
   return defaultWatchSessionExecutor.tick(db, payload, dependencies);
 }
 
+function runAssessmentCreateService(db, payload = {}) {
+  return createAssessmentArtifact(db, payload);
+}
+
+function runAssessmentListService(db, payload = {}) {
+  return {
+    artifacts: listAssessmentArtifacts(db, payload)
+  };
+}
+
+function runAssessmentGetService(db, payload = {}) {
+  const artifact = getAssessmentArtifact(db, payload.artifactId || payload.artifact_id);
+  if (!artifact) {
+    const error = new Error('Assessment artifact not found');
+    error.code = 'ASSESSMENT_ARTIFACT_NOT_FOUND';
+    throw error;
+  }
+  return artifact;
+}
+
 async function normalizeManualDiscoveryInput(db, payload, dependencies) {
   if (String(payload.scope || '').toLowerCase() === 'actor') {
     const actor = await resolveActorInput(db, payload, dependencies);
@@ -200,5 +225,8 @@ module.exports = {
   runWatchExecutorStatusService,
   runWatchExecutorDisarmService,
   runWatchExecutorArmService,
-  runWatchExecutorTickService
+  runWatchExecutorTickService,
+  runAssessmentCreateService,
+  runAssessmentListService,
+  runAssessmentGetService
 };

@@ -17,7 +17,7 @@ Recent backend/UI-readiness work completed:
 - scope controls UI loads backend defaults and validates manual discovery, manual expansion, actor watch, and system/radius watch inputs through `scope.validate`
 - queue/watch status UI previews discovery queue selections through `queue.selection` and watch due/blocked/backoff/session/live-gate state through `watch.schedule`
 - session-armed watch executor is implemented as volatile app-session state with explicit Arm/Disarm controls, one due-watch dispatch per tick, and task-backed execution
-- assessment artifact and evidence compaction behavior is contracted; executable evidence pruning remains blocked until artifact persistence and verification exist
+- assessment artifact persistence is implemented for deliberate assessment memory; executable evidence pruning remains blocked
 - `docs/gap/to-do` now tracks the remaining presentation-validation gaps; completed rigging items are in `docs/gap/complete`
 - Electron visual smoke now runs through `npm.cmd run smoke:electron`, writes screenshots/results under `F:\Projects\AURA-Atlas\.tmp\electron-visual-smoke`, and verifies startup creates no evidence/fetch runs
 - Electron was updated to `v42.2.0` so the app runtime supports the backend `node:sqlite` dependency
@@ -28,7 +28,7 @@ Recent backend/UI-readiness work completed:
 - queue selection, queue status isolation, and retention preflight are implemented
 - watch schedule/status planning and watch run state recording are implemented
 - report response contracts and common report-scope indexes are implemented
-- offline `verify:all` passes with 43 scripts
+- offline `verify:all` passes with 44 scripts
 - clean local checkpoint reviewed at `26f37a7`
 
 Current lane:
@@ -38,7 +38,7 @@ Current lane:
 - use the completed contracts as the source for future retention/assessment work
 - keep the session-armed watch executor loop separate from passive page load behavior
 - keep the implemented watch executor aligned with `docs/contracts/session-armed-watch-executor-contract.md`
-- keep retention/destructive actions blocked until assessment artifact persistence exists
+- keep retention/destructive evidence pruning blocked until compaction/preflight/deletion verification exists
 - defer true worker-thread/process isolation until heavier batch/runtime testing proves it is needed
 - run visual/app smoke through `npm.cmd run smoke:electron` or `npm start` rather than direct `file:///F:/...` navigation; the Codex in-app browser blocks direct file navigation by policy
 
@@ -70,6 +70,7 @@ Current implemented shell:
 - shared message taxonomy for readiness, live gate, and task responses
 - task locking for read-only, metadata, evidence-creating, destructive, and exclusive work
 - retention/destructive action preflight for confirmation and impact summaries
+- assessment artifact services for deliberate assessment memory creation/listing/inspection separate from evidence
 - scoped discovery queue transitions so manual, actor, and system/radius queue rows do not overwrite each other's status
 - UI language contract for evidence, observation, assessment, queue preview, scope, and warning wording
 - session-armed watch executor contract covering arm/disarm semantics, polling cadence, dispatch gates, task execution, completion recording, and restart behavior
@@ -111,6 +112,7 @@ Implemented backend actions include:
 - run metadata readiness reports
 - run scoped hydration commands
 - run diagnostics reports
+- create/list/get deliberate assessment artifacts
 - inspect watch schedule/backoff status
 - record watch run success/failure timing after a controlled task
 - invoke evidence-creating and metadata-mutating commands through the service/task boundary
@@ -173,7 +175,7 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 - broader visual/product polish beyond the initial shell
 - additional renderer controls for manual expansion, metadata hydration, actor watch, and system/radius watch execution outside the session executor
 - executable retention/deprecation actions and assessment compaction
-- assessment artifact schema/persistence
+- executable evidence compaction/pruning actions
 - true worker-thread/process isolation for CPU-heavy or synchronous SQLite-heavy tasks
 - broader manual visual polish beyond the automated Electron smoke harness
 
@@ -204,6 +206,7 @@ Latest reviewed commits:
 - current scope controls slice - backend-defaulted, backend-validated scope payload preview
 - current queue/watch slice - passive discovery queue selection preview and watch schedule status
 - current session-armed executor slice - volatile user-armed watch execution with explicit Arm/Disarm, one due-watch dispatch per tick, task-backed collection, and success/failure schedule recording
-- current retention design slice - assessment artifacts and evidence compaction contract before destructive pruning
+- current assessment artifact slice - deliberate assessment memory persistence separate from evidence, with service access and survival verification
+- current retention design slice - evidence compaction contract before destructive pruning
 
 These commits move the earlier rigging gaps into an initial presentation checkpoint. The main remaining risk is no longer missing service vocabulary; it is preserving the service/evidence boundary while adding further executable UI actions and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.

@@ -18,6 +18,9 @@ async function main() {
     const reportActorCommand = commands.find((entry) => entry.command === 'report.actor');
     const queueSelectionCommand = commands.find((entry) => entry.command === 'queue.selection');
     const retentionPreflightCommand = commands.find((entry) => entry.command === 'retention.preflight');
+    const assessmentCreateCommand = commands.find((entry) => entry.command === 'assessment.create');
+    const assessmentListCommand = commands.find((entry) => entry.command === 'assessment.list');
+    const assessmentGetCommand = commands.find((entry) => entry.command === 'assessment.get');
     const scopeDefaultsCommand = commands.find((entry) => entry.command === 'scope.defaults');
     const scopeValidateCommand = commands.find((entry) => entry.command === 'scope.validate');
     const taskListCommand = commands.find((entry) => entry.command === 'task.list');
@@ -47,6 +50,12 @@ async function main() {
     assert(queueSelectionCommand.classification === 'read-only', 'queue.selection should be read-only');
     assert(retentionPreflightCommand, 'retention.preflight should be listed');
     assert(retentionPreflightCommand.classification === 'read-only', 'retention.preflight should be read-only');
+    assert(assessmentCreateCommand, 'assessment.create should be listed');
+    assert(assessmentCreateCommand.classification === 'metadata-only', 'assessment.create should be metadata-only');
+    assert(assessmentListCommand, 'assessment.list should be listed');
+    assert(assessmentListCommand.classification === 'read-only', 'assessment.list should be read-only');
+    assert(assessmentGetCommand, 'assessment.get should be listed');
+    assert(assessmentGetCommand.classification === 'read-only', 'assessment.get should be read-only');
     assert(scopeDefaultsCommand, 'scope.defaults should be listed');
     assert(scopeDefaultsCommand.classification === 'read-only', 'scope.defaults should be read-only');
     assert(scopeValidateCommand, 'scope.validate should be listed');

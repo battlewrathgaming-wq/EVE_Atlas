@@ -69,5 +69,4 @@ The milestone should leave Atlas with:
 
 Recommended order:
 
-1. `assessment-artifact-persistence.md`
-2. `runtime-process-isolation-review.md`
+1. `runtime-process-isolation-review.md`

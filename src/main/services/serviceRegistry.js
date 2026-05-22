@@ -2,6 +2,9 @@ const { buildAppReadiness, prepareAppRuntimePaths } = require('./appReadinessSer
 const { getLiveApiGateState } = require('./liveApiGateService');
 const {
   runActorWatchService,
+  runAssessmentCreateService,
+  runAssessmentGetService,
+  runAssessmentListService,
   runManualDiscoveryService,
   runManualExpansionService,
   runMetadataHydrationService,
@@ -119,6 +122,21 @@ const COMMANDS = {
     classification: 'evidence-creating',
     description: 'Run one session-armed watch executor tick',
     handler: ({ db, payload, ...context }) => runWatchExecutorTickService(db, payload, context)
+  },
+  'assessment.create': {
+    classification: 'metadata-only',
+    description: 'Create a deliberate assessment artifact separate from evidence',
+    handler: ({ db, payload }) => runAssessmentCreateService(db, payload)
+  },
+  'assessment.list': {
+    classification: 'read-only',
+    description: 'List deliberate assessment artifacts',
+    handler: ({ db, payload }) => runAssessmentListService(db, payload)
+  },
+  'assessment.get': {
+    classification: 'read-only',
+    description: 'Return one assessment artifact by ID',
+    handler: ({ db, payload }) => runAssessmentGetService(db, payload)
   },
   'report.build': {
     classification: 'read-only',
