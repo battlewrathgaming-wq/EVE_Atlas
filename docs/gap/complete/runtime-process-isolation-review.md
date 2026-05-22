@@ -1,6 +1,6 @@
 # Gap To-Do: Runtime Process Isolation Review
 
-Status: Open
+Status: Complete
 Priority: P3
 Milestone: Presentation Validation And Controlled Execution
 
@@ -44,6 +44,22 @@ There is a short recommendation stating either:
 
 - current detached task model is acceptable for the next milestone, or
 - specific workloads should move to a separate runtime boundary, with the first target named.
+
+## Completion Notes
+
+Recommendation: current detached task model is acceptable for the next milestone.
+
+Do not introduce worker threads, utility processes, child processes, or a separate local service yet. The first future isolation target, if measured pressure appears, should be SDE import / future SDE sync-compare. The second likely candidate is large report generation or evidence compaction over large local corp/radius scopes.
+
+Review record:
+
+- `docs/audits/audit-2026-05-22-runtime-process-isolation-review.md`
+
+Verification signal:
+
+- `verify:bulk` measured at roughly 3.4 seconds in this review
+- `verify:all` passed with 44 scripts
+- `smoke:electron` passed
 
 ## Related Documents
 

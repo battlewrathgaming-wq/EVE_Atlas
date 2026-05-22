@@ -18,7 +18,7 @@ Recent backend/UI-readiness work completed:
 - queue/watch status UI previews discovery queue selections through `queue.selection` and watch due/blocked/backoff/session/live-gate state through `watch.schedule`
 - session-armed watch executor is implemented as volatile app-session state with explicit Arm/Disarm controls, one due-watch dispatch per tick, and task-backed execution
 - assessment artifact persistence is implemented for deliberate assessment memory; executable evidence pruning remains blocked
-- `docs/gap/to-do` now tracks the remaining presentation-validation gaps; completed rigging items are in `docs/gap/complete`
+- `docs/gap/to-do` has no active presentation-validation gap; completed rigging items are in `docs/gap/complete`
 - Electron visual smoke now runs through `npm.cmd run smoke:electron`, writes screenshots/results under `F:\Projects\AURA-Atlas\.tmp\electron-visual-smoke`, and verifies startup creates no evidence/fetch runs
 - Electron was updated to `v42.2.0` so the app runtime supports the backend `node:sqlite` dependency
 - `verify:electron-runtime` now checks that Electron itself can use `node:sqlite`, closing the gap between desktop Node verification and Electron runtime behavior
@@ -39,7 +39,7 @@ Current lane:
 - keep the session-armed watch executor loop separate from passive page load behavior
 - keep the implemented watch executor aligned with `docs/contracts/session-armed-watch-executor-contract.md`
 - keep retention/destructive evidence pruning blocked until compaction/preflight/deletion verification exists
-- defer true worker-thread/process isolation until heavier batch/runtime testing proves it is needed
+- defer true worker-thread/process isolation; current review recommends the detached task model for the next milestone
 - run visual/app smoke through `npm.cmd run smoke:electron` or `npm start` rather than direct `file:///F:/...` navigation; the Codex in-app browser blocks direct file navigation by policy
 
 ## What Exists
@@ -207,6 +207,7 @@ Latest reviewed commits:
 - current queue/watch slice - passive discovery queue selection preview and watch schedule status
 - current session-armed executor slice - volatile user-armed watch execution with explicit Arm/Disarm, one due-watch dispatch per tick, task-backed collection, and success/failure schedule recording
 - current assessment artifact slice - deliberate assessment memory persistence separate from evidence, with service access and survival verification
+- current runtime isolation review - keep current main-process service model for now; first future isolation target would be SDE import or SDE sync/compare if measured pressure appears
 - current retention design slice - evidence compaction contract before destructive pruning
 
 These commits move the earlier rigging gaps into an initial presentation checkpoint. The main remaining risk is no longer missing service vocabulary; it is preserving the service/evidence boundary while adding further executable UI actions and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.

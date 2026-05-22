@@ -69,4 +69,4 @@ The milestone should leave Atlas with:
 
 Recommended order:
 
-1. `runtime-process-isolation-review.md`
+- No active presentation-validation gap remains in this folder.
