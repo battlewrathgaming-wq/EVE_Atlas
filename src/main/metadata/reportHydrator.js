@@ -24,6 +24,7 @@ async function hydrateActorReportCandidates(db, input, dependencies = {}) {
       threshold: dependencies.threshold || 1
     });
     const alreadyKnown = countKnown(db, ids);
+    const knownPatchResult = patchKnownEntityNames(db, alreadyKnown.rows);
     const unresolvedIds = ids.filter((id) => !alreadyKnown.knownIds.has(id));
     const resolved = await resolveInChunks(esiClient, unresolvedIds, dependencies.chunkSize || 500);
     const applyResult = applyResolvedNames(db, resolved);
@@ -40,7 +41,7 @@ async function hydrateActorReportCandidates(db, input, dependencies = {}) {
       unresolved: unresolvedCount,
       entities_upserted: applyResult.entitiesUpserted,
       types_upserted: applyResult.typesUpserted,
-      activity_events_patched: applyResult.activityEventsPatched,
+      activity_events_patched: knownPatchResult.activityEventsPatched + applyResult.activityEventsPatched,
       api_calls_esi: apiCounts.esi,
       warnings: unresolvedCount > 0 ? [`${unresolvedCount} IDs were not resolved by ESI /universe/names/`] : []
     };
@@ -78,6 +79,7 @@ async function hydrateOperatorReportCandidates(db, systemNameOrId, dependencies 
     });
     const ids = collectHydrationIds(db, system.solar_system_id, candidates);
     const alreadyKnown = countKnown(db, ids);
+    const knownPatchResult = patchKnownEntityNames(db, alreadyKnown.rows);
     const unresolvedIds = ids.filter((id) => !alreadyKnown.knownIds.has(id));
     const resolved = await resolveInChunks(esiClient, unresolvedIds, dependencies.chunkSize || 500);
     const applyResult = applyResolvedNames(db, resolved);
@@ -97,7 +99,7 @@ async function hydrateOperatorReportCandidates(db, systemNameOrId, dependencies 
       unresolved: unresolvedCount,
       entities_upserted: applyResult.entitiesUpserted,
       types_upserted: applyResult.typesUpserted,
-      activity_events_patched: applyResult.activityEventsPatched,
+      activity_events_patched: knownPatchResult.activityEventsPatched + applyResult.activityEventsPatched,
       api_calls_esi: apiCounts.esi,
       warnings: unresolvedCount > 0 ? [`${unresolvedCount} IDs were not resolved by ESI /universe/names/`] : []
     };
@@ -194,17 +196,21 @@ function collectHydrationIds(db, systemId, candidates) {
 
 function countKnown(db, ids) {
   const knownIds = new Set();
-  const entityStatement = db.prepare('SELECT entity_name FROM entities WHERE entity_id = ? AND entity_name IS NOT NULL');
+  const rows = [];
+  const entityStatement = db.prepare('SELECT entity_type, entity_id, entity_name FROM entities WHERE entity_id = ? AND entity_name IS NOT NULL');
 
   for (const id of ids) {
-    if (entityStatement.get(id)) {
+    const known = entityStatement.get(id);
+    if (known) {
       knownIds.add(id);
+      rows.push(known);
     }
   }
 
   return {
     count: knownIds.size,
-    knownIds
+    knownIds,
+    rows
   };
 }
 
@@ -265,6 +271,24 @@ function patchStatements(db) {
     corporation: db.prepare('UPDATE activity_events SET corporation_name = ? WHERE corporation_id = ? AND corporation_name IS NULL'),
     alliance: db.prepare('UPDATE activity_events SET alliance_name = ? WHERE alliance_id = ? AND alliance_name IS NULL')
   };
+}
+
+function patchKnownEntityNames(db, rows) {
+  const statements = patchStatements(db);
+  let activityEventsPatched = 0;
+
+  db.exec('BEGIN IMMEDIATE;');
+  try {
+    for (const row of rows || []) {
+      activityEventsPatched += patchEntityEvents(statements, row.entity_type, row.entity_id, row.entity_name);
+    }
+    db.exec('COMMIT;');
+  } catch (error) {
+    db.exec('ROLLBACK;');
+    throw error;
+  }
+
+  return { activityEventsPatched };
 }
 
 function patchEntityEvents(statements, category, id, name) {

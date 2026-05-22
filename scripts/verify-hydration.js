@@ -95,6 +95,7 @@ async function main() {
   assert(actorHydration.ids_discovered > 0, 'actor hydration should discover report-scoped IDs');
   assert(actorHydration.requested_from_esi === 0, 'actor hydration should skip already known report-scoped IDs');
   assert(actorHydration.types_upserted === 0, 'actor hydration should not resolve inventory types through live ESI');
+  assert(actorHydration.activity_events_patched === 0, 'actor hydration should not repatch already labeled fixture events');
   assert(count(db, 'metadata_runs') === 2, 'actor hydration should write a metadata run');
 
   closeDatabase(db);
