@@ -30,6 +30,7 @@
     "verify:queue-preflight": "node scripts/verify-queue-preflight.js",
     "verify:actor-resolution": "node scripts/verify-actor-resolution.js",
     "verify:actor-watch-live": "node scripts/verify-actor-watch-live.js",
+    "verify:actor-workflow-live": "node scripts/live-actor-workflow-smoke.js",
     "verify:system-watch-live": "node scripts/verify-system-watch-live.js",
     "verify:system-watch-idempotent-live": "node scripts/verify-system-watch-idempotent-live.js",
     "report:run": "node scripts/report-run.js",
