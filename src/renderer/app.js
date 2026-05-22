@@ -107,6 +107,12 @@ const els = {
   actorObservations: document.querySelector('#actor-observations'),
   actorWarnings: document.querySelector('#actor-warnings'),
   actorRawIds: document.querySelector('#actor-raw-ids'),
+  metadataHydrationCandidates: document.querySelector('#metadata-hydration-candidates'),
+  metadataHydrationConfirm: document.querySelector('#metadata-hydration-confirm'),
+  preflightMetadataHydration: document.querySelector('#preflight-metadata-hydration'),
+  runMetadataHydration: document.querySelector('#run-metadata-hydration'),
+  metadataHydrationStatus: document.querySelector('#metadata-hydration-status'),
+  metadataHydrationNormalized: document.querySelector('#metadata-hydration-normalized'),
   assessmentBoundary: document.querySelector('#assessment-boundary'),
   assessmentReason: document.querySelector('#assessment-reason'),
   assessmentSummary: document.querySelector('#assessment-summary'),
@@ -147,6 +153,7 @@ async function init() {
     setServiceState(`${state.commands.length} services`);
     bindEvents();
     renderReportEmptyState();
+    renderMetadataHydrationContext();
     renderAssessmentContext();
     await Promise.all([
       loadReadiness(),
@@ -182,6 +189,8 @@ function bindEvents() {
   els.preflightManualDiscovery.addEventListener('click', preflightManualDiscovery);
   els.runManualDiscovery.addEventListener('click', runManualDiscovery);
   els.loadActorReport.addEventListener('click', loadActorReport);
+  els.preflightMetadataHydration.addEventListener('click', preflightMetadataHydration);
+  els.runMetadataHydration.addEventListener('click', runMetadataHydration);
   els.saveAssessmentArtifact.addEventListener('click', saveAssessmentArtifact);
   els.refreshAssessmentArtifacts.addEventListener('click', loadAssessmentArtifacts);
   els.loadQueueReport.addEventListener('click', loadQueueReport);
@@ -821,6 +830,7 @@ function renderActorReport(report) {
   renderObservationSections(report.observations?.sections || []);
   renderWarnings(report.warnings || []);
   renderRawIds(report.raw_ids || {});
+  renderMetadataHydrationContext();
   renderAssessmentContext();
 }
 
@@ -875,6 +885,131 @@ function renderAssessmentContext() {
     ['Activity Events', counts.activity_event_count ?? 0],
     ['Boundary', 'This records assessment memory over the loaded report context; it does not change evidence.']
   ]);
+}
+
+function renderMetadataHydrationContext() {
+  const ids = metadataHydrationCandidateIds();
+  if (!state.actorReport) {
+    renderRows(els.metadataHydrationCandidates, [
+      ['Context', 'Load an actor report before previewing hydration.'],
+      ['Boundary', 'Hydration patches cached labels only.']
+    ]);
+    els.metadataHydrationNormalized.textContent = 'Load an actor report to preview hydration candidates.';
+    return;
+  }
+  renderRows(els.metadataHydrationCandidates, [
+    ['Actor', actorLabel(state.actorReport)],
+    ['Candidate Entity IDs', ids.length ? ids.join(', ') : 'none'],
+    ['Expected ESI Name Calls', ids.length ? '1' : '0'],
+    ['Static Type IDs', (state.actorReport.raw_ids?.type_ids || []).length ? 'Use local SDE metadata, not live ESI.' : 'none in report'],
+    ['Boundary', 'Metadata hydration improves readability only; evidence IDs and raw killmails are unchanged.']
+  ]);
+  els.metadataHydrationNormalized.textContent = JSON.stringify({
+    target: 'actor',
+    actor: state.actorReport.scope?.actor || null,
+    candidate_entity_ids: ids,
+    excluded_type_ids: state.actorReport.raw_ids?.type_ids || [],
+    expected_esi_name_calls: ids.length ? 1 : 0
+  }, null, 2);
+}
+
+function metadataHydrationCandidateIds() {
+  const rawIds = state.actorReport?.raw_ids || {};
+  return [...new Set([
+    ...(rawIds.character_ids || []),
+    ...(rawIds.corporation_ids || []),
+    ...(rawIds.alliance_ids || [])
+  ].map(Number).filter((value) => Number.isInteger(value) && value > 0))]
+    .sort((a, b) => a - b);
+}
+
+async function metadataHydrationPreflight() {
+  if (!state.actorReport) {
+    throw new Error('Load an actor report before metadata hydration');
+  }
+  const ids = metadataHydrationCandidateIds();
+  const gate = await service.invoke('live.gate', {
+    action: 'metadata.hydration',
+    input: {
+      idsToRequest: ids.length
+    }
+  });
+  return { ids, gate, payload: metadataHydrationPayload() };
+}
+
+async function preflightMetadataHydration() {
+  setBusy(els.preflightMetadataHydration, true);
+  try {
+    const result = await metadataHydrationPreflight();
+    renderMetadataHydrationPreflight(result);
+  } catch (error) {
+    renderError(els.metadataHydrationStatus, error);
+  } finally {
+    setBusy(els.preflightMetadataHydration, false);
+  }
+}
+
+function renderMetadataHydrationPreflight(result) {
+  renderRows(els.metadataHydrationStatus, [
+    ['Live Gate', result.gate.display?.label || result.gate.state || 'unknown'],
+    ['Allowed', result.gate.allowed ? 'yes' : 'no'],
+    ['Providers', result.gate.providers?.join(', ') || 'none'],
+    ['Candidate Entity IDs', result.ids.length],
+    ['Expected ESI Name Calls', result.gate.estimated_api_calls?.esi ?? 0],
+    ['Evidence Effect', 'none; labels/readability only']
+  ]);
+  els.metadataHydrationNormalized.textContent = JSON.stringify({
+    payload: result.payload,
+    candidate_entity_ids: result.ids,
+    live_gate: {
+      state: result.gate.state,
+      allowed: result.gate.allowed,
+      blockers: result.gate.blockers || [],
+      warnings: result.gate.warnings || []
+    },
+    excluded_type_ids: state.actorReport?.raw_ids?.type_ids || []
+  }, null, 2);
+}
+
+async function runMetadataHydration() {
+  setBusy(els.runMetadataHydration, true);
+  try {
+    if (!els.metadataHydrationConfirm.checked) {
+      throw new Error('Metadata hydration requires the readability-only confirmation checkbox');
+    }
+    const preflight = await metadataHydrationPreflight();
+    renderMetadataHydrationPreflight(preflight);
+    if (!preflight.gate.allowed) {
+      throw new Error(preflight.gate.blockers?.[0]?.message || 'Metadata hydration is blocked by live API gate');
+    }
+    const task = await service.invoke('metadata.hydration', preflight.payload, {
+      asTask: true
+    });
+    renderRows(els.metadataHydrationStatus, [
+      ['Task ID', task.task_id],
+      ['Status', task.status],
+      ['Classification', task.classification],
+      ['Evidence Effect', 'none; metadata labels only']
+    ]);
+    state.selectedTaskId = task.task_id;
+    await loadTasks();
+    await loadActorReport();
+    els.metadataHydrationConfirm.checked = false;
+  } catch (error) {
+    renderError(els.metadataHydrationStatus, error);
+  } finally {
+    setBusy(els.runMetadataHydration, false);
+  }
+}
+
+function metadataHydrationPayload() {
+  const actor = state.actorReport?.scope?.actor || {};
+  return cleanObject({
+    target: 'actor',
+    entityType: actor.entity_type,
+    entityId: actor.entity_id,
+    entityName: actor.entity_name
+  });
 }
 
 async function saveAssessmentArtifact() {

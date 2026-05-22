@@ -87,6 +87,11 @@ function main() {
   assert(htmlText.includes('actor-provenance'), 'report view should include actor provenance section');
   assert(htmlText.includes('actor-observations'), 'report view should include actor observations section');
   assert(htmlText.includes('actor-raw-ids'), 'report view should include actor raw IDs section');
+  assert(htmlText.includes('metadata-hydration-candidates'), 'report view should include metadata hydration candidates');
+  assert(htmlText.includes('metadata-hydration-confirm'), 'metadata hydration should require visible readability confirmation');
+  assert(htmlText.includes('preflight-metadata-hydration'), 'metadata hydration should include preflight action');
+  assert(htmlText.includes('run-metadata-hydration'), 'metadata hydration should include explicit run action');
+  assert(htmlText.includes('metadata-hydration-normalized'), 'metadata hydration should show normalized payload');
   assert(htmlText.includes('assessment-boundary'), 'report view should include assessment/evidence boundary text');
   assert(htmlText.includes('assessment-reason'), 'assessment workflow should include reason input');
   assert(htmlText.includes('assessment-summary'), 'assessment workflow should include summary input');
@@ -136,6 +141,10 @@ function main() {
   assert(rendererText.includes("service.invoke('assessment.create'"), 'renderer should create assessment artifacts through service bridge');
   assert(rendererText.includes("service.invoke('assessment.list'"), 'renderer should list assessment artifacts through service bridge');
   assert(rendererText.includes("service.invoke('assessment.get'"), 'renderer should inspect assessment artifacts through service bridge');
+  assert(rendererText.includes("service.invoke('metadata.hydration'"), 'renderer should run metadata hydration through service bridge');
+  assert(rendererText.includes('metadataHydrationConfirm.checked'), 'metadata hydration should require visible confirmation');
+  assert(rendererText.includes('metadataHydrationCandidateIds'), 'renderer should show report-scoped hydration candidate IDs');
+  assert(rendererText.includes('Use local SDE metadata, not live ESI'), 'metadata hydration should not hydrate static type labels through ESI');
   assert(rendererText.includes('assessmentConfirm.checked'), 'assessment save should require visible boundary confirmation');
   assert(rendererText.includes('assessmentArtifactPayload'), 'renderer should build assessment artifact payload from report context');
   assert(rendererText.includes('Score fields require an assessment reason'), 'renderer should require reasons for score fields');

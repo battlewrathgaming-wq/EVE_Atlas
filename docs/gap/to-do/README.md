@@ -117,7 +117,6 @@ The milestone should leave Atlas with:
 
 Recommended order:
 
-- `metadata-hydration-ui.md`
 - `structured-report-expansion.md`
 - `retention-compaction-write-decision.md`
 

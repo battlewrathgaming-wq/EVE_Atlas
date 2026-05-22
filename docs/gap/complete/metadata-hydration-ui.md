@@ -1,6 +1,6 @@
 # Gap To-Do: Metadata Hydration UI
 
-Status: Open
+Status: Complete
 Priority: P2
 Milestone: Controlled Actor/Area Operation
 
@@ -27,6 +27,25 @@ Expose metadata hydration as a readability action, not evidence collection.
 ## Completion Signal
 
 The UI can improve labels for a report-scoped entity set, or there is a written decision to defer hydration UI until more structured reports exist.
+
+Completed:
+
+- First hydration context: loaded actor report.
+- Reports view shows candidate character/corporation/alliance IDs from `raw_ids`.
+- Reports view shows expected ESI name calls through `live.gate`.
+- Reports view explicitly excludes static type IDs from live ESI hydration and points to local SDE metadata instead.
+- Hydration requires a readability-only confirmation checkbox.
+- Hydration runs through `metadata.hydration` as a metadata-only task.
+- Actor report refreshes after the hydration task completes.
+- Boundary text states hydration patches cached labels/readability only and does not ingest evidence or mutate raw ESI killmails.
+
+Verification:
+
+```txt
+npm.cmd run verify:renderer-shell
+npm.cmd run verify:hydration
+npm.cmd run verify:service-registry
+```
 
 ## Related Documents
 

@@ -456,6 +456,25 @@
             </div>
           </div>
           <div class="panel">
+            <h4>Metadata Hydration</h4>
+            <p class="form-note">Hydration improves cached labels for report-scoped character, corporation, and alliance IDs. It does not ingest evidence or change raw ESI killmails. Ship/type labels come from local SDE metadata.</p>
+            <div class="report-grid">
+              <div>
+                <div id="metadata-hydration-candidates" class="detail-list"></div>
+                <label class="checkbox-row">
+                  <input id="metadata-hydration-confirm" type="checkbox" />
+                  <span>I understand this calls ESI names for readability only and does not create evidence.</span>
+                </label>
+                <div class="action-row stacked-actions">
+                  <button class="secondary-action" type="button" id="preflight-metadata-hydration">Preflight Hydration</button>
+                  <button class="primary-action" type="button" id="run-metadata-hydration">Hydrate Actor Labels</button>
+                </div>
+              </div>
+              <div id="metadata-hydration-status" class="detail-list"></div>
+            </div>
+            <pre class="task-output" id="metadata-hydration-normalized">Load an actor report to preview hydration candidates.</pre>
+          </div>
+          <div class="panel">
             <h4>Assessment Memory</h4>
             <p class="form-note" id="assessment-boundary">Assessment memory is a deliberate operator record over a loaded report context. It is not raw evidence and does not mutate stored killmails or activity events.</p>
             <div id="assessment-context" class="detail-list"></div>
