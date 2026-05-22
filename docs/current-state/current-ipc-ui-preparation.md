@@ -194,6 +194,8 @@ Live smoke groups refuse to run unless `AURA_ATLAS_LIVE_API=1` is set.
 - controlled area operation workflow is documented and verified offline with `Atlas Prime [solarSystemID: 30000001]`, local topology radius planning, capped collection, radius report observations, and multi-system presence wording
 - live expansion smoke passed against `Mr Jesterman [characterID: 1329523328]`: 5 queued refs, 1 ESI killmail expansion, 1 stored killmail, 8 activity events, 4 refs left pending in a disposable DB
 - actor report metadata hydration UI is implemented as a readability-only, live-gated, metadata-only task that excludes static type IDs from ESI hydration
+- structured report expansion is deferred by decision: radius is the next target, but only after renderer modularization and a native structured radius response
+- retention compaction writes are deferred by decision: `assessment.compact_from_evidence` remains preview-only until a real retention/pruning need exists
 - renderer modularization/component boundary review before `src/renderer/app.js` absorbs more workflow orchestration
 - renderer modularization review is complete: keep `app.js` whole for one narrow controlled actor/area proof, then split before adding another full structured report/workflow surface
 - executable retention/deprecation actions and actual assessment compaction writes
@@ -252,5 +254,7 @@ Latest reviewed commits:
 - current controlled area workflow - fixture path proves local topology radius scope to capped collection, stored evidence, radius report observations, and repeated/multi-system presence language without ownership/staging claims
 - current live expansion smoke - typed actor name resolved through ESI, zKill refs queued as possible evidence, one selected ref expanded through ESI, and reports confirmed partial sample boundaries
 - current metadata hydration UI - actor report can preview candidate entity IDs, estimate ESI name calls, run metadata-only hydration, and refresh labels without evidence mutation
+- current structured report expansion decision - next target should be radius, but implementation waits for renderer modules and native structured radius response
+- current retention compaction write decision - no compaction artifact write this milestone; preview remains read-only and evidence deletion remains blocked
 
 These commits move the earlier rigging gaps into an initial presentation checkpoint. The main remaining risk is no longer missing service vocabulary; it is preserving the service/evidence boundary while adding further executable UI actions and future retention actions without turning passive status views or preflights into hidden collection/destructive triggers.

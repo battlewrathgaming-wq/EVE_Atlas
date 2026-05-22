@@ -117,8 +117,7 @@ The milestone should leave Atlas with:
 
 Recommended order:
 
-- `structured-report-expansion.md`
-- `retention-compaction-write-decision.md`
+- No active Controlled Actor/Area Operation gap remains in this folder.
 
 Supporting audit:
 
