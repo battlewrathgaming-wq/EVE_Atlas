@@ -7,6 +7,12 @@ Signal: `.`
 
 The dot command is role-sensitive.
 
+If your role is unclear after context loss or compaction, stop before action and ask the human to identify the role.
+
+Do not infer your role solely from the existence of Dev and Overseer instructions.
+
+`workspace/current.md` may identify the expected executor, but you must still confirm that this chat/session is intended to act as that executor before executing `.`.
+
 ## Dev Meaning
 
 If the user sends only `.` in a Dev chat, Dev should read it as:
@@ -22,16 +28,17 @@ Perform required state documentation and git steps when the packet requires them
 Dev must:
 
 1. Confirm cwd, repo root, branch, tree health, and workspace files.
-2. Read `workspace/overview.md`.
-3. Read this file.
-4. Read `workspace/current.md` from top to bottom.
-5. Read source documents named in `current.md`.
-6. Execute the ordered runway in `current.md`.
-7. Update Evidence and Dev Handoff in `current.md`.
-8. Create the expected `DevHS##-[focus].md` handshake named in `current.md`.
-9. Run required verification.
-10. Perform state documentation and git steps only where the packet or user asks for them.
-11. Return a concise handoff.
+2. Read `AGENTS.md` if present.
+3. Read `workspace/overview.md`.
+4. Read this file.
+5. Read `workspace/current.md` from top to bottom.
+6. Read source documents named in `current.md`.
+7. Execute the ordered runway in `current.md`.
+8. Update Evidence and Dev Handoff in `current.md`.
+9. Create the expected `DevHS##-[focus].md` handshake named in `current.md`.
+10. Run required verification.
+11. Perform state documentation and git steps only where the packet or user asks for them.
+12. Return a concise handoff.
 
 ## Overseer Meaning
 
@@ -50,15 +57,16 @@ Return for discussion if unsure.
 Overseer must:
 
 1. Confirm cwd, repo root, branch, tree health, workspace files, active milestone, and handshake sequence.
-2. Read `workspace/overview.md`, `workspace/current.md`, and the latest Dev handoff.
-3. Review required source docs, current-state docs, roadmap/audit docs, and verification evidence.
-4. Accept, redirect, or mark the work incomplete.
-5. Create the next `OverseerHS##-[focus].md` review/handoff when appropriate.
-6. Rewrite `workspace/current.md` with the next bounded Dev runway.
-7. Update `workspace/overview.md` if milestone status or sequence changed.
-8. If the milestone is complete, batch-move milestone handshakes to `workspace/complete/milestone-XX/`.
-9. Complete milestone audit/code review where required by the project.
-10. Return for discussion when product intent, architecture, verification, or milestone acceptance is uncertain.
+2. Read `AGENTS.md` if present.
+3. Read `workspace/overview.md`, `workspace/current.md`, and the latest Dev handoff.
+4. Review required source docs, current-state docs, roadmap/audit docs, and verification evidence.
+5. Accept, redirect, or mark the work incomplete.
+6. Create the next `OverseerHS##-[focus].md` review/handoff when appropriate.
+7. Rewrite `workspace/current.md` with the next bounded Dev runway.
+8. Update `workspace/overview.md` if milestone status or sequence changed.
+9. If the milestone is complete, batch-move milestone handshakes to `workspace/complete/milestone-XX/`.
+10. Complete milestone audit/code review where required by the project.
+11. Return for discussion when product intent, architecture, verification, or milestone acceptance is uncertain.
 
 ## Must Do
 

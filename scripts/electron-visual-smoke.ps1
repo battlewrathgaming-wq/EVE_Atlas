@@ -19,7 +19,20 @@ $env:AURA_ATLAS_CACHE_DIR = $cacheRoot
 $env:AURA_ATLAS_SDE_CACHE_DIR = $sdeRoot
 $env:AURA_ATLAS_SETTINGS_PATH = Join-Path $smokeRoot "window-state.json"
 $env:AURA_ATLAS_ELECTRON_VISUAL_SMOKE = "1"
+$env:AURA_ATLAS_ELECTRON_RUGGED_SMOKE = "1"
 $env:AURA_ATLAS_VISUAL_SMOKE_DIR = $smokeRoot
+$env:AURA_ATLAS_DEMO_DB_PATH = $dbPath
 $env:npm_config_cache = Join-Path $cacheRoot "npm"
 
+npm.cmd run seed:demo-db
 npm.cmd run start
+
+$resultPath = Join-Path $smokeRoot "visual-smoke-result.json"
+if (-not (Test-Path -LiteralPath $resultPath)) {
+  throw "Electron visual smoke did not write $resultPath"
+}
+
+$result = Get-Content -LiteralPath $resultPath -Raw | ConvertFrom-Json
+if ($result.status -ne "passed") {
+  throw "Electron visual smoke failed: $($result.message)"
+}

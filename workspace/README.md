@@ -2,6 +2,8 @@
 
 This folder is the repo-local coordination surface for AURA Atlas agents.
 
+Root `AGENTS.md` is the project bootloader for agents. Read it first when present, then use this workspace folder for active coordination.
+
 ## Core Files
 
 - `workspace/overview.md` is the project map and durable record index.
@@ -18,9 +20,11 @@ The shared structure authority lives at:
 
 ## Shared Role And Command Prompts
 
-Role prompts:
+Role authority:
 
-`F:\Projects\Docs\Aura-Agent-Coordination\relay\role-prompts.md`
+- `F:\Projects\Docs\Aura-Agent-Coordination\roles\README.md`
+- `F:\Projects\Docs\Aura-Agent-Coordination\roles\[role]\README.md`
+- `F:\Projects\Docs\Aura-Agent-Coordination\roles\[role]\prompt.md`
 
 Command protocols:
 

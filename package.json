@@ -28,6 +28,7 @@
     "verify:app-readiness": "node scripts/verify-app-readiness.js",
     "verify:service-registry": "node scripts/verify-service-registry.js",
     "verify:task-runner": "node scripts/verify-task-runner.js",
+    "verify:task-concurrency": "node scripts/verify-task-concurrency-cancellation.js",
     "verify:live-api-gate": "node scripts/verify-live-api-gate.js",
     "verify:report-response": "node scripts/verify-report-response.js",
     "verify:passive-side-effects": "node scripts/verify-passive-side-effects.js",

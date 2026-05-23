@@ -125,6 +125,7 @@ function runVisualSmokeIfRequested(window) {
 }
 
 async function runVisualSmoke(window, outputDir) {
+  const ruggedSmoke = process.env.AURA_ATLAS_ELECTRON_RUGGED_SMOKE === '1';
   const views = [
     ['readiness', 'readiness.png'],
     ['scopes', 'scopes.png'],
@@ -140,9 +141,17 @@ async function runVisualSmoke(window, outputDir) {
   assertSmoke(checks.noNodeRequire, 'renderer should not expose Node require');
   assertSmoke(checks.noElectronGlobal, 'renderer should not expose Electron globals');
   assertSmoke(checks.hasViews, 'renderer should contain all initial shell views');
-  assertSmoke(checks.fetchRuns === 0, 'visual smoke startup should not create fetch runs');
-  assertSmoke(checks.killmails === 0, 'visual smoke startup should not create killmail evidence');
-  assertSmoke(checks.activityEvents === 0, 'visual smoke startup should not create activity events');
+  if (ruggedSmoke) {
+    assertSmoke(checks.fetchRuns >= 1, 'rugged smoke should start with synthetic demo fetch run data');
+    assertSmoke(checks.killmails >= 1, 'rugged smoke should start with synthetic demo killmail evidence');
+    assertSmoke(checks.activityEvents >= 1, 'rugged smoke should start with synthetic demo activity observations');
+  } else {
+    assertSmoke(checks.fetchRuns === 0, 'visual smoke startup should not create fetch runs');
+    assertSmoke(checks.killmails === 0, 'visual smoke startup should not create killmail evidence');
+    assertSmoke(checks.activityEvents === 0, 'visual smoke startup should not create activity events');
+  }
+
+  const ruggedChecks = ruggedSmoke ? await runRuggedOperatorSmoke(window, outputDir) : null;
 
   for (const [viewName, fileName] of views) {
     await selectSmokeView(window, viewName);
@@ -155,8 +164,125 @@ async function runVisualSmoke(window, outputDir) {
     checked_at: new Date().toISOString(),
     output_dir: outputDir,
     views: views.map(([viewName, fileName]) => ({ view: viewName, screenshot: fileName })),
-    checks
+    checks,
+    rugged_checks: ruggedChecks
   };
+}
+
+async function runRuggedOperatorSmoke(window, outputDir) {
+  await window.setSize(760, 620);
+  const checks = await window.webContents.executeJavaScript(`
+    (async () => {
+      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+      const text = (selector) => document.querySelector(selector)?.textContent || '';
+      const lowerText = (selector) => text(selector).toLowerCase();
+      const setValue = (selector, value) => {
+        const input = document.querySelector(selector);
+        if (!input) {
+          throw new Error('Missing rugged smoke input: ' + selector);
+        }
+        input.value = value;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      };
+      const click = async (selector) => {
+        const button = document.querySelector(selector);
+        if (!button) {
+          throw new Error('Missing rugged smoke button: ' + selector);
+        }
+        button.click();
+        await sleep(250);
+      };
+      const waitFor = async (label, predicate) => {
+        const started = Date.now();
+        while (Date.now() - started < 6000) {
+          if (predicate()) {
+            return true;
+          }
+          await sleep(100);
+        }
+        throw new Error('Timed out during rugged smoke: ' + label);
+      };
+
+      const longLabel = 'Atlas Scout With An Intentionally Long Operator Label For Rugged Smoke Review';
+
+      await click('#load-corpus-health');
+      await waitFor('corpus health', () => lowerText('#corpus-health-counts').includes('killmails'));
+
+      await click('#preflight-runtime-snapshot');
+      await waitFor('snapshot preflight', () => text('#runtime-snapshot-preflight').includes('Destination'));
+
+      await click('#create-debug-trace-pack');
+      await waitFor('debug trace pack', () => text('#debug-trace-pack-result').includes('.tmp'));
+
+      setValue('#scope-actor-id', '90000002');
+      setValue('#scope-actor-name', longLabel);
+      await click('#validate-scope');
+      await waitFor('scope validation', () => lowerText('#scope-validation').includes('valid'));
+
+      setValue('#queue-discovered-by-id', 'character:90000002');
+      setValue('#queue-killmail-ids', '9301, 999999999');
+      await click('#preview-queue-selection');
+      await waitFor('queue selection', () => lowerText('#queue-selection-summary').includes('selected'));
+      await click('#preflight-manual-expansion');
+      await waitFor('manual expansion refusal', () => lowerText('#manual-expansion-preflight').includes('allowedno') || lowerText('#manual-expansion-normalized').includes('blocked'));
+
+      setValue('#action-actor-id', '90000002');
+      setValue('#action-actor-name', longLabel);
+      await click('#preflight-manual-discovery');
+      await waitFor('manual discovery refusal', () => lowerText('#manual-discovery-preflight').includes('allowedno') || lowerText('#manual-discovery-normalized').includes('blocked'));
+
+      setValue('#watch-author-actor-id', '90000002');
+      setValue('#watch-author-actor-name', longLabel);
+      await click('#save-actor-watch');
+      await waitFor('watch authoring', () => lowerText('#watch-authoring-status').includes('saved') || text('#watch-list').includes('90000002'));
+      await click('#refresh-watch-status');
+      await waitFor('watch status', () => lowerText('#watch-summary').includes('live api') || lowerText('#watch-summary').includes('blocked'));
+
+      setValue('#actor-report-id', '90000002');
+      setValue('#actor-report-name', longLabel);
+      await click('#load-actor-report');
+      await waitFor('actor report', () => lowerText('#report-status').includes('killmail') && text('#actor-raw-ids').includes('9301'));
+
+      await click('#preflight-metadata-hydration');
+      await waitFor('hydration refusal', () => lowerText('#metadata-hydration-status').includes('allowedno') || lowerText('#metadata-hydration-normalized').includes('blocked'));
+
+      setValue('#assessment-reason', 'Rugged smoke assessment over fixture evidence with a deliberately long label.');
+      setValue('#assessment-summary', 'Fixture memory created by Electron rugged smoke.');
+      document.querySelector('#assessment-confirm').checked = true;
+      await click('#save-assessment-artifact');
+      await waitFor('assessment saved', () => lowerText('#assessment-status').includes('saved') || text('#assessment-artifact-list').includes('entity_interest'));
+
+      setValue('#radius-report-center', '30000001');
+      await click('#load-radius-report');
+      await waitFor('radius report', () => lowerText('#report-status').includes('radius') || text('#report-output').includes('Atlas Prime'));
+
+      return {
+        window_size: { width: window.innerWidth, height: window.innerHeight },
+        corpus_health_loaded: lowerText('#corpus-health-counts').includes('killmails'),
+        snapshot_preflight_read_only: lowerText('#runtime-snapshot-preflight').includes('read-only'),
+        trace_pack_written: text('#debug-trace-pack-result').includes('.tmp'),
+        manual_discovery_refused: lowerText('#manual-discovery-preflight').includes('allowedno') || lowerText('#manual-discovery-normalized').includes('blocked'),
+        manual_expansion_refused: lowerText('#manual-expansion-preflight').includes('allowedno') || lowerText('#manual-expansion-normalized').includes('blocked'),
+        hydration_refused: lowerText('#metadata-hydration-status').includes('allowedno') || lowerText('#metadata-hydration-normalized').includes('blocked'),
+        actor_report_loaded: text('#actor-raw-ids').includes('9301'),
+        assessment_saved: lowerText('#assessment-status').includes('saved') || text('#assessment-artifact-list').includes('entity_interest'),
+        long_label_length: longLabel.length
+      };
+    })();
+  `);
+  assertSmoke(checks.corpus_health_loaded, 'rugged smoke should load corpus health');
+  assertSmoke(checks.snapshot_preflight_read_only, 'rugged smoke should show read-only snapshot preflight');
+  assertSmoke(checks.trace_pack_written, 'rugged smoke should create a bounded trace pack artifact');
+  assertSmoke(checks.manual_discovery_refused, 'rugged smoke should refuse manual discovery when live gate is closed');
+  assertSmoke(checks.manual_expansion_refused, 'rugged smoke should refuse manual expansion when live gate is closed');
+  assertSmoke(checks.hydration_refused, 'rugged smoke should refuse hydration when live gate is closed');
+  assertSmoke(checks.actor_report_loaded, 'rugged smoke should load fixture actor report evidence');
+  assertSmoke(checks.assessment_saved, 'rugged smoke should save deliberate assessment memory');
+
+  const image = await window.webContents.capturePage();
+  fs.writeFileSync(path.join(outputDir, 'rugged-operator-narrow.png'), image.toPNG());
+  return checks;
 }
 
 function smokeChecks(window) {

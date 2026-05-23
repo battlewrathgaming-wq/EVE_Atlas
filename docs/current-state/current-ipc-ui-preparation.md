@@ -21,7 +21,7 @@ Recent backend/UI-readiness work completed:
 - assessment artifact persistence is implemented for deliberate assessment memory; executable evidence pruning remains blocked
 - Reports view can now save, list, and inspect deliberate assessment memory from a loaded actor report context without mutating evidence
 - `docs/gap/to-do` has no active presentation-validation gap; completed rigging items are in `docs/gap/complete`
-- Electron visual smoke now runs through `npm.cmd run smoke:electron`, writes screenshots/results under `F:\Projects\AURA-Atlas\.tmp\electron-visual-smoke`, and verifies startup creates no evidence/fetch runs
+- Electron visual smoke now runs through `npm.cmd run smoke:electron`, writes screenshots/results under `F:\Projects\AURA-Atlas\.tmp\electron-visual-smoke`, seeds an offline synthetic demo DB for the rugged operator path, and verifies closed live-gate refusals without live API calls
 - Electron was updated to `v42.2.0` so the app runtime supports the backend `node:sqlite` dependency
 - `verify:electron-runtime` now checks that Electron itself can use `node:sqlite`, closing the gap between desktop Node verification and Electron runtime behavior
 - first controlled evidence-creating UI path exists for `manual.discovery`, using scope validation, live gate preflight, explicit confirmation, and detached task execution
@@ -66,6 +66,7 @@ Recent backend/UI-readiness work completed:
 - backend/UI boundary handoff accepted at `041a0f6`; renderer still uses the preload service bridge and service registry rather than backend imports
 - `verify:all` and `smoke:electron` were rerun during overseer boundary review and passed
 - task wrapping, detached execution, cancellation, and HTTP timeout handling are verified
+- task concurrency/cancellation pressure now has a focused offline verification covering overlap locks, HTTP cancellation, lock release after cancellation/failure, immediate rerun, preserved evidence counts, visible task diagnostics, and bounded debug trace output
 - live API gates and user-defined scope validation are centralized
 - queue selection, queue status isolation, and retention preflight are implemented
 - watch schedule/status planning and watch run state recording are implemented
@@ -84,6 +85,7 @@ Current lane:
 - keep retention/destructive evidence pruning blocked; compaction remains read-only preview
 - continue deferring worker-thread/process isolation until measured scale pressure appears
 - run visual/app smoke through `npm.cmd run smoke:electron` or `npm start` rather than direct `file:///F:/...` navigation; the Codex in-app browser blocks direct file navigation by policy
+- treat `smoke:electron` artifacts as project-local fixture/runtime artifacts under `.tmp`; the smoke DB is synthetic demo data, not live evidence
 
 ## What Exists
 
@@ -138,7 +140,7 @@ Current implemented shell:
 - reports pane can create assessment memory from actor report context through `assessment.create`, then list/inspect artifacts through `assessment.list` and `assessment.get`
 - reports pane shows a status callout for loaded actor reports with sample status, evidence window, killmail count, activity event count, and layer boundary wording
 - native structured actor report response with text rendering retained for CLI/export
-- Electron visual smoke harness captures readiness, scopes, tasks, queue/watch, and reports screenshots from the real app window
+- Electron visual smoke harness captures readiness, scopes, tasks, queue/watch, and reports screenshots from the real app window; the default project script also drives the fixture-backed rugged operator path through corpus health, snapshot preflight, trace pack, queue/manual/hydration refusals, report loading, assessment save/review, and a narrow window screenshot
 
 The current renderer is intentionally an initial shell. It proves service consumption, status presentation, scoped previews, and actor-report rendering. It is not yet the final interaction model for live collection or assessment workflows.
 
@@ -208,6 +210,7 @@ Offline verification now includes:
 - queue/watch status UI verification through `verify:renderer-shell`, `verify:queue-selection`, `verify:queue-report`, and `verify:watch-scheduler`
 - native actor report response verification
 - task runner verification
+- task concurrency/cancellation pressure verification
 
 Live smoke grouping exists separately:
 

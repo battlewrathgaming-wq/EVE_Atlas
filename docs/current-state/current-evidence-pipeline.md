@@ -75,6 +75,7 @@ Assessment lane:
 - `verify:scope-controls`
 - `verify:controlled-workflow`
 - `verify:local-scale-smoke`
+- `verify:task-concurrency`
 - `verify:all`
 
 `verify:all` currently runs the offline verification set. Live smoke checks are intentionally separate and require `AURA_ATLAS_LIVE_API=1`.

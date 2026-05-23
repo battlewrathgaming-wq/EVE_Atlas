@@ -29,8 +29,8 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Aggressive Testing And Operator Bug Hunting
 Roadmap source: `docs/audits/audit-2026-05-23-aggressive-testing-and-bug-hunt-assessment.md`
 Current packet: `workspace/current.md`
-Current sequence: HS01
-Latest accepted handshake: None under the new workspace handshake sequence
+Current sequence: HS03
+Latest accepted handshake: `workspace/DevHS01-atlas-operator-refusal-smoke.md`
 
 ## Durable Record Index
 
@@ -69,7 +69,9 @@ Latest accepted handshake: None under the new workspace handshake sequence
 ### Shared Coordination Authority
 
 - `F:\Projects\Docs\Aura-Agent-Coordination\workspace-structure-authority.md`
-- `F:\Projects\Docs\Aura-Agent-Coordination\relay\role-prompts.md`
+- `F:\Projects\Docs\Aura-Agent-Coordination\roles\README.md`
+- `F:\Projects\Docs\Aura-Agent-Coordination\roles\[role]\README.md`
+- `F:\Projects\Docs\Aura-Agent-Coordination\roles\[role]\prompt.md`
 
 ## Open Questions
 

@@ -9,6 +9,7 @@ const GROUPS = {
     'verify:app-readiness',
     'verify:service-registry',
     'verify:task-runner',
+    'verify:task-concurrency',
     'verify:live-api-gate',
     'verify:report-response',
     'verify:passive-side-effects',
