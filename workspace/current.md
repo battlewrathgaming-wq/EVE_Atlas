@@ -8,12 +8,12 @@ Owner: Overseer planning, Dev execution
 
 Active milestone: Aggressive Testing And Operator Bug Hunting
 Roadmap source: `docs/audits/audit-2026-05-23-aggressive-testing-and-bug-hunt-assessment.md`
-Sequence: HS10
-Previous accepted handshake: `workspace/DevHS08-atlas-partial-failure-transaction-integrity.md`
-Latest Overseer review: `workspace/OverseerHS09-partial-failure-review.md`
+Sequence: HS12
+Previous accepted handshake: `workspace/DevHS10-atlas-sde-builder-failure-modes.md`
+Latest Overseer review: `workspace/OverseerHS11-sde-builder-review.md`
 Current executor: Dev
-Current focus: SDE lookup builder failure modes
-Expected output: DevHS10-atlas-sde-builder-failure-modes.md
+Current focus: larger synthetic scale pressure
+Expected output: DevHS12-atlas-large-synthetic-scale-pressure.md
 Archive target on milestone completion: `workspace/complete/milestone-aggressive-testing/`
 
 ## Purpose
@@ -26,9 +26,9 @@ The former `docs/gap` task lifecycle has been archived under `docs/archive/depre
 
 - `workspace/overview.md`
 - `workspace/00-dot-protocol.md`
-- `workspace/DevHS08-atlas-partial-failure-transaction-integrity.md`
+- `workspace/DevHS10-atlas-sde-builder-failure-modes.md`
 - `workspace/ProjectPlannerHS06-operator-investigation-ux.md`
-- `workspace/OverseerHS09-partial-failure-review.md`
+- `workspace/OverseerHS11-sde-builder-review.md`
 - `docs/index.md`
 - `docs/current-state/current-evidence-pipeline.md`
 - `docs/current-state/current-ipc-ui-preparation.md`
@@ -37,7 +37,7 @@ The former `docs/gap` task lifecycle has been archived under `docs/archive/depre
 
 ## Runway Objective
 
-Continue Atlas aggressive testing with SDE lookup builder failure-mode pressure: prove failed download/source/import paths fail visibly, clean up safely, and preserve existing lookup tables and evidence doctrine.
+Continue Atlas aggressive testing with larger synthetic scale pressure: measure bigger local fixture corpora, assert explicit thresholds, preserve evidence doctrine, and leave diagnostics that inform future process-isolation decisions.
 
 ## Accepted Planner Requirement
 
@@ -52,34 +52,32 @@ Do not implement the Operator Investigation Desk UX in this packet. Preserve the
 
 ## Ordered Runway
 
-1. Existing SDE builder review:
-   - inspect `sde:build-lookups`, `sde.build-lookups`, SDE current-state docs, temp/source cleanup behavior, and current verification
-   - identify deterministic failure injection points for download/source/import/cleanup behavior
-   - avoid real network download unless explicitly authorized
-2. SDE failure-mode coverage:
-   - cover failed download or source acquisition without mutating existing lookup tables
-   - cover bad zip/source or malformed source input with visible diagnostics
-   - cover interrupted import while preserving prior valid lookup tables
-   - cover cleanup behavior for default disposable source files
-   - cover `AURA_ATLAS_KEEP_SDE_SOURCE=1` preserving source artifacts as intended
+1. Existing scale/performance review:
+   - inspect local scale smoke, bulk synthetic verification, report indexes, task/background execution, and current process-isolation deferral notes
+   - identify deterministic larger-corpus sizes that are meaningful but still safe for normal offline verification
+   - keep generated artifacts under project-local `.tmp`
+2. Larger synthetic scale coverage:
+   - add or extend focused verification for a larger synthetic evidence corpus
+   - include reports and service/task paths most likely to pressure synchronous SQLite or renderer-adjacent workflows
+   - set explicit performance/diagnostic thresholds that are conservative enough for local development machines
+   - avoid private runtime DBs and live APIs
 3. Evidence and diagnostics assertions:
-   - assert SDE lookup failures do not mutate killmail evidence, activity events, queue refs, or assessment artifacts
-   - assert existing SDE lookup tables remain usable after failure
-   - assert failures leave reviewable run/status diagnostics without broad raw dumps
-   - assert rerun behavior is explicit and does not hide prior failure state
+   - assert row counts, raw evidence preservation, queue state, warnings, and assessment artifacts remain reviewable
+   - assert scale diagnostics are bounded and do not dump broad raw evidence
+   - assert results can inform whether future worker-thread/process isolation is needed
 4. Documentation/test index reconciliation:
-   - update durable docs only where command inventory, current-state truth, failure classes, or milestone meaning changes
+   - update durable docs only where command inventory, current-state truth, scale threshold, failure class, or milestone meaning changes
    - do not recreate `docs/gap` task files
 5. Next-runway recommendation:
-   - recommend the next bounded packet after this slice, with larger synthetic scale pressure as the expected default unless findings point to a more urgent blocker
+   - recommend whether the aggressive-testing milestone is ready for review/closure, or whether app restart recovery/live success smoke/roadmap conversion should be the next bounded packet
 
 ## Explicitly Deferred From This Packet
 
-- Larger synthetic scale pressure.
 - App restart recovery after running or failed tasks.
 - Live API success smoke without explicit operator authorization.
+- Real SDE network download.
 - Operator Investigation Desk UX implementation.
-- Converting the aggressive-testing audit into a roadmap milestone doc.
+- Converting the aggressive-testing audit into a roadmap milestone doc unless required for milestone closure recommendation.
 - Broad workflow-documentation cleanup outside this packet.
 
 ## Guardrails

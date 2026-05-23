@@ -5,6 +5,7 @@ const { openDatabase, migrate, closeDatabase } = require('../src/main/db/databas
 const { buildSdeLookupTables } = require('../src/main/sde/sdeLookupBuilder');
 const { buildAppReadiness } = require('../src/main/services/appReadinessService');
 const { invokeServiceCommand } = require('../src/main/services/serviceRegistry');
+const { TASK_STATES } = require('../src/main/services/taskRunner');
 const { makeAuraTempDir, projectRoot } = require('../src/main/util/tempPaths');
 
 async function main() {
@@ -24,6 +25,7 @@ async function main() {
     await verifyInvalidSourceFailure(tempRoot);
     await verifyExistingLookupPreservedOnRefreshFailure(tempRoot);
     await verifyInterruptedInventoryImportPreservesReadyLookups(tempRoot);
+    await verifyServiceTaskFailureDiagnosticsAndRerun(tempRoot);
     verifyMissingReadiness();
     verifyReportsDoNotReferenceSdeSource();
     console.log('SDE lookup builder verified');
@@ -148,6 +150,7 @@ async function verifyFailedDownload(tempRoot) {
   const db = openDatabase(':memory:');
   migrate(db);
   const cacheDir = path.join(tempRoot, 'failed-download-cache');
+  const beforeEvidence = evidenceTableCounts(db);
 
   try {
     await assertRejects(
@@ -161,6 +164,7 @@ async function verifyFailedDownload(tempRoot) {
       'failed official SDE download should surface the download error'
     );
     assert(!hasLookupBuildDirs(cacheDir), 'failed download should clean temporary work directory');
+    assertSame(evidenceTableCounts(db), beforeEvidence, 'failed download should not mutate evidence or assessment tables');
     const readiness = buildAppReadiness(db, { mode: 'verify' });
     assert(readiness.warnings.some((warning) => warning.code === 'SDE_LOOKUP_MISSING'), 'failed download should leave lookup readiness missing');
   } finally {
@@ -175,6 +179,7 @@ async function verifyInvalidSourceFailure(tempRoot) {
   const invalidZip = path.join(tempRoot, 'invalid-source', 'eve-online-static-data-999999-jsonl.zip');
   fs.mkdirSync(path.dirname(invalidZip), { recursive: true });
   fs.writeFileSync(invalidZip, 'not a real zip');
+  const beforeEvidence = evidenceTableCounts(db);
 
   try {
     await assertRejects(
@@ -187,6 +192,7 @@ async function verifyInvalidSourceFailure(tempRoot) {
       'invalid source input should fail'
     );
     assert(!hasLookupBuildDirs(cacheDir), 'invalid source failure should clean temporary work directory');
+    assertSame(evidenceTableCounts(db), beforeEvidence, 'invalid source failure should not mutate evidence or assessment tables');
     const readiness = buildAppReadiness(db, { mode: 'verify' });
     assert(readiness.checks.sde_lookup_ready === false, 'invalid source should not mark lookup tables ready');
   } finally {
@@ -211,6 +217,7 @@ async function verifyExistingLookupPreservedOnRefreshFailure(tempRoot) {
       cacheDir
     });
     const before = lookupTableCounts(db);
+    const beforeEvidence = evidenceTableCounts(db);
     assert(before.sdeReady === true, 'fixture good import should establish ready lookup tables');
 
     await assertRejects(
@@ -225,6 +232,7 @@ async function verifyExistingLookupPreservedOnRefreshFailure(tempRoot) {
 
     const after = lookupTableCounts(db);
     assertSame(after, before, 'failed refresh should preserve existing lookup table counts');
+    assertSame(evidenceTableCounts(db), beforeEvidence, 'failed refresh should not mutate evidence or assessment tables');
     assert(buildAppReadiness(db, { mode: 'verify' }).checks.sde_lookup_ready === true, 'failed refresh should not make existing lookups unready');
   } finally {
     closeDatabase(db);
@@ -251,6 +259,7 @@ async function verifyInterruptedInventoryImportPreservesReadyLookups(tempRoot) {
       cacheDir
     });
     const before = lookupTableCounts(db);
+    const beforeEvidence = evidenceTableCounts(db);
     assert(before.sdeReady === true, 'fixture good import should establish ready lookup tables before interruption test');
 
     await assertRejects(
@@ -271,7 +280,68 @@ async function verifyInterruptedInventoryImportPreservesReadyLookups(tempRoot) {
     assert(after.solar_systems >= before.solar_systems, 'interrupted refresh should not remove systems');
     assert(after.system_adjacency >= before.system_adjacency, 'interrupted refresh should not remove adjacency');
     assert(after.type_metadata === before.type_metadata, 'interrupted inventory refresh should not remove existing type metadata');
+    assertSame(evidenceTableCounts(db), beforeEvidence, 'interrupted inventory refresh should not mutate evidence or assessment tables');
     assert(buildAppReadiness(db, { mode: 'verify' }).checks.sde_lookup_ready === true, 'interrupted refresh should preserve existing ready state');
+  } finally {
+    closeDatabase(db);
+  }
+}
+
+async function verifyServiceTaskFailureDiagnosticsAndRerun(tempRoot) {
+  const db = openDatabase(':memory:');
+  migrate(db);
+  const cacheDir = path.join(tempRoot, 'service-task-cache');
+  const badZip = path.join(tempRoot, 'service-bad-source', 'eve-online-static-data-999999-jsonl.zip');
+  const goodZip = createFixtureZip(path.join(tempRoot, 'service-good-source'));
+  fs.mkdirSync(path.dirname(badZip), { recursive: true });
+  fs.writeFileSync(badZip, 'not a real zip');
+  const beforeLookup = lookupTableCounts(db);
+  const beforeEvidence = evidenceTableCounts(db);
+
+  try {
+    const failed = await invokeServiceCommand('sde.build-lookups', {
+      sourcePath: badZip,
+      sourceUrl: 'fixture://service-bad-sde.zip',
+      cacheDir,
+      scopeKey: 'sde.build-lookups'
+    }, {
+      db,
+      asTask: true
+    });
+    assert(failed.status === TASK_STATES.FAILED, 'bad SDE source service task should fail visibly');
+    assert(failed.error?.message, 'failed SDE service task should retain an error message');
+    assert(failed.progress.some((entry) => entry.stage === 'start'), 'failed SDE service task should retain start progress');
+    assert(!hasLookupBuildDirs(cacheDir), 'failed SDE service task should clean temporary work directory');
+    assertSame(lookupTableCounts(db), beforeLookup, 'failed SDE service task should not mutate lookup tables');
+    assertSame(evidenceTableCounts(db), beforeEvidence, 'failed SDE service task should not mutate evidence or assessment tables');
+
+    const taskList = await invokeServiceCommand('task.list', { limit: 8 }, { db });
+    assert(taskList.some((task) => task.task_id === failed.task_id && task.status === TASK_STATES.FAILED), 'task history should retain failed SDE build task');
+
+    const trace = await invokeServiceCommand('support.debug_trace_pack', {
+      outputDir: path.join(tempRoot, 'service-sde-trace')
+    }, { db });
+    assert(fs.existsSync(trace.output_path), 'SDE service failure should produce reviewable support trace artifact');
+    assert(trace.pack.task_history.some((task) => task.task_id === failed.task_id && task.status === TASK_STATES.FAILED), 'trace pack should include failed SDE task history');
+    assert(trace.pack.exclusions.includes('SDE zip contents'), 'trace pack should state SDE source-content exclusion');
+    const traceText = fs.readFileSync(trace.output_path, 'utf8');
+    assert(!traceText.includes('not a real zip'), 'trace pack should not dump SDE source contents');
+
+    const rerun = await invokeServiceCommand('sde.build-lookups', {
+      sourcePath: goodZip,
+      sourceUrl: 'fixture://service-good-sde.zip',
+      buildNumber: 'fixture-build',
+      cacheDir,
+      deleteSourceAfterImport: true,
+      scopeKey: 'sde.build-lookups'
+    }, {
+      db,
+      asTask: true
+    });
+    assert(rerun.status === TASK_STATES.SUCCEEDED, 'explicit SDE service rerun should succeed after failure releases exclusive lock');
+    assert(rerun.result.readiness.ready === true, 'explicit SDE service rerun should build ready lookup tables');
+    assert(!fs.existsSync(goodZip), 'explicit successful rerun should clean disposable source');
+    assertSame(evidenceTableCounts(db), beforeEvidence, 'explicit SDE service rerun should not mutate evidence or assessment tables');
   } finally {
     closeDatabase(db);
   }
@@ -397,6 +467,18 @@ function lookupTableCounts(db) {
       counts.solar_systems > 0 &&
       counts.system_adjacency > 0 &&
       counts.type_metadata > 0
+  };
+}
+
+function evidenceTableCounts(db) {
+  return {
+    killmails: count(db, 'killmails'),
+    activity_events: count(db, 'activity_events'),
+    discovered_killmail_refs: count(db, 'discovered_killmail_refs'),
+    fetch_runs: count(db, 'fetch_runs'),
+    api_request_logs: count(db, 'api_request_logs'),
+    metadata_runs: count(db, 'metadata_runs'),
+    assessment_artifacts: count(db, 'assessment_artifacts')
   };
 }
 

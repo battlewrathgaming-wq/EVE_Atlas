@@ -60,6 +60,7 @@ Recent backend/UI-readiness work completed:
 - Positive-ref scoped discovery-only live smoke succeeded against ZTS-4D with one zKill call, one queued ref, zero ESI calls, zero killmails, and zero activity events.
 - Local alpha readiness docs now include refreshed README guidance, offline-first runbook, demo fixture DB seed, release tag checklist, known limits, and feedback template.
 - local SDE lookup build is now an explicit command/service path: `npm run sde:build-lookups` / `sde.build-lookups` downloads official JSONL SDE source only on request, imports topology and inventory lookup tables, records provenance, cleans disposable source files by default, and leaves reports using SQLite lookup tables only
+- SDE lookup builder failure-mode verification now covers failed source acquisition, invalid source, interrupted inventory refresh, default cleanup, keep-source debug preservation, service/task failure diagnostics, explicit rerun, lookup preservation, and no mutation of evidence/assessment tables
 - assessment compaction writes are intentionally deferred; compaction remains read-only preview and evidence deletion remains blocked
 - runtime process isolation has been reviewed and deliberately deferred; detached tasks remain acceptable for the next milestone
 - current recommended first future isolation target, if measured pressure appears, is SDE import / SDE sync-compare

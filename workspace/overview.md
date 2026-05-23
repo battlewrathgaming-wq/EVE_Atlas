@@ -29,8 +29,8 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Aggressive Testing And Operator Bug Hunting
 Roadmap source: `docs/audits/audit-2026-05-23-aggressive-testing-and-bug-hunt-assessment.md`
 Current packet: `workspace/current.md`
-Current sequence: HS10
-Latest accepted handshake: `workspace/DevHS08-atlas-partial-failure-transaction-integrity.md`
+Current sequence: HS12
+Latest accepted handshake: `workspace/DevHS10-atlas-sde-builder-failure-modes.md`
 
 ## Durable Record Index
 
