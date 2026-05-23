@@ -15,6 +15,7 @@ const GROUPS = {
     'verify:adversarial-fixtures',
     'verify:passive-side-effects',
     'verify:partial-failures',
+    'verify:restart-recovery',
     'verify:report-indexes',
     'verify:queue-selection',
     'verify:queue-scope-isolation',

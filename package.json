@@ -34,6 +34,7 @@
     "verify:adversarial-fixtures": "node scripts/verify-adversarial-evidence-fixtures.js",
     "verify:passive-side-effects": "node scripts/verify-passive-side-effects.js",
     "verify:partial-failures": "node scripts/verify-partial-failures.js",
+    "verify:restart-recovery": "node scripts/verify-app-restart-recovery.js",
     "verify:report-indexes": "node scripts/verify-report-indexes.js",
     "verify:queue-selection": "node scripts/verify-queue-selection.js",
     "verify:queue-scope-isolation": "node scripts/verify-queue-scope-isolation.js",

@@ -70,6 +70,7 @@ Recent backend/UI-readiness work completed:
 - `verify:all` and `smoke:electron` were rerun during overseer boundary review and passed
 - task wrapping, detached execution, cancellation, and HTTP timeout handling are verified
 - task concurrency/cancellation pressure now has a focused offline verification covering overlap locks, HTTP cancellation, lock release after cancellation/failure, immediate rerun, preserved evidence counts, visible task diagnostics, and bounded debug trace output
+- restart/reinitialization recovery now has focused offline verification covering volatile task history/locks, cancelled/running task reinitialization, failed service work diagnostics, disarmed session watch state after restart, persisted evidence/queue/fetch/API/warning reviewability, and bounded support trace output without raw evidence dumps
 - partial-failure verification now covers a service-wrapped manual expansion persistence interruption with preserved accepted raw ESI evidence, pending queue retry state, scoped fetch/API/task diagnostics, bounded debug trace output, and explicit same-scope rerun
 - live API gates and user-defined scope validation are centralized
 - queue selection, queue status isolation, and retention preflight are implemented
