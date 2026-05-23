@@ -127,6 +127,7 @@ function runVisualSmokeIfRequested(window) {
 async function runVisualSmoke(window, outputDir) {
   const ruggedSmoke = process.env.AURA_ATLAS_ELECTRON_RUGGED_SMOKE === '1';
   const views = [
+    ['investigation', 'investigation.png'],
     ['readiness', 'readiness.png'],
     ['scopes', 'scopes.png'],
     ['tasks', 'tasks.png'],
@@ -141,6 +142,8 @@ async function runVisualSmoke(window, outputDir) {
   assertSmoke(checks.noNodeRequire, 'renderer should not expose Node require');
   assertSmoke(checks.noElectronGlobal, 'renderer should not expose Electron globals');
   assertSmoke(checks.hasViews, 'renderer should contain all initial shell views');
+  assertSmoke(checks.opensInvestigation, 'renderer should open on the investigation desk');
+  assertSmoke(checks.investigationPassiveText, 'investigation desk should state passive startup boundaries');
   if (ruggedSmoke) {
     assertSmoke(checks.fetchRuns >= 1, 'rugged smoke should start with synthetic demo fetch run data');
     assertSmoke(checks.killmails >= 1, 'rugged smoke should start with synthetic demo killmail evidence');
@@ -294,8 +297,12 @@ function smokeChecks(window) {
         hasWindowBridge: Boolean(window.atlasWindow && window.atlasWindow.getState),
         noNodeRequire: typeof window.require === 'undefined',
         noElectronGlobal: typeof window.ipcRenderer === 'undefined',
-        hasViews: ['readiness', 'scopes', 'tasks', 'queue-watch', 'actions', 'reports']
+        hasViews: ['investigation', 'readiness', 'scopes', 'tasks', 'queue-watch', 'actions', 'reports']
           .every((name) => Boolean(document.querySelector('#view-' + name))),
+        opensInvestigation: document.querySelector('#view-investigation')?.classList.contains('active') &&
+          document.querySelector('#view-title')?.textContent?.trim() === 'Investigation',
+        investigationPassiveText: (document.querySelector('#view-investigation')?.textContent || '')
+          .includes('Opening this desk is passive'),
         status: readiness.status,
         fetchRuns: readiness.lookup_counts.fetch_runs,
         killmails: readiness.lookup_counts.killmails || 0,

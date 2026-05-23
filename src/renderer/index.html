@@ -27,7 +27,8 @@
           </div>
         </div>
         <nav class="nav-list" aria-label="Primary">
-          <button class="nav-item active" type="button" data-view="readiness">Readiness</button>
+          <button class="nav-item active" type="button" data-view="investigation">Investigation</button>
+          <button class="nav-item" type="button" data-view="readiness">Readiness</button>
           <button class="nav-item" type="button" data-view="scopes">Scopes</button>
           <button class="nav-item" type="button" data-view="tasks">Tasks</button>
           <button class="nav-item" type="button" data-view="queue-watch">Queue / Watches</button>
@@ -39,13 +40,93 @@
       <main class="workspace">
         <header class="topbar">
           <div>
-            <p class="eyebrow">Initial Presentation Shell</p>
-            <h2 id="view-title">Readiness</h2>
+            <p class="eyebrow">Operator Investigation Desk</p>
+            <h2 id="view-title">Investigation</h2>
           </div>
           <div class="service-state" id="service-state">Connecting</div>
         </header>
 
-        <section class="view active" id="view-readiness" aria-labelledby="readiness-title">
+        <section class="view active" id="view-investigation" aria-labelledby="investigation-title">
+          <div class="investigation-layout">
+            <div class="investigation-lead">
+              <div class="section-heading">
+                <div>
+                  <h3 id="investigation-title">Start An Investigation</h3>
+                  <p>Follow a person, group, or place through discovery, stored evidence, observations, and deliberate assessment.</p>
+                </div>
+              </div>
+              <div class="lead-card">
+                <label>
+                  <span>Lead Type</span>
+                  <select id="investigation-lead-type">
+                    <option value="actor">Actor</option>
+                    <option value="system">System</option>
+                    <option value="radius">System Radius</option>
+                  </select>
+                </label>
+                <label class="lead-input">
+                  <span>Lead</span>
+                  <input id="investigation-lead-value" type="text" placeholder="Character, corporation, alliance, system name, or durable ID" />
+                </label>
+                <label class="radius-input">
+                  <span>Radius</span>
+                  <input id="investigation-radius" type="number" min="0" max="5" value="1" />
+                </label>
+              </div>
+              <div class="investigation-actions">
+                <button class="primary-action" type="button" id="investigation-check-scope">Check Scope</button>
+                <button class="secondary-action" type="button" id="investigation-discover-leads">Discover Possible Leads</button>
+                <button class="secondary-action" type="button" id="investigation-review-queue">Review Queue / Enrich</button>
+                <button class="secondary-action" type="button" id="investigation-open-reports">Reports / Assessment</button>
+              </div>
+              <div class="boundary-strip">
+                <div>
+                  <strong>Discovery</strong>
+                  <span>zKill refs are possible leads, not evidence.</span>
+                </div>
+                <div>
+                  <strong>Evidence</strong>
+                  <span>Enrich selected calls ESI and stores expanded killmail evidence.</span>
+                </div>
+                <div>
+                  <strong>Observation</strong>
+                  <span>Reports show patterns from stored evidence.</span>
+                </div>
+                <div>
+                  <strong>Assessment</strong>
+                  <span>Saved memory is deliberate operator judgment.</span>
+                </div>
+              </div>
+            </div>
+            <div class="panel investigation-context">
+              <h4>Live/API Context</h4>
+              <div id="investigation-live-context" class="detail-list"></div>
+              <p class="form-note">Opening this desk is passive. It does not call zKill or ESI, queue refs, enrich evidence, hydrate metadata, create assessments, or start watches.</p>
+            </div>
+          </div>
+          <div class="report-grid">
+            <div class="panel">
+              <h4>Marked</h4>
+              <p class="form-note">Marked means operator interest, tagging, or record attention. Marking alone does not collect, enrich, hydrate, assess, or run a routine check.</p>
+            </div>
+            <div class="panel">
+              <h4>Watch</h4>
+              <p class="form-note">Watch means active routine checking. Watch implies Marked, but Marked does not imply Watch. Blocked and unblocked describe whether a watch can run now.</p>
+            </div>
+          </div>
+          <details class="panel secondary-details">
+            <summary>Service And Raw Detail Routes</summary>
+            <div class="route-grid">
+              <button class="secondary-action" type="button" id="investigation-open-readiness">Readiness</button>
+              <button class="secondary-action" type="button" id="investigation-open-tasks">Task History</button>
+              <button class="secondary-action" type="button" id="investigation-open-actions">Action Preflights</button>
+              <button class="secondary-action" type="button" id="investigation-open-queue-detail">Queue Details</button>
+            </div>
+            <p class="form-note">Raw IDs, backend payloads, queue internals, and task/service detail stay in secondary surfaces.</p>
+          </details>
+        </section>
+
+        <section class="view" id="view-readiness" aria-labelledby="readiness-title">
           <div class="section-heading">
             <div>
               <h3 id="readiness-title">App Readiness</h3>
@@ -697,6 +778,7 @@
       </main>
     </div>
     <script src="./shared.js"></script>
+    <script src="./investigation.js"></script>
     <script src="./readiness.js"></script>
     <script src="./scopes.js"></script>
     <script src="./tasks.js"></script>

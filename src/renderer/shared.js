@@ -76,6 +76,7 @@ function setBusy(button, busy) {
 
 function titleForView(name) {
   return {
+    investigation: 'Investigation',
     readiness: 'Readiness',
     scopes: 'Scopes',
     tasks: 'Tasks',

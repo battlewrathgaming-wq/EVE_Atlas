@@ -8,32 +8,31 @@ Owner: Overseer planning, Dev execution
 
 Active milestone: Operator Investigation Desk
 Roadmap source: `docs/roadmap/operator-investigation-desk.md`
-Sequence: HS18
-Previous accepted handshake: `workspace/OverseerHS17-operator-investigation-roadmap.md`
+Sequence: HS20
+Previous accepted handshake: `workspace/DevHS18-operator-investigation-first-screen.md`
+Latest Overseer review: `workspace/OverseerHS19-first-screen-review.md`
 Current executor: Dev
-Current focus: first investigation-oriented opening screen
-Expected output: DevHS18-operator-investigation-first-screen.md
+Current focus: investigation lead-input ergonomics
+Expected output: DevHS20-operator-investigation-lead-ergonomics.md
 
 ## Purpose
 
-Start the Operator Investigation Desk milestone with a bounded first-screen slice.
+Continue the Operator Investigation Desk milestone by making the new first-screen lead input more useful and honest while staying on existing resolver/service paths.
 
-The goal is to shift the first useful experience from backend service inspection toward operator investigation, while preserving the existing safe service shell and evidence boundaries.
+This is not a broad investigation workflow build. It is a refinement slice for first-screen lead handling, validation, routing, empty states, and operator-facing feedback.
 
 ## Required Reading
 
 - `workspace/overview.md`
 - `workspace/00-dot-protocol.md`
-- `workspace/OverseerHS17-operator-investigation-roadmap.md`
+- `workspace/DevHS18-operator-investigation-first-screen.md`
+- `workspace/OverseerHS19-first-screen-review.md`
 - `docs/roadmap/operator-investigation-desk.md`
-- `workspace/ProjectPlannerHS06-operator-investigation-ux.md`
 - `docs/terms/marked.md`
-- `docs/terms/watchlist.md`
 - `docs/terms/actor-watch.md`
 - `docs/terms/system-radius-watch.md`
-- `docs/terms/discovery-queue.md`
 - `docs/terms/manual-discovery.md`
-- `docs/terms/work-products.md`
+- `docs/terms/discovery-queue.md`
 - `docs/current-state/current-ipc-ui-preparation.md`
 
 ## Accepted Product Requirement
@@ -51,25 +50,21 @@ Blocked/unblocked are user-facing watch status labels. They describe whether an 
 
 ## Ordered Dev Runway
 
-1. Renderer structure review:
-   - inspect the current Electron renderer shell, navigation, readiness startup, queue/watch, actions, and reports surfaces
-   - identify the smallest safe way to add or promote an Investigation Desk opening view without breaking existing service views
-2. First investigation screen:
-   - make the app open to an investigation-oriented first screen rather than Readiness
-   - include one primary lead input supporting actor or system/radius investigation intent
-   - show live/API state as global context without enabling live APIs
-   - surface Marked versus Watch distinction in user-facing wording
-   - provide clear routes into existing discovery, queue/enrich, reports, and assessment surfaces
-3. Boundary and detail hierarchy:
-   - describe discovery as possible leads, not evidence
-   - describe `Enrich selected` only with explicit ESI expansion / stored evidence detail
-   - keep metadata hydration labelled readability-only
-   - move raw IDs, backend payloads, queue internals, and task/service detail into secondary/detail areas where this slice touches them
-   - do not introduce Record, Intelligence, or Finding as durable product terms
+1. Lead route review:
+   - inspect the new investigation first-screen route code and existing scope validation/manual discovery/report input paths
+   - identify what can be improved with existing actor/system/radius validation and local system resolution behavior
+2. Lead-input ergonomics:
+   - add clear empty, invalid, and unresolved lead feedback on the Investigation screen
+   - improve actor/system/radius routing into existing Scopes, Actions, Queue/Enrich, and Reports surfaces without adding new live/API behavior
+   - make system/radius input use existing local resolution semantics where practical
+   - keep numeric IDs as facts and names as labels/resolution inputs
+3. Boundary language:
+   - preserve Discovery as possible leads, Enrich selected as explicit ESI expansion/stored evidence, metadata hydration as readability-only, and Assessment as deliberate memory
+   - preserve Marked/Watch asymmetry in user-facing copy
+   - do not introduce Record, Intelligence, or Finding as accepted durable terms
 4. Verification:
-   - update renderer/static verification for the new first screen and wording
-   - update Electron smoke if startup view or primary renderer flow changes
-   - prove passive startup still does not call live APIs or mutate evidence
+   - update renderer/static verification for lead ergonomics and boundary copy
+   - update Electron smoke if the primary Investigation flow changes
    - run focused affected verification, then `npm.cmd run verify:all`
 
 ## Explicitly Deferred From This Packet
@@ -100,11 +95,11 @@ Blocked/unblocked are user-facing watch status labels. They describe whether an 
 
 Return to chat before continuing if:
 
-- the first-screen implementation requires product decisions about Record, Intelligence/Finding, region, zKill link input, or battle timeline grouping
-- live network/API action is needed without explicit operator authorization
+- useful lead ergonomics require accepting zKill link / killmail ID paste support
+- useful lead ergonomics require a new backend resolver or live API behavior
+- the implementation requires product decisions about Record, Intelligence/Finding, region, or timeline grouping
 - passive startup would need to mutate evidence or call live APIs
 - evidence doctrine or assessment memory boundaries would need to change
-- existing verification reveals architecture risk that cannot be handled within the renderer shell
 
 ## Verification Required
 

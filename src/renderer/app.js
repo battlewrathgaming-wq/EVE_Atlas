@@ -27,6 +27,18 @@ const els = {
   viewTitle: document.querySelector('#view-title'),
   navItems: [...document.querySelectorAll('.nav-item')],
   views: [...document.querySelectorAll('.view')],
+  investigationLeadType: document.querySelector('#investigation-lead-type'),
+  investigationLeadValue: document.querySelector('#investigation-lead-value'),
+  investigationRadius: document.querySelector('#investigation-radius'),
+  investigationCheckScope: document.querySelector('#investigation-check-scope'),
+  investigationDiscoverLeads: document.querySelector('#investigation-discover-leads'),
+  investigationReviewQueue: document.querySelector('#investigation-review-queue'),
+  investigationOpenReports: document.querySelector('#investigation-open-reports'),
+  investigationOpenReadiness: document.querySelector('#investigation-open-readiness'),
+  investigationOpenTasks: document.querySelector('#investigation-open-tasks'),
+  investigationOpenActions: document.querySelector('#investigation-open-actions'),
+  investigationOpenQueueDetail: document.querySelector('#investigation-open-queue-detail'),
+  investigationLiveContext: document.querySelector('#investigation-live-context'),
   readinessSummary: document.querySelector('#readiness-summary'),
   nextAction: document.querySelector('#next-action'),
   apiState: document.querySelector('#api-state'),
@@ -213,6 +225,7 @@ function bindEvents() {
   els.navItems.forEach((item) => {
     item.addEventListener('click', () => selectView(item.dataset.view));
   });
+  bindInvestigationEvents();
   els.refreshReadiness.addEventListener('click', loadReadiness);
   els.preflightRuntimeSnapshot.addEventListener('click', preflightRuntimeSnapshot);
   els.createRuntimeSnapshot.addEventListener('click', createRuntimeSnapshot);

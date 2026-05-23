@@ -60,6 +60,7 @@ Recent backend/UI-readiness work completed:
 - Live target discipline is documented in `docs/statements/live-target-discipline.md`: narrow targets, disposable `.tmp` DBs, explicit caps/lookbacks, discovery-only before expansion, global expansion caps, and preserved artifacts.
 - Positive-ref scoped discovery-only live smoke succeeded against ZTS-4D with one zKill call, one queued ref, zero ESI calls, zero killmails, and zero activity events.
 - Local alpha readiness docs now include refreshed README guidance, offline-first runbook, demo fixture DB seed, release tag checklist, known limits, and feedback template.
+- Operator Investigation Desk now opens as the first renderer view, with one actor/system/radius lead input, passive live/API context, Marked versus Watch boundary wording, discovery/evidence/observation/assessment hierarchy, and routes into existing scope, discovery, queue/enrich, report, assessment, readiness, and task surfaces without passive collection.
 - local SDE lookup build is now an explicit command/service path: `npm run sde:build-lookups` / `sde.build-lookups` downloads official JSONL SDE source only on request, imports topology and inventory lookup tables, records provenance, cleans disposable source files by default, and leaves reports using SQLite lookup tables only
 - SDE lookup builder failure-mode verification now covers failed source acquisition, invalid source, interrupted inventory refresh, default cleanup, keep-source debug preservation, service/task failure diagnostics, explicit rerun, lookup preservation, and no mutation of evidence/assessment tables
 - assessment compaction writes are intentionally deferred; compaction remains read-only preview and evidence deletion remains blocked
@@ -133,6 +134,7 @@ Current implemented shell:
 - session-armed watch executor services for status, arm, disarm, and one-tick dispatch of due watches through task execution
 - compound report/query indexes for common evidence scopes and queue diagnostics
 - read-only readiness inspection separated from explicit runtime path preparation
+- initial Investigation Desk opening view with actor/system/radius lead input, Marked/Watch distinction, passive live/API context, and routes into readiness, scopes, queue/enrich, actions, reports, assessment, and task details
 - initial renderer panes for readiness, task history, and queue report output
 - readiness pane exposes explicit `app.prepare` only when backend readiness reports missing runtime paths
 - task pane uses only `task.list`, `task.get`, and `task.cancel` service calls
@@ -212,6 +214,7 @@ Offline verification now includes:
 - readiness/settings screen verification through `verify:renderer-shell` and `verify:app-readiness`
 - task progress/cancellation UI verification through `verify:renderer-shell` and `verify:task-runner`
 - actor report presentation verification through `verify:renderer-shell` and `verify:report-response`
+- investigation first-screen startup and wording verification through `verify:renderer-shell` and `smoke:electron`
 - scope controls UI verification through `verify:renderer-shell` and `verify:scope-controls`
 - queue/watch status UI verification through `verify:renderer-shell`, `verify:queue-selection`, `verify:queue-report`, and `verify:watch-scheduler`
 - native actor report response verification

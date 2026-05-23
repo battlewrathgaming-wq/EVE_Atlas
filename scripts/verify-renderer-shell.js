@@ -46,6 +46,7 @@ function main() {
   assert(windowStateText.includes('AURA_ATLAS_DB_PATH'), 'window state should colocate with dev DB when DB override is set');
 
   assert(htmlText.includes('./shared.js'), 'renderer HTML should load shared renderer helpers');
+  assert(htmlText.includes('./investigation.js'), 'renderer HTML should load investigation surface module');
   assert(htmlText.includes('./readiness.js'), 'renderer HTML should load readiness surface module');
   assert(htmlText.includes('./scopes.js'), 'renderer HTML should load scope surface module');
   assert(htmlText.includes('./tasks.js'), 'renderer HTML should load task surface module');
@@ -55,6 +56,17 @@ function main() {
   assert(htmlText.includes('./app.js'), 'renderer HTML should load app.js orchestrator');
   assert(htmlText.includes('window-chrome'), 'renderer should include frameless window chrome');
   assert(htmlText.includes('pin-window'), 'renderer should include always-on-top control');
+  assert(htmlText.includes('view-investigation'), 'renderer should include investigation opening view');
+  assert(htmlText.includes('nav-item active" type="button" data-view="investigation"'), 'renderer should open on investigation view');
+  assert(htmlText.includes('Operator Investigation Desk'), 'renderer should frame startup as the operator investigation desk');
+  assert(htmlText.includes('investigation-lead-value'), 'investigation view should include primary lead input');
+  assert(htmlText.includes('investigation-lead-type'), 'investigation view should support actor/system/radius intent');
+  assert(htmlText.includes('investigation-live-context'), 'investigation view should show global live/API context');
+  assert(htmlText.includes('Marked means operator interest'), 'investigation view should explain Marked as operator attention');
+  assert(htmlText.includes('Watch means active routine checking'), 'investigation view should reserve Watch for routine checks');
+  assert(htmlText.includes('zKill refs are possible leads, not evidence'), 'investigation view should label discovery as possible leads');
+  assert(htmlText.includes('Enrich selected calls ESI and stores expanded killmail evidence'), 'investigation view should state ESI expansion evidence effect');
+  assert(htmlText.includes('Raw IDs, backend payloads, queue internals, and task/service detail stay in secondary surfaces'), 'investigation view should demote raw/backend detail');
   assert(htmlText.includes('view-readiness'), 'renderer should include readiness view');
   assert(htmlText.includes('view-scopes'), 'renderer should include scope controls view');
   assert(htmlText.includes('scope-kind'), 'scope view should include scope kind selector');
@@ -142,6 +154,12 @@ function main() {
   assert(htmlText.includes('Cited killmail IDs are validated locally when saved.'), 'assessment workflow should state local citation validation');
 
   assert(rendererText.includes("service.invoke('app.readiness'"), 'renderer should call app.readiness through service bridge');
+  assert(rendererText.includes('bindInvestigationEvents'), 'renderer should bind investigation opening routes');
+  assert(rendererText.includes('renderInvestigationContext'), 'renderer should render live/API context on the investigation opening view');
+  assert(rendererText.includes('applyInvestigationLeadToScopes'), 'investigation routes should seed scope controls');
+  assert(rendererText.includes('applyInvestigationLeadToActions'), 'investigation routes should seed discovery preflight controls');
+  assert(rendererText.includes('applyInvestigationLeadToReports'), 'investigation routes should seed report controls');
+  assert(rendererText.includes("['Startup Effect', 'passive inspection only; no discovery, evidence, hydration, assessment, or watch execution']"), 'investigation startup should state passive side-effect boundary');
   assert(rendererText.includes("service.invoke('runtime.db_snapshot.preflight'"), 'renderer should call runtime snapshot preflight through service bridge');
   assert(rendererText.includes("service.invoke('runtime.db_snapshot.create'"), 'renderer should call runtime snapshot create through service bridge');
   assert(rendererText.includes('runtimeSnapshotConfirm.checked'), 'runtime snapshot creation should require visible confirmation');

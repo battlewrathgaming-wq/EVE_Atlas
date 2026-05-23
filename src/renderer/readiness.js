@@ -145,6 +145,7 @@ function renderReadiness(readiness) {
   }
   els.prepareApp.hidden = !readiness.warnings?.some((entry) => entry.code === 'RUNTIME_PATHS_MISSING');
   renderNextAction(readiness);
+  renderInvestigationContext(readiness);
 }
 
 function renderDebugTracePackResult(result) {

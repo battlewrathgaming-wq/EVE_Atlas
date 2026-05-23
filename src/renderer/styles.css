@@ -199,6 +199,92 @@ h2 {
   gap: 16px;
 }
 
+.investigation-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(300px, 0.8fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.investigation-lead {
+  display: grid;
+  gap: 16px;
+}
+
+.lead-card {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr) 120px;
+  gap: 12px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 14px;
+}
+
+.lead-card label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.lead-card input,
+.lead-card select {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #0c1114;
+  color: var(--text);
+  padding: 10px;
+  font: inherit;
+}
+
+.lead-input {
+  min-width: 0;
+}
+
+.investigation-actions,
+.route-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.boundary-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.boundary-strip div {
+  border: 1px solid var(--line);
+  background: #11171b;
+  padding: 12px;
+}
+
+.boundary-strip strong,
+.boundary-strip span {
+  display: block;
+}
+
+.boundary-strip strong {
+  margin-bottom: 6px;
+}
+
+.boundary-strip span {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.secondary-details summary {
+  cursor: pointer;
+  color: var(--text);
+  font-weight: 650;
+}
+
+.secondary-details .route-grid {
+  margin-top: 12px;
+}
+
 .action-row {
   display: flex;
   gap: 10px;
