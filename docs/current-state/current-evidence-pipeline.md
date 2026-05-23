@@ -76,6 +76,7 @@ Assessment lane:
 - `verify:scope-controls`
 - `verify:controlled-workflow`
 - `verify:local-scale-smoke`
+- `verify:large-scale`
 - `verify:task-concurrency`
 - `verify:all`
 

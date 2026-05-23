@@ -8,12 +8,12 @@ Owner: Overseer planning, Dev execution
 
 Active milestone: Aggressive Testing And Operator Bug Hunting
 Roadmap source: `docs/audits/audit-2026-05-23-aggressive-testing-and-bug-hunt-assessment.md`
-Sequence: HS12
-Previous accepted handshake: `workspace/DevHS10-atlas-sde-builder-failure-modes.md`
-Latest Overseer review: `workspace/OverseerHS11-sde-builder-review.md`
+Sequence: HS14
+Previous accepted handshake: `workspace/DevHS12-atlas-large-synthetic-scale-pressure.md`
+Latest Overseer review: `workspace/OverseerHS13-large-scale-review.md`
 Current executor: Dev
-Current focus: larger synthetic scale pressure
-Expected output: DevHS12-atlas-large-synthetic-scale-pressure.md
+Current focus: app restart recovery after running or failed tasks
+Expected output: DevHS14-atlas-app-restart-recovery.md
 Archive target on milestone completion: `workspace/complete/milestone-aggressive-testing/`
 
 ## Purpose
@@ -26,9 +26,9 @@ The former `docs/gap` task lifecycle has been archived under `docs/archive/depre
 
 - `workspace/overview.md`
 - `workspace/00-dot-protocol.md`
-- `workspace/DevHS10-atlas-sde-builder-failure-modes.md`
+- `workspace/DevHS12-atlas-large-synthetic-scale-pressure.md`
 - `workspace/ProjectPlannerHS06-operator-investigation-ux.md`
-- `workspace/OverseerHS11-sde-builder-review.md`
+- `workspace/OverseerHS13-large-scale-review.md`
 - `docs/index.md`
 - `docs/current-state/current-evidence-pipeline.md`
 - `docs/current-state/current-ipc-ui-preparation.md`
@@ -37,7 +37,7 @@ The former `docs/gap` task lifecycle has been archived under `docs/archive/depre
 
 ## Runway Objective
 
-Continue Atlas aggressive testing with larger synthetic scale pressure: measure bigger local fixture corpora, assert explicit thresholds, preserve evidence doctrine, and leave diagnostics that inform future process-isolation decisions.
+Complete the remaining non-live aggressive-testing slice: prove app restart/reinitialization after running, cancelled, or failed task scenarios leaves evidence, queues, task history, and support diagnostics reviewable without hidden collection or silent recovery claims.
 
 ## Accepted Planner Requirement
 
@@ -52,28 +52,26 @@ Do not implement the Operator Investigation Desk UX in this packet. Preserve the
 
 ## Ordered Runway
 
-1. Existing scale/performance review:
-   - inspect local scale smoke, bulk synthetic verification, report indexes, task/background execution, and current process-isolation deferral notes
-   - identify deterministic larger-corpus sizes that are meaningful but still safe for normal offline verification
-   - keep generated artifacts under project-local `.tmp`
-2. Larger synthetic scale coverage:
-   - add or extend focused verification for a larger synthetic evidence corpus
-   - include reports and service/task paths most likely to pressure synchronous SQLite or renderer-adjacent workflows
-   - set explicit performance/diagnostic thresholds that are conservative enough for local development machines
-   - avoid private runtime DBs and live APIs
+1. Existing restart/session-state review:
+   - inspect task runner persistence boundaries, app readiness, session-armed watch executor state, task history/reporting, and existing failure/cancellation tests
+   - identify deterministic restart or reinitialization harnesses that do not require live APIs or GUI smoke unless clearly justified
+2. Restart/recovery coverage:
+   - cover restart/reinitialization after a running or cancelled task where current architecture supports deterministic simulation
+   - cover restart/reinitialization after failed service work
+   - prove volatile session state, especially armed watch execution, does not silently resume collection
+   - prove persisted evidence, queue refs, fetch/API logs, and diagnostics remain reviewable
 3. Evidence and diagnostics assertions:
-   - assert row counts, raw evidence preservation, queue state, warnings, and assessment artifacts remain reviewable
-   - assert scale diagnostics are bounded and do not dump broad raw evidence
-   - assert results can inform whether future worker-thread/process isolation is needed
+   - assert no hidden live/API calls, evidence expansion, metadata hydration, assessment creation, or watch execution happens on restart
+   - assert recovery language is honest about volatile versus persisted state
+   - assert support/debug artifacts remain bounded and exclude broad raw evidence
 4. Documentation/test index reconciliation:
-   - update durable docs only where command inventory, current-state truth, scale threshold, failure class, or milestone meaning changes
+   - update durable docs only where command inventory, current-state truth, failure classes, or milestone meaning changes
    - do not recreate `docs/gap` task files
-5. Next-runway recommendation:
-   - recommend whether the aggressive-testing milestone is ready for review/closure, or whether app restart recovery/live success smoke/roadmap conversion should be the next bounded packet
+5. Next recommendation:
+   - recommend whether the aggressive-testing milestone is ready for Overseer closure review, with any remaining live success smoke or roadmap conversion clearly framed as gated/human-decision work
 
 ## Explicitly Deferred From This Packet
 
-- App restart recovery after running or failed tasks.
 - Live API success smoke without explicit operator authorization.
 - Real SDE network download.
 - Operator Investigation Desk UX implementation.

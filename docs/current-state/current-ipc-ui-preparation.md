@@ -39,6 +39,7 @@ Recent backend/UI-readiness work completed:
 - watch authoring UI is implemented as metadata-only actor and system/radius intent creation, separate from collection execution
 - report-scoped metadata hydration now supports radius reports using report-relevant entity IDs and metadata-only runs
 - local scale/stability smoke is implemented with a disposable `.tmp` DB: 120 killmails, 840 activity events, 80 queued refs, actor/corporation/radius/queue/metadata reports all completed under 50 ms in the first measured run
+- larger synthetic scale pressure is implemented with a disposable `.tmp` DB: 1000 killmails, 7000 activity events, 1200 queued refs, task-wrapped actor/radius/queue/corpus reports, snapshot preflight, and debug trace generation all completed under conservative 3-5 second thresholds in the first measured run
 - assessment from area context has a no-build decision for this milestone: radius reports remain observation surfaces, and future assessment must be deliberate through a selected entity or explicit analyst note
 - local system resolution is now a shared local-SDE resolver used by manual discovery and live system-watch runners; system names resolve to durable solar system IDs before scoped zKill routes are planned
 - scoped zKill discovery has a live-gated smoke harness that performs system-name resolution, plans the `/systemID/{id}/pastSeconds/{seconds}/` route, queues discovery refs only, reports trace/freshness context, and makes zero ESI expansion calls

@@ -66,6 +66,7 @@
     "verify:corpus-health": "node scripts/verify-corpus-health-report.js",
     "verify:bulk-synthetic": "node scripts/verify-bulk-synthetic.js",
     "verify:local-scale-smoke": "node scripts/verify-local-scale-smoke.js",
+    "verify:large-scale": "node scripts/verify-large-synthetic-scale.js",
     "verify:system-resolution": "node scripts/verify-system-resolution.js",
     "verify:migrations": "node scripts/verify-migrations.js",
     "verify:db-integrity": "node scripts/verify-db-integrity.js",
