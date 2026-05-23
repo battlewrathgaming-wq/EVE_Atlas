@@ -39,8 +39,10 @@ The non-live aggressive-testing slices have been completed and accepted:
 Carry this accepted planning requirement forward for future product/UI work:
 
 ```txt
-Mark = operator interest/tagging.
-Watch = active watch system only.
+Marked = operator interest / tag / record attention.
+Watch = active routine check behavior.
+Watch implies Marked.
+Marked does not imply Watch.
 ```
 
 ## Remaining Gated Or Planning-Level Work

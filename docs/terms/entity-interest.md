@@ -28,17 +28,21 @@ Entity interest helps separate:
 
 ## Important Distinction
 
-Interest is broader than a watchlist.
+Interest is broader than Marked.
 
 ```txt
 interest = this entity matters
-watchlist = remember this entity as interesting enough to inspect or collect later
+marked = operator interest / tag / record attention
 actor watch = run a scoped lookback collection for this entity
 ```
 
-An entity can be interesting without being watchlisted.
+An entity can be interesting without being Marked.
 
-An entity can be watchlisted without an actor watch currently running.
+An entity can be Marked without an actor watch currently running.
+
+If an active watch includes the entity, the entity should also be treated as Marked.
+
+Marked does not imply Watched.
 
 ## What It Is Not
 

@@ -28,10 +28,35 @@ Actor watches are bounded by explicit settings:
 - lookback window
 - max refs
 - max expansions per run
+- cadence or next eligible check when scheduled
+- live/API gate state
 
 The lookback window is the discovery scope.
 
 The expanded killmail set is the stored evidence sample.
+
+## Active Check State
+
+Watch is active routine check behavior.
+
+User-facing state should distinguish:
+
+```txt
+No watch -> Watched
+```
+
+Watched means there is an active check configuration or routine check relationship.
+
+User-facing status can then explain whether the watch is:
+
+- unblocked / ready
+- blocked by live/API gate
+- blocked by session not armed
+- blocked by backoff
+- blocked because it is not due yet
+- inactive
+
+Blocked and unblocked are operator-facing status labels. They describe whether the active check can run now; they are not evidence conclusions.
 
 ## What It Can Support
 
@@ -54,10 +79,20 @@ It does not prove staging, ownership, affiliation, or intent.
 
 It only describes stored killmail evidence within the selected scope.
 
-## Relationship To Watchlist
+## Relationship To Marked
 
-An actor may be watchlisted before an actor watch is run.
+The relationship is asymmetric.
 
-That means the actor is interesting enough to remember.
+```txt
+Watch -> Marked
+```
 
-Running an actor watch means Atlas is now gathering or refreshing scoped evidence for that actor.
+But not:
+
+```txt
+Marked -> Watch
+```
+
+If an actor is watched, it should also be Marked because Atlas has shown active interest or gathered attention around it.
+
+Marked alone does not mean Atlas is actively collecting or refreshing evidence.

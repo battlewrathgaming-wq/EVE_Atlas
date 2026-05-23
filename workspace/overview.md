@@ -77,4 +77,4 @@ Latest accepted handshake: `workspace/DevHS14-atlas-app-restart-recovery.md`
 
 - Which aggressive testing slice should be completed before local alpha can resume?
 - Should live smoke evidence remain in runbooks/audits, or be represented as a milestone acceptance gate?
-- Accepted future UX requirement from `workspace/ProjectPlannerHS06-operator-investigation-ux.md`: Mark means operator interest/tagging; Watch means active watch system only.
+- Accepted future UX requirement from `workspace/ProjectPlannerHS06-operator-investigation-ux.md`: Marked means operator interest / tag / record attention; Watch means active routine check behavior; Watch implies Marked, but Marked does not imply Watch.

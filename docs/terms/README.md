@@ -18,6 +18,7 @@ Use this folder when a term becomes important enough that misunderstanding it co
 - `expanded-killmail.md`
 - `metadata.md`
 - `manual-discovery.md`
+- `marked.md`
 - `watchlist.md`
 - `actor-watch.md`
 - `system-radius-watch.md`
