@@ -64,6 +64,14 @@
                     <option value="radius">System Radius</option>
                   </select>
                 </label>
+                <label>
+                  <span>Actor Type</span>
+                  <select id="investigation-actor-type">
+                    <option value="character">Character</option>
+                    <option value="corporation">Corporation</option>
+                    <option value="alliance">Alliance</option>
+                  </select>
+                </label>
                 <label class="lead-input">
                   <span>Lead</span>
                   <input id="investigation-lead-value" type="text" placeholder="Character, corporation, alliance, system name, or durable ID" />
@@ -78,6 +86,10 @@
                 <button class="secondary-action" type="button" id="investigation-discover-leads">Discover Possible Leads</button>
                 <button class="secondary-action" type="button" id="investigation-review-queue">Review Queue / Enrich</button>
                 <button class="secondary-action" type="button" id="investigation-open-reports">Reports / Assessment</button>
+              </div>
+              <div class="panel lead-feedback-panel">
+                <h4>Lead Feedback</h4>
+                <div id="investigation-lead-feedback" class="message-list"></div>
               </div>
               <div class="boundary-strip">
                 <div>

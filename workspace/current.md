@@ -8,25 +8,25 @@ Owner: Overseer planning, Dev execution
 
 Active milestone: Operator Investigation Desk
 Roadmap source: `docs/roadmap/operator-investigation-desk.md`
-Sequence: HS20
-Previous accepted handshake: `workspace/DevHS18-operator-investigation-first-screen.md`
-Latest Overseer review: `workspace/OverseerHS19-first-screen-review.md`
+Sequence: HS22
+Previous accepted handshake: `workspace/DevHS20-operator-investigation-lead-ergonomics.md`
+Latest Overseer review: `workspace/OverseerHS21-lead-ergonomics-review.md`
 Current executor: Dev
-Current focus: investigation lead-input ergonomics
-Expected output: DevHS20-operator-investigation-lead-ergonomics.md
+Current focus: stored-evidence investigation detail
+Expected output: DevHS22-operator-investigation-evidence-detail.md
 
 ## Purpose
 
-Continue the Operator Investigation Desk milestone by making the new first-screen lead input more useful and honest while staying on existing resolver/service paths.
+Continue the Operator Investigation Desk milestone by making a validated lead produce a useful stored-evidence detail view without turning the first screen into a broad dashboard or adding live collection behavior.
 
-This is not a broad investigation workflow build. It is a refinement slice for first-screen lead handling, validation, routing, empty states, and operator-facing feedback.
+This packet should help an operator answer what Atlas already knows from stored evidence after a lead is routed. It should remain read-only unless the operator explicitly uses existing deliberate actions such as Enrich selected or assessment save.
 
 ## Required Reading
 
 - `workspace/overview.md`
 - `workspace/00-dot-protocol.md`
-- `workspace/DevHS18-operator-investigation-first-screen.md`
-- `workspace/OverseerHS19-first-screen-review.md`
+- `workspace/DevHS20-operator-investigation-lead-ergonomics.md`
+- `workspace/OverseerHS21-lead-ergonomics-review.md`
 - `docs/roadmap/operator-investigation-desk.md`
 - `docs/terms/marked.md`
 - `docs/terms/actor-watch.md`
@@ -34,6 +34,7 @@ This is not a broad investigation workflow build. It is a refinement slice for f
 - `docs/terms/manual-discovery.md`
 - `docs/terms/discovery-queue.md`
 - `docs/current-state/current-ipc-ui-preparation.md`
+- `docs/current-state/current-report-products.md`
 
 ## Accepted Product Requirement
 
@@ -48,22 +49,35 @@ Marked does not imply Watch.
 
 Blocked/unblocked are user-facing watch status labels. They describe whether an active routine check can run now; they are not evidence conclusions.
 
+The accepted investigation path remains:
+
+```txt
+Discovery -> Evidence -> Observation -> Assessment
+```
+
+Discovery refs are possible leads. Expanded ESI killmails are evidence. Observation surfaces render patterns from stored evidence. Assessment is deliberate operator memory.
+
 ## Ordered Dev Runway
 
-1. Lead route review:
-   - inspect the new investigation first-screen route code and existing scope validation/manual discovery/report input paths
-   - identify what can be improved with existing actor/system/radius validation and local system resolution behavior
-2. Lead-input ergonomics:
-   - add clear empty, invalid, and unresolved lead feedback on the Investigation screen
-   - improve actor/system/radius routing into existing Scopes, Actions, Queue/Enrich, and Reports surfaces without adding new live/API behavior
-   - make system/radius input use existing local resolution semantics where practical
-   - keep numeric IDs as facts and names as labels/resolution inputs
-3. Boundary language:
-   - preserve Discovery as possible leads, Enrich selected as explicit ESI expansion/stored evidence, metadata hydration as readability-only, and Assessment as deliberate memory
-   - preserve Marked/Watch asymmetry in user-facing copy
+1. Evidence-detail route review:
+   - inspect the current Investigation lead routing, report services, actor reports, radius reports, and renderer report surfaces
+   - identify the smallest safe route from a validated actor/system/radius lead to stored-evidence detail already supported by existing services
+2. Add an Investigation evidence-detail surface:
+   - add a bounded primary/secondary panel or section reachable from the Investigation screen after lead routing
+   - show a concise stored-evidence summary for the current actor/system/radius lead when existing stored data supports it
+   - show honest empty states when Atlas has no stored evidence for the lead
+   - keep raw IDs, normalized payloads, and backend detail behind existing secondary/detail affordances where practical
+3. Evidence and observation wording:
+   - label stored ESI killmail data as evidence
+   - label rendered counts, timelines, or summaries as observations from stored evidence
+   - keep discovery refs described as possible leads until Enrich selected explicitly expands them through ESI
    - do not introduce Record, Intelligence, or Finding as accepted durable terms
-4. Verification:
-   - update renderer/static verification for lead ergonomics and boundary copy
+4. Route integration:
+   - preserve the HS20 lead validation behavior before filling detail/report state
+   - preserve routes into Scopes, Actions, Queue / Enrich, Reports, Readiness, and Tasks
+   - avoid passive startup mutation, automatic discovery, automatic enrichment, hydration, assessment save, or watch execution
+5. Verification:
+   - update renderer/static verification for the new investigation evidence-detail route and wording
    - update Electron smoke if the primary Investigation flow changes
    - run focused affected verification, then `npm.cmd run verify:all`
 
@@ -73,10 +87,11 @@ Blocked/unblocked are user-facing watch status labels. They describe whether an 
 - Intelligence/Finding naming.
 - pasted zKill links / killmail IDs.
 - first-class region investigation.
-- battle timeline implementation.
+- battle timeline grouping or fight clustering beyond a minimal stored-evidence summary if already supported.
 - relationship graph or footprint story implementation.
 - live success smoke.
 - evidence pruning/deletion.
+- new backend resolver services.
 
 ## Guardrails
 
@@ -95,10 +110,11 @@ Blocked/unblocked are user-facing watch status labels. They describe whether an 
 
 Return to chat before continuing if:
 
-- useful lead ergonomics require accepting zKill link / killmail ID paste support
-- useful lead ergonomics require a new backend resolver or live API behavior
-- the implementation requires product decisions about Record, Intelligence/Finding, region, or timeline grouping
-- passive startup would need to mutate evidence or call live APIs
+- the evidence-detail route requires accepting Record, Intelligence, or Finding terminology
+- the implementation needs a new backend resolver, live API behavior, or passive evidence collection
+- useful detail requires zKill link / killmail ID paste support
+- useful detail requires first-class region support, relationship graph decisions, or timeline/fight-cluster product decisions
+- passive startup would need to mutate evidence, call live APIs, hydrate metadata, create assessments, or run watches
 - evidence doctrine or assessment memory boundaries would need to change
 
 ## Verification Required

@@ -209,6 +209,21 @@ async function runRuggedOperatorSmoke(window, outputDir) {
 
       const longLabel = 'Atlas Scout With An Intentionally Long Operator Label For Rugged Smoke Review';
 
+      if (!lowerText('#investigation-lead-feedback').includes('no lead yet')) {
+        throw new Error('Investigation lead empty state was not visible');
+      }
+      setValue('#investigation-lead-type', 'radius');
+      setValue('#investigation-lead-value', '30000001');
+      setValue('#investigation-radius', '1');
+      await click('#investigation-check-scope');
+      await waitFor('investigation scope route', () => text('#view-title').trim() === 'Scopes' && document.querySelector('#scope-system-id')?.value === '30000001');
+      document.querySelector('[data-view="investigation"]').click();
+      await waitFor('back to investigation', () => text('#view-title').trim() === 'Investigation');
+      setValue('#investigation-lead-type', 'actor');
+      setValue('#investigation-lead-value', '90000002');
+      await click('#investigation-discover-leads');
+      await waitFor('investigation action route', () => text('#view-title').trim() === 'Actions' && document.querySelector('#action-actor-id')?.value === '90000002');
+
       await click('#load-corpus-health');
       await waitFor('corpus health', () => lowerText('#corpus-health-counts').includes('killmails'));
 
@@ -262,6 +277,9 @@ async function runRuggedOperatorSmoke(window, outputDir) {
 
       return {
         window_size: { width: window.innerWidth, height: window.innerHeight },
+        investigation_empty_feedback: true,
+        investigation_scope_route: document.querySelector('#scope-system-id')?.value === '30000001',
+        investigation_action_route: document.querySelector('#action-actor-id')?.value === '90000002',
         corpus_health_loaded: lowerText('#corpus-health-counts').includes('killmails'),
         snapshot_preflight_read_only: lowerText('#runtime-snapshot-preflight').includes('read-only'),
         trace_pack_written: text('#debug-trace-pack-result').includes('.tmp'),
@@ -275,6 +293,9 @@ async function runRuggedOperatorSmoke(window, outputDir) {
     })();
   `);
   assertSmoke(checks.corpus_health_loaded, 'rugged smoke should load corpus health');
+  assertSmoke(checks.investigation_empty_feedback, 'rugged smoke should show investigation empty lead feedback');
+  assertSmoke(checks.investigation_scope_route, 'rugged smoke should route investigation system/radius leads into scope controls');
+  assertSmoke(checks.investigation_action_route, 'rugged smoke should route investigation actor leads into action preflight controls');
   assertSmoke(checks.snapshot_preflight_read_only, 'rugged smoke should show read-only snapshot preflight');
   assertSmoke(checks.trace_pack_written, 'rugged smoke should create a bounded trace pack artifact');
   assertSmoke(checks.manual_discovery_refused, 'rugged smoke should refuse manual discovery when live gate is closed');
