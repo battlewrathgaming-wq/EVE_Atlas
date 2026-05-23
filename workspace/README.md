@@ -1,69 +1,29 @@
-# Workspace
+﻿# AURA Atlas Workspace
 
-This folder is the repo-local attention bridge between Overseer, Dev, and the user.
+This folder is the repo-local coordination surface for AURA Atlas agents.
 
-The workflow uses one overwriteable active packet:
+## Core Files
 
-```txt
-workspace/current.md
-```
+- `workspace/overview.md` is the project map and durable record index.
+- `workspace/current.md` is the only active executable work packet.
+- `workspace/00-dot-protocol.md` defines the `.` Dev execution signal.
+- `workspace/prompts.md` holds reusable Overseer and Dev prompts.
+- `workspace/complete/` stores batch-archived milestone handshakes.
 
-`current.md` is disposable current attention. It can be overwritten whenever the active milestone or task queue changes.
+## Shared Authority
 
-Durable memory still lives in:
+The shared structure authority lives at:
 
-- `docs/current-state/`
-- `docs/audits/`
-- `docs/gap/to-do/`
-- `docs/gap/complete/`
-- `docs/failures/`
-- `workspace/archive/`
-
-## Dot Signal
-
-When the user sends this exact signal in a Dev chat:
-
-```txt
-.
-```
-
-it means:
-
-```txt
-Read workspace/README.md.
-Read workspace/00-dot-protocol.md.
-Read workspace/current.md.
-Execute the task queue top to bottom.
-Return only for blockers, unsafe ambiguity, permission/live-network needs, or final handover.
-```
-
-## Roles
-
-Overseer:
-
-- audits repo and docs against project intent
-- checks tree health before directing work
-- overwrites `workspace/current.md` with the next milestone/task packet
-- updates state/docs when truth changes
-- archives completed packets when accepted
-
-Dev:
-
-- treats `.` as the execution signal
-- works only the scoped tasks in `workspace/current.md`
-- leaves evidence in `workspace/current.md`
-- updates docs/gaps only where the packet requires it
-- runs verification and hands back concise results
-
-## Read Order
-
-1. `README.md`
-2. `00-dot-protocol.md`
-3. `current.md`
-4. `prompts.md` only when writing or refreshing workflow prompts
-
-Then cross-check linked docs from `current.md`.
+`F:\Projects\Docs\Aura-Agent-Coordination\workspace-structure-authority.md`
 
 ## Rule
 
-This folder focuses current work. It does not override current-state, contracts, live IO policy, evidence/renderer boundary doctrine, or newer user instructions in the active chat.
+`workspace/current.md` gives executable direction.
+
+Roadmap docs define milestone meaning when present.
+
+Handshake files record transactions.
+
+Durable docs record product truth.
+
+Archived `docs/gap` files are historical context, not active task queues.

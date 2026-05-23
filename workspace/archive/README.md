@@ -1,18 +1,7 @@
-# Workspace Archive
+﻿# Legacy Workspace Archive
 
-Completed or redirected `workspace/current.md` packets may be copied here.
+This folder belongs to the older per-packet archive model.
 
-Use this only for useful workflow evidence. Do not archive every small edit by habit.
+New workspace handshakes should remain in `workspace/` during an active milestone and move in batch to `workspace/complete/milestone-XX/` when Overseer accepts milestone completion.
 
-Durable project truth remains in:
-
-- `docs/current-state/`
-- `docs/audits/`
-- `docs/gap/complete/`
-- `docs/failures/`
-
-Suggested filename:
-
-```txt
-YYYY-MM-DD-short-milestone-name.md
-```
+Former `docs/gap` task files are archived under `docs/archive/deprecated-gap-workflow-2026-05-23/`.

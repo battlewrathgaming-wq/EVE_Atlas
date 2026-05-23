@@ -1,58 +1,48 @@
-# Dot Protocol
+﻿# Dot Protocol
 
+Status: Active
 Signal: `.`
 
-If the user sends only `.` in a Dev chat, Dev should treat it as an execution signal:
+## Meaning
 
-1. Read `workspace/README.md`.
-2. Read this file.
-3. Read `workspace/current.md` from top to bottom.
-4. Read linked source-of-truth docs from the packet.
-5. Check `git status --short` and account for existing changes before edits.
-6. Execute the task queue from top to bottom.
-7. Ask the user only when blocked by real ambiguity, unsafe/destructive action, live network requirements, missing artifacts, or permission escalation.
-8. Update the Evidence and Dev Handoff sections in `workspace/current.md`.
-9. Update durable docs only when the packet requires it or product truth changes.
-10. Run the required verification.
-11. Return a concise handover.
+If the user sends only `.` in a Dev chat, Dev should treat it as an execution signal.
+
+## Required Steps
+
+1. Confirm cwd, repo root, branch, tree health, and workspace files.
+2. Read `workspace/overview.md`.
+3. Read this file.
+4. Read `workspace/current.md` from top to bottom.
+5. Read source documents named in `current.md`.
+6. Execute the ordered runway in `current.md`.
+7. Update Evidence and Dev Handoff in `current.md`.
+8. Create the expected `DevHS##-[focus].md` handshake named in `current.md`.
+9. Run required verification.
+10. Return a concise handoff.
 
 ## Must Do
 
 - Preserve existing user/Dev changes.
-- Treat `workspace/current.md` as the active milestone/task packet.
-- Use gap packets and roadmap docs for implementation detail.
-- Move completed gap packets only when completion evidence exists.
-- Record failures in `docs/failures` when a reusable bug class is found.
-- Leave evidence of what was done, what was verified, and what remains.
+- Treat `workspace/current.md` as the only active execution packet.
+- Use roadmap/audit/current-state docs for milestone meaning, not as a separate task queue.
+- Leave evidence of what was done, verified, deferred, and risked.
 
 ## Must Not Do
 
-- Do not treat this folder as product doctrine.
-- Do not ignore current-state docs.
-- Do not run live APIs unless the packet and operator explicitly allow the live gate.
-- Do not stage generated SDE, runtime DB, cache, or smoke artifacts by default.
-- Do not broaden scope beyond the queued work.
-- Do not ask the user to relay information that is already in this folder.
-- Do not silently skip dirty-tree health. If unrelated changes exist, preserve them and state how you worked around them.
+- Do not infer tasks from handshakes.
+- Do not create hidden task queues.
+- Do not recreate deprecated `docs/gap` workflow.
+- Do not run live/private/destructive operations unless authorized.
+- Do not broaden scope beyond the current runway.
 
 ## Return Conditions
 
 Return to chat immediately if:
 
-- the task would require destructive action
-- live network work is needed but not explicitly gated
-- the working tree contains overlapping unknown changes
-- required source artifacts are missing
+- cwd is not the project root
+- sequence state conflicts with visible handshakes
+- instructions conflict
+- live network/API action is needed without authorization
+- destructive or external mutation is required
+- required input/artifact is missing
 - a test failure reveals a doctrine or architecture decision
-
-Otherwise continue until the queued slice is complete.
-
-## Completion
-
-When a packet is done:
-
-1. Dev fills in `workspace/current.md` Evidence and Dev Handoff.
-2. Overseer reviews against project doctrine and tree health.
-3. Overseer either accepts, redirects, or rewrites `workspace/current.md`.
-4. If accepted, copy the completed packet to `workspace/archive/YYYY-MM-DD-short-name.md`.
-5. Update current-state/audits/gaps only when project truth changed.

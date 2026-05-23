@@ -1,101 +1,61 @@
-# Workflow Prompts
+﻿# Conversational Prompts
 
-Use these prompts to keep Overseer and Dev sessions aligned without making the user relay context by hand.
+Status: Active
 
-## User To Overseer: Plan Or Refresh
+## User To Overseer: Initiate Or Refresh Runway
 
 ```txt
-Overseer: review current repo state, docs, audits, gap packets, and tree health.
-Define or refresh the next milestone in workspace/current.md.
-Keep it feature-aligned and scoped.
-Update durable docs only if project truth changed.
-Leave the repo ready for Dev to use the dot protocol.
+Overseer: initiate from the AURA Atlas repo root.
+
+Confirm cwd, repo root, branch, tree health, workspace files, active milestone, and latest handshake sequence.
+
+Read workspace/overview.md, workspace/current.md, recent workspace handshakes, current-state, relevant roadmap/audit/contract docs, verification docs, and the shared Aura coordination authority.
+
+Do not merely create a one-task packet unless risk requires it.
+Look 2-4 tasks ahead and define a bounded Dev runway in workspace/current.md.
+
+Report:
+- why this runway is safe
+- what is intentionally excluded
+- what requires human decision
+- expected Dev handshake filename
 ```
 
-## User To Dev: Dot Signal
+## User To Dev: Execute Current Runway
 
 ```txt
 .
 ```
 
-Meaning:
-
-```txt
-Read workspace/README.md, workspace/00-dot-protocol.md, and workspace/current.md.
-Read the linked source docs.
-Check git status.
-Execute the task queue in priority order.
-Update Evidence and Dev Handoff in workspace/current.md.
-Run required verification.
-Return only for blockers or final handoff.
-```
-
 ## User To Dev: Narrow Execution
 
 ```txt
-Dev: use the dot protocol, but only execute P0 in workspace/current.md.
-Do not broaden scope.
-Leave evidence and verification in the packet.
+Dev: use the dot protocol, but execute only [named portion] of workspace/current.md.
+Leave evidence and verification output in the packet.
+Create the expected handshake, adjusted only if the narrowed scope changes the filename.
 ```
 
 ## User To Overseer: Review Dev Work
 
 ```txt
-Overseer: review Dev handoff in workspace/current.md.
-Check git status, docs/current-state, latest audits, and completed/to-do gaps.
-Accept, redirect, or split the work.
-Update state records only where truth changed.
-Refresh workspace/current.md for the next Dev session.
+Overseer: review the Dev handoff and latest DevHS file.
+Audit tree health and verification.
+Judge against workspace/current.md, current-state, evidence doctrine, active milestone assessment, and user intent.
+Accept, redirect, or rewrite current.md.
+Create the next OverseerHS file.
 ```
 
-## User To Overseer: Create Next Packet
+## User To Overseer: Milestone Closure
 
 ```txt
-Overseer: create the next overwriteable workspace packet.
-Use current-state and feature/roadmap docs as source of truth.
-Rank tasks P0/P1/P2.
-Write tasks as per-line actionable guidance, not micromanagement.
-Include guardrails, verification, evidence expectations, and return conditions.
+Overseer: assess whether the active milestone is complete.
+If accepted, update durable docs only where truth changed, batch archive milestone handshakes to workspace/complete/milestone-XX/, update workspace/overview.md, and rewrite workspace/current.md for the next milestone or idle state.
 ```
 
-## Dev Blocker Response Shape
+## User To Agent: Chat Retirement
 
 ```txt
-Blocked on: <specific blocker>
-Why it matters: <risk or missing contract>
-What I checked: <files/commands>
-Safe next options: <2-3 options>
-Recommendation: <one preferred option>
-```
-
-## State Reset Prompt
-
-```txt
-Overseer: perform a state reset.
-Read current-state, latest audits, workspace/current.md, and git status.
-Identify stale documentation, retired packets, and doctrine drift.
-Rewrite workspace/current.md to match current truth.
-Create or update audit/current-state/gap records only where useful for future sessions.
-```
-
-## Handoff Shape For Dev
-
-```txt
-Completed:
-Verified:
-Changed files:
-Evidence left in:
-Risks/deferrals:
-Recommended next slice:
-```
-
-## Handoff Shape For Overseer
-
-```txt
-Milestone verdict:
-Accepted work:
-Doctrine drift:
-Architecture risk:
-State/docs updated:
-Next Dev packet:
+Use the Agent Chat Retirement Process.
+Write only evidence-bound lessons from this chat/session and artifacts explicitly observed during it.
+Do not invent lessons for completeness.
 ```

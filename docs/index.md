@@ -1,4 +1,4 @@
-# AURA Atlas Documentation
+﻿# AURA Atlas Documentation
 
 This folder exists to keep Atlas aligned with its evidence rules while the codebase changes.
 
@@ -33,8 +33,7 @@ Atlas is not:
 | `adr/` | Accepted architecture decisions. |
 | `failures/` | Bugs and failure classes worth preserving. |
 | `roadmap/` | Future-facing milestone direction. |
-| `gap/to-do/` | Active work packets. |
-| `gap/complete/` | Closed work packets with completion notes. |
+| `archive/deprecated-gap-workflow-2026-05-23/` | Historical archive of the former gap task-file workflow. Not active execution. |
 | `runbooks/` | Operator and release procedures. |
 | `research/` | Non-authoritative investigation notes. |
 | `statements/` | Operational doctrine that is broader than one implementation slice. |
@@ -75,14 +74,19 @@ Start here:
 - `docs/current-state/current-evidence-pipeline.md`
 - `docs/current-state/current-ipc-ui-preparation.md`
 - `docs/tenets/tenets.md`
-- `docs/gap/to-do/README.md`
+- `workspace/overview.md`
 
 For local alpha:
 
 - `docs/runbooks/local-alpha-trial.md`
 - `docs/runbooks/local-alpha-known-limits-and-feedback.md`
 
-For current testing work:
+For current testing work, use `workspace/current.md` as the executable packet. Milestone context lives in:
 
 - `docs/audits/audit-2026-05-23-aggressive-testing-and-bug-hunt-assessment.md`
-- `docs/gap/to-do/README.md`
+- `workspace/overview.md`
+
+## Deprecated Gap Workflow
+
+The former docs/gap/to-do and docs/gap/complete task files were moved to docs/archive/deprecated-gap-workflow-2026-05-23/. Treat them as historical context only unless workspace/current.md explicitly references an archived file.
+
