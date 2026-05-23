@@ -8,12 +8,12 @@ Owner: Overseer planning, Dev execution
 
 Active milestone: Aggressive Testing And Operator Bug Hunting
 Roadmap source: `docs/audits/audit-2026-05-23-aggressive-testing-and-bug-hunt-assessment.md`
-Sequence: HS08
-Previous accepted handshake: `workspace/DevHS05-atlas-adversarial-evidence-fixtures.md`
-Latest Overseer review: `workspace/OverseerHS07-adversarial-fixtures-review.md`
+Sequence: HS10
+Previous accepted handshake: `workspace/DevHS08-atlas-partial-failure-transaction-integrity.md`
+Latest Overseer review: `workspace/OverseerHS09-partial-failure-review.md`
 Current executor: Dev
-Current focus: partial failure and transaction integrity
-Expected output: DevHS08-atlas-partial-failure-transaction-integrity.md
+Current focus: SDE lookup builder failure modes
+Expected output: DevHS10-atlas-sde-builder-failure-modes.md
 Archive target on milestone completion: `workspace/complete/milestone-aggressive-testing/`
 
 ## Purpose
@@ -26,9 +26,9 @@ The former `docs/gap` task lifecycle has been archived under `docs/archive/depre
 
 - `workspace/overview.md`
 - `workspace/00-dot-protocol.md`
-- `workspace/DevHS05-atlas-adversarial-evidence-fixtures.md`
+- `workspace/DevHS08-atlas-partial-failure-transaction-integrity.md`
 - `workspace/ProjectPlannerHS06-operator-investigation-ux.md`
-- `workspace/OverseerHS07-adversarial-fixtures-review.md`
+- `workspace/OverseerHS09-partial-failure-review.md`
 - `docs/index.md`
 - `docs/current-state/current-evidence-pipeline.md`
 - `docs/current-state/current-ipc-ui-preparation.md`
@@ -37,7 +37,7 @@ The former `docs/gap` task lifecycle has been archived under `docs/archive/depre
 
 ## Runway Objective
 
-Continue Atlas aggressive testing with partial failure and transaction-integrity pressure: prove interrupted expansion/import/hydration paths fail visibly, preserve accepted evidence, release locks, and leave reviewable diagnostics.
+Continue Atlas aggressive testing with SDE lookup builder failure-mode pressure: prove failed download/source/import paths fail visibly, clean up safely, and preserve existing lookup tables and evidence doctrine.
 
 ## Accepted Planner Requirement
 
@@ -52,29 +52,29 @@ Do not implement the Operator Investigation Desk UX in this packet. Preserve the
 
 ## Ordered Runway
 
-1. Existing failure-path review:
-   - inspect current partial-failure, HTTP timeout, task-concurrency, manual expansion, metadata hydration, import, and evidence-rule verification
-   - identify deterministic offline paths for interrupted expansion/import/hydration and mid-transaction exceptions
-   - avoid live/API success work unless explicitly authorized
-2. Partial failure and transaction-integrity coverage:
-   - add or extend focused verification for failed expansion retry behavior
-   - cover an interrupted or mid-transaction evidence write path where deterministic injection is available
-   - cover failed metadata hydration or import-style work without mutating evidence incorrectly
-   - cover lock release after failed service work where HS03 did not already prove the path
+1. Existing SDE builder review:
+   - inspect `sde:build-lookups`, `sde.build-lookups`, SDE current-state docs, temp/source cleanup behavior, and current verification
+   - identify deterministic failure injection points for download/source/import/cleanup behavior
+   - avoid real network download unless explicitly authorized
+2. SDE failure-mode coverage:
+   - cover failed download or source acquisition without mutating existing lookup tables
+   - cover bad zip/source or malformed source input with visible diagnostics
+   - cover interrupted import while preserving prior valid lookup tables
+   - cover cleanup behavior for default disposable source files
+   - cover `AURA_ATLAS_KEEP_SDE_SOURCE=1` preserving source artifacts as intended
 3. Evidence and diagnostics assertions:
-   - assert accepted raw ESI evidence is preserved after failure
-   - assert failed or partial work does not create hidden assessment memory or proof language
-   - assert queue refs, warning rows, fetch runs, API logs, task history, and support artifacts remain reviewable and scoped
-   - assert rerun/retry behavior is explicit and does not silently overwrite evidence
+   - assert SDE lookup failures do not mutate killmail evidence, activity events, queue refs, or assessment artifacts
+   - assert existing SDE lookup tables remain usable after failure
+   - assert failures leave reviewable run/status diagnostics without broad raw dumps
+   - assert rerun behavior is explicit and does not hide prior failure state
 4. Documentation/test index reconciliation:
    - update durable docs only where command inventory, current-state truth, failure classes, or milestone meaning changes
    - do not recreate `docs/gap` task files
 5. Next-runway recommendation:
-   - recommend the next bounded packet after this slice, with SDE lookup builder failure modes or larger synthetic scale pressure as the expected default unless findings point to a more urgent blocker
+   - recommend the next bounded packet after this slice, with larger synthetic scale pressure as the expected default unless findings point to a more urgent blocker
 
 ## Explicitly Deferred From This Packet
 
-- SDE lookup builder failure modes unless needed as the safest deterministic import failure target.
 - Larger synthetic scale pressure.
 - App restart recovery after running or failed tasks.
 - Live API success smoke without explicit operator authorization.
@@ -86,6 +86,7 @@ Do not implement the Operator Investigation Desk UX in this packet. Preserve the
 
 - zKillboard is discovery only.
 - Expanded ESI killmails are evidence.
+- SDE source files are import material; SQLite lookup tables are runtime metadata.
 - Assessment artifacts are deliberate operator memory, not evidence.
 - UI presents and scopes evidence; UI is not authority.
 - Passive views must not collect evidence.
@@ -124,6 +125,7 @@ npm.cmd run smoke:electron
 Do not run by default:
 
 - live API smoke without explicit gate/operator approval
+- real SDE network download without explicit operator approval
 - destructive retention/pruning operations
 - broad private runtime DB export outside existing verification harnesses
 
