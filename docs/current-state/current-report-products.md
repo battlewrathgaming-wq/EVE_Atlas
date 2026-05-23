@@ -22,6 +22,7 @@ The renderer currently has native structured presentation for:
 
 - actor evidence reports
 - radius evidence reports
+- Investigation first-screen stored-evidence detail summaries and observation previews backed by the same structured actor/radius report services
 - local evidence corpus health in the Readiness view
 - queue/watch preview state
 - task/readiness/service status surfaces
@@ -29,6 +30,8 @@ The renderer currently has native structured presentation for:
 - assessment artifact creation flow
 
 The backend exposes native structured actor and radius report responses. The renderer consumes those responses without parsing CLI text or recomputing observations.
+
+The Investigation first screen can now load a compact read-only stored-evidence detail for a validated actor/system/radius lead. It summarizes evidence counts and previews observations from structured report responses, while leaving raw IDs, normalized payloads, and fuller report/assessment work in the Reports surface.
 
 ## Report Structure
 

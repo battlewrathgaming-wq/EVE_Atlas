@@ -1,32 +1,32 @@
 # Current Workspace Packet
 
 Status: Active
-Updated: 2026-05-23
+Updated: 2026-05-24
 Owner: Overseer planning, Dev execution
 
 ## Coordination State
 
 Active milestone: Operator Investigation Desk
 Roadmap source: `docs/roadmap/operator-investigation-desk.md`
-Sequence: HS22
-Previous accepted handshake: `workspace/DevHS20-operator-investigation-lead-ergonomics.md`
-Latest Overseer review: `workspace/OverseerHS21-lead-ergonomics-review.md`
+Sequence: HS24
+Previous accepted handshake: `workspace/DevHS22-operator-investigation-evidence-detail.md`
+Latest Overseer review: `workspace/OverseerHS23-evidence-detail-review.md`
 Current executor: Dev
-Current focus: stored-evidence investigation detail
-Expected output: DevHS22-operator-investigation-evidence-detail.md
+Current focus: validated-lead Queue / Enrich preflight refinement
+Expected output: DevHS24-operator-investigation-queue-enrich-preflight.md
 
 ## Purpose
 
-Continue the Operator Investigation Desk milestone by making a validated lead produce a useful stored-evidence detail view without turning the first screen into a broad dashboard or adding live collection behavior.
+Continue the Operator Investigation Desk milestone by making the path from a validated lead to Queue / Enrich clearer and safer.
 
-This packet should help an operator answer what Atlas already knows from stored evidence after a lead is routed. It should remain read-only unless the operator explicitly uses existing deliberate actions such as Enrich selected or assessment save.
+This packet should help an operator understand when a lead has stored evidence, when it only has possible discovery refs, and what Enrich selected would do before any ESI expansion is run. It should use existing queue selection, manual discovery, manual expansion, and live-gate behavior rather than adding new collection machinery.
 
 ## Required Reading
 
 - `workspace/overview.md`
 - `workspace/00-dot-protocol.md`
-- `workspace/DevHS20-operator-investigation-lead-ergonomics.md`
-- `workspace/OverseerHS21-lead-ergonomics-review.md`
+- `workspace/DevHS22-operator-investigation-evidence-detail.md`
+- `workspace/OverseerHS23-evidence-detail-review.md`
 - `docs/roadmap/operator-investigation-desk.md`
 - `docs/terms/marked.md`
 - `docs/terms/actor-watch.md`
@@ -59,26 +59,24 @@ Discovery refs are possible leads. Expanded ESI killmails are evidence. Observat
 
 ## Ordered Dev Runway
 
-1. Evidence-detail route review:
-   - inspect the current Investigation lead routing, report services, actor reports, radius reports, and renderer report surfaces
-   - identify the smallest safe route from a validated actor/system/radius lead to stored-evidence detail already supported by existing services
-2. Add an Investigation evidence-detail surface:
-   - add a bounded primary/secondary panel or section reachable from the Investigation screen after lead routing
-   - show a concise stored-evidence summary for the current actor/system/radius lead when existing stored data supports it
-   - show honest empty states when Atlas has no stored evidence for the lead
-   - keep raw IDs, normalized payloads, and backend detail behind existing secondary/detail affordances where practical
-3. Evidence and observation wording:
-   - label stored ESI killmail data as evidence
-   - label rendered counts, timelines, or summaries as observations from stored evidence
-   - keep discovery refs described as possible leads until Enrich selected explicitly expands them through ESI
-   - do not introduce Record, Intelligence, or Finding as accepted durable terms
+1. Queue / Enrich route review:
+   - inspect the HS20/HS22 Investigation lead state, Queue / Enrich renderer surface, queue selection service, manual discovery preflight, manual expansion preflight/run path, and live-gate copy
+   - identify the smallest safe refinement that lets a validated lead explain queued refs and Enrich selected effects without starting live work automatically
+2. Add validated-lead queue context:
+   - from the Investigation screen, make Queue / Enrich context for a validated actor/system/radius lead clearer before navigation or prefill
+   - show whether the lead can prefill a stored discovery-scope filter, needs Discover Possible Leads first, or already has queued possible refs available through existing queue selection behavior
+   - keep no-ref and no-evidence states honest and non-accusatory
+3. Clarify Enrich selected preflight:
+   - make the preflight state provider, expected ESI calls, expected writes, selected refs, caps, and evidence effect obvious in user-facing copy
+   - preserve that Enrich selected is explicit ESI expansion into stored killmail evidence
+   - preserve metadata hydration as readability-only and separate from evidence enrichment
 4. Route integration:
-   - preserve the HS20 lead validation behavior before filling detail/report state
-   - preserve routes into Scopes, Actions, Queue / Enrich, Reports, Readiness, and Tasks
-   - avoid passive startup mutation, automatic discovery, automatic enrichment, hydration, assessment save, or watch execution
+   - preserve existing validated lead handling, stored-evidence detail, Reports, Scopes, Actions, Readiness, and Tasks routes
+   - do not run manual discovery, manual expansion, metadata hydration, assessment save, or watches from passive startup or from merely loading the Investigation screen
+   - do not add zKill link / killmail ID paste support, new resolver services, first-class region behavior, or live success smoke
 5. Verification:
-   - update renderer/static verification for the new investigation evidence-detail route and wording
-   - update Electron smoke if the primary Investigation flow changes
+   - update renderer/static verification for validated-lead Queue / Enrich context and Enrich selected evidence-effect wording
+   - update Electron smoke if the primary Investigation or Queue / Enrich flow changes
    - run focused affected verification, then `npm.cmd run verify:all`
 
 ## Explicitly Deferred From This Packet
@@ -87,11 +85,12 @@ Discovery refs are possible leads. Expanded ESI killmails are evidence. Observat
 - Intelligence/Finding naming.
 - pasted zKill links / killmail IDs.
 - first-class region investigation.
-- battle timeline grouping or fight clustering beyond a minimal stored-evidence summary if already supported.
+- battle timeline grouping or fight clustering.
 - relationship graph or footprint story implementation.
 - live success smoke.
 - evidence pruning/deletion.
 - new backend resolver services.
+- automatic discovery or automatic enrichment.
 
 ## Guardrails
 
@@ -110,10 +109,10 @@ Discovery refs are possible leads. Expanded ESI killmails are evidence. Observat
 
 Return to chat before continuing if:
 
-- the evidence-detail route requires accepting Record, Intelligence, or Finding terminology
-- the implementation needs a new backend resolver, live API behavior, or passive evidence collection
-- useful detail requires zKill link / killmail ID paste support
-- useful detail requires first-class region support, relationship graph decisions, or timeline/fight-cluster product decisions
+- useful Queue / Enrich refinement requires live API execution without the existing explicit gate/confirmation behavior
+- the implementation needs a new backend resolver, new collection service, or passive evidence collection
+- useful Queue / Enrich refinement requires zKill link / killmail ID paste support
+- the implementation requires product decisions about Record, Intelligence/Finding, region, relationship graph, timeline grouping, or fight clustering
 - passive startup would need to mutate evidence, call live APIs, hydrate metadata, create assessments, or run watches
 - evidence doctrine or assessment memory boundaries would need to change
 

@@ -63,6 +63,10 @@ function main() {
   assert(htmlText.includes('investigation-lead-type'), 'investigation view should support actor/system/radius intent');
   assert(htmlText.includes('investigation-actor-type'), 'investigation view should include actor type intent for actor leads');
   assert(htmlText.includes('investigation-lead-feedback'), 'investigation view should include lead feedback');
+  assert(htmlText.includes('investigation-load-detail'), 'investigation view should include stored-evidence detail action');
+  assert(htmlText.includes('investigation-detail-status'), 'investigation view should include stored-evidence detail status');
+  assert(htmlText.includes('investigation-evidence-summary'), 'investigation view should include stored-evidence summary');
+  assert(htmlText.includes('investigation-observation-preview'), 'investigation view should include observation preview from stored evidence');
   assert(htmlText.includes('investigation-live-context'), 'investigation view should show global live/API context');
   assert(htmlText.includes('Marked means operator interest'), 'investigation view should explain Marked as operator attention');
   assert(htmlText.includes('Watch means active routine checking'), 'investigation view should reserve Watch for routine checks');
@@ -168,6 +172,13 @@ function main() {
   assert(rendererText.includes('Actor reports require a durable ID'), 'investigation report route should explain actor ID requirement');
   assert(rendererText.includes('Marked is attention only. Watch is active routine checking'), 'investigation feedback should preserve Marked/Watch asymmetry');
   assert(rendererText.includes('Queue / Enrich is filtered to this actor discovery scope'), 'investigation queue route should provide operator-facing queue feedback');
+  assert(rendererText.includes('loadInvestigationEvidenceDetail'), 'investigation view should load stored-evidence detail explicitly');
+  assert(rendererText.includes("service.invoke('report.actor'"), 'investigation detail should use existing actor report service');
+  assert(rendererText.includes("service.invoke('report.radius'"), 'investigation detail should use existing radius report service');
+  assert(rendererText.includes('No stored evidence for this lead'), 'investigation detail should provide honest no-evidence empty state');
+  assert(rendererText.includes('Counts and preview rows are observations derived from stored expanded ESI killmail evidence.'), 'investigation detail should label previews as observations from stored evidence');
+  assert(rendererText.includes('This panel is read-only and never starts discovery, enrichment, hydration, assessment, or watches.'), 'investigation detail should state passive/read-only boundary');
+  assert(rendererText.includes('Discovery queue refs remain possible leads until Enrich selected calls ESI.'), 'investigation detail should keep queue refs separate from evidence');
   assert(rendererText.includes('applyInvestigationLeadToScopes'), 'investigation routes should seed scope controls');
   assert(rendererText.includes('applyInvestigationLeadToActions'), 'investigation routes should seed discovery preflight controls');
   assert(rendererText.includes('applyInvestigationLeadToReports'), 'investigation routes should seed report controls');

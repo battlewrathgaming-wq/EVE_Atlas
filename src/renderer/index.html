@@ -83,6 +83,7 @@
               </div>
               <div class="investigation-actions">
                 <button class="primary-action" type="button" id="investigation-check-scope">Check Scope</button>
+                <button class="secondary-action" type="button" id="investigation-load-detail">Stored Evidence Detail</button>
                 <button class="secondary-action" type="button" id="investigation-discover-leads">Discover Possible Leads</button>
                 <button class="secondary-action" type="button" id="investigation-review-queue">Review Queue / Enrich</button>
                 <button class="secondary-action" type="button" id="investigation-open-reports">Reports / Assessment</button>
@@ -107,6 +108,24 @@
                 <div>
                   <strong>Assessment</strong>
                   <span>Saved memory is deliberate operator judgment.</span>
+                </div>
+              </div>
+              <div class="panel investigation-detail-panel">
+                <div class="task-detail-heading">
+                  <h4>Stored Evidence Detail</h4>
+                  <button class="secondary-action" type="button" id="investigation-open-detail-report">Open Full Report</button>
+                </div>
+                <p class="form-note">This detail reads existing stored evidence only. It does not discover refs, call ESI, hydrate metadata, create assessment memory, or start watches.</p>
+                <div id="investigation-detail-status" class="callout warning"></div>
+                <div class="report-grid">
+                  <div>
+                    <h4>Evidence Summary</h4>
+                    <div id="investigation-evidence-summary" class="detail-list"></div>
+                  </div>
+                  <div>
+                    <h4>Observation Preview</h4>
+                    <div id="investigation-observation-preview" class="message-list"></div>
+                  </div>
                 </div>
               </div>
             </div>

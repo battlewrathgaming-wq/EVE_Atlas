@@ -9,6 +9,7 @@ function bindInvestigationEvents() {
   els.investigationCheckScope.addEventListener('click', async () => {
     await routeInvestigationLead('scopes');
   });
+  els.investigationLoadDetail.addEventListener('click', loadInvestigationEvidenceDetail);
   els.investigationDiscoverLeads.addEventListener('click', async () => {
     await routeInvestigationLead('actions');
   });
@@ -20,11 +21,13 @@ function bindInvestigationEvents() {
   els.investigationOpenReports.addEventListener('click', async () => {
     await routeInvestigationLead('reports');
   });
+  els.investigationOpenDetailReport.addEventListener('click', openInvestigationDetailReport);
   els.investigationOpenReadiness.addEventListener('click', () => selectView('readiness'));
   els.investigationOpenTasks.addEventListener('click', () => selectView('tasks'));
   els.investigationOpenActions.addEventListener('click', () => selectView('actions'));
   els.investigationOpenQueueDetail.addEventListener('click', () => selectView('queue-watch'));
   renderInvestigationLeadDraft();
+  renderInvestigationDetailEmptyState();
 }
 
 function renderInvestigationContext(readiness) {
@@ -42,6 +45,7 @@ function renderInvestigationContext(readiness) {
 async function routeInvestigationLead(target) {
   const buttons = [
     els.investigationCheckScope,
+    els.investigationLoadDetail,
     els.investigationDiscoverLeads,
     els.investigationOpenReports
   ];
@@ -72,6 +76,158 @@ async function routeInvestigationLead(target) {
   }
 }
 
+async function loadInvestigationEvidenceDetail() {
+  setBusy(els.investigationLoadDetail, true);
+  try {
+    const checked = await checkInvestigationLead('detail');
+    renderInvestigationLeadMessages(checked.messages);
+    if (!checked.ok) {
+      renderInvestigationDetailEmptyState(checked.messages[0]?.body);
+      return;
+    }
+    const report = await investigationDetailReport(checked.lead);
+    renderInvestigationEvidenceDetail(report, checked.lead);
+  } catch (error) {
+    renderInvestigationDetailError(error);
+  } finally {
+    setBusy(els.investigationLoadDetail, false);
+  }
+}
+
+async function investigationDetailReport(lead) {
+  if (lead.type === 'actor') {
+    return service.invoke('report.actor', {
+      params: cleanObject({
+        entityType: lead.actorType,
+        entityId: lead.numericValue,
+        entityName: Number.isInteger(lead.numericValue) ? undefined : lead.value
+      }),
+      options: {}
+    });
+  }
+  return service.invoke('report.radius', {
+    params: cleanObject({
+      center: lead.normalized?.centerSystemId || lead.numericValue || lead.value,
+      radiusJumps: lead.type === 'radius' ? lead.radius : 0
+    }),
+    options: {}
+  });
+}
+
+function renderInvestigationEvidenceDetail(report, lead) {
+  const counts = report.evidence_basis?.evidence_range || {};
+  const killmails = counts.killmail_count ?? 0;
+  const activityEvents = counts.activity_event_count ?? 0;
+  const hasEvidence = killmails > 0 || activityEvents > 0;
+  els.investigationDetailStatus.className = `callout ${hasEvidence ? 'ready' : 'warning'}`;
+  els.investigationDetailStatus.innerHTML = [
+    `<strong>${escapeHtml(hasEvidence ? 'Stored evidence found' : 'No stored evidence for this lead')}</strong>`,
+    `<span>${escapeHtml(investigationDetailStatusText(lead, hasEvidence))}</span>`
+  ].join('');
+  renderRows(els.investigationEvidenceSummary, [
+    ['Lead', reportLabel(report)],
+    ['Report Type', report.report_type || lead.type],
+    ['Evidence Basis', report.evidence_basis?.source || 'stored expanded ESI killmails and activity events'],
+    ['Sample Status', report.evidence_basis?.sample_status || 'unknown'],
+    ['Evidence Window', report.scope?.evidence_window?.label || 'unknown'],
+    ['Killmails', killmails],
+    ['Activity Events', activityEvents],
+    ['Boundary', 'This is a read-only stored-evidence summary. Discovery queue refs remain possible leads until Enrich selected calls ESI.']
+  ]);
+  renderInvestigationObservationPreview(report);
+  if (report.report_type === 'radius') {
+    state.radiusReport = report;
+    state.loadedReportType = 'radius';
+  } else {
+    state.actorReport = report;
+    state.loadedReportType = 'actor';
+  }
+}
+
+function renderInvestigationObservationPreview(report) {
+  const rows = investigationObservationRows(report);
+  els.investigationObservationPreview.innerHTML = '';
+  if (!rows.length) {
+    const row = document.createElement('div');
+    row.className = 'message warning';
+    row.innerHTML = '<span>Observation Preview</span><span>No observation rows are available for this stored evidence scope.</span>';
+    els.investigationObservationPreview.appendChild(row);
+    return;
+  }
+  rows.slice(0, 4).forEach((entry) => {
+    const row = document.createElement('div');
+    row.className = 'message ready';
+    row.innerHTML = `<span>${escapeHtml(entry.label)}</span><span>${escapeHtml(entry.value)}</span>`;
+    els.investigationObservationPreview.appendChild(row);
+  });
+}
+
+function investigationObservationRows(report) {
+  const sections = report.report_type === 'radius'
+    ? [
+      ...(report.observations?.scope ? [report.observations.scope] : []),
+      ...(report.observations?.sections || [])
+    ]
+    : (report.observations?.sections || []);
+  return sections.flatMap((section) => {
+    const title = section.title || section.name || 'Observation';
+    return (section.rows || []).slice(0, 2).map((row) => ({
+      label: title,
+      value: observationRowSummary(row.values || row.raw || row)
+    }));
+  });
+}
+
+function observationRowSummary(values) {
+  const entries = Object.entries(values || {}).slice(0, 4);
+  return entries.length
+    ? entries.map(([key, value]) => `${key}: ${value}`).join('; ')
+    : 'Observation row returned without display values.';
+}
+
+function investigationDetailStatusText(lead, hasEvidence) {
+  if (hasEvidence) {
+    return 'Counts and preview rows are observations derived from stored expanded ESI killmail evidence.';
+  }
+  if (lead.type === 'actor') {
+    return 'Atlas has no stored expanded ESI killmail evidence for this actor scope. Discover Possible Leads can queue zKill refs only; Enrich selected is required before evidence appears.';
+  }
+  return 'Atlas has no stored expanded ESI killmail evidence for this system scope. Discover Possible Leads can queue zKill refs only; Enrich selected is required before evidence appears.';
+}
+
+function renderInvestigationDetailEmptyState(message = 'Validate a lead, then load stored evidence detail to see what Atlas already knows.') {
+  els.investigationDetailStatus.className = 'callout warning';
+  els.investigationDetailStatus.innerHTML = [
+    '<strong>No stored evidence detail loaded</strong>',
+    `<span>${escapeHtml(message)} This panel is read-only and never starts discovery, enrichment, hydration, assessment, or watches.</span>`
+  ].join('');
+  renderRows(els.investigationEvidenceSummary, [
+    ['Evidence Basis', 'No stored evidence report loaded.'],
+    ['Boundary', 'Expanded ESI killmails are evidence. Discovery refs are possible leads until explicit ESI expansion.']
+  ]);
+  els.investigationObservationPreview.innerHTML = '';
+  const row = document.createElement('div');
+  row.className = 'message warning';
+  row.innerHTML = '<span>Observation Preview</span><span>No observations loaded. Observations derive from stored evidence only.</span>';
+  els.investigationObservationPreview.appendChild(row);
+}
+
+function renderInvestigationDetailError(error) {
+  els.investigationDetailStatus.className = 'callout blocked';
+  els.investigationDetailStatus.innerHTML = [
+    '<strong>Stored detail unavailable</strong>',
+    `<span>${escapeHtml(error.message || String(error))}</span>`
+  ].join('');
+}
+
+function openInvestigationDetailReport() {
+  if (investigationLead().value) {
+    routeInvestigationLead('reports');
+    return;
+  }
+  selectView('reports');
+}
+
 async function checkInvestigationLead(target) {
   const lead = investigationLead();
   const draftMessages = investigationLeadDraftMessages(lead);
@@ -94,7 +250,7 @@ async function checkInvestigationLead(target) {
       ]
     };
   }
-  if (target === 'reports' && lead.type === 'actor' && !Number.isInteger(lead.numericValue)) {
+  if ((target === 'reports' || target === 'detail') && lead.type === 'actor' && !Number.isInteger(lead.numericValue)) {
     return {
       ok: false,
       lead,
@@ -104,7 +260,7 @@ async function checkInvestigationLead(target) {
       ]
     };
   }
-  if (target === 'reports' && lead.type !== 'actor') {
+  if ((target === 'reports' || target === 'detail') && lead.type !== 'actor') {
     const result = await validateInvestigationLeadScope(lead);
     if (!result.ok) {
       return result;

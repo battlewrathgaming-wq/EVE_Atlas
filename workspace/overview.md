@@ -1,7 +1,7 @@
 ﻿# AURA Atlas Workspace Overview
 
 Status: Active
-Last reviewed: 2026-05-23
+Last reviewed: 2026-05-24
 
 ## Vision Statement
 
@@ -30,8 +30,8 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Operator Investigation Desk
 Roadmap source: `docs/roadmap/operator-investigation-desk.md`
 Current packet: `workspace/current.md`
-Current sequence: HS22
-Latest accepted handshake: `workspace/DevHS20-operator-investigation-lead-ergonomics.md`
+Current sequence: HS24
+Latest accepted handshake: `workspace/DevHS22-operator-investigation-evidence-detail.md`
 
 ## Durable Record Index
 
