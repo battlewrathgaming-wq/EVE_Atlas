@@ -31,6 +31,7 @@
     "verify:task-concurrency": "node scripts/verify-task-concurrency-cancellation.js",
     "verify:live-api-gate": "node scripts/verify-live-api-gate.js",
     "verify:report-response": "node scripts/verify-report-response.js",
+    "verify:adversarial-fixtures": "node scripts/verify-adversarial-evidence-fixtures.js",
     "verify:passive-side-effects": "node scripts/verify-passive-side-effects.js",
     "verify:partial-failures": "node scripts/verify-partial-failures.js",
     "verify:report-indexes": "node scripts/verify-report-indexes.js",

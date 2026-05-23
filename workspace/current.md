@@ -119,37 +119,66 @@ Dev updates this before handoff.
 Verification run:
 
 ```txt
-Not yet run for this packet.
+npm.cmd run verify:adversarial-fixtures
+Result: passed.
+
+npm.cmd run verify:evidence-rules
+Result: passed; evidence-rule manifest now includes verify:adversarial-fixtures.
+
+npm.cmd run verify:fixture
+Result: passed.
+
+npm.cmd run verify:idempotent
+Result: passed.
+
+npm.cmd run verify:manual-discovery
+Result: passed.
+
+npm.cmd run verify:report-response
+Result: passed.
+
+npm.cmd run verify:all
+Result: passed; all verification group passed with 59 offline scripts, including verify:adversarial-fixtures.
 ```
 
 Files changed:
 
 ```txt
-Not yet recorded.
+package.json
+scripts/verify-group.js
+scripts/verify-evidence-rule-regressions.js
+scripts/verify-adversarial-evidence-fixtures.js
+docs/current-state/current-evidence-pipeline.md
+docs/current-state/current-ipc-ui-preparation.md
+workspace/current.md
+workspace/DevHS05-atlas-adversarial-evidence-fixtures.md
 ```
 
 Findings:
 
 ```txt
-Not yet recorded.
+Added focused offline adversarial fixture verification for malformed missing killmail_id rejection before mutation; incomplete identifiable killmail persistence with warnings; NPC-only attacker warnings; duplicate corporation/alliance attacker dedupe; changed-hash/checksum rediscovery immutability; malformed/duplicate queue ref filtering; queue preview non-evidence boundary; unresolved labels; missing/stale type metadata exposure; report uncertainty/proof-language guard; and passive/report paths not creating assessment artifacts.
+No runtime ingestion/report behavior required changes; this packet adds regression coverage and test-index documentation.
+Planner advisory artifact ProjectPlannerHS06-operator-investigation-ux.md was not read or touched per user instruction.
 ```
 
 Deferrals:
 
 ```txt
-Not yet recorded.
+Partial failure and transaction-integrity expansion remains the recommended next bounded packet.
+SDE lookup builder failure modes, larger synthetic scale pressure, app restart recovery, live success smoke, roadmap conversion, and broad documentation cleanup remain deferred.
 ```
 
 ## Dev Handoff
 
 Dev fills this in when work is complete:
 
-- completed tasks:
-- tests added/updated:
-- verification output:
-- failures found:
-- handshake created:
-- remaining risk:
+- completed tasks: Reviewed existing ingestion/queue/report/evidence-rule harnesses and added deterministic adversarial evidence fixture coverage.
+- tests added/updated: Added `verify:adversarial-fixtures`, wired it into `verify:all`, and added it to the evidence-rule manifest.
+- verification output: Focused evidence checks passed; `verify:all` passed with 59 offline scripts.
+- failures found: No runtime failure found. Existing behavior already preserved doctrine; this slice locked it down with coverage.
+- handshake created: workspace/DevHS05-atlas-adversarial-evidence-fixtures.md
+- remaining risk: Broader partial-failure/transaction-integrity paths, SDE builder failure modes, app restart recovery, and larger scale pressure remain untested in this packet.
 
 ## Overseer Review
 

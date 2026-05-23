@@ -69,6 +69,7 @@ Assessment lane:
 - `verify:retention-preflight`
 - `verify:assessment-artifacts`
 - `verify:evidence-rules`
+- `verify:adversarial-fixtures`
 - `verify:metadata-status`
 - `verify:corpus-health`
 - `verify:db-integrity`

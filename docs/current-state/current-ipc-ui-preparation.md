@@ -47,6 +47,7 @@ Recent backend/UI-readiness work completed:
 - scoped system/radius discover-refs-only work is exposed through the existing Actions pane with system-name input, backend local resolution, live gate preflight, visible confirmation, and zero automatic expansion
 - live scoped zKill smoke now writes reviewable `.tmp` JSON artifacts for refusal/failure/success paths, including topology/evidence counts, route, API counts, queued ref summary, and non-evidence boundary wording
 - evidence-rule regression checks now protect core boundaries in `verify:all`: immutable raw killmail persistence, manual discovery as queue-only possible evidence, queue non-evidence wording, assessment citation validation, hydration without evidence mutation, and non-destructive retention preflight
+- adversarial evidence fixture checks now exercise malformed, incomplete, duplicate, unresolved, NPC-only, changed-hash, and inconsistent queue inputs while preserving evidence boundaries and reviewable warnings
 - Readiness view now exposes local corpus health and runtime DB snapshot safety through structured service calls. Corpus health is read-only; snapshot creation requires visible confirmation and does not restore, prune, compact, delete evidence, or call live APIs.
 - Offline operator workflow scenario smoke now exercises the renderer-like service/task loop: scope validation, manual discovery, queue report, selected expansion, metadata hydration, actor report, assessment creation, corpus health, snapshot preflight, and task history.
 - Assessment artifact review closure is complete: saved artifacts expose artifact type, typed entity scope, scores, status, evidence window, citation status, cited killmail IDs, source report/run context, created/updated timestamps, and boundary wording without mutating evidence.
@@ -191,6 +192,7 @@ Offline verification now includes:
 - scope defaults/validation verification
 - live API gate verification
 - report response verification
+- adversarial evidence fixture verification
 - queue expansion selection verification
 - queue scope isolation verification
 - message taxonomy verification

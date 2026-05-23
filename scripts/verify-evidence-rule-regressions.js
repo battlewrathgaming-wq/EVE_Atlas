@@ -35,6 +35,12 @@ const REQUIRED_GUARDS = [
     boundary: 'metadata hydration must not mutate evidence IDs or raw payloads'
   },
   {
+    script: 'verify:adversarial-fixtures',
+    file: 'scripts/verify-adversarial-evidence-fixtures.js',
+    phrase: 'rediscovery must not replace raw ESI payload',
+    boundary: 'adversarial fixtures must preserve evidence doctrine under malformed, incomplete, duplicated, and unresolved inputs'
+  },
+  {
     script: 'verify:retention-preflight',
     file: 'scripts/verify-retention-preflight.js',
     phrase: 'compaction preflight must not delete killmails',

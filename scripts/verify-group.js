@@ -12,6 +12,7 @@ const GROUPS = {
     'verify:task-concurrency',
     'verify:live-api-gate',
     'verify:report-response',
+    'verify:adversarial-fixtures',
     'verify:passive-side-effects',
     'verify:partial-failures',
     'verify:report-indexes',
