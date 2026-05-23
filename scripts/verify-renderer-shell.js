@@ -63,6 +63,8 @@ function main() {
   assert(htmlText.includes('investigation-lead-type'), 'investigation view should support actor/system/radius intent');
   assert(htmlText.includes('investigation-actor-type'), 'investigation view should include actor type intent for actor leads');
   assert(htmlText.includes('investigation-lead-feedback'), 'investigation view should include lead feedback');
+  assert(htmlText.includes('investigation-queue-context-status'), 'investigation view should include validated-lead queue context status');
+  assert(htmlText.includes('investigation-queue-context-summary'), 'investigation view should include validated-lead queue context summary');
   assert(htmlText.includes('investigation-load-detail'), 'investigation view should include stored-evidence detail action');
   assert(htmlText.includes('investigation-detail-status'), 'investigation view should include stored-evidence detail status');
   assert(htmlText.includes('investigation-evidence-summary'), 'investigation view should include stored-evidence summary');
@@ -72,6 +74,7 @@ function main() {
   assert(htmlText.includes('Watch means active routine checking'), 'investigation view should reserve Watch for routine checks');
   assert(htmlText.includes('zKill refs are possible leads, not evidence'), 'investigation view should label discovery as possible leads');
   assert(htmlText.includes('Enrich selected calls ESI and stores expanded killmail evidence'), 'investigation view should state ESI expansion evidence effect');
+  assert(htmlText.includes('This preview uses the existing read-only queue selection service'), 'investigation queue context should state read-only queue preview boundary');
   assert(htmlText.includes('Raw IDs, backend payloads, queue internals, and task/service detail stay in secondary surfaces'), 'investigation view should demote raw/backend detail');
   assert(htmlText.includes('view-readiness'), 'renderer should include readiness view');
   assert(htmlText.includes('view-scopes'), 'renderer should include scope controls view');
@@ -171,7 +174,11 @@ function main() {
   assert(rendererText.includes('System names resolve through local SDE lookup tables. This does not call zKill or ESI.'), 'investigation lead feedback should state local system resolution boundary');
   assert(rendererText.includes('Actor reports require a durable ID'), 'investigation report route should explain actor ID requirement');
   assert(rendererText.includes('Marked is attention only. Watch is active routine checking'), 'investigation feedback should preserve Marked/Watch asymmetry');
-  assert(rendererText.includes('Queue / Enrich is filtered to this actor discovery scope'), 'investigation queue route should provide operator-facing queue feedback');
+  assert(rendererText.includes('routeInvestigationLeadToQueue'), 'investigation queue route should validate and preview queue context before routing');
+  assert(rendererText.includes('renderInvestigationQueueContext'), 'investigation view should render validated-lead queue context');
+  assert(rendererText.includes("service.invoke('queue.selection'"), 'investigation queue context should use existing queue.selection service path');
+  assert(rendererText.includes('Queue Scope Previewed'), 'investigation queue route should provide operator-facing queue feedback');
+  assert(rendererText.includes('Use Discover Possible Leads first to queue zKill refs'), 'investigation queue context should explain no-ref next step');
   assert(rendererText.includes('loadInvestigationEvidenceDetail'), 'investigation view should load stored-evidence detail explicitly');
   assert(rendererText.includes("service.invoke('report.actor'"), 'investigation detail should use existing actor report service');
   assert(rendererText.includes("service.invoke('report.radius'"), 'investigation detail should use existing radius report service');
@@ -215,6 +222,10 @@ function main() {
   assert(rendererText.includes('manualExpansionPreflight'), 'renderer should preflight manual expansion before execution');
   assert(rendererText.includes('queueConfirmExpansion.checked'), 'manual expansion should require visible confirmation');
   assert(rendererText.includes('selectedKillmailIds'), 'manual expansion should submit selected queue refs explicitly');
+  assert(rendererText.includes('Provider'), 'manual expansion preflight should show provider');
+  assert(rendererText.includes('Expected Writes'), 'manual expansion preflight should show expected writes');
+  assert(rendererText.includes('Enrich selected explicitly calls ESI and stores expanded killmail evidence from selected queued refs'), 'manual expansion preflight should state evidence effect');
+  assert(rendererText.includes('Readability-only label hydration is separate from evidence enrichment'), 'manual expansion preflight should separate metadata hydration from evidence enrichment');
   assert(rendererText.includes("service.invoke('watch.schedule'"), 'renderer should call watch.schedule through service bridge');
   assert(rendererText.includes("service.invoke('watch.list'"), 'renderer should call watch.list through service bridge');
   assert(rendererText.includes("service.invoke('watch.create'"), 'renderer should create watches through service bridge');

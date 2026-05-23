@@ -62,7 +62,7 @@ async function preflightManualExpansion() {
     renderManualExpansionPreflight(result);
   } catch (error) {
     renderError(els.manualExpansionPreflight, error);
-    els.manualExpansionNormalized.textContent = `Manual expansion preflight failed: ${error.message}`;
+    els.manualExpansionNormalized.textContent = `Enrich selected preflight failed: ${error.message}`;
   } finally {
     setBusy(els.preflightManualExpansion, false);
   }
@@ -71,22 +71,27 @@ async function preflightManualExpansion() {
 function renderManualExpansionPreflight(result) {
   const { validation, selection, gate } = result;
   const counts = selection.counts || {};
+  const selectedIds = selectedKillmailIds(selection);
   renderRows(els.manualExpansionPreflight, [
     ['Scope Valid', validation.valid ? 'yes' : 'no'],
+    ['Provider', 'ESI killmail expansion through the manual.expansion service'],
     ['Live Gate', gate.display?.label || gate.state || 'unknown'],
     ['Allowed', gate.allowed ? 'yes' : 'no'],
     ['Providers', gate.providers?.join(', ') || 'none'],
-    ['Selected Killmail IDs', selectedKillmailIds(selection).join(', ') || 'none'],
+    ['Selected Refs', selectedIds.join(', ') || 'none'],
     ['Expansion Cap', validation.normalized.maxExpansions ?? 0],
-    ['Selected For Expansion', counts.selected_for_expansion ?? 0],
+    ['Selected For Enrich Selected', counts.selected_for_expansion ?? 0],
     ['Expected ESI Calls', counts.expected_esi_calls ?? gate.estimated_api_calls?.esi ?? 0],
+    ['Expected Writes', `${counts.selected_for_expansion ?? 0} expanded killmail evidence row(s) plus normalized activity events when ESI succeeds`],
     ['Pending Refs', counts.pending ?? 0],
     ['Cached Refs', counts.cached ?? 0],
-    ['Evidence Boundary', 'ESI expansion creates stored killmail evidence from queued refs']
+    ['Discovery Boundary', 'Queued refs are possible leads, not evidence or observations'],
+    ['Evidence Effect', 'Enrich selected explicitly calls ESI and stores expanded killmail evidence from selected queued refs'],
+    ['Metadata Hydration', 'Readability-only label hydration is separate from evidence enrichment']
   ]);
   els.manualExpansionNormalized.textContent = JSON.stringify({
     normalized: validation.normalized,
-    selected_killmail_ids: selectedKillmailIds(selection),
+    selected_killmail_ids: selectedIds,
     live_gate: {
       state: gate.state,
       allowed: gate.allowed,
@@ -106,7 +111,7 @@ async function runManualExpansion() {
   setBusy(els.runManualExpansion, true);
   try {
     if (!els.queueConfirmExpansion.checked) {
-      throw new Error('Manual expansion requires the live ESI confirmation checkbox');
+      throw new Error('Enrich selected requires the live ESI confirmation checkbox');
     }
     const preflight = await manualExpansionPreflight();
     state.queueSelection = preflight.selection;
@@ -116,7 +121,7 @@ async function runManualExpansion() {
       throw new Error(preflight.gate.blockers?.[0]?.message || 'Manual expansion is blocked by live API gate');
     }
     if (!selectedKillmailIds(preflight.selection).length) {
-      throw new Error('Manual expansion requires at least one selected queued ref');
+      throw new Error('Enrich selected requires at least one selected queued ref');
     }
     const task = await service.invoke('manual.expansion', {
       ...preflight.validation.normalized,
@@ -149,8 +154,9 @@ function renderQueueSelection(selection) {
     ['Mode', selection.selection?.mode || 'next'],
     ['Candidates', counts.candidates_considered ?? 0],
     ['Selectable', counts.selectable ?? 0],
-    ['Selected For Expansion', counts.selected_for_expansion ?? 0],
+    ['Selected For Enrich Selected', counts.selected_for_expansion ?? 0],
     ['Expected ESI Calls', counts.expected_esi_calls ?? 0],
+    ['Evidence Effect', 'none yet; Enrich selected must be confirmed before ESI expansion writes evidence'],
     ['Pending', counts.pending ?? 0],
     ['Failed', counts.failed ?? 0],
     ['Cached', counts.cached ?? 0],

@@ -8,25 +8,25 @@ Owner: Overseer planning, Dev execution
 
 Active milestone: Operator Investigation Desk
 Roadmap source: `docs/roadmap/operator-investigation-desk.md`
-Sequence: HS24
-Previous accepted handshake: `workspace/DevHS22-operator-investigation-evidence-detail.md`
-Latest Overseer review: `workspace/OverseerHS23-evidence-detail-review.md`
+Sequence: HS26
+Previous accepted handshake: `workspace/DevHS24-operator-investigation-queue-enrich-preflight.md`
+Latest Overseer review: `workspace/OverseerHS25-queue-enrich-review.md`
 Current executor: Dev
-Current focus: validated-lead Queue / Enrich preflight refinement
-Expected output: DevHS24-operator-investigation-queue-enrich-preflight.md
+Current focus: assessment-memory ergonomics from loaded stored-evidence context
+Expected output: DevHS26-operator-investigation-assessment-memory.md
 
 ## Purpose
 
-Continue the Operator Investigation Desk milestone by making the path from a validated lead to Queue / Enrich clearer and safer.
+Continue the Operator Investigation Desk milestone by making the deliberate Assessment Memory step clearer after a lead has stored-evidence context.
 
-This packet should help an operator understand when a lead has stored evidence, when it only has possible discovery refs, and what Enrich selected would do before any ESI expansion is run. It should use existing queue selection, manual discovery, manual expansion, and live-gate behavior rather than adding new collection machinery.
+This packet should help an operator understand when they are saving reviewed assessment memory over stored evidence, what local citations support it, and why this is separate from raw evidence, discovery refs, metadata hydration, and active watches.
 
 ## Required Reading
 
 - `workspace/overview.md`
 - `workspace/00-dot-protocol.md`
-- `workspace/DevHS22-operator-investigation-evidence-detail.md`
-- `workspace/OverseerHS23-evidence-detail-review.md`
+- `workspace/DevHS24-operator-investigation-queue-enrich-preflight.md`
+- `workspace/OverseerHS25-queue-enrich-review.md`
 - `docs/roadmap/operator-investigation-desk.md`
 - `docs/terms/marked.md`
 - `docs/terms/actor-watch.md`
@@ -59,24 +59,23 @@ Discovery refs are possible leads. Expanded ESI killmails are evidence. Observat
 
 ## Ordered Dev Runway
 
-1. Queue / Enrich route review:
-   - inspect the HS20/HS22 Investigation lead state, Queue / Enrich renderer surface, queue selection service, manual discovery preflight, manual expansion preflight/run path, and live-gate copy
-   - identify the smallest safe refinement that lets a validated lead explain queued refs and Enrich selected effects without starting live work automatically
-2. Add validated-lead queue context:
-   - from the Investigation screen, make Queue / Enrich context for a validated actor/system/radius lead clearer before navigation or prefill
-   - show whether the lead can prefill a stored discovery-scope filter, needs Discover Possible Leads first, or already has queued possible refs available through existing queue selection behavior
-   - keep no-ref and no-evidence states honest and non-accusatory
-3. Clarify Enrich selected preflight:
-   - make the preflight state provider, expected ESI calls, expected writes, selected refs, caps, and evidence effect obvious in user-facing copy
-   - preserve that Enrich selected is explicit ESI expansion into stored killmail evidence
-   - preserve metadata hydration as readability-only and separate from evidence enrichment
+1. Assessment route review:
+   - inspect the Investigation stored-evidence detail, Reports / Assessment route, actor report assessment context, assessment create/list/get services, and current renderer copy
+   - identify the smallest safe refinement that makes deliberate assessment memory easier to understand from a loaded actor stored-evidence context
+2. Improve assessment memory context:
+   - make the Reports / Assessment surface clearly show when an actor report is loaded and eligible for assessment memory
+   - show citation basis, sample killmail IDs, evidence window, local verification status, and evidence/assessment boundary before save
+   - keep radius/system assessment as context-only unless existing services already support it without new product decisions
+3. Preserve deliberate save behavior:
+   - require the existing operator-entered reason/summary and confirmation before `assessment.create`
+   - do not auto-generate assessment content, scores, tags, findings, intelligence, or records
+   - keep saved assessment memory separate from raw evidence, observations, discovery refs, metadata hydration, and watches
 4. Route integration:
-   - preserve existing validated lead handling, stored-evidence detail, Reports, Scopes, Actions, Readiness, and Tasks routes
-   - do not run manual discovery, manual expansion, metadata hydration, assessment save, or watches from passive startup or from merely loading the Investigation screen
-   - do not add zKill link / killmail ID paste support, new resolver services, first-class region behavior, or live success smoke
+   - preserve Investigation lead validation, stored-evidence detail, Queue / Enrich context, Reports, Scopes, Actions, Readiness, and Tasks routes
+   - optionally make the Investigation route to Reports / Assessment carry the current eligible actor context more clearly, but do not create new backend resolver behavior
 5. Verification:
-   - update renderer/static verification for validated-lead Queue / Enrich context and Enrich selected evidence-effect wording
-   - update Electron smoke if the primary Investigation or Queue / Enrich flow changes
+   - update renderer/static verification for assessment-memory context and boundary wording
+   - update Electron smoke if the primary Investigation-to-Assessment flow changes
    - run focused affected verification, then `npm.cmd run verify:all`
 
 ## Explicitly Deferred From This Packet
@@ -90,6 +89,7 @@ Discovery refs are possible leads. Expanded ESI killmails are evidence. Observat
 - live success smoke.
 - evidence pruning/deletion.
 - new backend resolver services.
+- automatic assessment or AI commentary.
 - automatic discovery or automatic enrichment.
 
 ## Guardrails
@@ -109,10 +109,10 @@ Discovery refs are possible leads. Expanded ESI killmails are evidence. Observat
 
 Return to chat before continuing if:
 
-- useful Queue / Enrich refinement requires live API execution without the existing explicit gate/confirmation behavior
-- the implementation needs a new backend resolver, new collection service, or passive evidence collection
-- useful Queue / Enrich refinement requires zKill link / killmail ID paste support
-- the implementation requires product decisions about Record, Intelligence/Finding, region, relationship graph, timeline grouping, or fight clustering
+- useful assessment ergonomics require accepting Record, Intelligence, or Finding terminology
+- the implementation needs automatic assessment generation, AI commentary, or hidden scoring
+- the implementation needs new backend resolver behavior, live API behavior, or passive evidence collection
+- useful assessment ergonomics require first-class region support, relationship graph decisions, timeline/fight-cluster decisions, or radius/system assessment semantics beyond existing support
 - passive startup would need to mutate evidence, call live APIs, hydrate metadata, create assessments, or run watches
 - evidence doctrine or assessment memory boundaries would need to change
 

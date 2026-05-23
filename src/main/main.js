@@ -210,6 +210,7 @@ async function runRuggedOperatorSmoke(window, outputDir) {
       const longLabel = 'Atlas Scout With An Intentionally Long Operator Label For Rugged Smoke Review';
       let investigationRadiusDetailLoaded = false;
       let investigationActorDetailLoaded = false;
+      let investigationQueueContextLoaded = false;
 
       if (!lowerText('#investigation-lead-feedback').includes('no lead yet')) {
         throw new Error('Investigation lead empty state was not visible');
@@ -229,6 +230,11 @@ async function runRuggedOperatorSmoke(window, outputDir) {
       await click('#investigation-load-detail');
       await waitFor('investigation actor detail', () => lowerText('#investigation-detail-status').includes('stored evidence') && lowerText('#investigation-evidence-summary').includes('killmails'));
       investigationActorDetailLoaded = lowerText('#investigation-evidence-summary').includes('character') || lowerText('#investigation-evidence-summary').includes('90000002');
+      await click('#investigation-review-queue');
+      await waitFor('investigation queue route', () => text('#view-title').trim() === 'Queue / Watches' && document.querySelector('#queue-discovered-by-id')?.value === 'character:90000002');
+      investigationQueueContextLoaded = lowerText('#investigation-queue-context-status').includes('queued possible refs') || lowerText('#investigation-queue-context-summary').includes('discover possible leads');
+      document.querySelector('[data-view="investigation"]').click();
+      await waitFor('back to investigation after queue route', () => text('#view-title').trim() === 'Investigation');
       await click('#investigation-discover-leads');
       await waitFor('investigation action route', () => text('#view-title').trim() === 'Actions' && document.querySelector('#action-actor-id')?.value === '90000002');
 
@@ -290,6 +296,7 @@ async function runRuggedOperatorSmoke(window, outputDir) {
         investigation_action_route: document.querySelector('#action-actor-id')?.value === '90000002',
         investigation_radius_detail_loaded: investigationRadiusDetailLoaded,
         investigation_actor_detail_loaded: investigationActorDetailLoaded,
+        investigation_queue_context_loaded: investigationQueueContextLoaded,
         corpus_health_loaded: lowerText('#corpus-health-counts').includes('killmails'),
         snapshot_preflight_read_only: lowerText('#runtime-snapshot-preflight').includes('read-only'),
         trace_pack_written: text('#debug-trace-pack-result').includes('.tmp'),
@@ -308,6 +315,7 @@ async function runRuggedOperatorSmoke(window, outputDir) {
   assertSmoke(checks.investigation_action_route, 'rugged smoke should route investigation actor leads into action preflight controls');
   assertSmoke(checks.investigation_radius_detail_loaded, 'rugged smoke should load investigation radius stored-evidence detail');
   assertSmoke(checks.investigation_actor_detail_loaded, 'rugged smoke should load investigation actor stored-evidence detail');
+  assertSmoke(checks.investigation_queue_context_loaded, 'rugged smoke should route investigation actor leads into Queue / Enrich context');
   assertSmoke(checks.snapshot_preflight_read_only, 'rugged smoke should show read-only snapshot preflight');
   assertSmoke(checks.trace_pack_written, 'rugged smoke should create a bounded trace pack artifact');
   assertSmoke(checks.manual_discovery_refused, 'rugged smoke should refuse manual discovery when live gate is closed');

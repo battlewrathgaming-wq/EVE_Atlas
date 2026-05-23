@@ -43,6 +43,8 @@ const els = {
   investigationOpenQueueDetail: document.querySelector('#investigation-open-queue-detail'),
   investigationLiveContext: document.querySelector('#investigation-live-context'),
   investigationLeadFeedback: document.querySelector('#investigation-lead-feedback'),
+  investigationQueueContextStatus: document.querySelector('#investigation-queue-context-status'),
+  investigationQueueContextSummary: document.querySelector('#investigation-queue-context-summary'),
   investigationDetailStatus: document.querySelector('#investigation-detail-status'),
   investigationEvidenceSummary: document.querySelector('#investigation-evidence-summary'),
   investigationObservationPreview: document.querySelector('#investigation-observation-preview'),

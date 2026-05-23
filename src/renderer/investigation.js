@@ -13,11 +13,7 @@ function bindInvestigationEvents() {
   els.investigationDiscoverLeads.addEventListener('click', async () => {
     await routeInvestigationLead('actions');
   });
-  els.investigationReviewQueue.addEventListener('click', () => {
-    if (applyInvestigationLeadToQueue()) {
-      selectView('queue-watch');
-    }
-  });
+  els.investigationReviewQueue.addEventListener('click', routeInvestigationLeadToQueue);
   els.investigationOpenReports.addEventListener('click', async () => {
     await routeInvestigationLead('reports');
   });
@@ -27,6 +23,7 @@ function bindInvestigationEvents() {
   els.investigationOpenActions.addEventListener('click', () => selectView('actions'));
   els.investigationOpenQueueDetail.addEventListener('click', () => selectView('queue-watch'));
   renderInvestigationLeadDraft();
+  renderInvestigationQueueContextEmptyState();
   renderInvestigationDetailEmptyState();
 }
 
@@ -47,7 +44,8 @@ async function routeInvestigationLead(target) {
     els.investigationCheckScope,
     els.investigationLoadDetail,
     els.investigationDiscoverLeads,
-    els.investigationOpenReports
+    els.investigationOpenReports,
+    els.investigationReviewQueue
   ];
   buttons.forEach((button) => setBusy(button, true));
   try {
@@ -218,6 +216,48 @@ function renderInvestigationDetailError(error) {
     '<strong>Stored detail unavailable</strong>',
     `<span>${escapeHtml(error.message || String(error))}</span>`
   ].join('');
+}
+
+function renderInvestigationQueueContextEmptyState(message = 'Validate a durable lead, then review Queue / Enrich to see stored possible refs for that discovery scope.') {
+  els.investigationQueueContextStatus.className = 'callout warning';
+  els.investigationQueueContextStatus.innerHTML = [
+    '<strong>No queue context loaded</strong>',
+    `<span>${escapeHtml(message)}</span>`
+  ].join('');
+  renderRows(els.investigationQueueContextSummary, [
+    ['Queue Selection', 'Read-only preview; no discovery or ESI expansion.'],
+    ['Evidence Boundary', 'Queued refs are possible leads. Enrich selected is explicit ESI expansion into stored killmail evidence.']
+  ]);
+}
+
+function renderInvestigationQueueContext(selection, lead, filter) {
+  const counts = selection.counts || {};
+  const candidates = counts.candidates_considered ?? 0;
+  const selected = counts.selected_for_expansion ?? 0;
+  const hasQueuedRefs = candidates > 0;
+  els.investigationQueueContextStatus.className = `callout ${hasQueuedRefs ? 'ready' : 'warning'}`;
+  els.investigationQueueContextStatus.innerHTML = [
+    `<strong>${escapeHtml(hasQueuedRefs ? 'Queued possible refs available' : 'No queued possible refs for this lead')}</strong>`,
+    `<span>${escapeHtml(investigationQueueContextStatusText(lead, hasQueuedRefs, selected))}</span>`
+  ].join('');
+  renderRows(els.investigationQueueContextSummary, [
+    ['Discovery Filter', `${filter.discoveredByType} / ${filter.discoveredById}`],
+    ['Filter Source', 'stored discovery-scope provenance from existing queue selection behavior'],
+    ['Queued Possible Refs', candidates],
+    ['Selectable For Enrich Selected', counts.selectable ?? 0],
+    ['Selected For Enrich Selected', selected],
+    ['Expected ESI Calls', counts.expected_esi_calls ?? selected],
+    ['Already Stored/Cached', `${counts.expanded ?? 0} expanded; ${counts.cached ?? 0} cached`],
+    ['Next Step', hasQueuedRefs ? 'Open Queue / Enrich, preflight Enrich selected, then confirm before ESI expansion.' : 'Use Discover Possible Leads first to queue zKill refs; absence of refs here is not an evidence conclusion.'],
+    ['Evidence Effect', 'Only successful Enrich selected writes expanded ESI killmail evidence and activity events.']
+  ]);
+}
+
+function investigationQueueContextStatusText(lead, hasQueuedRefs, selected) {
+  if (hasQueuedRefs) {
+    return `${leadLabel(lead)} has queued zKill refs stored as possible leads. ${selected} selected ref(s) would be offered to Enrich selected before any ESI call.`;
+  }
+  return `${leadLabel(lead)} can prefill the stored queue filter, but Atlas has no queued possible refs for that filter yet. Discover Possible Leads is the explicit zKill queueing step.`;
 }
 
 function openInvestigationDetailReport() {
@@ -393,37 +433,82 @@ function applyInvestigationLeadToReports() {
   els.radiusReportJumps.value = String(lead.type === 'radius' ? lead.radius : 0);
 }
 
-function applyInvestigationLeadToQueue() {
-  const lead = investigationLead();
-  if (!lead.value) {
+async function routeInvestigationLeadToQueue() {
+  setBusy(els.investigationReviewQueue, true);
+  try {
+    const checked = await checkInvestigationLead('queue');
+    renderInvestigationLeadMessages(checked.messages);
+    if (!checked.ok) {
+      renderInvestigationQueueContextEmptyState(checked.messages[0]?.body);
+      return;
+    }
+    const filter = investigationQueueFilter(checked.lead);
+    if (!filter) {
+      const message = checked.lead.type === 'actor'
+        ? 'Actor names can fill discovery preflight, but stored queue filters need a durable actor ID after explicit discovery. Use Discover Possible Leads first.'
+        : 'System names must resolve to a local SDE solar system ID before Queue / Enrich can use stored discovery-scope filters.';
+      renderInvestigationLeadMessages([
+        feedbackMessage('warning', 'Queue Filter Needs Durable Scope', message),
+        ...investigationLeadDraftMessages(checked.lead)
+      ]);
+      renderInvestigationQueueContextEmptyState(message);
+      return;
+    }
+    applyInvestigationLeadQueueFilter(filter);
+    const selection = await service.invoke('queue.selection', {
+      ...filter,
+      mode: els.queueSelectionMode.value,
+      maxExpansions: numberOrUndefined(els.queueMaxExpansions.value) || 2,
+      killmailIds: parseIdList(els.queueKillmailIds.value)
+    });
+    state.queueSelection = selection;
+    renderQueueSelection(selection);
+    renderInvestigationQueueContext(selection, checked.lead, filter);
     renderInvestigationLeadMessages([
-      feedbackMessage('blocked', 'Lead Required', 'Queue review needs a routed discovery scope or selected queued refs. Enter a durable ID to prefill a queue scope, or open Queue / Enrich directly from secondary routes.')
+      feedbackMessage('ready', 'Queue Scope Previewed', 'Queue / Enrich is filtered to this stored discovery scope. Queued refs remain possible leads until Enrich selected calls ESI.'),
+      ...checked.messages
     ]);
-    return false;
+    selectView('queue-watch');
+  } catch (error) {
+    renderInvestigationQueueContextError(error);
+  } finally {
+    setBusy(els.investigationReviewQueue, false);
   }
+}
+
+function investigationQueueFilter(lead) {
   if (lead.type === 'actor' && Number.isInteger(lead.numericValue)) {
-    clearInvestigationRouteInputs('queue');
-    els.queueDiscoveredByType.value = 'manual_actor';
-    els.queueDiscoveredById.value = `${lead.actorType}:${lead.numericValue}`;
-    renderInvestigationLeadMessages([
-      feedbackMessage('ready', 'Queue Scope Filled', 'Queue / Enrich is filtered to this actor discovery scope. Queued refs remain possible evidence until Enrich selected calls ESI.')
-    ]);
-    return true;
+    return {
+      discoveredByType: 'manual_actor',
+      discoveredById: `${lead.actorType}:${lead.numericValue}`
+    };
   }
-  if (lead.type !== 'actor' && Number.isInteger(lead.numericValue)) {
-    clearInvestigationRouteInputs('queue');
-    els.queueDiscoveredByType.value = lead.type === 'radius' ? 'manual_radius' : 'manual_system';
-    els.queueDiscoveredById.value = `system:${lead.numericValue}:radius:${lead.type === 'radius' ? lead.radius : 0}`;
-    renderInvestigationLeadMessages([
-      feedbackMessage('ready', 'Queue Scope Filled', 'Queue / Enrich is filtered to this system discovery scope. Queued refs remain possible evidence until Enrich selected calls ESI.')
-    ]);
-    return true;
+  const systemId = lead.normalized?.centerSystemId || lead.numericValue;
+  if (lead.type !== 'actor' && Number.isInteger(systemId)) {
+    return {
+      discoveredByType: lead.type === 'radius' ? 'manual_radius' : 'manual_system',
+      discoveredById: `system:${systemId}:radius:${lead.type === 'radius' ? lead.radius : 0}`
+    };
   }
-  renderInvestigationLeadMessages([
-    feedbackMessage('warning', 'Durable ID Useful', 'Queue filters use stored discovery scope IDs. Exact system names can be resolved through Check Scope or Discover Possible Leads first; actor names are labels/resolver input, not queue facts.'),
-    ...investigationLeadDraftMessages(lead)
+  return null;
+}
+
+function applyInvestigationLeadQueueFilter(filter) {
+  clearInvestigationRouteInputs('queue');
+  els.queueDiscoveredByType.value = filter.discoveredByType;
+  els.queueDiscoveredById.value = filter.discoveredById;
+}
+
+function renderInvestigationQueueContextError(error) {
+  els.investigationQueueContextStatus.className = 'callout blocked';
+  els.investigationQueueContextStatus.innerHTML = [
+    '<strong>Queue context unavailable</strong>',
+    `<span>${escapeHtml(error.message || String(error))}</span>`
+  ].join('');
+  renderRows(els.investigationQueueContextSummary, [
+    ['Queue Selection', 'Existing read-only queue selection could not be previewed.'],
+    ['Evidence Effect', 'No discovery, enrichment, hydration, assessment, or watch execution was started.']
   ]);
-  return false;
 }
 
 function investigationLead() {
@@ -502,6 +587,9 @@ function validationFailureMessage(lead, error) {
 }
 
 function leadRouteSummary(lead, target, normalized) {
+  if (target === 'queue') {
+    return 'Queue / Enrich preview uses stored discovery-scope filters and existing queue selection only; it does not discover refs or call ESI.';
+  }
   if (target === 'actions') {
     return 'Manual discovery preflight was filled. Discovery queues possible zKill refs only; it does not create evidence until selected ESI expansion succeeds.';
   }
@@ -511,6 +599,13 @@ function leadRouteSummary(lead, target, normalized) {
       : `${lead.actorType} name "${lead.value}" is ready as existing resolver/label input.`;
   }
   return systemResolutionSummary(normalized);
+}
+
+function leadLabel(lead) {
+  if (lead.type === 'actor') {
+    return `${lead.actorType} ${lead.numericValue || lead.value}`;
+  }
+  return `system/radius ${lead.normalized?.centerSystemId || lead.numericValue || lead.value}`;
 }
 
 function systemResolutionSummary(normalized) {

@@ -92,6 +92,12 @@
                 <h4>Lead Feedback</h4>
                 <div id="investigation-lead-feedback" class="message-list"></div>
               </div>
+              <div class="panel investigation-queue-panel">
+                <h4>Queue / Enrich Context</h4>
+                <p class="form-note">This preview uses the existing read-only queue selection service. It does not discover refs, call ESI, create evidence, hydrate labels, assess, or run watches.</p>
+                <div id="investigation-queue-context-status" class="callout warning"></div>
+                <div id="investigation-queue-context-summary" class="detail-list"></div>
+              </div>
               <div class="boundary-strip">
                 <div>
                   <strong>Discovery</strong>
@@ -419,14 +425,14 @@
                   <input id="queue-killmail-ids" type="text" placeholder="123456, 123457" />
                 </label>
               </div>
-              <p class="form-note">Queue previews are zKill discovery context only. Activity observations begin after ESI expansion.</p>
+              <p class="form-note">Queue previews are zKill discovery context only. Queued refs are possible leads until Enrich selected calls ESI and writes expanded killmail evidence.</p>
               <label class="checkbox-row">
                 <input id="queue-confirm-expansion" type="checkbox" />
-                <span>I understand manual expansion calls ESI and turns selected queued refs into stored evidence.</span>
+                <span>I understand Enrich selected calls ESI and turns selected queued refs into stored expanded killmail evidence.</span>
               </label>
               <div class="action-row stacked-actions">
-                <button class="secondary-action" type="button" id="preflight-manual-expansion">Preflight Expansion</button>
-                <button class="primary-action" type="button" id="run-manual-expansion">Expand Selected Refs</button>
+                <button class="secondary-action" type="button" id="preflight-manual-expansion">Preflight Enrich Selected</button>
+                <button class="primary-action" type="button" id="run-manual-expansion">Enrich Selected</button>
               </div>
             </div>
             <div class="panel">
