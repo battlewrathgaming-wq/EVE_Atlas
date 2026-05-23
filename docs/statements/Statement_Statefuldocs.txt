@@ -1,84 +1,16 @@
-## Perspective: Why Stateful Documentation Matters For AURA Atlas
+# Deprecated Stateful Documentation Seed
 
-AURA Atlas is no longer just an overlay or dashboard project.
+Status: Deprecated reference
+Updated: 2026-05-23
 
-The system now contains:
+This file was an early seed note for Atlas documentation discipline.
 
-- ingestion logic
-- normalization logic
-- aggregation logic
-- evidence philosophy
-- operational doctrine
-- API orchestration behavior
-- intelligence semantics
+Do not use it as the current statement.
 
-As the project grows, the risk is no longer only:
+Use:
 
-> the code breaks
-
-The larger risk becomes:
-
-> the code technically works, but violates the project’s reasoning, philosophy, or architectural boundaries
-
-Examples already encountered:
-
-- passive telemetry contaminating active Threat Intel
-- system searches resolving incorrectly due to ambiguous entity types
-- renderer/UI semantics drifting away from aggregation meaning
-- UI terminology implying certainty beyond evidence
-- API overreach conflicting with respectful collection doctrine
-- zKill summaries drifting toward source-of-truth status
-- collection provenance being confused with intelligence scope
-
-The project therefore benefits from persistent reasoning artifacts.
-
-These documents are not just traditional documentation. They are:
-
-- architectural memory
-- operational doctrine
-- preserved reasoning
-- anti-regression anchors
-- onboarding compression artifacts
-
-Their purpose is to preserve WHY the system behaves a certain way, not just HOW it currently behaves.
-
-This matters because AURA Atlas is intentionally:
-
-- evidence-driven
-- conservative
-- scoped
-- rebuildable
-- local-first
-- respectful in API usage
-- resistant to uncontrolled scraping
-- careful about uncertainty and interpretation
-
-The documentation approach should preserve:
-
-- philosophical truths
-- architectural invariants
-- discovered failure modes
-- operational constraints
-- intelligence semantics
-- orchestration doctrine
-
-The codebase should not be the only place where system intent exists.
-
-Stateful documentation allows Codex, future contributors, future refactors, and future AI tooling to reason from preserved project intent instead of inferring intent from implementation alone.
-
-The project is effectively building institutional memory.
-
-Important preserved concepts include:
-
-- zKill is discovery only
-- expanded ESI killmails are authoritative evidence
-- derived intelligence must be rebuildable
-- the HUD is tactical and short-window
-- Atlas is persistent and historical
-- broad discovery does not imply broad expansion, ingestion, or retention
-- attention-driven intelligence is preferred over scrape-driven intelligence
-- observation is not interpretation
-- discovering that data exists does not mean Atlas must ingest all of it
-- once scoped evidence is intentionally expanded and ingested, retention should be deliberate, auditable, and governed by policy
-
-The documentation therefore acts as compressed architectural context.
+```text
+docs/statements/stateful-documentation.md
+docs/index.md
+docs/tenets/tenets.md
+```

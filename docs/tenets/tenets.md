@@ -1,37 +1,50 @@
 # AURA Atlas Tenets
 
 Status: Active
-Date: 2026-05-21
+Updated: 2026-05-23
 
-AURA Atlas is an evidence-driven intelligence system, not a UI-driven dashboard.
+These are the rules Atlas should not violate while implementation changes.
 
-The UI exists to present, slice, filter, inspect, correlate, and explain stored evidence. It must not become the place where intelligence facts are invented, mutated, or made authoritative.
+## 1. Atlas Is Evidence Memory
 
-## 1. Evidence First
+Atlas answers:
 
-The durable source of truth is the expanded ESI killmail.
-
-```txt
-zKill discovery
--> ESI expanded killmail
--> stored evidence
--> normalized events
--> derived reports
+```text
+What stored evidence do we have?
+What observations can be derived from it?
+What assessment should the operator deliberately remember?
 ```
 
-zKillboard is discovery only. zKill may provide `killmail_id` and `zkb.hash`, but tactical truth comes from expanded ESI killmails.
+It does not answer immediate HUD questions. That belongs to AURA-Sense.
 
-Store expanded ESI killmails once. Recompute everything else from them.
+## 2. zKill Is Discovery Only
 
-## 2. Immutable Evidence Layer
+zKillboard may provide scoped references:
 
-Expanded ESI killmails should be treated as immutable evidence records.
+```text
+killmail_id
+zkb.hash
+```
 
-Corrections, enrichments, annotations, dispositions, and derived intelligence layer on top of evidence rather than mutating the original evidence object.
+zKill summaries are not tactical truth and are not stored as evidence.
 
-## 3. IDs Are Facts, Names Are Labels
+## 3. Expanded ESI Killmails Are Evidence
 
-Evidence records preserve original numeric IDs:
+The durable evidence record is the expanded ESI killmail.
+
+```text
+zKill ref
+-> selected ESI expansion
+-> killmails.raw_esi_payload
+-> normalized activity_events
+-> reports
+```
+
+Store expanded ESI killmails once. Do not replace raw evidence with display labels, zKill summaries, assessment text, or UI state.
+
+## 4. IDs Are Facts; Names Are Labels
+
+The fact is the numeric ID:
 
 - `killmail_id`
 - `character_id`
@@ -41,249 +54,180 @@ Evidence records preserve original numeric IDs:
 - `weapon_type_id`
 - `solar_system_id`
 
-Names are cached display metadata. They improve readability but do not replace IDs.
+Names improve readability. They are cached labels and may be stale or unresolved.
 
-Reports may show:
+Reports should prefer labels that keep IDs visible, such as:
 
-```txt
-Armageddon [typeID: 643]
+```text
 ZTS-4D [solarSystemID: 30004660]
+Armageddon [typeID: 643]
 The Initiative. [allianceID: 1900696668]
 ```
 
-The ID remains the fact. The name is presentation.
+## 5. SDE Source Is Not Runtime Data
 
-## 4. UI Is Presentation, Not Authority
+The SDE zip is source material only.
 
-The interface should behave like a set of slicers over stored evidence:
+Runtime reports use imported SQLite lookup tables:
 
-- system
-- radius
-- actor
-- corporation/alliance
-- time window
-- attacker/victim role
-- geography
-- disposition
-- ship/group/category
+- `regions`
+- `constellations`
+- `solar_systems`
+- `system_adjacency`
+- `type_metadata`
+- `ship_types`
 
-The UI may filter, summarize, correlate, visualize, and explain. It must not mutate evidence meaning.
-
-## 5. Observation Is Not Interpretation
-
-Observed behavior is not intent.
-
-Repeated appearances are observations. Claims such as staging, ownership, coalition behavior, hunting pattern, or home region must remain clearly labeled as analysis or commentary unless supported by explicit evidence and wording.
+Reports must not download, parse, or depend on SDE zip files.
 
 ## 6. Work Products Have Layers
 
-AURA Atlas work products should be understood in three layers:
+Atlas uses three product layers.
 
-```txt
-Evidence Layer
--> Observation Layer
--> Assessment Layer
-```
-
-The product may be an intelligence product overall, but not every artifact should be called intelligence.
-
-### Evidence Layer
+### Evidence
 
 Question:
 
-```txt
-What stored evidence do we have?
+```text
+What stored facts exist?
 ```
 
-Appropriate terms:
+Examples:
 
-- evidence
 - expanded killmail
 - activity event
 - evidence scope
-- collection provenance
-- evidence report
-- partial sample
-- stored evidence
+- run provenance
 
-Current examples:
-
-- `killmails`
-- `activity_events`
-- run reports
-- system evidence reports
-- radius evidence reports
-
-### Observation Layer
+### Observation
 
 Question:
 
-```txt
-What patterns are visible in the evidence?
+```text
+What visible pattern exists in the evidence?
 ```
 
-Appropriate terms:
+Examples:
 
-- observation
-- observed operator
 - repeated appearance
-- repeated presence
-- multi-system presence
-- candidate signal
 - role mix
+- multi-system presence
 - timeline
-- pattern
-- observation report
+- candidate operator signal
 
-Current examples:
-
-- observed operator reports
-- repeated attacker/corp/alliance appearances
-- multi-system presence in a radius watch
-
-### Assessment Layer
+### Assessment
 
 Question:
 
-```txt
-What do we think this means, and what should we remember or act on?
+```text
+What does the operator deliberately judge or remember?
 ```
 
-Appropriate terms:
+Examples:
 
-- assessment
-- interest
-- priority
-- impact
-- confidence
-- interpretation
-- recommendation
+- interest score
+- assessment artifact
+- watchlist promotion reason
 - hot/warm/cold trail
-- watchlist promotion
-- assessment artifact
 
-Current/future examples:
+Use the precise layer term. Do not call every artifact an intelligence report.
 
-- entity interest artifacts
-- watchlist promotion reasoning
-- analyst notes
-- confidence-bearing recommendations
+## 7. UI Is Presentation, Not Authority
 
-### Terminology Rule
+The UI is a set of controls over backend-owned evidence and reports.
 
-Use the most precise layer-specific term available.
+The renderer may:
 
-Prefer:
+- request validated scopes
+- start explicit service actions
+- present reports
+- show queue/watch/readiness state
+- create deliberate assessment artifacts through service calls
 
-- evidence report
-- observation report
-- assessment artifact
+The renderer must not:
 
-Avoid calling every artifact an intelligence report.
+- parse logs
+- call zKill or ESI directly
+- compute evidence truth
+- mutate raw evidence
+- invent observations from UI-only state
 
-## 7. Collection Provenance Is Not Evidence Scope
+## 8. Collection Provenance Is Not Evidence Scope
 
-Evidence scope drives intelligence reports. Collection provenance explains how evidence entered the corpus.
+Collection provenance explains how data entered Atlas:
 
-Evidence and observation reports should usually be scoped by what the evidence describes:
-
-- system + time
-- radius + time
-- actor + time
-- region + time
-
-Collection metadata is provenance:
-
-- `run_id`
-- discovery route
-- collection timestamp
+- run ID
+- route
 - API counts
+- timestamps
 - warnings
-- capped/partial status
+- caps
 
-Use run reports to answer: what happened during this collection run?
+Evidence scope explains what the report is about:
 
-Use evidence reports to answer: what stored evidence exists for this scope?
+- actor
+- system
+- radius
+- corporation/alliance
+- time window
 
-Use observation reports to answer: what patterns are visible in this scoped evidence?
+Observation reports should filter by evidence scope, not by the collection method, unless the report is explicitly a run report.
 
-Evidence and observation reports should query matching stored evidence by IDs, geography, actor, role, and time window. They should not require the evidence to have been discovered by a particular collection method unless the report is explicitly about that collection method.
+## 9. Scope And Sample Size Must Be Visible
 
-## 8. Scope And Sample Size Must Be Explicit
+Reports must expose:
 
-Every report must explain what it is based on:
-
-- evidence window
-- systems/actors included
+- scope
+- time window
 - stored killmail count
 - activity event count
-- discovered refs when relevant
-- expanded sample count
-- partial/complete status
-- source statement
+- sample/cap status
+- unresolved metadata
+- warnings where relevant
 
-Reports must not sound more certain than the evidence allows.
+Absence of evidence is not evidence of absence.
 
-## 9. Collection Is Incomplete By Default
+## 10. Derived Products Must Be Rebuildable
 
-Collection coverage is probabilistic, not complete.
+Reports, timelines, operator lists, footprints, rankings, and summaries are derived from stored evidence and metadata.
 
-Absence of evidence is not evidence of absence. Reports should assume polling gaps, zKill visibility limits, ESI failures, rate limits, and collection caps unless explicitly proven otherwise.
+They may be cached or indexed for performance, but the source of truth remains the evidence layer.
 
-## 10. Derived Work Products Must Be Rebuildable
+## 11. Assessments Are Deliberate
 
-Actor timelines, heatmaps, rankings, footprints, relationship views, and operator summaries must be derived from stored evidence.
+Assessment artifacts are operator memory.
 
-Derived data may be cached, indexed, accelerated, or summarized, but it must remain rebuildable.
+They may cite evidence, carry score/reason fields, and survive future retention decisions. They do not replace evidence and should not be created automatically for every observed entity.
 
-## 11. Disposition Filters Do Not Delete Evidence
+## 12. Dispositions Filter Presentation
 
-Whitelist, friendly, hostile, neutral, and ignored statuses affect presentation, ranking, filtering, and alerting.
+Friendly, hostile, ignored, watched, or whitelisted labels may affect display, priority, and alerting.
 
-They must not prevent ingestion, erase evidence, or mutate stored records.
+They must not erase evidence or block ingestion by themselves.
 
-## 12. AI Is Commentary, Not Evidence
+## 13. Live API Use Is Respectful And Explicit
 
-AI may summarize, narrate, explain, correlate, or assist interpretation.
+External calls must remain:
 
-AI may not become the evidence source, authoritative fact, or hidden transformation logic.
+- scoped
+- gated
+- capped
+- logged
+- retry/backoff aware
+- conservative
 
-## 13. Respectful API Use
+Discovery-only work should stay discovery-only. Expansion through ESI is a separate explicit evidence-creating step.
 
-AURA Atlas is a slow-burn intelligence system, not a high-speed scraper.
+## 14. Passive Surfaces Stay Passive
 
-External API behavior must remain conservative, scoped, observable, and rate-aware:
+Readiness, corpus health, queue preview, watch schedule, reports, snapshot preflight, and debug trace packs must not start hidden collection or mutate evidence.
 
-- zKill only for discovery refs
-- ESI expansion only for uncached killmails
-- dedupe before expansion
-- cap refs and expansions
-- use clear User-Agent
-- retry/backoff respectfully
-- log API counts and warnings
-- prefer local SDE metadata over live calls where possible
+If a surface writes a support artifact, that write must be explicit and documented.
 
-Repeated small observations over time are preferable to aggressive broad collection.
+## 15. Atlas And Sense Stay Separate
 
-## 14. Topology Is Lookup Metadata
-
-SDE geography and type data are lookup/reference metadata, not intelligence evidence.
-
-Use SDE for systems, constellations, regions, stargate adjacency, ship/type names, group metadata, and category metadata.
-
-Activity facts still come from expanded killmails.
-
-## 15. Product Identity
-
-AURA-7 is the tactical viewport.
-
-AURA Atlas is the persistent evidence map.
-
-```txt
-AURA-7 observes now.
-AURA Atlas remembers, scopes, correlates, and explains.
+```text
+AURA-Sense observes now.
+AURA Atlas remembers evidence and assessments later.
 ```
 
-The HUD answers: what is happening now?
-
-Atlas answers: what patterns emerge over time?
+Do not move tactical HUD behavior into Atlas. Do not move Atlas evidence persistence into Sense without an explicit future ADR.

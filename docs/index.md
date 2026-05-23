@@ -1,94 +1,88 @@
 # AURA Atlas Documentation
 
-This folder preserves AURA Atlas project memory.
+This folder exists to keep Atlas aligned with its evidence rules while the codebase changes.
 
-These documents are not commit logs. They are capstones of development: durable reasoning artifacts that protect the project from drift as chats, contributors, and implementation details change.
+The authoritative implementation truth lives in `docs/current-state`. Audits record reviews at a point in time and should not be rewritten during normal documentation cleanup.
 
-The codebase should not be the only place where system intent exists.
+## Product Summary
 
-## Documentation Purpose
+AURA Atlas is a local-first EVE Online evidence workstation.
 
-AURA Atlas is an evidence-driven intelligence system. Its most important risks are not only code defects, but architectural drift:
+It stores expanded ESI killmails, derives activity events, and presents scoped evidence/observation reports. It also lets the operator create deliberate assessment artifacts from reviewed evidence.
 
-- treating zKill summaries as truth
-- letting UI state become authoritative
-- confusing collection provenance with intelligence scope
-- implying certainty beyond the evidence
-- widening API collection beyond respectful bounds
-- turning derived analytics into unrebuildable facts
+Atlas is not:
 
-The documentation library exists to preserve why the system behaves a certain way, not only how it currently works.
+- AURA-Sense
+- a tactical HUD
+- a passive broad scraper
+- an AI analysis engine
+- a map renderer
+- a source of hidden live collection
 
-## Folder Map
+## Documentation Roles
 
-| Folder | Purpose | Change Frequency |
-| --- | --- | --- |
-| `current-state/` | Grounded description of what currently exists | As implementation changes |
-| `research/` | Exploratory findings and non-authoritative investigation notes | As discoveries are made |
-| `contracts/` | Stable rules, ownership boundaries, and interface expectations | Carefully and intentionally |
-| `tenets/` | Foundational truths and architectural invariants | Rare |
-| `statements/` | Operational doctrine and emerging philosophy | Occasional |
-| `audits/` | Current-state technical understanding | As implementation changes |
-| `failures/` | Preserved lessons from bugs/regressions | When lessons are learned |
-| `adr/` | Architecture Decision Records | Major decisions |
-| `schemas/` | Canonical data structures and interface contracts | When contracts change |
-| `features/` | Product feature concepts and committed assessment artifacts | As features are shaped |
-| `roadmap/` | Future-facing architecture and product direction | As strategy evolves |
-| `terms/` | Plain-language explanations of project concepts | When terminology needs shared understanding |
-| `templates/` | Templates for durable documentation artifacts | Rare |
+| Folder | Role |
+| --- | --- |
+| `current-state/` | What the implementation currently does. |
+| `audits/` | Reviews, handovers, and dated assessments. Do not rewrite as product copy. |
+| `tenets/` | Stable rules and invariants. |
+| `contracts/` | Interface, scope, and behavior contracts. |
+| `features/` | Product capability definitions and boundaries. |
+| `terms/` | Plain-language vocabulary for non-technical understanding. |
+| `schemas/` | Data shapes and persistence semantics. |
+| `adr/` | Accepted architecture decisions. |
+| `failures/` | Bugs and failure classes worth preserving. |
+| `roadmap/` | Future-facing milestone direction. |
+| `gap/to-do/` | Active work packets. |
+| `gap/complete/` | Closed work packets with completion notes. |
+| `runbooks/` | Operator and release procedures. |
+| `research/` | Non-authoritative investigation notes. |
+| `statements/` | Operational doctrine that is broader than one implementation slice. |
+| `templates/` | Reusable document templates. |
 
-## Artifact Rules
+## Core Rules To Preserve
 
-When significant architectural learning occurs, create or update a durable artifact.
-
-- Bug fixed -> add a failure record.
-- Major design choice -> add an ADR.
-- New operational philosophy -> add a statement.
-- New stable truth -> update tenets.
-- Current implementation understanding -> update an audit.
-- Stable data/interface shape -> update a schema document.
-- Future direction -> update roadmap.
-
-Good threshold:
-
-> Would future Codex, a contributor, or a refactor risk making the wrong architectural choice without this context?
-
-If yes, document it.
-
-## Current Seed Documents
-
-The original seed notes remain at the root of `docs/` as historical snapshots:
-
-- `Tenets_revision_0.txt`
-- `Statement_Statefuldocs.txt`
-- `Statement_Passive feeds.txt`
-
-New durable artifacts should use the structured folders and templates.
-
-## Naming Conventions
-
-Recommended patterns:
-
-- ADR: `ADR-0001-short-title.md`
-- Failure: `failure-0001-short-title.md`
-- Audit: `audit-YYYY-MM-DD-short-title.md`
-- Schema: `schema-name.md`
-- Statement: `short-doctrine-name.md`
-
-Use dates for audits because they describe implementation state at a point in time.
-
-## Core Project Memory
-
-The following concepts should remain preserved across implementation:
-
-- zKill is discovery only.
-- Expanded ESI killmails are authoritative evidence.
+- zKillboard is discovery only.
+- Expanded ESI killmails are evidence.
 - IDs are facts; names are labels.
+- Discovery refs are possible evidence until expanded.
 - UI presents and slices evidence; UI is not authority.
-- Derived intelligence must be rebuildable.
-- Collection provenance is not intelligence scope.
-- Reports must carry scope, sample size, and uncertainty.
-- Disposition filters do not delete evidence.
-- AI is commentary, not evidence.
-- SDE topology and type data are lookup metadata, not activity evidence.
-- Respectful API use is a product requirement, not a nice-to-have.
+- Reports must state scope, sample basis, and uncertainty.
+- Assessments are deliberate operator memory, not evidence.
+- SDE source files are import material; SQLite lookup tables are runtime metadata.
+- Live APIs require explicit gates and narrow scopes.
+- Passive views must not collect evidence.
+
+## When To Update Docs
+
+Update docs when the meaning changes:
+
+- new evidence rule
+- new scope/contract
+- new feature boundary
+- new data shape
+- new failure lesson
+- new milestone direction
+- current-state implementation drift
+
+Do not create docs just because normal implementation changed. For normal code slices, tests and final handoff are enough unless the change alters doctrine, contracts, or product meaning.
+
+## Current Navigation
+
+Start here:
+
+- `README.md`
+- `docs/current-state/current-evidence-pipeline.md`
+- `docs/current-state/current-ipc-ui-preparation.md`
+- `docs/tenets/tenets.md`
+- `docs/gap/to-do/README.md`
+
+For local alpha:
+
+- `docs/runbooks/local-alpha-trial.md`
+- `docs/runbooks/local-alpha-known-limits-and-feedback.md`
+
+For current testing work:
+
+- `docs/audits/audit-2026-05-23-aggressive-testing-and-bug-hunt-assessment.md`
+- `docs/gap/to-do/README.md`

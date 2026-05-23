@@ -1,131 +1,90 @@
-# Feature: Entity Interest Artifacts
+# Feature: Entity Interest And Assessment Artifacts
 
-Status: Proposed
-Date: 2026-05-21
+Status: Assessment artifact foundation implemented; interest scoring remains future assessment work
+Updated: 2026-05-23
 
 ## Purpose
 
-Entity interest artifacts preserve long-term assessment that an entity matters.
+Entity interest is deliberate operator memory that an entity matters after the immediate evidence trail cools.
 
-They let AURA Atlas remember a corporation, alliance, or pilot after an active evidence trail cools.
+It is the difference between:
 
-This is the difference between:
-
-```txt
-we observed this entity once
+```text
+this entity appeared in evidence
 ```
 
 and:
 
-```txt
-we assessed this entity as worth remembering
+```text
+the operator assessed this entity as worth remembering
 ```
-
-## User Value
-
-This feature supports:
-
-- hot trail -> cold trail memory
-- analyst-curated entity priority
-- delayed reinspection
-- future watchlist promotion
-- lightweight long-term corp/alliance memory
-- impact/priority ranking independent from raw activity counts
 
 ## Data Classification
 
-Entity interest is an assessment artifact.
+Entity interest is assessment memory.
 
-It is not raw evidence.
+It is not:
 
-It is not automatic ingestion.
+- raw evidence
+- collection provenance
+- automatic ingestion
+- a hidden threat score
 
-It is not collection provenance.
+## Current Behavior
 
-It is a committed assessment product.
+Atlas can create and review assessment artifacts from report context with citation status.
 
-## Creation Path
+Current assessment artifacts can preserve:
 
-Interest artifacts should be created deliberately through:
+- artifact type
+- typed entity scope
+- scores and reasons where required
+- evidence window
+- citation status
+- cited killmail IDs
+- source report/run context
+- timestamps
 
-- user action
-- explicit promotion from an observed-operator report
-- accepted system suggestion
-- accepted rule-based recommendation
+## Future Interest Shape
 
-They should not be created automatically for every entity seen in a killmail.
+A future entity interest record may include:
 
-## Suggested Data Shape
-
-Generic shape:
-
-```txt
+```text
 entity_type
 entity_id
-entity_name
 interest_score
 interest_band
 assessment_reason
-evidence_summary
-source_report_type
-source_report_scope
-source_run_id
-first_assessed_at
-last_assessed_at
-assessed_by
-status
-```
-
-Minimum useful shape:
-
-```txt
-entity_type
-entity_id
-interest_score
-assessment_reason
+source_report_context
+cited_killmail_ids
 last_assessed_at
 status
 ```
 
-Interest score can start simple:
-
-```txt
-0-19   cold
-20-49  warm
-50-79  hot
-80-100 priority
-```
-
-The exact scoring method is future assessment work.
+Interest score should remain explainable. A number without a reason is not acceptable assessment memory.
 
 ## Relationship To Watchlists
 
 Interest is not the same as watchlist membership.
 
-```txt
-watchlist = actively collect on this entity
+```text
+watchlist = actively collect or monitor
 interest = remember this entity matters
 ```
 
-An entity may be:
-
-- interesting but not watched
-- watched but low interest
-- both watched and high interest
+An entity can be interesting but not watched, watched but low interest, or both.
 
 ## Must Not Do
 
-This feature must not:
+- Automatically create interest records for every observed entity.
+- Replace evidence counts with an opaque score.
+- Claim affiliation, ownership, staging, or hostility without assessment wording.
+- Hide the evidence basis for an assessment.
+- Mutate raw killmails or activity events.
 
-- create interest records for every observed entity automatically
-- replace evidence counts
-- erase or mutate activity events
-- imply certainty beyond the supporting evidence
-- become an invisible threat score with no reason
+Related docs:
 
-## Related Documents
-
+- `docs/terms/entity-interest.md`
+- `docs/terms/work-products.md`
+- `docs/features/evidence-compaction-to-assessment.md`
 - `docs/statements/retention-and-deprecation-policy.md`
-- `docs/tenets/tenets.md`
-- `docs/terms/activity-event.md`
-

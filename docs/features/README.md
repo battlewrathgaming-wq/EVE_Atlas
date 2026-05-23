@@ -1,13 +1,29 @@
-# Features
+# Atlas Feature Documents
 
-This folder captures product feature concepts before or during implementation.
+Feature documents define product capabilities and boundaries. They are not implementation logs.
 
-Feature documents should explain:
+Each feature doc should state:
 
-- what user value the feature provides
-- what kind of data it creates
-- whether it is evidence, metadata, derived intelligence, assessment, or presentation
-- what it must not do
+- current status
+- user value
+- data classification
+- creation or update path
+- what the feature must not do
+- related contracts, terms, or verification
 
-These are not implementation logs. They are capstones for product capabilities that need stable meaning.
+Atlas feature docs must keep the three-layer model clear:
 
+```text
+evidence -> observation -> assessment
+```
+
+If a feature creates or changes stored data, identify whether that data is evidence, metadata, collection provenance, diagnostic support data, or assessment memory.
+
+Current core feature areas:
+
+- persistent discovery ref queue
+- entity interest and assessment artifacts
+- evidence compaction preflight and assessment preservation
+- UI triggers and scope mapping
+
+Do not use this folder for dated handovers. Use `docs/audits` for reviews and `docs/current-state` for implementation truth.

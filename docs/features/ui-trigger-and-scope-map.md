@@ -1,139 +1,123 @@
 # Feature: UI Trigger And Scope Map
 
-Status: Active
-Date: 2026-05-22
+Status: Implemented foundation; rugged testing remains active
+Updated: 2026-05-23
 
 ## Purpose
 
-This document lists current CLI capabilities that will likely need UI controls before or during the first read-only UI pass.
+This document maps user-visible UI actions to backend-owned scopes and services.
 
-It does not define visual design. It identifies user intent, inputs, and expected backend trigger.
+The UI may initiate explicit actions, but it must not become evidence authority.
 
-## User Value
+## Current UI Action Categories
 
-The UI should let users define evidence scopes, run controlled collection actions, inspect queue state, and read observation products without turning UI state into authority.
+### Readiness And Support
 
-## Likely UI Triggers
+User intent:
 
-### System / Radius Scope
+- inspect runtime readiness
+- inspect corpus health
+- create debug trace pack
+- preflight or create runtime DB snapshot
 
-User inputs:
+Rules:
 
-- center system name or ID
-- radius jumps
-- lookback window
-- max systems
-- max refs per system
-- max expansions
+- readiness and corpus health are read-only
+- snapshot create is explicit
+- trace pack is support data, not evidence
+- no live API calls
 
-Backend actions:
+### Manual Discovery
 
-- dry-run radius plan
-- routine system radius watch collection
-- manual radius discovery
-- radius report
-- system report
-- operator report
+User intent:
 
-### Actor Scope
+- discover possible killmail refs for a scoped actor/system/radius
 
-User inputs:
+Backend behavior:
 
-- actor type: character, corporation, or alliance
-- actor name or ID
-- lookback window
-- max refs
-- max expansions
+- validate scope
+- check live gate
+- call zKill only
+- write `discovered_killmail_refs`
+- write no `killmails`
+- write no `activity_events`
 
-Backend actions:
+### Manual Expansion
 
-- typed actor resolution
-- actor watch collection
-- manual actor discovery
-- actor report
-- metadata readiness
-- scoped hydration
+User intent:
 
-### Corporation Observation
+- expand selected queued refs into evidence
 
-User inputs:
+Backend behavior:
 
-- corporation name or ID
-- evidence window
-- optional hydration action
+- validate queue selection
+- check live gate
+- call ESI for selected refs under cap
+- store expanded killmails once
+- normalize activity events
+- update queue state
 
-Backend actions:
+### Watch Authoring
 
-- corporation report
-- corporation metadata readiness
-- report-scoped hydration
-- optional actor watch for the corporation
+User intent:
 
-### Discovery Queue
+- define actor or system/radius watch intent
 
-User inputs:
+Backend behavior:
 
-- queue scope type
-- queue scope ID
-- status filter
-- max rows
-- selected killmail IDs or scope expansion cap
+- metadata-only watch creation/update
+- no collection during authoring
+- collection only through explicit manual action or session-armed executor
 
-Backend actions:
+### Session-Armed Watch Execution
 
-- queue report
-- queue preflight
-- manual expansion
+User intent:
 
-### Metadata Readiness
+- allow due watches to run for the current session
 
-User inputs:
+Backend behavior:
 
-- report scope
-- hydrate yes/no
+- volatile arm/disarm state
+- live gate required
+- task-backed execution
+- at most controlled due-watch dispatch
+- no arming on page load
 
-Backend actions:
+### Reports And Hydration
 
-- metadata readiness report
-- report-scoped hydration
-- metadata status report
+User intent:
 
-### Diagnostics / Audit
+- load observation reports
+- hydrate report-scoped labels for readability
+- create deliberate assessment artifacts
 
-User inputs:
+Backend behavior:
 
-- run ID
-- report scope
+- reports read stored evidence
+- hydration is metadata-only and live-gated where needed
+- assessments require explicit save/reason/citation path
 
-Backend actions:
+## Scope Rules
 
-- run report
-- API request log review
-- evidence/provenance footer display
-
-## Scope Definition Rules
-
-- System scope should resolve from local SDE first.
-- Actor scope must require explicit actor type before resolving names.
-- Manual discovery scope must be explicit: actor, system, or radius.
-- Manual discovery should default to zero ESI expansion.
-- Routine watches may expand automatically, but only under visible global caps.
-- User-facing controls should expose lookback window, ref caps, expansion caps, and radius/system caps before live collection.
-- Evidence reports should filter by evidence scope and time, not collection route.
-- Collection provenance should remain visible but secondary.
+- System names resolve through local SDE lookup first.
+- Actor resolution requires explicit actor type where ambiguity matters.
+- Reports scope by evidence subject and time window, not collection route.
+- Lookback, radius, ref caps, system caps, and expansion caps must be visible before live work.
 
 ## Must Not Do
 
-- Do not let UI state create evidence.
-- Do not use zKill previews as observations.
-- Do not hide ingestion because an entity is friendly, ignored, or not watchlisted.
-- Do not run live collection without an explicit user action and live gate.
+- Run collection from passive view load.
+- Expand queue refs automatically.
+- Call zKill or ESI directly from renderer.
+- Hide live gates behind UI convenience.
+- Use zKill previews as observations.
+- Treat assessment artifacts as evidence input to reports.
 
-## Related Documents
+Related docs:
 
+- `docs/contracts/scope-definition-contract.md`
 - `docs/contracts/discovery-queue-contract.md`
 - `docs/contracts/expansion-selection-contract.md`
-- `docs/contracts/scope-definition-contract.md`
-- `docs/contracts/report-scope-contract.md`
+- `docs/contracts/session-armed-watch-executor-contract.md`
 - `docs/terms/manual-discovery.md`
-- `docs/terms/at-a-glance-preview.md`
+- `docs/terms/work-products.md`

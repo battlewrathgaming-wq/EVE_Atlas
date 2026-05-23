@@ -1,41 +1,24 @@
-Passive Feed Spotlighting
--------------------------
+# Deprecated Passive Feed Seed
 
-Broad passive feeds should be treated as temporary discovery streams, not automatic archives.
+Status: Deprecated reference
+Updated: 2026-05-23
 
-The platform may listen to broad event feeds such as R2Z2, but should only retain or expand records that match current intelligence intent.
+This file was an early passive-feed concept note.
 
-Primary use case:
-- watchlist pilots
-- watched corporations
-- watched alliances
-- watched systems
-- active session interests
+Do not use it as current Atlas doctrine.
 
-Default behavior:
-- inspect lightweight feed event
-- check against watchlists/session filters
-- if relevant:
-    - expand via ESI
-    - normalize
-    - alert
-    - persist
-- if not relevant:
-    - discard or retain only minimal transient diagnostics
+Current Atlas behavior is more constrained:
 
-This supports:
-- real-time spotlighting
-- fog-of-war awareness
-- respectful API use
-- low storage pressure
-- intent-driven collection
+- Atlas does not perform passive broad ingestion.
+- Discovery is scoped and explicit.
+- Queue refs are possible evidence only.
+- ESI expansion is separate and capped.
+- Stored evidence comes from expanded ESI killmails.
 
-It avoids:
-- turning passive feeds into uncontrolled scraping
-- expanding every event
-- storing irrelevant universe-wide activity
+Use:
 
-Guiding rule:
-Receiving an event does not mean the system must keep it.
-
-Expansion and persistence are deliberate intelligence decisions.
+```text
+docs/statements/attention-driven-intelligence.md
+docs/tenets/tenets.md
+docs/features/persistent-discovery-ref-queue.md
+```
