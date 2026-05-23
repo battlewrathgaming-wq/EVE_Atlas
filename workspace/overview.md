@@ -21,16 +21,17 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 
 | Milestone | Roadmap Source | Status | Notes |
 | --- | --- | --- | --- |
-| Aggressive Testing And Operator Bug Hunting | `docs/audits/audit-2026-05-23-aggressive-testing-and-bug-hunt-assessment.md` | Active | Attack bad inputs, operator paths, concurrency, live gates, and scale pressure before local alpha stability claims. |
+| Aggressive Testing And Operator Bug Hunting | `docs/audits/audit-2026-05-23-aggressive-testing-closure.md` | Closed | Non-live runway accepted; live success smoke remains gated future work. |
+| Operator Investigation Desk Planning | `workspace/ProjectPlannerHS06-operator-investigation-ux.md` | Active | Convert accepted operator UX direction into roadmap meaning and a bounded first Dev runway. |
 | Local Alpha Trial Readiness | `docs/roadmap/local-alpha-trial-readiness.md` | Planned / Related | Operator readiness remains dependent on bug-hunt confidence. |
 
 ## Active Milestone
 
-Milestone: Aggressive Testing And Operator Bug Hunting
-Roadmap source: `docs/audits/audit-2026-05-23-aggressive-testing-and-bug-hunt-assessment.md`
+Milestone: Operator Investigation Desk Planning
+Roadmap source: `workspace/ProjectPlannerHS06-operator-investigation-ux.md`
 Current packet: `workspace/current.md`
-Current sequence: HS15
-Latest accepted handshake: `workspace/DevHS14-atlas-app-restart-recovery.md`
+Current sequence: HS16
+Latest accepted handshake: `workspace/complete/milestone-aggressive-testing/OverseerHS15-restart-recovery-review.md`
 
 ## Durable Record Index
 
@@ -58,7 +59,7 @@ Latest accepted handshake: `workspace/DevHS14-atlas-app-restart-recovery.md`
 ### Verification
 
 - `package.json`
-- aggressive testing assessment: `docs/audits/audit-2026-05-23-aggressive-testing-and-bug-hunt-assessment.md`
+- aggressive testing closure: `docs/audits/audit-2026-05-23-aggressive-testing-closure.md`
 
 ### Historical Archives
 
@@ -75,6 +76,6 @@ Latest accepted handshake: `workspace/DevHS14-atlas-app-restart-recovery.md`
 
 ## Open Questions
 
-- Which aggressive testing slice should be completed before local alpha can resume?
 - Should live smoke evidence remain in runbooks/audits, or be represented as a milestone acceptance gate?
 - Accepted future UX requirement from `workspace/ProjectPlannerHS06-operator-investigation-ux.md`: Marked means operator interest / tag / record attention; Watch means active routine check behavior; Watch implies Marked, but Marked does not imply Watch.
+- Operator Investigation Desk naming decisions remain open before broad UI implementation.
