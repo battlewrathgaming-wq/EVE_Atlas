@@ -59,3 +59,15 @@ Use the Agent Chat Retirement Process.
 Write only evidence-bound lessons from this chat/session and artifacts explicitly observed during it.
 Do not invent lessons for completeness.
 ```
+
+## User To Overseer: Dot Signal
+
+```txt
+.
+```
+
+Meaning:
+
+```txt
+Work products are complete. Handoff is ready to read. Review the handoff and state, develop the new current runway, confirm project state, and on milestone completion move handoffs to archive and complete audit/code review. Return for discussion if unsure.
+```

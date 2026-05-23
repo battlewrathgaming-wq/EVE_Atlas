@@ -16,6 +16,16 @@ The shared structure authority lives at:
 
 `F:\Projects\Docs\Aura-Agent-Coordination\workspace-structure-authority.md`
 
+## Shared Role And Command Prompts
+
+Role prompts:
+
+`F:\Projects\Docs\Aura-Agent-Coordination\relay\role-prompts.md`
+
+Command protocols:
+
+`F:\Projects\Docs\Aura-Agent-Coordination\relay\command-protocols.md`
+
 ## Rule
 
 `workspace/current.md` gives executable direction.
@@ -27,3 +37,4 @@ Handshake files record transactions.
 Durable docs record product truth.
 
 Archived `docs/gap` files are historical context, not active task queues.
+
