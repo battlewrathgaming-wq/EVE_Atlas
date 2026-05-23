@@ -22,16 +22,16 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 | Milestone | Roadmap Source | Status | Notes |
 | --- | --- | --- | --- |
 | Aggressive Testing And Operator Bug Hunting | `docs/audits/audit-2026-05-23-aggressive-testing-closure.md` | Closed | Non-live runway accepted; live success smoke remains gated future work. |
-| Operator Investigation Desk Planning | `workspace/ProjectPlannerHS06-operator-investigation-ux.md` | Active | Convert accepted operator UX direction into roadmap meaning and a bounded first Dev runway. |
+| Operator Investigation Desk | `docs/roadmap/operator-investigation-desk.md` | Active | Build an operator-facing investigation desk while preserving evidence boundaries and safe service controls. |
 | Local Alpha Trial Readiness | `docs/roadmap/local-alpha-trial-readiness.md` | Planned / Related | Operator readiness remains dependent on bug-hunt confidence. |
 
 ## Active Milestone
 
-Milestone: Operator Investigation Desk Planning
-Roadmap source: `workspace/ProjectPlannerHS06-operator-investigation-ux.md`
+Milestone: Operator Investigation Desk
+Roadmap source: `docs/roadmap/operator-investigation-desk.md`
 Current packet: `workspace/current.md`
-Current sequence: HS16
-Latest accepted handshake: `workspace/complete/milestone-aggressive-testing/OverseerHS15-restart-recovery-review.md`
+Current sequence: HS18
+Latest accepted handshake: `workspace/OverseerHS17-operator-investigation-roadmap.md`
 
 ## Durable Record Index
 
@@ -60,6 +60,7 @@ Latest accepted handshake: `workspace/complete/milestone-aggressive-testing/Over
 
 - `package.json`
 - aggressive testing closure: `docs/audits/audit-2026-05-23-aggressive-testing-closure.md`
+- operator investigation desk roadmap: `docs/roadmap/operator-investigation-desk.md`
 
 ### Historical Archives
 
