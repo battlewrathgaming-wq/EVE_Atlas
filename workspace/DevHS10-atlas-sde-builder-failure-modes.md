@@ -62,7 +62,7 @@ workspace/DevHS10-atlas-sde-builder-failure-modes.md
 
 ## Findings
 
-No product bug was found during this packet. The SDE builder’s existing cleanup, lookup preservation, task failure, and rerun behavior matched the packet expectations once exercised together.
+No product bug was found during this packet. The SDE builder's existing cleanup, lookup preservation, task failure, and rerun behavior matched the packet expectations once exercised together.
 
 ## Deferred
 
