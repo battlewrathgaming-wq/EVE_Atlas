@@ -70,19 +70,19 @@ function setServiceState(text) {
 
 function setBusy(button, busy) {
   button.disabled = busy;
-  button.dataset.originalText = button.dataset.originalText || button.textContent;
-  button.textContent = busy ? 'Working...' : button.dataset.originalText;
+  button.setAttribute('aria-busy', busy ? 'true' : 'false');
+  button.classList.toggle('is-busy', busy);
 }
 
 function titleForView(name) {
   return {
-    investigation: 'Investigation',
-    readiness: 'Readiness',
-    scopes: 'Scopes',
-    tasks: 'Tasks',
-    'queue-watch': 'Queue / Watches',
-    actions: 'Actions',
-    reports: 'Reports'
+    investigation: 'Discovery',
+    readiness: 'Settings / Diagnostics',
+    scopes: 'Scope Detail',
+    tasks: 'Task History',
+    'queue-watch': 'Watch',
+    actions: 'Discovery Actions',
+    reports: 'Observation / Assessment'
   }[name] || 'AURA Atlas';
 }
 

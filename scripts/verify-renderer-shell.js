@@ -59,9 +59,18 @@ function main() {
   assert(htmlText.includes('view-investigation'), 'renderer should include investigation opening view');
   assert(htmlText.includes('nav-item active" type="button" data-view="investigation"'), 'renderer should open on investigation view');
   assert(htmlText.includes('Operator Investigation Desk'), 'renderer should frame startup as the operator investigation desk');
+  assert(htmlText.includes('data-primary-view="investigation">Discovery'), 'top bar should expose Discovery as a primary mode');
+  assert(htmlText.includes('data-primary-view="queue-watch">Watch'), 'top bar should expose Watch as a primary mode');
+  assert(htmlText.includes('External API: checking'), 'top bar should use External API provider-state language');
+  assert(htmlText.includes('Discovery Console'), 'renderer should make Discovery the primary console route');
+  assert(htmlText.includes('Watch Console'), 'renderer should make Watch a primary console route');
   assert(htmlText.includes('investigation-lead-value'), 'investigation view should include primary lead input');
   assert(htmlText.includes('investigation-lead-type'), 'investigation view should support actor/system/radius intent');
   assert(htmlText.includes('investigation-actor-type'), 'investigation view should include actor type intent for actor leads');
+  assert(htmlText.includes('Pilot / Corp / Alliance'), 'lead types should use Pilot/System/Corp/Alliance presentation concepts');
+  assert(htmlText.includes('Queue Review'), 'Discovery should stage Queue Review inside the flow');
+  assert(htmlText.includes('Enrich Selected'), 'Discovery should stage Enrich Selected inside the flow');
+  assert(htmlText.includes('Assessment Memory'), 'Discovery stage rail should end at Assessment Memory');
   assert(htmlText.includes('investigation-lead-feedback'), 'investigation view should include lead feedback');
   assert(htmlText.includes('investigation-queue-context-status'), 'investigation view should include validated-lead queue context status');
   assert(htmlText.includes('investigation-queue-context-summary'), 'investigation view should include validated-lead queue context summary');
@@ -69,6 +78,12 @@ function main() {
   assert(htmlText.includes('investigation-detail-status'), 'investigation view should include stored-evidence detail status');
   assert(htmlText.includes('investigation-evidence-summary'), 'investigation view should include stored-evidence summary');
   assert(htmlText.includes('investigation-observation-preview'), 'investigation view should include observation preview from stored evidence');
+  assert(htmlText.includes('investigation-stored-context'), 'investigation view should include a dedicated stored-context pane');
+  assert(htmlText.includes('investigation-observation-timeline'), 'investigation view should include an observation timeline/story surface');
+  assert(htmlText.includes('investigation-top-records'), 'investigation view should include the Top 5 records tray');
+  assert(htmlText.includes('Top 5 relevant records'), 'records tray should use requested label');
+  assert(htmlText.includes('relevance ranking is not implemented'), 'records tray should honestly state no true relevance ranking');
+  assert(htmlText.includes('zKill links and killmail ID paste are native operator input, but remain deferred'), 'zKill paste support should be visibly deferred');
   assert(htmlText.includes('investigation-live-context'), 'investigation view should show global live/API context');
   assert(htmlText.includes('Marked means operator interest'), 'investigation view should explain Marked as operator attention');
   assert(htmlText.includes('Watch means active routine checking'), 'investigation view should reserve Watch for routine checks');
@@ -167,6 +182,8 @@ function main() {
   assert(rendererText.includes("service.invoke('app.readiness'"), 'renderer should call app.readiness through service bridge');
   assert(rendererText.includes('bindInvestigationEvents'), 'renderer should bind investigation opening routes');
   assert(rendererText.includes('renderInvestigationContext'), 'renderer should render live/API context on the investigation opening view');
+  assert(rendererText.includes('externalApiStatus'), 'renderer should represent External API state from readiness');
+  assert(rendererText.includes('setExternalApiState'), 'renderer should update the External API top-bar state');
   assert(rendererText.includes('checkInvestigationLead'), 'investigation routes should validate leads before routing');
   assert(rendererText.includes("service.invoke('scope.validate', payload)"), 'investigation validation should use existing scope.validate service path');
   assert(rendererText.includes('No Lead Yet'), 'investigation lead feedback should include an empty state');
@@ -182,6 +199,11 @@ function main() {
   assert(rendererText.includes('Queue Scope Previewed'), 'investigation queue route should provide operator-facing queue feedback');
   assert(rendererText.includes('Use Discover Possible Leads first to queue zKill refs'), 'investigation queue context should explain no-ref next step');
   assert(rendererText.includes('loadInvestigationEvidenceDetail'), 'investigation view should load stored-evidence detail explicitly');
+  assert(rendererText.includes('renderStoredContextPane'), 'investigation view should render dedicated stored context from report data');
+  assert(rendererText.includes('renderObservationTimeline'), 'investigation view should render an evidence-grounded observation timeline');
+  assert(rendererText.includes('renderTopRelevantRecords'), 'investigation view should render recent stored records in the bottom tray');
+  assert(rendererText.includes('reportTimelineRows'), 'investigation timeline should derive rows from structured report responses');
+  assert(rendererText.includes('Relevance ranking is not implemented in HS41'), 'renderer should honestly label recent records when true relevance is unavailable');
   assert(rendererText.includes("service.invoke('report.actor'"), 'investigation detail should use existing actor report service');
   assert(rendererText.includes("service.invoke('report.radius'"), 'investigation detail should use existing radius report service');
   assert(rendererText.includes('No stored evidence for this lead'), 'investigation detail should provide honest no-evidence empty state');
@@ -193,6 +215,8 @@ function main() {
   assert(rendererText.includes('applyInvestigationLeadToReports'), 'investigation routes should seed report controls');
   assert(rendererText.includes('clearInvestigationRouteInputs'), 'investigation routing should clear stale target inputs before filling routes');
   assert(rendererText.includes("['Startup Effect', 'passive inspection only; no discovery, evidence, hydration, assessment, or watch execution']"), 'investigation startup should state passive side-effect boundary');
+  assert(rendererText.includes("button.setAttribute('aria-busy'"), 'busy buttons should use stable labels with aria-busy');
+  assert(!rendererText.includes("button.textContent = busy ? 'Working...'"), 'busy buttons should not replace labels with Working...');
   assert(rendererText.includes("service.invoke('runtime.db_snapshot.preflight'"), 'renderer should call runtime snapshot preflight through service bridge');
   assert(rendererText.includes("service.invoke('runtime.db_snapshot.create'"), 'renderer should call runtime snapshot create through service bridge');
   assert(rendererText.includes('runtimeSnapshotConfirm.checked'), 'runtime snapshot creation should require visible confirmation');
@@ -303,6 +327,11 @@ function main() {
   assert(styleText.includes('.form-grid'), 'renderer styles should define actor report controls');
   assert(styleText.includes('.form-grid textarea'), 'renderer styles should define assessment text areas');
   assert(styleText.includes('.report-output'), 'renderer styles should define report output');
+  assert(styleText.includes('.mode-switch'), 'renderer styles should define top-bar primary mode switch');
+  assert(styleText.includes('.external-api-pill'), 'renderer styles should define External API status pill');
+  assert(styleText.includes('.stage-rail'), 'renderer styles should define Discovery stage rail');
+  assert(styleText.includes('.record-tray'), 'renderer styles should define Top 5 records tray');
+  assert(styleText.includes('.is-busy'), 'renderer styles should define stable busy button state');
 
   const packageText = read(path.join(ROOT, 'package.json'));
   const smokeScriptText = read(path.join(ROOT, 'scripts', 'electron-visual-smoke.ps1'));

@@ -1,6 +1,6 @@
 # AURA Atlas Current Work
 
-Status: Active - Dev runway
+Status: HS41 accepted - awaiting Human review / next direction
 Last updated: 2026-05-24
 
 ## Active Milestone
@@ -23,16 +23,22 @@ Source of intent:
 - `workspace/critical/README.md`
 - `workspace/critical/critical-terms.md`
 
-Current focus: implement the first renderer-only presentation pass for the Operator Intel Console, using the hardened command-authority boundary.
+Current focus: HS41 renderer-only presentation pass is complete and accepted by Overseer after verification. Await Human UI review or next selected direction.
 
 ## Executor
 
-Current executor: Dev.
+Current executor: none. Dev runway is complete.
 
 Expected DevHS filename:
 
 ```txt
 DevHS41-renderer-intel-console-progressive-disclosure.md
+```
+
+Expected Overseer review filename:
+
+```txt
+OverseerHS42-renderer-intel-console-review.md
 ```
 
 ## Purpose
@@ -153,11 +159,51 @@ Dev updates this before handoff:
 
 ```txt
 Files changed:
+- src/renderer/index.html
+- src/renderer/app.js
+- src/renderer/investigation.js
+- src/renderer/shared.js
+- src/renderer/styles.css
+- scripts/verify-renderer-shell.js
+- src/main/main.js (Electron visual smoke title/route expectations only)
+- workspace/DevHS41-renderer-intel-console-progressive-disclosure.md
+- workspace/current.md
+
 Presentation changes:
+- Reworked the renderer first screen around Discovery with a top-bar Discovery / Watch primary mode switch and secondary detail routes.
+- Added External API provider-state presentation in the top bar and investigation trust/context pane.
+- Reworked lead presentation copy toward Pilot, System, Corp, and Alliance concepts while preserving existing actor/system/radius resolver/service paths.
+- Added a Discovery stage rail: Lead -> Discovery -> Queue Review -> Enrich Selected -> Evidence -> Observation -> Assessment Memory.
+- Kept Queue Review -> Enrich staged inside Discovery and kept queue preview read-only.
+- Added stored-context pane, observation timeline/story pane, and bottom Top 5 relevant records tray populated from loaded stored evidence report rows.
+- Stabilized busy-button presentation by using aria-busy / CSS state without changing visible button labels to "Working...".
+- Applied restrained teal/green shadow-glass styling and transparent pane treatment.
+
 Safety boundaries preserved:
+- No backend provider behavior, service contracts, DB schema, IPC command names, migrations, persistence semantics, live behavior, evidence semantics, assessment/watch/retention semantics, or passive startup collection were changed.
+- zKill refs remain possible leads, not evidence.
+- Enrich selected remains the explicit ESI expansion / stored evidence creation step.
+- Metadata hydration remains readability-only in existing report surfaces.
+- Assessment Memory remains deliberate operator judgment.
+- Marked remains attention/tag/record interest; Watch remains active routine check behavior; Watch implies Marked, Marked does not imply Watch.
+- Observation timeline/tray rows are rendered from existing structured report responses and avoid threat, motive, ownership, staging, affiliation, or current-presence inference.
+
 Authority boundaries preserved:
+- HS39 command authority remains intact; renderer command eligibility and command-owned confirmation tokens were not weakened.
+- Renderer changes continue to use existing service.invoke paths: scope.validate, queue.selection, report.actor, and report.radius.
+- Smoke harness expectations were updated to HS41 route titles only; service registry, preload, IPC handlers, and provider code were not changed.
+
 Deferred/unsupported items:
+- zKill link / killmail ID paste support is visibly deferred in the renderer because safe support would require backend/service parsing behavior outside HS41.
+- True relevance ranking for Top 5 relevant records is not implemented; the UI honestly labels the tray as recent stored records from loaded report rows.
+- Relationship graph, footprint story, first-class region investigation, battle clustering beyond existing Recent Timeline rows, Record/Intelligence/Finding naming, live success smoke, and evidence pruning remain out of scope.
+
 Verification run:
+- PASS: npm.cmd run verify:renderer-shell
+- PASS: npm.cmd run verify:command-authority
+- PASS: npm.cmd run verify:all
+- PASS: npm.cmd run smoke:electron
+- PASS/status captured: git status --short --branch
 ```
 
 ## Dev Handoff
@@ -167,6 +213,10 @@ Dev creates:
 ```txt
 workspace/DevHS41-renderer-intel-console-progressive-disclosure.md
 ```
+
+Dev completed HS41 and created `workspace/DevHS41-renderer-intel-console-progressive-disclosure.md`.
+
+Overseer accepted HS41 in `workspace/OverseerHS42-renderer-intel-console-review.md`.
 
 Handoff must include:
 

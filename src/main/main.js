@@ -142,7 +142,7 @@ async function runVisualSmoke(window, outputDir) {
   assertSmoke(checks.noNodeRequire, 'renderer should not expose Node require');
   assertSmoke(checks.noElectronGlobal, 'renderer should not expose Electron globals');
   assertSmoke(checks.hasViews, 'renderer should contain all initial shell views');
-  assertSmoke(checks.opensInvestigation, 'renderer should open on the investigation desk');
+  assertSmoke(checks.opensInvestigation, 'renderer should open on the Discovery console');
   assertSmoke(checks.investigationPassiveText, 'investigation desk should state passive startup boundaries');
   if (ruggedSmoke) {
     assertSmoke(checks.fetchRuns >= 1, 'rugged smoke should start with synthetic demo fetch run data');
@@ -220,9 +220,9 @@ async function runRuggedOperatorSmoke(window, outputDir) {
       setValue('#investigation-lead-value', '30000001');
       setValue('#investigation-radius', '1');
       await click('#investigation-check-scope');
-      await waitFor('investigation scope route', () => text('#view-title').trim() === 'Scopes' && document.querySelector('#scope-system-id')?.value === '30000001');
+      await waitFor('investigation scope route', () => text('#view-title').trim() === 'Scope Detail' && document.querySelector('#scope-system-id')?.value === '30000001');
       document.querySelector('[data-view="investigation"]').click();
-      await waitFor('back to investigation', () => text('#view-title').trim() === 'Investigation');
+      await waitFor('back to investigation', () => text('#view-title').trim() === 'Discovery');
       await click('#investigation-load-detail');
       await waitFor('investigation radius detail', () => lowerText('#investigation-detail-status').includes('stored evidence') && lowerText('#investigation-evidence-summary').includes('killmails'));
       investigationRadiusDetailLoaded = lowerText('#investigation-evidence-summary').includes('radius') || lowerText('#investigation-evidence-summary').includes('solar');
@@ -232,12 +232,12 @@ async function runRuggedOperatorSmoke(window, outputDir) {
       await waitFor('investigation actor detail', () => lowerText('#investigation-detail-status').includes('stored evidence') && lowerText('#investigation-evidence-summary').includes('killmails'));
       investigationActorDetailLoaded = lowerText('#investigation-evidence-summary').includes('character') || lowerText('#investigation-evidence-summary').includes('90000002');
       await click('#investigation-review-queue');
-      await waitFor('investigation queue route', () => text('#view-title').trim() === 'Queue / Watches' && document.querySelector('#queue-discovered-by-id')?.value === 'character:90000002');
+      await waitFor('investigation queue route', () => text('#view-title').trim() === 'Watch' && document.querySelector('#queue-discovered-by-id')?.value === 'character:90000002');
       investigationQueueContextLoaded = lowerText('#investigation-queue-context-status').includes('queued possible refs') || lowerText('#investigation-queue-context-summary').includes('discover possible leads');
       document.querySelector('[data-view="investigation"]').click();
-      await waitFor('back to investigation after queue route', () => text('#view-title').trim() === 'Investigation');
+      await waitFor('back to investigation after queue route', () => text('#view-title').trim() === 'Discovery');
       await click('#investigation-discover-leads');
-      await waitFor('investigation action route', () => text('#view-title').trim() === 'Actions' && document.querySelector('#action-actor-id')?.value === '90000002');
+      await waitFor('investigation action route', () => text('#view-title').trim() === 'Discovery Actions' && document.querySelector('#action-actor-id')?.value === '90000002');
 
       await click('#load-corpus-health');
       await waitFor('corpus health', () => lowerText('#corpus-health-counts').includes('killmails'));
@@ -347,7 +347,7 @@ function smokeChecks(window) {
         hasViews: ['investigation', 'readiness', 'scopes', 'tasks', 'queue-watch', 'actions', 'reports']
           .every((name) => Boolean(document.querySelector('#view-' + name))),
         opensInvestigation: document.querySelector('#view-investigation')?.classList.contains('active') &&
-          document.querySelector('#view-title')?.textContent?.trim() === 'Investigation',
+          document.querySelector('#view-title')?.textContent?.trim() === 'Discovery',
         investigationPassiveText: (document.querySelector('#view-investigation')?.textContent || '')
           .includes('Opening this desk is passive'),
         status: readiness.status,

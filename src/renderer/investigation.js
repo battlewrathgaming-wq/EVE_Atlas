@@ -25,18 +25,41 @@ function bindInvestigationEvents() {
   renderInvestigationLeadDraft();
   renderInvestigationQueueContextEmptyState();
   renderInvestigationDetailEmptyState();
+  renderStoredContextEmptyState();
+  renderObservationTimelineEmptyState();
+  renderTopRelevantRecordsEmptyState();
 }
 
 function renderInvestigationContext(readiness) {
   if (!els.investigationLiveContext) {
     return;
   }
+  const apiState = externalApiStatus(readiness);
+  setExternalApiState(apiState);
   renderRows(els.investigationLiveContext, [
-    ['Live API', `${readiness?.live_api?.state || 'unknown'}; ${readiness?.live_api?.rule || 'explicit gate required'}`],
+    ['External API', `${apiState.state}; ${apiState.rule}`],
     ['zKill Discovery', readiness?.live_api?.enabled ? 'available after explicit action confirmation' : 'blocked until live API is enabled'],
     ['ESI Enrichment', readiness?.live_api?.enabled ? 'available after explicit selected expansion confirmation' : 'blocked until live API is enabled'],
+    ['Queue Review -> Enrich', 'staged inside Discovery; queue preview is read-only, Enrich selected is the explicit ESI evidence step'],
     ['Startup Effect', 'passive inspection only; no discovery, evidence, hydration, assessment, or watch execution']
   ]);
+}
+
+function externalApiStatus(readiness) {
+  const live = readiness?.live_api || {};
+  const state = live.enabled ? 'enabled' : (live.state || 'local-only');
+  return {
+    state,
+    rule: live.rule || 'explicit gate required'
+  };
+}
+
+function setExternalApiState(status) {
+  const text = `External API: ${status.state}`;
+  if (els.externalApiState) {
+    els.externalApiState.textContent = text;
+  }
+  setServiceState(text);
 }
 
 async function routeInvestigationLead(target) {
@@ -133,6 +156,9 @@ function renderInvestigationEvidenceDetail(report, lead) {
     ['Boundary', 'This is a read-only stored-evidence summary. Discovery queue refs remain possible leads until Enrich selected calls ESI.']
   ]);
   renderInvestigationObservationPreview(report);
+  renderStoredContextPane(report, lead);
+  renderObservationTimeline(report);
+  renderTopRelevantRecords(report);
   if (report.report_type === 'radius') {
     state.radiusReport = report;
     state.loadedReportType = 'radius';
@@ -145,7 +171,13 @@ function renderInvestigationEvidenceDetail(report, lead) {
 }
 
 function renderInvestigationObservationPreview(report) {
-  const rows = investigationObservationRows(report);
+  const timelineRows = reportTimelineRows(report);
+  const rows = timelineRows.length
+    ? timelineRows.slice(0, 4).map((entry) => ({
+      label: entry.time || 'Observed event',
+      value: timelineRecordSummary(entry)
+    }))
+    : investigationObservationRows(report);
   els.investigationObservationPreview.innerHTML = '';
   if (!rows.length) {
     const row = document.createElement('div');
@@ -185,6 +217,149 @@ function observationRowSummary(values) {
     : 'Observation row returned without display values.';
 }
 
+function renderStoredContextPane(report, lead) {
+  const counts = report.evidence_basis?.evidence_range || {};
+  const timelineRows = reportTimelineRows(report);
+  renderRows(els.investigationStoredContext, [
+    ['Lead', leadLabel(lead)],
+    ['Stored Evidence', `${counts.killmail_count ?? 0} killmails / ${counts.activity_event_count ?? 0} activity events`],
+    ['Evidence Window', report.scope?.evidence_window?.label || 'unknown'],
+    ['Sample Status', report.evidence_basis?.sample_status || 'unknown'],
+    ['Latest Stored Event', timelineRows[0]?.time || counts.latest || 'none loaded'],
+    ['Marked', 'attention/tag state is separate; no mark is changed from this pane'],
+    ['Watch', 'shown only for active routine checks; loading context does not create or run watches'],
+    ['Boundary', 'Stored context is read-only and does not prove threat, ownership, affiliation, staging, intent, or current presence.']
+  ]);
+}
+
+function renderStoredContextEmptyState() {
+  renderRows(els.investigationStoredContext, [
+    ['Stored Context', 'No stored evidence report loaded.'],
+    ['Next Step', 'Enter a Pilot, System, Corp, or Alliance lead, then Load Stored Context.'],
+    ['Boundary', 'An empty local context is neutral; it is not proof of safety, absence, affiliation, or intent.']
+  ]);
+}
+
+function renderObservationTimeline(report) {
+  const rows = reportTimelineRows(report);
+  els.investigationObservationTimeline.innerHTML = '';
+  if (!rows.length) {
+    renderObservationTimelineEmptyState('No Recent Timeline rows are available for this stored evidence scope.');
+    return;
+  }
+  rows.slice(0, 5).forEach((entry) => {
+    const row = document.createElement('div');
+    row.className = 'timeline-row story-row';
+    row.innerHTML = [
+      `<strong>${escapeHtml(entry.time || 'unknown time')}</strong>`,
+      `<span>${escapeHtml(entry.killmail ? `Killmail ${entry.killmail}` : 'stored evidence')}</span>`,
+      `<p>${escapeHtml(timelineRecordSummary(entry))}</p>`
+    ].join('');
+    els.investigationObservationTimeline.appendChild(row);
+  });
+}
+
+function renderObservationTimelineEmptyState(message = 'Load stored context to render a fight timeline from existing report rows.') {
+  els.investigationObservationTimeline.innerHTML = '';
+  const row = document.createElement('div');
+  row.className = 'timeline-row story-row';
+  row.innerHTML = [
+    '<strong>No timeline loaded</strong>',
+    '<span>Observation</span>',
+    `<p>${escapeHtml(message)} Observations are grounded in stored expanded ESI evidence only.</p>`
+  ].join('');
+  els.investigationObservationTimeline.appendChild(row);
+}
+
+function renderTopRelevantRecords(report) {
+  const rows = reportTimelineRows(report);
+  els.investigationTopRecords.innerHTML = '';
+  if (!rows.length) {
+    renderTopRelevantRecordsEmptyState('No stored timeline rows are loaded for the current lead.');
+    return;
+  }
+  rows.slice(0, 5).forEach((entry) => {
+    const item = document.createElement('div');
+    item.className = 'record-item';
+    item.innerHTML = [
+      `<strong>${escapeHtml(entry.time || 'unknown time')}</strong>`,
+      `<span>${escapeHtml(entry.killmail ? `Killmail ${entry.killmail}` : 'Stored evidence row')}</span>`,
+      `<small>${escapeHtml(timelineRecordSummary(entry))}</small>`
+    ].join('');
+    els.investigationTopRecords.appendChild(item);
+  });
+}
+
+function renderTopRelevantRecordsEmptyState(message = 'Load stored context to see recent stored records.') {
+  els.investigationTopRecords.innerHTML = '';
+  const item = document.createElement('div');
+  item.className = 'record-item empty-note';
+  item.innerHTML = [
+    '<strong>No records loaded</strong>',
+    '<span>Recent stored records</span>',
+    `<small>${escapeHtml(message)} Relevance ranking is not implemented in HS41.</small>`
+  ].join('');
+  els.investigationTopRecords.appendChild(item);
+}
+
+function reportTimelineRows(report) {
+  const sections = report.report_type === 'radius'
+    ? [
+      ...(report.observations?.scope ? [report.observations.scope] : []),
+      ...(report.observations?.sections || [])
+    ]
+    : (report.observations?.sections || []);
+  const timeline = sections.find((section) => /recent timeline/i.test(section.title || section.name || ''));
+  const rows = (timeline?.rows || []).map((row) => row.values || row.raw || row);
+  return rows
+    .map(timelineRecord)
+    .sort((left, right) => Date.parse(right.time || '') - Date.parse(left.time || ''));
+}
+
+function timelineRecord(values) {
+  return {
+    time: values.Time || values.killmail_time,
+    killmail: values.Killmail || values.killmail_id,
+    role: values.Role,
+    system: values.System || values.solar_system_name,
+    region: values.Region || values.region_name,
+    ship: values.Ship || values['Victim Ship'] || values.ship_name || values.victim_ship_name,
+    victim: values.Victim || values.victim_label,
+    attacker: values['Observed Attacker'] || values.attacker_label,
+    attackerShip: values['Attacker Ship'] || values.attacker_ship_name,
+    aggressor: values['Aggressor Detail'] || values.aggressor_detail
+  };
+}
+
+function timelineRecordSummary(entry) {
+  const pieces = [];
+  if (entry.victim) {
+    pieces.push(`victim ${entry.victim}`);
+  }
+  if (entry.ship) {
+    pieces.push(`ship ${entry.ship}`);
+  }
+  if (entry.role) {
+    pieces.push(`role ${entry.role}`);
+  }
+  if (entry.system) {
+    pieces.push(`in ${entry.system}`);
+  }
+  if (entry.region) {
+    pieces.push(`region ${entry.region}`);
+  }
+  if (entry.attacker) {
+    pieces.push(`observed attacker ${entry.attacker}`);
+  }
+  if (entry.attackerShip) {
+    pieces.push(`attacker ship ${entry.attackerShip}`);
+  }
+  if (entry.aggressor) {
+    pieces.push(entry.aggressor);
+  }
+  return pieces.join('; ') || 'Stored evidence row returned without display values.';
+}
+
 function investigationDetailStatusText(lead, hasEvidence) {
   if (hasEvidence) {
     return 'Counts and preview rows are observations derived from stored expanded ESI killmail evidence.';
@@ -205,6 +380,9 @@ function renderInvestigationDetailEmptyState(message = 'Validate a lead, then lo
     ['Evidence Basis', 'No stored evidence report loaded.'],
     ['Boundary', 'Expanded ESI killmails are evidence. Discovery refs are possible leads until explicit ESI expansion.']
   ]);
+  renderStoredContextEmptyState();
+  renderObservationTimelineEmptyState();
+  renderTopRelevantRecordsEmptyState();
   els.investigationObservationPreview.innerHTML = '';
   const row = document.createElement('div');
   row.className = 'message warning';
@@ -548,14 +726,17 @@ function renderInvestigationLeadDraft() {
 function investigationLeadDraftMessages(lead) {
   if (!lead.value) {
     return [
-      feedbackMessage('warning', 'No Lead Yet', 'Enter an actor name/ID or exact system name/ID. Startup remains passive while you type.')
+      feedbackMessage('warning', 'No Lead Yet', 'Enter a Pilot, System, Corp, or Alliance lead. Startup remains passive while you type.')
     ];
   }
   if (lead.type === 'actor') {
+    const leadKind = lead.actorType === 'character'
+      ? 'Pilot'
+      : (lead.actorType === 'corporation' ? 'Corp' : 'Alliance');
     return [
-      feedbackMessage('ready', 'Actor Lead', Number.isInteger(lead.numericValue)
-        ? `Using ${lead.actorType} ID ${lead.numericValue} as the durable fact. Names remain labels unless resolved by an existing backend workflow.`
-        : `Using "${lead.value}" as ${lead.actorType} resolver input or display label. Reports need a durable actor ID.`),
+      feedbackMessage('ready', `${leadKind} Lead`, Number.isInteger(lead.numericValue)
+        ? `Using ${leadKind} ID ${lead.numericValue} as the durable fact. Names remain labels unless resolved by an existing backend workflow.`
+        : `Using "${lead.value}" as ${leadKind} resolver input or display label. Reports need a durable actor ID.`),
       feedbackMessage('warning', 'Marked / Watch Boundary', 'Marked is attention only. Watch is active routine checking and still requires explicit watch configuration.')
     ];
   }

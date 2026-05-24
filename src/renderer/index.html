@@ -26,14 +26,14 @@
             <p>Evidence memory</p>
           </div>
         </div>
-        <nav class="nav-list" aria-label="Primary">
-          <button class="nav-item active" type="button" data-view="investigation">Investigation</button>
-          <button class="nav-item" type="button" data-view="readiness">Readiness</button>
-          <button class="nav-item" type="button" data-view="scopes">Scopes</button>
-          <button class="nav-item" type="button" data-view="tasks">Tasks</button>
-          <button class="nav-item" type="button" data-view="queue-watch">Queue / Watches</button>
-          <button class="nav-item" type="button" data-view="actions">Actions</button>
-          <button class="nav-item" type="button" data-view="reports">Reports</button>
+        <nav class="nav-list" aria-label="Secondary detail routes">
+          <button class="nav-item active" type="button" data-view="investigation">Discovery Console</button>
+          <button class="nav-item" type="button" data-view="queue-watch">Watch Console</button>
+          <button class="nav-item" type="button" data-view="reports">Observation / Assessment</button>
+          <button class="nav-item" type="button" data-view="actions">Discovery Actions</button>
+          <button class="nav-item" type="button" data-view="scopes">Scope Detail</button>
+          <button class="nav-item" type="button" data-view="tasks">Task History</button>
+          <button class="nav-item" type="button" data-view="readiness">Settings / Diagnostics</button>
         </nav>
       </aside>
 
@@ -41,9 +41,16 @@
         <header class="topbar">
           <div>
             <p class="eyebrow">Operator Investigation Desk</p>
-            <h2 id="view-title">Investigation</h2>
+            <h2 id="view-title">Discovery</h2>
           </div>
-          <div class="service-state" id="service-state">Connecting</div>
+          <div class="topbar-controls">
+            <div class="mode-switch" aria-label="Primary modes">
+              <button class="mode-button active" type="button" data-primary-view="investigation">Discovery</button>
+              <button class="mode-button" type="button" data-primary-view="queue-watch">Watch</button>
+            </div>
+            <div class="external-api-pill" id="external-api-state">External API: checking</div>
+            <div class="service-state" id="service-state">Connecting</div>
+          </div>
         </header>
 
         <section class="view active" id="view-investigation" aria-labelledby="investigation-title">
@@ -59,7 +66,7 @@
                 <label>
                   <span>Lead Type</span>
                   <select id="investigation-lead-type">
-                    <option value="actor">Actor</option>
+                    <option value="actor">Pilot / Corp / Alliance</option>
                     <option value="system">System</option>
                     <option value="radius">System Radius</option>
                   </select>
@@ -67,14 +74,14 @@
                 <label>
                   <span>Actor Type</span>
                   <select id="investigation-actor-type">
-                    <option value="character">Character</option>
-                    <option value="corporation">Corporation</option>
+                    <option value="character">Pilot</option>
+                    <option value="corporation">Corp</option>
                     <option value="alliance">Alliance</option>
                   </select>
                 </label>
                 <label class="lead-input">
                   <span>Lead</span>
-                  <input id="investigation-lead-value" type="text" placeholder="Character, corporation, alliance, system name, or durable ID" />
+                  <input id="investigation-lead-value" type="text" placeholder="Pilot, corp, alliance, system name, or durable ID" />
                 </label>
                 <label class="radius-input">
                   <span>Radius</span>
@@ -82,18 +89,31 @@
                 </label>
               </div>
               <div class="investigation-actions">
-                <button class="primary-action" type="button" id="investigation-check-scope">Check Scope</button>
-                <button class="secondary-action" type="button" id="investigation-load-detail">Stored Evidence Detail</button>
+                <button class="primary-action" type="button" id="investigation-check-scope">Check Lead</button>
+                <button class="secondary-action" type="button" id="investigation-load-detail">Load Stored Context</button>
                 <button class="secondary-action" type="button" id="investigation-discover-leads">Discover Possible Leads</button>
-                <button class="secondary-action" type="button" id="investigation-review-queue">Review Queue / Enrich</button>
-                <button class="secondary-action" type="button" id="investigation-open-reports">Reports / Assessment</button>
+                <button class="secondary-action" type="button" id="investigation-review-queue">Queue Review -> Enrich</button>
+                <button class="secondary-action" type="button" id="investigation-open-reports">Observation / Assessment</button>
+              </div>
+              <div class="stage-rail" aria-label="Discovery staged process">
+                <span>Lead</span>
+                <span>Discovery</span>
+                <span>Queue Review</span>
+                <span>Enrich Selected</span>
+                <span>Evidence</span>
+                <span>Observation</span>
+                <span>Assessment Memory</span>
               </div>
               <div class="panel lead-feedback-panel">
                 <h4>Lead Feedback</h4>
                 <div id="investigation-lead-feedback" class="message-list"></div>
               </div>
+              <div class="panel zkill-deferred-panel">
+                <h4>zKill Paste Input</h4>
+                <p class="form-note">zKill links and killmail ID paste are native operator input, but remain deferred in HS41 because safe support would require new backend/service parsing behavior. Use Pilot, System, Corp, or Alliance leads on existing resolver paths.</p>
+              </div>
               <div class="panel investigation-queue-panel">
-                <h4>Queue / Enrich Context</h4>
+                <h4>Queue Review -> Enrich Context</h4>
                 <p class="form-note">This preview uses the existing read-only queue selection service. It does not discover refs, call ESI, create evidence, hydrate labels, assess, or run watches.</p>
                 <div id="investigation-queue-context-status" class="callout warning"></div>
                 <div id="investigation-queue-context-summary" class="detail-list"></div>
@@ -136,9 +156,20 @@
               </div>
             </div>
             <div class="panel investigation-context">
-              <h4>Live/API Context</h4>
+              <h4>External API Context</h4>
               <div id="investigation-live-context" class="detail-list"></div>
               <p class="form-note">Opening this desk is passive. It does not call zKill or ESI, queue refs, enrich evidence, hydrate metadata, create assessments, or start watches.</p>
+            </div>
+          </div>
+          <div class="report-grid">
+            <div class="panel stored-context-panel">
+              <h4>Stored Context</h4>
+              <div id="investigation-stored-context" class="detail-list"></div>
+            </div>
+            <div class="panel observation-story-panel">
+              <h4>Observation Timeline</h4>
+              <p class="form-note">What happened in that fight? This timeline uses stored evidence report rows only.</p>
+              <div id="investigation-observation-timeline" class="timeline story-timeline"></div>
             </div>
           </div>
           <div class="report-grid">
@@ -161,6 +192,11 @@
             </div>
             <p class="form-note">Raw IDs, backend payloads, queue internals, and task/service detail stay in secondary surfaces.</p>
           </details>
+          <div class="panel top-records-tray">
+            <h4>Top 5 relevant records</h4>
+            <p class="form-note">Recent stored records from the loaded report; relevance ranking is not implemented in this renderer slice.</p>
+            <div id="investigation-top-records" class="record-tray"></div>
+          </div>
         </section>
 
         <section class="view" id="view-readiness" aria-labelledby="readiness-title">

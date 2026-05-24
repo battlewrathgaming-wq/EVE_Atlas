@@ -24,8 +24,10 @@ const state = {
 
 const els = {
   serviceState: document.querySelector('#service-state'),
+  externalApiState: document.querySelector('#external-api-state'),
   viewTitle: document.querySelector('#view-title'),
   navItems: [...document.querySelectorAll('.nav-item')],
+  modeButtons: [...document.querySelectorAll('.mode-button')],
   views: [...document.querySelectorAll('.view')],
   investigationLeadType: document.querySelector('#investigation-lead-type'),
   investigationActorType: document.querySelector('#investigation-actor-type'),
@@ -48,6 +50,9 @@ const els = {
   investigationDetailStatus: document.querySelector('#investigation-detail-status'),
   investigationEvidenceSummary: document.querySelector('#investigation-evidence-summary'),
   investigationObservationPreview: document.querySelector('#investigation-observation-preview'),
+  investigationStoredContext: document.querySelector('#investigation-stored-context'),
+  investigationObservationTimeline: document.querySelector('#investigation-observation-timeline'),
+  investigationTopRecords: document.querySelector('#investigation-top-records'),
   readinessSummary: document.querySelector('#readiness-summary'),
   nextAction: document.querySelector('#next-action'),
   apiState: document.querySelector('#api-state'),
@@ -206,11 +211,11 @@ function assertServiceBridge() {
 async function init() {
   try {
     assertServiceBridge();
-    setServiceState('Connecting');
+    setServiceState('External API: checking');
     state.commands = await service.list();
     state.window = await windowBridge.getState();
     renderWindowState();
-    setServiceState(`${state.commands.length} services`);
+    setServiceState('External API: checking');
     bindEvents();
     renderReportEmptyState();
     renderMetadataHydrationContext();
@@ -234,6 +239,9 @@ async function init() {
 function bindEvents() {
   els.navItems.forEach((item) => {
     item.addEventListener('click', () => selectView(item.dataset.view));
+  });
+  els.modeButtons.forEach((item) => {
+    item.addEventListener('click', () => selectView(item.dataset.primaryView));
   });
   bindInvestigationEvents();
   els.refreshReadiness.addEventListener('click', loadReadiness);
@@ -269,6 +277,7 @@ function bindEvents() {
 
 function selectView(name) {
   els.navItems.forEach((item) => item.classList.toggle('active', item.dataset.view === name));
+  els.modeButtons.forEach((item) => item.classList.toggle('active', item.dataset.primaryView === name));
   els.views.forEach((view) => view.classList.toggle('active', view.id === `view-${name}`));
   els.viewTitle.textContent = titleForView(name);
 }
