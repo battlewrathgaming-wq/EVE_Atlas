@@ -65,7 +65,9 @@ function renderError(target, error) {
 }
 
 function setServiceState(text) {
-  els.serviceState.textContent = text;
+  if (els.serviceState) {
+    els.serviceState.textContent = text;
+  }
 }
 
 function setBusy(button, busy) {

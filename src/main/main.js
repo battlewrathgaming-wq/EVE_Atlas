@@ -363,7 +363,7 @@ function smokeDiagnostics(window) {
   return window.webContents.executeJavaScript(`
     ({
       readyState: document.readyState,
-      serviceState: document.querySelector('#service-state')?.textContent || null,
+      serviceState: document.querySelector('#external-api-state')?.textContent || null,
       viewTitle: document.querySelector('#view-title')?.textContent || null,
       hasServiceBridge: Boolean(window.atlasServices),
       hasServiceInvoke: Boolean(window.atlasServices?.invoke),
@@ -406,9 +406,9 @@ function waitForSmokeReady(window) {
     new Promise((resolve, reject) => {
       const started = Date.now();
       const check = () => {
-        const serviceState = document.querySelector('#service-state')?.textContent || '';
+        const serviceState = document.querySelector('#external-api-state')?.textContent || '';
         const navItems = document.querySelectorAll('.nav-item');
-        const hasReadyText = serviceState && serviceState !== 'Connecting';
+        const hasReadyText = serviceState && serviceState !== 'External API: checking';
         if (hasReadyText && navItems.length >= 5) {
           resolve(true);
           return;

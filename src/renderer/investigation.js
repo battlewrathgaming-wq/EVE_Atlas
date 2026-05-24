@@ -22,12 +22,14 @@ function bindInvestigationEvents() {
   els.investigationOpenTasks.addEventListener('click', () => selectView('tasks'));
   els.investigationOpenActions.addEventListener('click', () => selectView('actions'));
   els.investigationOpenQueueDetail.addEventListener('click', () => selectView('queue-watch'));
+  els.investigationOpenAssessmentDrawer.addEventListener('click', () => selectView('reports'));
   renderInvestigationLeadDraft();
   renderInvestigationQueueContextEmptyState();
   renderInvestigationDetailEmptyState();
   renderStoredContextEmptyState();
   renderObservationTimelineEmptyState();
   renderTopRelevantRecordsEmptyState();
+  renderAssessmentDrawerEmptyState();
 }
 
 function renderInvestigationContext(readiness) {
@@ -220,6 +222,8 @@ function observationRowSummary(values) {
 function renderStoredContextPane(report, lead) {
   const counts = report.evidence_basis?.evidence_range || {};
   const timelineRows = reportTimelineRows(report);
+  const hasEvidence = (counts.killmail_count ?? 0) > 0 || (counts.activity_event_count ?? 0) > 0;
+  revealPanel(els.investigationDetailPanel, true);
   renderRows(els.investigationStoredContext, [
     ['Lead', leadLabel(lead)],
     ['Stored Evidence', `${counts.killmail_count ?? 0} killmails / ${counts.activity_event_count ?? 0} activity events`],
@@ -230,9 +234,13 @@ function renderStoredContextPane(report, lead) {
     ['Watch', 'shown only for active routine checks; loading context does not create or run watches'],
     ['Boundary', 'Stored context is read-only and does not prove threat, ownership, affiliation, staging, intent, or current presence.']
   ]);
+  revealPanel(els.investigationObservationPanel, hasEvidence);
+  revealPanel(els.investigationTopRecordsPanel, hasEvidence);
+  renderAssessmentDrawer(report, hasEvidence);
 }
 
 function renderStoredContextEmptyState() {
+  revealPanel(els.investigationDetailPanel, false);
   renderRows(els.investigationStoredContext, [
     ['Stored Context', 'No stored evidence report loaded.'],
     ['Next Step', 'Enter a Pilot, System, Corp, or Alliance lead, then Load Stored Context.'],
@@ -260,6 +268,7 @@ function renderObservationTimeline(report) {
 }
 
 function renderObservationTimelineEmptyState(message = 'Load stored context to render a fight timeline from existing report rows.') {
+  revealPanel(els.investigationObservationPanel, false);
   els.investigationObservationTimeline.innerHTML = '';
   const row = document.createElement('div');
   row.className = 'timeline-row story-row';
@@ -291,15 +300,39 @@ function renderTopRelevantRecords(report) {
 }
 
 function renderTopRelevantRecordsEmptyState(message = 'Load stored context to see recent stored records.') {
+  revealPanel(els.investigationTopRecordsPanel, false);
   els.investigationTopRecords.innerHTML = '';
   const item = document.createElement('div');
   item.className = 'record-item empty-note';
   item.innerHTML = [
     '<strong>No records loaded</strong>',
     '<span>Recent stored records</span>',
-    `<small>${escapeHtml(message)} Relevance ranking is not implemented in HS41.</small>`
+    `<small>${escapeHtml(message)} Relevance ranking is not implemented in HS43.</small>`
   ].join('');
   els.investigationTopRecords.appendChild(item);
+}
+
+function renderAssessmentDrawer(report, hasEvidence) {
+  const eligible = hasEvidence && report.report_type === 'actor';
+  revealPanel(els.investigationAssessmentDrawer, hasEvidence);
+  els.investigationAssessmentDrawer.classList.toggle('is-ready', eligible);
+  els.investigationAssessmentDrawerText.textContent = eligible
+    ? 'Actor evidence context is loaded. Open the Assessment surface to save deliberate Assessment Memory with citation checks.'
+    : 'Stored context is available. Assessment Memory remains ready only from eligible actor evidence context; radius/system context stays observational in this slice.';
+}
+
+function renderAssessmentDrawerEmptyState() {
+  revealPanel(els.investigationAssessmentDrawer, false);
+  els.investigationAssessmentDrawer.classList.remove('is-ready');
+  els.investigationAssessmentDrawerText.textContent = 'Assessment appears after stored actor evidence or an eligible report context exists. It is deliberate operator memory, not evidence.';
+}
+
+function revealPanel(panel, revealed) {
+  if (!panel) {
+    return;
+  }
+  panel.classList.toggle('is-deferred', !revealed);
+  panel.classList.toggle('is-revealed', revealed);
 }
 
 function reportTimelineRows(report) {
@@ -383,6 +416,7 @@ function renderInvestigationDetailEmptyState(message = 'Validate a lead, then lo
   renderStoredContextEmptyState();
   renderObservationTimelineEmptyState();
   renderTopRelevantRecordsEmptyState();
+  renderAssessmentDrawerEmptyState();
   els.investigationObservationPreview.innerHTML = '';
   const row = document.createElement('div');
   row.className = 'message warning';
@@ -399,6 +433,7 @@ function renderInvestigationDetailError(error) {
 }
 
 function renderInvestigationQueueContextEmptyState(message = 'Validate a durable lead, then review Queue / Enrich to see stored possible refs for that discovery scope.') {
+  revealPanel(els.investigationQueuePanel, false);
   els.investigationQueueContextStatus.className = 'callout warning';
   els.investigationQueueContextStatus.innerHTML = [
     '<strong>No queue context loaded</strong>',
@@ -415,6 +450,7 @@ function renderInvestigationQueueContext(selection, lead, filter) {
   const candidates = counts.candidates_considered ?? 0;
   const selected = counts.selected_for_expansion ?? 0;
   const hasQueuedRefs = candidates > 0;
+  revealPanel(els.investigationQueuePanel, true);
   els.investigationQueueContextStatus.className = `callout ${hasQueuedRefs ? 'ready' : 'warning'}`;
   els.investigationQueueContextStatus.innerHTML = [
     `<strong>${escapeHtml(hasQueuedRefs ? 'Queued possible refs available' : 'No queued possible refs for this lead')}</strong>`,
@@ -680,6 +716,7 @@ function applyInvestigationLeadQueueFilter(filter) {
 }
 
 function renderInvestigationQueueContextError(error) {
+  revealPanel(els.investigationQueuePanel, true);
   els.investigationQueueContextStatus.className = 'callout blocked';
   els.investigationQueueContextStatus.innerHTML = [
     '<strong>Queue context unavailable</strong>',
@@ -720,7 +757,20 @@ function invalidInvestigationLeadReason(value, radius) {
 }
 
 function renderInvestigationLeadDraft() {
-  renderInvestigationLeadMessages(investigationLeadDraftMessages(investigationLead()));
+  const lead = investigationLead();
+  renderInvestigationLeadMessages(investigationLeadDraftMessages(lead));
+  renderSideLeadSummary(lead);
+}
+
+function renderSideLeadSummary(lead) {
+  if (!els.sideLeadSummary) {
+    return;
+  }
+  if (!lead.value) {
+    els.sideLeadSummary.textContent = 'No lead entered. Discovery starts with a Pilot, System, Corp, or Alliance search.';
+    return;
+  }
+  els.sideLeadSummary.textContent = `${leadLabel(lead)} drafted. Check Lead is local; Discovery and Enrich remain explicit actions.`;
 }
 
 function investigationLeadDraftMessages(lead) {
