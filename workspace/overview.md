@@ -27,11 +27,11 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 
 ## Active Milestone
 
-Milestone: Intel Console Face And Layout Refinement
-Roadmap source: `workspace/OverseerHS43-human-ui-review-face-direction.md`
+Milestone: Atlas Overview Face Concept Prototype
+Roadmap source: Human concept-render direction accepted on 2026-05-24
 Current packet: `workspace/current.md`
-Current sequence: HS43 Dev runway
-Latest accepted coordination artifact: `workspace/UIUXHS43-intel-console-face-layout-advisory.md`
+Current sequence: HS47 Dev runway
+Latest accepted coordination artifact: `workspace/AtlasLabAdoptionHS47-overview-face-concept-adoption.md`
 
 ## Durable Record Index
 
@@ -82,6 +82,7 @@ Latest accepted coordination artifact: `workspace/UIUXHS43-intel-console-face-la
 
 ## Open Questions
 
+- Human concept-render direction accepted the Atlas Overview Face as atmosphere, hierarchy, and interaction intent, not pixel-perfect specification or terminology authority.
 - Human HS41 UI review accepted the direction and requested face/layout refinement: search-first Discovery, no duplicated Discovery/Watch controls, compact External API state, and progressive Observation/Assessment.
 - Command/effect authority hardening accepted for the current local Electron trust boundary; renderer Intel Console work continues as a bounded Dev runway.
 - Presentation authority clarification: Atlas owns backend/bridge semantics; Labs or a dedicated presentation layer may later replace/finalize UI presentation after structure cleanup.
