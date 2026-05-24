@@ -14,6 +14,13 @@ Backend terms may remain technical when they are accurate implementation labels.
 
 Use bridge translation when the backend term is technically accurate but too abstract for the operator. Rewrite code terms only when the term encodes the wrong concept or causes boundary bugs.
 
+Authority note:
+
+```txt
+Atlas controls backend and bridge terms.
+Presentation/Lab layers may adapt human-facing wording where required, but intent must stay faithful to Atlas doctrine and evidence boundaries.
+```
+
 ## Current Layer Model
 
 ```txt

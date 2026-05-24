@@ -27,11 +27,11 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 
 ## Active Milestone
 
-Milestone: Operator Intel Console Presentation Decisions
-Roadmap source: `workspace/OverseerHS37-intel-console-spec-review.md`
+Milestone: Renderer Intel Console Progressive Disclosure
+Roadmap source: `workspace/OverseerHS38-intel-console-human-decisions.md`
 Current packet: `workspace/current.md`
-Current sequence: HS37 decision checkpoint
-Latest accepted handshake: `workspace/OverseerHS37-intel-console-spec-review.md`
+Current sequence: HS39 Dev runway
+Latest accepted handshake: `workspace/OverseerHS38-intel-console-human-decisions.md`
 
 ## Durable Record Index
 
@@ -82,7 +82,7 @@ Latest accepted handshake: `workspace/OverseerHS37-intel-console-spec-review.md`
 ## Open Questions
 
 - Human local-alpha UI trial produced presentation/story friction; active next step is UI/UX or Planner story pass before Dev.
-- HS36 presentation spec is accepted as advisory, but Dev is blocked on Human/Overseer presentation and terminology-authority decisions.
+- Human accepted presentation decisions for the first Intel Console pass; Dev is active on renderer-only progressive disclosure.
 - Live smoke evidence remains optional, explicit, and gated unless a future milestone makes it an acceptance gate.
 - Accepted UX requirement from the closed Operator Investigation Desk milestone: Marked means operator interest / tag / record attention; Watch means active routine check behavior; Watch implies Marked, but Marked does not imply Watch.
 - Operator Investigation Desk naming decisions remain open before broad UI implementation.
