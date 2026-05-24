@@ -23,15 +23,15 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 | --- | --- | --- | --- |
 | Aggressive Testing And Operator Bug Hunting | `docs/audits/audit-2026-05-23-aggressive-testing-closure.md` | Closed | Non-live runway accepted; live success smoke remains gated future work. |
 | Operator Investigation Desk | `docs/roadmap/operator-investigation-desk.md` | Closed | First-pass Investigation Desk accepted; future story/record/region work requires new milestone decisions. |
-| Local Alpha Trial Readiness | `docs/roadmap/local-alpha-trial-readiness.md` | Planned / Related | Candidate next milestone; requires Human/Overseer selection before Dev runway. |
+| Local Alpha Trial Readiness | `docs/roadmap/local-alpha-trial-readiness.md` | Active | Prepare current safe paths for one-operator local alpha trial readiness. |
 
 ## Active Milestone
 
-Milestone: Awaiting Human / Overseer next selection
-Roadmap source: none active
+Milestone: Local Alpha Trial Readiness
+Roadmap source: `docs/roadmap/local-alpha-trial-readiness.md`
 Current packet: `workspace/current.md`
-Current sequence: HS28 closed
-Latest accepted handshake: `workspace/complete/milestone-operator-investigation-desk/DevHS26-operator-investigation-assessment-memory.md`
+Current sequence: HS30
+Latest accepted handshake: `workspace/complete/milestone-operator-investigation-desk/OverseerHS28-operator-investigation-milestone-review.md`
 
 ## Durable Record Index
 
