@@ -31,7 +31,7 @@ npm.cmd run smoke:electron
 4. Optional demo DB seed check:
 
 ```powershell
-npm run seed:demo-db
+npm.cmd run seed:demo-db
 ```
 
 Expected artifact:

@@ -55,9 +55,9 @@ Expected:
 Use the demo fixture when the operator needs a repeatable no-live walkthrough:
 
 ```powershell
-npm run seed:demo-db
+npm.cmd run seed:demo-db
 $env:AURA_ATLAS_DB_PATH="F:\Projects\AURA-Atlas\.tmp\aura-atlas-demo-fixture.sqlite"
-npm run dev
+npm.cmd run dev
 ```
 
 The demo DB uses synthetic/fixture data and fake clients. It is not live evidence. Do not use live APIs just to populate a demo screen.
@@ -67,7 +67,7 @@ The demo DB uses synthetic/fixture data and fake clients. It is not live evidenc
 Start the app:
 
 ```powershell
-npm run dev
+npm.cmd run dev
 ```
 
 In the Investigation view:

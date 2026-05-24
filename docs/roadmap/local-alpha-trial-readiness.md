@@ -1,6 +1,7 @@
 # Roadmap: Local Alpha Trial Readiness
 
 Date: 2026-05-22
+Status: Closed 2026-05-24
 
 ## Purpose
 
@@ -60,6 +61,23 @@ The trial should be possible without live APIs, using fixture/offline paths, and
 - A release/tag checklist exists for safe checkpoints.
 - Known alpha blockers and accepted limitations are documented.
 - `verify:all` and `smoke:electron` pass at handoff.
+
+## Closure
+
+Closed by `workspace/complete/milestone-local-alpha-trial-readiness/OverseerHS33-local-alpha-readiness-closure.md`.
+
+Durable closure audit: `docs/audits/audit-2026-05-24-local-alpha-readiness-closure.md`.
+
+Accepted evidence:
+
+- `workspace/complete/milestone-local-alpha-trial-readiness/DevHS30-local-alpha-doc-readiness.md`
+- `workspace/complete/milestone-local-alpha-trial-readiness/OverseerHS31-local-alpha-doc-review.md`
+- `workspace/complete/milestone-local-alpha-trial-readiness/DevHS32-local-alpha-offline-walkthrough.md`
+- `workspace/complete/milestone-local-alpha-trial-readiness/OverseerHS33-local-alpha-readiness-closure.md`
+
+HS32 rehearsed the fixture-backed offline path and corrected Windows PowerShell command examples from `npm run ...` to `npm.cmd run ...` where needed. Overseer reran `npm.cmd run verify:all` and `npm.cmd run smoke:electron`; both passed.
+
+Remaining work is outside this readiness milestone: the Human/operator still needs to follow the UI runbook manually to record lived operator friction, or choose the next Atlas milestone.
 
 ## Recommended Order
 

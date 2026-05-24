@@ -1,168 +1,117 @@
-# Current Workspace Packet
+# AURA Atlas Current Work
 
-Status: Active
-Updated: 2026-05-24
-Owner: Overseer planning, Dev execution
+Status: Idle - awaiting Human selection
+Last updated: 2026-05-24
 
-## Coordination State
+## Active Milestone
 
-Active milestone: Local Alpha Trial Readiness
-Roadmap source: `docs/roadmap/local-alpha-trial-readiness.md`
-Sequence: HS32
-Previous accepted handshake: `workspace/DevHS30-local-alpha-doc-readiness.md`
-Latest Overseer review: `workspace/OverseerHS31-local-alpha-doc-review.md`
-Current executor: Dev
-Current focus: offline local-alpha walkthrough rehearsal
-Expected output: DevHS32-local-alpha-offline-walkthrough.md
+No active Dev milestone.
 
-## Purpose
+Local Alpha Trial Readiness is closed as of `workspace/complete/milestone-local-alpha-trial-readiness/OverseerHS33-local-alpha-readiness-closure.md` and `docs/audits/audit-2026-05-24-local-alpha-readiness-closure.md`.
 
-Exercise the refreshed local-alpha documentation as a one-operator offline rehearsal and record any friction before a real alpha trial.
+## Current Focus
 
-This packet should prove that the current README/runbook path is usable with fixture/demo data and no live API work. It is not a feature implementation packet and not a public packaging packet.
+Atlas is ready for either a Human manual local-alpha UI trial or a new selected milestone. Do not start Dev implementation until the Human chooses the next direction and Overseer writes a bounded runway.
 
-## Required Reading
+## Source Of Intent
 
-- `workspace/overview.md`
-- `workspace/00-dot-protocol.md`
-- `workspace/DevHS30-local-alpha-doc-readiness.md`
-- `workspace/OverseerHS31-local-alpha-doc-review.md`
+Accepted sources:
+
+- Human selection of Local Alpha Trial Readiness.
 - `docs/roadmap/local-alpha-trial-readiness.md`
-- `README.md`
+- `workspace/complete/milestone-local-alpha-trial-readiness/OverseerHS29-local-alpha-selection.md`
+- `workspace/complete/milestone-local-alpha-trial-readiness/DevHS30-local-alpha-doc-readiness.md`
+- `workspace/complete/milestone-local-alpha-trial-readiness/OverseerHS31-local-alpha-doc-review.md`
+- `workspace/complete/milestone-local-alpha-trial-readiness/DevHS32-local-alpha-offline-walkthrough.md`
+- `workspace/complete/milestone-local-alpha-trial-readiness/OverseerHS33-local-alpha-readiness-closure.md`
+- `docs/audits/audit-2026-05-24-local-alpha-readiness-closure.md`
 - `docs/runbooks/local-alpha-trial.md`
 - `docs/runbooks/local-alpha-known-limits-and-feedback.md`
 - `docs/runbooks/local-alpha-release-tag-checklist.md`
 
-## Accepted Product Requirement
+Advisory disposition:
 
-Local alpha means:
+- `AGENTS.md` advisory/protocol clarification accepted as repo-local workflow guidance.
+- No archived `docs/gap` file is active task authority.
+- No shared/Lab presentation advisory has been promoted into Atlas product direction.
 
-```txt
-one operator
-one machine
-explicit actions
-reviewable artifacts
-no hidden live collection
-```
+## Executor
 
-The rehearsal must stay offline/fixture-first. Live API smoke remains optional future work and must not run in this packet.
+Current executor: Human / Overseer selection.
 
-## Ordered Dev Runway
+Dev is not active.
 
-1. Walkthrough setup:
-   - read the refreshed README and local-alpha runbook as if following them fresh
-   - seed the offline demo DB using the documented command
-   - set `AURA_ATLAS_DB_PATH` to the demo fixture DB for any command-line checks that need it
-2. Offline path rehearsal:
-   - run the documented verification commands that prove the local app is healthy
-   - run or inspect fixture-backed paths that correspond to readiness, corpus health, scoped question, report, assessment memory, snapshot, and trace pack where supported by existing commands
-   - do not run live API smoke, real SDE network download, or destructive operations
-3. Documentation friction notes:
-   - if a documented step is unclear, stale, missing a command, or names the wrong artifact path, update only the relevant docs
-   - keep edits narrowly limited to README/runbook/checklist/known-limits wording unless a real blocker appears
-4. Evidence capture:
-   - record the exact commands run and key artifact paths
-   - record whether the demo DB path, Electron smoke artifact path, runtime snapshot path, and trace pack path were produced or intentionally skipped
-5. Verification:
-   - run `npm.cmd run verify:all`
-   - run `npm.cmd run smoke:electron`
-   - run `git status --short --branch`
+Expected DevHS filename: none until a new Dev packet is written.
 
-## Explicitly Deferred From This Packet
+## Closed Readiness Evidence
 
-- New renderer features.
-- Code changes unless a documentation-linked verification blocker requires returning to chat.
-- Public packaging or release distribution.
-- Live API smoke.
-- Real SDE network download.
-- Evidence pruning/deletion.
-- Record, Intelligence, or Finding terminology decisions.
-- zKill link / killmail ID paste support.
-- First-class region investigation.
-- Relationship graph, footprint story, or fight-cluster timeline behavior.
-- Lab/shared presentation adoption.
+HS32 and Overseer review confirmed:
+
+- Demo fixture DB seed works through `npm.cmd run seed:demo-db`.
+- Fixture-backed corpus health, actor report, radius report, snapshot, and debug trace paths work without live API use.
+- README and local-alpha runbooks now use `npm.cmd run ...` for Windows PowerShell repeatability.
+- `npm.cmd run verify:all` passed.
+- `npm.cmd run smoke:electron` passed.
 
 ## Guardrails
 
-- Offline fixture/demo operation is the primary path.
-- Do not create live evidence.
-- Do not broaden Local Alpha into public release work.
-- Do not weaken live/API gates or evidence doctrine.
-- Keep Atlas doctrine project-local.
-- If a runbook step would require live/private/destructive action, mark it skipped and explain why.
+- Do not run live/private/destructive actions without explicit Human authorization.
+- Do not treat archived docs or handshakes as active task queues.
+- Do not broaden into public release packaging.
+- Do not add product features merely to keep Dev busy.
+- Do not rewrite Atlas doctrine from Lab/shared presentation work without a deliberate Atlas milestone decision.
 
 ## Stop Conditions
 
-Return to chat before continuing if:
+Stop and ask the Human if:
 
-- the runbook cannot produce a viable offline rehearsal with current features
-- verification fails in a way that implies product or architecture risk
-- completing the rehearsal requires code changes
-- live/private/destructive action appears necessary
-- the docs require a Human decision about alpha scope
+- the next requested direction changes product scope or doctrine
+- live API smoke, private data, tagging, or destructive cleanup is requested
+- a fresh Dev runway would require choosing between multiple product directions
+- verification fails in a way that changes readiness acceptance
 
-## Verification Required
+## Verification Record
 
-Run:
+Latest accepted verification:
 
 ```powershell
 npm.cmd run verify:all
 npm.cmd run smoke:electron
-git status --short --branch
 ```
 
-Do not run:
+Result:
 
-- live API smoke
-- real SDE network download
-- destructive retention/pruning operations
+```txt
+PASS - npm.cmd run verify:all
+PASS - npm.cmd run smoke:electron
+```
 
 ## Evidence
 
-Dev updates this before handoff.
-
-Verification run:
+Overseer acceptance:
 
 ```txt
-Not yet run for this packet.
+workspace/complete/milestone-local-alpha-trial-readiness/OverseerHS33-local-alpha-readiness-closure.md
 ```
 
-Files changed:
+Closed milestone handshakes were batch-moved to:
 
 ```txt
-Not yet recorded.
-```
-
-Findings:
-
-```txt
-Not yet recorded.
-```
-
-Deferrals:
-
-```txt
-Not yet recorded.
+workspace/complete/milestone-local-alpha-trial-readiness/
 ```
 
 ## Dev Handoff
 
-Dev fills this in when work is complete:
+No active Dev handoff is expected.
 
-- completed tasks:
-- tests/docs updated:
-- verification output:
-- artifacts produced:
-- failures found:
-- handshake created:
-- remaining risk:
+When the Human chooses the next direction, Overseer should write a fresh bounded packet with:
 
-## Overseer Review
-
-Overseer fills this in after Dev handoff:
-
-- accepted / redirected:
-- doctrine drift:
-- architecture risk:
-- state updates needed:
-- next packet:
+- active milestone and focus
+- accepted sources of intent
+- current executor
+- expected DevHS filename when Dev is active
+- ordered runway
+- guardrails and non-goals
+- stop conditions
+- exact verification
+- Evidence and Dev Handoff sections

@@ -23,15 +23,15 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 | --- | --- | --- | --- |
 | Aggressive Testing And Operator Bug Hunting | `docs/audits/audit-2026-05-23-aggressive-testing-closure.md` | Closed | Non-live runway accepted; live success smoke remains gated future work. |
 | Operator Investigation Desk | `docs/roadmap/operator-investigation-desk.md` | Closed | First-pass Investigation Desk accepted; future story/record/region work requires new milestone decisions. |
-| Local Alpha Trial Readiness | `docs/roadmap/local-alpha-trial-readiness.md` | Active | Prepare current safe paths for one-operator local alpha trial readiness. |
+| Local Alpha Trial Readiness | `docs/audits/audit-2026-05-24-local-alpha-readiness-closure.md` | Closed | Readiness docs, fixture path, checklist, known limits, offline rehearsal, and required verification accepted. |
 
 ## Active Milestone
 
-Milestone: Local Alpha Trial Readiness
-Roadmap source: `docs/roadmap/local-alpha-trial-readiness.md`
+Milestone: None selected
+Roadmap source: none active
 Current packet: `workspace/current.md`
-Current sequence: HS32
-Latest accepted handshake: `workspace/DevHS30-local-alpha-doc-readiness.md`
+Current sequence: idle after HS33
+Latest accepted handshake: `workspace/complete/milestone-local-alpha-trial-readiness/OverseerHS33-local-alpha-readiness-closure.md`
 
 ## Durable Record Index
 
@@ -61,6 +61,7 @@ Latest accepted handshake: `workspace/DevHS30-local-alpha-doc-readiness.md`
 - `package.json`
 - aggressive testing closure: `docs/audits/audit-2026-05-23-aggressive-testing-closure.md`
 - operator investigation desk closure: `docs/audits/audit-2026-05-24-operator-investigation-desk-closure.md`
+- local alpha readiness closure: `docs/audits/audit-2026-05-24-local-alpha-readiness-closure.md`
 - operator investigation desk roadmap: `docs/roadmap/operator-investigation-desk.md`
 
 ### Historical Archives
@@ -78,6 +79,7 @@ Latest accepted handshake: `workspace/DevHS30-local-alpha-doc-readiness.md`
 
 ## Open Questions
 
-- Should live smoke evidence remain in runbooks/audits, or be represented as a milestone acceptance gate?
+- Next Human direction after readiness closure: manual local-alpha UI trial, second Operator Investigation Desk milestone, UI/UX specialist pass, advisory shared/Lab presentation review, or pause.
+- Live smoke evidence remains optional, explicit, and gated unless a future milestone makes it an acceptance gate.
 - Accepted UX requirement from the closed Operator Investigation Desk milestone: Marked means operator interest / tag / record attention; Watch means active routine check behavior; Watch implies Marked, but Marked does not imply Watch.
 - Operator Investigation Desk naming decisions remain open before broad UI implementation.

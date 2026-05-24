@@ -103,7 +103,7 @@ $env:AURA_ATLAS_SDE_CACHE_DIR="F:\Projects\AURA-Atlas\.tmp\sde"
 The Windows dev launcher sets local paths for normal development:
 
 ```powershell
-npm run dev
+npm.cmd run dev
 ```
 
 ## First Local Start
@@ -123,7 +123,7 @@ npm.cmd run verify:all
 Build local SDE lookup tables if Readiness reports `SDE_LOOKUP_MISSING`:
 
 ```powershell
-npm run sde:build-lookups
+npm.cmd run sde:build-lookups
 ```
 
 Run the Electron smoke check:
@@ -135,14 +135,14 @@ npm.cmd run smoke:electron
 Seed an offline demo DB if you want a fixture-backed walkthrough:
 
 ```powershell
-npm run seed:demo-db
+npm.cmd run seed:demo-db
 $env:AURA_ATLAS_DB_PATH="F:\Projects\AURA-Atlas\.tmp\aura-atlas-demo-fixture.sqlite"
 ```
 
 Start the app:
 
 ```powershell
-npm run dev
+npm.cmd run dev
 ```
 
 Start in the app with the Investigation Desk. A safe local-alpha walkthrough is:
@@ -179,14 +179,14 @@ Live scripts refuse to run unless the gate is enabled.
 ## Useful Commands
 
 ```powershell
-npm run dev
+npm.cmd run dev
 npm.cmd run verify:all
 npm.cmd run smoke:electron
-npm run sde:build-lookups
-npm run seed:demo-db
-npm run report:corpus-health
-npm run report:debug-trace
-npm run snapshot:runtime-db
+npm.cmd run sde:build-lookups
+npm.cmd run seed:demo-db
+npm.cmd run report:corpus-health
+npm.cmd run report:debug-trace
+npm.cmd run snapshot:runtime-db
 ```
 
 `seed:demo-db` creates an offline synthetic/fixture DB under `.tmp` for local alpha walkthroughs. It does not call live APIs.

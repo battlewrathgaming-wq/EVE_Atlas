@@ -26,6 +26,12 @@ Executes only the ordered runway in `workspace/current.md`, runs required verifi
 Specialists:
 Provide focused review or scoped implementation lenses. They do not own product direction.
 
+Advisory artifacts:
+Planner and specialist work products should contain analysis, findings, recommendations, risks, acceptance checks, and parked items. They should not be mostly prompt text. Prompts may appear only as short suggested next-action appendices after the artifact has done its analysis.
+
+Prompt requests:
+If the human asks for "a prompt," treat it as chat-only by default. Do not create or save a prompt artifact unless the human explicitly asks for a file or `workspace/current.md` requires one.
+
 Orchestrator:
 Routes work to the right role and prepares exact prompts. It does not replace Overseer or Dev.
 
@@ -42,11 +48,13 @@ When the user sends only:
 
 Use the meaning for your current role.
 
+For every role, `.` means progress the current project context: continue the current packet when safe, complete the expected artifact when appropriate, or ask the next necessary question if safe progress is blocked. If you pause, explain the concrete reason.
+
 Dev:
 Run the current packet. Clear the runway unless blocked. Update Evidence / Dev Handoff and create the expected DevHS file.
 
 Overseer:
-Review completed work and handoff. Accept, redirect, or write the next bounded runway in `workspace/current.md`.
+Review completed work and handoff. Accept, redirect, or write the next suitable runway in `workspace/current.md`.
 
 If your role is unclear, stop and ask.
 
@@ -69,6 +77,14 @@ Useful files:
 - `roles\[your-role]\prompt.md`
 - `workspace-structure-authority.md`
 - `relay\command-protocols.md`
+
+Memory refresh expectation:
+
+- Re-read this `AGENTS.md`.
+- Re-read `workspace/overview.md`, `workspace/00-dot-protocol.md`, and `workspace/current.md`.
+- Re-read the role prompt for your current role.
+- Treat compacted chat summaries as orientation only; prefer repo/workspace facts for current truth.
+- If your role is unclear after refresh, stop and ask the human before acting.
 
 ## Boundaries
 
