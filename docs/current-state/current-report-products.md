@@ -33,6 +33,8 @@ The backend exposes native structured actor and radius report responses. The ren
 
 The Investigation first screen can now load a compact read-only stored-evidence detail for a validated actor/system/radius lead. It summarizes evidence counts and previews observations from structured report responses, while leaving raw IDs, normalized payloads, and fuller report/assessment work in the Reports surface.
 
+The Reports / Assessment surface now presents actor-report assessment-memory eligibility before save: citation basis, cited killmail IDs, evidence window, local verification timing, and deliberate reason/summary plus confirmation requirements. Radius reports remain observation/context surfaces for this slice and do not become assessment-memory save contexts.
+
 ## Report Structure
 
 Observation reports use:

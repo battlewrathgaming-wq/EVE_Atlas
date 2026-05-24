@@ -211,6 +211,7 @@ async function runRuggedOperatorSmoke(window, outputDir) {
       let investigationRadiusDetailLoaded = false;
       let investigationActorDetailLoaded = false;
       let investigationQueueContextLoaded = false;
+      let assessmentMemoryContextLoaded = false;
 
       if (!lowerText('#investigation-lead-feedback').includes('no lead yet')) {
         throw new Error('Investigation lead empty state was not visible');
@@ -275,6 +276,9 @@ async function runRuggedOperatorSmoke(window, outputDir) {
       setValue('#actor-report-name', longLabel);
       await click('#load-actor-report');
       await waitFor('actor report', () => lowerText('#report-status').includes('killmail') && text('#actor-raw-ids').includes('9301'));
+      assessmentMemoryContextLoaded = lowerText('#assessment-readiness-status').includes('eligible') &&
+        lowerText('#assessment-context').includes('citation basis') &&
+        lowerText('#assessment-context').includes('local verification');
 
       await click('#preflight-metadata-hydration');
       await waitFor('hydration refusal', () => lowerText('#metadata-hydration-status').includes('allowedno') || lowerText('#metadata-hydration-normalized').includes('blocked'));
@@ -304,6 +308,7 @@ async function runRuggedOperatorSmoke(window, outputDir) {
         manual_expansion_refused: lowerText('#manual-expansion-preflight').includes('allowedno') || lowerText('#manual-expansion-normalized').includes('blocked'),
         hydration_refused: lowerText('#metadata-hydration-status').includes('allowedno') || lowerText('#metadata-hydration-normalized').includes('blocked'),
         actor_report_loaded: text('#actor-raw-ids').includes('9301'),
+        assessment_memory_context_loaded: assessmentMemoryContextLoaded,
         assessment_saved: lowerText('#assessment-status').includes('saved') || text('#assessment-artifact-list').includes('entity_interest'),
         long_label_length: longLabel.length
       };
@@ -322,6 +327,7 @@ async function runRuggedOperatorSmoke(window, outputDir) {
   assertSmoke(checks.manual_expansion_refused, 'rugged smoke should refuse manual expansion when live gate is closed');
   assertSmoke(checks.hydration_refused, 'rugged smoke should refuse hydration when live gate is closed');
   assertSmoke(checks.actor_report_loaded, 'rugged smoke should load fixture actor report evidence');
+  assertSmoke(checks.assessment_memory_context_loaded, 'rugged smoke should show assessment memory citation context');
   assertSmoke(checks.assessment_saved, 'rugged smoke should save deliberate assessment memory');
 
   const image = await window.webContents.capturePage();

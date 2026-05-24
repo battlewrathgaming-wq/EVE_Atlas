@@ -150,6 +150,7 @@ function renderRadiusReport(report) {
   ]);
   renderWarnings(report.warnings || []);
   renderRawIds(report.raw_ids || {});
+  renderAssessmentReadiness('warning', 'Radius report is context-only for Assessment Memory', 'Area-context assessment memory remains deferred; save assessment memory from a loaded actor report in this slice.');
   renderRows(els.assessmentContext, [
     ['Context', 'Radius report loaded. Area-context assessment memory is still a later design task.'],
     ['Boundary', report.interpretation_warning || 'Area observations are not proof of staging, ownership, affiliation, or intent.']
@@ -192,10 +193,13 @@ function renderReportStatus(report) {
 function renderAssessmentContext() {
   const report = state.actorReport;
   if (!report) {
+    renderAssessmentReadiness('warning', 'Assessment memory not ready', 'Load an actor report before saving assessment memory. Radius reports remain context-only in this slice.');
     renderRows(els.assessmentContext, [
       ['Context', 'Load an actor report before saving assessment memory.'],
       ['Source Report', 'none'],
       ['Cited Killmail IDs', 'none'],
+      ['Citation Basis', 'No local killmail sample loaded.'],
+      ['Local Verification', 'Not available until save because no actor report is loaded.'],
       ['Score Rule', 'Scores are optional; any score requires an assessment reason.'],
       ['Boundary', 'Assessment artifacts are memory, not raw evidence.']
     ]);
@@ -204,6 +208,14 @@ function renderAssessmentContext() {
   const actor = report.scope?.actor || {};
   const counts = report.evidence_basis?.evidence_range || {};
   const citedKillmailIds = report.raw_ids?.killmail_ids || [];
+  const hasEvidence = (counts.killmail_count ?? 0) > 0 || citedKillmailIds.length > 0;
+  renderAssessmentReadiness(
+    hasEvidence ? 'ready' : 'warning',
+    hasEvidence ? 'Actor report eligible for Assessment Memory' : 'Actor report loaded without local killmail citations',
+    hasEvidence
+      ? 'Review the cited stored evidence sample, enter an operator reason or summary, confirm the boundary, then save deliberately.'
+      : 'You can inspect the report, but assessment memory should cite stored killmail evidence when possible.'
+  );
   renderRows(els.assessmentContext, [
     ['Actor', actorLabel(report)],
     ['Source Report', report.report_type || 'actor'],
@@ -212,10 +224,21 @@ function renderAssessmentContext() {
     ['Killmails', counts.killmail_count ?? 0],
     ['Activity Events', counts.activity_event_count ?? 0],
     ['Cited Killmail IDs', citedKillmailIds.length ? citedKillmailIds.join(', ') : 'none'],
+    ['Citation Basis', citedKillmailIds.length ? 'stored expanded ESI killmail IDs from this actor report sample' : 'no local killmail IDs available in this report sample'],
+    ['Local Verification', citedKillmailIds.length ? 'will verify cited killmail IDs and actor-scope activity locally on save' : 'not applicable until a cited local killmail sample exists'],
     ['Citation Status', 'validated locally on save'],
+    ['Assessment Write', 'operator reason/summary plus confirmation required before assessment.create'],
     ['Score Rule', 'Scores are optional; any score requires an assessment reason.'],
-    ['Boundary', 'This records assessment memory over the loaded report context; it does not change evidence.']
+    ['Boundary', 'This saves assessment memory over reviewed stored evidence; it does not change raw evidence, observations, discovery refs, metadata hydration, or watches.']
   ]);
+}
+
+function renderAssessmentReadiness(kind, title, body) {
+  els.assessmentReadinessStatus.className = `callout ${kind}`;
+  els.assessmentReadinessStatus.innerHTML = [
+    `<strong>${escapeHtml(title)}</strong>`,
+    `<span>${escapeHtml(body)}</span>`
+  ].join('');
 }
 
 function renderMetadataHydrationContext() {

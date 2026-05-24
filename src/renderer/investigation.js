@@ -136,9 +136,11 @@ function renderInvestigationEvidenceDetail(report, lead) {
   if (report.report_type === 'radius') {
     state.radiusReport = report;
     state.loadedReportType = 'radius';
+    renderRadiusReport(report);
   } else {
     state.actorReport = report;
     state.loadedReportType = 'actor';
+    renderActorReport(report);
   }
 }
 

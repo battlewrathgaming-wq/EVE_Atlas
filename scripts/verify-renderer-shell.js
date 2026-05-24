@@ -151,6 +151,7 @@ function main() {
   assert(htmlText.includes('run-metadata-hydration'), 'metadata hydration should include explicit run action');
   assert(htmlText.includes('metadata-hydration-normalized'), 'metadata hydration should show normalized payload');
   assert(htmlText.includes('assessment-boundary'), 'report view should include assessment/evidence boundary text');
+  assert(htmlText.includes('assessment-readiness-status'), 'report view should include assessment memory readiness status');
   assert(htmlText.includes('assessment-reason'), 'assessment workflow should include reason input');
   assert(htmlText.includes('assessment-summary'), 'assessment workflow should include summary input');
   assert(htmlText.includes('assessment-interest-score'), 'assessment workflow should include score controls');
@@ -160,7 +161,8 @@ function main() {
   assert(htmlText.includes('assessment-artifact-detail'), 'assessment workflow should include saved artifact detail');
   assert(htmlText.includes('Create Assessment From Loaded Report'), 'assessment workflow should describe loaded report context');
   assert(htmlText.includes('Scores are optional. If any score is entered, a reason is required.'), 'assessment workflow should state score/reason rule');
-  assert(htmlText.includes('Cited killmail IDs are validated locally when saved.'), 'assessment workflow should state local citation validation');
+  assert(htmlText.includes('Cited killmail IDs are validated locally when saved;'), 'assessment workflow should state local citation validation');
+  assert(htmlText.includes('saved assessment memory remains separate from evidence, observations, discovery refs, metadata hydration, and watches'), 'assessment workflow should separate saved memory from adjacent layers');
 
   assert(rendererText.includes("service.invoke('app.readiness'"), 'renderer should call app.readiness through service bridge');
   assert(rendererText.includes('bindInvestigationEvents'), 'renderer should bind investigation opening routes');
@@ -263,6 +265,12 @@ function main() {
   assert(rendererText.includes('Use local SDE metadata, not live ESI'), 'metadata hydration should not hydrate static type labels through ESI');
   assert(rendererText.includes('assessmentConfirm.checked'), 'assessment save should require visible boundary confirmation');
   assert(rendererText.includes('assessmentArtifactPayload'), 'renderer should build assessment artifact payload from report context');
+  assert(rendererText.includes('renderAssessmentReadiness'), 'renderer should render assessment memory readiness status');
+  assert(rendererText.includes('Actor report eligible for Assessment Memory'), 'assessment context should show loaded actor eligibility');
+  assert(rendererText.includes('Citation Basis'), 'assessment context should show citation basis before save');
+  assert(rendererText.includes('Local Verification'), 'assessment context should show local verification timing before save');
+  assert(rendererText.includes('operator reason/summary plus confirmation required before assessment.create'), 'assessment context should preserve deliberate save behavior');
+  assert(rendererText.includes('Area-context assessment memory remains deferred'), 'assessment context should keep radius/system assessment deferred');
   assert(rendererText.includes('Score fields require an assessment reason'), 'renderer should require reasons for score fields');
   assert(rendererText.includes("['Source Report', report.report_type || 'actor']"), 'assessment context should show source report context');
   assert(rendererText.includes("['Cited Killmail IDs', citedKillmailIds.length ? citedKillmailIds.join(', ') : 'none']"), 'assessment context should show cited killmail IDs before save');

@@ -2,39 +2,43 @@
 
 Status: Active
 Updated: 2026-05-24
-Owner: Overseer planning, Dev execution
+Owner: Overseer planning and milestone review
 
 ## Coordination State
 
 Active milestone: Operator Investigation Desk
 Roadmap source: `docs/roadmap/operator-investigation-desk.md`
-Sequence: HS26
-Previous accepted handshake: `workspace/DevHS24-operator-investigation-queue-enrich-preflight.md`
-Latest Overseer review: `workspace/OverseerHS25-queue-enrich-review.md`
-Current executor: Dev
-Current focus: assessment-memory ergonomics from loaded stored-evidence context
-Expected output: DevHS26-operator-investigation-assessment-memory.md
+Sequence: HS28
+Previous accepted handshake: `workspace/DevHS26-operator-investigation-assessment-memory.md`
+Latest Overseer review: `workspace/OverseerHS27-assessment-memory-review.md`
+Current executor: Overseer
+Current focus: Operator Investigation Desk milestone review and closure decision
+Expected output: OverseerHS28-operator-investigation-milestone-review.md
 
 ## Purpose
 
-Continue the Operator Investigation Desk milestone by making the deliberate Assessment Memory step clearer after a lead has stored-evidence context.
+Review whether the first-pass Operator Investigation Desk milestone is complete enough to close or whether one more bounded Dev packet is required.
 
-This packet should help an operator understand when they are saving reviewed assessment memory over stored evidence, what local citations support it, and why this is separate from raw evidence, discovery refs, metadata hydration, and active watches.
+This is a review packet, not a Dev implementation runway. Do not add product scope by momentum. Decide from evidence, roadmap acceptance checks, current-state docs, handshakes, and verification.
 
 ## Required Reading
 
 - `workspace/overview.md`
 - `workspace/00-dot-protocol.md`
+- `workspace/DevHS18-operator-investigation-first-screen.md`
+- `workspace/OverseerHS19-first-screen-review.md`
+- `workspace/DevHS20-operator-investigation-lead-ergonomics.md`
+- `workspace/OverseerHS21-lead-ergonomics-review.md`
+- `workspace/DevHS22-operator-investigation-evidence-detail.md`
+- `workspace/OverseerHS23-evidence-detail-review.md`
 - `workspace/DevHS24-operator-investigation-queue-enrich-preflight.md`
 - `workspace/OverseerHS25-queue-enrich-review.md`
+- `workspace/DevHS26-operator-investigation-assessment-memory.md`
+- `workspace/OverseerHS27-assessment-memory-review.md`
 - `docs/roadmap/operator-investigation-desk.md`
-- `docs/terms/marked.md`
-- `docs/terms/actor-watch.md`
-- `docs/terms/system-radius-watch.md`
-- `docs/terms/manual-discovery.md`
-- `docs/terms/discovery-queue.md`
 - `docs/current-state/current-ipc-ui-preparation.md`
 - `docs/current-state/current-report-products.md`
+- `docs/features/presentation-layer-information-index.md`
 
 ## Accepted Product Requirement
 
@@ -57,76 +61,71 @@ Discovery -> Evidence -> Observation -> Assessment
 
 Discovery refs are possible leads. Expanded ESI killmails are evidence. Observation surfaces render patterns from stored evidence. Assessment is deliberate operator memory.
 
-## Ordered Dev Runway
+## Ordered Overseer Runway
 
-1. Assessment route review:
-   - inspect the Investigation stored-evidence detail, Reports / Assessment route, actor report assessment context, assessment create/list/get services, and current renderer copy
-   - identify the smallest safe refinement that makes deliberate assessment memory easier to understand from a loaded actor stored-evidence context
-2. Improve assessment memory context:
-   - make the Reports / Assessment surface clearly show when an actor report is loaded and eligible for assessment memory
-   - show citation basis, sample killmail IDs, evidence window, local verification status, and evidence/assessment boundary before save
-   - keep radius/system assessment as context-only unless existing services already support it without new product decisions
-3. Preserve deliberate save behavior:
-   - require the existing operator-entered reason/summary and confirmation before `assessment.create`
-   - do not auto-generate assessment content, scores, tags, findings, intelligence, or records
-   - keep saved assessment memory separate from raw evidence, observations, discovery refs, metadata hydration, and watches
-4. Route integration:
-   - preserve Investigation lead validation, stored-evidence detail, Queue / Enrich context, Reports, Scopes, Actions, Readiness, and Tasks routes
-   - optionally make the Investigation route to Reports / Assessment carry the current eligible actor context more clearly, but do not create new backend resolver behavior
-5. Verification:
-   - update renderer/static verification for assessment-memory context and boundary wording
-   - update Electron smoke if the primary Investigation-to-Assessment flow changes
-   - run focused affected verification, then `npm.cmd run verify:all`
+1. Milestone evidence review:
+   - confirm the handoff sequence from HS18 through HS27 is present and coherent
+   - confirm `workspace/current.md`, `workspace/overview.md`, and current-state docs agree on status
+   - separate repo-verified facts from advisory heading/alignment artifacts
+2. Acceptance-check review:
+   - compare implemented behavior against `docs/roadmap/operator-investigation-desk.md`
+   - verify the first-pass path covers investigation entry, passive startup, Marked/Watch language, discovery/evidence/observation/assessment boundaries, Enrich selected preflight, stored-evidence detail, and deliberate assessment memory
+3. Risk and deferral review:
+   - list open Human decisions that must remain deferred
+   - identify whether any blocker requires another Dev packet before milestone closure
+   - ensure Lab/shared presentation alignment remains advisory and does not alter Atlas doctrine
+4. Closure decision:
+   - if complete, create a milestone closure record and update `workspace/overview.md`
+   - batch-move active milestone handshakes into `workspace/complete/milestone-operator-investigation-desk/`
+   - rewrite `workspace/current.md` for the next milestone or idle/awaiting-human state
+   - if not complete, write exactly one bounded Dev packet with expected DevHS filename
+5. Verification and git:
+   - do not run live/private/destructive actions
+   - run `git status --short --branch`
+   - if files are changed, commit and push after review artifacts are complete
 
-## Explicitly Deferred From This Packet
+## Explicitly Deferred From This Review
 
-- Record drawer semantics.
-- Intelligence/Finding naming.
-- pasted zKill links / killmail IDs.
-- first-class region investigation.
-- battle timeline grouping or fight clustering.
-- relationship graph or footprint story implementation.
-- live success smoke.
-- evidence pruning/deletion.
-- new backend resolver services.
-- automatic assessment or AI commentary.
-- automatic discovery or automatic enrichment.
+- Implementing code.
+- Running live API smoke.
+- Accepting Record, Intelligence, or Finding terminology.
+- Adding pasted zKill link / killmail ID support.
+- Adding first-class region investigation.
+- Adding relationship graph, footprint story, or fight-cluster timeline behavior.
+- Creating Lab adapter tasks or importing Lab doctrine.
+- Evidence pruning/deletion.
 
 ## Guardrails
 
-- zKillboard is discovery only.
-- Expanded ESI killmails are evidence.
-- Discovery refs are possible evidence until expanded.
-- Assessment artifacts are deliberate operator memory, not evidence.
-- UI presents and scopes evidence; UI is not authority.
-- Passive views must not collect evidence.
-- Live APIs require explicit gates and narrow scopes.
-- Marked is attention, not collection.
-- Watch is active routine checking, not proof.
-- Do not use Record, Intelligence, or Finding as accepted durable terms in this slice.
+- `workspace/current.md` remains the active packet.
+- Handshakes are transaction records, not task queues.
+- Roadmap/current-state docs define meaning, not hidden task lists.
+- Advisory artifacts are not authority until accepted.
+- Do not use archived docs as active queues.
+- Atlas doctrine stays Atlas-local unless Human explicitly accepts shared promotion.
 
 ## Stop Conditions
 
 Return to chat before continuing if:
 
-- useful assessment ergonomics require accepting Record, Intelligence, or Finding terminology
-- the implementation needs automatic assessment generation, AI commentary, or hidden scoring
-- the implementation needs new backend resolver behavior, live API behavior, or passive evidence collection
-- useful assessment ergonomics require first-class region support, relationship graph decisions, timeline/fight-cluster decisions, or radius/system assessment semantics beyond existing support
-- passive startup would need to mutate evidence, call live APIs, hydrate metadata, create assessments, or run watches
-- evidence doctrine or assessment memory boundaries would need to change
+- milestone closure depends on a Human product decision
+- git state contains unrelated changes that cannot be safely separated
+- verification evidence conflicts with handoff claims
+- closure would require live/private/destructive action
+- closing the milestone would obscure an unresolved doctrine or architecture risk
 
 ## Verification Required
 
-Run focused affected verification, then run:
+At minimum run:
+
+```powershell
+git status --short --branch
+```
+
+If any code or verification logic changes during review, run:
 
 ```powershell
 npm.cmd run verify:all
-```
-
-Run if renderer startup or primary flow changes:
-
-```powershell
 npm.cmd run smoke:electron
 ```
 
@@ -138,7 +137,7 @@ Do not run by default:
 
 ## Evidence
 
-Dev updates this before handoff.
+Overseer updates this before handoff.
 
 Verification run:
 
@@ -164,20 +163,21 @@ Deferrals:
 Not yet recorded.
 ```
 
-## Dev Handoff
+## Review Handoff
 
-Dev fills this in when work is complete:
+Overseer fills this in when work is complete:
 
-- completed tasks:
-- tests added/updated:
+- completed review:
+- closure decision:
+- files changed:
 - verification output:
-- failures found:
-- handshake created:
+- handshakes moved:
+- next state:
 - remaining risk:
 
 ## Overseer Review
 
-Overseer fills this in after Dev handoff:
+Overseer fills this in after the next review handoff if needed:
 
 - accepted / redirected:
 - doctrine drift:

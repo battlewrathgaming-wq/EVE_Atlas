@@ -30,8 +30,8 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Operator Investigation Desk
 Roadmap source: `docs/roadmap/operator-investigation-desk.md`
 Current packet: `workspace/current.md`
-Current sequence: HS26
-Latest accepted handshake: `workspace/DevHS24-operator-investigation-queue-enrich-preflight.md`
+Current sequence: HS28
+Latest accepted handshake: `workspace/DevHS26-operator-investigation-assessment-memory.md`
 
 ## Durable Record Index
 

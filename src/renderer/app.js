@@ -182,6 +182,7 @@ const els = {
   assessmentConfirm: document.querySelector('#assessment-confirm'),
   saveAssessmentArtifact: document.querySelector('#save-assessment-artifact'),
   refreshAssessmentArtifacts: document.querySelector('#refresh-assessment-artifacts'),
+  assessmentReadinessStatus: document.querySelector('#assessment-readiness-status'),
   assessmentContext: document.querySelector('#assessment-context'),
   assessmentStatus: document.querySelector('#assessment-status'),
   assessmentArtifactList: document.querySelector('#assessment-artifact-list'),
