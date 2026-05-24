@@ -27,10 +27,10 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 
 ## Active Milestone
 
-Milestone: None selected
-Roadmap source: none active
+Milestone: Operator Experience Story Pass
+Roadmap source: `docs/audits/audit-2026-05-24-local-alpha-human-ui-trial.md`
 Current packet: `workspace/current.md`
-Current sequence: idle after HS33
+Current sequence: HS34 specialist planning
 Latest accepted handshake: `workspace/complete/milestone-local-alpha-trial-readiness/OverseerHS33-local-alpha-readiness-closure.md`
 
 ## Durable Record Index
@@ -62,6 +62,7 @@ Latest accepted handshake: `workspace/complete/milestone-local-alpha-trial-readi
 - aggressive testing closure: `docs/audits/audit-2026-05-23-aggressive-testing-closure.md`
 - operator investigation desk closure: `docs/audits/audit-2026-05-24-operator-investigation-desk-closure.md`
 - local alpha readiness closure: `docs/audits/audit-2026-05-24-local-alpha-readiness-closure.md`
+- local alpha human UI trial: `docs/audits/audit-2026-05-24-local-alpha-human-ui-trial.md`
 - operator investigation desk roadmap: `docs/roadmap/operator-investigation-desk.md`
 
 ### Historical Archives
@@ -79,7 +80,7 @@ Latest accepted handshake: `workspace/complete/milestone-local-alpha-trial-readi
 
 ## Open Questions
 
-- Next Human direction after readiness closure: manual local-alpha UI trial, second Operator Investigation Desk milestone, UI/UX specialist pass, advisory shared/Lab presentation review, or pause.
+- Human local-alpha UI trial produced presentation/story friction; active next step is UI/UX or Planner story pass before Dev.
 - Live smoke evidence remains optional, explicit, and gated unless a future milestone makes it an acceptance gate.
 - Accepted UX requirement from the closed Operator Investigation Desk milestone: Marked means operator interest / tag / record attention; Watch means active routine check behavior; Watch implies Marked, but Marked does not imply Watch.
 - Operator Investigation Desk naming decisions remain open before broad UI implementation.
