@@ -5,20 +5,22 @@ Role: Overseer
 Reviewed artifacts:
 
 - `workspace/UIUXHS34-operator-experience-story-pass.md`
-- `docs/audits/audit-2026-05-24-terminology-bridge.md`
+- `workspace/archive/terminology-bridge-audit-2026-05-24-unaccepted.md`
 - `workspace/current.md` specialist evidence update
 
 ## Decision
 
 Accepted the UI/UX story pass as advisory input.
 
-Accepted the terminology bridge audit as durable advisory evidence and promoted it to:
+Correction:
+
+The terminology bridge audit was initially treated as durable advisory evidence, but this was withdrawn by Human correction. It is now parked as unaccepted advisory material:
 
 ```txt
-docs/audits/audit-2026-05-24-terminology-bridge.md
+workspace/archive/terminology-bridge-audit-2026-05-24-unaccepted.md
 ```
 
-Do not send Dev directly from these artifacts. The correct next step is a screen-level presentation specification that integrates the UI/UX stories with the terminology bridge and current backend/service boundaries.
+Do not send Dev directly from these artifacts. The correct next step is a screen-level presentation specification that integrates the UI/UX stories with current backend/service boundaries while leaving terminology authority unsettled.
 
 ## Accepted Inputs
 
@@ -27,7 +29,7 @@ Do not send Dev directly from these artifacts. The correct next step is a screen
 - Scopes should become progressive refinement after a lead/action exists.
 - Queue refs should present as possible leads until ESI expansion.
 - `Enrich selected` must remain the explicit ESI expansion step that creates stored killmail evidence.
-- Metadata hydration should present as `Refresh labels` in user-facing copy.
+- Metadata hydration remains readability-only. Any user-facing label such as `Refresh labels` remains provisional unless separately accepted through terminology authority.
 - `Power on live lookups` is acceptable as a provisional presentation affordance only; it must not trigger live/API calls or weaken per-action preflights.
 - Raw IDs, queue keys, service counts, run/task IDs, API logs, backend defaults, and normalized payloads should remain available as detail/diagnostic surfaces, not first-path burdens.
 - Marked/Watch asymmetry remains binding.
@@ -39,7 +41,7 @@ Do not send Dev directly from these artifacts. The correct next step is a screen
 - Deferred: final `Record`, `Intelligence`, `Finding`, or final Assessment naming.
 - Deferred: zKill link / killmail ID entry as a first-class input.
 - Deferred: relationship graph, map rendering, fight clustering, AI commentary, shared/Lab doctrine adoption, and public release work.
-- Deferred: broad code/database/service renames from the terminology audit.
+- Deferred: terminology audit authority, broad code/database/service renames, and bridge aliases from the parked terminology audit.
 - Deferred: any deletion/retention implementation beyond read-only preview and explicit assessment artifact creation.
 
 ## Next Packet

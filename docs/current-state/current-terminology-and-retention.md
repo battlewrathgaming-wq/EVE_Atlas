@@ -6,7 +6,7 @@ Date: 2026-05-24
 
 Atlas now has enough backend, bridge, and renderer surface area that terms can drift between database names, service names, and user-facing copy.
 
-This file records the current simplified state. The durable terminology bridge audit is `docs/audits/audit-2026-05-24-terminology-bridge.md`.
+This file records the current simplified state. A terminology bridge audit exists at `workspace/archive/terminology-bridge-audit-2026-05-24-unaccepted.md`, but it is parked advisory material, not accepted authority.
 
 ## Current Principle
 
@@ -81,10 +81,10 @@ It must not become a reason to delete evidence without a separate accepted delet
 
 ## Audit Need
 
-Atlas has a first terminology bridge audit. Future implementation packets should use its table:
+Atlas still needs terminology authority before accepting a bridge table. A future authority packet should define who/what can approve mappings such as:
 
 ```txt
 backend/db term -> service/bridge term -> frontend/user term -> meaning -> allowed use -> avoid/conflicts
 ```
 
-Other Aura projects should produce equivalent tables and compare for shared abstract terms. Shared terms should be adopted only when they preserve each product's doctrine and do not hide meaningful performance or safety costs.
+Other Aura projects may produce equivalent tables and compare for shared abstract terms. Shared terms should be adopted only after authority is defined and only when they preserve each product's doctrine and do not hide meaningful performance or safety costs.

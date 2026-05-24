@@ -28,10 +28,10 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 ## Active Milestone
 
 Milestone: Operator Intel Console Presentation Specification
-Roadmap source: `workspace/OverseerHS35-operator-experience-advisory-review.md`
+Roadmap source: `workspace/OverseerHS35A-terminology-authority-correction.md`
 Current packet: `workspace/current.md`
 Current sequence: HS36 specialist specification
-Latest accepted handshake: `workspace/OverseerHS35-operator-experience-advisory-review.md`
+Latest accepted handshake: `workspace/OverseerHS35A-terminology-authority-correction.md`
 
 ## Durable Record Index
 
@@ -64,7 +64,6 @@ Latest accepted handshake: `workspace/OverseerHS35-operator-experience-advisory-
 - operator investigation desk closure: `docs/audits/audit-2026-05-24-operator-investigation-desk-closure.md`
 - local alpha readiness closure: `docs/audits/audit-2026-05-24-local-alpha-readiness-closure.md`
 - local alpha human UI trial: `docs/audits/audit-2026-05-24-local-alpha-human-ui-trial.md`
-- terminology bridge audit: `docs/audits/audit-2026-05-24-terminology-bridge.md`
 - operator investigation desk roadmap: `docs/roadmap/operator-investigation-desk.md`
 
 ### Historical Archives
@@ -83,7 +82,7 @@ Latest accepted handshake: `workspace/OverseerHS35-operator-experience-advisory-
 ## Open Questions
 
 - Human local-alpha UI trial produced presentation/story friction; active next step is UI/UX or Planner story pass before Dev.
-- Terminology bridge and retention/deletion state now have a current-state stub; a full backend/bridge/frontend term table remains a likely cross-project audit.
+- Terminology bridge and retention/deletion state have a current-state stub, but the terminology audit is parked as unaccepted advisory until authority is defined.
 - Live smoke evidence remains optional, explicit, and gated unless a future milestone makes it an acceptance gate.
 - Accepted UX requirement from the closed Operator Investigation Desk milestone: Marked means operator interest / tag / record attention; Watch means active routine check behavior; Watch implies Marked, but Marked does not imply Watch.
 - Operator Investigation Desk naming decisions remain open before broad UI implementation.
