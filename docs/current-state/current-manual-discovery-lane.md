@@ -1,6 +1,6 @@
 # Current State: Manual Discovery Lane
 
-Date: 2026-05-22
+Date: 2026-05-24
 
 ## What Exists
 
@@ -42,6 +42,8 @@ Manual expansion:
 - writes evidence through the existing ingestion pipeline
 
 Manual discovery and manual expansion now use shared scope validation/default helpers. This keeps the CLI path aligned with the future IPC/UI path.
+
+In the current UI, these controls exist but still need better progressive presentation. The backend lane is usable; the operator journey should make discovery feel like possible leads first, and expose scope/queue internals only when they help the operator choose a bounded action.
 
 ## Current Verification
 

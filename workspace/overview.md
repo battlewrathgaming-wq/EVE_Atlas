@@ -41,6 +41,7 @@ Latest accepted handshake: `workspace/complete/milestone-local-alpha-trial-readi
 - `docs/current-state/current-ipc-ui-preparation.md`
 - `docs/current-state/current-report-products.md`
 - `docs/current-state/current-manual-discovery-lane.md`
+- `docs/current-state/current-terminology-and-retention.md`
 
 ### Roadmap And Runbooks
 
@@ -81,6 +82,7 @@ Latest accepted handshake: `workspace/complete/milestone-local-alpha-trial-readi
 ## Open Questions
 
 - Human local-alpha UI trial produced presentation/story friction; active next step is UI/UX or Planner story pass before Dev.
+- Terminology bridge and retention/deletion state now have a current-state stub; a full backend/bridge/frontend term table remains a likely cross-project audit.
 - Live smoke evidence remains optional, explicit, and gated unless a future milestone makes it an acceptance gate.
 - Accepted UX requirement from the closed Operator Investigation Desk milestone: Marked means operator interest / tag / record attention; Watch means active routine check behavior; Watch implies Marked, but Marked does not imply Watch.
 - Operator Investigation Desk naming decisions remain open before broad UI implementation.

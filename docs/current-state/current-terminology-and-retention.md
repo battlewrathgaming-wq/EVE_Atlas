@@ -1,0 +1,90 @@
+# Current State: Terminology Bridge And Retention
+
+Date: 2026-05-24
+
+## Purpose
+
+Atlas now has enough backend, bridge, and renderer surface area that terms can drift between database names, service names, and user-facing copy.
+
+This file records the current simplified state. It is not a full terminology audit yet. The next terminology bridge audit should expand this into a table across backend, bridge/API, and frontend/user language.
+
+## Current Principle
+
+Backend terms may remain technical when they are accurate implementation labels. User-facing terms should explain operator meaning.
+
+Use bridge translation when the backend term is technically accurate but too abstract for the operator. Rewrite code terms only when the term encodes the wrong concept or causes boundary bugs.
+
+## Current Layer Model
+
+```txt
+Discovery -> Evidence -> Observation -> Assessment
+```
+
+Supporting attention model:
+
+```txt
+Marked = operator interest / tag / record attention
+Watch = active routine check behavior
+Watch implies Marked
+Marked does not imply Watch
+```
+
+## Terms To Preserve
+
+| Term | Current meaning | User-facing | Notes |
+| --- | --- | --- | --- |
+| Discovery | A possible lead before ESI expansion | Yes | zKill refs and previews are discovery/provenance, not evidence. |
+| Evidence | Expanded ESI killmail data and derived activity events | Yes | Reserved term; do not use for queue refs or assessments. |
+| Observation | Rendered pattern from stored evidence | Yes | Reports/timelines/role summaries should use observed language. |
+| Assessment Memory | Deliberate saved operator judgment with citation context | Yes | Maps to backend assessment artifacts but is not evidence. |
+| Marked | Operator interest or attention | Yes | Lightweight state; does not run collection. |
+| Watch | Active routine check configuration/behavior | Yes | Watch implies Marked; blocked/unblocked are watch run-state labels. |
+| Enrich selected | Explicit ESI expansion into stored killmail evidence | Yes | Must be paired with provider/call/write/evidence effect wording. |
+| Refresh labels | Readability-only metadata hydration | Yes | Avoid presenting metadata hydration as evidence enrichment. |
+
+## Terms To Keep Mostly Internal
+
+| Term | Current meaning | User-facing stance | Notes |
+| --- | --- | --- | --- |
+| `assessment_artifact` | Backend persistence row for assessment memory | Internal/detail | User copy should prefer Assessment Memory unless inspecting raw details. |
+| `discovered_killmail_refs` | Queue table for possible zKill leads | Internal/detail | User copy should prefer possible leads / discovery queue. |
+| `activity_events` | Derived rows from expanded evidence | Detail/secondary | User copy can say appearances, roles, observed activity, or evidence-derived events. |
+| `fetch_runs` | Provider/run provenance | Detail/secondary | Useful for audit/debug, not primary story copy. |
+| `api_request_logs` | Provider call logs | Detail/secondary | Supports live smoke/debug, not evidence itself. |
+| `scope.validate` | Backend scope validation service | Internal/detail | User copy should explain whether the chosen lead/action is valid. |
+| `queue.selection` | Backend queue preview service | Internal/detail | User copy should frame selected possible leads and expected expansion effect. |
+
+## Retention / Deletion State
+
+Evidence deletion is blocked.
+
+Currently implemented:
+
+- retention preflight is read-only
+- compaction preview is read-only
+- assessment memory may be created deliberately from validated context
+- runtime DB snapshots can be created explicitly as local support/safety artifacts
+
+Not implemented:
+
+- executable evidence pruning
+- automatic retention policy
+- destructive compaction
+- deleting raw evidence because assessment memory exists
+
+Policy note:
+
+```txt
+Assessment memory can preserve operator judgment.
+It must not become a reason to delete evidence without a separate accepted deletion policy.
+```
+
+## Audit Need
+
+Atlas should next produce a terminology bridge table:
+
+```txt
+backend/db term -> service/bridge term -> frontend/user term -> meaning -> allowed use -> avoid/conflicts
+```
+
+Other Aura projects should produce equivalent tables and compare for shared abstract terms. Shared terms should be adopted only when they preserve each product's doctrine and do not hide meaningful performance or safety costs.

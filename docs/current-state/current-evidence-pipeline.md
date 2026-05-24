@@ -1,6 +1,6 @@
 # Current State: Evidence Pipeline
 
-Date: 2026-05-22
+Date: 2026-05-24
 
 ## What Exists
 
@@ -124,3 +124,23 @@ The corpus health report is an operational readiness report. It is not an observ
 `runtime.db_snapshot.preflight` reports the runtime DB path, destination path, file size, WAL/SHM state, core table counts, latest fetch run, latest evidence timestamp, and assessment artifact counts without writing files.
 
 `runtime.db_snapshot.create` is an explicit exclusive action that writes a SQLite snapshot under the approved project `.tmp` area by default. Verification opens the snapshot and confirms core counts plus raw ESI payload/checksum preservation. Evidence pruning remains blocked.
+
+## Current Retention / Deletion State
+
+Deletion is not an active product capability.
+
+Implemented retention-related behavior is limited to:
+
+- read-only retention preflight
+- read-only evidence compaction preview
+- explicit assessment artifact creation from validated preview context
+- verification that evidence counts and raw killmail payloads are preserved
+
+Blocked/deferred behavior:
+
+- executable evidence pruning
+- destructive retention actions
+- automatic compaction
+- deleting evidence because assessment memory exists
+
+Any future deletion policy work must start with a bounded design/audit packet before Dev implementation.

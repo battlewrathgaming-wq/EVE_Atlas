@@ -1,6 +1,6 @@
 # Current State: Report Products
 
-Date: 2026-05-22
+Date: 2026-05-24
 
 ## What Exists
 
@@ -94,8 +94,9 @@ The renderer may render structured sections and text export. It must not parse C
 
 The previous queue report text export issue has been completed and moved to `docs/gap/complete/queue-report-text-export-fix.md`.
 
-Current presentation work should focus on operator workflow clarity rather than bug repair:
+Current presentation work should focus on operator workflow clarity rather than bug repair. The Human local-alpha UI trial found that reports and support surfaces work, but the first experience still overexposes technical/configuration structure.
 
 - make citation status readable when assessment artifacts are shown
 - keep discovery queue language visibly separate from evidence language
 - preserve backend-owned report meaning as more renderer surfaces are added
+- keep report/detail internals available without making them the primary investigation journey

@@ -29,15 +29,11 @@ Documents here should answer:
 
 Useful current-state documents include:
 
-- `current-architecture.md`
-- `current-database-and-migrations.md`
 - `current-evidence-pipeline.md`
-- `current-sde-imports.md`
-- `current-system-radius-collector.md`
-- `current-reports.md`
-- `current-metadata-hydration.md`
-- `current-live-gates-and-storage-paths.md`
+- `current-report-products.md`
+- `current-manual-discovery-lane.md`
 - `current-ipc-ui-preparation.md`
+- `current-terminology-and-retention.md`
 
 ## Known Implemented Building Blocks
 
@@ -60,6 +56,10 @@ At the time this seed was aligned, AURA Atlas includes:
 - shared scope validation/default helpers for CLI, future IPC, and future UI
 - controlled disposable DB workflow verification
 - explicit gated live smoke verification groups
+- Electron IPC service bridge and first-pass Investigation Desk
+- local alpha fixture/demo DB path and Electron visual smoke
+- assessment memory persistence and citation validation
+- read-only retention preflight and compaction preview, with evidence deletion blocked
 
 ## Current-State Vs Audit
 
