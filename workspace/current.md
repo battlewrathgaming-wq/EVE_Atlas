@@ -5,23 +5,22 @@ Last updated: 2026-05-24
 
 ## Active Milestone
 
-Milestone: Renderer Intel Console Progressive Disclosure
+Milestone: Atlas Command Authority Hardening
 
 Source of intent:
 
-- Human local-alpha UI trial notes from 2026-05-24.
-- Human Intel Console decisions recorded in `workspace/OverseerHS38-intel-console-human-decisions.md`.
-- Presentation authority note in `workspace/OverseerHS38A-presentation-authority-note.md`.
-- `workspace/UIUXHS36-operator-intel-console-presentation-spec.md`
-- `workspace/OverseerHS37-intel-console-spec-review.md`
-- `workspace/OverseerHS35A-terminology-authority-correction.md`
-- `docs/audits/audit-2026-05-24-local-alpha-human-ui-trial.md`
-- `docs/features/presentation-layer-information-index.md`
+- Human request: advisory hardening and authority update tour.
+- `F:\Projects\Docs\Aura-Project-Orchestration\terminology\Atlas-Terminology-Boundary-Requirements-2026-05-24.md`
+- Accepted ruleset: `F:\Projects\Docs\Aura-Project-Orchestration\terminology\TerminologyAuthorityRuleset-2026-05-24.md`
+- `workspace/OverseerHS39-authority-hardening-tour.md`
+- `workspace/critical/README.md`
+- `workspace/critical/critical-terms.md`
+- `workspace/critical/critical-assets.md`
 - `docs/current-state/current-ipc-ui-preparation.md`
+- `docs/current-state/current-evidence-pipeline.md`
 - `docs/current-state/current-terminology-and-retention.md`
-- `docs/roadmap/operator-investigation-desk.md`
 
-Current focus: implement the first renderer-only presentation pass for the Operator Intel Console.
+Current focus: harden Atlas backend/bridge command authority before continuing broader renderer presentation wiring.
 
 ## Executor
 
@@ -30,114 +29,116 @@ Current executor: Dev.
 Expected DevHS filename:
 
 ```txt
-DevHS39-renderer-intel-console-progressive-disclosure.md
+DevHS39-atlas-command-authority-hardening.md
 ```
 
 ## Purpose
 
-Turn the existing renderer shell into a clearer Intel Console presentation without changing backend behavior.
+Atlas has strong local-alpha mechanics, but the authority advisory found a risk at the renderer -> preload -> service boundary.
 
-The app should feel like a discovery/storytelling console, not a sysadmin or network configuration panel.
+This packet should ensure command/effect authority is enforced by backend/bridge policy, not merely by renderer presentation.
 
-## Accepted Product Decisions
+The previous Renderer Intel Console Progressive Disclosure runway is deferred until this hardening packet is reviewed.
 
-- Use `External API` as the honest top-bar label for zKill/ESI/live provider availability and kill-switch state.
-- Top bar primary modes: `Discovery` and `Watch`.
-- `Radar` is not an active product term.
-- When `Discovery` is selected, the center view should focus on discovery content only.
-- The left side should populate with `Observation` and `Assessment` as the investigation develops.
-- `Queue Review -> Enrich` are inherent staged processes inside Discovery, not top-level navigation.
-- If External API is connected and the kill switch is off, the Discovery flow may proceed through its visible staged process using existing gates/actions. Do not add passive startup/background collection.
-- Stored context should have its own pane.
-- Add a bottom console tray for `Top 5 relevant records`, ordered by time where current data supports it.
-- zKill input is native to user behavior and should be supported if it can be done safely within existing services; otherwise create a visible deferred/unsupported state and note the gap.
-- Lead/input types should use current pipeline concepts: Pilot, System, Corp, Alliance.
-- Observation timeline should be a strong presentation layer for "What happened in that fight?"
-- Visual direction: sci-fi teal/green, shadow-glass buttons, slightly transparent back pane. Keep it restrained and readable; textures may evolve later.
-- Terminology authority: Atlas controls backend/bridge terms. Presentation may adapt human-facing wording where required, but must preserve intent and evidence boundaries.
-- Longer term, Labs or a dedicated presentation layer may replace/finalize UI presentation as a focus-group surface. HS39 is not final presentation doctrine.
+## Accepted Requirements
+
+- Atlas owns internal and Project -> Bridge meaning.
+- Lab/presentation layers may adapt human-facing language later, but must preserve Atlas meaning.
+- Evidence/state/live-effect commands must not rely only on renderer checkbox or button state.
+- Renderer IPC must not be able to invoke every registered backend command merely by knowing the command name.
+- Command classifications must match actual effect.
+- Evidence creation, live/API calls, durable/local state writes, metadata/readability updates, runtime/control mutations, and support artifact creation must be distinguishable.
+- Confirmation/authority requirements belong to command/backend policy, with renderer metadata only supporting presentation.
+- Direct invocation bypass attempts must be tested.
 
 ## Ordered Dev Runway
 
-1. Read all source-of-intent files above and inspect current renderer structure before editing.
-2. Rework renderer navigation/presentation:
-   - primary top bar modes: `Discovery`, `Watch`
-   - keep access to existing readiness/scopes/tasks/actions/reports details through secondary/settings/detail routes
-   - do not remove capabilities
-3. Rework the Discovery center view:
-   - center only discovery content when Discovery is selected
-   - use lead/input types: Pilot, System, Corp, Alliance
-   - include External API status/gate copy in the top bar or trust strip
-   - make queue review and enrich appear as staged parts of the Discovery flow, not separate top-level destinations
-4. Add/preserve staged presentation:
-   - lead/check state
-   - discovery/possible leads
-   - queue review
-   - enrich selected
-   - evidence created / stored evidence available
-   - observation timeline/story preview
-   - assessment entry point
-5. Add stored-context presentation:
-   - create a dedicated stored-context pane
-   - add a bottom `Top 5 relevant records` tray ordered by time where available
-   - if current services cannot supply true relevance, use honest labels such as recent stored records and do not fabricate relevance
-6. Add or improve observation timeline presentation from existing structured report responses:
-   - emphasize "what happened in that fight?"
-   - keep evidence basis and observation boundary visible
-   - do not infer threat, motive, ownership, staging, affiliation, or current presence
-7. Apply visual polish within scope:
-   - sci-fi teal/green palette
-   - shadow-glass button treatment
-   - slightly transparent back pane
-   - fix obvious text edge handling where touched
-   - stabilize flicker/label churn for `Refresh watches` / queue preview style actions where touched
-8. Preserve and verify safety boundaries:
-   - no backend/service/database/IPC renames
-   - no new live/API behavior
-   - no passive collection
-   - no evidence, assessment, watch, or retention semantic changes
-   - no destructive behavior
-9. Update Evidence / Dev Handoff below and create the expected DevHS file.
+1. Read source-of-intent files and inspect the relevant source:
+   - `src/main/preload.js`
+   - `src/main/services/serviceRegistry.js`
+   - `src/main/services/mutatingActionService.js`
+   - `src/main/services/scopeService.js`
+   - `src/main/services/queueSelectionService.js`
+   - `src/main/services/retentionActionService.js`
+   - `src/main/services/runtimeSnapshotService.js`
+   - `src/main/services/liveApiGateService.js`
+   - `src/main/services/taskRunner.js`
+   - `src/main/api/httpClient.js`
+   - renderer action paths that present confirmation
+2. Inventory renderer-accessible service commands and classify their effects:
+   - read-only
+   - runtime/control mutation
+   - local data mutation
+   - external live/API call
+   - evidence creation
+   - metadata/readability update
+   - support artifact creation
+3. Add or tighten a backend/registry/preload authority policy:
+   - explicit renderer allowlist or registry-level renderer eligibility
+   - effect metadata available for bridge-facing commands
+   - command-owned confirmation/authority requirements for evidence/state/live/support effects
+4. Add backend rejection for direct invocation of commands that need confirmation/intent but lack it.
+   Review at minimum:
+   - `manual.discovery`
+   - `manual.expansion`
+   - `metadata.hydration`
+   - `runtime.db_snapshot.create`
+   - `sde.build-lookups`
+   - watch/action commands that can call live APIs or write durable/local state
+5. Correct HTTP retry behavior if inspection confirms non-retryable statuses are retried.
+6. Reclassify `task.cancel` if inspection confirms it is misclassified as read-only despite mutating task state or aborting work.
+7. Add or update verification for:
+   - renderer allowlist / command eligibility
+   - direct invocation without required confirmation rejected
+   - command effect classifications
+   - non-retryable HTTP status behavior
+   - `task.cancel` classification
+8. Update current-state or critical docs only if implementation changes authority boundaries.
+9. Update Evidence / Dev Handoff and create the expected DevHS file.
 
 ## Guardrails
 
-- Renderer presentation/copy/navigation only.
-- Treat this as a structured Atlas renderer pass, not final Labs presentation wiring.
-- Do not change backend provider behavior, service contracts, database schema, IPC command names, migrations, or persistence semantics.
+- Do not implement the Intel Console renderer presentation in this packet.
+- Do not rename database tables, IPC commands, service command names, or files for terminology preference.
+- Do not change evidence doctrine.
+- Do not change live/API gates except to enforce authority more strictly.
+- Do not create new live/private/destructive behavior.
+- Do not make Lab responsible for Atlas meaning.
 - Do not treat the parked terminology audit as approved authority.
-- Do not introduce `Record`, `Intelligence`, `Finding`, or `Radar` as active product terms.
-- Do not make Readiness or Scopes the primary operator journey.
-- Do not hide access to diagnostics/support details; relocate or demote them.
-- Do not start live/API calls from startup, page load, passive refresh, or presentation-only controls.
-- Do not add automatic evidence deletion/pruning or retention behavior.
-- Do not fake relevance, evidence, observations, or assessment.
-- Do not block future Labs/presentation replacement by entangling UI copy with backend authority.
+- Keep unrelated UI redesign deferred.
 
 ## Stop Conditions
 
 Return to Overseer/Human before continuing if:
 
-- implementing zKill link / killmail ID input requires backend/service behavior changes
-- making Discovery proceed through Queue Review -> Enrich requires new automatic live/API behavior
-- External API presentation cannot stay honest about current gate/refusal behavior
-- stored-context relevance cannot be represented truthfully with current data
-- a requested visual state would imply threat/safety semantics not supported by evidence
-- verification requires live/private/destructive actions
+- authority hardening requires breaking current documented operator workflows
+- command confirmation requirements would require a product decision not covered here
+- renderer allowlisting requires large IPC redesign beyond a bounded packet
+- tests reveal existing commands are already unsafe in a way that needs broader architecture decision
+- live/private/destructive verification would be required
 
 ## Required Verification
 
 Run:
 
 ```powershell
-npm.cmd run verify:renderer-shell
-npm.cmd run smoke:electron
+npm.cmd run verify:all
 git status --short --branch
 ```
 
-If Dev changes broad evidence/report/live-gate copy or touches shared service-facing assumptions, also run:
+Also run any new/focused verification added for:
+
+```txt
+renderer allowlist / command eligibility
+direct invocation confirmation rejection
+HTTP non-retryable status behavior
+task.cancel classification
+```
+
+Run Electron smoke only if renderer/preload/UI paths changed:
 
 ```powershell
-npm.cmd run verify:all
+npm.cmd run smoke:electron
 ```
 
 Do not run live smoke unless explicitly authorized by the Human.
@@ -148,10 +149,14 @@ Dev updates this before handoff:
 
 ```txt
 Files changed:
-Presentation changes:
-Safety boundaries preserved:
-Deferred/unsupported items:
+Commands/effects inventoried:
+Authority policy added/changed:
+Confirmation enforcement:
+Renderer eligibility/allowlist:
+HTTP retry decision:
+task.cancel classification decision:
 Verification run:
+Deferred items:
 ```
 
 ## Dev Handoff
@@ -159,16 +164,16 @@ Verification run:
 Dev creates:
 
 ```txt
-workspace/DevHS39-renderer-intel-console-progressive-disclosure.md
+workspace/DevHS39-atlas-command-authority-hardening.md
 ```
 
 Handoff must include:
 
-- completed renderer changes
-- any zKill/paste support decision or deferral
-- how External API state is represented
-- how Discovery / Watch top bar behaves
-- how stored context and Top 5 records are populated
-- how observation timeline/story preview is grounded
+- what command/effect policy now exists
+- how direct invocation bypass is prevented or tested
+- which commands require confirmation/intent
+- renderer allowlist or eligibility details
+- HTTP retry result
+- task.cancel classification result
 - verification results
-- remaining risks or Human questions
+- remaining risks or required Overseer decisions

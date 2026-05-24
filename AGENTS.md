@@ -10,6 +10,7 @@ Start here:
 - `workspace/overview.md`
 - `workspace/00-dot-protocol.md`
 - `workspace/current.md`
+- `workspace/critical/README.md`
 - `workspace/prompts.md`
 
 ## Role Summary
@@ -31,6 +32,14 @@ Planner and specialist work products should contain analysis, findings, recommen
 
 Prompt requests:
 If the human asks for "a prompt," treat it as chat-only by default. Do not create or save a prompt artifact unless the human explicitly asks for a file or `workspace/current.md` requires one.
+
+Critical terms and assets:
+When work touches terminology, emitted meanings, bridge-facing labels, payloads, events, interface interpretation, or critical project workflows, read `workspace/critical/README.md`, `workspace/critical/critical-terms.md`, and `workspace/critical/critical-assets.md`.
+
+Atlas owns its internal language and its Project -> Bridge language: what Atlas emits and what it means. Lab owns later Bridge -> Interface presentation language for humans and should use product-agnostic Lab defaults, but must preserve Atlas meaning unless Human override resolves a conflict. Shared spelling does not imply shared meaning.
+
+Accepted terminology policy:
+`F:\Projects\Docs\Aura-Project-Orchestration\terminology\TerminologyAuthorityRuleset-2026-05-24.md`
 
 Orchestrator:
 Routes work to the right role and prepares exact prompts. It does not replace Overseer or Dev.

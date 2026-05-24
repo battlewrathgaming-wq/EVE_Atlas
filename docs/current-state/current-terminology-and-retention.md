@@ -20,6 +20,15 @@ Authority note:
 Atlas controls backend and bridge terms.
 Presentation/Lab layers may adapt human-facing wording where required, but intent must stay faithful to Atlas doctrine and evidence boundaries.
 Labs or a dedicated presentation layer may later replace/finalize UI presentation after Atlas structure and boundaries are clean.
+Accepted terminology policy: F:\Projects\Docs\Aura-Project-Orchestration\terminology\TerminologyAuthorityRuleset-2026-05-24.md
+```
+
+Critical reference:
+
+```txt
+workspace/critical/README.md
+workspace/critical/critical-terms.md
+workspace/critical/critical-assets.md
 ```
 
 ## Current Layer Model

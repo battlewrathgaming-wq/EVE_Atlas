@@ -8,7 +8,7 @@ AURA Atlas has a working Electron IPC/service shell and a first-pass Investigati
 
 The current risk is no longer missing backend capability. The current risk is presentation shape: the UI still exposes too much diagnostic/configuration structure too early and needs a clearer discovery/storytelling journey.
 
-Active coordination state is in `workspace/current.md`. As of 2026-05-24, the active packet is an Operator Experience Story Pass for UI/UX or Planner, not Dev implementation.
+Active coordination state is in `workspace/current.md`. As of 2026-05-24, the active packet is Atlas Command Authority Hardening for Dev. The earlier Intel Console renderer presentation pass is deferred until backend/bridge command authority is reviewed.
 
 ## What Exists Now
 
@@ -82,13 +82,13 @@ Treat the current renderer as a proven service shell and first-pass investigatio
 Next active work:
 
 ```txt
-Operator Experience Story Pass
--> UI/UX specialist or Planner
--> write user stories and acceptance checks
--> recommend one bounded Dev packet if justified
+Atlas Command Authority Hardening
+-> Dev
+-> inspect preload/registry/service command authority
+-> enforce renderer eligibility, command-owned confirmation, and effect classification where needed
 ```
 
-Do not start broad UI implementation until the story pass has accepted what belongs in the primary investigation journey versus diagnostics/settings/detail surfaces.
+Do not resume broad UI implementation until command/effect authority is reviewed and accepted.
 
 ## What Should Stay Secondary
 
