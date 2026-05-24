@@ -25,5 +25,6 @@ Current core feature areas:
 - entity interest and assessment artifacts
 - evidence compaction preflight and assessment preservation
 - UI triggers and scope mapping
+- presentation layer information index
 
 Do not use this folder for dated handovers. Use `docs/audits` for reviews and `docs/current-state` for implementation truth.
