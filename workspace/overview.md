@@ -83,6 +83,7 @@ Latest accepted handshake: `workspace/OverseerHS38-intel-console-human-decisions
 
 - Human local-alpha UI trial produced presentation/story friction; active next step is UI/UX or Planner story pass before Dev.
 - Human accepted presentation decisions for the first Intel Console pass; Dev is active on renderer-only progressive disclosure.
+- Presentation authority clarification: Atlas owns backend/bridge semantics; Labs or a dedicated presentation layer may later replace/finalize UI presentation after structure cleanup.
 - Live smoke evidence remains optional, explicit, and gated unless a future milestone makes it an acceptance gate.
 - Accepted UX requirement from the closed Operator Investigation Desk milestone: Marked means operator interest / tag / record attention; Watch means active routine check behavior; Watch implies Marked, but Marked does not imply Watch.
 - Operator Investigation Desk naming decisions remain open before broad UI implementation.

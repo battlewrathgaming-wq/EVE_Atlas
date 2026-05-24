@@ -11,6 +11,7 @@ Source of intent:
 
 - Human local-alpha UI trial notes from 2026-05-24.
 - Human Intel Console decisions recorded in `workspace/OverseerHS38-intel-console-human-decisions.md`.
+- Presentation authority note in `workspace/OverseerHS38A-presentation-authority-note.md`.
 - `workspace/UIUXHS36-operator-intel-console-presentation-spec.md`
 - `workspace/OverseerHS37-intel-console-spec-review.md`
 - `workspace/OverseerHS35A-terminology-authority-correction.md`
@@ -54,6 +55,7 @@ The app should feel like a discovery/storytelling console, not a sysadmin or net
 - Observation timeline should be a strong presentation layer for "What happened in that fight?"
 - Visual direction: sci-fi teal/green, shadow-glass buttons, slightly transparent back pane. Keep it restrained and readable; textures may evolve later.
 - Terminology authority: Atlas controls backend/bridge terms. Presentation may adapt human-facing wording where required, but must preserve intent and evidence boundaries.
+- Longer term, Labs or a dedicated presentation layer may replace/finalize UI presentation as a focus-group surface. HS39 is not final presentation doctrine.
 
 ## Ordered Dev Runway
 
@@ -100,6 +102,7 @@ The app should feel like a discovery/storytelling console, not a sysadmin or net
 ## Guardrails
 
 - Renderer presentation/copy/navigation only.
+- Treat this as a structured Atlas renderer pass, not final Labs presentation wiring.
 - Do not change backend provider behavior, service contracts, database schema, IPC command names, migrations, or persistence semantics.
 - Do not treat the parked terminology audit as approved authority.
 - Do not introduce `Record`, `Intelligence`, `Finding`, or `Radar` as active product terms.
@@ -108,6 +111,7 @@ The app should feel like a discovery/storytelling console, not a sysadmin or net
 - Do not start live/API calls from startup, page load, passive refresh, or presentation-only controls.
 - Do not add automatic evidence deletion/pruning or retention behavior.
 - Do not fake relevance, evidence, observations, or assessment.
+- Do not block future Labs/presentation replacement by entangling UI copy with backend authority.
 
 ## Stop Conditions
 

@@ -19,6 +19,7 @@ Authority note:
 ```txt
 Atlas controls backend and bridge terms.
 Presentation/Lab layers may adapt human-facing wording where required, but intent must stay faithful to Atlas doctrine and evidence boundaries.
+Labs or a dedicated presentation layer may later replace/finalize UI presentation after Atlas structure and boundaries are clean.
 ```
 
 ## Current Layer Model
