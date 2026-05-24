@@ -1,7 +1,7 @@
 # Operator Investigation Desk
 
 Date: 2026-05-23
-Status: Active planning
+Status: Closed first-pass milestone on 2026-05-24
 
 ## Human Intent
 
@@ -128,3 +128,15 @@ These should return to Human before broad UI build-out:
 `docs/roadmap/operator-ui-workflow-polish.md` remains historical/planned context for polishing existing surfaces.
 
 This roadmap supersedes it as the active milestone meaning for the next product direction.
+
+## Closure
+
+The first-pass Operator Investigation Desk milestone closed on 2026-05-24.
+
+Closure record:
+
+```txt
+docs/audits/audit-2026-05-24-operator-investigation-desk-closure.md
+```
+
+The closed first pass established the Investigation opening view, lead handling, stored-evidence detail, Queue / Enrich context, and deliberate Assessment Memory ergonomics while preserving passive startup, live/API gates, and evidence doctrine.

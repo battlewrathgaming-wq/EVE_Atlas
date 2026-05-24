@@ -22,16 +22,16 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 | Milestone | Roadmap Source | Status | Notes |
 | --- | --- | --- | --- |
 | Aggressive Testing And Operator Bug Hunting | `docs/audits/audit-2026-05-23-aggressive-testing-closure.md` | Closed | Non-live runway accepted; live success smoke remains gated future work. |
-| Operator Investigation Desk | `docs/roadmap/operator-investigation-desk.md` | Active | Build an operator-facing investigation desk while preserving evidence boundaries and safe service controls. |
-| Local Alpha Trial Readiness | `docs/roadmap/local-alpha-trial-readiness.md` | Planned / Related | Operator readiness remains dependent on bug-hunt confidence. |
+| Operator Investigation Desk | `docs/roadmap/operator-investigation-desk.md` | Closed | First-pass Investigation Desk accepted; future story/record/region work requires new milestone decisions. |
+| Local Alpha Trial Readiness | `docs/roadmap/local-alpha-trial-readiness.md` | Planned / Related | Candidate next milestone; requires Human/Overseer selection before Dev runway. |
 
 ## Active Milestone
 
-Milestone: Operator Investigation Desk
-Roadmap source: `docs/roadmap/operator-investigation-desk.md`
+Milestone: Awaiting Human / Overseer next selection
+Roadmap source: none active
 Current packet: `workspace/current.md`
-Current sequence: HS28
-Latest accepted handshake: `workspace/DevHS26-operator-investigation-assessment-memory.md`
+Current sequence: HS28 closed
+Latest accepted handshake: `workspace/complete/milestone-operator-investigation-desk/DevHS26-operator-investigation-assessment-memory.md`
 
 ## Durable Record Index
 
@@ -60,6 +60,7 @@ Latest accepted handshake: `workspace/DevHS26-operator-investigation-assessment-
 
 - `package.json`
 - aggressive testing closure: `docs/audits/audit-2026-05-23-aggressive-testing-closure.md`
+- operator investigation desk closure: `docs/audits/audit-2026-05-24-operator-investigation-desk-closure.md`
 - operator investigation desk roadmap: `docs/roadmap/operator-investigation-desk.md`
 
 ### Historical Archives
@@ -78,5 +79,5 @@ Latest accepted handshake: `workspace/DevHS26-operator-investigation-assessment-
 ## Open Questions
 
 - Should live smoke evidence remain in runbooks/audits, or be represented as a milestone acceptance gate?
-- Accepted future UX requirement from `workspace/ProjectPlannerHS06-operator-investigation-ux.md`: Marked means operator interest / tag / record attention; Watch means active routine check behavior; Watch implies Marked, but Marked does not imply Watch.
+- Accepted UX requirement from the closed Operator Investigation Desk milestone: Marked means operator interest / tag / record attention; Watch means active routine check behavior; Watch implies Marked, but Marked does not imply Watch.
 - Operator Investigation Desk naming decisions remain open before broad UI implementation.
