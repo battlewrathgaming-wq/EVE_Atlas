@@ -78,7 +78,7 @@ function setBusy(button, busy) {
 
 function titleForView(name) {
   return {
-    investigation: 'Discovery',
+    investigation: 'Atlas Overview',
     readiness: 'Settings / Diagnostics',
     scopes: 'Scope Detail',
     tasks: 'Task History',

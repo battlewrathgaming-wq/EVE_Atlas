@@ -1,11 +1,11 @@
 # AURA Atlas Current Work
 
-Status: Active - Dev runway
+Status: HS47 accepted - awaiting Human/UIUX review
 Last updated: 2026-05-24
 
 ## Active Milestone
 
-Milestone: Atlas Overview Face Concept Prototype
+Milestone: Atlas Overview Face Concept Prototype (accepted)
 
 Source of intent:
 
@@ -23,13 +23,13 @@ Source of intent:
 - Lab conformance input: `F:\Projects\AURA- Lab\workspace\LabRemoteConsumerConformanceHS66.md`
 - Lab advisory input: `F:\Projects\AURA- Lab\workspace\archive\cross-project-relay\AtlasImportAdvisoryHS64-lab-presentation-adoption.md`
 
-Current focus: build one Atlas Overview Face prototype from the concept render's composition while preserving Atlas meaning and existing renderer/service boundaries.
+Current focus: HS47 Atlas Overview Face prototype is accepted after Overseer review and verification. Atlas is awaiting Human/UIUX review before another Dev runway is written.
 
 ## Executor
 
-Current executor: Dev.
+Current executor: None. Dev completed HS47; Overseer has accepted the handoff.
 
-Expected DevHS filename:
+Completed DevHS filename:
 
 ```txt
 workspace/DevHS47-atlas-overview-face-prototype.md
@@ -140,22 +140,70 @@ npm.cmd run verify:all
 
 Do not run live smoke unless explicitly authorized by the Human.
 
+## Overseer Acceptance
+
+Decision: accepted HS47 as a renderer-only Atlas Overview Face prototype.
+
+Accepted evidence:
+
+- Dev created `workspace/DevHS47-atlas-overview-face-prototype.md`.
+- Diff scope stayed in renderer presentation, renderer shell verification, Electron smoke title/route expectations, and `workspace/current.md`.
+- `src/main/main.js` changed only Electron visual-smoke expectations for the opening title/route.
+- Existing route IDs, service paths, command authority, backend behavior, IPC contracts, persistence, schemas, live/API behavior, and payload meanings were not changed.
+- The opening face now presents Atlas Overview with central current-lead/search composition, right-side status cards, and a bottom local/security strip.
+- Smoke screenshots under `.tmp/electron-visual-smoke` show the opening face is readable and contained at rugged/narrow smoke width. The right rail stacks below the center at this width by design.
+
+Verification repeated by Overseer:
+
+- PASS: `npm.cmd run verify:renderer-shell`
+- PASS: `npm.cmd run verify:command-authority`
+- PASS: `npm.cmd run smoke:electron`
+- PASS: `npm.cmd run verify:protected-terms -- --max-warnings 20` (warning-only advisory output: 1692 warnings; no renames or protected-word JSON updates)
+- PASS: `npm.cmd run verify:all`
+
+Remaining risks / next decision points:
+
+- Human/UIUX should review whether `Atlas Overview` should become the durable primary navigation label or remain prototype presentation over the existing investigation route.
+- Wider viewport composition should be reviewed by Human/UIUX because the smoke screenshot is narrow and stacks the right rail below the center.
+- Future refinements should remain renderer-bounded unless a new milestone explicitly opens backend, bridge, persistence, or live/API scope.
+
 ## Evidence
 
 Dev updates this before handoff:
 
 ```txt
 Files changed:
+src/renderer/index.html
+src/renderer/app.js
+src/renderer/investigation.js
+src/renderer/queueWatch.js
+src/renderer/reports.js
+src/renderer/shared.js
+src/renderer/styles.css
+scripts/verify-renderer-shell.js
+src/main/main.js
+workspace/current.md
+workspace/DevHS47-atlas-overview-face-prototype.md
 
 Overview face changes:
+Built one renderer-only Atlas Overview Face as the opening `view-investigation` screen. The face keeps the existing service-backed lead input, Discovery action deck, queue/reports/watch routes, and progressive stored-context panels, while adding the concept-inspired central current-lead/search area, right-side status stack, and bottom local/security/status strip.
 
 Meaning boundaries preserved:
+Discovery remains Possible Leads only. Evidence remains stored expanded ESI killmail/activity-event context. Observation remains report-layer output from stored evidence. Assessment Memory remains deliberate saved operator judgment. Watch remains active routine checking; Marked remains attention/interest only and does not imply Watch.
 
 Right rail behavior:
+Stored Evidence routes through the existing stored-context/report path. Possible Leads routes through the existing Queue Review / Enrich context. Watch Status routes to the existing Watch surface. Assessment Memory routes to the existing Observation / Assessment report surface. The cards are readouts and route affordances only; they do not create backend behavior.
 
 Local/API honesty:
+The center states that typing is passive/local, Check Lead uses existing local scope validation/local lookup where available, local stored context is report-backed, and External API use remains controlled by the existing gate plus explicit operator actions. API Gate was not introduced as a new backend authority.
 
 Verification run:
+npm.cmd run verify:renderer-shell - PASS
+npm.cmd run verify:command-authority - PASS
+npm.cmd run smoke:electron - PASS; screenshot artifacts under `.tmp/electron-visual-smoke`
+npm.cmd run verify:protected-terms -- --max-warnings 20 - PASS exit 0; warning-only advisory output, 1692 warnings across final working set
+npm.cmd run verify:all - PASS; 62 scripts
+git status --short --branch - ## main...origin/main with HS47 modified renderer/check/workspace files and new DevHS artifact
 ```
 
 ## Dev Handoff

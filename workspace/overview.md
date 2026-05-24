@@ -30,8 +30,8 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Atlas Overview Face Concept Prototype
 Roadmap source: Human concept-render direction accepted on 2026-05-24
 Current packet: `workspace/current.md`
-Current sequence: HS47 Dev runway
-Latest accepted coordination artifact: `workspace/AtlasLabAdoptionHS47-overview-face-concept-adoption.md`
+Current sequence: HS47 accepted; awaiting Human/UIUX review
+Latest accepted coordination artifact: `workspace/OverseerHS48-atlas-overview-face-review.md`
 
 ## Durable Record Index
 

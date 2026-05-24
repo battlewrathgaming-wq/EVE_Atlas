@@ -515,6 +515,7 @@ async function loadAssessmentArtifacts() {
 }
 
 function renderAssessmentArtifacts() {
+  renderOverviewStatus(state.readiness, externalApiStatus(state.readiness));
   els.assessmentArtifactList.innerHTML = '';
   if (!state.assessmentArtifacts.length) {
     els.assessmentArtifactList.textContent = 'No assessment artifacts saved for the current view.';

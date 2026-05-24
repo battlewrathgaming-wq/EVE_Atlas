@@ -43,11 +43,11 @@
         <header class="topbar">
           <div>
             <p class="eyebrow">Operator Investigation Desk</p>
-            <h2 id="view-title">Discovery</h2>
+            <h2 id="view-title">Atlas Overview</h2>
           </div>
           <div class="topbar-controls">
             <div class="mode-switch" aria-label="Primary modes">
-              <button class="mode-button active" type="button" data-primary-view="investigation" data-view="investigation">Discovery</button>
+              <button class="mode-button active" type="button" data-primary-view="investigation" data-view="investigation">Atlas Overview</button>
               <button class="mode-button" type="button" data-primary-view="queue-watch" data-view="queue-watch">Watch</button>
             </div>
             <div class="external-api-pill" id="external-api-state">External API: checking</div>
@@ -55,61 +55,105 @@
         </header>
 
         <section class="view active" id="view-investigation" aria-labelledby="investigation-title">
-          <div class="discovery-face">
-            <p class="eyebrow">Discovery Console</p>
-            <h3 id="investigation-title">Who or where are we investigating?</h3>
-            <p>Start with a lead, check local scope, then choose the next explicit step. Typing and checking stay local.</p>
-            <div class="investigation-lead">
-              <div class="lead-card">
-                <label class="lead-input">
-                  <span>Search lead</span>
-                  <input id="investigation-lead-value" type="text" placeholder="Pilot, corp, alliance, system name, or durable ID" />
-                </label>
-                <label>
-                  <span>Lead Type</span>
-                  <select id="investigation-lead-type">
-                    <option value="actor">Pilot / Corp / Alliance</option>
-                    <option value="system">System</option>
-                    <option value="radius">System Radius</option>
-                  </select>
-                </label>
-                <label>
-                  <span>Actor Type</span>
-                  <select id="investigation-actor-type">
-                    <option value="character">Pilot</option>
-                    <option value="corporation">Corp</option>
-                    <option value="alliance">Alliance</option>
-                  </select>
-                </label>
-                <label class="radius-input">
-                  <span>Radius</span>
-                  <input id="investigation-radius" type="number" min="0" max="5" value="1" />
-                </label>
+          <div class="atlas-overview-face">
+            <div class="overview-center">
+              <div class="discovery-face">
+                <p class="eyebrow">Atlas Overview</p>
+                <h3 id="investigation-title">Who or where are we investigating?</h3>
+                <p>Start with a lead, check local stored context, then choose an explicit Atlas action. Typing and checking stay local; Discovery and Enrich selected remain deliberate operator steps.</p>
+                <div class="investigation-lead">
+                  <div class="lead-card">
+                    <label class="lead-input">
+                      <span>Current lead</span>
+                      <input id="investigation-lead-value" type="text" placeholder="Pilot, corp, alliance, system name, or durable ID" />
+                    </label>
+                    <label>
+                      <span>Lead Type</span>
+                      <select id="investigation-lead-type">
+                        <option value="actor">Pilot / Corp / Alliance</option>
+                        <option value="system">System</option>
+                        <option value="radius">System Radius</option>
+                      </select>
+                    </label>
+                    <label>
+                      <span>Actor Type</span>
+                      <select id="investigation-actor-type">
+                        <option value="character">Pilot</option>
+                        <option value="corporation">Corp</option>
+                        <option value="alliance">Alliance</option>
+                      </select>
+                    </label>
+                    <label class="radius-input">
+                      <span>Radius</span>
+                      <input id="investigation-radius" type="number" min="0" max="5" value="1" />
+                    </label>
+                  </div>
+                  <div class="overview-source-strip" id="investigation-source-strip">Local stored context available after readiness check; External API state is checking.</div>
+                  <div class="discovery-action-deck">
+                    <button class="primary-action discovery-main-action" type="button" id="investigation-discover-leads">Discover Possible Leads</button>
+                    <button class="secondary-action" type="button" id="investigation-check-scope">Check Lead</button>
+                    <button class="secondary-action" type="button" id="investigation-load-detail">Load Stored Context</button>
+                    <button class="secondary-action" type="button" id="investigation-review-queue">Queue Review -> Enrich</button>
+                    <button class="secondary-action" type="button" id="investigation-open-reports">Observation / Assessment</button>
+                  </div>
+                  <div class="stage-rail" aria-label="Discovery staged process">
+                    <span>Lead</span>
+                    <span>Discovery</span>
+                    <span>Queue Review</span>
+                    <span>Enrich Selected</span>
+                    <span>Evidence</span>
+                    <span>Observation</span>
+                    <span>Assessment Memory</span>
+                  </div>
+                </div>
               </div>
-              <div class="discovery-action-deck">
-                <button class="primary-action discovery-main-action" type="button" id="investigation-discover-leads">Discover Possible Leads</button>
-                <button class="secondary-action" type="button" id="investigation-check-scope">Check Lead</button>
-                <button class="secondary-action" type="button" id="investigation-load-detail">Load Stored Context</button>
-                <button class="secondary-action" type="button" id="investigation-review-queue">Queue Review -> Enrich</button>
-                <button class="secondary-action" type="button" id="investigation-open-reports">Observation / Assessment</button>
-              </div>
-              <div class="stage-rail" aria-label="Discovery staged process">
-                <span>Lead</span>
-                <span>Discovery</span>
-                <span>Queue Review</span>
-                <span>Enrich Selected</span>
-                <span>Evidence</span>
-                <span>Observation</span>
-                <span>Assessment Memory</span>
-              </div>
-            </div>
-          </div>
-          <div class="investigation-layout">
-            <div class="investigation-lead">
               <div class="panel lead-feedback-panel">
                 <h4>Lead Feedback</h4>
                 <div id="investigation-lead-feedback" class="message-list"></div>
               </div>
+            </div>
+            <aside class="overview-right-rail" aria-label="Atlas Overview status stack">
+              <div class="overview-status-card">
+                <div>
+                  <span class="status-light"></span>
+                  <h4>Stored Evidence</h4>
+                </div>
+                <p id="overview-stored-evidence-status">Read-only stored evidence and provenance. No local report loaded.</p>
+                <button class="secondary-action" type="button" id="overview-open-stored-evidence">Open Stored Evidence</button>
+              </div>
+              <div class="overview-status-card">
+                <div>
+                  <span class="status-light pending"></span>
+                  <h4>Possible Leads</h4>
+                </div>
+                <p id="overview-possible-leads-status">Discovery output only. Queued refs are not Evidence until Enrich selected succeeds.</p>
+                <button class="secondary-action" type="button" id="overview-open-possible-leads">Open Possible Leads</button>
+              </div>
+              <div class="overview-status-card">
+                <div>
+                  <span class="status-light watch"></span>
+                  <h4>Watch Status</h4>
+                </div>
+                <p id="overview-watch-status">Watch is active routine checking. Marked attention alone does not run checks.</p>
+                <button class="secondary-action" type="button" id="overview-open-watch-status">Open Watch</button>
+              </div>
+              <div class="overview-status-card">
+                <div>
+                  <span class="status-light memory"></span>
+                  <h4>Assessment Memory</h4>
+                </div>
+                <p id="overview-assessment-status">Deliberate saved operator judgment only. It is not evidence or Discovery output.</p>
+                <button class="secondary-action" type="button" id="overview-open-assessment-memory">Open Assessment</button>
+              </div>
+            </aside>
+          </div>
+          <div class="overview-bottom-strip" aria-label="Local and security status">
+            <span>Local first: typing, Check Lead, reports, queue preview, and readiness inspection use existing local/service paths.</span>
+            <span>External API: disabled unless the existing gate and explicit operator confirmation allow a live action.</span>
+            <span>Security: opening Atlas Overview is passive and does not discover, enrich, hydrate, assess, or run watches.</span>
+          </div>
+          <div class="investigation-layout">
+            <div class="investigation-lead">
               <div class="panel zkill-deferred-panel">
                 <h4>zKill Paste Input</h4>
                 <p class="form-note">zKill links and killmail ID paste are native operator input, but remain deferred in HS43 because safe support would require new backend/service parsing behavior. Use Pilot, System, Corp, or Alliance leads on existing resolver paths.</p>

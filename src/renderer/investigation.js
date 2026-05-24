@@ -23,6 +23,10 @@ function bindInvestigationEvents() {
   els.investigationOpenActions.addEventListener('click', () => selectView('actions'));
   els.investigationOpenQueueDetail.addEventListener('click', () => selectView('queue-watch'));
   els.investigationOpenAssessmentDrawer.addEventListener('click', () => selectView('reports'));
+  els.overviewOpenStoredEvidence.addEventListener('click', loadInvestigationEvidenceDetail);
+  els.overviewOpenPossibleLeads.addEventListener('click', routeInvestigationLeadToQueue);
+  els.overviewOpenWatchStatus.addEventListener('click', () => selectView('queue-watch'));
+  els.overviewOpenAssessmentMemory.addEventListener('click', () => selectView('reports'));
   renderInvestigationLeadDraft();
   renderInvestigationQueueContextEmptyState();
   renderInvestigationDetailEmptyState();
@@ -45,6 +49,7 @@ function renderInvestigationContext(readiness) {
     ['Queue Review -> Enrich', 'staged inside Discovery; queue preview is read-only, Enrich selected is the explicit ESI evidence step'],
     ['Startup Effect', 'passive inspection only; no discovery, evidence, hydration, assessment, or watch execution']
   ]);
+  renderOverviewStatus(readiness, apiState);
 }
 
 function externalApiStatus(readiness) {
@@ -234,6 +239,7 @@ function renderStoredContextPane(report, lead) {
     ['Watch', 'shown only for active routine checks; loading context does not create or run watches'],
     ['Boundary', 'Stored context is read-only and does not prove threat, ownership, affiliation, staging, intent, or current presence.']
   ]);
+  renderOverviewStoredEvidence(report);
   revealPanel(els.investigationObservationPanel, hasEvidence);
   revealPanel(els.investigationTopRecordsPanel, hasEvidence);
   renderAssessmentDrawer(report, hasEvidence);
@@ -246,6 +252,9 @@ function renderStoredContextEmptyState() {
     ['Next Step', 'Enter a Pilot, System, Corp, or Alliance lead, then Load Stored Context.'],
     ['Boundary', 'An empty local context is neutral; it is not proof of safety, absence, affiliation, or intent.']
   ]);
+  if (els.overviewStoredEvidenceStatus) {
+    els.overviewStoredEvidenceStatus.textContent = 'Read-only stored evidence and provenance. No local report loaded.';
+  }
 }
 
 function renderObservationTimeline(report) {
@@ -319,12 +328,20 @@ function renderAssessmentDrawer(report, hasEvidence) {
   els.investigationAssessmentDrawerText.textContent = eligible
     ? 'Actor evidence context is loaded. Open the Assessment surface to save deliberate Assessment Memory with citation checks.'
     : 'Stored context is available. Assessment Memory remains ready only from eligible actor evidence context; radius/system context stays observational in this slice.';
+  if (els.overviewAssessmentStatus) {
+    els.overviewAssessmentStatus.textContent = eligible
+      ? 'Eligible actor evidence context is loaded for deliberate Assessment Memory.'
+      : 'Stored context is loaded. Assessment Memory stays deliberate and actor-evidence gated in this slice.';
+  }
 }
 
 function renderAssessmentDrawerEmptyState() {
   revealPanel(els.investigationAssessmentDrawer, false);
   els.investigationAssessmentDrawer.classList.remove('is-ready');
   els.investigationAssessmentDrawerText.textContent = 'Assessment appears after stored actor evidence or an eligible report context exists. It is deliberate operator memory, not evidence.';
+  if (els.overviewAssessmentStatus) {
+    els.overviewAssessmentStatus.textContent = 'Deliberate saved operator judgment only. It is not evidence or Discovery output.';
+  }
 }
 
 function revealPanel(panel, revealed) {
@@ -467,6 +484,11 @@ function renderInvestigationQueueContext(selection, lead, filter) {
     ['Next Step', hasQueuedRefs ? 'Open Queue / Enrich, preflight Enrich selected, then confirm before ESI expansion.' : 'Use Discover Possible Leads first to queue zKill refs; absence of refs here is not an evidence conclusion.'],
     ['Evidence Effect', 'Only successful Enrich selected writes expanded ESI killmail evidence and activity events.']
   ]);
+  if (els.overviewPossibleLeadsStatus) {
+    els.overviewPossibleLeadsStatus.textContent = hasQueuedRefs
+      ? `${candidates} queued possible lead(s) for ${leadLabel(lead)}; ${selected} selected for Enrich selected preflight.`
+      : `No queued possible refs loaded for ${leadLabel(lead)}. Discover Possible Leads is the explicit zKill queueing step.`;
+  }
 }
 
 function investigationQueueContextStatusText(lead, hasQueuedRefs, selected) {
@@ -726,6 +748,9 @@ function renderInvestigationQueueContextError(error) {
     ['Queue Selection', 'Existing read-only queue selection could not be previewed.'],
     ['Evidence Effect', 'No discovery, enrichment, hydration, assessment, or watch execution was started.']
   ]);
+  if (els.overviewPossibleLeadsStatus) {
+    els.overviewPossibleLeadsStatus.textContent = 'Possible Leads context could not be previewed. No discovery, ESI, evidence write, hydration, assessment, or watch execution started.';
+  }
 }
 
 function investigationLead() {
@@ -760,6 +785,7 @@ function renderInvestigationLeadDraft() {
   const lead = investigationLead();
   renderInvestigationLeadMessages(investigationLeadDraftMessages(lead));
   renderSideLeadSummary(lead);
+  renderOverviewLeadDraft(lead);
 }
 
 function renderSideLeadSummary(lead) {
@@ -771,6 +797,51 @@ function renderSideLeadSummary(lead) {
     return;
   }
   els.sideLeadSummary.textContent = `${leadLabel(lead)} drafted. Check Lead is local; Discovery and Enrich remain explicit actions.`;
+}
+
+function renderOverviewLeadDraft(lead) {
+  if (!els.investigationSourceStrip) {
+    return;
+  }
+  const apiState = externalApiStatus(state.readiness);
+  const localBasis = lead.value
+    ? `${leadLabel(lead)} is drafted locally. Check Lead uses scope validation and local lookup where available.`
+    : 'No lead drafted. Typing remains local and passive.';
+  els.investigationSourceStrip.textContent = `${localBasis} External API is ${apiState.state}; live provider use requires an explicit action and the existing gate.`;
+}
+
+function renderOverviewStatus(readiness, apiState) {
+  if (els.investigationSourceStrip) {
+    renderOverviewLeadDraft(investigationLead());
+  }
+  if (els.overviewWatchStatus) {
+    const schedule = state.watchSchedule || {};
+    const due = schedule.due_count ?? schedule.dueCount ?? schedule.due?.length;
+    const total = schedule.watch_count ?? schedule.watchCount ?? schedule.watches?.length;
+    els.overviewWatchStatus.textContent = Number.isInteger(total)
+      ? `Watch schedule loaded: ${total} watch item(s), ${due ?? 0} due. Watch is active routine checking; Marked remains attention only.`
+      : 'Watch is active routine checking. Marked attention alone does not run checks.';
+  }
+  if (els.overviewPossibleLeadsStatus && state.queueSelection?.counts) {
+    const counts = state.queueSelection.counts;
+    els.overviewPossibleLeadsStatus.textContent = `${counts.candidates_considered ?? 0} queued possible lead(s) in the current queue preview. Discovery output is not Evidence.`;
+  }
+  if (els.overviewAssessmentStatus && Array.isArray(state.assessmentArtifacts) && state.assessmentArtifacts.length) {
+    els.overviewAssessmentStatus.textContent = `${state.assessmentArtifacts.length} saved Assessment Memory item(s). Deliberate operator memory remains separate from evidence.`;
+  }
+  if (els.overviewStoredEvidenceStatus && readiness?.lookup_counts) {
+    const killmails = readiness.lookup_counts.killmails ?? 0;
+    const activityEvents = readiness.lookup_counts.activity_events ?? 0;
+    els.overviewStoredEvidenceStatus.textContent = `Local corpus: ${killmails} killmail evidence row(s), ${activityEvents} activity event(s). Open Stored Evidence to read report context.`;
+  }
+}
+
+function renderOverviewStoredEvidence(report) {
+  if (!els.overviewStoredEvidenceStatus) {
+    return;
+  }
+  const counts = report.evidence_basis?.evidence_range || {};
+  els.overviewStoredEvidenceStatus.textContent = `Loaded report context: ${counts.killmail_count ?? 0} killmail evidence row(s), ${counts.activity_event_count ?? 0} activity event(s), provenance/report context only.`;
 }
 
 function investigationLeadDraftMessages(lead) {

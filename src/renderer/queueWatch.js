@@ -149,6 +149,10 @@ async function runManualExpansion() {
 
 function renderQueueSelection(selection) {
   const counts = selection.counts || {};
+  renderOverviewStatus(state.readiness, externalApiStatus(state.readiness));
+  if (els.overviewPossibleLeadsStatus) {
+    els.overviewPossibleLeadsStatus.textContent = `${counts.candidates_considered ?? 0} queued possible lead(s) in the current queue preview. Discovery output is not Evidence.`;
+  }
   renderRows(els.queueSelectionSummary, [
     ['Classification', selection.classification || 'queue-selection-preview'],
     ['Boundary', selection.evidence_boundary || 'Queued refs are not evidence.'],
@@ -340,6 +344,7 @@ function systemWatchAuthoringInput() {
 }
 
 function renderWatchSchedule(schedule) {
+  renderOverviewStatus(state.readiness, externalApiStatus(state.readiness));
   renderRows(els.watchSummary, [
     ['Generated', schedule.now || 'unknown'],
     ['Session Armed', schedule.session_armed ? 'yes' : 'no'],
