@@ -27,11 +27,11 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 
 ## Active Milestone
 
-Milestone: Operator Experience Story Pass
-Roadmap source: `docs/audits/audit-2026-05-24-local-alpha-human-ui-trial.md`
+Milestone: Operator Intel Console Presentation Specification
+Roadmap source: `workspace/OverseerHS35-operator-experience-advisory-review.md`
 Current packet: `workspace/current.md`
-Current sequence: HS34 specialist planning
-Latest accepted handshake: `workspace/complete/milestone-local-alpha-trial-readiness/OverseerHS33-local-alpha-readiness-closure.md`
+Current sequence: HS36 specialist specification
+Latest accepted handshake: `workspace/OverseerHS35-operator-experience-advisory-review.md`
 
 ## Durable Record Index
 
@@ -64,6 +64,7 @@ Latest accepted handshake: `workspace/complete/milestone-local-alpha-trial-readi
 - operator investigation desk closure: `docs/audits/audit-2026-05-24-operator-investigation-desk-closure.md`
 - local alpha readiness closure: `docs/audits/audit-2026-05-24-local-alpha-readiness-closure.md`
 - local alpha human UI trial: `docs/audits/audit-2026-05-24-local-alpha-human-ui-trial.md`
+- terminology bridge audit: `docs/audits/audit-2026-05-24-terminology-bridge.md`
 - operator investigation desk roadmap: `docs/roadmap/operator-investigation-desk.md`
 
 ### Historical Archives

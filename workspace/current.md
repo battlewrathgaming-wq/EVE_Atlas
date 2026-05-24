@@ -1,22 +1,25 @@
 # AURA Atlas Current Work
 
-Status: Active - specialist planning
+Status: Active - presentation specification
 Last updated: 2026-05-24
 
 ## Active Milestone
 
-Milestone: Operator Experience Story Pass
+Milestone: Operator Intel Console Presentation Specification
 
 Source of intent:
 
 - Human local-alpha UI trial notes from 2026-05-24.
 - `docs/audits/audit-2026-05-24-local-alpha-human-ui-trial.md`
-- `docs/audits/audit-2026-05-24-local-alpha-readiness-closure.md`
-- `docs/roadmap/operator-investigation-desk.md`
+- `workspace/UIUXHS34-operator-experience-story-pass.md`
+- `docs/audits/audit-2026-05-24-terminology-bridge.md`
+- `workspace/OverseerHS35-operator-experience-advisory-review.md`
 - `docs/features/presentation-layer-information-index.md`
 - `docs/current-state/current-ipc-ui-preparation.md`
+- `docs/current-state/current-terminology-and-retention.md`
+- `docs/roadmap/operator-investigation-desk.md`
 
-Current focus: convert Human UI friction into concrete operator stories and a bounded future Dev slice.
+Current focus: produce a screen-level presentation specification for the first operator path before any Dev implementation.
 
 ## Executor
 
@@ -27,75 +30,103 @@ Dev is not active.
 Expected handoff filename:
 
 ```txt
-UIUXHS34-operator-experience-story-pass.md
+UIUXHS36-operator-intel-console-presentation-spec.md
 ```
 
 ## Purpose
 
-Atlas has passed readiness mechanics, but the Human UI trial found that the first experience still reads like configuration, diagnostics, and backend surfaces rather than discovery and story.
+Integrate the Human UI trial, UI/UX story pass, and terminology bridge audit into a concrete presentation specification.
 
-This packet should turn that feedback into clear product stories, presentation priorities, and one bounded Dev-ready recommendation. It should not implement code.
+This packet should answer what the first operator experience should look like and say, using existing Atlas backend/service capabilities. It should define a future bounded Dev slice only after the screen/spec work is clear.
 
-## Accepted Human Feedback
+## Accepted Direction
 
-- Window movement feels smooth.
-- The app is much improved.
-- Text edge handling is odd in places.
-- Verbiage is abstract.
-- Readiness should feel like diagnostics/settings, not the main user flow.
-- Scopes exposes too many choices at once and feels internal.
-- Scope data should appear as the end state of a journey, not the first burden.
-- `Refresh watches` and `Preview queue` flicker strangely.
-- The UI remains too information-dense.
-- Live API / zKill / ESI state should likely be represented by one clear operator-facing "Power on" control, with details behind it.
-- The current surface reads more like network configuration than a discovery and storytelling tool.
+Use an operator-facing guided pipeline:
+
+```txt
+Lead
+-> Discovery / possible leads
+-> Queue review
+-> Enrich selected
+-> Evidence
+-> Observation
+-> Assessment Memory
+```
+
+This is a presentation model over existing services. It is not a new backend pipeline.
+
+Accepted principles:
+
+- Investigation is the primary path.
+- Readiness is diagnostics/settings.
+- Scopes are progressive refinement after a lead or action exists.
+- Queue refs are possible leads until ESI expansion.
+- `Enrich selected` explicitly calls ESI and creates stored killmail evidence.
+- `Refresh labels` is readability-only metadata hydration.
+- `Power on live lookups` is provisional as a global live/API affordance, but it must not start work.
+- Raw/internal detail remains available through drawers/details/settings.
+- Marked and Watch remain asymmetric.
+- Deletion/pruning remains blocked.
 
 ## Ordered Runway
 
-1. Read the accepted source documents and the Human trial note.
-2. Write 4-6 operator user stories for the first Investigation experience.
-3. For each story, define:
-   - operator intent
-   - plain-language UI promise
-   - primary information shown
-   - secondary/detail information hidden or deferred
-   - safety/evidence boundary
-   - acceptance check
-4. Recommend a progressive flow for Investigation, Readiness, Scopes, Queue / Watches, and Reports:
-   - what belongs in the first operator path
-   - what belongs in diagnostics/settings
-   - what belongs only after a lead or action exists
-5. Decide whether the "Power on" idea should be accepted as:
-   - one global live/API affordance
-   - a label/copy change only
-   - deferred pending more design work
-6. Recommend exactly one bounded next Dev packet if implementation is justified.
-7. Create the expected handoff file and update Evidence / Handoff below.
+1. Read all source-of-intent files above.
+2. Restate the screen-level problem in plain operator language.
+3. Define the first Investigation screen layout:
+   - primary regions
+   - lead input/state
+   - compact local/stored context
+   - live/API affordance
+   - current stage indicator
+   - next action
+   - detail/drawer affordances
+4. Define stage grammar for each pipeline stage:
+   - what the operator sees
+   - what action is available
+   - what must be hidden/deferred
+   - evidence/live/API/assessment boundary copy
+   - loading, empty, blocked, degraded, and error states
+5. Define navigation disposition:
+   - what remains top-level
+   - what moves under Settings / Diagnostics
+   - what Scopes becomes as progressive refinement
+   - how Queue Review and Watch/Radar should be separated conceptually
+6. Define terminology and copy rules using the terminology bridge audit:
+   - backend/internal terms that must not appear in primary copy
+   - user-facing aliases
+   - risky terms to avoid
+   - approved wording for Discovery, Evidence, Observation, Assessment Memory, Marked, Watch, Enrich selected, Refresh labels, and retention/deletion.
+7. Decide whether `Power on live lookups` should be specified exactly, renamed, or left as a placeholder with constraints.
+8. Recommend exactly one future bounded Dev packet only if enough specification exists.
+9. Create the expected handoff and update Evidence / Handoff below.
 
 ## Guardrails
 
 - Do not implement code.
 - Do not authorize live/API behavior changes.
+- Do not rename database tables, services, IPC commands, or files.
+- Do not pass UI/UX or terminology audit recommendations directly to Dev unless accepted in this packet.
 - Do not collapse Discovery, Evidence, Observation, and Assessment boundaries.
-- Do not treat Scopes/backend IDs/service counts as primary user story content unless the story requires detail inspection.
-- Do not make Readiness the main product journey.
-- Do not broaden into public release, map rendering, AI commentary, relationship graph, or fight-clustering.
-- Do not rewrite product doctrine from Lab/shared work.
+- Do not make Readiness or Scopes the primary operator journey.
+- Do not introduce final `Record`, `Intelligence`, or `Finding` semantics.
+- Do not introduce evidence deletion/pruning or destructive retention behavior.
+- Do not adopt shared/Lab doctrine unless it is explicitly accepted for Atlas.
 
 ## Stop Conditions
 
 Stop and return to Human/Overseer if:
 
-- the story pass requires a product term decision such as Record, Intelligence, Finding, or final Assessment naming
-- the recommended flow requires live/private/destructive actions
-- the "Power on" model would weaken explicit live/API gates
-- the proposed Dev packet cannot be verified with bounded smoke or renderer checks
+- the spec requires final naming for `Record`, `Intelligence`, `Finding`, or Assessment variants
+- the `Power on` affordance cannot be specified without weakening explicit live/API gates
+- the desired first screen would require backend/service behavior changes
+- the future Dev packet cannot be verified by renderer/Electron smoke checks
+- deletion/retention wording appears to imply an available destructive capability
 
 ## Required Verification
 
-No code verification is required for this specialist planning packet.
+No code verification is required for this specification packet.
 
-Required checks:
+Required status check:
 
 ```powershell
 git status --short --branch
@@ -114,9 +145,11 @@ Specialist fills this before handoff:
 
 ```txt
 Files reviewed:
-Stories written:
-Presentation decisions:
-Deferred decisions:
+Screen spec written:
+Accepted terminology:
+Deferred terminology:
+Navigation disposition:
+Power on disposition:
 Recommended next Dev packet:
 Verification notes:
 ```
@@ -126,14 +159,16 @@ Verification notes:
 Specialist creates:
 
 ```txt
-workspace/UIUXHS34-operator-experience-story-pass.md
+workspace/UIUXHS36-operator-intel-console-presentation-spec.md
 ```
 
 Handoff must include:
 
-- user stories
-- accepted presentation direction
-- rejected/deferred ideas
-- exact next Dev packet if recommended
+- screen-level layout specification
+- stage-by-stage presentation grammar
+- terminology/copy rules
+- navigation disposition
+- `Power on` disposition
+- future Dev packet recommendation, if any
 - acceptance checks
 - risks and Human questions

@@ -6,7 +6,7 @@ Date: 2026-05-24
 
 Atlas now has enough backend, bridge, and renderer surface area that terms can drift between database names, service names, and user-facing copy.
 
-This file records the current simplified state. It is not a full terminology audit yet. The next terminology bridge audit should expand this into a table across backend, bridge/API, and frontend/user language.
+This file records the current simplified state. The durable terminology bridge audit is `docs/audits/audit-2026-05-24-terminology-bridge.md`.
 
 ## Current Principle
 
@@ -81,7 +81,7 @@ It must not become a reason to delete evidence without a separate accepted delet
 
 ## Audit Need
 
-Atlas should next produce a terminology bridge table:
+Atlas has a first terminology bridge audit. Future implementation packets should use its table:
 
 ```txt
 backend/db term -> service/bridge term -> frontend/user term -> meaning -> allowed use -> avoid/conflicts
