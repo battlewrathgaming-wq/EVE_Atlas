@@ -31,7 +31,7 @@ Milestone: Intel Console Face And Layout Refinement
 Roadmap source: `workspace/OverseerHS43-human-ui-review-face-direction.md`
 Current packet: `workspace/current.md`
 Current sequence: HS43 Dev runway
-Latest accepted handshake: `workspace/OverseerHS42-renderer-intel-console-review.md`
+Latest accepted coordination artifact: `workspace/UIUXHS43-intel-console-face-layout-advisory.md`
 
 ## Durable Record Index
 
