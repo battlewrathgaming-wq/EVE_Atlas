@@ -8,6 +8,7 @@ const GROUPS = {
     'verify:scope-controls',
     'verify:app-readiness',
     'verify:service-registry',
+    'verify:command-authority',
     'verify:task-runner',
     'verify:task-concurrency',
     'verify:live-api-gate',

@@ -71,7 +71,7 @@ async function main() {
     assert(taskListCommand, 'task.list should be listed');
     assert(taskListCommand.classification === 'read-only', 'task.list should be read-only');
     assert(taskCancelCommand, 'task.cancel should be listed');
-    assert(taskCancelCommand.classification === 'read-only', 'task.cancel should be read-only');
+    assert(taskCancelCommand.classification === 'runtime-control', 'task.cancel should be runtime-control');
     assert(manualDiscoveryCommand?.classification === 'evidence-creating', 'manual.discovery should be evidence-creating');
     assert(manualExpansionCommand?.classification === 'evidence-creating', 'manual.expansion should be evidence-creating');
     assert(actorWatchCommand?.classification === 'evidence-creating', 'actor.watch should be evidence-creating');

@@ -125,7 +125,8 @@ async function runManualExpansion() {
     }
     const task = await service.invoke('manual.expansion', {
       ...preflight.validation.normalized,
-      killmailIds: selectedKillmailIds(preflight.selection)
+      killmailIds: selectedKillmailIds(preflight.selection),
+      confirmation: 'confirm:manual.expansion'
     }, {
       asTask: true,
       detachedTask: true
@@ -225,6 +226,7 @@ async function armWatchSession() {
   setBusy(els.armWatchSession, true);
   try {
     const status = await service.invoke('watch.executor.arm', {
+      confirmation: 'confirm:watch.executor.arm',
       liveApiEnabled: els.watchLiveApiEnabled.checked
     });
     els.watchSessionArmed.checked = status.session_armed === true;
@@ -263,6 +265,7 @@ async function saveActorWatch() {
     });
     const result = await service.invoke('watch.create', {
       ...validation.normalized,
+      confirmation: 'confirm:watch.create',
       pollIntervalMinutes: numberOrUndefined(els.watchAuthorActorPoll.value),
       notes: textOrUndefined(els.watchAuthorActorNotes.value)
     }, {
@@ -293,6 +296,7 @@ async function saveSystemWatch() {
     const result = await service.invoke('watch.create', {
       watchType: 'system_radius',
       ...validation.normalized,
+      confirmation: 'confirm:watch.create',
       pollIntervalMinutes: numberOrUndefined(els.watchAuthorSystemPoll.value),
       notes: textOrUndefined(els.watchAuthorSystemNotes.value)
     }, {

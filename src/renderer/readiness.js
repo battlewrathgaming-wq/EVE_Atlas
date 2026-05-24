@@ -56,7 +56,9 @@ async function createRuntimeSnapshot() {
     if (!els.runtimeSnapshotConfirm.checked) {
       throw new Error('Runtime snapshot creation requires visible confirmation');
     }
-    const result = await service.invoke('runtime.db_snapshot.create', {});
+    const result = await service.invoke('runtime.db_snapshot.create', {
+      confirmation: 'confirm:runtime.db_snapshot.create'
+    });
     renderRuntimeSnapshotResult(result);
     els.runtimeSnapshotConfirm.checked = false;
     await preflightRuntimeSnapshot();
@@ -70,7 +72,9 @@ async function createRuntimeSnapshot() {
 async function createDebugTracePack() {
   setBusy(els.createDebugTracePack, true);
   try {
-    const result = await service.invoke('support.debug_trace_pack', {});
+    const result = await service.invoke('support.debug_trace_pack', {
+      confirmation: 'confirm:support.debug_trace_pack'
+    });
     renderDebugTracePackResult(result);
   } catch (error) {
     renderError(els.debugTracePackResult, error);

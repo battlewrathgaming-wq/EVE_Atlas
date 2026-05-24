@@ -71,18 +71,20 @@ class HttpClient {
           rateLimited: response.status === 420 || response.status === 429,
           errorMessage: `${provider} ${response.status}`
         });
-        throw new Error(`${provider} ${response.status} for ${endpoint}`);
+        throw httpStatusError(provider, response.status, endpoint);
       } catch (error) {
         const normalized = normalizeRequestError(error, requestSignal);
         if (normalized.nonRetryable) {
-          this.log({
-            provider,
-            endpoint,
-            method,
-            durationMs: Date.now() - started,
-            retryCount,
-            errorMessage: normalized.error.message
-          });
+          if (!normalized.error.logged) {
+            this.log({
+              provider,
+              endpoint,
+              method,
+              durationMs: Date.now() - started,
+              retryCount,
+              errorMessage: normalized.error.message
+            });
+          }
           throw normalized.error;
         }
 
@@ -239,6 +241,15 @@ function abortError(code, message) {
   const error = new Error(message);
   error.code = code;
   error.name = code === 'HTTP_TIMEOUT' ? 'TimeoutError' : 'AbortError';
+  return error;
+}
+
+function httpStatusError(provider, statusCode, endpoint) {
+  const error = new Error(`${provider} ${statusCode} for ${endpoint}`);
+  error.code = 'HTTP_STATUS_ERROR';
+  error.statusCode = statusCode;
+  error.nonRetryable = true;
+  error.logged = true;
   return error;
 }
 

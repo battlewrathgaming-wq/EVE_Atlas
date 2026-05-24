@@ -35,7 +35,8 @@ async function cancelSelectedTask() {
   try {
     state.selectedTask = await service.invoke('task.cancel', {
       task_id: state.selectedTaskId,
-      reason: 'Cancelled from renderer task view'
+      reason: 'Cancelled from renderer task view',
+      confirmation: 'confirm:task.cancel'
     });
     await loadTasks();
   } catch (error) {

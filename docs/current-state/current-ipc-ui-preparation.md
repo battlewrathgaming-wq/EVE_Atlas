@@ -8,7 +8,7 @@ AURA Atlas has a working Electron IPC/service shell and a first-pass Investigati
 
 The current risk is no longer missing backend capability. The current risk is presentation shape: the UI still exposes too much diagnostic/configuration structure too early and needs a clearer discovery/storytelling journey.
 
-Active coordination state is in `workspace/current.md`. As of 2026-05-24, the active packet is Atlas Command Authority Hardening for Dev. The earlier Intel Console renderer presentation pass is deferred until backend/bridge command authority is reviewed.
+Active coordination state is in `workspace/current.md`. As of 2026-05-24, the active packet is Atlas Command Authority Hardening for Dev. The earlier Intel Console renderer presentation pass is deferred until backend/bridge command authority is reviewed and accepted.
 
 ## What Exists Now
 
@@ -16,6 +16,8 @@ Implemented shell and bridge:
 
 - Electron renderer uses the preload service bridge, not direct backend imports.
 - `atlas:service:list` and `atlas:service:invoke` expose backend services through IPC.
+- Renderer IPC service listing and invocation are governed by registry-owned renderer eligibility; non-renderer service commands are blocked at the IPC boundary.
+- Bridge-facing service commands expose effect metadata and command-owned authority requirements so downstream presentation can distinguish read-only, runtime-control, local mutation, live/API, evidence creation, metadata/readability, and support artifact effects.
 - `window.atlasServices` is the renderer service bridge.
 - `window.atlasWindow` supports frameless window controls.
 - Frameless shell, minimize/close, and persisted always-on-top are implemented.
@@ -57,6 +59,9 @@ Implemented renderer surfaces include:
 - Assessment memory is deliberate operator memory and is not evidence.
 - Watch authoring is metadata/intent; watch execution requires explicit session arming or controlled task execution.
 - Evidence pruning/deletion remains blocked. Retention and compaction paths are preview/assessment-only, not destructive.
+- Renderer confirmation checkboxes are presentation support only; commands with live/API, evidence, local state, runtime-control, or support-artifact effects now require registry-owned confirmation tokens at renderer IPC invocation.
+- `task.cancel` is treated as runtime-control, not read-only.
+- Non-retryable HTTP status responses are not retried unless explicitly listed as retryable.
 
 ## Current UI Finding
 

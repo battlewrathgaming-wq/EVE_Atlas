@@ -27,7 +27,8 @@ async function main() {
           entityId: 90000002,
           entityName: 'Background Scout',
           lookbackSeconds: 86400,
-          maxRefs: 1
+          maxRefs: 1,
+          confirmation: 'confirm:manual.discovery'
         },
         asTask: true,
         detachedTask: true

@@ -84,7 +84,10 @@ async function runManualDiscovery() {
     if (!preflight.gate.allowed) {
       throw new Error(preflight.gate.blockers?.[0]?.message || 'Manual discovery is blocked by live API gate');
     }
-    const task = await service.invoke('manual.discovery', preflight.validation.normalized, {
+    const task = await service.invoke('manual.discovery', {
+      ...preflight.validation.normalized,
+      confirmation: 'confirm:manual.discovery'
+    }, {
       asTask: true,
       detachedTask: true
     });

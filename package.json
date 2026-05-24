@@ -27,6 +27,7 @@
     "verify:renderer-shell": "node scripts/verify-renderer-shell.js",
     "verify:app-readiness": "node scripts/verify-app-readiness.js",
     "verify:service-registry": "node scripts/verify-service-registry.js",
+    "verify:command-authority": "node scripts/verify-command-authority.js",
     "verify:task-runner": "node scripts/verify-task-runner.js",
     "verify:task-concurrency": "node scripts/verify-task-concurrency-cancellation.js",
     "verify:live-api-gate": "node scripts/verify-live-api-gate.js",

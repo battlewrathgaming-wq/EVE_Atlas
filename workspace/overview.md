@@ -27,11 +27,11 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 
 ## Active Milestone
 
-Milestone: Atlas Command Authority Hardening
-Roadmap source: `workspace/OverseerHS39-authority-hardening-tour.md`
+Milestone: Renderer Intel Console Progressive Disclosure
+Roadmap source: `workspace/OverseerHS40-command-authority-review.md`
 Current packet: `workspace/current.md`
-Current sequence: HS39 Dev runway
-Latest accepted handshake: `workspace/OverseerHS39-authority-hardening-tour.md`
+Current sequence: HS41 Dev runway
+Latest accepted handshake: `workspace/OverseerHS40-command-authority-review.md`
 
 ## Durable Record Index
 
@@ -83,7 +83,7 @@ Latest accepted handshake: `workspace/OverseerHS39-authority-hardening-tour.md`
 ## Open Questions
 
 - Human local-alpha UI trial produced presentation/story friction; active next step is UI/UX or Planner story pass before Dev.
-- Human accepted presentation decisions for the first Intel Console pass; renderer work is deferred behind command/effect authority hardening.
+- Command/effect authority hardening accepted for the current local Electron trust boundary; renderer Intel Console work has resumed as a bounded Dev runway.
 - Presentation authority clarification: Atlas owns backend/bridge semantics; Labs or a dedicated presentation layer may later replace/finalize UI presentation after structure cleanup.
 - Live smoke evidence remains optional, explicit, and gated unless a future milestone makes it an acceptance gate.
 - Accepted UX requirement from the closed Operator Investigation Desk milestone: Marked means operator interest / tag / record attention; Watch means active routine check behavior; Watch implies Marked, but Marked does not imply Watch.

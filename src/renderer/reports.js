@@ -337,7 +337,10 @@ async function runMetadataHydration() {
     if (!preflight.gate.allowed) {
       throw new Error(preflight.gate.blockers?.[0]?.message || 'Metadata hydration is blocked by live API gate');
     }
-    const task = await service.invoke('metadata.hydration', preflight.payload, {
+    const task = await service.invoke('metadata.hydration', {
+      ...preflight.payload,
+      confirmation: 'confirm:metadata.hydration'
+    }, {
       asTask: true
     });
     renderRows(els.metadataHydrationStatus, [
@@ -394,7 +397,10 @@ async function saveAssessmentArtifact() {
       throw new Error('Assessment save requires the boundary confirmation checkbox');
     }
     const payload = assessmentArtifactPayload();
-    const artifact = await service.invoke('assessment.create', payload);
+    const artifact = await service.invoke('assessment.create', {
+      ...payload,
+      confirmation: 'confirm:assessment.create'
+    });
     renderRows(els.assessmentStatus, [
       ['Saved Artifact', artifact.artifact_id],
       ['Entity', artifact.entity_name ? `${artifact.entity_name} [${artifact.entity_type}: ${artifact.entity_id}]` : `${artifact.entity_type}:${artifact.entity_id}`],
