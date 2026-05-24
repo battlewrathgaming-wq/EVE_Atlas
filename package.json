@@ -25,6 +25,7 @@
     "verify:operator-debug-trace": "node scripts/verify-operator-debug-trace-pack.js",
     "verify:electron-runtime": "electron scripts/verify-electron-runtime.js",
     "verify:renderer-shell": "node scripts/verify-renderer-shell.js",
+    "verify:protected-terms": "node scripts/verify-protected-terms.js",
     "verify:app-readiness": "node scripts/verify-app-readiness.js",
     "verify:service-registry": "node scripts/verify-service-registry.js",
     "verify:command-authority": "node scripts/verify-command-authority.js",
