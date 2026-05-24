@@ -27,11 +27,11 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 
 ## Active Milestone
 
-Milestone: Renderer Intel Console Progressive Disclosure
-Roadmap source: `workspace/OverseerHS40-command-authority-review.md`
+Milestone: Intel Console Face And Layout Refinement
+Roadmap source: `workspace/OverseerHS43-human-ui-review-face-direction.md`
 Current packet: `workspace/current.md`
-Current sequence: HS41 Dev runway
-Latest accepted handshake: `workspace/OverseerHS40-command-authority-review.md`
+Current sequence: HS43 Dev runway
+Latest accepted handshake: `workspace/OverseerHS42-renderer-intel-console-review.md`
 
 ## Durable Record Index
 
@@ -82,8 +82,8 @@ Latest accepted handshake: `workspace/OverseerHS40-command-authority-review.md`
 
 ## Open Questions
 
-- Human local-alpha UI trial produced presentation/story friction; active next step is UI/UX or Planner story pass before Dev.
-- Command/effect authority hardening accepted for the current local Electron trust boundary; renderer Intel Console work has resumed as a bounded Dev runway.
+- Human HS41 UI review accepted the direction and requested face/layout refinement: search-first Discovery, no duplicated Discovery/Watch controls, compact External API state, and progressive Observation/Assessment.
+- Command/effect authority hardening accepted for the current local Electron trust boundary; renderer Intel Console work continues as a bounded Dev runway.
 - Presentation authority clarification: Atlas owns backend/bridge semantics; Labs or a dedicated presentation layer may later replace/finalize UI presentation after structure cleanup.
 - Live smoke evidence remains optional, explicit, and gated unless a future milestone makes it an acceptance gate.
 - Accepted UX requirement from the closed Operator Investigation Desk milestone: Marked means operator interest / tag / record attention; Watch means active routine check behavior; Watch implies Marked, but Marked does not imply Watch.

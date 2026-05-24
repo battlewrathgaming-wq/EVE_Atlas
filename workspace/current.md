@@ -10,6 +10,7 @@ Milestone: Intel Console Face And Layout Refinement
 Source of intent:
 
 - Human HS41 UI review captured in `workspace/OverseerHS43-human-ui-review-face-direction.md`.
+- UI/UX priority advisory in `workspace/UIUXHS43-intel-console-face-layout-advisory.md`.
 - HS41 acceptance in `workspace/OverseerHS42-renderer-intel-console-review.md`.
 - `workspace/DevHS41-renderer-intel-console-progressive-disclosure.md`
 - Human Intel Console decisions recorded in `workspace/OverseerHS38-intel-console-human-decisions.md`.
@@ -55,6 +56,16 @@ This is a renderer presentation/layout packet only. It is not final Labs present
 - Queue Review and Enrich are inherent staged processes, not primary navigation.
 - Readiness/settings/API details belong behind settings/widgets rather than dominating the workflow.
 - Future face direction should lean sci-fi, space, research, and write-up, with more Human detail expected later.
+
+Accepted UI/UX advisory emphasis:
+
+- Keep HS43 focused; do not add more goals.
+- First viewport should answer: "Who or where are we investigating?"
+- Discovery success from zKill alone should reveal possible leads / Queue Review, not Observation.
+- Observation is evidence/report-backed.
+- Assessment is deliberate memory and should only become ready when stored context or actor report eligibility supports it.
+- Fix hierarchy before decorative polish.
+- Dev should include screenshot-based handoff notes if practical: first viewport, after lead entry, after stored context, and Watch mode.
 
 ## Ordered Dev Runway
 
