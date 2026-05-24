@@ -30,8 +30,8 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Local Alpha Trial Readiness
 Roadmap source: `docs/roadmap/local-alpha-trial-readiness.md`
 Current packet: `workspace/current.md`
-Current sequence: HS30
-Latest accepted handshake: `workspace/complete/milestone-operator-investigation-desk/OverseerHS28-operator-investigation-milestone-review.md`
+Current sequence: HS32
+Latest accepted handshake: `workspace/DevHS30-local-alpha-doc-readiness.md`
 
 ## Durable Record Index
 

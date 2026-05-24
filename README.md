@@ -132,19 +132,30 @@ Run the Electron smoke check:
 npm.cmd run smoke:electron
 ```
 
+Seed an offline demo DB if you want a fixture-backed walkthrough:
+
+```powershell
+npm run seed:demo-db
+$env:AURA_ATLAS_DB_PATH="F:\Projects\AURA-Atlas\.tmp\aura-atlas-demo-fixture.sqlite"
+```
+
 Start the app:
 
 ```powershell
 npm run dev
 ```
 
-Start in the app with:
+Start in the app with the Investigation Desk. A safe local-alpha walkthrough is:
 
-1. Readiness
-2. Evidence Corpus Health
-3. Scopes
-4. Queue / Watches
-5. Reports
+1. Investigation: enter an actor, system, or radius lead and read the passive live/API context.
+2. Readiness: confirm runtime paths, SDE lookup state, live API state, and User-Agent.
+3. Readiness / Evidence Corpus Health: inspect local corpus counts before making claims.
+4. Investigation or Scopes: create or validate a scoped question.
+5. Actions: run controlled manual discovery only when intentional; it queues zKill refs only.
+6. Queue / Watches: preview queued refs and use Enrich selected only with explicit ESI confirmation.
+7. Reports: view actor/radius evidence reports from stored evidence.
+8. Reports / Assessment: optionally save deliberate Assessment Memory from a loaded actor report.
+9. Readiness: create a runtime DB snapshot and trace pack for review if needed.
 
 ## Live API Gate
 
@@ -182,24 +193,27 @@ npm run snapshot:runtime-db
 
 ## Current Work Focus
 
-The current milestone is aggressive testing and bug hunting.
+The current milestone is Local Alpha Trial Readiness.
 
-Atlas is healthy under normal offline verification and Electron smoke. The next useful work is to attack assumptions:
+Atlas has closed the first-pass Operator Investigation Desk milestone. The current work is to make the existing safe path understandable, repeatable, and reviewable for:
 
-- adversarial evidence fixtures
-- partial failure and transaction integrity
-- passive surface side-effect sweeps
-- SDE lookup builder failure modes
-- Electron operator rugged smoke
-- task concurrency and cancellation stress
-- larger synthetic scale pressure
-- live API refusal and smoke matrix
-- documentation/test-index alignment
+```text
+one operator
+one machine
+explicit actions
+reviewable artifacts
+no hidden live collection
+```
+
+This is not public packaging and not a feature-widening milestone. Active docs should point operators at the current local-alpha runbooks, not the deprecated `docs/gap` workflow.
 
 See:
 
-- `docs/audits/audit-2026-05-23-aggressive-testing-and-bug-hunt-assessment.md`
-- `docs/gap/to-do/README.md`
+- `docs/roadmap/local-alpha-trial-readiness.md`
+- `docs/runbooks/local-alpha-trial.md`
+- `docs/runbooks/local-alpha-known-limits-and-feedback.md`
+- `docs/runbooks/local-alpha-release-tag-checklist.md`
+- `docs/audits/audit-2026-05-24-operator-investigation-desk-closure.md`
 
 ## Further Reading
 

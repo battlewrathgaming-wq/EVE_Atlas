@@ -50,6 +50,18 @@ Expected:
 - no live API gate required
 - no `.tmp` artifacts are committed
 
+## Offline Fixture Path
+
+Use the demo fixture when the operator needs a repeatable no-live walkthrough:
+
+```powershell
+npm run seed:demo-db
+$env:AURA_ATLAS_DB_PATH="F:\Projects\AURA-Atlas\.tmp\aura-atlas-demo-fixture.sqlite"
+npm run dev
+```
+
+The demo DB uses synthetic/fixture data and fake clients. It is not live evidence. Do not use live APIs just to populate a demo screen.
+
 ## Offline Trial Path
 
 Start the app:
@@ -57,6 +69,15 @@ Start the app:
 ```powershell
 npm run dev
 ```
+
+In the Investigation view:
+
+1. Confirm the opening view is the Operator Investigation Desk.
+2. Enter an actor, system, or radius lead.
+3. Read the passive live/API context before routing.
+4. Use Stored Evidence Detail to inspect current stored evidence without discovery, ESI, hydration, assessment save, or watch execution.
+5. Use Review Queue / Enrich to preview existing queued possible refs without running ESI.
+6. Use Reports / Assessment for a loaded actor report only when saving deliberate assessment memory.
 
 In the Readiness view:
 
@@ -76,8 +97,8 @@ In Scopes:
 In Queue / Watches:
 
 1. Preview queue selection.
-2. Confirm queued refs are labelled as possible evidence, not observations.
-3. Confirm manual expansion requires explicit selection and confirmation.
+2. Confirm queued refs are labelled as possible leads, not evidence or observations.
+3. Confirm Enrich selected requires explicit selection, cap review, ESI call estimate, and confirmation.
 4. Confirm watch authoring creates intent only and does not run collection.
 
 In Reports:
@@ -85,33 +106,9 @@ In Reports:
 1. Load actor or radius reports against the current local corpus.
 2. Confirm the evidence footer/window/sample language is visible.
 3. Confirm raw IDs and cached labels are distinguishable.
-4. If an actor report has evidence, create an assessment artifact only after entering a reason or summary.
-5. Inspect saved assessment detail for citation status and cited killmail IDs.
-
-## Offline Demo Data
-
-If the current runtime DB is empty, seed the offline demo fixture DB:
-
-```powershell
-npm run seed:demo-db
-```
-
-Default output:
-
-```text
-F:\Projects\AURA-Atlas\.tmp\aura-atlas-demo-fixture.sqlite
-```
-
-Then point the app at it:
-
-```powershell
-$env:AURA_ATLAS_DB_PATH="F:\Projects\AURA-Atlas\.tmp\aura-atlas-demo-fixture.sqlite"
-npm run dev
-```
-
-The demo DB uses synthetic/fixture data and fake clients. It is not live evidence.
-
-Do not use live APIs just to populate a demo screen.
+4. If an actor report has evidence, review Assessment Memory eligibility, citation basis, cited killmail IDs, evidence window, and local verification timing.
+5. Create assessment memory only after entering an operator reason or summary and confirming the evidence/assessment boundary.
+6. Inspect saved assessment detail for citation status and cited killmail IDs.
 
 ## Optional Live-Gated Trial
 
@@ -164,7 +161,7 @@ Use the feedback template in:
 docs/runbooks/local-alpha-known-limits-and-feedback.md
 ```
 
-Record:
+Capture:
 
 - date/time
 - DB path

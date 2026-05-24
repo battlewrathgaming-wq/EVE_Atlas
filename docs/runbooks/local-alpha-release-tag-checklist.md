@@ -34,16 +34,24 @@ npm.cmd run smoke:electron
 npm run seed:demo-db
 ```
 
+Expected artifact:
+
+```text
+F:\Projects\AURA-Atlas\.tmp\aura-atlas-demo-fixture.sqlite
+```
+
 5. Confirm current-state docs were reviewed:
 
 ```text
 docs/current-state/current-ipc-ui-preparation.md
+docs/current-state/current-report-products.md
 ```
 
-6. Confirm gap/to-do was reviewed:
+6. Confirm the closed milestone and active roadmap were reviewed:
 
 ```text
-docs/gap/to-do
+docs/audits/audit-2026-05-24-operator-investigation-desk-closure.md
+docs/roadmap/local-alpha-trial-readiness.md
 ```
 
 7. Confirm known limits are current:
@@ -65,6 +73,8 @@ Before tagging, confirm:
 - no passive broad collection has been added
 - no automatic queue expansion has been added
 - live API instructions remain explicitly gated
+- public packaging/distribution has not been added to this checkpoint
+- archived `docs/gap` material was not treated as an active task queue
 
 ## Evidence Boundary Check
 
@@ -105,12 +115,13 @@ Do not run destructive reset commands unless explicitly requested.
 
 ## Handoff Note
 
-Record:
+Capture:
 
 - commit hash
 - tag name
 - verification results
-- Electron smoke result
+- Electron smoke result and artifact path, usually `.tmp/electron-visual-smoke/visual-smoke-result.json`
+- optional demo DB seed result and path, if run
 - known limits doc path
 - any live smoke artifact path
 - whether live APIs were used during checkpoint validation

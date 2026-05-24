@@ -15,6 +15,11 @@ Atlas does not currently provide:
 - passive broad ingestion
 - automatic queue expansion
 - evidence pruning
+- accepted `Record`, `Intelligence`, or `Finding` product terminology
+- pasted zKill links or killmail IDs as lead input
+- first-class region investigation
+- relationship graph or footprint story views
+- fight-cluster timeline grouping
 - public packaging or installer flow
 - map rendering
 - route planning UI
@@ -23,6 +28,8 @@ Atlas does not currently provide:
 - production retention/deletion workflow
 
 Live APIs are explicitly gated and should be used only with narrow targets, explicit windows, and conservative caps.
+
+Live success smoke remains a disciplined operator choice, not a default alpha requirement. Offline fixture/demo operation should be the first path.
 
 ## Accepted Rough Edges
 
@@ -36,6 +43,8 @@ During alpha, expect:
 - UI is a working shell, not final product design
 - support/debug trace packs are JSON artifacts, not polished reports
 - assessment memory is useful but deliberately simple
+- radius reports are observation/context surfaces; actor report context is the supported assessment-memory save path
+- Marked means operator attention and does not start collection; Watch means active routine checking
 - live smoke scripts write review artifacts under `.tmp`
 
 ## Layer Boundaries
@@ -108,6 +117,7 @@ Less useful:
 - "The app did not find anything."
 - "Make the map better."
 - "It should know who is hostile."
+- "Add relationship graph/fight clustering/region support" without tying it to a failed current alpha step.
 
 ## Alpha Review Questions
 
