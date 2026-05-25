@@ -26,6 +26,10 @@ Human design context:
 - It is a normal offline/local posture.
 - Atlas should have useful local context to show while Watch is not armed.
 - Future display work may use a quiet offline pane or readout, but this scope does not design or implement that pane.
+- Future display/material work may use two state-communication abstractions:
+  - ambient posture: always-present state indication driven by runtime truth
+  - explicit status/action: discrete text/control state that names what is happening and what the operator can do
+- Any future ambient transition treatment must represent actual state transitions, not implied live feed or hidden collection.
 
 ## Scope Of Works
 
@@ -84,6 +88,13 @@ List what a future display/material pass should be able to show without enabling
 - Arm Watch is an explicit action, not startup behavior.
 
 This should end at display-readiness, not UI implementation.
+
+Future display/material constraints:
+
+- Ambient posture and explicit status/action should remain separate.
+- Ambient state must never imply active collection unless collection is actually running.
+- Explicit status/action must carry the precise truth: local memory, External API gate/reachability, Watch configured/due/armed/running/blocked, partial success, and next eligible state where known.
+- Motion or packet-like treatment, if later explored by UIUX/Lab, should mean state transition rather than live feed.
 
 ### 5. Identify Risks And Gaps
 
