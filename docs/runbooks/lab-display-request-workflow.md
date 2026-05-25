@@ -46,6 +46,36 @@ Atlas-local pointers:
 - Workflow hardening contract: `workspace/display-request-workflow-hardening-contract.md`
 - Initial Lab request batch: `workspace/RequestDisplayHS50-atlas-initial-display-requests.md`
 
+## Atlas Request File Convention
+
+Atlas keeps the pointer/workflow separate from scoped request artifacts.
+
+Use:
+
+```txt
+F:\Projects\AURA-Atlas\workspace\request_display.md
+```
+
+for the Atlas pointer, routing note, and workflow guardrails.
+
+Use:
+
+```txt
+F:\Projects\AURA-Atlas\workspace\RequestDisplayHS##-[topic].md
+```
+
+for an Atlas-owned scoped request artifact.
+
+Use:
+
+```txt
+F:\Projects\AURA- Lab\workspace\request_display.md
+```
+
+for the Lab intake copy.
+
+Do not append scoped request bodies to Atlas `workspace/request_display.md`. It should remain the pointer and local workflow note.
+
 Durable Atlas pointers:
 
 - Current state summary: `docs/current-state/current-display-inventory.md`

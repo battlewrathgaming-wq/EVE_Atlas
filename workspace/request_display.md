@@ -13,6 +13,35 @@ Aura Lab accepts advisory display requests through:
 
 Use `request_display` only when Atlas wants Lab to compare Bridge -> Interface presentation options for an Atlas-owned current presentation surface or use case.
 
+## Atlas File Locations
+
+This file is the Atlas pointer/workflow note. Do not append scoped request bodies here.
+
+Atlas scoped request source artifacts live in:
+
+```txt
+F:\Projects\AURA-Atlas\workspace\RequestDisplayHS##-[topic].md
+```
+
+Examples:
+
+```txt
+F:\Projects\AURA-Atlas\workspace\RequestDisplayHS50-atlas-initial-display-requests.md
+```
+
+Lab intake copies are submitted through:
+
+```txt
+F:\Projects\AURA- Lab\workspace\request_display.md
+```
+
+Location rule:
+
+- `workspace/request_display.md` = pointer, workflow, authority, and routing note.
+- `workspace\RequestDisplayHS##-[topic].md` = Atlas-owned scoped request artifact.
+- `F:\Projects\AURA- Lab\workspace\request_display.md` = Lab intake location.
+- Lab responses must be reviewed in an Atlas-local response/adoption record before Dev work.
+
 Authority:
 
 - Atlas owns internal -> Bridge meaning, source terms, Evidence, Discovery, Watch, Marked, provenance, storage, and renderer semantics.

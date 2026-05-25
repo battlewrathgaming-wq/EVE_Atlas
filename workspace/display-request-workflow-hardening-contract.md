@@ -142,6 +142,35 @@ Every active Atlas request should include:
 - verification or review needs
 - non-goals
 
+## Atlas File Convention
+
+Atlas separates the workflow pointer from scoped request artifacts.
+
+Pointer/workflow:
+
+```txt
+F:\Projects\AURA-Atlas\workspace\request_display.md
+```
+
+Scoped Atlas request artifact:
+
+```txt
+F:\Projects\AURA-Atlas\workspace\RequestDisplayHS##-[topic].md
+```
+
+Lab intake copy:
+
+```txt
+F:\Projects\AURA- Lab\workspace\request_display.md
+```
+
+Rules:
+
+- Do not append scoped request bodies to Atlas `workspace/request_display.md`.
+- Do create an Atlas-owned `RequestDisplayHS##-[topic].md` artifact before or alongside Lab submission.
+- Do submit/copy the accepted request body to Lab intake only when Human/Overseer has opened that advisory request.
+- Do record Lab answers in an Atlas-local response/adoption record before any Dev runway.
+
 ## Active Request Cap
 
 Atlas keeps no more than five active `request_display` entries in Lab review unless Human or Atlas Overseer explicitly overrides the cap.
