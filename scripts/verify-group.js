@@ -19,6 +19,7 @@ const GROUPS = {
     'verify:restart-recovery',
     'verify:report-indexes',
     'verify:queue-selection',
+    'verify:queue-api-evidence-write',
     'verify:queue-scope-isolation',
     'verify:message-taxonomy',
     'verify:retention-preflight',

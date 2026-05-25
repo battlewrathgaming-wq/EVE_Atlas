@@ -1,6 +1,6 @@
 # AURA Atlas Current Work
 
-Status: Active Dev packet - Queue API/Evidence write hardening
+Status: Idle after accepted Queue API/Evidence write hardening
 Last updated: 2026-05-25
 
 ## Active Milestone
@@ -12,6 +12,7 @@ Source of intent:
 - Human direction on 2026-05-25: after `Watch_offline`, focus read/write hardening on the Queue boundary because Queue controls API request flow.
 - `workspace/OverseerHS53-runtime-record-integrity-audit.md`
 - `workspace/DevHS56-watch_offline-readout-support.md`
+- `workspace/DevHS57-queue-api-evidence-write-hardening.md`
 - `docs/current-state/current-evidence-pipeline.md`
 - `docs/current-state/current-terminology-and-retention.md`
 - `docs/adr/ADR-0001-zkill-is-discovery-only.md`
@@ -20,101 +21,95 @@ Source of intent:
 - `workspace/critical/README.md`
 - `workspace/critical/critical-terms.md`
 
-Current focus: harden the local Queue -> Enrich selected -> ESI request planning/execution -> Evidence write boundary. Queue is the API-request gate between Discovery refs and durable Evidence. This packet is test-led: trace first, add or strengthen focused offline verification, then implement only local fixes directly tied to proven gaps.
+Current focus: HS57 is accepted. Atlas now has a focused offline verifier covering the Queue -> `Enrich selected` -> ESI request -> Evidence write boundary. No Dev packet is currently open.
 
 ## Executor
 
-Current executor: Dev.
+Current executor: none; awaiting Human / Overseer selection for the next bounded read/write hardening slice.
 
-Expected handoff filename:
+Expected handoff filename: none until a new packet is opened.
+
+## Accepted HS57 Understanding
+
+HS57 traced the current Queue -> API -> Evidence flow:
+
+- `queue.selection` is read-only through `serviceRegistry` and `queueSelectionService`.
+- Queue selection only treats `pending` and `failed` refs as selectable.
+- `cached`, `expanded`, and `superseded` refs are skipped and do not count as expected ESI calls.
+- `manual.expansion` is the evidence-creating `Enrich selected` path.
+- `manualExpansionWorker.expandManualRefs()` creates `fetch_runs`, selects eligible refs, records selection time, skips locally cached killmails before ESI, expands uncached refs through ESI, persists expanded ESI killmails as Evidence, marks successful refs expanded, cached refs cached, and failed refs failed.
+- `persistEvidencePackage()` keeps killmail/activity/audit/warning writes transactional and idempotent.
+- `fetch_runs`, `api_request_logs`, `ingestion_audits`, and queue status/error state are sufficient to reconstruct the covered boundary.
+
+HS57 added:
 
 ```txt
-workspace/DevHS57-queue-api-evidence-write-hardening.md
+scripts/verify-queue-api-evidence-write.js
+npm.cmd run verify:queue-api-evidence-write
 ```
 
-## Ordered Runway
+No production service, backend, schema, IPC, command, payload, persistence, contract, or product terminology code was changed.
 
-1. Read the source-of-intent files above, then trace current code paths for:
-   - queued Discovery ref selection and caps
-   - `Enrich selected`
-   - cached/ref dedupe behavior
-   - ESI expansion request planning/execution
-   - partial ESI failure handling
-   - Evidence writes and idempotency
-   - queue status transitions
-   - provenance/run/API logging
-2. Identify the exact current Queue -> API -> Evidence flow in the handoff before changing code. Include the files/functions that own each stage.
-3. Add or strengthen focused offline verification for dangerous cases:
-   - selected refs are not double-expanded accidentally
-   - cached refs do not spend ESI/API calls
-   - partial ESI failure records failed/skipped state without corrupting successful Evidence writes
-   - retry can pick up unresolved refs cleanly
-   - successful ESI expansion writes Evidence idempotently
-   - provenance, fetch run, ingestion audit, API log, or equivalent local record is sufficient to reconstruct what happened
-   - Discovery refs remain Discovery until accepted ESI expansion writes Evidence
-4. Before implementation, be able to answer clearly in the handoff:
-   - What is the current trace from Queue refs to Evidence writes?
-   - Which dangerous cases were proven by verification?
-   - Did any policy, schema, or product decision become necessary?
-5. Implement only local hardening fixes that are directly proven by the verification work and stay within existing product meaning.
-6. Preserve accepted terms and effects:
-   - zKill refs / queue refs are Discovery, not Evidence.
-   - `Enrich selected` is the deliberate ESI expansion into stored Evidence.
-   - Expanded ESI killmail is the authoritative Evidence source.
-   - Metadata hydration / label refresh is not Evidence creation.
-7. Run required verification.
-8. Create `workspace/DevHS57-queue-api-evidence-write-hardening.md` with trace, changes, verification, risks, and any deferred policy decisions.
+## Accepted Coverage
 
-## Acceptance Criteria
+The new verifier proves:
 
-HS57 is acceptable if the handoff and verification prove:
+- cached selected refs do not spend ESI/API calls
+- repeated selection of expanded refs does not double-create Evidence
+- fresh Discovery refs remain non-Evidence before accepted ESI expansion
+- partial ESI failure preserves successful Evidence writes
+- failed refs remain reviewable/retryable as `failed`
+- retry of unresolved failed refs writes Evidence and marks the ref expanded
+- duplicate activity event keys are not created by retry
+- fetch run, API log, ingestion audit, and queue state can reconstruct the covered boundary
 
-- The Queue -> `Enrich selected` -> ESI request -> Evidence write trace is explicit enough for Overseer review.
-- At least one focused hardening verifier covers the risky boundary, or existing focused verifiers are strengthened with named cases.
-- Cached refs do not spend ESI calls.
-- Duplicate or repeated selection cannot accidentally double-create Evidence.
-- Partial ESI failure preserves successful Evidence writes and records unresolved/failed refs clearly enough for retry.
-- Retry behavior is proven for unresolved refs, or a precise stop/deferred decision is recorded.
-- Evidence writes remain idempotent.
-- Provenance/run/API/local records are sufficient to reconstruct what happened at the boundary, or the exact missing record model is escalated.
-- Discovery refs remain Discovery until accepted ESI expansion writes Evidence.
-- No live/API calls, user real database mutation, schema/migration changes, service/command/payload renames, or product meaning changes occurred unless explicitly approved.
-- If Dev is unsure about a case, acceptance should widen toward better evidence, clearer trace, or explicit deferral, not broader implementation.
+No schema change, retry policy change, retention/deletion decision, live/API proof, or service/command/payload rename was required.
+
+## Remaining Work Options
+
+No work is active by default.
+
+Recommended future read/write hardening slices, to be selected one at a time:
+
+- provenance/API logging sufficiency across non-fixture clients
+- retention/deletion execution and footprint behavior
+- Watch authoring/write-boundary consistency
+- metadata hydration/label refresh write boundaries
+- Assessment Memory write/citation integrity
+
+Do not reopen Queue hardening unless a new defect or product decision appears.
 
 ## Guardrails
 
+- No implementation is authorized by this idle state.
 - No live/private/API calls unless explicitly authorized by the Human.
-- Use fixtures/mocks/local in-memory DBs for verification.
 - Do not mutate the user's real local database.
 - No UI redesign.
-- No schema/migration changes unless Dev proves the hardening cannot be safely represented without one and stops for Overseer approval first.
-- No bridge, IPC, service, payload, command, or contract renames.
-- Do not rename Queue, Discovery, Evidence, Enrich selected, External API, provenance, Watch, Marked, or `Watch_offline`.
-- Do not change `Watch_offline` readout shape unless a bug directly impacts this packet and Overseer approves.
-- Do not broaden into deletion/retention policy execution.
-- Do not broaden into Watch authoring hardening except where Watch-produced queue refs are needed as fixtures for this boundary.
+- No schema/migration changes unless a future packet explicitly authorizes them.
+- No bridge, IPC, service, payload, command, or contract renames unless a future packet explicitly authorizes them.
+- Preserve Queue, Discovery, Evidence, Enrich selected, External API, provenance, Watch, Marked, and `Watch_offline` meanings.
+- Do not broaden into deletion/retention policy execution without Human / Overseer selection.
 
 ## Stop Conditions
 
-Stop and return to Overseer if:
+Return to Human / Overseer before opening work if:
 
+- the next hardening scope spans multiple persistence domains at once
 - live/API behavior is needed to prove the hardening
 - a schema/migration change appears necessary
 - retention/deletion policy must be decided
-- Queue status semantics are insufficient and require product decision
 - retry behavior requires a new user-facing policy
-- provenance/logging records cannot reconstruct the boundary without a broader record model change
-- Dev cannot clearly show the current Queue -> API -> Evidence trace before implementation
-- Dev cannot name the dangerous case proven by verification
+- provenance/logging records require a broader record model change
 - a fix requires service/command/payload renames
 - verification requires mutating the user's real local database
 - protected-term output suggests new terminology authority decisions are needed
 
 ## Required Verification
 
-Run focused offline checks:
+HS57 was accepted with:
 
 ```powershell
+npm.cmd run verify:queue-api-evidence-write
 npm.cmd run verify:queue-selection
 npm.cmd run verify:queue-preflight
 npm.cmd run verify:queue-report
@@ -123,65 +118,36 @@ npm.cmd run verify:partial-failures
 npm.cmd run verify:evidence-rules
 npm.cmd run verify:live-api-gate
 npm.cmd run verify:protected-terms
+npm.cmd run verify:all
 git status --short --branch
 ```
 
-Add and run a focused hardening verifier if Dev creates one, for example:
-
-```powershell
-npm.cmd run verify:queue-api-evidence-write
-```
-
-If Dev touches shared ingestion, evidence persistence, service registry, or task-runner behavior, also run:
-
-```powershell
-npm.cmd run verify:all
-```
-
-Do not run live smoke unless explicitly authorized by the Human.
+Local Overseer verification result: all focused checks passed, and `verify:all` passed 64 scripts including `verify:queue-api-evidence-write`. `verify:protected-terms` passed warning-only with expected advisory warnings across changed verifier/handoff/state files.
 
 ## Evidence
 
-Dev must update this section in the handoff, not necessarily in `current.md`:
-
-```txt
-Trace of current Queue -> API -> Evidence flow:
-
-Files/functions changed:
-
-Dangerous cases covered:
-
-Queue status transition behavior:
-
-Partial failure / retry behavior:
-
-Evidence idempotency and provenance:
-
-Verification run:
-
-Protected-term output:
-
-Deferred decisions:
-```
-
-## Dev Handoff
-
-Create:
+Accepted handoff:
 
 ```txt
 workspace/DevHS57-queue-api-evidence-write-hardening.md
 ```
 
-Handoff must include:
+Accepted implementation files:
 
-- trace of the current Queue -> API -> Evidence flow
-- files/code paths changed
-- verification cases added or strengthened
-- any implementation fixes and why each was necessary
-- confirmation no live/API calls were run
-- confirmation no user real database was mutated
-- confirmation Discovery/Evidence/Enrich selected meanings were preserved
-- confirmation no schema/migration/contract/command/payload renames were performed, or exact approved exception if Overseer authorized one
-- verification commands and results
-- warning-only protected-term output and noisy classes
-- recommended next packet for remaining read/write hardening, if clear
+```txt
+scripts/verify-queue-api-evidence-write.js
+scripts/verify-group.js
+package.json
+```
+
+## Dev Handoff
+
+No Dev packet is open.
+
+The next Dev packet should be a bounded read/write hardening packet selected by Human / Overseer and should name:
+
+- exact persistence/write boundary under review
+- allowed files and non-goals
+- expected failure/recovery cases
+- required offline verification commands
+- whether `verify:all` is required
