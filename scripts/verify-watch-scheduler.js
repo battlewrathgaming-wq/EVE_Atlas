@@ -39,9 +39,16 @@ async function main() {
     });
     assert(hasDueWatch(armed, 'actor', 1), 'due actor watch should be returned when gates are open');
     assert(hasDueWatch(armed, 'system_radius', 1), 'due system watch should be returned when gates are open');
+    const dueSystem = armed.due.find((watch) => watch.watch_type === 'system_radius' && watch.watch_id === 1);
+    assert(dueSystem.sequencer_diagnostic.radius_allowed === true, 'watch sequencer diagnostic should allow radius');
+    assert(dueSystem.sequencer_diagnostic.planned_packets === 4, 'watch sequencer diagnostic should show planned zKill packet count');
+    assert(dueSystem.sequencer_diagnostic.caps.esi_expansions === 20, 'watch sequencer diagnostic should show ESI expansion cap');
+    assert(dueSystem.sequencer_diagnostic.waiting_is_failure === false, 'watch sequencer waiting should not be classified as failure');
     assert(hasBlockedReason(armed, 'actor', 2, 'not_due'), 'future actor watch should be blocked as not_due');
     assert(hasBlockedReason(armed, 'actor', 3, 'backoff'), 'backoff actor watch should be blocked');
     assert(hasBlockedReason(armed, 'actor', 4, 'inactive'), 'inactive actor watch should be blocked');
+    const futureActor = armed.blocked.find((watch) => watch.watch_type === 'actor' && watch.watch_id === 2);
+    assert(futureActor.sequencer_diagnostic.wait_state === 'not_due', 'watch sequencer diagnostic should show wait state');
 
     const success = recordWatchRunResult(db, {
       watchType: 'actor',

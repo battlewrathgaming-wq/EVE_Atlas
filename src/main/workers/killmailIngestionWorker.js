@@ -27,6 +27,15 @@ async function buildEvidencePackageFromRefs({ refs, repository, esiClient, run, 
       if (error?.code === 'HTTP_CANCELLED' || error?.code === 'TASK_CANCELLED' || error?.name === 'AbortError') {
         throw error;
       }
+      if (isProviderCapacityError(error)) {
+        output.warnings.push({
+          killmail_id: ref.killmail_id,
+          warning_type: 'provider_capacity_deferred',
+          message: error.message,
+          created_at: new Date().toISOString()
+        });
+        continue;
+      }
       output.run.failed_count += 1;
       output.warnings.push({
         killmail_id: ref.killmail_id,
@@ -82,6 +91,12 @@ function emptyEvidencePackage(run) {
     ingestion_audits: [],
     warnings: []
   };
+}
+
+function isProviderCapacityError(error) {
+  return error?.code === 'PROVIDER_CAPACITY_DEFERRED' ||
+    error?.code === 'HTTP_RETRYABLE_CAPACITY' ||
+    [420, 429, 503].includes(Number(error?.statusCode || error?.status_code));
 }
 
 module.exports = {

@@ -26,6 +26,7 @@ async function main() {
   try {
     await verifyDiscoveryPartialFailure();
     await verifyExpansionPartialFailureAndRetry();
+    await verifyExpansionCapacityDeferral();
     verifyPersistenceRollbackAfterKillmailInsert();
     await verifyManualExpansionPersistenceFailureState();
     await verifyMetadataHydrationFailure();
@@ -35,6 +36,44 @@ async function main() {
   } finally {
     restoreEnv(previous);
     fs.rmSync(root, { recursive: true, force: true });
+  }
+}
+
+async function verifyExpansionCapacityDeferral() {
+  const db = openDatabase(':memory:');
+  migrate(db);
+  seedTopology(db);
+  seedQueue(db, [{ killmail_id: 8791, hash: 'hash_8791' }]);
+
+  try {
+    const result = await expandManualRefs({
+      discoveredByType: 'manual_actor',
+      discoveredById: 'character:90000002',
+      maxExpansions: 1,
+      trigger: 'fixture_capacity'
+    }, {
+      db,
+      esiClient: {
+        async expandKillmail() {
+          const error = new Error('fixture ESI retryable capacity wait');
+          error.code = 'HTTP_STATUS_ERROR';
+          error.statusCode = 429;
+          throw error;
+        }
+      }
+    });
+
+    assert(result.new_esi_expansions === 0, 'capacity deferral should not create ESI evidence');
+    assert(result.failed_expansions === 0, 'capacity deferral should not be terminal failed expansion');
+    assert(count(db, 'killmails') === 0, 'capacity deferral should not write killmails');
+    assert(count(db, 'activity_events') === 0, 'capacity deferral should not write activity events');
+    assert(queueStatus(db, 8791) === 'pending', 'capacity deferral should leave queued ref pending');
+    const run = latestFetchRun(db);
+    assert(run.status === 'success', 'capacity deferral should keep run reviewable without terminal failure');
+    assert(run.failed_expansions === 0, 'capacity deferral fetch run should not count failed expansion');
+    assert(warningsForRun(db, run.run_id).some((warning) => warning.warning_type === 'provider_capacity_deferred'), 'capacity deferral should write provider warning');
+  } finally {
+    closeDatabase(db);
   }
 }
 
@@ -351,6 +390,7 @@ async function verifyServiceTaskFailureDiagnosticsAndRetry(root) {
       db,
       databasePath: dbPath,
       asTask: true,
+      now: '2026-05-26T10:00:00.000Z',
       repository: failingRepository,
       esiClient: loggingEsiClient(db, failingRepository)
     });
@@ -401,6 +441,7 @@ async function verifyServiceTaskFailureDiagnosticsAndRetry(root) {
       db,
       databasePath: dbPath,
       asTask: true,
+      now: '2026-05-26T10:06:00.000Z',
       esiClient: loggingEsiClient(db, new EvidenceRepository(db))
     });
 
@@ -562,6 +603,15 @@ function latestApiLog(db) {
     ORDER BY rowid DESC
     LIMIT 1
   `).get();
+}
+
+function warningsForRun(db, runId) {
+  return db.prepare(`
+    SELECT *
+    FROM data_quality_warnings
+    WHERE run_id = ?
+    ORDER BY rowid ASC
+  `).all(runId);
 }
 
 function latestMetadataRun(db) {

@@ -144,7 +144,19 @@ Write boundaries remain command-owned: Discovery queues refs only; Enrich select
 
 Queue -> API request -> Evidence write verification now includes a file-backed restart reconstruction proof. After a mixed expansion run, Atlas can reconstruct expanded and failed queue refs, fetch run counts, scoped ESI API logs, failed-expansion warnings, ingestion audits, stored killmail Evidence, and derived activity events from durable SQLite state without relying on volatile task memory. zKill Discovery anchors remain queue/provenance rows; ESI-expanded killmail rows are the Evidence-confirmed anchors.
 
+Retryable ESI/provider capacity waits are not terminal Evidence failures. They create reviewable provider-capacity warning state, write no Evidence, and leave selected refs pending for later explicit work rather than marking them failed.
+
 `app.readiness` exposes a compact `runtime_boundary` support readout for ordinary readiness/status inspection. The same source-owned model is used by operator debug trace packs. It separates durable SQLite state from volatile task/session state, summarizes partial-failure indicators, and classifies snapshots, trace packs, logs, and reports as support/readout artifacts rather than Evidence, Observation, or Assessment Memory.
+
+## Forward Sequencer Distinction
+
+Future sequencing work should keep three lanes separate:
+
+- Discovery Sequencer: paced zKill acquisition over a scoped target, time window, and radius/lookback envelope. Its output is Discovery refs.
+- Enrichment Sequencer: paced ESI expansion of known refs into stored Evidence.
+- Hydration: readability and metadata repair for known local records. It is not request-control sequencing.
+
+zKill batch support is useful design input for future packet sizing, but it does not make Live search a radius or large-envelope acquisition path. Live remains immediate and narrow; Watch / Sequencer owns patient scoped acquisition.
 
 ## Current Retention / Deletion State
 

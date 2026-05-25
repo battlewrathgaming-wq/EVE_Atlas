@@ -33,6 +33,8 @@ Manual discovery:
 - writes no killmails
 - writes no activity events
 - uses `manual_actor`, `manual_system`, or `manual_radius` queue scopes
+- direct Live manual discovery rejects radius before provider work; radius acquisition belongs to Watch / Sequencer
+- direct Live manual discovery uses per-fingerprint cooldown and scoped abuse lockout as provider pacing, not Evidence or queue failure state
 
 Manual expansion:
 
@@ -40,6 +42,7 @@ Manual expansion:
 - calls ESI for selected refs
 - respects max expansion cap
 - writes evidence through the existing ingestion pipeline
+- direct Live manual expansion uses per-fingerprint ESI cooldown; retryable provider capacity deferral leaves refs pending rather than marking them failed
 
 Manual discovery and manual expansion now use shared scope validation/default helpers. This keeps the CLI path aligned with the future IPC/UI path.
 

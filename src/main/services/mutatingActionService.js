@@ -1,4 +1,4 @@
-const { actionGate } = require('./liveApiGateService');
+const { actionGate, enterLiveProviderAttempt } = require('./liveApiGateService');
 const { taxonomyMessage } = require('./messageTaxonomy');
 const { discoverManualRefs } = require('../workers/manualDiscoveryWorker');
 const { expandManualRefs } = require('../workers/manualExpansionWorker');
@@ -31,17 +31,17 @@ const { defaultWatchSessionExecutor } = require('../watchlist/watchExecutor');
 const { buildWatchOfflineReadout } = require('../watchlist/watchOfflineReadout');
 
 async function runManualDiscoveryService(db, payload = {}, dependencies = {}) {
-  assertLiveAllowed('manual.discovery', payload);
   const input = await normalizeManualDiscoveryInput(db, payload, dependencies);
+  assertLiveAllowed('manual.discovery', input, dependencies);
   return discoverManualRefs(input, { ...dependencies, db });
 }
 
 async function runManualExpansionService(db, payload = {}, dependencies = {}) {
-  assertLiveAllowed('manual.expansion', payload);
   const input = normalizeManualExpansionScope({
     ...payload,
     trigger: payload.trigger || 'manual'
   });
+  assertLiveAllowed('manual.expansion', input, dependencies);
   return expandManualRefs(input, { ...dependencies, db });
 }
 
@@ -53,18 +53,18 @@ async function runActorWatchService(db, payload = {}, dependencies = {}) {
     entityId: actor.entity_id,
     entityName: actor.entity_name
   });
-  assertLiveAllowed('actor.watch', input);
+  assertLiveAllowed('actor.watch', input, dependencies);
   return collectActorWatch(input, { ...dependencies, db });
 }
 
 async function runSystemRadiusWatchService(db, payload = {}, dependencies = {}) {
   const input = normalizeSystemRadiusWatchScope(payload);
-  assertLiveAllowed('system.radius.watch', input);
+  assertLiveAllowed('system.radius.watch', input, dependencies);
   return collectSystemRadiusWatch(input, { ...dependencies, db });
 }
 
 async function runMetadataHydrationService(db, payload = {}, dependencies = {}) {
-  assertLiveAllowed('metadata.hydration', payload);
+  assertLiveAllowed('metadata.hydration', payload, { ...dependencies, requestControl: false });
   const target = String(payload.target || payload.kind || '').toLowerCase();
   if (target === 'actor') {
     const actor = await resolveActorInput(db, payload, dependencies);
@@ -263,8 +263,10 @@ async function resolveActorInput(db, payload = {}, dependencies = {}) {
   }, dependencies);
 }
 
-function assertLiveAllowed(action, input = {}) {
-  const gate = actionGate(action, input);
+function assertLiveAllowed(action, input = {}, dependencies = {}) {
+  const gate = dependencies.requestControl === false
+    ? actionGate(action, input)
+    : enterLiveProviderAttempt(action, input, dependencies);
   if (!gate.allowed) {
     const blocker = gate.blockers[0] || taxonomyMessage('LIVE_API_DISABLED', `${action} is not allowed`, { source: 'mutating.action' });
     const error = new Error(blocker.message);

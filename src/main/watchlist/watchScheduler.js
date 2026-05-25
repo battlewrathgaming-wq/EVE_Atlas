@@ -111,6 +111,7 @@ function scheduleRow(watchType, row, now, gates) {
     last_polled_at: row.last_polled_at || null,
     last_success_at: row.last_success_at || null,
     last_error_at: row.last_error_at || null,
+    sequencer_diagnostic: sequencerDiagnostic(watchType, row, reasons),
     source: watchType === 'actor' ? {
       entity_type: row.entity_type,
       entity_id: row.entity_id,
@@ -125,6 +126,43 @@ function scheduleRow(watchType, row, now, gates) {
       max_systems_per_run: row.max_systems_per_run,
       max_killmails_per_run: row.max_killmails_per_run
     }
+  };
+}
+
+function sequencerDiagnostic(watchType, row, blockedReasons = []) {
+  if (watchType === 'actor') {
+    const maxRefs = Number(row.max_killmails_per_run || 1);
+    return {
+      mode: 'watch',
+      status: blockedReasons.length ? 'waiting_for_gate_or_schedule' : 'pending_dispatch',
+      wait_state: blockedReasons.length ? blockedReasons.join(',') : null,
+      radius_allowed: false,
+      planned_packets: 1,
+      packet_shape: 'actor zKill discovery then capped ESI expansion',
+      caps: {
+        zkill_packets: 1,
+        esi_expansions: maxRefs
+      },
+      waiting_is_failure: false
+    };
+  }
+
+  const maxSystems = Number(row.max_systems_per_run || 1);
+  const maxKillmails = Number(row.max_killmails_per_run || 1);
+  return {
+    mode: 'watch_sequencer',
+    status: blockedReasons.length ? 'waiting_for_gate_or_schedule' : 'pending_dispatch',
+    wait_state: blockedReasons.length ? blockedReasons.join(',') : null,
+    radius_allowed: true,
+    radius_jumps: Number(row.radius_jumps || 0),
+    planned_packets: maxSystems,
+    packet_shape: 'system/radius zKill packets then capped ESI expansion',
+    caps: {
+      zkill_packets: maxSystems,
+      esi_expansions: maxKillmails,
+      max_refs_per_packet: Math.max(1, Math.ceil(maxKillmails / Math.max(maxSystems, 1)))
+    },
+    waiting_is_failure: false
   };
 }
 
@@ -194,5 +232,6 @@ function positiveInteger(value, label) {
 
 module.exports = {
   buildWatchScheduleStatus,
-  recordWatchRunResult
+  recordWatchRunResult,
+  sequencerDiagnostic
 };
