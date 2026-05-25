@@ -1,6 +1,6 @@
 # AURA Atlas Current Work
 
-Status: HS47 accepted; HS50 Lab display requests shipped; awaiting Lab/UIUX response
+Status: HS47 accepted; HS50 Lab display response relay closed as material-production scope
 Last updated: 2026-05-25
 
 ## Active Milestone
@@ -23,7 +23,7 @@ Source of intent:
 - Lab conformance input: `F:\Projects\AURA- Lab\workspace\LabRemoteConsumerConformanceHS66.md`
 - Lab advisory input: `F:\Projects\AURA- Lab\workspace\archive\cross-project-relay\AtlasImportAdvisoryHS64-lab-presentation-adoption.md`
 
-Current focus: HS47 Atlas Overview Face prototype is accepted after Overseer review and verification. Atlas is now in display workflow review: Lab has the first HS50 request batch, and UIUX should expand the display inventory with user stories, acceptance criteria, overload risks, and journey placement before another Dev runway is written.
+Current focus: HS47 Atlas Overview Face prototype is accepted after Overseer review and verification. Atlas display response relay is closed at the material-production scope level: Lab answered the first HS50 request batch, Human/source-project fitness discussion occurred, and the outcome is scope for future UIUX/Lab presentation materials rather than complete UI delivery or Dev authorization. UIUX should still expand the display inventory with user stories, acceptance criteria, overload risks, and journey placement before another Dev runway is written.
 
 ## Executor
 
@@ -42,13 +42,21 @@ workspace/RequestDisplayHS50-atlas-initial-display-requests.md
 F:\Projects\AURA- Lab\workspace\request_display.md
 ```
 
+Current Lab response relay:
+
+```txt
+workspace/DisplayResponseHS51-atlas-lab-m24-response-relay.md
+F:\Projects\AURA- Lab\workspace\DisplayResponseComparisonHS82-active-display-requests.md
+F:\Projects\AURA- Lab\workspace\OverseerHS83-m24-acceptance.md
+```
+
 Active request ids:
 
 - `atlas.overview.right-rail-status-stack`
 - `atlas.discovery.queue-review-possible-leads`
 - `atlas.watch.state-display`
 
-Expected next response record pattern:
+Expected next action/resting record pattern, only after a further Atlas/Human decision:
 
 ```txt
 workspace/DisplayResponseHS##-[request-id-or-surface]-lab-response-review.md
@@ -56,10 +64,10 @@ workspace/DisplayResponseHS##-[request-id-or-surface]-lab-response-review.md
 
 ## Next Workflow
 
-1. Await Lab response to the three HS50 advisory display requests.
+1. Use the closed HS50/HS51 relay as material-production scope for future UIUX/Lab sketches, slices, or presentation studies.
 2. Run an expanded UIUX inventory pass that attaches user stories, acceptance criteria, overload risks, and journey placement to Atlas user-facing data.
-3. Record Lab/UIUX responses in Atlas-local response/adoption records.
-4. Decide which display method, if any, Atlas accepts or adapts.
+3. Record only stable Atlas decisions as local resting/action records.
+4. Decide which display method, if any, Atlas accepts, adapts, rejects, or parks for implementation.
 5. Write a new bounded Dev runway only after Atlas/Human acceptance.
 
 No implementation is authorized by this file at this time.

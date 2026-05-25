@@ -91,6 +91,7 @@ Atlas display inventory
 | `request-ready` | Can become a scoped `request_display` entry. |
 | `submitted` | Sent to Lab. |
 | `answered` | Lab response received and linked. |
+| `discussion-needed` | Lab or advisory response exists, but Human/source-project fitness discussion is still needed before resting/action state. |
 | `accepted` | Atlas accepts a display method. |
 | `adapted` | Atlas accepts with changes. |
 | `parked` | Useful but not now. |
@@ -114,7 +115,7 @@ Use these as the main classification outcomes:
 ```yaml
 display_inventory:
   id:
-  status: identified | needs-scope | request-ready | submitted | answered | accepted | adapted | parked | rejected | implemented | deprecated
+  status: identified | needs-scope | request-ready | submitted | answered | discussion-needed | accepted | adapted | parked | rejected | implemented | deprecated
   product_area:
   surface:
   current_location:
@@ -202,7 +203,19 @@ Local source record:
 
 - `workspace/RequestDisplayHS50-atlas-initial-display-requests.md`
 
+Lab response relay:
+
+- `workspace/DisplayResponseHS51-atlas-lab-m24-response-relay.md`
+
 These are advisory display-comparison requests only. They do not authorize implementation, backend work, contract changes, terminology renames, or Atlas adoption.
+
+Current local state:
+
+- `atlas.overview.right-rail-status-stack`: answered; fit signal; material-production scope.
+- `atlas.discovery.queue-review-possible-leads`: answered; fit signal; material-production scope.
+- `atlas.watch.state-display`: answered; adapt signal toward compact status plus drawer/detail; material-production scope.
+
+This closes the response-relay stage only. It does not mean complete delivery, Atlas adoption, or Dev authorization.
 
 Parked for expanded UIUX inventory/user-story pass:
 
