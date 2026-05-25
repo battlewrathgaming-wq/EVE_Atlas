@@ -25,10 +25,22 @@ Future production deletion policy may need two fixed elements:
    - Working label candidate: `EVE_value`.
    - Possible role: assessment line/rating or compact user significance marker.
 
+Reserved catchment placeholders:
+
+- `EVE_Pilot_value`
+  - Working label candidate for a human-authored pilot-specific value, rating, or significance marker.
+  - Intended to give future design room if the user-authored value needs to distinguish killmail-level meaning from pilot/entity-level meaning.
+- `Spare_1A`
+  - Reserved catchment placeholder for future deletion/footprint design.
+  - No accepted meaning yet.
+- `Spare_1B`
+  - Reserved catchment placeholder for future deletion/footprint design.
+  - No accepted meaning yet.
+
 Working pair:
 
 ```txt
-[Immutable_record][User-input, short form string]
+[Evidence-confirmed killmail_id][Human-authored EVE_value]
 ```
 
 ## Interpretation
@@ -39,9 +51,13 @@ The immutable side should be narrowly scoped to an identifier such as `killmail_
 
 The user-input side should be explicitly human-authored and should not be confused with programmatic Evidence, Discovery, Observation, or automatic Assessment Memory.
 
+`EVE_Pilot_value`, `Spare_1A`, and `Spare_1B` are breathing-room placeholders only. They should not be treated as schema fields, UI copy, accepted terminology, or implementation requirements until a future policy packet accepts exact meanings.
+
 ## Open Questions
 
 - Is `EVE_value` the right term, or only a working placeholder?
+- Is `EVE_Pilot_value` needed as a separate pilot/entity-level value, or should one value field remain enough?
+- Should `Spare_1A` and `Spare_1B` remain reserved, be renamed, or be removed before implementation?
 - What verification standard proves a `killmail_id` is factual enough to serve as the immutable anchor?
 - Does the user-input string live as Assessment Memory, footprint metadata, or another accepted storage class?
 - Can the pair survive explicit deletion, or should the operator choose whether it survives?
@@ -56,3 +72,4 @@ The user-input side should be explicitly human-authored and should not be confus
 - Do not preserve raw ESI payloads, full activity events, participant arrays, or hidden deleted-record copies.
 - Do not make the user-input value mandatory without Human acceptance.
 - Do not treat `EVE_value` as accepted terminology until Human/Overseer accepts it in a future policy packet.
+- Do not treat `EVE_Pilot_value`, `Spare_1A`, or `Spare_1B` as accepted terminology, schema, payload, bridge, or UI fields until Human/Overseer accepts them in a future policy packet.
