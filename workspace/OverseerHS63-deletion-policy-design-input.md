@@ -18,6 +18,7 @@ Future production deletion policy may need two fixed elements:
    - Used as the immutable record identifier and verification anchor.
    - It is present in zKillboard discovery response context and ESI expanded killmail response context.
    - In the Atlas pipeline, the expanded ESI killmail is what becomes stored Evidence.
+   - Must be verified as factual before it can act as the immutable anchor; Atlas should not treat a user-entered or unverified ID as sufficient.
 
 2. Short human/user value string
    - A user-authored short-form input associated with the deleted or retained-interest record.
@@ -41,6 +42,7 @@ The user-input side should be explicitly human-authored and should not be confus
 ## Open Questions
 
 - Is `EVE_value` the right term, or only a working placeholder?
+- What verification standard proves a `killmail_id` is factual enough to serve as the immutable anchor?
 - Does the user-input string live as Assessment Memory, footprint metadata, or another accepted storage class?
 - Can the pair survive explicit deletion, or should the operator choose whether it survives?
 - Should the pair apply only to killmail Evidence, or also to actor/system/corporation/alliance interest traces?
@@ -50,6 +52,7 @@ The user-input side should be explicitly human-authored and should not be confus
 
 - Do not implement deletion execution from this note.
 - Do not add footprint storage from this note.
+- Do not treat an unverified or user-entered `killmail_id` as factual.
 - Do not preserve raw ESI payloads, full activity events, participant arrays, or hidden deleted-record copies.
 - Do not make the user-input value mandatory without Human acceptance.
 - Do not treat `EVE_value` as accepted terminology until Human/Overseer accepts it in a future policy packet.
