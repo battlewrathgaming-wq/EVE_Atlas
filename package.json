@@ -48,6 +48,7 @@
     "verify:evidence-rules": "node scripts/verify-evidence-rule-regressions.js",
     "verify:watch-scheduler": "node scripts/verify-watch-scheduler.js",
     "verify:watch-executor": "node scripts/verify-watch-executor.js",
+    "verify:watch-offline-readout": "node scripts/verify-watch-offline-readout.js",
     "verify:mutating-services": "node scripts/verify-mutating-services.js",
     "verify:background-execution": "node scripts/verify-background-execution.js",
     "verify:http-boundaries": "node scripts/verify-http-boundaries.js",

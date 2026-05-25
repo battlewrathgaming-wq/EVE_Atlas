@@ -28,6 +28,7 @@ const GROUPS = {
     'verify:evidence-rules',
     'verify:watch-scheduler',
     'verify:watch-executor',
+    'verify:watch-offline-readout',
     'verify:mutating-services',
     'verify:background-execution',
     'verify:http-boundaries',

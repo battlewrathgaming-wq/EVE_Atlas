@@ -17,6 +17,7 @@ const {
   runWatchExecutorDisarmService,
   runWatchExecutorStatusService,
   runWatchExecutorTickService,
+  runWatchOfflineReadoutService,
   runWatchRecordRunService,
   runWatchScheduleService,
   runWatchUpdateService
@@ -173,6 +174,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Return due, blocked, and backoff state for actor and system/radius watches',
     handler: ({ db, payload }) => runWatchScheduleService(db, payload)
+  },
+  'watch.offline_readout': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Return the read-only Watch_offline support model from local watch, executor, queue, and evidence state',
+    handler: ({ db, payload }) => runWatchOfflineReadoutService(db, payload)
   },
   'watch.recordRun': {
     classification: 'metadata-only',

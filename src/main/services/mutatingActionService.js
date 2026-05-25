@@ -28,6 +28,7 @@ const {
 const { addSystemRadiusWatch, addWatchlistEntity, listSystemRadiusWatches, listWatchlistEntities } = require('../watchlist/watchlistRepository');
 const { buildWatchScheduleStatus, recordWatchRunResult } = require('../watchlist/watchScheduler');
 const { defaultWatchSessionExecutor } = require('../watchlist/watchExecutor');
+const { buildWatchOfflineReadout } = require('../watchlist/watchOfflineReadout');
 
 async function runManualDiscoveryService(db, payload = {}, dependencies = {}) {
   assertLiveAllowed('manual.discovery', payload);
@@ -166,6 +167,15 @@ function runWatchScheduleService(db, payload = {}) {
   return buildWatchScheduleStatus(db, payload);
 }
 
+function runWatchOfflineReadoutService(db, payload = {}) {
+  const executorStatus = defaultWatchSessionExecutor.status(db);
+  return buildWatchOfflineReadout(db, {
+    now: payload.now,
+    liveApiEnabled: payload.liveApiEnabled,
+    executorStatus
+  });
+}
+
 function runWatchRecordRunService(db, payload = {}) {
   return recordWatchRunResult(db, payload);
 }
@@ -277,6 +287,7 @@ module.exports = {
   runWatchUpdateService,
   runWatchListService,
   runWatchScheduleService,
+  runWatchOfflineReadoutService,
   runWatchRecordRunService,
   runWatchExecutorStatusService,
   runWatchExecutorDisarmService,
