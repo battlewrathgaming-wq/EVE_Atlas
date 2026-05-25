@@ -87,6 +87,14 @@ HS53 recommends these bounded future packets:
 
 These are recommendations only. They are not active work until Human/Overseer selects one and `workspace/current.md` is updated.
 
+The Watch recovery/readout polish lane has a scoped works note:
+
+```txt
+workspace/OverseerHS54-watch-recovery-offline-readout-scope.md
+```
+
+This is scope and acceptance criteria only, not an active Dev runway.
+
 ## Human Decisions Needed
 
 - Should Atlas ever support Evidence deletion, or should raw ESI Evidence remain append/retain?
