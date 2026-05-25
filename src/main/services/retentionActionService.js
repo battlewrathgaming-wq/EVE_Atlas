@@ -33,7 +33,7 @@ const RETENTION_ACTIONS = Object.freeze({
     classification: 'destructive',
     dataClass: 'evidence',
     confirmation: 'required',
-    preservation: 'assessment_recommended',
+    preservation: 'not_required',
     description: 'Prune expanded killmail evidence and derived activity events for an explicit scope'
   },
   'assessment.compact_from_evidence': {
@@ -72,8 +72,8 @@ function buildRetentionPreflight(db, input = {}) {
   }
   if (definition.dataClass === 'evidence') {
     warnings.push(taxonomyMessage(
-      'ASSESSMENT_PRESERVATION_RECOMMENDED',
-      'Evidence pruning should offer or require assessment preservation before deletion',
+      'DELETION_EXECUTION_BLOCKED',
+      'Evidence deletion execution is not implemented; this response is a read-only preflight only',
       { source: 'retention.preflight' }
     ));
   }
@@ -97,6 +97,7 @@ function buildRetentionPreflight(db, input = {}) {
       assessment_recommended: definition.preservation === 'assessment_recommended',
       creates_assessment: definition.preservation === 'creates_assessment'
     },
+    deletion_policy: action === 'evidence.prune_scope' ? evidenceDeletionPolicy() : null,
     assessment_preview: assessmentPreview,
     scope,
     impact,
@@ -249,9 +250,14 @@ function impactFor(db, action, scope) {
 function evidenceScopeImpact(db, scope = {}) {
   const where = [];
   const params = [];
+  const selectedKillmailIds = selectedEvidenceKillmailIds(scope);
   const entityType = String(scope.entityType || scope.entity_type || scope.actorType || scope.actor_type || '').toLowerCase();
   const entityId = Number(scope.entityId ?? scope.entity_id ?? scope.actorId ?? scope.actor_id);
   const hasActorScope = ['character', 'corporation', 'alliance'].includes(entityType) && Number.isInteger(entityId) && entityId > 0;
+  if (selectedKillmailIds.length) {
+    where.push(`k.killmail_id IN (${selectedKillmailIds.map(() => '?').join(', ')})`);
+    params.push(...selectedKillmailIds);
+  }
   if (hasActorScope) {
     where.push('ae.entity_type = ? AND ae.entity_id = ?');
     params.push(entityType, entityId);
@@ -280,15 +286,84 @@ function evidenceScopeImpact(db, scope = {}) {
       killmails: 0,
       activity_events: 0,
       ingestion_audits: 0,
-      data_quality_warnings: 0
+      data_quality_warnings: 0,
+      assessment_artifact_references: 0,
+      affected_assessment_artifacts: []
     };
   }
   const placeholders = killmailIds.map(() => '?').join(', ');
+  const affectedAssessmentArtifacts = assessmentArtifactsForKillmails(db, killmailIds);
   return {
     killmails: killmailIds.length,
     activity_events: db.prepare(`SELECT COUNT(*) AS count FROM activity_events WHERE killmail_id IN (${placeholders})`).get(...killmailIds).count,
     ingestion_audits: db.prepare(`SELECT COUNT(*) AS count FROM ingestion_audits WHERE killmail_id IN (${placeholders})`).get(...killmailIds).count,
-    data_quality_warnings: countWarningsForKillmails(db, killmailIds)
+    data_quality_warnings: countWarningsForKillmails(db, killmailIds),
+    assessment_artifact_references: affectedAssessmentArtifacts.length,
+    affected_assessment_artifacts: affectedAssessmentArtifacts
+  };
+}
+
+function selectedEvidenceKillmailIds(scope = {}) {
+  const raw = scope.killmailIds || scope.killmail_ids || scope.killmailId || scope.killmail_id || [];
+  const values = Array.isArray(raw) ? raw : [raw];
+  return uniqueNumbers(values);
+}
+
+function assessmentArtifactsForKillmails(db, killmailIds) {
+  if (!killmailIds.length) {
+    return [];
+  }
+  const selected = new Set(killmailIds.map(Number));
+  const rows = db.prepare(`
+    SELECT artifact_id, artifact_type, entity_type, entity_id, status, sample_killmail_ids_json, citation_status
+    FROM assessment_artifacts
+    WHERE sample_killmail_ids_json IS NOT NULL
+    ORDER BY updated_at DESC, created_at DESC, artifact_id
+  `).all();
+  return rows
+    .map((row) => {
+      const sampleIds = parseJsonArray(row.sample_killmail_ids_json)
+        .map(Number)
+        .filter((value) => Number.isInteger(value) && selected.has(value));
+      if (!sampleIds.length) {
+        return null;
+      }
+      return {
+        artifact_id: row.artifact_id,
+        artifact_type: row.artifact_type,
+        entity_type: row.entity_type || null,
+        entity_id: row.entity_id || null,
+        status: row.status,
+        citation_status: row.citation_status || 'not_applicable',
+        referenced_killmail_ids: sampleIds,
+        interpretation: 'Assessment Memory is mutable, disposable, and stale after Evidence deletion; it is not Evidence and not a deletion blocker.'
+      };
+    })
+    .filter(Boolean);
+}
+
+function evidenceDeletionPolicy() {
+  return {
+    execution_status: 'blocked_preflight_only',
+    execution_note: 'HS69 does not implement deletion execution; retention.preflight only reports scope, policy, and affected-row counts.',
+    selected_active_data_policy: 'If future deletion is explicitly confirmed, Atlas should delete selected deletable active data in scope.',
+    no_retained_footprint: true,
+    footprint_policy: 'No retained deletion footprint is accepted: no killmail_id + pilot_id, value, rating, note, catchment field, raw Evidence, full activity events, participant arrays, or hidden copy.',
+    rejected_footprint_fields: [
+      'killmail_id + pilot_id',
+      'EVE_value',
+      'EVE_Pilot_value',
+      'EVE_rating',
+      'EVE_interest_score',
+      'Spare_1A',
+      'Spare_1B',
+      'custom note',
+      'custom value',
+      'custom rating',
+      'catchment field'
+    ],
+    snapshot_recovery_disclosure: 'Snapshots/backups are separate historical support artifacts and may retain records removed from active storage unless separately deleted.',
+    assessment_memory_policy: 'Assessment Memory is mutable, disposable, and quickly stale; it is not Evidence, not hidden retention, and not a deletion blocker.'
   };
 }
 
@@ -421,6 +496,18 @@ function uniqueNumbers(values) {
 
 function uniqueText(values) {
   return [...new Set(values.filter(Boolean))].sort((a, b) => String(a).localeCompare(String(b)));
+}
+
+function parseJsonArray(value) {
+  if (!value) {
+    return [];
+  }
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
 }
 
 function textOrNull(value) {

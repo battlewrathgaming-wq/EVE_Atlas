@@ -96,6 +96,14 @@ Accepted HS58 policy clarification:
 - footprint must not retain raw Evidence, full activity events, or hidden copies after deletion
 - assessment preservation may be offered or recommended, but it must not silently block or reverse explicit deletion unless future Human policy changes this
 
+Accepted HS69A/HS69 policy refinement:
+
+- retained deletion footprint is rejected
+- if explicit deletion execution is implemented later, selected deletable active data should be deleted without a retained footprint
+- deletion preflight reports no-footprint policy and rejected footprint fields rather than footprint candidates
+- snapshots/backups are separate historical support artifacts and may retain records removed from active storage unless separately deleted
+- Assessment Memory is mutable, disposable, and stale after Evidence deletion; it is not Evidence, not hidden retention, and not a deletion blocker
+
 Policy note:
 
 ```txt

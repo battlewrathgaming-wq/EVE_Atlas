@@ -28,7 +28,7 @@ async function verifyRetentionBoundaryIsPreflightOnly() {
     assert(pruneDefinition, 'retention actions should list evidence.prune_scope');
     assert(pruneDefinition.classification === 'destructive', 'evidence prune should be classified destructive');
     assert(pruneDefinition.confirmation === 'required', 'evidence prune should require confirmation');
-    assert(pruneDefinition.preservation === 'assessment_recommended', 'evidence prune should recommend assessment preservation without requiring it');
+    assert(pruneDefinition.preservation === 'not_required', 'evidence prune should not require hidden preservation');
 
     const blocked = buildRetentionPreflight(db, {
       action: 'evidence.prune_scope',
@@ -40,6 +40,14 @@ async function verifyRetentionBoundaryIsPreflightOnly() {
     assert(blocked.impact.activity_events > 0, 'preflight impact should count affected activity events');
     assert(blocked.impact.ingestion_audits === 1, 'preflight impact should count affected ingestion audits');
     assert(blocked.impact.data_quality_warnings === 1, 'preflight impact should count affected data quality warnings');
+    assert(blocked.impact.assessment_artifact_references === 1, 'preflight impact should count affected assessment references');
+    assert(blocked.deletion_policy.execution_status === 'blocked_preflight_only', 'preflight should state deletion execution remains blocked');
+    assert(blocked.deletion_policy.no_retained_footprint === true, 'preflight should state retained footprint is rejected');
+    assert(blocked.deletion_policy.footprint_policy.includes('No retained deletion footprint'), 'preflight should not report footprint candidates');
+    assert(blocked.deletion_policy.rejected_footprint_fields.includes('killmail_id + pilot_id'), 'preflight should reject killmail/pilot footprint retention');
+    assert(blocked.deletion_policy.rejected_footprint_fields.includes('EVE_interest_score'), 'preflight should reject custom score footprint fields');
+    assert(blocked.deletion_policy.snapshot_recovery_disclosure.includes('may retain records removed from active storage'), 'preflight should disclose snapshot/backups may retain historical records');
+    assert(blocked.deletion_policy.assessment_memory_policy.includes('not hidden retention'), 'preflight should classify Assessment Memory correctly');
     assertSame(tableCounts(db), before, 'blocked evidence preflight must not mutate evidence or memory');
 
     const allowed = buildRetentionPreflight(db, {
@@ -49,8 +57,23 @@ async function verifyRetentionBoundaryIsPreflightOnly() {
     });
     assert(allowed.allowed === true, 'matching confirmation should allow preflight calculation only');
     assert(allowed.confirmation.token === 'evidence.prune_scope', 'preflight should expose explicit confirmation token');
-    assert(allowed.preservation.assessment_recommended === true, 'preflight should recommend assessment preservation');
+    assert(allowed.preservation.assessment_recommended === false, 'preflight should not recommend assessment preservation as deletion substitute');
+    assert(allowed.deletion_policy.no_retained_footprint === true, 'allowed preflight should still reject retained footprint');
     assertSame(tableCounts(db), before, 'allowed evidence preflight must still not delete');
+
+    const selectedEvidence = buildRetentionPreflight(db, {
+      action: 'evidence.prune_scope',
+      confirmation: 'evidence.prune_scope',
+      scope: {
+        killmailId: 7701
+      }
+    });
+    assert(selectedEvidence.impact.killmails === 1, 'selected Evidence preflight should count exact selected killmail');
+    assert(selectedEvidence.impact.ingestion_audits === 1, 'selected Evidence preflight should count exact ingestion audit rows');
+    assert(selectedEvidence.impact.data_quality_warnings === 1, 'selected Evidence preflight should count exact warning rows');
+    assert(selectedEvidence.impact.assessment_artifact_references === 1, 'selected Evidence preflight should report affected Assessment Memory references');
+    assert(!JSON.stringify(selectedEvidence).includes('raw_esi_payload'), 'preflight should not report raw Evidence payloads');
+    assert(!JSON.stringify(selectedEvidence).includes('attackers'), 'preflight should not report participant arrays');
 
     const commands = listServiceCommands();
     assert(commands.some((entry) => entry.command === 'retention.preflight' && entry.classification === 'read-only'), 'retention.preflight command should be read-only');
@@ -123,7 +146,7 @@ function verifyCompactionAndFootprintPolicy() {
     assert(afterDeletion.activity_events === 0, 'fixture deletion should remove full activity events');
     assert(afterDeletion.ingestion_audits === 0, 'fixture deletion should remove ingestion audit for selected evidence');
     assert(afterDeletion.data_quality_warnings === 0, 'fixture deletion should remove warning tied to selected evidence run');
-    assert(afterDeletion.assessment_artifacts === 1, 'Assessment Memory can survive fixture evidence deletion');
+    assert(afterDeletion.assessment_artifacts === afterArtifact.assessment_artifacts, 'fixture deletion simulation should not mutate Assessment Memory');
 
     const artifactRow = db.prepare('SELECT * FROM assessment_artifacts LIMIT 1').get();
     assert(!JSON.stringify(artifactRow).includes('raw_esi_payload'), 'surviving footprint row must not hide raw ESI payload');
@@ -198,6 +221,13 @@ function seed(db) {
     expanded_new: result.killmailsWritten,
     activity_events_written: result.eventsWritten
   }, 'success');
+
+  createAssessmentArtifact(db, {
+    artifactType: 'analyst_note',
+    assessmentReason: 'Fixture Assessment Memory cites selected Evidence and is disposable after deletion.',
+    sampleKillmailIds: [7701],
+    assessedBy: 'fixture'
+  });
 }
 
 function expandedKillmail(killmailId, hash) {

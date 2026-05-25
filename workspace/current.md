@@ -129,26 +129,65 @@ Overseer verification:
 - The scan confirmed warning-only behavior; no renames and no protected-word JSON updates were performed.
 - No code, schema, deletion execution, footprint storage, live API, or real DB mutation occurred while opening this runway.
 
-To be completed by Dev after implementation.
+HS69 completed by Dev.
 
-Expected evidence:
+Files changed:
 
-- files changed
-- preflight fields/readout added or refined
-- fixture cases added/updated
-- proof that `retention.preflight` remains read-only
-- proof that no executable deletion command was added
-- proof that no schema/storage/footprint persistence was added
-- proof that no retained footprint is reported or stored
-- verification commands and results
-- confirmation that no live API, real DB mutation, protected-word JSON update, or terminology rename occurred
+- `src/main/services/retentionActionService.js`
+- `scripts/verify-retention-preflight.js`
+- `scripts/verify-retention-deletion-boundary.js`
+- `docs/current-state/current-evidence-pipeline.md`
+- `docs/current-state/current-terminology-and-retention.md`
+- `workspace/current.md`
+- `workspace/DevHS69-deletion-preflight-refinement.md`
+
+Preflight fields/readout refined:
+
+- `evidence.prune_scope` preflight now includes `deletion_policy`.
+- `deletion_policy.execution_status` reports `blocked_preflight_only`.
+- `deletion_policy.no_retained_footprint` reports `true`.
+- `deletion_policy.footprint_policy` rejects retained deletion footprint reporting.
+- `deletion_policy.rejected_footprint_fields` lists rejected footprint/custom fields including `killmail_id + pilot_id`, `EVE_value`, `EVE_Pilot_value`, `EVE_rating`, `EVE_interest_score`, `Spare_1A`, and `Spare_1B`.
+- `deletion_policy.snapshot_recovery_disclosure` states snapshots/backups are historical support artifacts and may retain records removed from active storage unless separately deleted.
+- `deletion_policy.assessment_memory_policy` states Assessment Memory is mutable, disposable, stale after Evidence deletion, not Evidence, not hidden retention, and not a deletion blocker.
+- `impact.assessment_artifact_references` and `impact.affected_assessment_artifacts` report related Assessment Memory references where practical.
+- Selected Evidence scope can now count exact affected rows by `killmailId` / `killmailIds`.
+
+Fixture cases added/updated:
+
+- refined retention preflight verifies no-footprint policy, snapshot disclosure, rejected custom footprint fields, selected Evidence row counts, affected Assessment Memory references, and read-only table counts
+- retention deletion boundary verifies no executable deletion command exists, no retained footprint is reported, raw Evidence/participant payloads are not exposed by preflight, and service preflight does not mutate Evidence or Assessment Memory
+
+Boundary proof:
+
+- `retention.preflight` remains read-only.
+- No executable `evidence.prune_scope` command was added.
+- No executable `assessment.compact_from_evidence` command was added.
+- No schema, migration, storage class, footprint table/file, or footprint persistence was added.
+- No retained footprint is reported or stored.
+- No live API, real DB mutation, protected-word JSON update, or terminology rename occurred.
+
+Verification:
+
+```powershell
+npm.cmd run verify:retention-preflight
+npm.cmd run verify:retention-deletion-boundary
+npm.cmd run verify:runtime-snapshot
+npm.cmd run verify:assessment-artifacts
+npm.cmd run verify:service-registry
+npm.cmd run verify:protected-terms
+npm.cmd run verify:all
+git status --short --branch
+```
+
+Result: all focused checks passed and `verify:all` passed 65 scripts. `verify:protected-terms` passed warning-only; final warning count and classes are recorded in `workspace/DevHS69-deletion-preflight-refinement.md`. No renames or protected-word JSON updates were performed.
 
 ## Dev Handoff
 
-Dev should create:
+Dev completed:
 
 ```txt
 workspace/DevHS69-deletion-preflight-refinement.md
 ```
 
-The handoff must summarize what preflight now reports, which policy decisions it encodes, verification results, and any remaining policy or implementation risks.
+The handoff summarizes what preflight now reports, which policy decisions it encodes, verification results, and remaining policy or implementation risks.

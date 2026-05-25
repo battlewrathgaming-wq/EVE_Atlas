@@ -29,9 +29,20 @@ async function main() {
     });
     assert(evidenceBlocked.allowed === false, 'evidence prune should require confirmation');
     assert(evidenceBlocked.blockers.some((entry) => entry.code === 'DESTRUCTIVE_CONFIRMATION_REQUIRED'), 'evidence prune should include confirmation blocker');
-    assert(evidenceBlocked.warnings.some((entry) => entry.code === 'ASSESSMENT_PRESERVATION_RECOMMENDED'), 'evidence prune should recommend assessment preservation');
+    assert(evidenceBlocked.warnings.some((entry) => entry.code === 'DELETION_EXECUTION_BLOCKED'), 'evidence prune should state execution is blocked');
     assert(evidenceBlocked.impact.killmails === 1, 'evidence preflight should count killmails');
     assert(evidenceBlocked.impact.activity_events > 0, 'evidence preflight should count activity events');
+    assert(evidenceBlocked.impact.ingestion_audits === 1, 'evidence preflight should count ingestion audits');
+    assert(evidenceBlocked.impact.data_quality_warnings === 0, 'evidence preflight should count data quality warnings');
+    assert(evidenceBlocked.impact.assessment_artifact_references === 1, 'evidence preflight should count affected assessment references');
+    assert(evidenceBlocked.impact.affected_assessment_artifacts[0].referenced_killmail_ids.includes(8801), 'evidence preflight should list referenced killmail IDs');
+    assert(evidenceBlocked.deletion_policy.execution_status === 'blocked_preflight_only', 'evidence preflight should state deletion execution is blocked');
+    assert(evidenceBlocked.deletion_policy.no_retained_footprint === true, 'evidence preflight should state no retained footprint policy');
+    assert(evidenceBlocked.deletion_policy.footprint_policy.includes('No retained deletion footprint'), 'evidence preflight should reject retained footprint reporting');
+    assert(evidenceBlocked.deletion_policy.rejected_footprint_fields.includes('killmail_id + pilot_id'), 'evidence preflight should reject killmail/pilot footprint');
+    assert(evidenceBlocked.deletion_policy.rejected_footprint_fields.includes('EVE_value'), 'evidence preflight should reject custom value footprint fields');
+    assert(evidenceBlocked.deletion_policy.snapshot_recovery_disclosure.includes('Snapshots/backups'), 'evidence preflight should disclose snapshot recovery boundary');
+    assert(evidenceBlocked.deletion_policy.assessment_memory_policy.includes('not Evidence'), 'evidence preflight should state assessment memory is not Evidence');
 
     const evidenceAllowed = buildRetentionPreflight(db, {
       action: 'evidence.prune_scope',
@@ -42,7 +53,19 @@ async function main() {
       }
     });
     assert(evidenceAllowed.allowed === true, 'matching confirmation token should allow preflight');
-    assert(evidenceAllowed.preservation.assessment_recommended === true, 'evidence prune should carry preservation policy');
+    assert(evidenceAllowed.preservation.assessment_recommended === false, 'evidence prune should not recommend hidden preservation');
+    assert(evidenceAllowed.deletion_policy.no_retained_footprint === true, 'allowed preflight should still report no retained footprint');
+
+    const selectedEvidence = buildRetentionPreflight(db, {
+      action: 'evidence.prune_scope',
+      confirmation: 'evidence.prune_scope',
+      scope: {
+        killmailId: 8801
+      }
+    });
+    assert(selectedEvidence.impact.killmails === 1, 'selected killmail preflight should count exact killmail row');
+    assert(selectedEvidence.impact.activity_events > 0, 'selected killmail preflight should count exact activity rows');
+    assert(selectedEvidence.impact.assessment_artifact_references === 1, 'selected killmail preflight should count affected Assessment Memory references');
 
     const actor = db.prepare(`
       SELECT entity_type, entity_id, entity_name
@@ -195,6 +218,13 @@ function seed(db) {
     api_calls_zkill: 1,
     api_calls_esi: 0
   }, 'success');
+
+  createAssessmentArtifact(db, {
+    artifactType: 'analyst_note',
+    assessmentReason: 'Fixture Assessment Memory cites selected Evidence and may become stale after deletion.',
+    sampleKillmailIds: [8801],
+    assessedBy: 'fixture'
+  });
 }
 
 function assert(condition, message) {

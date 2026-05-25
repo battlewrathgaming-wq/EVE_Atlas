@@ -160,8 +160,11 @@ Blocked/deferred behavior:
 Retention policy clarification:
 
 - explicit user-selected deletion, if implemented later, must delete the selected deletable records
-- footprint is optional historical-interest metadata only, not a retention override
-- footprint must not preserve raw Evidence, full activity events, or hidden copies of deleted records
+- retained deletion footprint is rejected
+- if explicit deletion execution is implemented later, selected deletable active data should be deleted without a retained footprint
+- deletion preflight remains read-only and now reports no-footprint policy, rejected footprint fields, affected Evidence row counts, related Assessment Memory references where practical, and snapshot/backup disclosure
+- snapshots/backups are separate historical support artifacts and may retain records removed from active storage unless separately deleted
+- Assessment Memory is mutable, disposable, and stale after Evidence deletion; it is not Evidence, not hidden retention, and not a deletion blocker
 
 Any future deletion policy work must start with a bounded design/audit packet before Dev implementation.
 
