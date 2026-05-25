@@ -1,15 +1,15 @@
 # AURA Atlas Current Work
 
-Status: Idle after accepted Watch recovery / offline readout audit
+Status: Active Dev packet - Watch_offline readout support
 Last updated: 2026-05-25
 
 ## Active Milestone
 
-Milestone: Watch Recovery / Offline Readout State Audit
+Milestone: Watch_offline Readout Support
 
 Source of intent:
 
-- Human direction on 2026-05-25 to focus on post-restart Watch readout as a common state.
+- Human direction on 2026-05-25: proceed with the readout support first, then focus on read/write hardening.
 - Human naming and architecture direction on 2026-05-25: use `Watch_offline` for this line, avoid `Watcher`, ignore UX for now, and keep aggregation off the renderer where practical.
 - `workspace/OverseerHS53-runtime-record-integrity-audit.md`
 - `workspace/OverseerHS54-watch-recovery-offline-readout-scope.md`
@@ -21,91 +21,92 @@ Source of intent:
 - `workspace/critical/README.md`
 - `workspace/critical/critical-terms.md`
 
-Current focus: HS55 is accepted as a read-only audit. Atlas is not currently authorized for implementation. Future work should be selected deliberately from the accepted findings below.
+Current focus: implement a bounded read-only `Watch_offline` model/service support layer that exposes post-restart/offline Watch truth for future presentation, without UI redesign, live/API calls, collection, persistence-policy changes, or renderer-owned state interpretation.
 
 ## Executor
 
-Current executor: none; awaiting Human / Overseer selection.
+Current executor: Dev.
 
-Expected handoff filename: none until a new packet is opened.
-
-## Accepted HS55 Understanding
-
-The audit confirmed Atlas can already state the core post-restart Watch truth without live/API calls or collection:
+Expected handoff filename:
 
 ```txt
-Configured Watch exists.
-Session is unarmed because runtime restarted.
-No collection is active.
-Local context is still available.
-Operator can arm when ready.
+workspace/DevHS56-watch_offline-readout-support.md
 ```
 
-Accepted findings:
+## Ordered Runway
 
-- Watch definitions, active/inactive config, last polled, last success/error, next poll, backoff, and local queue/evidence context are persisted or locally available.
-- `sessionArmed`, active task, last tick, last dispatch, and task runner state are intentionally volatile after restart.
-- A passive restart/status path does not start collection.
-- `session_not_armed` is available through existing scheduler/executor state and is a normal post-restart block reason, not an error.
-- `due` currently means runnable after gates; a time-eligible Watch blocked by unarmed session appears as blocked, not due.
-- Local/offline context remains available while Watch execution is unarmed.
-- Current services expose enough truth for future display work, but not a polished operator readout model.
+1. Read the source-of-intent files above, then inspect the existing Watch schedule/executor/readiness/report/queue service paths:
+   - `src/main/watchlist/watchScheduler.js`
+   - `src/main/watchlist/watchExecutor.js`
+   - `src/main/watchlist/watchlistRepository.js`
+   - `src/main/services/serviceRegistry.js`
+   - `src/main/services/taskRunner.js`
+   - `src/main/services/appReadinessService.js`
+   - `src/renderer/queueWatch.js`
+   - existing focused verification scripts in `scripts/`
+2. Design the smallest read-only `Watch_offline` support shape using existing state. Prefer a backend/main-process service or model aggregation over renderer-side interpretation. Do not rename existing commands, IPC names, payloads, schemas, or UI terms.
+3. Implement derived fields only where they can be proven from existing local state. Candidate fields:
+   - `session_armed`
+   - `collection_active`
+   - `time_eligible`
+   - `eligible_if_armed`
+   - `next_eligible_at`
+   - `blocked_reasons`
+   - `state_basis` or equivalent explanation of which existing state produced the readout
+   - `local_context_available`
+   - Watch-scoped local queue/evidence counts only if cheap, read-only, and clearly local
+4. Preserve the core post-restart truth:
 
-## Remaining Work Options
+   ```txt
+   Configured Watch exists.
+   Session is unarmed because runtime restarted.
+   No collection is active.
+   Local context is still available.
+   Operator can arm when ready.
+   ```
 
-No work is active by default.
-
-Recommended optional future packet:
-
-```txt
-DevHS##-watch_offline-readout-support
-```
-
-Candidate scope:
-
-- Add or refine a read-only `Watch_offline` recovery/readout model using derived fields only.
-- Candidate fields: `time_eligible`, `eligible_if_armed`, `next_eligible_at`, `collection_active`, `state_layer` / `state_basis`, and optionally Watch-scoped local queue/evidence counts.
-- Prefer backend/read-only service aggregation over renderer-side interpretation so presentation layers have clean state to consume.
-- Keep `sessionArmed` volatile and never persisted.
-- Do not start collection, call live APIs, alter Watch execution, rename commands, or design the UI pane.
-
-Accepted Human / Overseer decisions:
-
-- Use `Watch_offline` as the specific working name for this post-restart/offline Watch line.
-- Avoid `Watcher` as a class or user-facing state unless explicitly approved later as presentation-only language.
-- Treat `Radar` as a parked future UI/display metaphor only, not Atlas backend, bridge, service, payload, or state-model doctrine.
-- Ignore UX implementation for now.
-- Bias architecture toward a read-only service/model and keep as much interpretation as practical off the renderer.
-
-Open Human / Overseer decisions:
-
-- Whether "eligible if armed" is acceptable as a field/phrase inside the `Watch_offline` model, or should remain an internal candidate only.
-- How much backoff/error detail belongs in first-read operator state versus a diagnostic/detail surface.
-- Whether to open the optional `Watch_offline` readout-support packet now or leave findings parked for later material work.
+5. Add or update focused offline verification for the readout shape. Include cases for:
+   - configured Watch after restart with `session_armed=false`
+   - no active collection
+   - time-eligible Watch blocked by unarmed session
+   - not-due Watch
+   - backoff/error state if existing fixtures make this cheap
+   - local context availability without live/API calls
+6. Keep renderer changes minimal. If any renderer touch is necessary, it may only consume or expose the read-only support shape for verification; it must not redesign the interface or own Watch meaning.
+7. Run required verification.
+8. Create `workspace/DevHS56-watch_offline-readout-support.md` with the implementation summary, field contract, verification output, and guardrail confirmation.
 
 ## Guardrails
 
-- No implementation is authorized by this idle state.
-- No UI implementation or offline pane design is authorized.
-- No backend, schema, persistence, bridge, IPC, service, payload, command, or contract changes are authorized.
+- No UI redesign.
+- No offline pane design.
+- No live/private/API calls.
+- No collection on startup or passive page load.
 - Do not persist `sessionArmed`.
-- Do not start collection on app startup or passive page load.
-- No live/private/API calls unless explicitly authorized by the Human.
-- Preserve Atlas meanings for Watch, Marked, Evidence, Discovery, External API, Assessment Memory, and provenance.
+- No schema/migration changes unless Dev proves a read-only fixture/test update cannot verify the packet without one and stops for Overseer approval first.
+- No bridge, IPC, service, payload, command, or contract renames.
+- No backend meaning rename.
+- Do not use `Watcher` as a class, user-facing state, or service concept.
+- Do not promote `Radar` into Atlas backend, bridge, service, payload, or state-model terminology.
+- Preserve Atlas meanings for Watch, Marked, Evidence, Discovery, External API, Assessment Memory, provenance, and storage.
+- Treat `eligible_if_armed` as a technical candidate field, not final human-facing copy.
 
 ## Stop Conditions
 
-Return to Human / Overseer before opening work if:
+Stop and return to Overseer if:
 
-- implementation would require live/private provider calls
-- a packet would mutate the user's real local database
-- Watch due/armed/running/blocked meanings need product wording decisions first
-- display work risks implying live feed, background collection, hidden monitoring, or startup watching
-- UIUX/Lab advice starts to rename Atlas-owned backend or bridge meaning
+- the implementation needs live/API calls
+- the implementation would start collection from startup, passive load, or readout generation
+- `sessionArmed` would need to be persisted
+- Watch due/armed/running/blocked meanings cannot be represented without product wording decisions
+- queue/evidence counts require risky joins, broad report rewrites, or performance-heavy scans
+- renderer code starts becoming the authority for Watch state interpretation
+- implementation requires contract/payload/service renames
+- protected-term output suggests new terminology authority decisions are needed
 
 ## Required Verification
 
-HS55 reported the following offline verification:
+Run focused offline checks:
 
 ```powershell
 npm.cmd run verify:watch-scheduler
@@ -118,32 +119,57 @@ npm.cmd run verify:protected-terms
 git status --short --branch
 ```
 
-Reported result: all focused checks passed. `verify:protected-terms` scanned no changed files before handoff creation and returned warning count 0. `verify:all` was not required because the audit did not find a cross-cutting renderer/service safety regression.
+Add and run a focused readout verification command if Dev creates one, for example:
+
+```powershell
+npm.cmd run verify:watch-offline-readout
+```
+
+If Dev touches shared service registry behavior or broad renderer/service paths, also run:
+
+```powershell
+npm.cmd run verify:all
+```
+
+Do not run live smoke unless explicitly authorized by the Human.
 
 ## Evidence
 
-Accepted handoff:
+Dev must update this section in the handoff, not necessarily in `current.md`:
 
 ```txt
-workspace/OverseerHS55-watch-recovery-offline-readout-audit.md
-```
+Files changed:
 
-Accepted prior scope:
+Read-only readout shape:
 
-```txt
-workspace/OverseerHS54-watch-recovery-offline-readout-scope.md
+Derived fields and basis:
+
+Post-restart behavior:
+
+Renderer involvement, if any:
+
+Verification run:
+
+Protected-term output:
 ```
 
 ## Dev Handoff
 
-No Dev packet is open.
+Create:
 
-If the optional readout-support packet is selected later, the Dev handoff should require:
+```txt
+workspace/DevHS56-watch_offline-readout-support.md
+```
 
-- exact files/code paths changed
-- derived readout fields added or clarified
-- proof `sessionArmed` remains volatile
-- proof no collection starts on startup/passive load
-- proof no live/API calls are introduced
-- focused verification command results
-- protected-term warning output
+Handoff must include:
+
+- files/code paths changed
+- field contract for the `Watch_offline` readout shape
+- how each derived field is calculated or intentionally omitted
+- confirmation `sessionArmed` remains volatile
+- confirmation readout generation does not start collection
+- confirmation no live/API calls were added
+- confirmation no persistence/schema/contract renames were performed, or exact approved exception if Overseer authorized one
+- verification commands and results
+- warning-only protected-term output and any noisy classes
+- recommended next packet for read/write hardening, if clear
