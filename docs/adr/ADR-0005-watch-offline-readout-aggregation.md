@@ -21,6 +21,8 @@ Use `Watch_offline` as the specific working name for the post-restart/offline Wa
 
 Avoid `Watcher` as a class or user-facing state unless the Human explicitly approves it later as presentation-only language.
 
+Treat `Radar` as a parked future UI/display metaphor only. It may later be evaluated by UIUX/Lab for presentation, but it is not an Atlas backend, bridge, service, payload, or state-model term.
+
 Keep Watch recovery/readout aggregation out of the renderer where practical. Prefer a read-only Atlas service/model that composes existing Watch, queue, Evidence, and runtime gate state into derived fields for presentation.
 
 The renderer may present and arrange the resulting model, but it should not become the authority for Watch state meaning, due/blocked interpretation, Evidence/Discovery separation, External API gate meaning, or collection activity.
@@ -45,6 +47,7 @@ These fields must not start collection, call live APIs, persist `sessionArmed`, 
 - Compose all state in the renderer: parked because it gives UI too much authority over Atlas state meaning and can blur due, blocked, running, Evidence, Discovery, and External API meanings.
 - Treat Watch recovery as a UX-only problem: rejected because the display needs backend-owned derived truth before presentation refinement.
 - Rename the area to `Watcher`: rejected for now because it risks creating a new class/state term around Watch behavior.
+- Promote `Radar` into Atlas internals now: rejected because it is a future presentation metaphor, not current project-to-bridge doctrine.
 
 ## Related Documents
 

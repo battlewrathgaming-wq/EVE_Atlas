@@ -73,6 +73,7 @@ Accepted Human / Overseer decisions:
 
 - Use `Watch_offline` as the specific working name for this post-restart/offline Watch line.
 - Avoid `Watcher` as a class or user-facing state unless explicitly approved later as presentation-only language.
+- Treat `Radar` as a parked future UI/display metaphor only, not Atlas backend, bridge, service, payload, or state-model doctrine.
 - Ignore UX implementation for now.
 - Bias architecture toward a read-only service/model and keep as much interpretation as practical off the renderer.
 
