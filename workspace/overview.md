@@ -30,8 +30,8 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Atlas Storage And Runtime Hardening
 Roadmap source: Human storage/runtime hardening direction accepted on 2026-05-25
 Current packet: `workspace/current.md`
-Current sequence: HS77 queue systems-design advisory requested before Dev
-Latest accepted coordination artifact: `workspace/OverseerHS75-hs74-queue-evidence-confidence-review.md`
+Current sequence: HS78 request-control/sequencer advisory accepted; Atlas is idle pending next Human/Overseer-selected packet
+Latest accepted coordination artifact: `workspace/OverseerHS78-request-control-sequencer-advisory-review.md`
 Display workflow support: `workspace/display_inventory.md`, `workspace/DisplayInventoryAuditHS49-ingest-to-userdisplay.md`, `workspace/request_display.md`, `workspace/display-request-workflow-hardening-contract.md`, `workspace/RequestDisplayHS50-atlas-initial-display-requests.md`, `workspace/DisplayResponseHS51-atlas-lab-m24-response-relay.md`
 Runtime/record integrity design input: `workspace/OverseerHS52-runtime-record-integrity-design-input.md`
 Watch recovery/offline readout scope: `workspace/OverseerHS54-watch-recovery-offline-readout-scope.md`
@@ -116,6 +116,7 @@ Watch_offline aggregation ADR: `docs/adr/ADR-0005-watch-offline-readout-aggregat
 - HS74 accepted Queue -> API request -> Evidence write confidence hardening as verification-only: offline fixture proof now covers mixed success/failure, retry/idempotency, durable provenance/restart reconstruction, and preserved Discovery/Evidence anchors.
 - HS76 design input captured Human intent for future Queue stale/expiration policy: queue refs should be treated as Watch-scheduled work items, freshness should relate to originating Watch interval/lookback, live searches should enter the priority queue instead of pulsing directly, queue policy does not affect local hydration, `ref` needs explicit definition, and uniqueness likely belongs per Watch configuration/target/time/scope.
 - HS77 pauses Dev and requests systems-design review before queue stale/expiration implementation; Atlas may need a clearer provider request/work queue model before diagnostics, cadence, live-search priority, and one-active-work-item uniqueness are encoded.
+- HS78 accepted the practical request-control/sequencer direction: no broad provider work queue yet; Live search stays direct/narrow with cooldown/lockout and no radius; Watch / Sequencer owns paced radius/lookback acquisition; `discovered_killmail_refs` remains returned zKill refs; waiting is not failure; local hydration is outside request-control policy.
 - Queue batch cadence and UX pacing is parked as a future product/UX lane after evidence-write correctness; it should decide batch size, timing, throttling, External API state behavior, and operator-facing working/waiting/throttled/failed/retry states.
 - Native picker/UI rigging, broader support-artifact budget coverage, active DB relocation, restore, automatic cleanup/pruning, snapshot deletion, and deletion execution remain out of scope until explicitly opened.
 - Storage-location/file-selector authority remains future infrastructure for heavy Atlas records, backups, exports, snapshots, or cache paths; Sense work may inform it but does not define Atlas storage semantics.

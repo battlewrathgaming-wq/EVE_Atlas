@@ -1,40 +1,43 @@
 # AURA Atlas Current Work
 
-Status: Idle pending systems-design advisory
-Last updated: 2026-05-25
+Status: Idle after accepted systems-design advisory
+Last updated: 2026-05-26
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS74 Queue -> API request -> Evidence write confidence is accepted. HS76 queue stale/expiration design input and the Human-provided audit indicate Atlas should pause before Dev implementation and get a systems-design pass on queue/work-request architecture.
+Current focus: HS78 accepted the request-control/sequencer advisory. Atlas should not build a broad provider work queue yet. The next likely Dev packet is a bounded request-control/sequencer diagnostic and Live-search guardrail slice, but no Dev packet is open until Human/Overseer selects it.
 
 Source of intent:
 
-- Human direction on 2026-05-25: consider a better systems design before implementing queue stale/expiration.
-- Human HS76 design input: queue refs should be treated as Watch-scheduled work items, not a generic inbox.
-- Human HS76 design input: freshness should relate to the originating Watch interval/lookback where possible.
-- Human HS76 design input: live searches should enter the priority queue instead of pulsing live search directly.
-- Human HS76 design input: queue policy does not affect local hydration.
-- Human-provided queue/schema audit on 2026-05-25: current storage does not reliably preserve Watch configuration ID, request time window, exact lookback, or one-active-work-item identity across all queue lanes.
+- Human advisory on 2026-05-26: do not implement a broad provider work queue yet; use a small Watch / Sequencer request-control layer.
+- Human advisory on 2026-05-26: Live search is immediate and narrow; Watch / Sequencer is patient and powerful.
+- Human advisory on 2026-05-26: radius belongs to Watch / Sequencer, not Live search.
+- Human advisory on 2026-05-26: waiting is endpoint-respectful behavior, not failure.
+- Human advisory on 2026-05-26: Discovery Queue is returned zKill refs; Evidence is expanded ESI killmails.
+- Human advisory on 2026-05-26: queue/request-control policy does not affect local hydration, and local cache checks should not be called hydration.
+- `workspace/OverseerHS78-request-control-sequencer-advisory-review.md`
+- `workspace/OverseerHS77-queue-systems-design-advisory-request.md`
 - `workspace/OverseerHS76-queue-stale-expiration-design-input.md`
 - `docs/contracts/discovery-queue-contract.md`
 - `docs/contracts/expansion-selection-contract.md`
 - `docs/contracts/metadata-hydration-contract.md`
 - `docs/current-state/current-evidence-pipeline.md`
 - `docs/current-state/current-manual-discovery-lane.md`
-- `workspace/OverseerHS75-hs74-queue-evidence-confidence-review.md`
 - `workspace/critical/README.md`
 - `workspace/critical/critical-terms.md`
 
 Accepted baseline:
 
 - A queued ref is Discovery/provenance, not Evidence.
-- Today a killmail queued ref is a row in `discovered_killmail_refs` keyed by `killmail_id`, `killmail_hash`, `discovered_by_type`, and `discovered_by_id`.
-- Current durable statuses include `pending`, `expanded`, `cached`, `failed`, and `superseded`; stale/expired are not accepted implemented states.
-- Queue policy should govern provider request/discovery/expansion work, not local metadata hydration.
-- Live/private/provider calls remain gated and are not required for the systems-design advisory.
-- The audit found current Watch linkage is uneven: actor Watch inference is stronger; routine system/radius Watch linkage is weaker because queued refs do not store a durable Watch row ID or full radius/lookback/time-window identity.
+- `discovered_killmail_refs` should remain the returned-ref Discovery queue, not the request-control sequencer.
+- Live search is direct provider-style lookup: no radius, short lookback, low caps, cooldown, abuse lockout.
+- Watch / Sequencer is Atlas-engineered scoped acquisition over time: radius, longer lookbacks, paced packets, separate zKill/ESI capacity, and waiting as valid behavior.
+- Waiting/capacity deferral must not mark refs failed.
+- ESI failure should mark a ref failed only after an actual ESI attempt fails outside retry/capacity handling.
+- Local hydration remains readability/label metadata work and is outside request-control policy.
+- Stale/expired Discovery ref mutation is deferred.
 
 ## Executor
 
@@ -50,36 +53,33 @@ None. No Dev packet is open.
 
 No active Dev runway.
 
-Recommended next specialist step:
+Recommended next packet, if Human/Overseer selects it:
 
-1. Systems Designer reviews whether Atlas needs a separate provider request/work queue ahead of `discovered_killmail_refs`.
-2. Systems Designer distinguishes:
-   - Watch schedule/work requests
-   - live search priority requests
-   - provider discovery refs
-   - ESI expansion refs
-   - local hydration jobs
-3. Systems Designer proposes a smallest safe architecture path:
-   - computed diagnostic only
-   - schema/work-queue migration
-   - staged hybrid path
-4. Overseer reviews the advisory and opens a bounded Dev packet only after architecture direction is accepted.
+1. Add request fingerprint generation for live/manual/Watch scopes.
+2. Add Live search cooldown/lockout check.
+3. Reject radius in Live search.
+4. Add Watch/Sequencer diagnostic output showing planned packets for radius/lookback.
+5. Keep `discovered_killmail_refs` schema unchanged.
+6. Do not implement stale/expired refs.
+7. Do not run live calls in verification.
 
 ## Guardrails And Non-Goals
 
-- No Dev implementation until the systems-design advisory is reviewed.
-- No live/private/API calls.
-- No stale/expired mutation.
-- No schema migration.
+- No broad provider work queue framework.
+- No Dev implementation until a bounded runway is explicitly opened.
+- No live/private/API calls in verification.
+- No stale/expired Discovery ref mutation.
+- No schema migration unless explicitly opened.
 - No production deletion execution.
 - No retention/deletion policy changes.
 - No snapshot, restore, active DB relocation, or storage-budget expansion.
 - No UI redesign or renderer presentation work.
 - No local hydration changes.
-- No direct live-search routing implementation.
+- No direct Live search radius.
+- Do not make `discovered_killmail_refs` the sequencer.
 - Do not treat queued refs as Evidence.
 - Do not treat failed/partial provider results as stored Evidence.
-- Do not hide partial failure by reporting complete evidence coverage.
+- Do not treat waiting as failure.
 
 ## Stop Conditions
 
@@ -88,8 +88,9 @@ Stop and return to Overseer/Human before any implementation if:
 - proposed work requires live provider access
 - proposed work requires schema migration
 - proposed work would blur Discovery with Evidence
-- proposed work would apply queue policy to local hydration
-- proposed work would add direct live-search dispatch, automatic retry loops, or background collection changes
+- proposed work would apply request-control policy to local hydration
+- proposed work would make Live search a radius or large-envelope acquisition path
+- proposed work would add broad background provider orchestration
 - proposed work would require new user-facing doctrine or presentation decisions
 - protected-term warnings suggest a new authority decision is required
 
@@ -97,16 +98,16 @@ Stop and return to Overseer/Human before any implementation if:
 
 No active Dev packet.
 
-Systems-design advisory is read-only. If a future Dev packet opens near queue identity/freshness, likely verification includes:
+If the recommended request-control/sequencer diagnostic packet opens, likely verification includes:
 
 ```powershell
-npm.cmd run verify:queue-selection
-npm.cmd run verify:queue-scope-isolation
-npm.cmd run verify:queue-report
+npm.cmd run verify:live-api-gate
+npm.cmd run verify:scope-controls
 npm.cmd run verify:watch-scheduler
 npm.cmd run verify:watch-executor
-npm.cmd run verify:watch-offline-readout
 npm.cmd run verify:manual-discovery
+npm.cmd run verify:queue-selection
+npm.cmd run verify:queue-scope-isolation
 npm.cmd run verify:queue-api-evidence-write
 npm.cmd run verify:hydration
 npm.cmd run verify:db-integrity
@@ -124,22 +125,20 @@ npm.cmd run verify:all
 
 HS74 is accepted and closed.
 
-HS76 design input captured:
+HS76 design input captured queue stale/expiration intent.
 
-- queue refs should be treated as Watch-scheduled work items
-- freshness should relate to Watch interval/lookback where possible
-- live searches should enter the priority queue instead of pulsing directly
-- queue policy does not affect local hydration
-- `ref` needs explicit definition
-- uniqueness likely belongs per Watch configuration/target/time/scope, but must be verified
+HS77 requested systems-design review before Dev implementation.
 
-Human-provided queue/schema audit found:
+HS78 accepted the practical systems-design advisory:
 
-- current queued killmail refs are rows in `discovered_killmail_refs`
-- current ref identity is `killmail_id`, `killmail_hash`, `discovered_by_type`, and `discovered_by_id`
-- current storage does not reliably preserve originating Watch configuration ID, exact lookback, request time window, or one-active-work-item identity
-- local hydration is separate from queue policy
-- smallest useful next step may be diagnostic, but Human/Overseer now want systems-design review before Dev implementation
+- Live search = direct provider-style lookup.
+- Watch / Sequencer = Atlas-engineered scoped acquisition over time.
+- Discovery Queue = returned zKill refs.
+- Evidence = expanded ESI killmails.
+- Broad provider work queue is rejected for the next step.
+- `discovered_killmail_refs` should not be the sequencer.
+- Stale/expired ref mutation is deferred.
+- Local hydration is outside request-control policy.
 
 No Dev implementation is open.
 
@@ -147,10 +146,10 @@ Opening verification:
 
 - `npm.cmd run verify:protected-terms` passed with exit code 0, warning-only.
 - Protected-term discovery ran in working-set mode against 3 files.
-- Warning count: 86.
-- Warning classes: cross-project-borrowing 12, lab-quarantine-borrowing 58, atlas-candidate 16.
+- Warning count: 110.
+- Warning classes: cross-project-borrowing 13, lab-quarantine-borrowing 61, atlas-candidate 36.
 - `git diff --check` passed.
 
 ## Dev Handoff
 
-No Dev handoff is expected until the systems-design advisory is reviewed and accepted.
+No Dev handoff is expected until a bounded runway is opened.
