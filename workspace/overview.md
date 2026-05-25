@@ -27,11 +27,11 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 
 ## Active Milestone
 
-Milestone: Runtime And Record Integrity Audit
-Roadmap source: Human runtime/record integrity direction accepted on 2026-05-25
+Milestone: Watch Recovery / Offline Readout State Audit
+Roadmap source: Human Watch recovery/offline readout direction accepted on 2026-05-25
 Current packet: `workspace/current.md`
-Current sequence: HS53 audit accepted; awaiting Human priority decision
-Latest accepted coordination artifact: `workspace/OverseerHS53-runtime-record-integrity-audit.md`
+Current sequence: HS55 audit packet opened; no implementation authorized
+Latest accepted coordination artifact: `workspace/OverseerHS54-watch-recovery-offline-readout-scope.md`
 Display workflow support: `workspace/display_inventory.md`, `workspace/DisplayInventoryAuditHS49-ingest-to-userdisplay.md`, `workspace/request_display.md`, `workspace/display-request-workflow-hardening-contract.md`, `workspace/RequestDisplayHS50-atlas-initial-display-requests.md`, `workspace/DisplayResponseHS51-atlas-lab-m24-response-relay.md`
 Runtime/record integrity design input: `workspace/OverseerHS52-runtime-record-integrity-design-input.md`
 Watch recovery/offline readout scope: `workspace/OverseerHS54-watch-recovery-offline-readout-scope.md`
