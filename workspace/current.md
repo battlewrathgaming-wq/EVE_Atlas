@@ -1,18 +1,21 @@
 # AURA Atlas Current Work
 
-Status: Idle after deletion scope and backup matrix
+Status: Human decision needed after deletion policy decision brief
 Last updated: 2026-05-25
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS65 accepted a bounded deletion scope and backup/restore decision matrix for future production deletion work. Atlas remains idle; no Dev packet is open.
+Current focus: HS66 narrowed the remaining production deletion choices into a Human decision brief. Atlas remains idle; no Dev packet is open until backup/snapshot, footprint, placeholder value labels, and Assessment Memory citation behavior are accepted or revised.
 
 Source of intent:
 
 - Human direction on 2026-05-25: continue from HS64 production deletion policy design.
+- Human selected option 2 on 2026-05-25: policy decision pass before Dev.
+- `workspace/OverseerHS66-deletion-policy-human-decisions.md`
 - `workspace/OverseerHS64-production-deletion-policy-design.md`
+- `workspace/OverseerHS65-deletion-scope-backup-matrix.md`
 - `workspace/OverseerHS63-deletion-policy-design-input.md`
 - `workspace/DevHS58-retention-deletion-execution-boundary.md`
 - `docs/current-state/current-evidence-pipeline.md`
@@ -39,10 +42,11 @@ Expected handoff filename: none until a new packet is opened.
 
 ## Ordered Runway
 
-1. Hold Atlas idle until the Human selects the next bounded packet.
-2. Future production deletion work must use HS64 and HS65 as policy inputs, not implementation authority by themselves.
-3. Do not open Dev work until the next packet defines exact deletion scope, backup/restore behavior, footprint behavior, fixture cases, and verification commands.
-4. Keep storage/runtime hardening, deletion policy, storage-location authority, and display/presentation work separated unless a future packet explicitly joins them.
+1. Hold Atlas idle until the Human accepts or revises the HS66 decision bundle.
+2. Future production deletion work must use HS64, HS65, and HS66 as policy inputs, not implementation authority by themselves.
+3. Do not open Dev work until the next packet defines exact deletion scope, accepted backup/restore behavior, accepted footprint behavior, fixture cases, and verification commands.
+4. If the HS66 recommendation is accepted, the next suitable Dev packet is read-only deletion preflight refinement, not deletion execution.
+5. Keep storage/runtime hardening, deletion policy, storage-location authority, and display/presentation work separated unless a future packet explicitly joins them.
 
 ## Guardrails And Non-Goals
 
@@ -70,7 +74,7 @@ Stop and return to Human before writing a Dev runway if:
 
 ## Required Verification
 
-For the completed HS65 documentation pass:
+For the completed HS66 documentation pass:
 
 ```powershell
 npm.cmd run verify:protected-terms
@@ -81,24 +85,21 @@ If future code changes occur under this idle state, stop and explain why the run
 
 ## Evidence
 
-HS65 completed by Overseer.
+HS66 completed by Overseer.
 
 Accepted handoff:
 
 ```txt
-workspace/OverseerHS65-deletion-scope-backup-matrix.md
+workspace/OverseerHS66-deletion-policy-human-decisions.md
 ```
 
-Policy matrix captured:
+Decision brief captured:
 
-- candidate deletion scopes
-- records affected in principle
-- records that must not become hidden Evidence retention
-- backup/restore options
-- footprint survival options
-- recommended default policy shape
-- unresolved Human decisions
-- future Dev gates
+- backup/snapshot behavior recommendation
+- footprint default recommendation
+- placeholder value label recommendation
+- Assessment Memory citation recommendation
+- next read-only Dev packet shape if accepted
 
 No code, schema, deletion execution, footprint storage, live API, real DB mutation, protected-word JSON update, or implementation terminology acceptance occurred.
 
@@ -106,4 +107,4 @@ No code, schema, deletion execution, footprint storage, live API, real DB mutati
 
 No Dev packet is open.
 
-Future Dev work requires a new Human / Overseer packet with exact deletion scope, accepted backup/restore behavior, footprint behavior, fixture cases, and verification commands.
+Future Dev work requires Human acceptance or revision of HS66, then a new Human / Overseer packet with exact deletion scope, accepted backup/restore behavior, footprint behavior, fixture cases, and verification commands.

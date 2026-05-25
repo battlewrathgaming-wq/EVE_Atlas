@@ -30,8 +30,8 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Atlas Storage And Runtime Hardening
 Roadmap source: Human storage/runtime hardening direction accepted on 2026-05-25
 Current packet: `workspace/current.md`
-Current sequence: HS65 deletion scope and backup matrix accepted; Atlas idle
-Latest accepted coordination artifact: `workspace/OverseerHS65-deletion-scope-backup-matrix.md`
+Current sequence: HS66 deletion policy Human decision brief written; Human decision needed before Dev
+Latest accepted coordination artifact: `workspace/OverseerHS66-deletion-policy-human-decisions.md`
 Display workflow support: `workspace/display_inventory.md`, `workspace/DisplayInventoryAuditHS49-ingest-to-userdisplay.md`, `workspace/request_display.md`, `workspace/display-request-workflow-hardening-contract.md`, `workspace/RequestDisplayHS50-atlas-initial-display-requests.md`, `workspace/DisplayResponseHS51-atlas-lab-m24-response-relay.md`
 Runtime/record integrity design input: `workspace/OverseerHS52-runtime-record-integrity-design-input.md`
 Watch recovery/offline readout scope: `workspace/OverseerHS54-watch-recovery-offline-readout-scope.md`
@@ -105,6 +105,7 @@ Watch_offline aggregation ADR: `docs/adr/ADR-0005-watch-offline-readout-aggregat
 - HS62 accepted compact `partial_success` status in `report.corpus_health`; the storage/runtime hardening lane is resting with clean body snapshot readiness, deletion policy, storage-location authority, and queue stale/expiration policy parked for future selection.
 - HS64 accepted production deletion policy design: zKill `killmail_id` is a Discovery anchor, ESI-expanded and Atlas-written `killmail_id` is the Evidence-confirmed anchor, and any future footprint must not preserve deleted Evidence in disguise.
 - HS65 accepted the deletion scope and backup matrix: first production deletion should stay tightly scoped to selected Evidence-confirmed `killmail_id` records, backup/restore behavior must be accepted before execution, and no Dev deletion work is open.
+- HS66 narrowed the remaining production deletion decisions: recommended first-release posture is explicit pre-delete snapshot warning, optional per-action footprint defaulting off, placeholder value labels parked, and Assessment Memory citation effects shown in preflight with explicit acknowledgement.
 - Storage-location/file-selector authority is parked as future infrastructure for heavy Atlas records, backups, exports, snapshots, or cache paths; Sense work may inform it but does not define Atlas storage semantics.
 - `Watch_offline` is the accepted working name for the post-restart/offline Watch readout line; avoid `Watcher` unless later approved as presentation-only language.
 - Human HS41 UI review accepted the direction and requested face/layout refinement: search-first Discovery, no duplicated Discovery/Watch controls, compact External API state, and progressive Observation/Assessment.
