@@ -7,7 +7,7 @@ Last updated: 2026-05-26
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS79 Live provider gate and Watch / Sequencer diagnostic is accepted. Atlas is resting until the Human / Overseer selects the next bounded packet.
+Current focus: HS79 Live provider gate and Watch / Sequencer diagnostic is accepted. Atlas is resting from Dev work while HS81 systems design advisory is prepared for Watch restart recovery and resumable sequencer intent.
 
 Source of intent:
 
@@ -20,6 +20,7 @@ Source of intent:
 - Human gate recommendation on 2026-05-26: Live search should block with next eligible time rather than wait long-running.
 - Human gate recommendation on 2026-05-26: Live cooldowns must not pause Watch globally, and Watch waits must not globally lock out Live.
 - `workspace/OverseerHS80-hs79-live-gate-review.md`
+- `workspace/OverseerHS81-watch-recovery-systems-design-request.md`
 - `workspace/DevHS79-live-gate-sequencer-diagnostic.md`
 - `workspace/OverseerHS79-live-gate-mechanic-acceptance.md`
 - `workspace/OverseerHS78-request-control-sequencer-advisory-review.md`
@@ -62,7 +63,7 @@ HS79 is accepted. No Dev work is currently open.
 
 Next likely candidate lanes, for Human / Overseer selection:
 
-1. Durable request-control state across restart.
+1. Watch restart recovery and resumable sequencer intent.
 2. Discovery Sequencer / Enrichment Sequencer architecture note and first implementation slice.
 3. Watch / Sequencer paced packet implementation for radius/lookback acquisition.
 4. Operator-facing waiting/cooldown/readout surface after the backend state is durable enough.
@@ -140,11 +141,18 @@ Accepted changes:
 
 Deferred:
 
-- Durable request-control state across restart.
+- Durable request-control counting across restart, pending HS81 systems review.
+- Watch restart recovery and resumable sequencer intent, pending HS81 systems review.
 - Persisted Watch / Sequencer packets.
 - Broad provider work queue framework.
 - Discovery ref stale/expiration mutation.
 - Operator-facing waiting/cooldown presentation.
+
+Advisory preparation:
+
+- `workspace/OverseerHS81-watch-recovery-systems-design-request.md` bundles the next systems-design prompt.
+- HS81 asks Systems to challenge whether recovery/resumable Watch intent is a better next architecture step than durable request-control counting.
+- HS81 is advisory only and does not authorize implementation.
 
 Verification:
 

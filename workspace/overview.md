@@ -30,8 +30,9 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Atlas Storage And Runtime Hardening
 Roadmap source: Human storage/runtime hardening direction accepted on 2026-05-25
 Current packet: `workspace/current.md`
-Current sequence: HS79 Live gate and Watch / Sequencer diagnostic accepted; no Dev runway is open
+Current sequence: HS79 Live gate and Watch / Sequencer diagnostic accepted; no Dev runway is open; HS81 systems design advisory is prepared
 Latest accepted coordination artifact: `workspace/OverseerHS80-hs79-live-gate-review.md`
+Latest advisory request: `workspace/OverseerHS81-watch-recovery-systems-design-request.md`
 Display workflow support: `workspace/display_inventory.md`, `workspace/DisplayInventoryAuditHS49-ingest-to-userdisplay.md`, `workspace/request_display.md`, `workspace/display-request-workflow-hardening-contract.md`, `workspace/RequestDisplayHS50-atlas-initial-display-requests.md`, `workspace/DisplayResponseHS51-atlas-lab-m24-response-relay.md`
 Runtime/record integrity design input: `workspace/OverseerHS52-runtime-record-integrity-design-input.md`
 Watch recovery/offline readout scope: `workspace/OverseerHS54-watch-recovery-offline-readout-scope.md`
@@ -119,6 +120,7 @@ Watch_offline aggregation ADR: `docs/adr/ADR-0005-watch-offline-readout-aggregat
 - HS78 accepted the practical request-control/sequencer direction: no broad provider work queue yet; Live search stays direct/narrow with cooldown/lockout and no radius; Watch / Sequencer owns paced radius/lookback acquisition; `discovered_killmail_refs` remains returned zKill refs; waiting is not failure; local hydration is outside request-control policy.
 - HS79 accepted the first-pass Live gate mechanic and opened Dev runway: per provider/action/fingerprint cooldown and rare lockout, Live radius rejection, already-running block, Watch / Sequencer planning diagnostics, no stale/expired refs, no live calls in verification, and no hydration coupling.
 - HS80 accepted DevHS79: Live/manual provider request-control metadata, per-fingerprint cooldown/lockout, Live radius rejection, Watch / Sequencer diagnostics, and provider-capacity deferral are implemented; request-control state remains service-memory-only and durable restart persistence is deferred.
+- HS81 bundles a systems-design advisory request to challenge whether the next architecture step should be Watch restart recovery and resumable sequencer intent instead of durable request-control counting.
 - Future sequencing should keep Discovery Sequencer, Enrichment Sequencer, and Hydration separate: zKill returns Discovery refs, ESI expansion writes Evidence, and hydration repairs local readability/metadata.
 - Queue batch cadence and UX pacing is parked as a future product/UX lane after evidence-write correctness; it should decide batch size, timing, throttling, External API state behavior, and operator-facing working/waiting/throttled/failed/retry states.
 - Native picker/UI rigging, broader support-artifact budget coverage, active DB relocation, restore, automatic cleanup/pruning, snapshot deletion, and deletion execution remain out of scope until explicitly opened.
