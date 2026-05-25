@@ -19,21 +19,30 @@ async function main() {
 
   const dbPath = path.join(workDir, 'runtime-source.sqlite');
   const snapshotPath = path.join(workDir, 'snapshots', 'runtime-source.snapshot.sqlite');
+  const configuredSnapshotDir = path.join(workDir, 'configured-snapshots');
+  const settingsPath = path.join(workDir, 'runtime-snapshot-settings.json');
+  const rendererSuppliedSettingsPath = path.join(workDir, 'renderer-supplied-settings.json');
   const db = openDatabase(dbPath);
   migrate(db);
   seed(db);
+  fs.mkdirSync(configuredSnapshotDir, { recursive: true });
 
   try {
     const beforeCounts = tableCounts(db);
     const preflight = buildRuntimeDbSnapshotPreflight(db, {
-      destinationPath: snapshotPath
+      destinationPath: snapshotPath,
+      settingsPath
     }, {
       databasePath: dbPath
     });
     assert(preflight.read_only === true, 'snapshot preflight should declare read-only behavior');
     assert(preflight.database_path === dbPath, 'snapshot preflight should report source DB path');
     assert(preflight.destination_path === snapshotPath, 'snapshot preflight should report destination before write');
+    assert(preflight.destination.source === 'explicit_request', 'explicit destination should be reported as request-scoped');
     assert(preflight.database.exists === true, 'snapshot preflight should report source DB existence');
+    assert(preflight.projected_snapshot_bytes >= preflight.database.size_bytes, 'snapshot preflight should estimate snapshot size from DB and journals');
+    assert(preflight.storage.budget_configured === false, 'snapshot preflight should report missing budget as unconfigured');
+    assert(preflight.storage.automatic_cleanup === false, 'snapshot budget must not imply automatic cleanup');
     assert(preflight.table_counts.killmails === beforeCounts.killmails, 'snapshot preflight should report killmail count');
     assert(preflight.latest_fetch_run.run_id, 'snapshot preflight should report latest fetch run');
     assert(preflight.latest_evidence_timestamp === '2026-05-01T20:01:00Z', 'snapshot preflight should report latest evidence timestamp');
@@ -41,7 +50,8 @@ async function main() {
     assert(!fs.existsSync(snapshotPath), 'snapshot preflight must not write destination file');
 
     const servicePreflight = await invokeServiceCommand('runtime.db_snapshot.preflight', {
-      destinationPath: snapshotPath
+      destinationPath: snapshotPath,
+      settingsPath
     }, {
       db,
       databasePath: dbPath
@@ -49,7 +59,8 @@ async function main() {
     assert(servicePreflight.destination_path === snapshotPath, 'snapshot preflight service should use context database path');
 
     const snapshot = await invokeServiceCommand('runtime.db_snapshot.create', {
-      destinationPath: snapshotPath
+      destinationPath: snapshotPath,
+      settingsPath
     }, {
       db,
       databasePath: dbPath
@@ -71,14 +82,131 @@ async function main() {
     }
 
     await assertRejects(() => invokeServiceCommand('runtime.db_snapshot.create', {
-      destinationPath: snapshotPath
+      destinationPath: snapshotPath,
+      settingsPath
     }, {
       db,
       databasePath: dbPath
     }), 'snapshot create should refuse existing destination without overwrite');
 
+    const savedSettings = await invokeServiceCommand('runtime.db_snapshot.settings.update', {
+      settingsPath,
+      snapshotDestinationDir: configuredSnapshotDir,
+      snapshotBudgetBytes: snapshot.snapshot.size_bytes * 4
+    }, { db });
+    assert(savedSettings.status === 'ready', 'valid snapshot settings should save as ready');
+    assert(savedSettings.settings.snapshot_destination_dir === configuredSnapshotDir, 'settings should persist configured destination directory');
+    assert(savedSettings.settings.snapshot_budget_bytes === snapshot.snapshot.size_bytes * 4, 'settings should persist configured budget');
+
+    const loadedSettings = await invokeServiceCommand('runtime.db_snapshot.settings.get', { settingsPath }, { db });
+    assert(loadedSettings.effective.snapshot_destination_dir === configuredSnapshotDir, 'settings get should load valid configured destination');
+    assert(loadedSettings.effective.snapshot_budget_bytes === snapshot.snapshot.size_bytes * 4, 'settings get should load valid budget');
+
+    const configuredPreflight = await invokeServiceCommand('runtime.db_snapshot.preflight', {
+      settingsPath
+    }, {
+      db,
+      databasePath: dbPath
+    });
+    assert(configuredPreflight.destination.source === 'configured', 'preflight should use valid configured destination');
+    assert(configuredPreflight.destination.directory === configuredSnapshotDir, 'preflight should report configured destination directory');
+    assert(path.dirname(configuredPreflight.destination_path) === configuredSnapshotDir, 'backend should generate snapshot filename inside configured directory');
+    assert(configuredPreflight.storage.budget_configured === true, 'preflight should report configured budget');
+    assert(configuredPreflight.storage.budget_bytes === snapshot.snapshot.size_bytes * 4, 'preflight should report configured budget bytes');
+    assert(configuredPreflight.allowed === true, 'configured preflight should allow when projected usage is inside budget');
+    assert(!fs.existsSync(configuredPreflight.destination_path), 'configured preflight must not write generated snapshot file');
+
+    await assertRejects(() => invokeServiceCommand('runtime.db_snapshot.settings.update', {
+      settingsPath,
+      snapshotDestinationDir: path.join(workDir, 'missing-destination'),
+      snapshotBudgetBytes: snapshot.snapshot.size_bytes
+    }, { db }), 'settings update should reject missing destination directories');
+
+    fs.writeFileSync(settingsPath, JSON.stringify({
+      version: 1,
+      snapshot_destination_dir: path.join(workDir, 'missing-destination'),
+      snapshot_budget_bytes: snapshot.snapshot.size_bytes
+    }, null, 2));
+    const invalidDestination = await invokeServiceCommand('runtime.db_snapshot.settings.get', { settingsPath }, { db });
+    assert(invalidDestination.status === 'degraded', 'invalid persisted destination should degrade visibly');
+    assert(invalidDestination.effective.snapshot_destination_dir === null, 'invalid persisted destination should not become effective');
+    const fallbackPreflight = await invokeServiceCommand('runtime.db_snapshot.preflight', { settingsPath }, {
+      db,
+      databasePath: dbPath
+    });
+    assert(fallbackPreflight.destination.source === 'fallback', 'invalid destination should fall back to project temp snapshot directory');
+    assert(fallbackPreflight.settings.status === 'degraded', 'preflight should expose degraded persisted destination state');
+
+    fs.writeFileSync(settingsPath, JSON.stringify({
+      version: 1,
+      snapshot_destination_dir: configuredSnapshotDir,
+      snapshot_budget_bytes: -1
+    }, null, 2));
+    const invalidBudget = await invokeServiceCommand('runtime.db_snapshot.settings.get', { settingsPath }, { db });
+    assert(invalidBudget.status === 'degraded', 'invalid persisted budget should degrade visibly');
+    assert(invalidBudget.effective.snapshot_budget_bytes === null, 'invalid persisted budget should not become effective');
+
+    fs.writeFileSync(settingsPath, JSON.stringify({
+      version: 1,
+      snapshot_destination_dir: configuredSnapshotDir,
+      snapshot_budget_bytes: 1
+    }, null, 2));
+    const overBudgetPreflight = await invokeServiceCommand('runtime.db_snapshot.preflight', { settingsPath }, {
+      db,
+      databasePath: dbPath
+    });
+    assert(overBudgetPreflight.allowed === false, 'over-budget preflight should block snapshot creation');
+    assert(overBudgetPreflight.storage.over_budget === true, 'over-budget preflight should report over-budget state');
+    assert(overBudgetPreflight.blockers.some((entry) => entry.code === 'SNAPSHOT_BUDGET_EXCEEDED'), 'over-budget preflight should name the budget blocker');
+    await assertRejects(() => invokeServiceCommand('runtime.db_snapshot.create', { settingsPath }, {
+      db,
+      databasePath: dbPath
+    }), 'snapshot create should reject over-budget writes');
+
+    await assertRejects(() => invokeServiceCommand('runtime.db_snapshot.preflight', {
+      destinationPath: path.join(workDir, 'renderer-picked.sqlite'),
+      settingsPath
+    }, {
+      db,
+      databasePath: dbPath,
+      source: 'renderer'
+    }), 'renderer snapshot preflight should reject arbitrary destination file paths');
+
+    const rendererSettings = await invokeServiceCommand('runtime.db_snapshot.settings.update', {
+      settingsPath: rendererSuppliedSettingsPath,
+      snapshotDestinationDir: configuredSnapshotDir,
+      snapshotBudgetBytes: snapshot.snapshot.size_bytes * 5
+    }, {
+      db,
+      source: 'renderer',
+      runtimeSnapshotSettingsPath: settingsPath
+    });
+    assert(rendererSettings.settings_path === settingsPath, 'renderer settings update should use context-owned settings path');
+    assert(!fs.existsSync(rendererSuppliedSettingsPath), 'renderer settings update must not write payload-supplied settings path');
+
+    const rendererSettingsGet = await invokeServiceCommand('runtime.db_snapshot.settings.get', {
+      settingsPath: rendererSuppliedSettingsPath
+    }, {
+      db,
+      source: 'renderer',
+      runtimeSnapshotSettingsPath: settingsPath
+    });
+    assert(rendererSettingsGet.settings_path === settingsPath, 'renderer settings get should ignore payload-supplied settings path');
+
+    const rendererPreflight = await invokeServiceCommand('runtime.db_snapshot.preflight', {
+      settingsPath: rendererSuppliedSettingsPath
+    }, {
+      db,
+      databasePath: dbPath,
+      source: 'renderer',
+      runtimeSnapshotSettingsPath: settingsPath
+    });
+    assert(rendererPreflight.settings.settings_path === settingsPath, 'renderer preflight should ignore payload-supplied settings path');
+
     const commands = listServiceCommands();
     assert(commands.some((entry) => entry.command === 'runtime.db_snapshot.preflight' && entry.classification === 'read-only'), 'snapshot preflight service should be read-only');
+    assert(commands.some((entry) => entry.command === 'runtime.db_snapshot.settings.get' && entry.classification === 'read-only'), 'snapshot settings get service should be read-only');
+    assert(commands.some((entry) => entry.command === 'runtime.db_snapshot.settings.update' && entry.classification === 'metadata-only'), 'snapshot settings update service should be metadata-only');
     assert(commands.some((entry) => entry.command === 'runtime.db_snapshot.create' && entry.classification === 'exclusive'), 'snapshot create service should be exclusive');
   } finally {
     closeDatabase(db);

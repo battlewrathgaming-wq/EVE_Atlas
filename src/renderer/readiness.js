@@ -191,9 +191,20 @@ function renderCorpusHealth(report) {
 }
 
 function renderRuntimeSnapshotPreflight(preflight) {
+  const storage = preflight.storage || {};
+  const settings = preflight.settings || {};
+  const blockers = preflight.blockers || [];
   renderRows(els.runtimeSnapshotPreflight, [
     ['Source DB', preflight.database_path || 'unknown'],
     ['Destination', preflight.destination_path || 'unknown'],
+    ['Snapshot Settings', settings.status || 'unknown'],
+    ['Destination Source', preflight.destination?.source || 'unknown'],
+    ['Current Usage', `${storage.current_usage_bytes ?? 0} bytes`],
+    ['Projected Snapshot', `${storage.projected_snapshot_bytes ?? preflight.projected_snapshot_bytes ?? 0} bytes`],
+    ['Budget', storage.budget_configured ? `${storage.budget_bytes} bytes` : 'unconfigured'],
+    ['Remaining After Snapshot', storage.remaining_after_projected_bytes === null || storage.remaining_after_projected_bytes === undefined ? 'unconfigured' : `${storage.remaining_after_projected_bytes} bytes`],
+    ['Allowed', preflight.allowed ? 'yes' : 'no'],
+    ['Blockers', blockers.length ? blockers.map((entry) => entry.code).join(', ') : 'none'],
     ['DB Size', `${preflight.database?.size_bytes ?? 0} bytes`],
     ['WAL', preflight.journal_files?.wal?.exists ? `${preflight.journal_files.wal.size_bytes} bytes` : 'none'],
     ['SHM', preflight.journal_files?.shm?.exists ? `${preflight.journal_files.shm.size_bytes} bytes` : 'none'],

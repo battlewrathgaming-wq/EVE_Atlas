@@ -1,37 +1,73 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { auraTempRoot, projectRoot } = require('../util/tempPaths');
+const {
+  loadRuntimeSnapshotSettings,
+  saveRuntimeSnapshotSettings,
+  validateSnapshotDestinationDir
+} = require('./runtimeSnapshotSettingsService');
 
 const SNAPSHOT_DIR_NAME = 'db-snapshots';
 
 function buildRuntimeDbSnapshotPreflight(db, input = {}, context = {}) {
   const databasePath = normalizeDatabasePath(input.databasePath || context.databasePath);
-  const destinationPath = normalizeSnapshotDestination(input.destinationPath, databasePath);
+  assertNoRendererDestinationPath(input, context);
+  const settingsState = loadRuntimeSnapshotSettings({
+    settingsPath: runtimeSnapshotSettingsPathForContext(input, context)
+  });
+  const destination = resolveSnapshotDestination(input, databasePath, settingsState);
+  const destinationPath = destination.path;
   const stats = fileStats(databasePath);
+  const journals = journalState(databasePath);
+  const projectedSnapshotBytes = estimateSnapshotBytes(stats, journals);
+  const storage = snapshotStorageStatus(destination.directory, projectedSnapshotBytes, settingsState);
+  const blockers = [];
+  if (storage.over_budget) {
+    blockers.push({
+      code: 'SNAPSHOT_BUDGET_EXCEEDED',
+      message: 'Projected snapshot/support-artifact usage exceeds the configured budget'
+    });
+  }
 
   return {
     action: 'runtime.db_snapshot',
-    allowed: true,
+    allowed: blockers.length === 0,
     read_only: true,
     database_path: databasePath,
     destination_path: destinationPath,
+    destination: {
+      directory: destination.directory,
+      source: destination.source,
+      fallback_used: destination.source !== 'configured',
+      validation: destination.validation
+    },
     destination_exists: fs.existsSync(destinationPath),
     database: {
       exists: stats.exists,
       size_bytes: stats.size_bytes,
       modified_at: stats.modified_at
     },
-    journal_files: journalState(databasePath),
+    journal_files: journals,
+    projected_snapshot_bytes: projectedSnapshotBytes,
+    storage,
+    settings: settingsState,
     table_counts: tableCounts(db),
     latest_fetch_run: latestFetchRun(db),
     latest_evidence_timestamp: scalar(db, 'SELECT MAX(killmail_time) FROM killmails'),
     assessment_artifacts: assessmentArtifactCounts(db),
-    boundary: 'Snapshot preflight is read-only. Create the snapshot through the explicit runtime.db_snapshot.create action.'
+    blockers,
+    boundary: 'Snapshot preflight is read-only. Create the snapshot through the explicit runtime.db_snapshot.create action. Snapshots are support/recovery artifacts, not active-state truth, Evidence, Observation, Assessment Memory, pruning, or deletion.'
   };
 }
 
 function createRuntimeDbSnapshot(db, input = {}, context = {}) {
   const preflight = buildRuntimeDbSnapshotPreflight(db, input, context);
+  if (!preflight.allowed) {
+    const error = new Error(preflight.blockers[0]?.message || 'Runtime DB snapshot preflight is blocked');
+    error.code = preflight.blockers[0]?.code || 'RUNTIME_DB_SNAPSHOT_BLOCKED';
+    error.preflight = preflight;
+    throw error;
+  }
   if (!preflight.database.exists) {
     throw new Error(`Runtime DB does not exist: ${preflight.database_path}`);
   }
@@ -56,12 +92,31 @@ function createRuntimeDbSnapshot(db, input = {}, context = {}) {
     database_path: preflight.database_path,
     snapshot_path: preflight.destination_path,
     snapshot: snapshotStats,
+    storage: snapshotStorageStatus(preflight.destination.directory, snapshotStats.size_bytes, preflight.settings),
     table_counts: preflight.table_counts,
     latest_fetch_run: preflight.latest_fetch_run,
     latest_evidence_timestamp: preflight.latest_evidence_timestamp,
     assessment_artifacts: preflight.assessment_artifacts,
     boundary: 'Snapshot creation copied the local SQLite runtime DB only. It did not prune, compact, or delete evidence.'
   };
+}
+
+function assertNoRendererDestinationPath(input, context) {
+  if (context.source === 'renderer' && input.destinationPath) {
+    const error = new Error('Renderer snapshot requests must use backend-generated filenames from validated snapshot settings');
+    error.code = 'SNAPSHOT_DESTINATION_RENDERER_FORBIDDEN';
+    throw error;
+  }
+}
+
+function runtimeSnapshotSettingsPathForContext(input = {}, context = {}) {
+  if (context.runtimeSnapshotSettingsPath) {
+    return context.runtimeSnapshotSettingsPath;
+  }
+  if (context.source === 'renderer') {
+    return null;
+  }
+  return input.settingsPath || input.runtimeSnapshotSettingsPath || null;
 }
 
 function normalizeDatabasePath(databasePath) {
@@ -81,6 +136,86 @@ function normalizeSnapshotDestination(destinationPath, databasePath) {
   const stamp = new Date().toISOString().replace(/[:.]/g, '-');
   const outputDir = path.join(auraTempRoot(), SNAPSHOT_DIR_NAME);
   return path.join(outputDir, `${safeBaseName}.${stamp}.snapshot.sqlite`);
+}
+
+function resolveSnapshotDestination(input, databasePath, settingsState) {
+  if (input.destinationPath) {
+    const explicitPath = normalizeSnapshotDestination(input.destinationPath, databasePath);
+    return {
+      path: explicitPath,
+      directory: path.dirname(explicitPath),
+      source: 'explicit_request',
+      validation: {
+        valid: true,
+        issues: []
+      }
+    };
+  }
+
+  const configuredDir = settingsState.effective.snapshot_destination_dir;
+  const directory = configuredDir || path.join(auraTempRoot(), SNAPSHOT_DIR_NAME);
+  const validation = configuredDir
+    ? validateSnapshotDestinationDir(configuredDir)
+    : {
+      valid: true,
+      path: directory,
+      exists: fs.existsSync(directory),
+      issues: []
+    };
+  return {
+    path: generatedSnapshotPath(databasePath, directory),
+    directory,
+    source: configuredDir ? 'configured' : 'fallback',
+    validation
+  };
+}
+
+function generatedSnapshotPath(databasePath, outputDir) {
+  const safeBaseName = path.basename(databasePath).replace(/[^a-z0-9_.-]/gi, '_');
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  return path.join(outputDir, `${safeBaseName}.${stamp}.snapshot.sqlite`);
+}
+
+function estimateSnapshotBytes(databaseStats, journals) {
+  return databaseStats.size_bytes + journals.wal.size_bytes + journals.shm.size_bytes;
+}
+
+function snapshotStorageStatus(directory, projectedSnapshotBytes, settingsState) {
+  const budgetBytes = settingsState.effective.snapshot_budget_bytes;
+  const currentUsageBytes = directoryUsageBytes(directory);
+  const projectedUsageBytes = currentUsageBytes + projectedSnapshotBytes;
+  const remainingAfterProjectedBytes = budgetBytes === null ? null : budgetBytes - projectedUsageBytes;
+  return {
+    classification: 'snapshot/support-artifact storage budget; not Evidence, deletion, restore, or cleanup',
+    directory,
+    current_usage_bytes: currentUsageBytes,
+    projected_snapshot_bytes: projectedSnapshotBytes,
+    projected_usage_bytes: projectedUsageBytes,
+    budget_bytes: budgetBytes,
+    budget_configured: budgetBytes !== null,
+    remaining_after_projected_bytes: remainingAfterProjectedBytes,
+    over_budget: budgetBytes !== null && projectedUsageBytes > budgetBytes,
+    action: budgetBytes !== null && projectedUsageBytes > budgetBytes ? 'block_create' : 'allow_create',
+    automatic_cleanup: false
+  };
+}
+
+function directoryUsageBytes(directory) {
+  if (!directory || !fs.existsSync(directory)) {
+    return 0;
+  }
+  const stats = fs.statSync(directory);
+  if (!stats.isDirectory()) {
+    return stats.size;
+  }
+  return fs.readdirSync(directory).reduce((total, name) => {
+    const child = path.join(directory, name);
+    const childStats = fs.statSync(child);
+    if (childStats.isDirectory()) {
+      return total + directoryUsageBytes(child);
+    }
+    return total + childStats.size;
+  }, 0);
 }
 
 function assertProjectLocalPath(targetPath, label) {
@@ -173,5 +308,7 @@ function sqlString(value) {
 
 module.exports = {
   buildRuntimeDbSnapshotPreflight,
-  createRuntimeDbSnapshot
+  createRuntimeDbSnapshot,
+  loadRuntimeSnapshotSettings,
+  saveRuntimeSnapshotSettings
 };

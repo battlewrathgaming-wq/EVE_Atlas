@@ -247,6 +247,10 @@ function main() {
   assert(rendererText.includes("service.invoke('runtime.db_snapshot.create'"), 'renderer should call runtime snapshot create through service bridge');
   assert(rendererText.includes('runtimeSnapshotConfirm.checked'), 'runtime snapshot creation should require visible confirmation');
   assert(rendererText.includes('renderRuntimeSnapshotPreflight'), 'renderer should render structured runtime snapshot preflight');
+  assert(rendererText.includes('Snapshot Settings'), 'runtime snapshot preflight should render settings/degraded state');
+  assert(rendererText.includes('Destination Source'), 'runtime snapshot preflight should render destination authority source');
+  assert(rendererText.includes('Projected Snapshot'), 'runtime snapshot preflight should render projected snapshot budget usage');
+  assert(rendererText.includes('Remaining After Snapshot'), 'runtime snapshot preflight should render remaining budget state');
   assert(rendererText.includes('Snapshot creation does not prune, compact, or delete evidence.'), 'runtime snapshot rendering should state no pruning/deletion boundary');
   assert(rendererText.includes("service.invoke('report.corpus_health'"), 'renderer should call corpus health through service bridge');
   assert(rendererText.includes('renderCorpusHealth'), 'renderer should render structured corpus health response');

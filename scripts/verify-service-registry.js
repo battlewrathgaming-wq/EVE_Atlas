@@ -46,6 +46,8 @@ async function main() {
     const watchExecutorArmCommand = commands.find((entry) => entry.command === 'watch.executor.arm');
     const watchExecutorDisarmCommand = commands.find((entry) => entry.command === 'watch.executor.disarm');
     const watchExecutorTickCommand = commands.find((entry) => entry.command === 'watch.executor.tick');
+    const snapshotSettingsGetCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.get');
+    const snapshotSettingsUpdateCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.update');
     assert(readinessCommand, 'app.readiness should be listed');
     assert(readinessCommand.classification === 'read-only', 'app.readiness should be read-only');
     assert(prepareCommand, 'app.prepare should be listed');
@@ -86,6 +88,8 @@ async function main() {
     assert(watchExecutorArmCommand?.classification === 'evidence-creating', 'watch.executor.arm should be evidence-creating');
     assert(watchExecutorDisarmCommand?.classification === 'metadata-only', 'watch.executor.disarm should be metadata-only');
     assert(watchExecutorTickCommand?.classification === 'evidence-creating', 'watch.executor.tick should be evidence-creating');
+    assert(snapshotSettingsGetCommand?.classification === 'read-only', 'runtime snapshot settings get should be read-only');
+    assert(snapshotSettingsUpdateCommand?.classification === 'metadata-only', 'runtime snapshot settings update should be metadata-only');
 
     const readiness = await invokeServiceCommand('app.readiness', {}, {
       db,

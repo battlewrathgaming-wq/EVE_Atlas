@@ -81,6 +81,7 @@ Currently implemented:
 - compaction preview is read-only
 - assessment memory may be created deliberately from validated context
 - runtime DB snapshots can be created explicitly as local support/safety artifacts
+- runtime DB snapshot destination and budget settings are backend-validated, versioned, and degraded visibly when invalid
 
 Not implemented:
 
@@ -88,6 +89,9 @@ Not implemented:
 - automatic retention policy
 - destructive compaction
 - deleting raw evidence because assessment memory exists
+- active runtime DB relocation
+- snapshot restore
+- snapshot deletion or automatic pruning
 
 Accepted HS58 policy clarification:
 
@@ -102,6 +106,7 @@ Accepted HS69A/HS69 policy refinement:
 - if explicit deletion execution is implemented later, selected deletable active data should be deleted without a retained footprint
 - deletion preflight reports no-footprint policy and rejected footprint fields rather than footprint candidates
 - snapshots/backups are separate historical support artifacts and may retain records removed from active storage unless separately deleted
+- snapshot storage budget can block new snapshot support-artifact writes but must not automatically delete old artifacts
 - Assessment Memory is mutable, disposable, and stale after Evidence deletion; it is not Evidence, not hidden retention, and not a deletion blocker
 
 Policy note:

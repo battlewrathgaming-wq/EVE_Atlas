@@ -28,7 +28,9 @@ const { buildRetentionPreflight, listRetentionActions } = require('./retentionAc
 const { buildSdeLookupTables } = require('../sde/sdeLookupBuilder');
 const {
   buildRuntimeDbSnapshotPreflight,
-  createRuntimeDbSnapshot
+  createRuntimeDbSnapshot,
+  loadRuntimeSnapshotSettings,
+  saveRuntimeSnapshotSettings
 } = require('./runtimeSnapshotService');
 const { writeOperatorDebugTracePack } = require('../support/operatorDebugTracePack');
 const { getScopeDefaults, validateScope } = require('./scopeService');
@@ -316,7 +318,24 @@ const COMMANDS = {
     effects: [EFFECTS.READ_ONLY],
     renderer: true,
     description: 'Preview runtime DB snapshot destination, counts, and freshness without writing',
-    handler: ({ db, payload, databasePath }) => buildRuntimeDbSnapshotPreflight(db, payload, { databasePath })
+    handler: ({ db, payload, ...context }) => buildRuntimeDbSnapshotPreflight(db, payload, context)
+  },
+  'runtime.db_snapshot.settings.get': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Return validated runtime DB snapshot destination and budget settings',
+    handler: ({ payload, ...context }) => loadRuntimeSnapshotSettings(snapshotSettingsOptionsForContext(payload, context))
+  },
+  'runtime.db_snapshot.settings.update': {
+    classification: 'metadata-only',
+    effects: [EFFECTS.LOCAL_DATA_MUTATION],
+    renderer: true,
+    description: 'Validate and persist runtime DB snapshot destination and budget settings',
+    handler: ({ payload, ...context }) => saveRuntimeSnapshotSettings(payload, {
+      ...snapshotSettingsOptionsForContext(payload, context),
+      allowInputSettingsPath: context.source !== 'renderer'
+    })
   },
   'runtime.db_snapshot.create': {
     classification: 'exclusive',
@@ -324,7 +343,7 @@ const COMMANDS = {
     renderer: true,
     authority: confirmationAuthority(CONFIRMATION.RUNTIME_DB_SNAPSHOT_CREATE, 'Runtime snapshot creation writes a local support artifact.'),
     description: 'Create an explicit SQLite runtime DB snapshot under the approved project temp area',
-    handler: ({ db, payload, databasePath }) => createRuntimeDbSnapshot(db, payload, { databasePath })
+    handler: ({ db, payload, ...context }) => createRuntimeDbSnapshot(db, payload, context)
   },
   'support.debug_trace_pack': {
     classification: 'metadata-only',
@@ -390,6 +409,18 @@ function listServiceCommands(options = {}) {
     authority: authorityMetadata(definition.authority),
     description: definition.description
   }));
+}
+
+function snapshotSettingsOptionsForContext(payload = {}, context = {}) {
+  if (context.runtimeSnapshotSettingsPath) {
+    return { settingsPath: context.runtimeSnapshotSettingsPath };
+  }
+  if (context.source === 'renderer') {
+    return {};
+  }
+  return {
+    settingsPath: payload.settingsPath || payload.runtimeSnapshotSettingsPath
+  };
 }
 
 async function invokeServiceCommand(command, payload = {}, context = {}) {
