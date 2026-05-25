@@ -143,6 +143,12 @@ Blocked/deferred behavior:
 - automatic compaction
 - deleting evidence because assessment memory exists
 
+Retention policy clarification:
+
+- explicit user-selected deletion, if implemented later, must delete the selected deletable records
+- footprint is optional historical-interest metadata only, not a retention override
+- footprint must not preserve raw Evidence, full activity events, or hidden copies of deleted records
+
 Any future deletion policy work must start with a bounded design/audit packet before Dev implementation.
 
 ## Forward Design Input

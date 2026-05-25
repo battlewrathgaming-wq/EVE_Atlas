@@ -1,6 +1,6 @@
 # AURA Atlas Current Work
 
-Status: Active Dev packet - Retention/deletion execution boundary
+Status: Idle after accepted retention/deletion boundary hardening
 Last updated: 2026-05-25
 
 ## Active Milestone
@@ -14,98 +14,106 @@ Source of intent:
 - Human footprint clarification on 2026-05-25: retained metadata, if any, should be a unique appearance trace in the system that can survive the retention period, not retained raw Evidence.
 - `workspace/OverseerHS53-runtime-record-integrity-audit.md`
 - `workspace/DevHS57-queue-api-evidence-write-hardening.md`
+- `workspace/DevHS58-retention-deletion-execution-boundary.md`
 - `docs/current-state/current-evidence-pipeline.md`
 - `docs/current-state/current-terminology-and-retention.md`
 - `workspace/critical/README.md`
 - `workspace/critical/critical-terms.md`
-- `src/main/services/retentionActionService.js`
-- `scripts/verify-retention-preflight.js`
 
-Current focus: harden the retention/deletion boundary. Atlas currently has read-only retention preflight, compaction preview, deliberate Assessment Memory creation, and runtime snapshots. Executable evidence deletion/pruning is not implemented. This packet should decide and verify the next smallest safe step without making footprint/preservation override explicit deletion.
+Current focus: HS58 is accepted. Atlas still does not have production deletion execution. It now has explicit current-state policy and fixture verification proving the retention/deletion boundary, non-destructive preflight, and footprint constraints.
 
 ## Executor
 
-Current executor: Dev.
+Current executor: none; awaiting Human / Overseer selection for the next bounded packet.
 
-Expected handoff filename:
+Expected handoff filename: none until a new packet is opened.
+
+## Accepted HS58 Understanding
+
+Current implemented behavior:
+
+- `retention.actions` and `retention.preflight` are the only retention service commands.
+- `retention.preflight` is read-only destructive preview and non-renderer.
+- `evidence.prune_scope` exists only as action metadata/preflight impact, not as executable service command.
+- `assessment.compact_from_evidence` exists only as preflight/preview plus explicit Assessment Memory input creation.
+- `runtime.db_snapshot.preflight` is read-only.
+- `runtime.db_snapshot.create` writes a support artifact but does not prune or delete Evidence.
+
+Accepted policy:
+
+- User-selected deletion must mean deletion of selected deletable records if implemented later.
+- Footprint is optional historical-interest metadata only.
+- Footprint does not override deletion.
+- Footprint must not preserve raw Evidence, full activity events, or hidden copies.
+- Assessment Memory may be offered or recommended, but must not silently block or reverse explicit deletion.
+
+HS58 added:
 
 ```txt
-workspace/DevHS58-retention-deletion-execution-boundary.md
+scripts/verify-retention-deletion-boundary.js
+npm.cmd run verify:retention-deletion-boundary
 ```
 
-## Ordered Runway
+HS58 updated durable current-state docs:
 
-1. Read the source-of-intent files above, then trace current retention/deletion paths:
-   - `retention.actions`
-   - `retention.preflight`
-   - `assessment.compact_from_evidence`
-   - `evidence.prune_scope`
-   - runtime snapshot boundary
-   - Assessment Memory creation from compaction preview
-   - current verification around non-destructive preflight
-2. Record the current truth before changing code:
-   - what is implemented
-   - what is preflight-only
-   - what is not implemented
-   - what records are counted in impact
-   - what would be deleted if execution existed
-   - what currently survives as Assessment Memory or provenance
-3. Apply the Human policy clarification:
-   - user-selected deletion must mean deletion of the selected deletable records
-   - footprint is optional/edge metadata, not a retention override
-   - footprint, if accepted or tested, means a durable unique appearance trace that can survive the retention period
-   - footprint must not preserve raw Evidence, full activity events, or hidden copies of deleted records
-   - assessment preservation may be offered or recommended, but must not silently block or reverse explicit deletion unless a future Human policy says so
-4. Add or strengthen fixture-only verification for the destructive boundary. Cover:
-   - `retention.preflight` remains read-only and does not delete
-   - confirmation requirements are explicit
-   - evidence prune impact lists the records that would be affected
-   - compaction preview and Assessment Memory creation do not delete Evidence
-   - any future execution path, if implemented, deletes selected records in fixtures and does not leave hidden raw Evidence behind
-   - footprint behavior, if touched, is clearly optional/minimal, records only a unique appearance trace, and does not override deletion
-5. Implement only the smallest local hardening justified by the trace and tests.
-   - Documentation/current-state updates are allowed.
-   - Verification additions are encouraged.
-   - Production deletion execution is allowed only if it stays fixture-proven, explicit, local, scoped, non-live, and does not require schema or product-policy expansion.
-6. Stop rather than implement if deletion execution requires:
-   - schema/migration changes
-   - a new footprint table/file
-   - user-facing policy decisions
-   - backup/restore policy
-   - cross-domain deletion spanning Evidence, Assessment Memory, runtime DB files, metadata logs, and queue refs in one packet
-7. Run required verification.
-8. Create `workspace/DevHS58-retention-deletion-execution-boundary.md` with trace, accepted policy, verification, changes, and deferred decisions.
+```txt
+docs/current-state/current-evidence-pipeline.md
+docs/current-state/current-terminology-and-retention.md
+```
 
-## Acceptance Criteria
+No production deletion execution, service command, schema, migration, IPC, renderer exposure, payload, or contract was added or renamed.
 
-HS58 is acceptable if the handoff and verification prove:
+## Accepted Coverage
 
-- Dev clearly traces current retention/deletion behavior before implementation.
-- The Human clarification is preserved: footprint does not override user-selected deletion.
-- Read-only preflight remains read-only unless an explicit, tested execution path is added.
-- Assessment Memory / compaction preview does not delete Evidence.
-- If no production deletion is implemented, the handoff explains exactly why and identifies the next required policy/schema/UX decision.
-- If production deletion is implemented, fixture tests prove scoped deletion, confirmation, no live/API calls, no real user DB mutation, no hidden raw Evidence copy, and no unexpected Assessment Memory mutation.
-- Discovery, Evidence, Observation, Assessment Memory, provenance, storage, and `Enrich selected` meanings remain intact.
-- No schema/migration/service/command/payload renames occurred unless explicitly approved.
+The new verifier proves:
+
+- `evidence.prune_scope` remains action metadata/preflight only.
+- `retention.preflight` and `retention.actions` are read-only service commands.
+- There is no executable `evidence.prune_scope` or `assessment.compact_from_evidence` command.
+- Confirmation requirements are explicit.
+- Matching confirmation allows preflight calculation only, not deletion.
+- Evidence prune impact counts affected killmails, activity events, ingestion audits, and data quality warnings.
+- Compaction preview is read-only and does not delete Evidence.
+- Explicit Assessment Memory creation from preview does not delete Evidence.
+- Fixture deletion simulation removes selected killmail Evidence, full activity events, ingestion audit, and related warning.
+- Surviving Assessment Memory does not hide `raw_esi_payload`, raw payload checksums, raw attacker arrays, or full activity event rows.
+
+Accepted caveat:
+
+- Assessment Memory may retain minimal historical-interest context, including counts, observed system/region/ship summaries, source run IDs, and sample killmail IDs for citation validation. Whether sample killmail IDs should survive production deletion remains a future policy detail before executable Evidence deletion ships.
+
+## Remaining Work Options
+
+No work is active by default.
+
+Recommended future options, to be selected one at a time:
+
+- policy/design packet defining exact production deletion scope and backup/restore expectations
+- narrow fixture-only implementation packet for a simpler destructive action, such as diagnostics/API log pruning
+- provenance/API logging sufficiency across non-fixture clients
+- Watch authoring/write-boundary consistency
+- metadata hydration/label refresh write boundaries
+- storage location / file selector authority for heavy local records, backups, exports, snapshots, or cache paths
+
+Do not implement raw Evidence deletion until exact deletion scope, backup/restore expectations, and footprint/citation survival policy are accepted.
 
 ## Guardrails
 
-- No live/private/API calls.
+- No implementation is authorized by this idle state.
+- No live/private/API calls unless explicitly authorized by the Human.
 - Do not mutate the user's real local database.
-- Use in-memory or disposable fixture databases only.
+- Use in-memory or disposable fixture databases only for future verification.
 - No UI redesign.
-- No renderer exposure changes unless strictly needed for existing read-only service verification.
-- No schema/migration changes unless Dev stops and gets Overseer approval first.
-- No bridge, IPC, service, payload, command, or contract renames.
+- No schema/migration changes unless a future packet explicitly authorizes them.
+- No bridge, IPC, service, payload, command, or contract renames unless a future packet explicitly authorizes them.
 - Do not treat archived docs/gap files as active task queues.
 - Do not make footprint mandatory unless a future Human decision explicitly does so.
 - Do not allow footprint, Assessment Memory, or provenance to keep raw deleted Evidence or full activity events in disguise.
-- Do not broaden into storage-location/file-selector work.
+- Do not broaden into storage-location/file-selector work without explicit selection.
 
 ## Stop Conditions
 
-Stop and return to Overseer if:
+Return to Human / Overseer before opening work if:
 
 - deletion execution requires schema/migration work
 - footprint requires a new table, file format, or durable storage location
@@ -113,83 +121,53 @@ Stop and return to Overseer if:
 - implementation would touch the user's real database
 - retention spans multiple unrelated domains in one packet
 - Assessment Memory preservation appears to conflict with explicit deletion
-- a fix requires service/command/payload renames
 - backup/restore behavior becomes necessary
+- a fix requires service/command/payload renames
 - protected-term output suggests new terminology authority decisions are needed
 
 ## Required Verification
 
-Run focused offline checks:
+HS58 was accepted with:
 
 ```powershell
+npm.cmd run verify:retention-deletion-boundary
 npm.cmd run verify:retention-preflight
 npm.cmd run verify:runtime-snapshot
 npm.cmd run verify:assessment-artifacts
 npm.cmd run verify:evidence-rules
 npm.cmd run verify:protected-terms
+npm.cmd run verify:all
 git status --short --branch
 ```
 
-Add and run a focused verifier if Dev creates one, for example:
-
-```powershell
-npm.cmd run verify:retention-deletion-boundary
-```
-
-If Dev touches shared persistence, assessment, service registry, runtime snapshot, or any production deletion path, also run:
-
-```powershell
-npm.cmd run verify:all
-```
-
-Do not run live smoke unless explicitly authorized by the Human.
+Local Overseer verification result: all focused checks passed, and `verify:all` passed 65 scripts including `verify:retention-deletion-boundary`. `verify:protected-terms` passed warning-only with expected advisory warnings across changed verifier/handoff/current-state files.
 
 ## Evidence
 
-Dev must update this section in the handoff, not necessarily in `current.md`:
-
-```txt
-Current retention/deletion trace:
-
-Human policy preserved:
-
-Files/functions changed:
-
-Verification cases:
-
-Deletion execution status:
-
-Footprint behavior:
-
-Assessment Memory / preservation behavior:
-
-Verification run:
-
-Protected-term output:
-
-Deferred decisions:
-```
-
-## Dev Handoff
-
-Create:
+Accepted handoff:
 
 ```txt
 workspace/DevHS58-retention-deletion-execution-boundary.md
 ```
 
-Handoff must include:
+Accepted implementation files:
 
-- trace of current retention/deletion behavior
-- exact policy interpretation used
-- files/code paths changed
-- verification cases added or strengthened
-- whether production deletion execution was implemented or deferred
-- confirmation no live/API calls were run
-- confirmation no user real database was mutated
-- confirmation footprint does not override deletion
-- confirmation no hidden raw Evidence is preserved by footprint/preservation behavior
-- confirmation no schema/migration/contract/command/payload renames were performed, or exact approved exception if Overseer authorized one
-- verification commands and results
-- warning-only protected-term output and noisy classes
-- recommended next packet, if clear
+```txt
+scripts/verify-retention-deletion-boundary.js
+scripts/verify-group.js
+package.json
+docs/current-state/current-evidence-pipeline.md
+docs/current-state/current-terminology-and-retention.md
+```
+
+## Dev Handoff
+
+No Dev packet is open.
+
+The next Dev packet should be selected by Human / Overseer and should name:
+
+- exact destructive/write boundary under review
+- allowed files and non-goals
+- expected failure/recovery cases
+- required offline verification commands
+- whether `verify:all` is required

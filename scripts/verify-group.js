@@ -23,6 +23,7 @@ const GROUPS = {
     'verify:queue-scope-isolation',
     'verify:message-taxonomy',
     'verify:retention-preflight',
+    'verify:retention-deletion-boundary',
     'verify:runtime-snapshot',
     'verify:assessment-artifacts',
     'verify:assessment-review',

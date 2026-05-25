@@ -89,6 +89,13 @@ Not implemented:
 - destructive compaction
 - deleting raw evidence because assessment memory exists
 
+Accepted HS58 policy clarification:
+
+- user-selected deletion must mean deletion of the selected deletable records
+- footprint is a historical-interest clue only; it must not override deletion
+- footprint must not retain raw Evidence, full activity events, or hidden copies after deletion
+- assessment preservation may be offered or recommended, but it must not silently block or reverse explicit deletion unless future Human policy changes this
+
 Policy note:
 
 ```txt
