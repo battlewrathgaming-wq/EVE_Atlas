@@ -7,11 +7,13 @@ Last updated: 2026-05-25
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS69 is a bounded read-only deletion preflight refinement packet. It should make the existing retention/deletion preflight report the accepted policy decisions more clearly without adding deletion execution, schema, footprint storage, live calls, or real database mutation.
+Current focus: HS69 is a bounded read-only deletion preflight refinement packet. It should make the existing retention/deletion preflight report the accepted policy decisions more clearly without adding deletion execution, schema, footprint storage, live calls, or real database mutation. HS69A corrected the trust policy: explicit deletion should not retain a footprint.
 
 Source of intent:
 
 - Human direction on 2026-05-25: continue after accepted deletion policy decisions.
+- Human trust decision on 2026-05-25: when the operator confirms deletion, Atlas should delete the selected deletable active data and retain no footprint.
+- `workspace/OverseerHS69A-deletion-trust-no-footprint-decision.md`
 - `workspace/OverseerHS68-deletion-recovery-assessment-decisions.md`
 - `workspace/OverseerHS67-deletion-footprint-anchor-decision.md`
 - `workspace/OverseerHS66-deletion-policy-human-decisions.md`
@@ -31,9 +33,9 @@ Accepted baseline:
 - Retention/deletion behavior is preflight-only.
 - zKill `killmail_id` is a Discovery anchor.
 - ESI-expanded and Atlas-written `killmail_id` is the Evidence-confirmed anchor.
-- If a deletion footprint is retained later, it should be `Evidence-confirmed killmail_id + pilot_id` only.
-- Footprint must not preserve raw Evidence, full activity events, participant arrays, or hidden deleted-record copies.
-- `EVE_value`, `EVE_Pilot_value`, `EVE_rating`, `EVE_interest_score`, `Spare_1A`, and `Spare_1B` are rejected for deletion footprint.
+- Retained deletion footprint is rejected.
+- Deletion preflight should report no-footprint policy, not footprint candidate fields.
+- `killmail_id + pilot_id`, `EVE_value`, `EVE_Pilot_value`, `EVE_rating`, `EVE_interest_score`, `Spare_1A`, and `Spare_1B` are rejected for deletion footprint.
 - Snapshotting is accepted as the recovery posture for first production deletion, with honest disclosure that snapshots/backups may retain records removed from active storage.
 - Assessment Memory is mutable, disposable, and quickly stale; it is not Evidence and must not become hidden retention.
 
@@ -53,7 +55,7 @@ workspace/DevHS69-deletion-preflight-refinement.md
 2. Refine the read-only `evidence.prune_scope` preflight output so it reports the accepted policy state for selected Evidence deletion:
    - deletion remains blocked from execution
    - snapshot/recovery disclosure is present
-   - footprint candidate policy is `killmail_id + pilot_id` only
+   - no retained footprint policy is present
    - custom value/rating/note/catchment fields are not footprint fields
    - Assessment Memory is mutable/disposable/stale context, not Evidence and not a deletion blocker
 3. Ensure preflight can report exact affected row counts where available for selected Evidence scope:
@@ -70,7 +72,7 @@ workspace/DevHS69-deletion-preflight-refinement.md
 
 - No deletion execution.
 - No schema or migration changes.
-- No footprint table, file, storage class, or persistence.
+- No footprint table, file, storage class, persistence, or retained footprint reporting.
 - No real local database mutation.
 - No live/private/API calls.
 - No bridge, IPC, service command, payload, CSS/test-id, or protected-term renames.
@@ -78,6 +80,7 @@ workspace/DevHS69-deletion-preflight-refinement.md
 - Do not mutate Assessment Memory.
 - Do not mutate snapshots, backups, reports, trace packs, or support artifacts.
 - Do not preserve raw Evidence, full activity events, participant arrays, or hidden deleted-record copies through footprint, reports, traces, snapshots, or Assessment Memory.
+- Do not present `killmail_id + pilot_id` as a retained deletion footprint; HS69A rejects retained footprint.
 - Do not treat archived docs/gap files as active task queues.
 
 ## Stop Conditions
@@ -86,7 +89,7 @@ Stop and return to Overseer/Human before implementation if:
 
 - exact preflight refinement requires schema or storage changes
 - implementation would execute deletion or mutate real/user data
-- implementation would create footprint storage
+- implementation would create footprint storage or retained footprint reporting
 - implementation would promote rejected placeholder/custom value terms
 - implementation would make Assessment Memory immutable or a deletion blocker
 - implementation would blur Evidence, Discovery, Report, Assessment, Watch, or Marked boundaries
@@ -136,6 +139,7 @@ Expected evidence:
 - proof that `retention.preflight` remains read-only
 - proof that no executable deletion command was added
 - proof that no schema/storage/footprint persistence was added
+- proof that no retained footprint is reported or stored
 - verification commands and results
 - confirmation that no live API, real DB mutation, protected-word JSON update, or terminology rename occurred
 
