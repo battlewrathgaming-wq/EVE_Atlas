@@ -59,6 +59,15 @@ Next likely selectable lanes:
 3. Production deletion execution design, with transaction, rollback, confirmation, snapshot disclosure, and failure behavior.
 4. Queue -> API request -> Evidence write confidence hardening if storage/runtime work continues there.
 
+## Runway Shape
+
+- current packet: idle decision state after HS72 acceptance; no executor and no Dev runway.
+- likely next packet if accepted: Overseer selects one storage/runtime hardening lane and writes a bounded current packet.
+- follow-up packet if clean: continue the same selected lane for one adjacent slice, then return to Human/Overseer selection before crossing into deletion execution, restore, active DB relocation, automatic pruning, or broad settings redesign.
+- stop or Human decision point: choosing the next lane, especially before deletion execution, active runtime DB relocation, restore, snapshot deletion/pruning, or automatic cleanup.
+
+Likely-next and follow-up lines are orientation, not authorization. Dev opens only through a rewritten `workspace/current.md`.
+
 ## Guardrails And Non-Goals
 
 - No production deletion execution.
@@ -99,8 +108,9 @@ If work resumes in the HS72 area, rerun at minimum:
 npm.cmd run verify:runtime-snapshot
 npm.cmd run verify:renderer-shell
 npm.cmd run verify:service-registry
-npm.cmd run verify:protected-terms
 ```
+
+Run `npm.cmd run verify:protected-terms` only when the selected packet touches terminology, adapter mappings, display copy, bridge-facing labels, Atlas-owned meanings, critical assets, release/push readiness, or the packet explicitly requires it. It is warning-only unless Atlas Overseer/Human tightens it.
 
 If main/preload/service registry/shared verification surfaces change, also run:
 
