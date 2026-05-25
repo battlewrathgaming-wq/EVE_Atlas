@@ -27,11 +27,11 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 
 ## Active Milestone
 
-Milestone: Atlas Overview Face Concept Prototype / Display Workflow Review
-Roadmap source: Human concept-render direction accepted on 2026-05-24
+Milestone: Runtime And Record Integrity Audit
+Roadmap source: Human runtime/record integrity direction accepted on 2026-05-25
 Current packet: `workspace/current.md`
-Current sequence: HS47 accepted; HS50/HS51 display response relay closed as material-production scope
-Latest accepted coordination artifact: `workspace/OverseerHS48-atlas-overview-face-review.md`
+Current sequence: HS53 audit packet opened; no implementation authorized
+Latest accepted coordination artifact: `workspace/OverseerHS52-runtime-record-integrity-design-input.md`
 Display workflow support: `workspace/display_inventory.md`, `workspace/DisplayInventoryAuditHS49-ingest-to-userdisplay.md`, `workspace/request_display.md`, `workspace/display-request-workflow-hardening-contract.md`, `workspace/RequestDisplayHS50-atlas-initial-display-requests.md`, `workspace/DisplayResponseHS51-atlas-lab-m24-response-relay.md`
 Runtime/record integrity design input: `workspace/OverseerHS52-runtime-record-integrity-design-input.md`
 
@@ -91,7 +91,7 @@ Runtime/record integrity design input: `workspace/OverseerHS52-runtime-record-in
 - User-facing display inventory is now staged as a short-term product/workflow tool before further declutter or Lab display requests.
 - HS49 completed the first advisory ingest -> transformation -> bridge -> user display extraction pass.
 - Lab M24 answered Atlas HS50 display requests; HS51 closes the response relay as material-production scope, not Atlas adoption or Dev authorization.
-- Runtime/connection and record manipulation/storage efficacy are now captured as forward design input for a future audit lane, not implementation truth.
+- Runtime/connection and record manipulation/storage efficacy are now the active read-only audit lane, not implementation work.
 - Human HS41 UI review accepted the direction and requested face/layout refinement: search-first Discovery, no duplicated Discovery/Watch controls, compact External API state, and progressive Observation/Assessment.
 - Command/effect authority hardening accepted for the current local Electron trust boundary; renderer Intel Console work continues as a bounded Dev runway.
 - Presentation authority clarification: Atlas owns backend/bridge semantics; Labs or a dedicated presentation layer may later replace/finalize UI presentation after structure cleanup.
