@@ -36,6 +36,7 @@ Display workflow support: `workspace/display_inventory.md`, `workspace/DisplayIn
 Runtime/record integrity design input: `workspace/OverseerHS52-runtime-record-integrity-design-input.md`
 Watch recovery/offline readout scope: `workspace/OverseerHS54-watch-recovery-offline-readout-scope.md`
 Watch recovery/offline readout audit: `workspace/OverseerHS55-watch-recovery-offline-readout-audit.md`
+Watch_offline aggregation ADR: `docs/adr/ADR-0005-watch-offline-readout-aggregation.md`
 
 ## Durable Record Index
 
@@ -95,6 +96,7 @@ Watch recovery/offline readout audit: `workspace/OverseerHS55-watch-recovery-off
 - Lab M24 answered Atlas HS50 display requests; HS51 closes the response relay as material-production scope, not Atlas adoption or Dev authorization.
 - Runtime/connection and record manipulation/storage efficacy audit is accepted; future packets should stay bounded and selected by Human/Overseer.
 - Watch recovery/offline readout audit is accepted; optional future work is a bounded read-only recovery/readout support packet, not automatic implementation.
+- `Watch_offline` is the accepted working name for the post-restart/offline Watch readout line; avoid `Watcher` unless later approved as presentation-only language.
 - Human HS41 UI review accepted the direction and requested face/layout refinement: search-first Discovery, no duplicated Discovery/Watch controls, compact External API state, and progressive Observation/Assessment.
 - Command/effect authority hardening accepted for the current local Electron trust boundary; renderer Intel Console work continues as a bounded Dev runway.
 - Presentation authority clarification: Atlas owns backend/bridge semantics; Labs or a dedicated presentation layer may later replace/finalize UI presentation after structure cleanup.

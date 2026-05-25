@@ -10,9 +10,11 @@ Milestone: Watch Recovery / Offline Readout State Audit
 Source of intent:
 
 - Human direction on 2026-05-25 to focus on post-restart Watch readout as a common state.
+- Human naming and architecture direction on 2026-05-25: use `Watch_offline` for this line, avoid `Watcher`, ignore UX for now, and keep aggregation off the renderer where practical.
 - `workspace/OverseerHS53-runtime-record-integrity-audit.md`
 - `workspace/OverseerHS54-watch-recovery-offline-readout-scope.md`
 - `workspace/OverseerHS55-watch-recovery-offline-readout-audit.md`
+- `docs/adr/ADR-0005-watch-offline-readout-aggregation.md`
 - `docs/contracts/session-armed-watch-executor-contract.md`
 - `docs/current-state/current-evidence-pipeline.md`
 - `docs/current-state/current-terminology-and-retention.md`
@@ -56,22 +58,29 @@ No work is active by default.
 Recommended optional future packet:
 
 ```txt
-DevHS##-watch-recovery-readout-support
+DevHS##-watch_offline-readout-support
 ```
 
 Candidate scope:
 
-- Add or refine a read-only Watch recovery/readout model using derived fields only.
+- Add or refine a read-only `Watch_offline` recovery/readout model using derived fields only.
 - Candidate fields: `time_eligible`, `eligible_if_armed`, `next_eligible_at`, `collection_active`, `state_layer` / `state_basis`, and optionally Watch-scoped local queue/evidence counts.
+- Prefer backend/read-only service aggregation over renderer-side interpretation so presentation layers have clean state to consume.
 - Keep `sessionArmed` volatile and never persisted.
 - Do not start collection, call live APIs, alter Watch execution, rename commands, or design the UI pane.
 
+Accepted Human / Overseer decisions:
+
+- Use `Watch_offline` as the specific working name for this post-restart/offline Watch line.
+- Avoid `Watcher` as a class or user-facing state unless explicitly approved later as presentation-only language.
+- Ignore UX implementation for now.
+- Bias architecture toward a read-only service/model and keep as much interpretation as practical off the renderer.
+
 Open Human / Overseer decisions:
 
-- Whether to use "eligible if armed" as the Atlas-owned operator phrase, or choose different wording.
-- Whether local queue/evidence context should be aggregated by a read-only service or composed in the renderer from existing services.
+- Whether "eligible if armed" is acceptable as a field/phrase inside the `Watch_offline` model, or should remain an internal candidate only.
 - How much backoff/error detail belongs in first-read operator state versus a diagnostic/detail surface.
-- Whether to open the optional readout-support packet now or leave Watch recovery findings parked for UIUX/Lab material work.
+- Whether to open the optional `Watch_offline` readout-support packet now or leave findings parked for later material work.
 
 ## Guardrails
 
