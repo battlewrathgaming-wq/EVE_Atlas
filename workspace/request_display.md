@@ -3,6 +3,9 @@
 Status: Advisory pointer
 Date: 2026-05-25
 Source: Aura Lab M23
+Atlas local contract:
+
+- `workspace/display-request-workflow-hardening-contract.md`
 
 Aura Lab accepts advisory display requests through:
 
@@ -26,10 +29,13 @@ Request guardrails:
 
 Workflow:
 
-1. Create or propose one scoped `request_display` entry using the Lab schema.
-2. Preserve Atlas-owned terms and list any terms Lab must not rewrite.
-3. Send the entry to Lab for use-case comparison.
-4. Lab maps the request to Lab slots, display types, material sets, and up to three candidate display methods.
-5. Atlas reviews any recommendation under Atlas authority before implementation.
+1. Create or propose one scoped `request_display` entry using the Lab schema and the Atlas local contract.
+2. Mark the request strength: formative, comparative, pressure-test, or parked/inventory.
+3. Preserve Atlas-owned terms and list any terms Lab must not rewrite.
+4. Send the entry to Lab for use-case comparison.
+5. Lab may form up to three Bridge -> Interface display methods inside the scoped boundary.
+6. Lab may recommend split, merge, narrow, park, or return-to-project when the request needs stronger Atlas meaning decisions.
+7. Atlas reviews any recommendation under Atlas authority before implementation.
+8. Atlas implementation requires a separate Atlas-local Dev runway in `workspace/current.md`.
 
 Do not treat this pointer as an active Atlas task queue.
