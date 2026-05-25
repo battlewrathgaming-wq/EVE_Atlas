@@ -190,6 +190,27 @@ For each surface, extract visible text labels, fields, states, warnings, and con
 
 HS49 completed the first advisory extraction pass and should be used as evidence for future scoping. It is not a Dev runway, Lab request batch, terminology rename, or implementation approval.
 
+## HS50 Initial Lab Display Requests
+
+Submitted request batch:
+
+- `atlas.overview.right-rail-status-stack`
+- `atlas.discovery.queue-review-possible-leads`
+- `atlas.watch.state-display`
+
+Local source record:
+
+- `workspace/RequestDisplayHS50-atlas-initial-display-requests.md`
+
+These are advisory display-comparison requests only. They do not authorize implementation, backend work, contract changes, terminology renames, or Atlas adoption.
+
+Parked for expanded UIUX inventory/user-story pass:
+
+- Atlas Overview current-lead/search center.
+- Stored Evidence / Provenance Drawer detail layering.
+- Runtime, queue timing, SQLite/memory load, and IO hardening diagnostics.
+- Point-of-need copy collapse and progressive disclosure system.
+
 Accepted HS49 implications:
 
 - Atlas Overview is the healthiest current operator-intent layer.
