@@ -1,188 +1,165 @@
 # AURA Atlas Current Work
 
-Status: Idle after accepted Watch_offline readout support
+Status: Active Dev packet - Queue API/Evidence write hardening
 Last updated: 2026-05-25
 
 ## Active Milestone
 
-Milestone: Watch_offline Readout Support
+Milestone: Queue API/Evidence Write Hardening
 
 Source of intent:
 
-- Human direction on 2026-05-25: proceed with the readout support first, then focus on read/write hardening.
-- Human naming and architecture direction on 2026-05-25: use `Watch_offline` for this line, avoid `Watcher`, ignore UX for now, and keep aggregation off the renderer where practical.
+- Human direction on 2026-05-25: after `Watch_offline`, focus read/write hardening on the Queue boundary because Queue controls API request flow.
 - `workspace/OverseerHS53-runtime-record-integrity-audit.md`
-- `workspace/OverseerHS54-watch-recovery-offline-readout-scope.md`
-- `workspace/OverseerHS55-watch-recovery-offline-readout-audit.md`
 - `workspace/DevHS56-watch_offline-readout-support.md`
-- `docs/adr/ADR-0005-watch-offline-readout-aggregation.md`
-- `docs/contracts/session-armed-watch-executor-contract.md`
 - `docs/current-state/current-evidence-pipeline.md`
 - `docs/current-state/current-terminology-and-retention.md`
+- `docs/adr/ADR-0001-zkill-is-discovery-only.md`
+- `docs/adr/ADR-0002-expanded-killmails-authoritative.md`
+- `docs/adr/ADR-0004-staged-collection-and-expansion-budgets.md`
 - `workspace/critical/README.md`
 - `workspace/critical/critical-terms.md`
 
-Current focus: HS56 is accepted. Atlas now has a backend/main-process read-only `Watch_offline` support model for post-restart/offline Watch truth. No Dev packet is currently open.
+Current focus: harden the local Queue -> Enrich selected -> ESI request planning/execution -> Evidence write boundary. Queue is the API-request gate between Discovery refs and durable Evidence. This packet is test-led: trace first, add or strengthen focused offline verification, then implement only local fixes directly tied to proven gaps.
 
 ## Executor
 
-Current executor: none; awaiting Human / Overseer selection for the read/write hardening line.
+Current executor: Dev.
 
-Expected handoff filename: none until a new packet is opened.
-
-## Accepted HS56 Understanding
-
-HS56 added the renderer-eligible read-only service command:
+Expected handoff filename:
 
 ```txt
-watch.offline_readout
+workspace/DevHS57-queue-api-evidence-write-hardening.md
 ```
 
-Accepted model:
+## Ordered Runway
 
-```txt
-model: Watch_offline
-classification: read-only watch offline readout
-generated_at
-session_armed
-collection_active
-active_task_id
-live_api_enabled
-local_context_available
-summary
-watches[]
-state_basis[]
-```
-
-Accepted per-Watch fields:
-
-```txt
-watch_type
-watch_id
-scope_key
-scheduler_state
-session_armed
-collection_active
-time_eligible
-eligible_if_armed
-next_eligible_at
-blocked_reasons
-local_context_available
-local_context.queue
-local_context.evidence
-last_polled_at
-last_success_at
-last_error_at
-backoff_until
-next_poll_at
-source
-state_basis[]
-```
-
-Accepted implementation notes:
-
-- `Watch_offline` aggregation lives in backend/main-process support code, not renderer-owned interpretation.
-- `session_armed` remains volatile and comes from `WatchSessionExecutor` status.
-- `collection_active` is true only when the executor reports an active task id.
-- `time_eligible`, `eligible_if_armed`, and `next_eligible_at` are derived from existing scheduler state and block reasons.
-- Local context counts are read-only and local. Actor counts use matching actor refs/events. System/radius counts use matching center-system refs/events only, avoiding broad radius joins.
-- Readout generation does not arm the executor, dispatch a tick, create a task, start collection, call zKill, call ESI, write Evidence, hydrate metadata, or mutate Watch state.
-- No renderer files were changed.
-
-Core post-restart truth remains:
-
-```txt
-Configured Watch exists.
-Session is unarmed because runtime restarted.
-No collection is active.
-Local context is still available.
-Operator can arm when ready.
-```
-
-## Next Focus
-
-Next selected line: read/write hardening.
-
-Do not open a broad implementation packet from that phrase alone. The next packet should first scope a bounded hardening target, likely one of:
-
-- Watch authoring/readout write-boundary consistency
-- Watch schedule row mutation and run-result recording under partial failure
-- queue state mutation/recovery under partial failure
-- Evidence write idempotency and provenance completeness
-- deletion/retention policy execution and footprint behavior
-
-The next packet should preserve the accepted `Watch_offline` readout shape unless Human / Overseer explicitly reopens it.
+1. Read the source-of-intent files above, then trace current code paths for:
+   - queued Discovery ref selection and caps
+   - `Enrich selected`
+   - cached/ref dedupe behavior
+   - ESI expansion request planning/execution
+   - partial ESI failure handling
+   - Evidence writes and idempotency
+   - queue status transitions
+   - provenance/run/API logging
+2. Identify the exact current Queue -> API -> Evidence flow in the handoff before changing code. Include the files/functions that own each stage.
+3. Add or strengthen focused offline verification for dangerous cases:
+   - selected refs are not double-expanded accidentally
+   - cached refs do not spend ESI/API calls
+   - partial ESI failure records failed/skipped state without corrupting successful Evidence writes
+   - retry can pick up unresolved refs cleanly
+   - successful ESI expansion writes Evidence idempotently
+   - provenance, fetch run, ingestion audit, API log, or equivalent local record is sufficient to reconstruct what happened
+   - Discovery refs remain Discovery until accepted ESI expansion writes Evidence
+4. Implement only local hardening fixes that are directly proven by the verification work and stay within existing product meaning.
+5. Preserve accepted terms and effects:
+   - zKill refs / queue refs are Discovery, not Evidence.
+   - `Enrich selected` is the deliberate ESI expansion into stored Evidence.
+   - Expanded ESI killmail is the authoritative Evidence source.
+   - Metadata hydration / label refresh is not Evidence creation.
+6. Run required verification.
+7. Create `workspace/DevHS57-queue-api-evidence-write-hardening.md` with trace, changes, verification, risks, and any deferred policy decisions.
 
 ## Guardrails
 
-- No implementation is authorized by this idle state.
-- No UI redesign or offline pane design is authorized.
 - No live/private/API calls unless explicitly authorized by the Human.
-- Do not persist `sessionArmed`.
-- Do not start collection on startup, passive page load, or readout generation.
-- Do not use `Watcher` as a class, user-facing state, or service concept.
-- Do not promote `Radar` into Atlas backend, bridge, service, payload, or state-model terminology.
-- Preserve Atlas meanings for Watch, Marked, Evidence, Discovery, External API, Assessment Memory, provenance, and storage.
-- Treat `eligible_if_armed` as a technical field, not final human-facing copy.
+- Use fixtures/mocks/local in-memory DBs for verification.
+- Do not mutate the user's real local database.
+- No UI redesign.
+- No schema/migration changes unless Dev proves the hardening cannot be safely represented without one and stops for Overseer approval first.
+- No bridge, IPC, service, payload, command, or contract renames.
+- Do not rename Queue, Discovery, Evidence, Enrich selected, External API, provenance, Watch, Marked, or `Watch_offline`.
+- Do not change `Watch_offline` readout shape unless a bug directly impacts this packet and Overseer approves.
+- Do not broaden into deletion/retention policy execution.
+- Do not broaden into Watch authoring hardening except where Watch-produced queue refs are needed as fixtures for this boundary.
 
 ## Stop Conditions
 
-Return to Human / Overseer before opening work if:
+Stop and return to Overseer if:
 
-- read/write hardening scope spans multiple persistence domains at once
-- implementation would require live/private provider calls
-- implementation would mutate the user's real local database
-- a proposed fix would rename bridge, IPC, service, payload, command, or schema meaning
-- Watch due/armed/running/blocked meanings need product wording decisions first
-- retention/deletion behavior needs Human policy confirmation
+- live/API behavior is needed to prove the hardening
+- a schema/migration change appears necessary
+- retention/deletion policy must be decided
+- Queue status semantics are insufficient and require product decision
+- retry behavior requires a new user-facing policy
+- provenance/logging records cannot reconstruct the boundary without a broader record model change
+- a fix requires service/command/payload renames
+- verification requires mutating the user's real local database
 - protected-term output suggests new terminology authority decisions are needed
 
 ## Required Verification
 
-HS56 was accepted with:
+Run focused offline checks:
 
 ```powershell
-npm.cmd run verify:watch-offline-readout
-npm.cmd run verify:watch-scheduler
-npm.cmd run verify:watch-executor
-npm.cmd run verify:restart-recovery
-npm.cmd run verify:background-execution
+npm.cmd run verify:queue-selection
+npm.cmd run verify:queue-preflight
+npm.cmd run verify:queue-report
+npm.cmd run verify:manual-discovery
+npm.cmd run verify:partial-failures
+npm.cmd run verify:evidence-rules
 npm.cmd run verify:live-api-gate
-npm.cmd run verify:renderer-shell
 npm.cmd run verify:protected-terms
-npm.cmd run verify:all
 git status --short --branch
 ```
 
-Local Overseer verification result: all focused checks passed, and `verify:all` passed 63 scripts including `verify:watch-offline-readout`. `verify:protected-terms` passed warning-only with 456 expected advisory warnings across changed code/handoff files.
+Add and run a focused hardening verifier if Dev creates one, for example:
+
+```powershell
+npm.cmd run verify:queue-api-evidence-write
+```
+
+If Dev touches shared ingestion, evidence persistence, service registry, or task-runner behavior, also run:
+
+```powershell
+npm.cmd run verify:all
+```
+
+Do not run live smoke unless explicitly authorized by the Human.
 
 ## Evidence
 
-Accepted handoff:
+Dev must update this section in the handoff, not necessarily in `current.md`:
 
 ```txt
-workspace/DevHS56-watch_offline-readout-support.md
-```
+Trace of current Queue -> API -> Evidence flow:
 
-Accepted implementation files:
+Files/functions changed:
 
-```txt
-src/main/watchlist/watchOfflineReadout.js
-src/main/services/mutatingActionService.js
-src/main/services/serviceRegistry.js
-scripts/verify-watch-offline-readout.js
-scripts/verify-group.js
-package.json
+Dangerous cases covered:
+
+Queue status transition behavior:
+
+Partial failure / retry behavior:
+
+Evidence idempotency and provenance:
+
+Verification run:
+
+Protected-term output:
+
+Deferred decisions:
 ```
 
 ## Dev Handoff
 
-No Dev packet is open.
+Create:
 
-The next Dev packet should be a bounded read/write hardening packet selected by Human / Overseer and should name:
+```txt
+workspace/DevHS57-queue-api-evidence-write-hardening.md
+```
 
-- exact persistence/write boundary under review
-- allowed files and non-goals
-- expected failure/recovery cases
-- required offline verification commands
-- whether `verify:all` is required
+Handoff must include:
+
+- trace of the current Queue -> API -> Evidence flow
+- files/code paths changed
+- verification cases added or strengthened
+- any implementation fixes and why each was necessary
+- confirmation no live/API calls were run
+- confirmation no user real database was mutated
+- confirmation Discovery/Evidence/Enrich selected meanings were preserved
+- confirmation no schema/migration/contract/command/payload renames were performed, or exact approved exception if Overseer authorized one
+- verification commands and results
+- warning-only protected-term output and noisy classes
+- recommended next packet for remaining read/write hardening, if clear
