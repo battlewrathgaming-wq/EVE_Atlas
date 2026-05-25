@@ -30,8 +30,8 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Atlas Storage And Runtime Hardening
 Roadmap source: Human storage/runtime hardening direction accepted on 2026-05-25
 Current packet: `workspace/current.md`
-Current sequence: HS69 read-only deletion preflight refinement accepted; Atlas idle
-Latest accepted coordination artifact: `workspace/OverseerHS70-hs69-deletion-preflight-review.md`
+Current sequence: HS72 snapshot destination authority runway opened for Dev
+Latest accepted coordination artifact: `workspace/OverseerHS71-sense-selector-pattern-review.md`
 Display workflow support: `workspace/display_inventory.md`, `workspace/DisplayInventoryAuditHS49-ingest-to-userdisplay.md`, `workspace/request_display.md`, `workspace/display-request-workflow-hardening-contract.md`, `workspace/RequestDisplayHS50-atlas-initial-display-requests.md`, `workspace/DisplayResponseHS51-atlas-lab-m24-response-relay.md`
 Runtime/record integrity design input: `workspace/OverseerHS52-runtime-record-integrity-design-input.md`
 Watch recovery/offline readout scope: `workspace/OverseerHS54-watch-recovery-offline-readout-scope.md`
@@ -111,6 +111,8 @@ Watch_offline aggregation ADR: `docs/adr/ADR-0005-watch-offline-readout-aggregat
 - HS69 opens a bounded Dev runway for read-only deletion preflight refinement: encode accepted deletion policy into preflight reporting without deletion execution, schema/storage work, footprint persistence, live calls, or real DB mutation.
 - HS69A corrected the deletion trust posture: retained deletion footprint is rejected; when an operator confirms deletion, Atlas should delete the selected deletable active data and only disclose snapshots/backups as separate historical support artifacts.
 - HS70 accepted DevHS69: `evidence.prune_scope` preflight now reports blocked execution, no retained footprint, snapshot/backup disclosure, mutable/stale Assessment Memory context, selected Evidence row counts, and affected Assessment Memory references while remaining read-only.
+- HS71 accepted Sense selector/settings hardening patterns for Atlas adaptation: main-process-owned picker, backend validation, versioned persisted settings, degraded invalid state, and no direct renderer filesystem authority.
+- HS72 opens a bounded Dev runway for snapshot destination and storage-budget authority before production deletion execution; active DB relocation, restore, automatic cleanup/pruning, snapshot deletion, and deletion execution remain out of scope.
 - Storage-location/file-selector authority is parked as future infrastructure for heavy Atlas records, backups, exports, snapshots, or cache paths; Sense work may inform it but does not define Atlas storage semantics.
 - `Watch_offline` is the accepted working name for the post-restart/offline Watch readout line; avoid `Watcher` unless later approved as presentation-only language.
 - Human HS41 UI review accepted the direction and requested face/layout refinement: search-first Discovery, no duplicated Discovery/Watch controls, compact External API state, and progressive Observation/Assessment.

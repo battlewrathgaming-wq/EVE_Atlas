@@ -1,131 +1,175 @@
 # AURA Atlas Current Work
 
-Status: Idle after accepted deletion preflight refinement
+Status: Active Dev runway opened
 Last updated: 2026-05-25
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS69 read-only deletion preflight refinement is accepted. Atlas remains idle; no Dev packet is open. Production deletion execution is still absent and requires a future Human/Overseer packet.
+Current focus: HS72 is a bounded snapshot destination and storage-budget authority packet. Atlas should adapt Sense's selector/settings hardening pattern for runtime DB snapshot destinations before production deletion execution, and add an operator-configurable snapshot/support-artifact space budget. This is not active DB relocation, not automatic cleanup, and not deletion execution.
 
 Source of intent:
 
-- Human direction on 2026-05-25: continue after accepted deletion policy decisions.
-- Human trust decision on 2026-05-25: when the operator confirms deletion, Atlas should delete the selected deletable active data and retain no footprint.
+- Human direction on 2026-05-25: prioritize storage/snapshot management before destructive deletion execution.
+- Human direction on 2026-05-25: look to Sense's selector hardening.
+- Human direction on 2026-05-25: wire in an option to choose how much space Atlas will use.
+- `workspace/OverseerHS71-sense-selector-pattern-review.md`
 - `workspace/OverseerHS70-hs69-deletion-preflight-review.md`
 - `workspace/DevHS69-deletion-preflight-refinement.md`
 - `workspace/OverseerHS69A-deletion-trust-no-footprint-decision.md`
 - `workspace/OverseerHS68-deletion-recovery-assessment-decisions.md`
-- `workspace/OverseerHS67-deletion-footprint-anchor-decision.md`
-- `workspace/OverseerHS66-deletion-policy-human-decisions.md`
-- `workspace/OverseerHS65-deletion-scope-backup-matrix.md`
-- `workspace/OverseerHS64-production-deletion-policy-design.md`
-- `workspace/OverseerHS63-deletion-policy-design-input.md`
-- `workspace/DevHS58-retention-deletion-execution-boundary.md`
 - `docs/current-state/current-evidence-pipeline.md`
 - `docs/current-state/current-terminology-and-retention.md`
-- `src/main/db/schema.sql`
+- `src/main/services/runtimeSnapshotService.js`
+- `src/main/services/serviceRegistry.js`
+- `scripts/verify-runtime-db-snapshot.js`
 - `workspace/critical/README.md`
 - `workspace/critical/critical-terms.md`
 
 Accepted baseline:
 
-- Production deletion execution does not exist.
-- Retention/deletion behavior remains preflight-only.
-- zKill `killmail_id` is a Discovery anchor.
-- ESI-expanded and Atlas-written `killmail_id` is the Evidence-confirmed anchor.
+- Production deletion execution does not exist and must not be added in HS72.
 - Retained deletion footprint is rejected.
-- Deletion preflight reports no-footprint policy, not footprint candidate fields.
-- `killmail_id + pilot_id`, `EVE_value`, `EVE_Pilot_value`, `EVE_rating`, `EVE_interest_score`, `Spare_1A`, and `Spare_1B` are rejected for deletion footprint.
-- Snapshotting is accepted as the recovery posture for first production deletion, with honest disclosure that snapshots/backups may retain records removed from active storage.
-- Assessment Memory is mutable, disposable, and quickly stale; it is not Evidence and must not become hidden retention.
+- Snapshotting is accepted as recovery/support posture, with honest disclosure that snapshots/backups may retain records removed from active storage.
+- Snapshots/backups are support/recovery artifacts, not Evidence, Observation, Assessment Memory, deletion, or active-state truth.
+- Operator-configured storage budget should apply to the snapshot/support-artifact lane in this packet.
+- Storage budget should warn or block new snapshot/support artifact writes when projected usage exceeds the accepted budget; it must not automatically delete old artifacts.
+- Active runtime DB relocation is not accepted for this packet.
+- Atlas may adapt Sense's selector/settings workflow pattern, but Sense product terms and gamelog-folder structure rules are not Atlas authority.
 
 ## Executor
 
-Current executor: none; awaiting Human / Overseer selection for the next bounded packet.
+Current executor: Dev
 
-Expected handoff filename: none until a new packet is opened.
+Expected handoff filename:
+
+```txt
+workspace/DevHS72-snapshot-destination-authority.md
+```
 
 ## Ordered Runway
 
-1. Hold Atlas idle until the Human selects the next bounded packet.
-2. Treat HS69 as accepted read-only deletion preflight refinement, not deletion execution.
-3. Future production deletion execution requires a new packet defining transaction, rollback, backup/snapshot, confirmation, and failure behavior.
-4. Keep storage-location/snapshot management authority separate unless a future packet explicitly joins it to deletion execution.
+1. Read the source of intent and trace current Atlas runtime snapshot preflight/create behavior.
+2. Add or refine Atlas runtime snapshot destination authority using the Sense pattern:
+   - main-process-owned native folder picker or controlled backend service path
+   - backend validation before save/use
+   - explicit persisted runtime setting for snapshot destination directory if implemented
+   - explicit persisted runtime setting for snapshot/support-artifact storage budget if implemented
+   - visible degraded state for invalid/missing persisted destination settings
+   - default fallback remains existing project `.tmp` snapshot location
+3. Ensure snapshot filenames are generated by Atlas backend/service logic, not arbitrary renderer file paths.
+4. Add storage-budget accounting for the snapshot/support-artifact lane:
+   - report current configured destination usage
+   - estimate/project the next snapshot size from the active DB and journal state where practical
+   - report budget, remaining space, and over-budget/degraded state
+   - warn or block new snapshot creation when projected usage exceeds budget
+   - do not auto-prune or delete old snapshots/support artifacts
+5. Update `runtime.db_snapshot.preflight` and `runtime.db_snapshot.create` only as needed to use a validated configured destination directory and accepted budget behavior.
+6. Preserve explicit snapshot creation confirmation.
+7. Add focused verification for:
+   - valid snapshot destination save/load or equivalent accepted state
+   - invalid persisted destination degrades visibly
+   - valid storage budget save/load or equivalent accepted state
+   - invalid budget degrades visibly
+   - over-budget preflight/create behavior
+   - renderer has no direct filesystem authority
+   - picker/bridge boundary if a native picker is added
+   - snapshot preflight remains read-only
+   - snapshot create writes only the explicit support artifact
+   - external/live/API behavior is not introduced
+8. Update current-state docs only where the accepted behavior changes.
+9. Update this file Evidence / Dev Handoff sections and create the expected DevHS72 handoff.
 
 ## Guardrails And Non-Goals
 
-- No deletion execution without a new packet.
-- No schema or migration changes without a new packet.
-- No footprint table, file, storage class, persistence, or retained footprint reporting.
-- No real local database mutation without a new packet.
-- No live/private/API calls unless explicitly authorized.
-- No bridge, IPC, service command, payload, CSS/test-id, or protected-term renames without explicit approval.
-- Do not add an executable `evidence.prune_scope` command without a production deletion execution packet.
-- Do not mutate Assessment Memory unless a future packet explicitly defines stale/prune behavior.
-- Do not mutate snapshots, backups, reports, trace packs, or support artifacts unless a future packet explicitly targets them.
-- Do not treat archived docs/gap files as active task queues.
+- No production deletion execution.
+- No active runtime DB relocation.
+- No restore implementation.
+- No snapshot deletion/pruning implementation.
+- No automatic cleanup/pruning to satisfy storage budget.
+- No footprint storage or retained footprint reporting.
+- No live/private/API calls.
+- No direct renderer filesystem access.
+- No broad readiness/settings redesign.
+- No bridge, IPC, service command, payload, CSS/test-id, or protected-term renames beyond what the bounded selector/settings path requires.
+- Do not copy Sense product terms or gamelog-folder validation rules into Atlas.
+- Do not silently accept invalid persisted paths.
+- Do not silently accept invalid persisted budgets.
+- Do not mutate real operator data outside explicit snapshot support artifact creation.
 
 ## Stop Conditions
 
-Stop and return to Human before writing a Dev runway if:
+Stop and return to Overseer/Human before implementation if:
 
-- production deletion behavior is not explicitly scoped
-- transaction, rollback, backup/snapshot, confirmation, or failure behavior is unresolved
-- implementation would create footprint storage or retained footprint reporting
-- implementation would make Assessment Memory immutable or a deletion blocker
-- implementation would blur Evidence, Discovery, Report, Assessment, Watch, or Marked boundaries
-- implementation would require live/provider calls
+- implementation requires moving the active runtime DB
+- implementation requires production deletion, restore, or snapshot deletion
+- implementation requires automatic pruning/cleanup
+- implementation requires accepting arbitrary renderer-supplied file paths
+- implementation would bypass backend validation
+- implementation would require broad settings/product doctrine decisions
+- implementation would blur snapshots/backups with Evidence, Observation, Assessment Memory, or active-state truth
 - protected-term warnings suggest a new authority decision is required
 
 ## Required Verification
 
-For the accepted HS69 review, Overseer reran:
+Run the smallest focused set that proves the packet, then broaden if touched code requires it:
 
 ```powershell
-npm.cmd run verify:retention-preflight
-npm.cmd run verify:retention-deletion-boundary
+npm.cmd run verify:runtime-snapshot
+npm.cmd run verify:renderer-shell
+npm.cmd run verify:service-registry
+npm.cmd run verify:protected-terms
+git status --short --branch
 ```
 
-If future production deletion work opens, verification must include focused retention/deletion checks and likely `npm.cmd run verify:all`.
+If main/preload/service registry/shared verification surfaces change, also run:
+
+```powershell
+npm.cmd run verify:all
+```
+
+Native folder picker success is environment-dependent; static checks may prove the bridge boundary, but manual Electron smoke is still useful if a native picker is added:
+
+```powershell
+npm.cmd run smoke:electron
+```
 
 ## Evidence
 
-HS69 completed by Dev and accepted by Overseer.
+HS72 runway opened by Overseer.
 
-Accepted handoffs:
+Overseer verification:
 
-```txt
-workspace/DevHS69-deletion-preflight-refinement.md
-workspace/OverseerHS70-hs69-deletion-preflight-review.md
-```
+- `npm.cmd run verify:protected-terms` completed with exit code 0.
+- Protected-term discovery ran in working-set mode against 3 files.
+- Warning count: 111.
+- Warning classes: cross-project borrowing 10, Lab quarantine borrowing 91, Atlas candidate 10.
+- The scan confirmed warning-only behavior; no renames and no protected-word JSON updates were performed.
+- No code, schema, deletion execution, storage relocation, snapshot deletion, automatic pruning, live API, or real DB mutation occurred while opening this runway.
 
-Accepted behavior:
+To be completed by Dev after implementation.
 
-- `evidence.prune_scope` preflight now reports `deletion_policy`.
-- `deletion_policy.execution_status` reports `blocked_preflight_only`.
-- `deletion_policy.no_retained_footprint` reports `true`.
-- snapshot/backup recovery disclosure is present.
-- Assessment Memory is reported as mutable/disposable/stale context, not Evidence and not a blocker.
-- selected Evidence scope can count affected rows by `killmailId` / `killmailIds`.
-- affected Assessment Memory references are reported where practical.
-- `retention.preflight` remains read-only.
-- no executable deletion command was added.
-- no schema, migration, storage class, footprint table/file, or footprint persistence was added.
-- no retained footprint is reported or stored.
+Expected evidence:
 
-Overseer reran:
-
-```powershell
-npm.cmd run verify:retention-preflight
-npm.cmd run verify:retention-deletion-boundary
-```
-
-Both passed.
+- files changed
+- Sense patterns adapted and Sense patterns explicitly not imported
+- snapshot destination validation behavior
+- snapshot/support-artifact budget validation and over-budget behavior
+- persisted/degraded settings behavior, if implemented
+- picker/bridge boundary proof, if picker added
+- proof that snapshot preflight remains read-only
+- proof that snapshot create remains explicit support artifact creation
+- proof that active DB relocation, deletion execution, restore, and snapshot deletion were not added
+- verification commands and results
+- confirmation that no live API, real DB mutation beyond explicit fixture/support-artifact behavior, protected-word JSON update, or terminology rename occurred
 
 ## Dev Handoff
 
-No Dev packet is open.
+Dev should create:
 
-Future Dev work requires a new Human / Overseer packet.
+```txt
+workspace/DevHS72-snapshot-destination-authority.md
+```
+
+The handoff must summarize what snapshot destination authority now exists, what is still deferred, verification results, and any remaining storage/deletion risks.
