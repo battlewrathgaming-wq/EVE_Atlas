@@ -73,6 +73,7 @@ Start here:
 - `README.md`
 - `docs/current-state/current-evidence-pipeline.md`
 - `docs/current-state/current-ipc-ui-preparation.md`
+- `docs/current-state/current-display-inventory.md`
 - `docs/tenets/tenets.md`
 - `workspace/overview.md`
 

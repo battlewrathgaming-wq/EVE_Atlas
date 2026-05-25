@@ -43,17 +43,20 @@ Display workflow support: `workspace/display_inventory.md`, `workspace/DisplayIn
 - `docs/current-state/current-report-products.md`
 - `docs/current-state/current-manual-discovery-lane.md`
 - `docs/current-state/current-terminology-and-retention.md`
+- `docs/current-state/current-display-inventory.md`
 
 ### Roadmap And Runbooks
 
 - `docs/roadmap/`
 - `docs/runbooks/`
+- `docs/runbooks/lab-display-request-workflow.md`
 
 ### Contracts And Doctrine
 
 - `docs/adr/`
 - `docs/contracts/` if present
 - `docs/features/`
+- `docs/features/display-boundary-principles.md`
 - `docs/statements/`
 - `docs/terms/`
 - `docs/schemas/`
