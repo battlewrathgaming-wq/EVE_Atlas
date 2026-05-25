@@ -119,6 +119,8 @@ The accepted success-smoke review is recorded in `docs/audits/audit-2026-05-22-l
 
 The corpus health report is an operational readiness report. It is not an observation report and not an assessment artifact.
 
+The structured corpus health response now includes a compact `partial_success` support status. It uses existing local `fetch_runs`, `discovered_killmail_refs`, `api_request_logs`, and `data_quality_warnings` rows to count failed runs, failed expansions, warning/error summaries, pending and failed queue refs, API error logs, and warning groups. This status is a read-only coverage warning: it does not call live providers, does not create Evidence, and must not be read as complete local evidence coverage when partial indicators are present.
+
 ## Current Snapshot Safety
 
 `runtime.db_snapshot.preflight` reports the runtime DB path, destination path, file size, WAL/SHM state, core table counts, latest fetch run, latest evidence timestamp, and assessment artifact counts without writing files.

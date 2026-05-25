@@ -76,6 +76,7 @@ function buildNativeCorpusHealthReportResponse(db) {
       counts: model.counts,
       integrity: model.integrity,
       warnings_by_type: model.warning_rows,
+      partial_success: model.partial_success,
       freshness: model.freshness
     },
     evidence_basis: {

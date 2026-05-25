@@ -6,6 +6,7 @@ function buildCorpusHealthReportModel(db) {
   const integrity = integrityChecks(db);
   const freshness = freshnessChecks(db);
   const warningRows = warningsByType(db);
+  const partialSuccess = partialSuccessStatus(db, warningRows);
 
   return {
     report_type: 'corpus_health',
@@ -14,11 +15,13 @@ function buildCorpusHealthReportModel(db) {
     counts,
     integrity,
     warning_rows: warningRows,
+    partial_success: partialSuccess,
     freshness,
     boundaries: [
       'This report reads local SQLite tables only.',
       'It does not parse SDE zip files.',
       'It does not call zKill or ESI.',
+      'Partial success indicators mean local coverage may be incomplete.',
       'It does not infer assessment or operator intent.'
     ]
   };
@@ -43,6 +46,18 @@ function renderCorpusHealthReport(model) {
       { label: 'Count', value: (row) => row.count },
       { label: 'Latest', value: (row) => row.latest || 'none' }
     ])),
+    printSection('Partial Success Status', [
+      `Status: ${model.partial_success.status}`,
+      `Failed fetch runs: ${model.partial_success.failed_fetch_runs}`,
+      `Runs with failed expansions: ${model.partial_success.runs_with_failed_expansions}`,
+      `Runs with warning/error summaries: ${model.partial_success.runs_with_warning_or_error_summaries}`,
+      `Pending queue refs: ${model.partial_success.pending_queue_refs}`,
+      `Failed queue refs: ${model.partial_success.failed_queue_refs}`,
+      `API error logs: ${model.partial_success.api_error_logs}`,
+      `Warning groups: ${model.partial_success.warning_groups}`,
+      `Coverage: ${model.partial_success.coverage_note}`,
+      `Boundary: ${model.partial_success.boundary}`
+    ].join('\n')),
     printSection('Operational Freshness', [
       `Latest fetch run: ${model.freshness.latest_fetch_run?.run_id || 'none'}`,
       `Latest fetch status: ${model.freshness.latest_fetch_run?.status || 'none'}`,
@@ -198,6 +213,68 @@ function warningsByType(db) {
     GROUP BY warning_type
     ORDER BY count DESC, warning_type
   `).all();
+}
+
+function partialSuccessStatus(db, warningRows) {
+  const failedFetchRuns = scalar(db, `
+    SELECT COUNT(*)
+    FROM fetch_runs
+    WHERE status = 'failed'
+  `);
+  const runsWithFailedExpansions = scalar(db, `
+    SELECT COUNT(*)
+    FROM fetch_runs
+    WHERE failed_expansions > 0
+  `);
+  const runsWithWarningOrErrorSummaries = scalar(db, `
+    SELECT COUNT(*)
+    FROM fetch_runs
+    WHERE error_summary IS NOT NULL
+      AND TRIM(error_summary) != ''
+  `);
+  const pendingQueueRefs = scalar(db, `
+    SELECT COUNT(*)
+    FROM discovered_killmail_refs
+    WHERE status = 'pending'
+  `);
+  const failedQueueRefs = scalar(db, `
+    SELECT COUNT(*)
+    FROM discovered_killmail_refs
+    WHERE status = 'failed'
+  `);
+  const apiErrorLogs = scalar(db, `
+    SELECT COUNT(*)
+    FROM api_request_logs
+    WHERE (status_code IS NOT NULL AND status_code >= 400)
+       OR (error_message IS NOT NULL AND TRIM(error_message) != '')
+       OR rate_limited = 1
+  `);
+  const warningGroups = warningRows.length;
+  const hasPartialIndicators = [
+    failedFetchRuns,
+    runsWithFailedExpansions,
+    runsWithWarningOrErrorSummaries,
+    pendingQueueRefs,
+    failedQueueRefs,
+    apiErrorLogs,
+    warningGroups
+  ].some((value) => Number(value || 0) > 0);
+
+  return {
+    classification: 'read-only partial-success support status; not Evidence, Observation, or Assessment Memory',
+    status: hasPartialIndicators ? 'partial_or_incomplete' : 'no_partial_indicators',
+    failed_fetch_runs: failedFetchRuns,
+    runs_with_failed_expansions: runsWithFailedExpansions,
+    runs_with_warning_or_error_summaries: runsWithWarningOrErrorSummaries,
+    pending_queue_refs: pendingQueueRefs,
+    failed_queue_refs: failedQueueRefs,
+    api_error_logs: apiErrorLogs,
+    warning_groups: warningGroups,
+    coverage_note: hasPartialIndicators
+      ? 'Local evidence coverage may be incomplete; review queue refs, failed runs, API logs, and warnings before treating the corpus as complete.'
+      : 'No local partial-success indicators are present in these status tables.',
+    boundary: 'Discovery refs remain possible leads until Enrich selected performs ESI expansion and writes Evidence.'
+  };
 }
 
 function freshnessChecks(db) {

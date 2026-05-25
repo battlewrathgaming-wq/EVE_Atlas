@@ -30,8 +30,8 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Atlas Storage And Runtime Hardening
 Roadmap source: Human storage/runtime hardening direction accepted on 2026-05-25
 Current packet: `workspace/current.md`
-Current sequence: HS61 accepted; HS62 partial-success report readout packet opened for Dev
-Latest accepted coordination artifact: `workspace/DevHS61-operator-runtime-status-readout.md`
+Current sequence: HS62 partial-success report readout accepted; Atlas idle
+Latest accepted coordination artifact: `workspace/DevHS62-partial-success-report-readout.md`
 Display workflow support: `workspace/display_inventory.md`, `workspace/DisplayInventoryAuditHS49-ingest-to-userdisplay.md`, `workspace/request_display.md`, `workspace/display-request-workflow-hardening-contract.md`, `workspace/RequestDisplayHS50-atlas-initial-display-requests.md`, `workspace/DisplayResponseHS51-atlas-lab-m24-response-relay.md`
 Runtime/record integrity design input: `workspace/OverseerHS52-runtime-record-integrity-design-input.md`
 Watch recovery/offline readout scope: `workspace/OverseerHS54-watch-recovery-offline-readout-scope.md`
@@ -102,6 +102,7 @@ Watch_offline aggregation ADR: `docs/adr/ADR-0005-watch-offline-readout-aggregat
 - HS59 accepted the storage/runtime read-write boundary map; HS60 now focuses on runtime observability/readout clarity for partial success, restart state, durable/volatile state, and support artifact classification.
 - HS60 accepted the runtime boundary section in operator debug trace packs; HS61 now focuses on exposing that status through an existing compact report/support response without renderer redesign or storage contract expansion.
 - HS61 accepted compact `runtime_boundary` status in `app.readiness`; HS62 now focuses on partial-success status in one existing report/readout surface using existing fetch run, API log, warning, and queue records.
+- HS62 accepted compact `partial_success` status in `report.corpus_health`; the storage/runtime hardening lane is resting with clean body snapshot readiness, deletion policy, storage-location authority, and queue stale/expiration policy parked for future selection.
 - Storage-location/file-selector authority is parked as future infrastructure for heavy Atlas records, backups, exports, snapshots, or cache paths; Sense work may inform it but does not define Atlas storage semantics.
 - `Watch_offline` is the accepted working name for the post-restart/offline Watch readout line; avoid `Watcher` unless later approved as presentation-only language.
 - Human HS41 UI review accepted the direction and requested face/layout refinement: search-first Discovery, no duplicated Discovery/Watch controls, compact External API state, and progressive Observation/Assessment.

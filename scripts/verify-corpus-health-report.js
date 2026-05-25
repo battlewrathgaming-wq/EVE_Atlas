@@ -22,7 +22,7 @@ async function main() {
     assert(model.report_type === 'corpus_health', 'model should identify corpus health report');
     assert(model.counts.some((row) => row.area === 'killmails' && row.rows === 1), 'health report should count killmails');
     assert(model.counts.some((row) => row.area === 'activity_events' && row.rows > 0), 'health report should count activity events');
-    assert(model.counts.some((row) => row.area === 'discovered_killmail_refs' && row.rows === 2), 'health report should count queued refs');
+    assert(model.counts.some((row) => row.area === 'discovered_killmail_refs' && row.rows === 3), 'health report should count queued refs');
     assert(integrityCount(model, 'duplicate activity event keys') === 0, 'activity event primary keys should have no duplicates');
     assert(integrityCount(model, 'orphan activity events without killmail') === 0, 'activity events should have matching killmails');
     assert(integrityCount(model, 'queued refs already expanded') === 1, 'expanded queue refs should be visible');
@@ -34,12 +34,27 @@ async function main() {
     assert(model.freshness.latest_metadata_run.run_id === 'metadata_fixture', 'latest metadata run should be reported');
     assert(model.freshness.latest_sde_topology.build_number === 'fixture-build', 'latest topology build should be reported');
     assert(model.freshness.latest_sde_inventory.build_number === 'fixture-build', 'latest inventory build should be reported');
+    assert(model.partial_success.classification.includes('not Evidence'), 'partial-success status should be classified as support status');
+    assert(model.partial_success.status === 'partial_or_incomplete', 'partial-success indicators should mark corpus coverage incomplete');
+    assert(model.partial_success.failed_fetch_runs === 1, 'partial-success status should count failed fetch runs');
+    assert(model.partial_success.runs_with_failed_expansions === 1, 'partial-success status should count failed expansion runs');
+    assert(model.partial_success.runs_with_warning_or_error_summaries === 1, 'partial-success status should count run warning/error summaries');
+    assert(model.partial_success.pending_queue_refs === 1, 'partial-success status should count pending queue refs');
+    assert(model.partial_success.failed_queue_refs === 1, 'partial-success status should count failed queue refs');
+    assert(model.partial_success.api_error_logs === 1, 'partial-success status should count API error logs');
+    assert(model.partial_success.warning_groups === 2, 'partial-success status should count warning groups');
+    assert(model.partial_success.boundary.includes('Discovery refs remain possible leads'), 'partial-success status should preserve discovery/evidence boundary');
     assertIncludes(text, 'AURA Atlas Evidence Corpus Health');
+    assertIncludes(text, 'Partial Success Status');
+    assertIncludes(text, 'Status: partial_or_incomplete');
+    assertIncludes(text, 'Coverage: Local evidence coverage may be incomplete');
     assertIncludes(text, 'It does not parse SDE zip files.');
     assertIncludes(text, 'It does not call zKill or ESI.');
+    assertIncludes(text, 'Partial success indicators mean local coverage may be incomplete.');
     assertIncludes(text, 'It does not infer assessment or operator intent.');
     assert(response.response_mode === 'native-structured', 'service response should be native structured');
     assert(response.health.integrity.length === model.integrity.length, 'service response should include structured integrity checks');
+    assert(response.health.partial_success.failed_queue_refs === 1, 'service response should expose structured partial-success status');
     assert(response.boundaries.includes('It does not call zKill or ESI.'), 'service response should include API boundary');
 
     const commands = listServiceCommands();
@@ -138,6 +153,11 @@ function seed(db) {
       killmail_id: 7702,
       hash: 'fixture_hash_7702',
       discovered_at: '2026-05-01T20:02:00Z'
+    },
+    {
+      killmail_id: 7703,
+      hash: 'fixture_hash_7703',
+      discovered_at: '2026-05-01T20:03:00Z'
     }
   ], {
     runId: run.run_id,
@@ -146,6 +166,39 @@ function seed(db) {
     sourceSystemId: 30000001
   });
   repository.markDiscoveryRefsExpanded([{ killmail_id: 7701, hash: 'fixture_hash_7701' }]);
+  const failedRun = repository.createFetchRun({
+    runId: 'run_failed_expansion_fixture',
+    trigger: 'fixture_test',
+    watchType: 'manual_expand',
+    watchId: 'corpus-health-partial'
+  });
+  repository.insertApiRequestLog({
+    run_id: failedRun.run_id,
+    provider: 'esi',
+    endpoint: 'fixture://esi/killmails/7703/fixture_hash_7703',
+    method: 'GET',
+    status_code: 503,
+    duration_ms: 2,
+    cache_status: 'miss',
+    error_message: 'fixture ESI failure',
+    requested_at: '2026-05-01T20:03:00Z'
+  });
+  repository.insertWarning(failedRun.run_id, {
+    killmail_id: 7703,
+    warning_type: 'FAILED_EXPANSION',
+    message: 'Fixture failed expansion for corpus partial-success status.',
+    created_at: '2026-05-01T20:03:00Z'
+  });
+  repository.markDiscoveryRefsFailed([{
+    killmail_id: 7703,
+    warning_type: 'failed_expansion',
+    message: 'fixture ESI failure'
+  }]);
+  repository.finalizeFetchRun(failedRun.run_id, {
+    discovered_refs: 1,
+    failed_expansions: 1,
+    api_calls_esi: 1
+  }, 'failed', 'fixture ESI failure');
   repository.finalizeFetchRun(run.run_id, {
     discovered_refs: 2,
     expanded_new: result.killmailsWritten,
