@@ -52,14 +52,34 @@ workspace/DevHS57-queue-api-evidence-write-hardening.md
    - successful ESI expansion writes Evidence idempotently
    - provenance, fetch run, ingestion audit, API log, or equivalent local record is sufficient to reconstruct what happened
    - Discovery refs remain Discovery until accepted ESI expansion writes Evidence
-4. Implement only local hardening fixes that are directly proven by the verification work and stay within existing product meaning.
-5. Preserve accepted terms and effects:
+4. Before implementation, be able to answer clearly in the handoff:
+   - What is the current trace from Queue refs to Evidence writes?
+   - Which dangerous cases were proven by verification?
+   - Did any policy, schema, or product decision become necessary?
+5. Implement only local hardening fixes that are directly proven by the verification work and stay within existing product meaning.
+6. Preserve accepted terms and effects:
    - zKill refs / queue refs are Discovery, not Evidence.
    - `Enrich selected` is the deliberate ESI expansion into stored Evidence.
    - Expanded ESI killmail is the authoritative Evidence source.
    - Metadata hydration / label refresh is not Evidence creation.
-6. Run required verification.
-7. Create `workspace/DevHS57-queue-api-evidence-write-hardening.md` with trace, changes, verification, risks, and any deferred policy decisions.
+7. Run required verification.
+8. Create `workspace/DevHS57-queue-api-evidence-write-hardening.md` with trace, changes, verification, risks, and any deferred policy decisions.
+
+## Acceptance Criteria
+
+HS57 is acceptable if the handoff and verification prove:
+
+- The Queue -> `Enrich selected` -> ESI request -> Evidence write trace is explicit enough for Overseer review.
+- At least one focused hardening verifier covers the risky boundary, or existing focused verifiers are strengthened with named cases.
+- Cached refs do not spend ESI calls.
+- Duplicate or repeated selection cannot accidentally double-create Evidence.
+- Partial ESI failure preserves successful Evidence writes and records unresolved/failed refs clearly enough for retry.
+- Retry behavior is proven for unresolved refs, or a precise stop/deferred decision is recorded.
+- Evidence writes remain idempotent.
+- Provenance/run/API/local records are sufficient to reconstruct what happened at the boundary, or the exact missing record model is escalated.
+- Discovery refs remain Discovery until accepted ESI expansion writes Evidence.
+- No live/API calls, user real database mutation, schema/migration changes, service/command/payload renames, or product meaning changes occurred unless explicitly approved.
+- If Dev is unsure about a case, acceptance should widen toward better evidence, clearer trace, or explicit deferral, not broader implementation.
 
 ## Guardrails
 
@@ -84,6 +104,8 @@ Stop and return to Overseer if:
 - Queue status semantics are insufficient and require product decision
 - retry behavior requires a new user-facing policy
 - provenance/logging records cannot reconstruct the boundary without a broader record model change
+- Dev cannot clearly show the current Queue -> API -> Evidence trace before implementation
+- Dev cannot name the dangerous case proven by verification
 - a fix requires service/command/payload renames
 - verification requires mutating the user's real local database
 - protected-term output suggests new terminology authority decisions are needed
