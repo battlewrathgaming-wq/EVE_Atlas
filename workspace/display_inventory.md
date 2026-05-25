@@ -3,6 +3,9 @@
 Status: Working inventory scaffold
 Date: 2026-05-25
 Owner: Atlas Overseer
+First extraction audit:
+
+- `workspace/DisplayInventoryAuditHS49-ingest-to-userdisplay.md`
 
 ## Purpose
 
@@ -184,6 +187,17 @@ Recommended first inventory pass:
 4. Settings / Diagnostics and Task History.
 
 For each surface, extract visible text labels, fields, states, warnings, and controls. Classify role and visibility decision before recommending declutter.
+
+HS49 completed the first advisory extraction pass and should be used as evidence for future scoping. It is not a Dev runway, Lab request batch, terminology rename, or implementation approval.
+
+Accepted HS49 implications:
+
+- Atlas Overview is the healthiest current operator-intent layer.
+- The right rail is valuable but visually mixes Evidence, Discovery, Watch, and Assessment Memory with equal weight.
+- Queue / Possible Leads needs a display method that keeps refs investigable without making them look like Evidence.
+- Watch needs a compact operator state model before exposing scheduler/executor internals.
+- Readiness and Task History should remain diagnostic/support surfaces, with only compact trust/status summaries promoted to primary UI.
+- Reports are comparatively well structured, but provenance/raw IDs should remain secondary to Evidence Basis and Observation.
 
 ## Non-Goals
 
