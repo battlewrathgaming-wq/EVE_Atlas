@@ -32,6 +32,7 @@ Roadmap source: Human concept-render direction accepted on 2026-05-24
 Current packet: `workspace/current.md`
 Current sequence: HS47 accepted; awaiting Human/UIUX review
 Latest accepted coordination artifact: `workspace/OverseerHS48-atlas-overview-face-review.md`
+Display workflow support: `workspace/display_inventory.md`, `workspace/request_display.md`, `workspace/display-request-workflow-hardening-contract.md`
 
 ## Durable Record Index
 
@@ -83,6 +84,7 @@ Latest accepted coordination artifact: `workspace/OverseerHS48-atlas-overview-fa
 ## Open Questions
 
 - Human concept-render direction accepted the Atlas Overview Face as atmosphere, hierarchy, and interaction intent, not pixel-perfect specification or terminology authority.
+- User-facing display inventory is now staged as a short-term product/workflow tool before further declutter or Lab display requests.
 - Human HS41 UI review accepted the direction and requested face/layout refinement: search-first Discovery, no duplicated Discovery/Watch controls, compact External API state, and progressive Observation/Assessment.
 - Command/effect authority hardening accepted for the current local Electron trust boundary; renderer Intel Console work continues as a bounded Dev runway.
 - Presentation authority clarification: Atlas owns backend/bridge semantics; Labs or a dedicated presentation layer may later replace/finalize UI presentation after structure cleanup.
