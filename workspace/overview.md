@@ -30,8 +30,8 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Atlas Storage And Runtime Hardening
 Roadmap source: Human storage/runtime hardening direction accepted on 2026-05-25
 Current packet: `workspace/current.md`
-Current sequence: HS74 Queue -> API request -> Evidence write confidence runway opened for Dev
-Latest accepted coordination artifact: `workspace/OverseerHS73-hs72-snapshot-destination-review.md`
+Current sequence: HS74 Queue -> API request -> Evidence write confidence accepted; Atlas is idle pending next Human/Overseer-selected packet
+Latest accepted coordination artifact: `workspace/OverseerHS75-hs74-queue-evidence-confidence-review.md`
 Display workflow support: `workspace/display_inventory.md`, `workspace/DisplayInventoryAuditHS49-ingest-to-userdisplay.md`, `workspace/request_display.md`, `workspace/display-request-workflow-hardening-contract.md`, `workspace/RequestDisplayHS50-atlas-initial-display-requests.md`, `workspace/DisplayResponseHS51-atlas-lab-m24-response-relay.md`
 Runtime/record integrity design input: `workspace/OverseerHS52-runtime-record-integrity-design-input.md`
 Watch recovery/offline readout scope: `workspace/OverseerHS54-watch-recovery-offline-readout-scope.md`
@@ -113,7 +113,8 @@ Watch_offline aggregation ADR: `docs/adr/ADR-0005-watch-offline-readout-aggregat
 - HS70 accepted DevHS69: `evidence.prune_scope` preflight now reports blocked execution, no retained footprint, snapshot/backup disclosure, mutable/stale Assessment Memory context, selected Evidence row counts, and affected Assessment Memory references while remaining read-only.
 - HS71 accepted Sense selector/settings hardening patterns for Atlas adaptation: main-process-owned picker, backend validation, versioned persisted settings, degraded invalid state, and no direct renderer filesystem authority.
 - HS72 accepted snapshot destination and storage-budget authority before production deletion execution: operator-configured runtime snapshot/support-artifact destination and budget, visible current/projected usage, over-budget snapshot block, backend-generated filenames, degraded invalid settings, and no automatic pruning.
-- HS74 opens a bounded Dev runway for Queue -> API request -> Evidence write confidence hardening with offline fixtures, mixed success/failure proof, durable provenance/restart reconstruction, and preserved Discovery/Evidence anchors.
+- HS74 accepted Queue -> API request -> Evidence write confidence hardening as verification-only: offline fixture proof now covers mixed success/failure, retry/idempotency, durable provenance/restart reconstruction, and preserved Discovery/Evidence anchors.
+- Queue batch cadence and UX pacing is parked as a future product/UX lane after evidence-write correctness; it should decide batch size, timing, throttling, External API state behavior, and operator-facing working/waiting/throttled/failed/retry states.
 - Native picker/UI rigging, broader support-artifact budget coverage, active DB relocation, restore, automatic cleanup/pruning, snapshot deletion, and deletion execution remain out of scope until explicitly opened.
 - Storage-location/file-selector authority remains future infrastructure for heavy Atlas records, backups, exports, snapshots, or cache paths; Sense work may inform it but does not define Atlas storage semantics.
 - `Watch_offline` is the accepted working name for the post-restart/offline Watch readout line; avoid `Watcher` unless later approved as presentation-only language.

@@ -1,9 +1,12 @@
+const fs = require('node:fs');
+const path = require('node:path');
 const fixtureKillmail = require('../fixtures/killmail-1001.json');
 const { openDatabase, migrate, closeDatabase } = require('../src/main/db/database');
 const { EvidenceRepository } = require('../src/main/db/evidenceRepository');
 const { buildQueueExpansionSelection } = require('../src/main/services/queueSelectionService');
 const { expandManualRefs } = require('../src/main/workers/manualExpansionWorker');
 const { evidencePackageFromExpandedKillmails } = require('../src/main/workers/killmailIngestionWorker');
+const { auraTempRoot } = require('../src/main/util/tempPaths');
 
 async function main() {
   await verifyCachedAndRepeatedSelectionBoundary();
@@ -83,12 +86,16 @@ async function verifyCachedAndRepeatedSelectionBoundary() {
 }
 
 async function verifyPartialFailureRetryAndProvenance() {
-  const db = openDatabase(':memory:');
+  const workDir = path.join(auraTempRoot(), 'queue-api-evidence-write');
+  fs.rmSync(workDir, { recursive: true, force: true });
+  fs.mkdirSync(workDir, { recursive: true });
+  const dbPath = path.join(workDir, 'queue-api-evidence-write.sqlite');
+  let db = openDatabase(dbPath);
   migrate(db);
   seedTopology(db);
 
   try {
-    const repository = new EvidenceRepository(db);
+    let repository = new EvidenceRepository(db);
     seedQueue(repository, [
       { killmail_id: 9201, hash: 'hash_9201', discovered_at: '2026-05-23T11:00:00Z' },
       { killmail_id: 9202, hash: 'hash_9202', discovered_at: '2026-05-23T11:01:00Z' }
@@ -116,6 +123,11 @@ async function verifyPartialFailureRetryAndProvenance() {
     assert(queueStatus(db, 9202) === 'failed', 'failed partial ref should stay reviewable as failed');
     assert(count(db, 'killmails') === 1, 'partial run should persist only successful ESI evidence');
     assert(count(db, 'ingestion_audits') === 1, 'partial run should audit only successful ESI evidence');
+    assert(discoveryRef(db, 9201).status === 'expanded', 'Discovery anchor should stay in queue layer after success');
+    assert(evidenceRow(db, 9201).source === 'esi', 'ESI-expanded row should become the Evidence-confirmed anchor');
+    assert(evidenceRow(db, 9201).raw_payload_checksum, 'Evidence-confirmed anchor should carry raw payload checksum');
+    assert(discoveryRef(db, 9202).status === 'failed', 'failed Discovery anchor should remain reviewable in queue layer');
+    assert(evidenceRow(db, 9202) === null, 'failed expansion must not write partial Evidence');
 
     const partialRun = latestFetchRun(db);
     assert(partialRun.status === 'success', 'partial ESI failure should finalize run with warning state');
@@ -124,6 +136,21 @@ async function verifyPartialFailureRetryAndProvenance() {
     assert(String(partialRun.error_summary || '').includes('fixture ESI failure for 9202'), 'partial fetch run should preserve failure summary');
     assert(apiLogsForRun(db, partialRun.run_id).length === 2, 'partial run should have reconstructable ESI API logs');
     assert(ingestionAuditsForRun(db, partialRun.run_id).length === 1, 'partial run should have audit row for accepted ESI evidence');
+    assert(warningsForRun(db, partialRun.run_id).some((warning) => warning.killmail_id === 9202 && warning.warning_type === 'failed_expansion'), 'partial run should preserve failed expansion warning');
+
+    closeDatabase(db);
+    db = openDatabase(dbPath);
+    migrate(db);
+    repository = new EvidenceRepository(db);
+
+    const durable = durableQueueEvidenceState(db, partialRun.run_id);
+    assert(durable.queue.expanded === 1, 'restart reconstruction should preserve expanded queue ref count');
+    assert(durable.queue.failed === 1, 'restart reconstruction should preserve failed queue ref count');
+    assert(durable.evidence.killmails === 1, 'restart reconstruction should preserve accepted Evidence count');
+    assert(durable.evidence.activity_events > 0, 'restart reconstruction should preserve derived Evidence events');
+    assert(durable.provenance.api_logs === 2, 'restart reconstruction should preserve scoped API logs');
+    assert(durable.provenance.ingestion_audits === 1, 'restart reconstruction should preserve ingestion audit');
+    assert(durable.provenance.failed_expansion_warnings === 1, 'restart reconstruction should preserve failed expansion warning');
 
     const retryCalls = [];
     const retry = await expandManualRefs({
@@ -150,6 +177,7 @@ async function verifyPartialFailureRetryAndProvenance() {
     assert(ingestionAuditsForRun(db, retryRun.run_id).length === 1, 'retry run should keep scoped ingestion audit');
   } finally {
     closeDatabase(db);
+    fs.rmSync(workDir, { recursive: true, force: true });
   }
 }
 
@@ -312,6 +340,49 @@ function ingestionAuditsForRun(db, runId) {
   `).all(runId);
 }
 
+function warningsForRun(db, runId) {
+  return db.prepare(`
+    SELECT *
+    FROM data_quality_warnings
+    WHERE run_id = ?
+    ORDER BY rowid ASC
+  `).all(runId);
+}
+
+function durableQueueEvidenceState(db, runId) {
+  return {
+    queue: {
+      expanded: countWhere(db, 'discovered_killmail_refs', "status = 'expanded'"),
+      failed: countWhere(db, 'discovered_killmail_refs', "status = 'failed'")
+    },
+    evidence: {
+      killmails: count(db, 'killmails'),
+      activity_events: count(db, 'activity_events')
+    },
+    provenance: {
+      api_logs: apiLogsForRun(db, runId).length,
+      ingestion_audits: ingestionAuditsForRun(db, runId).length,
+      failed_expansion_warnings: warningsForRun(db, runId).filter((warning) => warning.warning_type === 'failed_expansion').length
+    }
+  };
+}
+
+function discoveryRef(db, killmailId) {
+  return db.prepare(`
+    SELECT killmail_id, killmail_hash, status, preview_json, failure_count, last_error
+    FROM discovered_killmail_refs
+    WHERE killmail_id = ?
+  `).get(killmailId) || null;
+}
+
+function evidenceRow(db, killmailId) {
+  return db.prepare(`
+    SELECT killmail_id, killmail_hash, source, raw_payload_checksum
+    FROM killmails
+    WHERE killmail_id = ?
+  `).get(killmailId) || null;
+}
+
 function queueStatus(db, killmailId) {
   return db.prepare(`
     SELECT status
@@ -334,6 +405,10 @@ function duplicateEventKeys(db) {
 
 function count(db, tableName) {
   return db.prepare(`SELECT COUNT(*) AS count FROM ${tableName}`).get().count;
+}
+
+function countWhere(db, tableName, whereSql) {
+  return db.prepare(`SELECT COUNT(*) AS count FROM ${tableName} WHERE ${whereSql}`).get().count;
 }
 
 function assertSame(actual, expected, message) {

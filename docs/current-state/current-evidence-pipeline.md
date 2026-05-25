@@ -46,6 +46,7 @@ Manual lane:
 
 - manual discovery queues refs without ESI expansion
 - manual expansion explicitly expands queued refs
+- mixed manual expansion results are durable: successful ESI-expanded refs write Evidence, failed expansions leave queue/provenance warning state, and later retry does not duplicate Evidence
 
 Assessment lane:
 
@@ -140,6 +141,8 @@ Volatile runtime state includes task history, task locks, cancellation controlle
 Support artifacts such as runtime DB snapshots and operator debug trace packs are diagnostics. They are not Evidence, Observation, or Assessment Memory. Trace packs exclude raw expanded ESI payloads by default.
 
 Write boundaries remain command-owned: Discovery queues refs only; Enrich selected writes expanded ESI Evidence; metadata hydration updates readability labels; Assessment creation writes deliberate memory; retention preflight stays read-only; runtime snapshot creation writes a local support artifact without pruning or deleting Evidence.
+
+Queue -> API request -> Evidence write verification now includes a file-backed restart reconstruction proof. After a mixed expansion run, Atlas can reconstruct expanded and failed queue refs, fetch run counts, scoped ESI API logs, failed-expansion warnings, ingestion audits, stored killmail Evidence, and derived activity events from durable SQLite state without relying on volatile task memory. zKill Discovery anchors remain queue/provenance rows; ESI-expanded killmail rows are the Evidence-confirmed anchors.
 
 `app.readiness` exposes a compact `runtime_boundary` support readout for ordinary readiness/status inspection. The same source-owned model is used by operator debug trace packs. It separates durable SQLite state from volatile task/session state, summarizes partial-failure indicators, and classifies snapshots, trace packs, logs, and reports as support/readout artifacts rather than Evidence, Observation, or Assessment Memory.
 

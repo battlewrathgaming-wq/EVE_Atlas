@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Active Dev runway opened
+Status: Idle after accepted HS74 review
 Last updated: 2026-05-25
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS74 is a bounded Queue -> API request -> Evidence write confidence packet. Atlas should prove, with offline fixtures, what happens when queued Discovery refs are expanded through the API/ESI boundary into stored Evidence, especially under partial provider failure and mixed success/failure conditions.
+Current focus: HS74 Queue -> API request -> Evidence write confidence is accepted. Atlas is resting before the next Human/Overseer-selected storage/runtime hardening slice.
 
 Source of intent:
 
@@ -35,32 +35,25 @@ Accepted baseline:
 
 ## Executor
 
-Current executor: Dev
+Current executor: none
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS74-queue-api-evidence-confidence.md
+None. No Dev packet is open.
 ```
 
 ## Ordered Runway
 
-1. Read the source of intent and trace the current queue-to-Evidence path in code:
-   - queued Discovery refs
-   - API/ESI expansion request handling
-   - Evidence writes into `killmails` and `activity_events`
-   - `fetch_runs`, `api_request_logs`, `ingestion_audits`, `data_quality_warnings`, and queue status updates
-2. Review existing offline verification for this boundary, especially `verify:queue-api-evidence-write`, `verify:partial-failures`, `verify:manual-discovery`, `verify:queue-selection`, and any helper fixtures they use.
-3. Add or refine focused offline fixture coverage that proves mixed-result behavior:
-   - successful ESI-expanded killmail writes durable Evidence
-   - failed expansion does not write partial Evidence
-   - failed expansion leaves reviewable provenance/status
-   - retries or later success do not duplicate Evidence
-   - zKill/Discovery anchor and ESI/Evidence-confirmed anchor remain distinct
-4. Ensure the readout/provenance records are sufficient to reconstruct what happened after restart using durable SQLite/support state, without relying on volatile task memory.
-5. If a real defect is found, make the smallest code correction required to preserve the accepted boundary. Do not broaden into product redesign.
-6. Update current-state docs only where implemented behavior or verified confidence changes.
-7. Update this file Evidence / Dev Handoff sections and create the expected DevHS74 handoff.
+No active Dev runway.
+
+Next likely selectable lanes:
+
+1. Queue stale/expiration policy.
+2. Queue batch cadence and UX pacing.
+3. Partial-success operator presentation/readout.
+4. Production deletion execution design, with transaction, rollback, confirmation, snapshot disclosure, and failure behavior.
+5. Native picker/UI rigging or broader support-artifact budget coverage if storage-location work resumes.
 
 ## Guardrails And Non-Goals
 
@@ -77,7 +70,7 @@ workspace/DevHS74-queue-api-evidence-confidence.md
 
 ## Stop Conditions
 
-Stop and return to Overseer/Human before implementation if:
+Stop and return to Overseer/Human before any new implementation if:
 
 - proving the boundary requires live provider access
 - the fix requires schema migration or durable contract changes beyond focused verification support
@@ -89,7 +82,9 @@ Stop and return to Overseer/Human before implementation if:
 
 ## Required Verification
 
-Run the focused set first:
+No active Dev packet.
+
+If work resumes near HS74, run the focused set first:
 
 ```powershell
 npm.cmd run verify:queue-api-evidence-write
@@ -135,25 +130,125 @@ Opening evidence:
 - The scan confirmed warning-only behavior; no renames and no protected-word JSON updates were performed.
 - `git diff --check` passed.
 
-To be completed by Dev after implementation:
+Dev implementation completed for HS74.
 
-- files reviewed
-- files changed
-- trace of the current queue -> API request -> Evidence write path
-- existing verification coverage reviewed
-- any defect found and correction made, or confirmation that added proof was verification-only
-- mixed success/failure fixture behavior
-- duplicate/retry/idempotency behavior
-- durable provenance/restart reconstruction behavior
-- commands run and results
-- confirmation that no live calls, deletion execution, snapshot cleanup, active DB relocation, broad UI work, or terminology rename occurred
+Files reviewed:
+
+- `workspace/current.md`
+- `workspace/OverseerHS52-runtime-record-integrity-design-input.md`
+- `workspace/OverseerHS53-runtime-record-integrity-audit.md`
+- `workspace/OverseerHS70-hs69-deletion-preflight-review.md`
+- `workspace/OverseerHS73-hs72-snapshot-destination-review.md`
+- `docs/current-state/current-evidence-pipeline.md`
+- `docs/current-state/current-terminology-and-retention.md`
+- `workspace/critical/README.md`
+- `workspace/critical/critical-terms.md`
+- `src/main/workers/manualExpansionWorker.js`
+- `src/main/workers/killmailIngestionWorker.js`
+- `src/main/db/evidenceRepository.js`
+- `src/main/services/queueSelectionService.js`
+- `scripts/verify-queue-api-evidence-write.js`
+- `scripts/verify-partial-failures.js`
+- `scripts/verify-manual-discovery.js`
+- `scripts/verify-queue-selection.js`
+
+Files changed:
+
+- `scripts/verify-queue-api-evidence-write.js`
+- `docs/current-state/current-evidence-pipeline.md`
+- `workspace/current.md`
+- `workspace/DevHS74-queue-api-evidence-confidence.md`
+
+Trace of current queue -> API request -> Evidence write path:
+
+- manual discovery stores zKill refs in `discovered_killmail_refs` as Discovery/provenance only
+- queue selection is read-only and marks preview rows as non-Evidence
+- manual expansion creates a `fetch_runs` row, selects pending/failed refs, marks them selected, and calls ESI only for uncached selected refs
+- successful ESI responses normalize into `killmails`, `activity_events`, entity updates, and `ingestion_audits`
+- failed ESI expansion creates `failed_expansion` warning provenance, marks the queue ref `failed`, and writes no partial Evidence
+- persistence is atomic through `persistEvidencePackage`; persistence failure rolls back raw killmail and derived event writes
+- successful refs become `expanded`; cached refs remain `cached`; failed refs remain reviewable for explicit retry
+
+Existing verification coverage reviewed:
+
+- `verify:queue-api-evidence-write`
+- `verify:partial-failures`
+- `verify:manual-discovery`
+- `verify:queue-selection`
+
+Implementation result:
+
+- No runtime defect was found.
+- Added verification-only confidence in `verify:queue-api-evidence-write`.
+- The partial failure/retry proof now uses a file-backed fixture DB, closes/reopens after the mixed-result run, and proves durable reconstruction before retry.
+
+Mixed success/failure behavior now proved:
+
+- successful ESI-expanded killmail writes durable Evidence
+- failed expansion writes no partial Evidence
+- failed expansion leaves reviewable queue state and warning provenance
+- zKill/Discovery anchor remains a queue/provenance row
+- ESI-expanded killmail row is the Evidence-confirmed anchor
+
+Duplicate/retry/idempotency behavior now proved:
+
+- retry of failed ref writes the later successful Evidence
+- retry does not duplicate activity event keys
+- repeated selection of expanded/cached refs does not spend ESI or duplicate Evidence
+
+Durable provenance/restart reconstruction now proved:
+
+- expanded and failed queue refs
+- fetch run counts and warning summary
+- scoped ESI API logs
+- failed-expansion warning rows
+- ingestion audit rows
+- stored killmail Evidence and derived activity events
+
+Verification:
+
+- `npm.cmd run verify:queue-api-evidence-write` passed.
+- `npm.cmd run verify:partial-failures` passed.
+- `npm.cmd run verify:manual-discovery` passed.
+- `npm.cmd run verify:queue-selection` passed.
+- `npm.cmd run verify:db-integrity` passed.
+- `npm.cmd run verify:protected-terms` passed with exit code 0, warning-only.
+- Protected-term discovery ran in working-set mode against 4 files.
+- Warning count: 239.
+- Warning classes: lab-quarantine-borrowing 130, atlas-candidate 96, cross-project-borrowing 13.
+- `git status --short --branch` reported `main...origin/main` with expected HS74 modified/untracked files.
+
+Guardrail confirmation:
+
+- No live calls, deletion execution, snapshot cleanup, restore, active DB relocation, schema change, service registry change, IPC/preload change, broad UI work, protected-word JSON update, or terminology rename occurred.
 
 ## Dev Handoff
 
-Dev should create:
+Dev created:
 
 ```txt
 workspace/DevHS74-queue-api-evidence-confidence.md
 ```
 
-The handoff must summarize what confidence was added, whether any behavior changed, how partial provider failure is represented, and what remains deferred.
+The handoff summarizes what confidence was added, confirms no runtime behavior changed, explains partial provider failure representation, and records deferred risks.
+
+Overseer review:
+
+```txt
+workspace/OverseerHS75-hs74-queue-evidence-confidence-review.md
+```
+
+HS74 is accepted as verification-only. No runtime behavior changed.
+
+Overseer verification:
+
+- `npm.cmd run verify:queue-api-evidence-write` passed.
+- `npm.cmd run verify:partial-failures` passed.
+- `npm.cmd run verify:manual-discovery` passed.
+- `npm.cmd run verify:queue-selection` passed.
+- `npm.cmd run verify:db-integrity` passed.
+- `npm.cmd run verify:protected-terms` passed with exit code 0, warning-only.
+- Protected-term discovery ran in working-set mode against 6 files.
+- Warning count: 289.
+- Warning classes: lab-quarantine-borrowing 167, atlas-candidate 99, cross-project-borrowing 23.
+- `git diff --check` passed.
