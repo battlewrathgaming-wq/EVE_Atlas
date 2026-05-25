@@ -36,6 +36,14 @@ async function main() {
     assert(pack.boundaries.includes('It does not call zKill or ESI.'), 'trace pack should state no-live boundary');
     assert(pack.boundaries.includes('Raw expanded ESI payloads are excluded by default.'), 'trace pack should exclude raw payloads');
     assert(pack.exclusions.includes('raw_esi_payload'), 'raw ESI payload exclusion should be explicit');
+    assert(pack.runtime_boundary.classification.includes('support readout'), 'trace pack should classify runtime boundary as support readout');
+    assert(pack.runtime_boundary.durable_state_basis.includes('fetch_runs'), 'runtime boundary should name durable fetch run basis');
+    assert(pack.runtime_boundary.volatile_state_basis.includes('current in-memory task history'), 'runtime boundary should name volatile task basis');
+    assert(pack.runtime_boundary.support_artifacts.operator_debug_trace_pack.includes('excludes raw expanded ESI payloads'), 'runtime boundary should classify trace packs as support artifacts');
+    assert(pack.runtime_boundary.partial_failure_indicators.queue_refs_pending === 1, 'runtime boundary should expose pending queue indicator');
+    assert(pack.runtime_boundary.partial_failure_indicators.warning_groups === 1, 'runtime boundary should expose warning group indicator');
+    assert(pack.runtime_boundary.current_volatile_task_counts.succeeded === 1, 'runtime boundary should summarize current volatile task statuses');
+    assert(pack.runtime_boundary.boundaries.some((entry) => entry.includes('Retention preflight is read-only')), 'runtime boundary should separate retention preflight from deletion');
     assert(pack.fetch_runs.length === 1, 'trace pack should include latest fetch runs');
     assert(pack.api_request_logs.length === 1, 'trace pack should include latest API request logs');
     assert(pack.task_history.length === 1, 'trace pack should include task history summaries');
@@ -69,6 +77,7 @@ async function main() {
     });
     assert(fs.existsSync(serviceResult.output_path), 'service should write a trace pack artifact');
     assert(serviceResult.pack.boundaries.includes('It does not call zKill or ESI.'), 'service trace pack should preserve no-live boundary');
+    assert(serviceResult.pack.runtime_boundary.restart_interpretation.includes('After restart'), 'service trace pack should include restart interpretation');
 
     const commands = listServiceCommands();
     assert(commands.some((entry) => entry.command === 'support.debug_trace_pack' && entry.classification === 'metadata-only'), 'support.debug_trace_pack should be metadata-only');
