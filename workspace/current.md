@@ -1,19 +1,21 @@
 # AURA Atlas Current Work
 
-Status: Human footprint decision accepted; backup and Assessment Memory decisions remain
+Status: Deletion policy decisions accepted; ready for next bounded Dev runway
 Last updated: 2026-05-25
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS67 accepted the deletion footprint anchor decision. If a footprint is retained, it should be `Evidence-confirmed killmail_id + pilot_id` only. Custom value/rating/note fields are rejected for the deletion footprint because observations must be reproducible. Atlas remains idle; no Dev packet is open until backup/snapshot and Assessment Memory citation behavior are accepted or revised.
+Current focus: HS68 accepted the remaining deletion policy decisions. Recovery can use explicit snapshots, and Assessment Memory is mutable, disposable, and quickly stale. Atlas is ready for a bounded read-only deletion preflight refinement runway, but no Dev packet is open yet.
 
 Source of intent:
 
 - Human direction on 2026-05-25: continue from HS64 production deletion policy design.
 - Human selected option 2 on 2026-05-25: policy decision pass before Dev.
 - Human refinement on 2026-05-25: deletion footprint should keep `killmail_id + pilot_id` only; custom value input does not satisfy the reproducible-observation policy.
+- Human decision on 2026-05-25: recovery snapshotting is acceptable; Assessment Memory is mutable/disposable/stale.
+- `workspace/OverseerHS68-deletion-recovery-assessment-decisions.md`
 - `workspace/OverseerHS67-deletion-footprint-anchor-decision.md`
 - `workspace/OverseerHS66-deletion-policy-human-decisions.md`
 - `workspace/OverseerHS64-production-deletion-policy-design.md`
@@ -35,6 +37,8 @@ Accepted baseline:
 - Future footprint, if accepted, should retain only `Evidence-confirmed killmail_id + pilot_id`.
 - Footprint must not preserve raw Evidence, full activity events, participant arrays, or hidden deleted-record copies.
 - `EVE_value`, `EVE_Pilot_value`, `EVE_rating`, `EVE_interest_score`, `Spare_1A`, and `Spare_1B` are rejected for the deletion footprint.
+- Snapshotting is accepted as the recovery posture for first production deletion, with honest disclosure that snapshots/backups may retain records removed from active storage.
+- Assessment Memory is mutable, disposable, and quickly stale; it is not Evidence and must not become hidden retention.
 
 ## Executor
 
@@ -44,10 +48,10 @@ Expected handoff filename: none until a new packet is opened.
 
 ## Ordered Runway
 
-1. Hold Atlas idle until the Human accepts or revises the remaining backup/snapshot and Assessment Memory decisions.
-2. Future production deletion work must use HS64, HS65, HS66, and HS67 as policy inputs, not implementation authority by themselves.
-3. Do not open Dev work until the next packet defines exact deletion scope, accepted backup/restore behavior, accepted footprint behavior, fixture cases, and verification commands.
-4. If remaining decisions are accepted, the next suitable Dev packet is read-only deletion preflight refinement, not deletion execution.
+1. Open the next packet only if the Human wants Dev to proceed.
+2. Future production deletion work must use HS64, HS65, HS66, HS67, and HS68 as policy inputs, not implementation authority by themselves.
+3. The next suitable Dev packet is read-only deletion preflight refinement, not deletion execution.
+4. The Dev packet must define exact deletion scope, accepted snapshot/recovery behavior, accepted footprint behavior, fixture cases, and verification commands.
 5. Keep storage/runtime hardening, deletion policy, storage-location authority, and display/presentation work separated unless a future packet explicitly joins them.
 
 ## Guardrails And Non-Goals
@@ -67,7 +71,6 @@ Expected handoff filename: none until a new packet is opened.
 
 Stop and return to Human before writing a Dev runway if:
 
-- backup/snapshot or Assessment Memory behavior still needs Human acceptance
 - backup/restore choices imply implementation requirements
 - footprint persistence implies schema/storage design
 - policy would blur Evidence, Discovery, Report, Assessment, Watch, or Marked boundaries
@@ -76,7 +79,7 @@ Stop and return to Human before writing a Dev runway if:
 
 ## Required Verification
 
-For the completed HS67 documentation pass:
+For the completed HS68 documentation pass:
 
 ```powershell
 npm.cmd run verify:protected-terms
@@ -87,20 +90,20 @@ If future code changes occur under this idle state, stop and explain why the run
 
 ## Evidence
 
-HS67 completed by Overseer.
+HS68 completed by Overseer.
 
 Accepted handoff:
 
 ```txt
-workspace/OverseerHS67-deletion-footprint-anchor-decision.md
+workspace/OverseerHS68-deletion-recovery-assessment-decisions.md
 ```
 
 Decision captured:
 
-- footprint should be `Evidence-confirmed killmail_id + pilot_id` only
-- custom value/rating/note fields are rejected for deletion footprint
-- footprint remains optional and not storage-authorized
-- backup/snapshot and Assessment Memory behavior remain to be accepted or revised
+- snapshotting accepted as recovery posture
+- snapshots/backups must be disclosed as possible historical holders of deleted active records
+- Assessment Memory accepted as mutable/disposable/stale
+- next suitable Dev packet is read-only deletion preflight refinement
 
 No code, schema, deletion execution, footprint storage, live API, real DB mutation, protected-word JSON update, or implementation terminology acceptance occurred.
 
@@ -108,4 +111,4 @@ No code, schema, deletion execution, footprint storage, live API, real DB mutati
 
 No Dev packet is open.
 
-Future Dev work requires Human acceptance or revision of the remaining backup/snapshot and Assessment Memory decisions, then a new Human / Overseer packet with exact deletion scope, accepted backup/restore behavior, footprint behavior, fixture cases, and verification commands.
+Future Dev work requires a new Human / Overseer packet with exact deletion scope, accepted snapshot/recovery behavior, footprint behavior, fixture cases, and verification commands.
