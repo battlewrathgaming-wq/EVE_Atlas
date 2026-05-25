@@ -30,8 +30,8 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Atlas Storage And Runtime Hardening
 Roadmap source: Human storage/runtime hardening direction accepted on 2026-05-25
 Current packet: `workspace/current.md`
-Current sequence: HS59 storage/runtime read-write boundary packet opened for Dev
-Latest accepted coordination artifact: `workspace/DevHS58-retention-deletion-execution-boundary.md`
+Current sequence: HS59 accepted; HS60 runtime observability readout packet opened for Dev
+Latest accepted coordination artifact: `workspace/DevHS59-storage-runtime-readwrite-boundary.md`
 Display workflow support: `workspace/display_inventory.md`, `workspace/DisplayInventoryAuditHS49-ingest-to-userdisplay.md`, `workspace/request_display.md`, `workspace/display-request-workflow-hardening-contract.md`, `workspace/RequestDisplayHS50-atlas-initial-display-requests.md`, `workspace/DisplayResponseHS51-atlas-lab-m24-response-relay.md`
 Runtime/record integrity design input: `workspace/OverseerHS52-runtime-record-integrity-design-input.md`
 Watch recovery/offline readout scope: `workspace/OverseerHS54-watch-recovery-offline-readout-scope.md`
@@ -99,6 +99,7 @@ Watch_offline aggregation ADR: `docs/adr/ADR-0005-watch-offline-readout-aggregat
 - HS57 accepted the first read/write hardening slice at the Queue -> API request -> Evidence write boundary; no production defect was found, and a focused offline verifier now guards the boundary.
 - HS58 accepted the retention/deletion boundary: production deletion remains deferred, preflight stays read-only, and footprint is optional historical-interest metadata that must not override explicit deletion or preserve raw Evidence.
 - HS59 opens the Atlas Storage And Runtime Hardening milestone with a bounded Dev packet for storage/runtime read-write boundary mapping and offline verification across queue/API request logging, Evidence persistence, restart recovery, retention preflight, and runtime snapshots.
+- HS59 accepted the storage/runtime read-write boundary map; HS60 now focuses on runtime observability/readout clarity for partial success, restart state, durable/volatile state, and support artifact classification.
 - Storage-location/file-selector authority is parked as future infrastructure for heavy Atlas records, backups, exports, snapshots, or cache paths; Sense work may inform it but does not define Atlas storage semantics.
 - `Watch_offline` is the accepted working name for the post-restart/offline Watch readout line; avoid `Watcher` unless later approved as presentation-only language.
 - Human HS41 UI review accepted the direction and requested face/layout refinement: search-first Discovery, no duplicated Discovery/Watch controls, compact External API state, and progressive Observation/Assessment.

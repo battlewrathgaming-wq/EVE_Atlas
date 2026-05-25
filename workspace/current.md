@@ -7,14 +7,21 @@ Last updated: 2026-05-25
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS59 should establish a verified, source-owned map of Atlas read/write boundaries after Queue/API/Evidence and retention/deletion hardening. The goal is to make restart, partial failure, queue state, provenance, retention preflight, and support artifacts reviewable without opening live IO, production deletion, storage-location work, or UI redesign.
+Current focus: HS60 should improve Atlas runtime observability around partial success, restart state, durable/volatile state clarity, and support artifact classification. This is a read-only/status-surface hardening packet using existing storage and support paths. It must not become UI redesign, live IO, production deletion, storage-location work, or schema/contract expansion.
 
 Source of intent:
 
-- Human direction on 2026-05-25: kick off the Atlas storage/runtime hardening milestone.
-- Human direction on 2026-05-25: runtime and connection hardening are important, especially timing, task queue/API-to-ESI behavior, SQLite/local memory runtime behavior, and IO hardening for a connected app.
-- Human policy clarification on 2026-05-25: deletion/retention remains focused; footprint is an edge case, does not override user deletion, and is only a historical-interest trace if accepted later.
-- `workspace/OverseerHS52-runtime-record-integrity-design-input.md`
+- Human direction on 2026-05-25: continue the Atlas storage/runtime hardening milestone.
+- Human advisory maturity headings on 2026-05-25:
+  - Storage/runtime hardening.
+  - Queue -> API -> Evidence write confidence.
+  - Restart recovery and durable/volatile state clarity.
+  - Evidence, Discovery, Report, Assessment, Watch, Marked boundaries.
+  - Retention/deletion preflight clarity.
+  - Support artifact classification: snapshots, trace packs, logs.
+  - Provider/API partial failure reconstruction.
+  - Clean body snapshot readiness later.
+- `workspace/DevHS59-storage-runtime-readwrite-boundary.md`
 - `workspace/OverseerHS53-runtime-record-integrity-audit.md`
 - `workspace/DevHS57-queue-api-evidence-write-hardening.md`
 - `workspace/DevHS58-retention-deletion-execution-boundary.md`
@@ -23,11 +30,12 @@ Source of intent:
 - `workspace/critical/README.md`
 - `workspace/critical/critical-terms.md`
 
-Accepted prior baseline:
+Accepted HS59 baseline:
 
-- HS57 verified Queue -> API -> Evidence write behavior with fixture-backed partial failure, retry, idempotency, queue state, API logs, and provenance.
-- HS58 verified retention/deletion remains preflight-only; no production deletion execution exists; footprint must not retain raw Evidence, full activity events, or hidden copies.
-- HS53 found persistent queue/watch/evidence/provenance state is split from volatile executor/task/session state after restart. That split is acceptable only if it stays visible and verifiable.
+- Persistent SQLite state includes Evidence rows, Discovery queue refs, Watch definitions and schedule timestamps, provider/run provenance, API request logs, ingestion audits, warnings, metadata runs, entities, local SDE lookups, and Assessment Memory.
+- Volatile runtime state includes task history, locks, cancellation controllers, Watch executor armed state, active task ID, interval timer, last tick, last dispatch, and last blocked reason.
+- Support artifacts such as runtime DB snapshots and operator debug trace packs are diagnostics. They are not Evidence, Observation, or Assessment Memory.
+- Existing verification already covers the HS59 storage/runtime boundary; no duplicate verifier was needed.
 
 ## Executor
 
@@ -36,59 +44,105 @@ Current executor: Dev
 Expected handoff filename:
 
 ```txt
-workspace/DevHS59-storage-runtime-readwrite-boundary.md
+workspace/DevHS60-runtime-observability-readout.md
 ```
 
 ## Ordered Runway
 
-1. Read the accepted authority and current-state inputs listed above, plus the implementation files needed to trace queue state, task/run state, retention preflight, runtime snapshots, API logs, and evidence persistence.
-2. Produce a concise current-state map for the HS59 boundary:
-   - persistent state: SQLite rows/artifacts that survive restart
-   - volatile state: in-memory task/session/executor state that does not survive restart
-   - support artifacts: runtime snapshots, logs, reports, or diagnostics that are not Evidence
-   - write boundaries: commands that write local state, what they write, and what they must not write
-3. Add or refine one focused offline verifier for the storage/runtime read-write boundary if a verifier gap exists. Prefer fixture/in-memory databases. The verifier should prove at least:
-   - Discovery refs remain queue/provenance until ESI expansion writes Evidence.
-   - partial ESI/API failure remains reconstructable through queue state, fetch runs, API logs, warnings, and successful Evidence writes.
-   - restart-style recovery preserves durable queue/watch/evidence/provenance state while volatile task/session state is not treated as durable.
-   - retention preflight and runtime snapshot behavior stay distinct from Evidence deletion/pruning.
-4. If no new verifier is needed, document why existing verifiers already cover the boundary and add only documentation/handoff evidence. Do not add duplicate test scripts for coverage that already exists.
-5. Update durable current-state docs only where HS59 confirms an implemented behavior or accepted limitation. Keep proposed policy separate from implemented behavior.
-6. Update the Evidence and Dev Handoff sections in this file with exact files changed, verification commands, warning counts, and remaining risks.
-7. Create `workspace/DevHS59-storage-runtime-readwrite-boundary.md` with the boundary map, current behavior, verification evidence, risks, and recommended next bounded packet.
+1. Read the accepted authority and current-state inputs listed above, then inspect the existing readout/support paths relevant to runtime observability:
+   - `src/main/support/operatorDebugTracePack.js`
+   - runtime snapshot service and verifier
+   - task runner/task history services
+   - Watch executor/scheduler status paths
+   - queue selection/report paths
+   - partial failure verification paths
+2. Audit what the operator/support readouts already expose for:
+   - durable state after restart
+   - volatile state after restart
+   - partial provider/API failure reconstruction
+   - retention preflight versus deletion execution
+   - support artifact classification for snapshots, trace packs, logs, and reports
+3. Implement the smallest read-only improvement if a gap is found. Preferred shape:
+   - add a compact runtime boundary/status section to an existing support artifact or read-only report path
+   - show durable state basis separately from volatile task/session state
+   - show partial-success/failure indicators without claiming completeness
+   - classify support artifacts as support/diagnostic rather than Evidence, Observation, or Assessment Memory
+4. If existing readouts are already sufficient, do not add redundant fields. Document sufficiency in the handoff and update only current-state docs.
+5. Preserve existing terms and boundaries:
+   - Discovery refs remain possible leads/provenance until ESI expansion writes Evidence.
+   - Reports/readouts are not Evidence.
+   - Assessment Memory remains deliberate operator judgment.
+   - Watch remains active routine checking, distinct from Marked.
+   - retention preflight remains read-only and distinct from deletion.
+6. Update focused verification for any changed readout/support path. If code changes are made, update or add the narrowest relevant verifier and run `verify:all`.
+7. Update Evidence and Dev Handoff sections in this file, then create `workspace/DevHS60-runtime-observability-readout.md`.
 
 ## Guardrails And Non-Goals
 
 - No live/private/API calls.
 - Do not mutate the user's real local database.
 - Use in-memory or disposable fixture databases only.
-- No UI redesign, renderer layout work, or Lab display adoption.
+- No UI redesign, renderer layout work, Lab display adoption, or presentation animation.
 - No production deletion execution.
 - No new footprint storage/table/file format.
 - No storage-location/file-selector work.
+- No clean body snapshot implementation in this packet; keep it parked as later readiness.
 - No schema or migration changes unless a verified blocker makes them unavoidable; stop before implementing them.
-- No bridge, IPC, service, payload, command, or CSS/test-id renames.
+- No bridge, IPC, service, payload, command, CSS/test-id, or protected-term renames.
 - Do not rename Atlas source-owned terms from terminology or protected-word output.
 - Do not treat protected-word discovery as authority or a hard gate.
-- Do not broaden into all record manipulation. Stay on the storage/runtime read-write boundary that connects queue, API request logging, evidence persistence, retention preflight, runtime snapshots, and restart recovery.
+- Do not broaden into all reporting. Stay on runtime observability and support/readout clarity.
 
 ## Stop Conditions
 
 Stop and return to Overseer/Human if:
 
+- a fix requires live ESI/zKill/API access
 - a fix requires production deletion execution
 - a fix requires schema/migration/storage-location/file-selector work
-- verification would need live ESI/zKill/API access
 - verification would need the user's real database
-- queue/API/log state cannot be proven without altering bridge/IPC/service contracts
-- the boundary map exposes a policy choice rather than an implementation defect
-- footprint/citation survival policy blocks the work
-- UI presentation decisions become necessary
+- a support artifact would need to include raw expanded ESI payloads or full participant payloads
+- improving clarity requires renderer/UI design decisions
+- a readout would blur Evidence, Discovery, Report, Assessment, Watch, or Marked boundaries
+- queue/API/log reconstruction cannot be improved without service/contract changes
+- clean body snapshot design becomes necessary
 - protected-term warnings suggest a new authority decision is required
 
 ## Required Verification
 
 Minimum required verification:
+
+```powershell
+npm.cmd run verify:operator-debug-trace
+npm.cmd run verify:runtime-snapshot
+npm.cmd run verify:restart-recovery
+npm.cmd run verify:partial-failures
+npm.cmd run verify:queue-api-evidence-write
+npm.cmd run verify:retention-deletion-boundary
+npm.cmd run verify:evidence-rules
+npm.cmd run verify:protected-terms
+git status --short --branch
+```
+
+If production code or verifier code changes are made, also run:
+
+```powershell
+npm.cmd run verify:all
+```
+
+If no code changes are made, Dev must explain why existing readouts are sufficient and still run the minimum required verification.
+
+## Evidence
+
+HS59 accepted by Overseer.
+
+Accepted handoff:
+
+```txt
+workspace/DevHS59-storage-runtime-readwrite-boundary.md
+```
+
+Overseer verification for HS59:
 
 ```powershell
 npm.cmd run verify:queue-api-evidence-write
@@ -99,36 +153,26 @@ npm.cmd run verify:runtime-snapshot
 npm.cmd run verify:db-integrity
 npm.cmd run verify:evidence-rules
 npm.cmd run verify:protected-terms
-git status --short --branch
 ```
 
-If Dev adds a focused verifier, add it to `package.json` and `scripts/verify-group.js`, then also run:
+Result: all focused checks passed. `verify:protected-terms` passed warning-only with 160 advisory warnings across three changed files. No renames or protected-word JSON updates were performed.
 
-```powershell
-npm.cmd run verify:all
-```
-
-If no focused verifier is added, Dev must explain why existing verification is sufficient and still run the minimum required verification above.
-
-## Evidence
-
-To be completed by Dev.
+HS60 evidence to be completed by Dev.
 
 Expected evidence:
 
 - files reviewed
 - files changed
-- storage/runtime boundary map
-- current persistent vs volatile state summary
-- current write-boundary summary
+- readout/support paths audited
+- exact runtime observability improvement or sufficiency rationale
 - verification commands and results
 - protected-term warning count, if any
-- confirmation that no live API, real DB mutation, production deletion, schema/migration, storage-location, bridge/IPC/service/payload/command rename, UI redesign, or protected-word JSON update occurred
+- confirmation that no live API, real DB mutation, production deletion, schema/migration, storage-location, UI redesign, contract rename, raw payload exposure, or protected-word JSON update occurred
 
 ## Dev Handoff
 
 To be completed by Dev in:
 
 ```txt
-workspace/DevHS59-storage-runtime-readwrite-boundary.md
+workspace/DevHS60-runtime-observability-readout.md
 ```

@@ -125,6 +125,16 @@ The corpus health report is an operational readiness report. It is not an observ
 
 `runtime.db_snapshot.create` is an explicit exclusive action that writes a SQLite snapshot under the approved project `.tmp` area by default. Verification opens the snapshot and confirms core counts plus raw ESI payload/checksum preservation. Evidence pruning remains blocked.
 
+## Current Storage / Runtime Boundary
+
+Persistent SQLite state includes Evidence rows, Discovery queue refs, Watch definitions and schedule timestamps, provider/run provenance, API request logs, ingestion audits, warnings, metadata runs, entities, local SDE lookups, and Assessment Memory.
+
+Volatile runtime state includes task history, task locks, cancellation controllers, Watch executor armed state, active task ID, interval timer, last tick, last dispatch, and last blocked reason. After restart, Atlas must reconstruct operator review state from SQLite rows and support artifacts rather than treating in-memory task/session state as durable.
+
+Support artifacts such as runtime DB snapshots and operator debug trace packs are diagnostics. They are not Evidence, Observation, or Assessment Memory. Trace packs exclude raw expanded ESI payloads by default.
+
+Write boundaries remain command-owned: Discovery queues refs only; Enrich selected writes expanded ESI Evidence; metadata hydration updates readability labels; Assessment creation writes deliberate memory; retention preflight stays read-only; runtime snapshot creation writes a local support artifact without pruning or deleting Evidence.
+
 ## Current Retention / Deletion State
 
 Deletion is not an active product capability.
