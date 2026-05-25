@@ -80,6 +80,41 @@ HS49 identified these as the safest Lab display-method comparison candidates:
 
 These are candidates only. They are not active Lab tasks until converted into scoped `request_display` entries.
 
+## HS50 Submitted Lab Requests
+
+Atlas submitted the first bounded Lab request batch on 2026-05-25.
+
+Source record:
+
+- `workspace/RequestDisplayHS50-atlas-initial-display-requests.md`
+
+Submitted to:
+
+- `F:\Projects\AURA- Lab\workspace\request_display.md`
+
+Active request ids:
+
+- `atlas.overview.right-rail-status-stack`
+- `atlas.discovery.queue-review-possible-leads`
+- `atlas.watch.state-display`
+
+These requests are advisory only. They do not authorize implementation, backend work, bridge/IPC/contract changes, persistence changes, terminology renames, or Atlas adoption.
+
+Parked for expanded UIUX inventory/user-story work:
+
+- Atlas Overview current-lead/search center.
+- Stored Evidence / Provenance Drawer detail layering.
+- Runtime, queue timing, SQLite/memory load, and IO hardening diagnostics.
+- Point-of-need copy collapse and progressive disclosure system.
+
+## Metadata Envelope Candidate
+
+Human design direction introduced a potential top-of-page metadata envelope: a subdued curved status band that shows computational state without making the main surface feel like a configuration panel.
+
+This is currently product guidance, not a Dev packet or Lab request by itself.
+
+It may draw from runtime/display families such as External API, local memory, Watch timing, queue state, evidence basis, and runtime confidence. It must stay summary-level and reveal detail at point of need.
+
 ## Atlas-Owned Boundaries
 
 The following remain Atlas-owned and must not be rewritten by display work:

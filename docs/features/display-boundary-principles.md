@@ -81,6 +81,42 @@ Examples:
 - Raw IDs belong near disambiguation, provenance, export, or diagnostics.
 - Task IDs belong in diagnostics unless a task is actively blocking the operator.
 
+## Metadata Envelope Pattern
+
+Atlas may use a subdued top-of-page metadata envelope to show the computational nature of the platform without turning the first face into a configuration panel.
+
+The envelope is a presentation pattern, not a new backend concept or contract.
+
+It should summarize machine/platform state such as:
+
+- External API: disabled, enabled, checking, blocked, or unavailable.
+- Local memory: loaded, partial, stale, or unavailable.
+- Watch timing: idle, due, blocked, armed, running, last checked, or next eligible.
+- Queue state: no possible leads, possible leads pending, needs review, or unavailable.
+- Evidence basis: stored context available, stale, not loaded, or unavailable.
+- Runtime confidence: ok, warning, degraded, or diagnostic detail available.
+
+The envelope should answer:
+
+```txt
+What mode is Atlas in right now?
+```
+
+The main page should still answer:
+
+```txt
+Who or what are we investigating, and what can the operator do next?
+```
+
+Guardrails:
+
+- Keep labels sparse and instrument-like.
+- Use muted color state, not loud alert panels.
+- Reveal fuller diagnostic detail only on hover, click, drawer, or route.
+- Do not let the envelope become the workflow.
+- Do not imply live/API collection unless existing External API gates and operator actions allow it.
+- Do not blur Evidence, Discovery, Watch, Marked, or Assessment Memory.
+
 ## Relationship To Lab
 
 Lab may compare Bridge -> Interface display methods after Atlas meaning is preserved.

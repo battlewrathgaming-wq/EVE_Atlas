@@ -1,7 +1,7 @@
 # AURA Atlas Current Work
 
-Status: HS47 accepted - awaiting Human/UIUX review
-Last updated: 2026-05-24
+Status: HS47 accepted; HS50 Lab display requests shipped; awaiting Lab/UIUX response
+Last updated: 2026-05-25
 
 ## Active Milestone
 
@@ -23,17 +23,46 @@ Source of intent:
 - Lab conformance input: `F:\Projects\AURA- Lab\workspace\LabRemoteConsumerConformanceHS66.md`
 - Lab advisory input: `F:\Projects\AURA- Lab\workspace\archive\cross-project-relay\AtlasImportAdvisoryHS64-lab-presentation-adoption.md`
 
-Current focus: HS47 Atlas Overview Face prototype is accepted after Overseer review and verification. Atlas is awaiting Human/UIUX review before another Dev runway is written.
+Current focus: HS47 Atlas Overview Face prototype is accepted after Overseer review and verification. Atlas is now in display workflow review: Lab has the first HS50 request batch, and UIUX should expand the display inventory with user stories, acceptance criteria, overload risks, and journey placement before another Dev runway is written.
 
 ## Executor
 
-Current executor: None. Dev completed HS47; Overseer has accepted the handoff.
+Current executor: None. Dev completed HS47; Overseer has accepted the handoff. No active Dev runway is open.
 
 Completed DevHS filename:
 
 ```txt
 workspace/DevHS47-atlas-overview-face-prototype.md
 ```
+
+Current Lab display request batch:
+
+```txt
+workspace/RequestDisplayHS50-atlas-initial-display-requests.md
+F:\Projects\AURA- Lab\workspace\request_display.md
+```
+
+Active request ids:
+
+- `atlas.overview.right-rail-status-stack`
+- `atlas.discovery.queue-review-possible-leads`
+- `atlas.watch.state-display`
+
+Expected next response record pattern:
+
+```txt
+workspace/DisplayResponseHS##-[request-id-or-surface]-lab-response-review.md
+```
+
+## Next Workflow
+
+1. Await Lab response to the three HS50 advisory display requests.
+2. Run an expanded UIUX inventory pass that attaches user stories, acceptance criteria, overload risks, and journey placement to Atlas user-facing data.
+3. Record Lab/UIUX responses in Atlas-local response/adoption records.
+4. Decide which display method, if any, Atlas accepts or adapts.
+5. Write a new bounded Dev runway only after Atlas/Human acceptance.
+
+No implementation is authorized by this file at this time.
 
 ## Accepted Concept Direction
 
@@ -64,7 +93,9 @@ Correct risky wording:
 - `Assessment Memory` is deliberate operator memory only.
 - `API Gate` is acceptable only if it maps to existing External API enabled/disabled state and does not imply new backend authority.
 
-## Ordered Dev Runway
+## Closed HS47 Dev Runway Reference
+
+The following runway is retained as accepted HS47 completion context, not as an active Dev packet.
 
 1. Read the source-of-intent files above, then inspect the current renderer files before editing: `src/renderer/index.html`, `src/renderer/app.js`, `src/renderer/investigation.js`, `src/renderer/shared.js`, `src/renderer/styles.css`, `scripts/verify-renderer-shell.js`, and `src/main/main.js`.
 2. Create one `Atlas Overview` face as the opening renderer screen using existing renderer structure and service paths. Keep the existing supporting surfaces reachable; do not redesign the full app.

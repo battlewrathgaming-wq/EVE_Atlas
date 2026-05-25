@@ -24,6 +24,60 @@ Atlas display inventory
 -> optional Atlas-local Dev runway
 ```
 
+## End-To-End Workflow
+
+| Stage | Owner | Input | Output | Gate |
+| --- | --- | --- | --- | --- |
+| Display inventory | Atlas / UIUX | Current renderer surfaces, audits, Human notes | User-exposed data map with roles, states, and visibility decisions | No implementation; identify before declutter |
+| Request shaping | Atlas Overseer | Inventory entry or bounded display problem | Scoped `request_display` entry with source terms, known fields, states, non-goals, and request strength | No more than five active requests unless explicitly approved |
+| Lab intake | Aura Lab | Submitted `request_display` entry | Accepted, returned, split, parked, or active-review Lab record | Lab may form display methods, not source meaning |
+| Lab comparison | Aura Lab | Accepted request plus Lab display/material vocabulary | Up to three Bridge -> Interface methods with risks and questions | No target-project implementation |
+| Atlas review | Atlas Overseer / Human / UIUX | Lab response and Atlas source meaning | Accepted, adapted, rejected, parked, or narrowed adoption record | Preserve Atlas meanings and stop conditions |
+| Dev runway | Atlas Overseer | Accepted adoption decision | Bounded `workspace/current.md` packet | Dev may implement only this packet |
+| Verification | Atlas Dev / Overseer | Implemented renderer changes | DevHS, smoke/check results, git-clean handoff | No claimed verification without commands/evidence |
+
+## Workflow Pointers
+
+Atlas-local pointers:
+
+- Live inventory tracker: `workspace/display_inventory.md`
+- Initial extraction audit: `workspace/DisplayInventoryAuditHS49-ingest-to-userdisplay.md`
+- Display request pointer: `workspace/request_display.md`
+- Workflow hardening contract: `workspace/display-request-workflow-hardening-contract.md`
+- Initial Lab request batch: `workspace/RequestDisplayHS50-atlas-initial-display-requests.md`
+
+Durable Atlas pointers:
+
+- Current state summary: `docs/current-state/current-display-inventory.md`
+- Display principles: `docs/features/display-boundary-principles.md`
+- This runbook: `docs/runbooks/lab-display-request-workflow.md`
+
+Lab pointer:
+
+- Intake file: `F:\Projects\AURA- Lab\workspace\request_display.md`
+
+## Response Record Rule
+
+When Lab answers a request, Atlas should create or update an Atlas-local response/adoption record before any implementation packet.
+
+Record:
+
+- Lab source artifact reviewed.
+- Candidate methods received.
+- Accepted, adapted, rejected, parked, or returned disposition.
+- Atlas source meanings preserved.
+- UIUX or Human decisions still needed.
+- Whether the response is enough for Dev.
+- Verification expectations if implementation follows.
+
+Recommended response filename:
+
+```txt
+workspace/DisplayResponseHS##-[request-id-or-surface]-lab-response-review.md
+```
+
+`workspace/display_inventory.md` should then link the response record under the matching inventory/request entry.
+
 ## Authority
 
 Atlas owns:

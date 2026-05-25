@@ -1,7 +1,7 @@
 ﻿# AURA Atlas Workspace Overview
 
 Status: Active
-Last reviewed: 2026-05-24
+Last reviewed: 2026-05-25
 
 ## Vision Statement
 
@@ -27,12 +27,12 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 
 ## Active Milestone
 
-Milestone: Atlas Overview Face Concept Prototype
+Milestone: Atlas Overview Face Concept Prototype / Display Workflow Review
 Roadmap source: Human concept-render direction accepted on 2026-05-24
 Current packet: `workspace/current.md`
-Current sequence: HS47 accepted; awaiting Human/UIUX review
+Current sequence: HS47 accepted; HS50 Lab display requests shipped; awaiting Lab/UIUX response
 Latest accepted coordination artifact: `workspace/OverseerHS48-atlas-overview-face-review.md`
-Display workflow support: `workspace/display_inventory.md`, `workspace/DisplayInventoryAuditHS49-ingest-to-userdisplay.md`, `workspace/request_display.md`, `workspace/display-request-workflow-hardening-contract.md`
+Display workflow support: `workspace/display_inventory.md`, `workspace/DisplayInventoryAuditHS49-ingest-to-userdisplay.md`, `workspace/request_display.md`, `workspace/display-request-workflow-hardening-contract.md`, `workspace/RequestDisplayHS50-atlas-initial-display-requests.md`
 
 ## Durable Record Index
 
