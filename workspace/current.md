@@ -27,6 +27,7 @@ Source of intent:
 - `workspace/DevHS60-runtime-observability-readout.md`
 - `workspace/DevHS61-operator-runtime-status-readout.md`
 - `workspace/DevHS62-partial-success-report-readout.md`
+- `workspace/OverseerHS63-deletion-policy-design-input.md`
 - `docs/current-state/current-evidence-pipeline.md`
 - `docs/current-state/current-terminology-and-retention.md`
 - `workspace/critical/README.md`
@@ -84,7 +85,7 @@ No work is active by default.
 Recommended future options, to be selected one at a time:
 
 - clean body snapshot readiness design, still non-destructive and local-only unless explicitly expanded
-- production deletion policy design for exact deletion scope, backup/restore expectations, and footprint/citation survival
+- production deletion policy design for exact deletion scope, backup/restore expectations, footprint/citation survival, and the HS63 advisory pair of immutable `killmail_id` plus optional short human value input
 - storage-location/file-selector authority for heavy Atlas records, backups, exports, snapshots, or cache paths
 - one existing operator/report surface to present runtime or partial-success status, if the Human wants renderer-facing work later
 - queue stale/expiration policy for old pending/failed/expanded/cached Discovery refs
