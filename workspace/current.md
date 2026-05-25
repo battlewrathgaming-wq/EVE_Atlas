@@ -11,6 +11,7 @@ Source of intent:
 
 - Human direction on 2026-05-25: focus next on retention/deletion.
 - Human policy clarification on 2026-05-25: footprint is an edge case and does not override user selection for deletion.
+- Human footprint clarification on 2026-05-25: retained metadata, if any, should be a unique appearance trace in the system that can survive the retention period, not retained raw Evidence.
 - `workspace/OverseerHS53-runtime-record-integrity-audit.md`
 - `workspace/DevHS57-queue-api-evidence-write-hardening.md`
 - `docs/current-state/current-evidence-pipeline.md`
@@ -52,7 +53,8 @@ workspace/DevHS58-retention-deletion-execution-boundary.md
 3. Apply the Human policy clarification:
    - user-selected deletion must mean deletion of the selected deletable records
    - footprint is optional/edge metadata, not a retention override
-   - footprint must not preserve raw Evidence, activity events, or hidden copies of deleted records
+   - footprint, if accepted or tested, means a durable unique appearance trace that can survive the retention period
+   - footprint must not preserve raw Evidence, full activity events, or hidden copies of deleted records
    - assessment preservation may be offered or recommended, but must not silently block or reverse explicit deletion unless a future Human policy says so
 4. Add or strengthen fixture-only verification for the destructive boundary. Cover:
    - `retention.preflight` remains read-only and does not delete
@@ -60,7 +62,7 @@ workspace/DevHS58-retention-deletion-execution-boundary.md
    - evidence prune impact lists the records that would be affected
    - compaction preview and Assessment Memory creation do not delete Evidence
    - any future execution path, if implemented, deletes selected records in fixtures and does not leave hidden raw Evidence behind
-   - footprint behavior, if touched, is clearly optional/minimal and does not override deletion
+   - footprint behavior, if touched, is clearly optional/minimal, records only a unique appearance trace, and does not override deletion
 5. Implement only the smallest local hardening justified by the trace and tests.
    - Documentation/current-state updates are allowed.
    - Verification additions are encouraged.
@@ -98,7 +100,7 @@ HS58 is acceptable if the handoff and verification prove:
 - No bridge, IPC, service, payload, command, or contract renames.
 - Do not treat archived docs/gap files as active task queues.
 - Do not make footprint mandatory unless a future Human decision explicitly does so.
-- Do not allow footprint, Assessment Memory, or provenance to keep raw deleted Evidence in disguise.
+- Do not allow footprint, Assessment Memory, or provenance to keep raw deleted Evidence or full activity events in disguise.
 - Do not broaden into storage-location/file-selector work.
 
 ## Stop Conditions
