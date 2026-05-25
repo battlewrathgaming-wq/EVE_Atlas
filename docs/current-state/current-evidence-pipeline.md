@@ -144,3 +144,13 @@ Blocked/deferred behavior:
 - deleting evidence because assessment memory exists
 
 Any future deletion policy work must start with a bounded design/audit packet before Dev implementation.
+
+## Forward Design Input
+
+Runtime, connection, queue, Watch, enrichment, and record-integrity hardening are now identified as a forward-looking audit lane.
+
+Design input and audit questions are captured in:
+
+- `workspace/OverseerHS52-runtime-record-integrity-design-input.md`
+
+That note is directional only. It does not change implemented behavior, accepted deletion policy, schema authority, or Dev scope.

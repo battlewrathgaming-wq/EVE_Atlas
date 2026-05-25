@@ -25,6 +25,14 @@ Source of intent:
 
 Current focus: HS47 Atlas Overview Face prototype is accepted after Overseer review and verification. Atlas display response relay is closed at the material-production scope level: Lab answered the first HS50 request batch, Human/source-project fitness discussion occurred, and the outcome is scope for future UIUX/Lab presentation materials rather than complete UI delivery or Dev authorization. UIUX should still expand the display inventory with user stories, acceptance criteria, overload risks, and journey placement before another Dev runway is written.
 
+Forward design input now also identifies runtime/connection hardening and record manipulation/storage efficacy as a future audit lane:
+
+```txt
+workspace/OverseerHS52-runtime-record-integrity-design-input.md
+```
+
+This is design input only, not an active Dev runway or implementation claim.
+
 ## Executor
 
 Current executor: None. Dev completed HS47; Overseer has accepted the handoff. No active Dev runway is open.
