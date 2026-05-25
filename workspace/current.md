@@ -76,8 +76,17 @@ Recommended future read/write hardening slices, to be selected one at a time:
 - Watch authoring/write-boundary consistency
 - metadata hydration/label refresh write boundaries
 - Assessment Memory write/citation integrity
+- storage location / file selector authority for heavy local records, backups, exports, snapshots, or cache paths
 
 Do not reopen Queue hardening unless a new defect or product decision appears.
+
+Parked future infrastructure note:
+
+- Atlas will likely need a storage-location/file-selector boundary before broader human use because records may become heavy.
+- This is not a now task.
+- Do not implement until the selected surface is clear: database path, evidence store, export folder, runtime snapshot folder, backup folder, cache folder, or another storage class.
+- Future scope should consider path validation, write permissions, disk space, restart survival, missing path recovery, network/cloud path cautions, migration/backup behavior, and diagnostics.
+- Sense file-selector hardening may be advisory input only; Atlas owns its own storage and record semantics.
 
 ## Guardrails
 
