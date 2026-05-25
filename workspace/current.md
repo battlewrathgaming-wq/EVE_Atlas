@@ -1,6 +1,6 @@
 # AURA Atlas Current Work
 
-Status: Active audit packet - Watch recovery / offline readout
+Status: Idle after accepted Watch recovery / offline readout audit
 Last updated: 2026-05-25
 
 ## Active Milestone
@@ -12,108 +12,90 @@ Source of intent:
 - Human direction on 2026-05-25 to focus on post-restart Watch readout as a common state.
 - `workspace/OverseerHS53-runtime-record-integrity-audit.md`
 - `workspace/OverseerHS54-watch-recovery-offline-readout-scope.md`
+- `workspace/OverseerHS55-watch-recovery-offline-readout-audit.md`
 - `docs/contracts/session-armed-watch-executor-contract.md`
 - `docs/current-state/current-evidence-pipeline.md`
 - `docs/current-state/current-terminology-and-retention.md`
 - `workspace/critical/README.md`
 - `workspace/critical/critical-terms.md`
 
-Current focus: verify what Atlas already exposes after restart for configured/due Watches, session armed state, block reasons, local/offline context, and display-readiness. End at state/readout audit and future material readiness, not UI implementation.
-
-This packet is read-only audit work. It does not authorize implementation.
+Current focus: HS55 is accepted as a read-only audit. Atlas is not currently authorized for implementation. Future work should be selected deliberately from the accepted findings below.
 
 ## Executor
 
-Current executor: Engineering audit / Overseer review.
+Current executor: none; awaiting Human / Overseer selection.
 
-Expected handoff filename:
+Expected handoff filename: none until a new packet is opened.
+
+## Accepted HS55 Understanding
+
+The audit confirmed Atlas can already state the core post-restart Watch truth without live/API calls or collection:
 
 ```txt
-workspace/OverseerHS55-watch-recovery-offline-readout-audit.md
+Configured Watch exists.
+Session is unarmed because runtime restarted.
+No collection is active.
+Local context is still available.
+Operator can arm when ready.
 ```
 
-## Ordered Runway
+Accepted findings:
 
-1. Read the source-of-intent files above, then inspect relevant code paths for:
-   - Watch scheduler status and due-state calculation
-   - Watch executor status, arming/disarming, and `session_not_armed`
-   - Watch repository persisted fields
-   - Task runner volatile state
-   - renderer services/surfaces that expose Watch, queue, local context, readiness, or status
-   - restart recovery verification and session-armed contract coverage
-2. Verify post-restart Watch state:
-   - configured watches
-   - due watches
-   - blocked reason, especially `session_not_armed`
-   - last checked / last success
-   - next eligible / next poll
-   - backoff / last error
-   - active/inactive watch configuration
-   - queued Discovery refs related to watches, if exposed
-   - local Evidence/report context related to watch targets, if already available
-3. Map persisted versus volatile state in a table:
-   - Watch definition
-   - due status
-   - session armed
-   - active task
-   - last success/error
-   - backoff
-   - local queue/evidence context
-4. Confirm whether existing service and renderer exposure can honestly state:
+- Watch definitions, active/inactive config, last polled, last success/error, next poll, backoff, and local queue/evidence context are persisted or locally available.
+- `sessionArmed`, active task, last tick, last dispatch, and task runner state are intentionally volatile after restart.
+- A passive restart/status path does not start collection.
+- `session_not_armed` is available through existing scheduler/executor state and is a normal post-restart block reason, not an error.
+- `due` currently means runnable after gates; a time-eligible Watch blocked by unarmed session appears as blocked, not due.
+- Local/offline context remains available while Watch execution is unarmed.
+- Current services expose enough truth for future display work, but not a polished operator readout model.
 
-   ```txt
-   Configured Watch exists.
-   Schedule may be due.
-   Session is unarmed because runtime restarted.
-   No collection is active.
-   Local context is still available.
-   Operator can arm when ready.
-   ```
+## Remaining Work Options
 
-5. Define display-readiness needs without designing the offline pane:
-   - ambient posture vs explicit status/action state split
-   - fields needed for future UIUX/Lab material production
-   - operator-facing versus diagnostic-only state
-   - missing state fields, ambiguous labels, or confusing service boundaries
-6. Identify risks and gaps:
-   - due state mistaken for active collection
-   - unarmed state mistaken for error/broken Watch
-   - local/offline context hidden when Watch is not armed
-   - task runner volatility confused with lost Watch configuration
-   - backoff/error state too diagnostic for first-read display
-   - copy or state that implies live feed/background collection/hidden monitoring
-7. Run required verification commands below.
-8. Write `workspace/OverseerHS55-watch-recovery-offline-readout-audit.md` with findings, acceptance-criteria coverage, and any recommended bounded future Dev packet.
+No work is active by default.
+
+Recommended optional future packet:
+
+```txt
+DevHS##-watch-recovery-readout-support
+```
+
+Candidate scope:
+
+- Add or refine a read-only Watch recovery/readout model using derived fields only.
+- Candidate fields: `time_eligible`, `eligible_if_armed`, `next_eligible_at`, `collection_active`, `state_layer` / `state_basis`, and optionally Watch-scoped local queue/evidence counts.
+- Keep `sessionArmed` volatile and never persisted.
+- Do not start collection, call live APIs, alter Watch execution, rename commands, or design the UI pane.
+
+Open Human / Overseer decisions:
+
+- Whether to use "eligible if armed" as the Atlas-owned operator phrase, or choose different wording.
+- Whether local queue/evidence context should be aggregated by a read-only service or composed in the renderer from existing services.
+- How much backoff/error detail belongs in first-read operator state versus a diagnostic/detail surface.
+- Whether to open the optional readout-support packet now or leave Watch recovery findings parked for UIUX/Lab material work.
 
 ## Guardrails
 
-- Audit only unless a later Human/Overseer packet explicitly opens implementation.
-- No UI implementation.
-- Do not design a complete offline pane.
-- No backend changes.
-- No schema/migration changes.
-- No persistence changes.
+- No implementation is authorized by this idle state.
+- No UI implementation or offline pane design is authorized.
+- No backend, schema, persistence, bridge, IPC, service, payload, command, or contract changes are authorized.
 - Do not persist `sessionArmed`.
-- Do not start collection on startup.
+- Do not start collection on app startup or passive page load.
 - No live/private/API calls unless explicitly authorized by the Human.
-- No bridge, IPC, service, payload, command, or contract renames.
-- Do not treat ambient posture or packet-motion ideas as active UI scope.
 - Preserve Atlas meanings for Watch, Marked, Evidence, Discovery, External API, Assessment Memory, and provenance.
 
 ## Stop Conditions
 
-Return to Human/Overseer before continuing if:
+Return to Human / Overseer before opening work if:
 
-- the audit requires live/private provider calls
-- verification would mutate the user's real local database
-- implementation changes appear necessary to answer the audit
-- `session_not_armed` or equivalent state cannot be traced without changing code
-- Watch due/armed/running/blocked meanings are ambiguous in a way that affects audit conclusions
-- any path appears to start collection from app startup or passive page load
+- implementation would require live/private provider calls
+- a packet would mutate the user's real local database
+- Watch due/armed/running/blocked meanings need product wording decisions first
+- display work risks implying live feed, background collection, hidden monitoring, or startup watching
+- UIUX/Lab advice starts to rename Atlas-owned backend or bridge meaning
 
 ## Required Verification
 
-Run offline checks:
+HS55 reported the following offline verification:
 
 ```powershell
 npm.cmd run verify:watch-scheduler
@@ -126,52 +108,32 @@ npm.cmd run verify:protected-terms
 git status --short --branch
 ```
 
-If the audit finds cross-cutting renderer/service risk, also run:
+Reported result: all focused checks passed. `verify:protected-terms` scanned no changed files before handoff creation and returned warning count 0. `verify:all` was not required because the audit did not find a cross-cutting renderer/service safety regression.
 
-```powershell
-npm.cmd run verify:all
-```
+## Evidence
 
-Do not run live smoke unless explicitly authorized by the Human.
-
-## Audit Evidence
-
-Auditor updates this section in the handoff, not necessarily in `current.md`:
-
-```txt
-Files/code paths reviewed:
-
-Persisted vs volatile state:
-
-Existing service/renderer exposure:
-
-Display-readiness findings:
-
-Missing fields / ambiguous labels:
-
-Risks:
-
-Verification run:
-```
-
-## Audit Handoff
-
-Create:
+Accepted handoff:
 
 ```txt
 workspace/OverseerHS55-watch-recovery-offline-readout-audit.md
 ```
 
-Handoff must include:
+Accepted prior scope:
 
-- files and code paths reviewed
-- persisted versus volatile state map
-- post-restart Watch state findings
-- service/renderer exposure findings
-- local/offline context availability
-- operator-facing versus diagnostic-only readout needs
-- acceptance-criteria coverage from HS54
-- recommended bounded Dev packet, if any
-- required Human decisions
-- verification commands and results
-- confirmation that no implementation, live calls, collection, persistence changes, or protected-term updates were performed
+```txt
+workspace/OverseerHS54-watch-recovery-offline-readout-scope.md
+```
+
+## Dev Handoff
+
+No Dev packet is open.
+
+If the optional readout-support packet is selected later, the Dev handoff should require:
+
+- exact files/code paths changed
+- derived readout fields added or clarified
+- proof `sessionArmed` remains volatile
+- proof no collection starts on startup/passive load
+- proof no live/API calls are introduced
+- focused verification command results
+- protected-term warning output
