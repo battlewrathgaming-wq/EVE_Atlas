@@ -30,6 +30,12 @@ function main() {
     assert(empty.checks.type_metadata_ready === false, 'empty DB should not have type metadata ready');
     assert(empty.checks.sde_lookup_ready === false, 'empty DB should not have complete SDE lookup readiness');
     assert(empty.live_api.enabled === false, 'live API should default disabled');
+    assert(empty.runtime_boundary.classification.includes('support readout'), 'readiness should expose compact runtime boundary support readout');
+    assert(empty.runtime_boundary.durable_state_basis.includes('fetch_runs'), 'readiness runtime boundary should name durable fetch runs');
+    assert(empty.runtime_boundary.volatile_state_basis.includes('current in-memory task history'), 'readiness runtime boundary should name volatile task state');
+    assert(empty.runtime_boundary.support_artifacts.runtime_db_snapshot.includes('support artifact'), 'readiness runtime boundary should classify snapshots as support artifacts');
+    assert(empty.runtime_boundary.partial_failure_indicators.fetch_runs_failed === 0, 'empty readiness boundary should report zero failed fetch runs');
+    assert(empty.runtime_boundary.boundaries.some((entry) => entry.includes('Support artifacts are diagnostics')), 'readiness runtime boundary should preserve support artifact boundary');
     assertHasWarning(empty, 'RUNTIME_PATHS_MISSING');
     assertHasWarning(empty, 'SDE_LOOKUP_MISSING');
     assertHasWarning(empty, 'SDE_TOPOLOGY_NOT_READY');

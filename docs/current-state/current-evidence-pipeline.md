@@ -135,6 +135,8 @@ Support artifacts such as runtime DB snapshots and operator debug trace packs ar
 
 Write boundaries remain command-owned: Discovery queues refs only; Enrich selected writes expanded ESI Evidence; metadata hydration updates readability labels; Assessment creation writes deliberate memory; retention preflight stays read-only; runtime snapshot creation writes a local support artifact without pruning or deleting Evidence.
 
+`app.readiness` exposes a compact `runtime_boundary` support readout for ordinary readiness/status inspection. The same source-owned model is used by operator debug trace packs. It separates durable SQLite state from volatile task/session state, summarizes partial-failure indicators, and classifies snapshots, trace packs, logs, and reports as support/readout artifacts rather than Evidence, Observation, or Assessment Memory.
+
 ## Current Retention / Deletion State
 
 Deletion is not an active product capability.

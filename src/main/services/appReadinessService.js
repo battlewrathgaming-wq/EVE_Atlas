@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { USER_AGENT } = require('../../shared/constants');
+const { buildRuntimeBoundaryStatus } = require('../support/runtimeBoundaryStatus');
 const { projectRoot } = require('../util/tempPaths');
 const { taxonomyMessage } = require('./messageTaxonomy');
 
@@ -50,6 +51,10 @@ function buildAppReadiness(db, options = {}) {
     path_state: pathState.paths,
     checks,
     lookup_counts: counts,
+    runtime_boundary: buildRuntimeBoundaryStatus(db, {
+      taskRunner: options.taskRunner,
+      limit: options.limit || 12
+    }),
     sde: {
       topology: importSummary(topology),
       inventory: importSummary(inventory)
