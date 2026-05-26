@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after accepted HS91 alpha observation
+Status: Active Dev packet - R-Scanner renderer prototype
 Last updated: 2026-05-26
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS92 accepted DevHS91. Atlas is resting; the next recommended packet is a bounded renderer-only R-Scanner presentation prototype using `watch.offline_readout` as source model.
+Current focus: HS93 opens a bounded, lightweight renderer-only R-Scanner prototype using `watch.offline_readout` as the source model.
 
 Source of intent:
 
@@ -16,6 +16,8 @@ Source of intent:
 - Human advisory on 2026-05-26: final presentation may not expose Watch directly; R-Scanner / R-scan is a candidate presentation metaphor.
 - Human preference on 2026-05-26: focus on runtime evidence before UI presentation because Atlas has nothing useful to show if the system state is broken.
 - Human accepted on 2026-05-26: proceed with a targeted runtime/use observation pass before UI.
+- Human accepted on 2026-05-26: proceed with the R-Scanner renderer prototype, keeping frontend/render work light because a facelift is expected soon.
+- `workspace/OverseerHS93-r-scanner-renderer-prototype-runway.md`
 - `workspace/OverseerHS92-hs91-alpha-observation-review.md`
 - `workspace/DevHS91-watch-offline-alpha-observation.md`
 - `workspace/OverseerHS91-watch-offline-alpha-observation-runway.md`
@@ -61,28 +63,30 @@ Accepted presentation guidance:
 
 ## Executor
 
-Current executor: None
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-None
+workspace/DevHS93-r-scanner-watch-offline-renderer-prototype.md
 ```
 
-## Resting State
+## Ordered Runway
 
-No Dev or specialist work is currently open.
-
-Next likely candidate lanes:
-
-1. Bounded renderer-only R-Scanner / `Watch_offline` presentation prototype using `watch.offline_readout`.
-2. Minimal durable Watch movement checkpoint design, only if derived readout proves insufficient in real use.
-3. Discovery Sequencer / Enrichment Sequencer architecture note and first implementation slice.
+1. Re-read the accepted `Watch_offline` source meaning, HS92 closeout, and R-Scanner presentation guidance.
+2. Inspect the current renderer routes/modules and identify the smallest place to expose a prototype R-Scanner powered-down/offline surface.
+3. Add a lightweight renderer-only surface or panel that consumes existing `watch.offline_readout` state.
+4. Map raw readout values into operator-facing display labels for at least: disarmed/offline, pending local Discovery refs, provider deferred/waiting, missed slot recoverable, orphan review, and malformed/missing radius scope.
+5. Keep Discovery refs, Evidence/EVEidence, Watch, and hydration meanings visibly separate where those concepts appear.
+6. Add or update renderer verification/smoke coverage only as needed for this bounded surface.
+7. Create the expected Dev handoff with files changed, screenshots or visual-smoke evidence if available, verification results, and any presentation gaps that should wait for the facelift.
 
 ## Guardrails And Non-Goals
 
-- No renderer work.
-- No UI redesign.
+- Renderer-only.
+- Keep styling light, replaceable, and local to this prototype.
+- No full app redesign.
+- No final facelift implementation.
 - No live/private/API calls.
 - No new provider calls.
 - No backend behavior changes unless needed to fix a direct observation-blocking defect.
@@ -97,9 +101,10 @@ Next likely candidate lanes:
 - Do not treat queued refs as Evidence/EVEidence.
 - Do not treat waiting as failure.
 - Do not couple metadata hydration to Watch recovery.
-- Do not rename backend Watch, `Watch_offline`, scheduler, service, IPC, schema, command, or payload terms.
-- Do not treat R-Scanner / R-scan as Atlas source or bridge authority yet.
-- Do not adopt R-Scanner presentation into implementation in this packet.
+- Do not rename backend Watch, `Watch_offline`, scheduler, service, IPC, schema, command, payload terms, or test IDs.
+- Do not treat R-Scanner / R-scan as Atlas source or bridge authority.
+- Do not imply background surveillance, active checking, or live coverage while disarmed/offline.
+- Do not draw exact radius coverage when scope is missing or malformed.
 - Do not treat shared keyword references as Atlas authority.
 
 ## Stop Conditions
@@ -113,7 +118,7 @@ Stop and return to Overseer/Human before implementation if:
 - implementation would make offline/disarmed state look live
 - implementation would make waiting/provider deferral look like failure
 - implementation would import Lab presentation authority into Atlas source meaning
-- evidence capture requires renderer/UI work
+- renderer work turns into a full redesign
 - behavior changes expand beyond a direct testability defect
 - the packet turns into sequencer architecture implementation
 - observation requires live provider access
@@ -121,24 +126,18 @@ Stop and return to Overseer/Human before implementation if:
 
 ## Required Verification
 
-No active implementation packet is open.
-
-Recent closeout verification:
+Run:
 
 ```powershell
+npm.cmd run verify:renderer-shell
 npm.cmd run verify:watch-offline-readout
-npm.cmd run verify:watch-scheduler
-npm.cmd run verify:watch-executor
-npm.cmd run verify:restart-recovery
-npm.cmd run verify:queue-api-evidence-write
-npm.cmd run verify:queue-selection
-npm.cmd run verify:queue-report
-npm.cmd run verify:app-readiness
-npm.cmd run verify:operator-debug-trace
+npm.cmd run smoke:electron
 npm.cmd run verify:protected-terms
 git diff --check
 git status --short --branch
 ```
+
+If source/service/verifier files change beyond renderer scope, explain why and run the relevant narrower verifier. Run `npm.cmd run verify:all` only if the blast radius expands beyond the bounded renderer surface.
 
 ## Evidence
 
@@ -423,4 +422,21 @@ Accepted:
 - Missing/malformed radius scope must stay limited in future presentation and must not imply exact live coverage.
 - Durable movement checkpointing remains deferred until real use shows derived `Watch_offline` state is insufficient.
 
-No active handoff is expected.
+HS93 opens the R-Scanner renderer prototype packet.
+
+Files added:
+
+- `workspace/OverseerHS93-r-scanner-renderer-prototype-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS93-r-scanner-watch-offline-renderer-prototype.md
+```
+
+Accepted:
+
+- This is a lightweight renderer-only prototype, not a final facelift.
+- `watch.offline_readout` remains the source model.
+- R-Scanner / R-scan is presentation-only language.
+- No backend, IPC, payload, schema, persistence, provider, scheduler, Watch semantic, Discovery ref, Evidence/EVEidence, hydration, deletion/retention, or terminology rename work is opened.
