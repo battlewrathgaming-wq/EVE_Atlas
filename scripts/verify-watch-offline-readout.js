@@ -106,7 +106,14 @@ async function main() {
     assert(findWatch(serviceReadout, 'actor', 1).eligible_if_armed === true, 'service readout should expose eligible_if_armed');
     assert(findWatch(serviceReadout, 'actor', 1).recovery.next_safe_action === 'drain_pending_refs', 'service readout should expose recovery next action');
 
-    assertSame(before, persistedCounts(db), 'Watch_offline readout should not mutate persisted state');
+    const after = persistedCounts(db);
+    assertSame(before, after, 'Watch_offline readout should not mutate persisted state');
+
+    console.log('watch offline readout runtime evidence:');
+    console.log(JSON.stringify(runtimeEvidenceSummary(readout, {
+      before,
+      after
+    }), null, 2));
   } finally {
     closeDatabase(db);
   }
@@ -465,6 +472,57 @@ function persistedCounts(db) {
     data_quality_warnings: count(db, 'data_quality_warnings'),
     metadata_runs: count(db, 'metadata_runs'),
     assessment_artifacts: count(db, 'assessment_artifacts')
+  };
+}
+
+function runtimeEvidenceSummary(readout, counts) {
+  const evidence = {
+    model: readout.model,
+    session_armed: readout.session_armed,
+    collection_active: readout.collection_active,
+    configured_watches: readout.summary.configured_watches,
+    eligible_if_armed: readout.summary.eligible_if_armed,
+    states: {
+      unarmed_restart: pickWatchEvidence(findWatch(readout, 'actor', 4)),
+      due_if_armed_with_pending_refs: pickWatchEvidence(findWatch(readout, 'actor', 1)),
+      provider_deferred: pickWatchEvidence(findWatch(readout, 'actor', 7)),
+      missed_slot_recoverable: pickWatchEvidence(findWatch(readout, 'actor', 5)),
+      orphan_review: pickWatchEvidence(findWatch(readout, 'actor', 6)),
+      valid_radius_scope: pickWatchEvidence(findWatch(readout, 'system_radius', 1)),
+      missing_radius_scope: pickWatchEvidence(findWatch(readout, 'system_radius', 2)),
+      malformed_radius_scope: pickWatchEvidence(findWatch(readout, 'system_radius', 3))
+    },
+    mutation_check: {
+      before: counts.before,
+      after: counts.after,
+      unchanged: JSON.stringify(counts.before) === JSON.stringify(counts.after)
+    },
+    boundary: {
+      no_provider_work: readout.watches.every((watch) => watch.recovery.no_provider_work === true),
+      mutates_state: readout.watches.some((watch) => watch.recovery.mutates_state === true)
+    }
+  };
+  return evidence;
+}
+
+function pickWatchEvidence(watch) {
+  return {
+    watch_type: watch.watch_type,
+    watch_id: watch.watch_id,
+    scheduler_state: watch.scheduler_state,
+    blocked_reasons: watch.blocked_reasons,
+    time_eligible: watch.time_eligible,
+    eligible_if_armed: watch.eligible_if_armed,
+    next_eligible_at: watch.next_eligible_at,
+    pending_refs_count: watch.recovery.pending_refs_count,
+    expected_next_run_at: watch.recovery.expected_next_run_at,
+    observed_movement_at: watch.recovery.observed_movement_at,
+    provider_deferral: watch.recovery.provider_deferral?.present === true,
+    missed_slot: watch.recovery.missed_slot,
+    orphaned_run: watch.recovery.orphaned_run,
+    scope_status: watch.recovery.reconstructed_scope.scope_status,
+    scope_limitation: watch.recovery.reconstructed_scope.limitation || null,
+    next_safe_action: watch.recovery.next_safe_action
   };
 }
 

@@ -45,6 +45,36 @@ Lab may use its own product-agnostic presentation vocabulary after the bridge, b
 | `Runtime snapshot` | Local DB support artifact. | Not Sense lane snapshot and not retention/pruning policy. |
 | `Record`, `Intelligence`, `Finding` | Unresolved final naming candidates. | Do not standardize or export as Lab defaults. |
 
+## Watch_offline Readout State Terms
+
+These terms are Atlas support/readout vocabulary. They may be emitted by Atlas for diagnostics, bridge-facing support state, or future renderer consumption, but they are not Lab presentation defaults and they do not rename backend source concepts.
+
+| Term | Meaning | Notes |
+| --- | --- | --- |
+| `Watch_offline` | Read-only post-restart/offline Watch support model. | Does not arm collection, call providers, hydrate metadata, create Evidence, or mutate Discovery refs. |
+| `session_armed` | Volatile executor/session state indicating whether Watch execution is armed. | Restart should be unarmed by default. |
+| `collection_active` | Derived readout flag indicating whether collection work is currently active. | Must not imply background provider work when false. |
+| `eligible_if_armed` | Due-time Watch could move if the session were armed and no higher-priority block applies. | This is not authorization to call a provider by itself. |
+| `recovery` | Per-Watch derived recovery diagnostic block. | Support/readout layer only; not persisted recovery state. |
+| `next_safe_action` | Derived operator/system-safe next action label. | Presentation may translate later, but source meaning stays Atlas-owned. |
+| `provider_deferral` | Provider/capacity wait signal surfaced as availability state. | Waiting is not failure and does not mark refs failed. |
+| `missed_slot` | Expected Watch timing moved past observed movement and may be recoverable. | Does not replay exact sequencer packets. |
+| `orphaned_run` | Previously running fetch/run state needs review after restart. | Should request review, not auto-resume. |
+| `reconstructed_scope` | Readout of recoverable Watch scope basis from durable local state. | Must expose limitation rather than guess exact coverage. |
+| `scope_status` | Scope quality classification for reconstructed scope. | Accepted values include `valid`, `not_stored`, and `malformed`. |
+
+Accepted `next_safe_action` values:
+
+| Value | Meaning |
+| --- | --- |
+| `arm_required` | Work may need deliberate arming before provider movement. |
+| `wait` | Capacity, timing, or availability means waiting is the safe action. |
+| `drain_pending_refs` | Existing local Discovery refs should be handled before fresh Discovery. |
+| `ready_for_discovery` | Readout has no safer local step blocking future Discovery when otherwise allowed. |
+| `review_orphan` | A prior running state needs operator/diagnostic review. |
+| `recover_missed_slot_when_capacity_allows` | Missed timing is recoverable when capacity and gates allow movement. |
+| `complete_enough_alpha` | Readout is sufficient for alpha-level posture while known limitations remain visible. |
+
 ## Translation Caution
 
 | Atlas Term | Possible Interface Term | Risk | Decision |
