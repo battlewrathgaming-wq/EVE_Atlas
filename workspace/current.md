@@ -7,7 +7,7 @@ Last updated: 2026-05-26
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS94 accepted DevHS93 and captured operator-intent direction for R-Scanner, Sequencer patience, retention/storage, Assessment entities, and Observation as the story layer. Atlas is resting.
+Current focus: HS95 captured Observation lookup product direction. Atlas is resting with no active Dev runway.
 
 Source of intent:
 
@@ -18,6 +18,8 @@ Source of intent:
 - Human accepted on 2026-05-26: proceed with a targeted runtime/use observation pass before UI.
 - Human accepted on 2026-05-26: proceed with the R-Scanner renderer prototype, keeping frontend/render work light because a facelift is expected soon.
 - Human product direction on 2026-05-26: Atlas should answer "Do I need to do anything?", surface action-needed states as light diagnostic rows, treat R-Scanner/Sequencer as patient background discovery, require honest storage/deletion posture, and treat Observation as the layer that pulls connected records into story.
+- Human product direction on 2026-05-26: Observation is a presentation/query layer that starts from anchors such as killmail ID, pilot ID, corporation ID, or system ID and pulls connected records into story without creating new truth.
+- `workspace/OverseerHS95-observation-lookup-product-note.md`
 - `workspace/OverseerHS94-hs93-review-and-operator-intent-note.md`
 - `workspace/OverseerHS93-r-scanner-renderer-prototype-runway.md`
 - `workspace/OverseerHS92-hs91-alpha-observation-review.md`
@@ -81,7 +83,8 @@ Next likely candidate lanes:
 
 1. Human/UIUX review of the R-Scanner prototype against the operator-intent note.
 2. A small renderer polish packet only if the prototype blocks understanding before the facelift.
-3. Storage/runtime hardening for storage path/budget or sequencer progress behavior.
+3. Observation lookup advisory or inventory pass to identify first strong anchor relationships.
+4. Storage/runtime hardening for storage path/budget or sequencer progress behavior.
 
 ## Guardrails And Non-Goals
 
@@ -532,3 +535,19 @@ Accepted:
 - Observation is the middle layer that pulls connected records into a story.
 
 No active handoff is expected.
+
+HS95 captured Observation lookup product direction.
+
+Files added:
+
+- `workspace/OverseerHS95-observation-lookup-product-note.md`
+
+Accepted:
+
+- Observation is a presentation/query layer, not a truth-creation layer.
+- ESI-expanded killmail remains the strongest primary Evidence/EVEidence anchor.
+- Pilot, corporation, system, and later alliance/entity IDs may become lookup anchors.
+- Pilot lookup should assemble sightings, timeline, locations, corporation context, assessments, Watch/Marked context where relevant, and provenance/Evidence basis.
+- Corporation lookup should assemble known members, member sightings, related killmails, recurring systems/regions, assessments, and traceable observed patterns.
+- Evidence/EVEidence, Discovery, Assessment, Hydration, and Observation boundaries remain distinct.
+- Future implementation questions are parked until opened through a bounded packet or advisory pass.

@@ -30,8 +30,8 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Atlas Storage And Runtime Hardening
 Roadmap source: Human storage/runtime hardening direction accepted on 2026-05-25
 Current packet: `workspace/current.md`
-Current sequence: HS94 accepted HS93 R-Scanner prototype and captured operator-intent note; no implementation runway is open
-Latest accepted coordination artifact: `workspace/OverseerHS94-hs93-review-and-operator-intent-note.md`
+Current sequence: HS95 captured Observation lookup product direction; no implementation runway is open
+Latest accepted coordination artifact: `workspace/OverseerHS95-observation-lookup-product-note.md`
 Latest advisory artifact: `workspace/UIUXHS84-watch-recovery-readout-interpretation.md`
 Latest advisory runway: `workspace/OverseerHS84-watch-recovery-readout-interpretation-runway.md`
 Latest display request: `workspace/RequestDisplayHS86-r-scanner-powered-down-console.md`
@@ -139,6 +139,7 @@ Watch_offline aggregation ADR: `docs/adr/ADR-0005-watch-offline-readout-aggregat
 - HS92 accepted DevHS91: `watch.offline_readout` is the best current source model for a future renderer-only R-Scanner prototype, while queue/readiness/debug trace surfaces remain complementary support context; no implementation runway is open.
 - HS93 opens a lightweight renderer-only R-Scanner prototype using `watch.offline_readout` as source model; this is not a final facelift and does not authorize backend, IPC, payload, schema, persistence, provider, scheduler, Watch semantic, Discovery ref, Evidence/EVEidence, hydration, deletion/retention, or terminology rename work.
 - HS94 accepted DevHS93: the R-Scanner prototype proves the renderer display contract over `watch.offline_readout`; Atlas should answer "Do I need to do anything?", use light diagnostic rows for action-needed states, treat Sequencer/R-Scanner as patient background discovery/enrichment, keep deletion absolute with snapshot disclosure, and treat Observation as the story layer over connected records.
+- HS95 captured Observation lookup product direction: Observation is a presentation/query layer that starts from anchors such as killmail ID, pilot ID, corporation ID, or system ID, then pulls connected Evidence/EVEidence, Discovery context, Assessment, hydration labels, Watch/Marked context, and provenance into an operator-facing story without creating new truth.
 - Future sequencing should keep Discovery Sequencer, Enrichment Sequencer, and Hydration separate: zKill returns Discovery refs, ESI expansion writes Evidence, and hydration repairs local readability/metadata.
 - Queue batch cadence and UX pacing is parked as a future product/UX lane after evidence-write correctness; it should decide batch size, timing, throttling, External API state behavior, and operator-facing working/waiting/throttled/failed/retry states.
 - Native picker/UI rigging, broader support-artifact budget coverage, active DB relocation, restore, automatic cleanup/pruning, snapshot deletion, and deletion execution remain out of scope until explicitly opened.
