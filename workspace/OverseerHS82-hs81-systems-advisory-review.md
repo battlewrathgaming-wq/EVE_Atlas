@@ -31,6 +31,16 @@ Evidence = completed truth
 Watch recovery readout = derived operator state
 ```
 
+Refined timer-led model:
+
+```txt
+Watch row = durable train / payload contract
+Timer / sequencer = payload-agnostic conductor
+Worker = engine that moves the Watch payload
+```
+
+The timer firing means "this Watch should be considered," not "provider work must start now." The diagnostic should compare expected timing with observed movement and derive whether the Watch should hold, dispatch later, or recover after a missed slot.
+
 ## Rejected For Next Step
 
 - broad provider work queue
@@ -56,6 +66,8 @@ Watch recovery readout = derived operator state
 - Live cooldown/lockout may remain volatile for alpha.
 - Provider-capacity deferral should appear in the recovery readout first; Watch timing/backoff mutation is deferred.
 - Radius recovery should use included-system scope where available, or explicitly report when it cannot.
+- Missed timer slots should be recoverable from expected next run time versus observed Watch movement.
+- The recovery diagnostic should not attempt exact packet replay.
 
 ## Verification Correction
 

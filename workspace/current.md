@@ -38,6 +38,9 @@ Accepted baseline:
 - Discovery refs are returned zKill work awaiting ESI/cache handling.
 - Evidence is completed ESI-expanded truth.
 - Watch recovery readout is derived operator state.
+- Watch row is the durable payload contract.
+- Timer / sequencer is a payload-agnostic conductor.
+- Worker logic moves the Watch payload.
 - Live search remains immediate and narrow.
 - Watch / Sequencer remains the patient radius/lookback acquisition lane.
 - `discovered_killmail_refs` remains the returned-ref Discovery queue, not the sequencer.
@@ -71,11 +74,13 @@ workspace/DevHS82-watch-recovery-diagnostic-readout.md
    - durable intent source
    - session/armed state
    - next eligible time
+   - expected next run time versus observed movement
    - reconstructed planned scope
    - pending refs count
    - latest fetch/API activity
    - provider deferral/wait signal
    - orphaned run signal
+   - missed-slot recoverability signal
    - next safe action
 5. Use these next-safe-action values unless existing local naming strongly requires a better scoped equivalent:
    - `arm_required`
@@ -83,15 +88,18 @@ workspace/DevHS82-watch-recovery-diagnostic-readout.md
    - `drain_pending_refs`
    - `ready_for_discovery`
    - `review_orphan`
+   - `recover_missed_slot_when_capacity_allows`
    - `complete_enough_alpha`
 6. Ensure recovery diagnostics perform no provider work, create no Evidence, mutate no Discovery ref lifecycle, and do not hydrate metadata.
 7. Prefer pending Discovery refs before fresh zKill Discovery in the derived next action.
 8. Surface retryable provider-capacity deferral as waiting/deferred, not failure.
 9. Surface orphaned pre-restart `running` fetch runs instead of silently resuming them.
-10. For radius recovery, use included-system scope where available; if not available, explicitly report the limitation rather than guessing.
-11. Add focused offline fixture coverage for the accepted recovery states.
-12. Update current-state docs only where behavior/readout meaning changes.
-13. Update Evidence / Dev Handoff sections and create the expected DevHS82 handoff.
+10. Treat timer firing as "this Watch should be considered," not "provider work must start now." The admission check may hold a due Watch for conflict, capacity, recent movement, or provider deferment.
+11. Do not attempt exact packet replay. Recover intent and safe next action from last/expected movement and durable local state.
+12. For radius recovery, use included-system scope where available; if not available, explicitly report the limitation rather than guessing.
+13. Add focused offline fixture coverage for the accepted recovery states.
+14. Update current-state docs only where behavior/readout meaning changes.
+15. Update Evidence / Dev Handoff sections and create the expected DevHS82 handoff.
 
 ## Guardrails And Non-Goals
 
@@ -149,6 +157,7 @@ Add focused verifier expectations for:
 - due Watch after restart reports `arm_required`
 - Watch with pending refs reports `drain_pending_refs`
 - old `running` fetch run reports `review_orphan` or an equivalent orphaned-run signal
+- missed timer slot reports `recover_missed_slot_when_capacity_allows` or an equivalent recoverable-missed-slot signal
 - provider-capacity warning reports waiting/deferred, not failed
 - metadata hydration is unaffected
 - recovery diagnostic makes no provider calls
@@ -185,10 +194,12 @@ Opening evidence:
 - No Dev implementation was performed while opening HS82.
 - No live calls, schema migration, broad provider queue, persisted sequencer packets, stale/expired mutation, hydration coupling, retention/deletion change, or UI work were opened.
 - Verification command name corrected from advisory text to package script: `npm.cmd run verify:restart-recovery`.
+- Human timer-led refinement accepted: the Watch row carries durable payload intent, the timer/sequencer only decides whether due work may move, and the worker owns payload processing.
+- HS82 should not model exact packet replay. It should derive missed-slot recovery from expected next run time versus observed Watch movement.
 - `npm.cmd run verify:protected-terms` passed with exit code 0, warning-only.
 - Protected-term discovery ran in working-set mode against 4 files.
-- Warning count: 215.
-- Warning classes: cross-project-borrowing 48, lab-quarantine-borrowing 136, atlas-candidate 31.
+- Warning count: 244.
+- Warning classes: cross-project-borrowing 48, lab-quarantine-borrowing 155, atlas-candidate 41.
 - `git diff --check` passed.
 
 ## Dev Handoff

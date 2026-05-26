@@ -79,6 +79,26 @@ Watch recovery readout = derived operator state
 
 The next packet should not create persisted sequencer packets. Atlas should first prove that durable Watch intent plus current execution records are enough to restart safely, avoid obvious duplicate work, and explain the next safe action.
 
+Refined model from Human advisory:
+
+```txt
+Watch row = durable train / payload contract
+Timer / sequencer = payload-agnostic conductor
+Worker = engine that moves the Watch payload
+```
+
+This is a strong fit for the existing system. The Watch row should carry the meaningful acquisition envelope: target, radius, lookback, caps, cadence, included systems, active state, and next expected run time. The timer/sequencer should not need to understand exact provider packet details. It should only decide whether a due Watch may move now, must wait, or appears to have missed movement after disconnect/restart.
+
+The practical comparison is:
+
+```txt
+expected_next_run_at   = when the Watch intended to be considered
+last_observed_move_at  = when Atlas actually dispatched or completed work
+sequencer_decision     = computed hold / dispatch / recover decision
+```
+
+This supports missed-run recovery without a request-attempt ledger: if the expected time is in the past and observed movement is older than that expectation, Atlas can classify the Watch as missed-but-recoverable, then admit it only when armed and capacity allows.
+
 ## Minimal Durable State Needed
 
 Current durable state is already useful:
@@ -92,6 +112,15 @@ Current durable state is already useful:
 No new table is justified for the first recovery packet.
 
 A future checkpoint table may become useful only after Atlas has real packet identity for paced radius/lookback work. Adding it now would risk preserving the wrong abstraction.
+
+If later derivation from `fetch_runs` and `api_request_logs` is awkward, the smallest justified durable addition would be rewritten Watch movement checkpoints, not a ledger:
+
+- `last_dispatch_at`
+- `last_completion_at`
+- `last_provider_attempt_at`, if provider-specific delay cannot be derived cleanly
+- `deferred_until`, if provider/capacity waits need a compact durable hold
+
+These fields describe whether the train moved. They should not describe the full payload packet.
 
 ## State That Should Remain Volatile
 
@@ -127,9 +156,21 @@ Per Watch, the derived state should be one of:
 - `recently_attempted`
 - `provider_deferred`
 - `orphaned_run`
+- `missed_slot_recoverable`
 - `complete_enough_alpha`
 
 These are readout states, not necessarily persisted enum values.
+
+Missed-slot logic should be based on expected timing versus observed movement:
+
+```txt
+next_poll_at is in the past
+last_dispatch_at or last_completion_at is older than next_poll_at
+=> Watch did not move for its expected slot
+=> recoverable when armed, not an immediate provider call
+```
+
+This keeps the timer agnostic to payload shape. The timer notices that the Watch did not move; the worker still owns how the Watch payload is processed.
 
 ## Duplicate-Work Prevention Model
 
@@ -157,6 +198,8 @@ Current safe controls:
 For the next packet, do not persist all Live request attempts. If restart hammering later becomes a proven issue, use a minimal current-cooldown footprint or derive recent provider activity from `api_request_logs`.
 
 Important critique: Watch execution should be documented as paced by Watch cadence, not by Live cooldown. Live gate policy should not be treated as the hidden Watch scheduler.
+
+The timer firing should mean "this Watch should be considered," not "provider work must start now." The sequencer admission check should be able to hold a due Watch for conflict, capacity, recent movement, or provider deferment.
 
 ## Partial-Completion Model
 
@@ -247,11 +290,13 @@ Expected output per Watch:
 - durable intent source
 - session/armed state
 - next eligible time
+- expected next run time versus observed movement
 - reconstructed planned scope
 - pending refs count
 - latest fetch/API activity
 - provider deferral/wait signal
 - orphaned run signal
+- missed-slot recoverability signal
 - next safe action
 
 Suggested next-safe-action values:
@@ -261,6 +306,7 @@ Suggested next-safe-action values:
 - `drain_pending_refs`
 - `ready_for_discovery`
 - `review_orphan`
+- `recover_missed_slot_when_capacity_allows`
 - `complete_enough_alpha`
 
 ## Acceptance Criteria
