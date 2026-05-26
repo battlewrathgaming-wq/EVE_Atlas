@@ -31,8 +31,14 @@ Files:
 
 Expanded lists:
 
+- Working protected-term index: `F:\Projects\Docs\Aura-Project-Orchestration\terminology\protected-term-working-index.md`
 - Atlas expanded coordination list: `F:\Projects\Docs\Aura-Project-Orchestration\critical\AURA-Atlas\critical-terms.md`
 - Cross-project synthesis: `F:\Projects\Docs\Aura-Project-Orchestration\terminology\terminology-critical-cross-project-synthesis-2026-05-24.md`
 - Frequency synthesis: `F:\Projects\Docs\Aura-Project-Orchestration\terminology\terminology-frequency-synthesis-2026-05-24.md`
+- Historical collision map: `F:\Projects\Docs\Aura-Project-Orchestration\terminology\known-keyword-reference-historical-collision-map-2026-05-26.md`
 
 These files do not replace `workspace/current.md`. They are reference material for agents and Overseer review.
+
+If a key word is unclear, use the working protected-term index as a navigation aid only. It does not infer ownership, accept shared doctrine, rename Atlas meaning, or authorize Dev work. If the owner/layer/preserve decision is unclear, stop and ask the Human or relevant project Overseer.
+
+Overseer only: when the Human gives authority, the project Overseer may update this local critical folder or another accepted local resting-state record. Specialists, Dev, and advisory workers should flag the issue in their handoff instead of updating authority surfaces themselves.

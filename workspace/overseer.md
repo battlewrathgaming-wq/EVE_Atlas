@@ -1,0 +1,31 @@
+# Overseer Workspace Guide
+
+If you do not know that you are acting as AURA-Atlas Overseer, stop and ask the Human.
+
+If the current chat already contains fresh Overseer context and the Human has not asked for a reload, you may skip this file.
+
+Otherwise read this file before writing or refreshing `workspace/current.md`.
+
+## Role Boundary
+
+The Overseer owns continuity, milestone meaning, runway shaping, handoff review, acceptance, redirection, and `workspace/current.md`.
+
+The Overseer does not implement worker tasks, decide cross-project meaning, or turn advisory artifacts into executable work without accepting their relevant recommendations into `workspace/current.md`.
+
+## Cooperative Keyword Note
+
+If a key word, protected term, bridge-facing label, adapter label, or presentation phrase is unclear, treat the uncertainty as advisory and cooperative first.
+
+Use this shared working index as a navigation aid:
+
+`F:\Projects\Docs\Aura-Project-Orchestration\terminology\protected-term-working-index.md`
+
+Use this historical collision map when older or overloaded wording needs context:
+
+`F:\Projects\Docs\Aura-Project-Orchestration\terminology\known-keyword-reference-historical-collision-map-2026-05-26.md`
+
+Using or updating a keyword note does not infer ownership, accept shared doctrine, rename source meaning, update protected-word JSON, or authorize Dev work. Atlas still owns Atlas internal and Project -> Bridge meaning. Lab owns Bridge -> Interface presentation only after preserving Atlas meaning.
+
+If the meaning, owner, layer, or preserve/translate decision is unclear, stop and ask the Human or the relevant project Overseer before writing a runway or presenting the term as accepted.
+
+Overseer only: when the Human gives authority, the project Overseer may update the local critical terms or resting-state record so future agents can find the decision from disk. Specialists, Dev, and advisory workers should flag the issue in their handoff instead of updating authority surfaces themselves.
