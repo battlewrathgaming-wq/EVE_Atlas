@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Active Dev packet - Watch_offline alpha observation
+Status: Resting after accepted HS91 alpha observation
 Last updated: 2026-05-26
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS91 opens a bounded targeted alpha/runtime observation pass using the existing `Watch_offline` readout before renderer presentation work.
+Current focus: HS92 accepted DevHS91. Atlas is resting; the next recommended packet is a bounded renderer-only R-Scanner presentation prototype using `watch.offline_readout` as source model.
 
 Source of intent:
 
@@ -16,6 +16,8 @@ Source of intent:
 - Human advisory on 2026-05-26: final presentation may not expose Watch directly; R-Scanner / R-scan is a candidate presentation metaphor.
 - Human preference on 2026-05-26: focus on runtime evidence before UI presentation because Atlas has nothing useful to show if the system state is broken.
 - Human accepted on 2026-05-26: proceed with a targeted runtime/use observation pass before UI.
+- `workspace/OverseerHS92-hs91-alpha-observation-review.md`
+- `workspace/DevHS91-watch-offline-alpha-observation.md`
 - `workspace/OverseerHS91-watch-offline-alpha-observation-runway.md`
 - `workspace/OverseerHS89-hs88-runtime-evidence-review.md`
 - `workspace/OverseerHS90-keyword-housekeeping-review.md`
@@ -59,23 +61,23 @@ Accepted presentation guidance:
 
 ## Executor
 
-Current executor: Dev
+Current executor: None
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS91-watch-offline-alpha-observation.md
+None
 ```
 
-## Ordered Runway
+## Resting State
 
-1. Re-read the accepted `Watch_offline` state, HS88/HS89 evidence, and HS90 keyword boundary.
-2. Inspect the existing operator-facing or service/report surfaces that can currently expose `Watch_offline`, readiness, queue, debug trace, and local context without UI redesign.
-3. Run the offline fixture/runtime path from disk and capture what a fresh operator can observe after restart or disarmed startup.
-4. Compare observed state against the intended user questions: disarmed/active, local context, pending local Discovery refs, provider deferral, missed slot recovery, orphan review, radius scope quality, and next safe action.
-5. Record gaps as observation findings, not implementation decisions.
-6. Do not change behavior unless a direct verifier/readout defect blocks the observation.
-7. Create the expected Dev handoff with observed evidence, operator-readability gaps, and recommendation: renderer prototype next, checkpoint design next, or more runtime hardening next.
+No Dev or specialist work is currently open.
+
+Next likely candidate lanes:
+
+1. Bounded renderer-only R-Scanner / `Watch_offline` presentation prototype using `watch.offline_readout`.
+2. Minimal durable Watch movement checkpoint design, only if derived readout proves insufficient in real use.
+3. Discovery Sequencer / Enrichment Sequencer architecture note and first implementation slice.
 
 ## Guardrails And Non-Goals
 
@@ -119,7 +121,9 @@ Stop and return to Overseer/Human before implementation if:
 
 ## Required Verification
 
-Run:
+No active implementation packet is open.
+
+Recent closeout verification:
 
 ```powershell
 npm.cmd run verify:watch-offline-readout
@@ -134,12 +138,6 @@ npm.cmd run verify:operator-debug-trace
 npm.cmd run verify:protected-terms
 git diff --check
 git status --short --branch
-```
-
-If any verifier or source file changes, also run:
-
-```powershell
-npm.cmd run verify:all
 ```
 
 ## Evidence
@@ -316,4 +314,113 @@ Accepted:
 
 ## Dev Handoff
 
-No active handoff expected.
+Dev created:
+
+```txt
+workspace/DevHS91-watch-offline-alpha-observation.md
+```
+
+HS91 Dev observation complete.
+
+Files reviewed:
+
+- `AGENTS.md`
+- `workspace/README.md`
+- `workspace/overview.md`
+- `workspace/00-dot-protocol.md`
+- `workspace/current.md`
+- `workspace/OverseerHS91-watch-offline-alpha-observation-runway.md`
+- `workspace/OverseerHS89-hs88-runtime-evidence-review.md`
+- `workspace/OverseerHS90-keyword-housekeeping-review.md`
+- `workspace/DevHS88-watch-offline-runtime-evidence.md`
+- `workspace/OverseerHS87-hs86-lab-response-review.md`
+- `workspace/DisplayResponseHS86-atlas-r-scanner-powered-down-console.md`
+- `docs/adr/ADR-0005-watch-offline-readout-aggregation.md`
+- `docs/current-state/current-evidence-pipeline.md`
+- `workspace/critical/README.md`
+- `workspace/critical/critical-terms.md`
+- `src/main/services/serviceRegistry.js`
+- `src/main/watchlist/watchOfflineReadout.js`
+- `src/main/watchlist/watchScheduler.js`
+- `src/main/watchlist/watchExecutor.js`
+- `src/main/watchlist/watchlistRepository.js`
+- `scripts/verify-watch-offline-readout.js`
+- `scripts/verify-app-readiness.js`
+- `scripts/verify-queue-report.js`
+- `scripts/verify-operator-debug-trace-pack.js`
+- `package.json`
+
+Files changed:
+
+- `workspace/current.md`
+- `workspace/DevHS91-watch-offline-alpha-observation.md`
+
+No source, verifier, service, schema, renderer, payload, IPC, or behavior files were changed.
+
+Observed surfaces:
+
+- `watch.offline_readout` is the precise renderer-eligible read-only source for `Watch_offline` recovery meaning.
+- `watch.schedule` and `watch.executor.status` expose schedule and volatile executor state but are less complete than `Watch_offline`.
+- `report.queue` exposes pending/failed/expanded Discovery refs and preserves the non-Evidence boundary, but it does not explain Watch recovery state.
+- `app.readiness` exposes compact runtime boundary support context.
+- `support.debug_trace_pack` writes a bounded support/debug artifact and is useful for support review, not first-screen operator understanding.
+
+Runtime evidence observed:
+
+- `Watch_offline` readout generated with `session_armed=false`, `collection_active=false`, `configured_watches=10`, and `eligible_if_armed=8`.
+- Unarmed restart: actor Watch 4 reports `next_safe_action=arm_required`.
+- Pending local Discovery refs: actor Watch 1 reports `pending_refs_count=1` and `next_safe_action=drain_pending_refs`.
+- Provider deferred: actor Watch 7 reports `provider_deferral=true` and `next_safe_action=wait`.
+- Missed-slot recovery: actor Watch 5 reports expected next run `2026-05-25T11:00:00.000Z`, observed movement `2026-05-25T10:00:00.000Z`, `missed_slot.present=true`, and `recoverable=true`.
+- Orphan review: actor Watch 6 reports orphaned run `run_orphan_actor` and `next_safe_action=review_orphan`.
+- Radius scope quality: system/radius Watch 1 reports `valid`, Watch 2 reports `not_stored`, and Watch 3 reports `malformed`.
+- No mutation: persisted counts before and after readout stayed identical.
+- Boundary flags: `no_provider_work=true`, `mutates_state=false`.
+
+Operator-readability findings:
+
+- The readout is sufficient for a bounded renderer prototype, but it needs presentation mapping for raw `next_safe_action` values.
+- Queue/readiness/debug surfaces are useful complements but not substitutes for `watch.offline_readout`.
+- Missing/malformed radius scope must remain limited in presentation and must not imply exact live coverage.
+- Debug trace packs are support artifacts, not ordinary first-screen operator UI.
+
+Boundary confirmation:
+
+- No live/API calls, renderer work, UI redesign, schema migration, provider queue, sequencer table, durable movement checkpoint, Discovery ref mutation, Evidence/EVEidence writes, hydration coupling, deletion/retention work, terminology rename, source changes, or behavior changes were performed.
+
+Verification:
+
+- `npm.cmd run verify:watch-offline-readout` passed and printed runtime evidence JSON.
+- `npm.cmd run verify:watch-scheduler` passed.
+- `npm.cmd run verify:watch-executor` passed.
+- `npm.cmd run verify:restart-recovery` passed.
+- `npm.cmd run verify:queue-api-evidence-write` passed.
+- `npm.cmd run verify:queue-selection` passed.
+- `npm.cmd run verify:queue-report` passed.
+- `npm.cmd run verify:app-readiness` passed.
+- `npm.cmd run verify:operator-debug-trace` passed.
+- `npm.cmd run verify:protected-terms` passed with exit code 0, warning-only.
+- Protected-term discovery ran in working-set mode against 2 files.
+- Warning count: 264.
+- Warning classes: cross-project-borrowing 45, lab-quarantine-borrowing 150, atlas-candidate 69.
+- `git diff --check` passed with the existing LF-to-CRLF working-copy warning for `workspace/current.md`.
+- `git status --short --branch` reported expected HS91 workspace file changes.
+
+Recommendation:
+
+- Proceed to a bounded renderer-only presentation prototype next, using `watch.offline_readout` as the source model and treating R-Scanner / R-scan as presentation-only language.
+
+HS92 accepted DevHS91.
+
+Files added:
+
+- `workspace/OverseerHS92-hs91-alpha-observation-review.md`
+
+Accepted:
+
+- `watch.offline_readout` is the best current source model for a first renderer-only R-Scanner prototype.
+- Queue/readiness/debug trace surfaces are useful complementary support context, not substitutes for `Watch_offline`.
+- Missing/malformed radius scope must stay limited in future presentation and must not imply exact live coverage.
+- Durable movement checkpointing remains deferred until real use shows derived `Watch_offline` state is insufficient.
+
+No active handoff is expected.
