@@ -68,6 +68,7 @@ function actorWatchRows(db) {
 function systemWatchRows(db) {
   return db.prepare(`
     SELECT watch_id, center_system_id, center_system_name, radius_jumps,
+           included_system_ids, excluded_system_ids,
            lookback_hours, max_systems_per_run, max_killmails_per_run,
            is_active, poll_interval_minutes,
            last_polled_at, next_poll_at, last_success_at, last_error_at,
@@ -122,11 +123,42 @@ function scheduleRow(watchType, row, now, gates) {
       center_system_id: row.center_system_id,
       center_system_name: row.center_system_name,
       radius_jumps: row.radius_jumps,
+      included_system_ids: parseJsonArray(row.included_system_ids).values,
+      excluded_system_ids: parseJsonArray(row.excluded_system_ids).values,
+      included_system_scope_status: parseJsonArray(row.included_system_ids).status,
+      excluded_system_scope_status: parseJsonArray(row.excluded_system_ids).status,
       lookback_hours: row.lookback_hours,
       max_systems_per_run: row.max_systems_per_run,
       max_killmails_per_run: row.max_killmails_per_run
     }
   };
+}
+
+function parseJsonArray(value) {
+  if (!value) {
+    return {
+      status: 'not_stored',
+      values: []
+    };
+  }
+  try {
+    const parsed = JSON.parse(value);
+    if (!Array.isArray(parsed)) {
+      return {
+        status: 'malformed',
+        values: []
+      };
+    }
+    return {
+      status: 'valid',
+      values: parsed
+    };
+  } catch {
+    return {
+      status: 'malformed',
+      values: []
+    };
+  }
 }
 
 function sequencerDiagnostic(watchType, row, blockedReasons = []) {

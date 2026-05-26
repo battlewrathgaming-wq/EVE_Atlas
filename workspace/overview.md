@@ -30,8 +30,8 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Atlas Storage And Runtime Hardening
 Roadmap source: Human storage/runtime hardening direction accepted on 2026-05-25
 Current packet: `workspace/current.md`
-Current sequence: HS82 Watch recovery diagnostic Dev runway opened
-Latest accepted coordination artifact: `workspace/OverseerHS82-hs81-systems-advisory-review.md`
+Current sequence: HS82 Watch recovery diagnostic accepted; no Dev runway is open
+Latest accepted coordination artifact: `workspace/OverseerHS83-hs82-watch-recovery-review.md`
 Latest advisory request: `workspace/OverseerHS81-watch-recovery-systems-design-request.md`
 Display workflow support: `workspace/display_inventory.md`, `workspace/DisplayInventoryAuditHS49-ingest-to-userdisplay.md`, `workspace/request_display.md`, `workspace/display-request-workflow-hardening-contract.md`, `workspace/RequestDisplayHS50-atlas-initial-display-requests.md`, `workspace/DisplayResponseHS51-atlas-lab-m24-response-relay.md`
 Runtime/record integrity design input: `workspace/OverseerHS52-runtime-record-integrity-design-input.md`
@@ -123,6 +123,7 @@ Watch_offline aggregation ADR: `docs/adr/ADR-0005-watch-offline-readout-aggregat
 - HS81 bundles a systems-design advisory request to challenge whether the next architecture step should be Watch restart recovery and resumable sequencer intent instead of durable request-control counting.
 - HS82 accepts the HS81 systems recommendation and opens a bounded Dev runway for read-only Watch Recovery Diagnostic And Resumable Intent Readout from existing durable state; no schema migration, broad provider queue, persisted sequencer packets, live calls, hydration coupling, or UI redesign are authorized.
 - HS82 also accepts the timer-led Watch refinement: the Watch row carries durable payload intent, the timer/sequencer only decides whether due work may move or hold, and missed slots should be recoverable from expected next run time versus observed movement without exact packet replay.
+- HS83 accepted DevHS82: `Watch_offline` now includes per-Watch recovery diagnostics and `next_safe_action`, distinguishing valid/missing/malformed radius scope, orphaned runs, provider deferral, missed timer slots, and pending local refs without provider calls or state mutation.
 - Future sequencing should keep Discovery Sequencer, Enrichment Sequencer, and Hydration separate: zKill returns Discovery refs, ESI expansion writes Evidence, and hydration repairs local readability/metadata.
 - Queue batch cadence and UX pacing is parked as a future product/UX lane after evidence-write correctness; it should decide batch size, timing, throttling, External API state behavior, and operator-facing working/waiting/throttled/failed/retry states.
 - Native picker/UI rigging, broader support-artifact budget coverage, active DB relocation, restore, automatic cleanup/pruning, snapshot deletion, and deletion execution remain out of scope until explicitly opened.

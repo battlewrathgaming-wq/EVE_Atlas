@@ -39,6 +39,8 @@ Future `Watch_offline` work can add derived read-only fields such as:
 - `collection_active`
 - `state_layer` or `state_basis`
 - Watch-scoped local queue/evidence counts
+- recovery diagnostics derived from Watch rows, fetch/API logs, Discovery refs, Evidence counts, and provider deferral warnings
+- `next_safe_action` values such as `arm_required`, `wait`, `drain_pending_refs`, `review_orphan`, and `recover_missed_slot_when_capacity_allows`
 
 These fields must not start collection, call live APIs, persist `sessionArmed`, or rename existing bridge/IPC/service/payload contracts unless separately authorized.
 

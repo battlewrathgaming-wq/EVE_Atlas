@@ -25,8 +25,8 @@ async function main() {
     assert(readout.model === 'Watch_offline', 'readout should identify the Watch_offline model');
     assert(readout.session_armed === false, 'post-restart readout should be unarmed');
     assert(readout.collection_active === false, 'post-restart readout should not report active collection');
-    assert(readout.summary.configured_watches === 4, 'readout should include configured actor and system watches');
-    assert(readout.summary.eligible_if_armed === 2, 'due-time watches should be explicit eligible_if_armed when session is unarmed');
+    assert(readout.summary.configured_watches === 10, 'readout should include configured actor and system watches');
+    assert(readout.summary.eligible_if_armed >= 6, 'due-time watches should be explicit eligible_if_armed when session is unarmed');
     assert(readout.summary.local_context_available >= 2, 'readout should expose local context availability');
     assert(readout.state_basis.some((entry) => entry.includes('does not start collection')), 'readout should state passive/no-collection basis');
 
@@ -36,6 +36,9 @@ async function main() {
     assert(actorDue.eligible_if_armed === true, 'due actor should be eligible if armed');
     assert(actorDue.local_context.queue.pending === 1, 'actor readout should include local pending possible lead count');
     assert(actorDue.local_context.evidence.activity_events === 1, 'actor readout should include local evidence event count');
+    assert(actorDue.recovery.next_safe_action === 'drain_pending_refs', 'pending refs should be preferred before fresh discovery');
+    assert(actorDue.recovery.pending_refs_count === 1, 'recovery should expose pending ref count');
+    assert(actorDue.recovery.no_provider_work === true, 'recovery diagnostic should declare no provider work');
 
     const actorFuture = findWatch(readout, 'actor', 2);
     assert(actorFuture.time_eligible === false, 'not-due actor should not be time eligible');
@@ -46,10 +49,35 @@ async function main() {
     assert(actorBackoff.blocked_reasons.includes('backoff'), 'backoff actor should expose backoff reason');
     assert(actorBackoff.next_eligible_at === '2026-05-25T12:30:00.000Z', 'backoff actor should expose backoff as next eligible time');
 
+    const actorArmRequired = findWatch(readout, 'actor', 4);
+    assert(actorArmRequired.recovery.next_safe_action === 'arm_required', 'due watch after restart should report arm_required when no local work is pending');
+    assert(actorArmRequired.recovery.expected_next_run_at === null, 'never-run due watch should expose missing expected time as null');
+
+    const actorMissed = findWatch(readout, 'actor', 5);
+    assert(actorMissed.recovery.missed_slot.present === true, 'missed timer slot should be detected from expected time versus observed movement');
+    assert(actorMissed.recovery.next_safe_action === 'recover_missed_slot_when_capacity_allows', 'missed timer slot should be recoverable, not auto-dispatched');
+
+    const actorOrphan = findWatch(readout, 'actor', 6);
+    assert(actorOrphan.recovery.orphaned_run.present === true, 'old running fetch run should be surfaced as orphaned');
+    assert(actorOrphan.recovery.next_safe_action === 'review_orphan', 'orphaned run should request review');
+
+    const actorDeferred = findWatch(readout, 'actor', 7);
+    assert(actorDeferred.recovery.provider_deferral.present === true, 'provider-capacity warning should be surfaced');
+    assert(actorDeferred.recovery.next_safe_action === 'wait', 'provider-capacity warning should produce wait/deferred action');
+
     const systemDue = findWatch(readout, 'system_radius', 1);
     assert(systemDue.eligible_if_armed === true, 'due system/radius watch should be eligible if armed');
     assert(systemDue.local_context.queue.pending === 1, 'system readout should include local pending possible lead count');
-    assert(systemDue.local_context.evidence.killmails === 1, 'system readout should include local center-system evidence count');
+    assert(systemDue.local_context.evidence.killmails === 2, 'system readout should use stored included-system scope for evidence count');
+    assert(systemDue.recovery.reconstructed_scope.scope_status === 'valid', 'valid included-system scope should be reported as valid');
+
+    const systemMissingScope = findWatch(readout, 'system_radius', 2);
+    assert(systemMissingScope.recovery.reconstructed_scope.scope_status === 'not_stored', 'missing included-system scope should be reported without guessing');
+    assert(String(systemMissingScope.recovery.reconstructed_scope.limitation || '').includes('center-system'), 'missing scope should describe center-system fallback');
+
+    const systemMalformedScope = findWatch(readout, 'system_radius', 3);
+    assert(systemMalformedScope.recovery.reconstructed_scope.scope_status === 'malformed', 'malformed included-system scope should be reported');
+    assert(String(systemMalformedScope.recovery.reconstructed_scope.limitation || '').includes('malformed'), 'malformed scope should describe limitation');
 
     const activeCollection = buildWatchOfflineReadout(db, {
       now,
@@ -76,6 +104,7 @@ async function main() {
     assert(serviceReadout.session_armed === false, 'service should use volatile executor unarmed state');
     assert(serviceReadout.collection_active === false, 'service should not report collection active on fresh executor');
     assert(findWatch(serviceReadout, 'actor', 1).eligible_if_armed === true, 'service readout should expose eligible_if_armed');
+    assert(findWatch(serviceReadout, 'actor', 1).recovery.next_safe_action === 'drain_pending_refs', 'service readout should expose recovery next action');
 
     assertSame(before, persistedCounts(db), 'Watch_offline readout should not mutate persisted state');
   } finally {
@@ -104,6 +133,28 @@ function seedReadoutState(db) {
     lastErrorAt: '2026-05-25T11:55:00.000Z',
     backoffUntil: '2026-05-25T12:30:00.000Z'
   });
+  seedActorWatch(db, 4, {
+    entityType: 'character',
+    entityId: 90000004,
+    entityName: 'Arm Required Pilot'
+  });
+  seedActorWatch(db, 5, {
+    entityType: 'character',
+    entityId: 90000005,
+    entityName: 'Missed Slot Pilot',
+    nextPollAt: '2026-05-25T11:00:00.000Z',
+    lastPolledAt: '2026-05-25T10:00:00.000Z'
+  });
+  seedActorWatch(db, 6, {
+    entityType: 'character',
+    entityId: 90000006,
+    entityName: 'Orphan Run Pilot'
+  });
+  seedActorWatch(db, 7, {
+    entityType: 'character',
+    entityId: 90000007,
+    entityName: 'Provider Deferred Pilot'
+  });
 
   db.prepare(`
     INSERT INTO system_watches (
@@ -114,7 +165,27 @@ function seedReadoutState(db) {
       last_polled_at, next_poll_at, last_success_at, last_error_at,
       backoff_until, notes
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(1, 30004660, 'ZTS-4D', 1, '[30004660]', '[]', 24, 4, 20, 1, 45, null, null, null, null, null, 'due system');
+  `).run(1, 30004660, 'ZTS-4D', 1, '[30004660,30004661]', '[]', 24, 4, 20, 1, 45, null, null, null, null, null, 'due system');
+  db.prepare(`
+    INSERT INTO system_watches (
+      watch_id, center_system_id, center_system_name, radius_jumps,
+      included_system_ids, excluded_system_ids,
+      lookback_hours, max_systems_per_run, max_killmails_per_run,
+      is_active, poll_interval_minutes,
+      last_polled_at, next_poll_at, last_success_at, last_error_at,
+      backoff_until, notes
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(2, 30004662, 'NO-SCOPE', 1, '[]', '[]', 24, 4, 20, 1, 45, null, null, null, null, null, 'missing stored scope');
+  db.prepare(`
+    INSERT INTO system_watches (
+      watch_id, center_system_id, center_system_name, radius_jumps,
+      included_system_ids, excluded_system_ids,
+      lookback_hours, max_systems_per_run, max_killmails_per_run,
+      is_active, poll_interval_minutes,
+      last_polled_at, next_poll_at, last_success_at, last_error_at,
+      backoff_until, notes
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(3, 30004663, 'BAD-SCOPE', 1, 'not-json', '[]', 24, 4, 20, 1, 45, null, null, null, null, null, 'malformed stored scope');
 
   seedQueueRef(db, {
     killmailId: 700001,
@@ -144,6 +215,7 @@ function seedReadoutState(db) {
   });
 
   seedKillmail(db, 900001, 30004660);
+  seedKillmail(db, 900002, 30004661);
   seedActivityEvent(db, {
     killmailId: 900001,
     eventKey: '900001:attacker:character:90000001',
@@ -151,6 +223,44 @@ function seedReadoutState(db) {
     entityType: 'character',
     entityId: 90000001,
     solarSystemId: 30004660
+  });
+  seedActivityEvent(db, {
+    killmailId: 900002,
+    eventKey: '900002:victim:character:90000099',
+    role: 'victim',
+    entityType: 'character',
+    entityId: 90000099,
+    solarSystemId: 30004661
+  });
+  seedFetchRun(db, {
+    runId: 'run_orphan_actor',
+    watchType: 'actor',
+    watchId: 'character:90000006',
+    startedAt: '2026-05-25T10:30:00.000Z',
+    status: 'running'
+  });
+  seedFetchRun(db, {
+    runId: 'run_provider_deferred',
+    watchType: 'actor',
+    watchId: 'character:90000007',
+    startedAt: '2026-05-25T10:40:00.000Z',
+    finishedAt: '2026-05-25T10:41:00.000Z',
+    status: 'success'
+  });
+  seedApiLog(db, {
+    requestId: 'request_provider_deferred',
+    runId: 'run_provider_deferred',
+    provider: 'esi',
+    endpoint: 'fixture://esi/deferred',
+    statusCode: 429,
+    requestedAt: '2026-05-25T10:40:30.000Z'
+  });
+  seedWarning(db, {
+    warningId: 'warning_provider_deferred',
+    runId: 'run_provider_deferred',
+    warningType: 'provider_capacity_deferred',
+    message: 'fixture provider capacity wait',
+    createdAt: '2026-05-25T10:40:31.000Z'
   });
 }
 
@@ -172,12 +282,79 @@ function seedActorWatch(db, watchId, input) {
     50,
     1,
     60,
-    null,
+    input.lastPolledAt || null,
     input.nextPollAt || null,
     null,
     input.lastErrorAt || null,
     input.backoffUntil || null,
     'Watch_offline fixture'
+  );
+}
+
+function seedFetchRun(db, input) {
+  db.prepare(`
+    INSERT INTO fetch_runs (
+      run_id, trigger, watch_type, watch_id, started_at, finished_at, status,
+      discovered_refs, already_cached, expanded_new, failed_expansions,
+      activity_events_written, api_calls_zkill, api_calls_esi, duration_ms,
+      error_summary
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    input.runId,
+    'fixture',
+    input.watchType,
+    input.watchId,
+    input.startedAt,
+    input.finishedAt || null,
+    input.status,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    input.provider === 'esi' ? 1 : 0,
+    null,
+    input.errorSummary || null
+  );
+}
+
+function seedApiLog(db, input) {
+  db.prepare(`
+    INSERT INTO api_request_logs (
+      request_id, run_id, run_type, provider, endpoint, method, status_code,
+      duration_ms, cache_status, retry_count, rate_limited, error_message,
+      requested_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    input.requestId,
+    input.runId,
+    'collection',
+    input.provider,
+    input.endpoint,
+    'GET',
+    input.statusCode,
+    1,
+    'miss',
+    0,
+    input.statusCode === 429 ? 1 : 0,
+    input.statusCode === 429 ? 'fixture provider capacity wait' : null,
+    input.requestedAt
+  );
+}
+
+function seedWarning(db, input) {
+  db.prepare(`
+    INSERT INTO data_quality_warnings (
+      warning_id, run_id, killmail_id, warning_type, message, created_at
+    ) VALUES (?, ?, ?, ?, ?, ?)
+  `).run(
+    input.warningId,
+    input.runId,
+    input.killmailId || null,
+    input.warningType,
+    input.message,
+    input.createdAt
   );
 }
 
@@ -285,6 +462,7 @@ function persistedCounts(db) {
     discovered_killmail_refs: count(db, 'discovered_killmail_refs'),
     fetch_runs: count(db, 'fetch_runs'),
     api_request_logs: count(db, 'api_request_logs'),
+    data_quality_warnings: count(db, 'data_quality_warnings'),
     metadata_runs: count(db, 'metadata_runs'),
     assessment_artifacts: count(db, 'assessment_artifacts')
   };

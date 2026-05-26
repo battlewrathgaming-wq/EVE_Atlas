@@ -148,6 +148,8 @@ Retryable ESI/provider capacity waits are not terminal Evidence failures. They c
 
 `app.readiness` exposes a compact `runtime_boundary` support readout for ordinary readiness/status inspection. The same source-owned model is used by operator debug trace packs. It separates durable SQLite state from volatile task/session state, summarizes partial-failure indicators, and classifies snapshots, trace packs, logs, and reports as support/readout artifacts rather than Evidence, Observation, or Assessment Memory.
 
+`Watch_offline` includes a read-only recovery diagnostic per configured Watch. It derives durable intent, expected next run time, observed movement, pending Discovery refs, latest fetch/API activity, provider deferral, orphaned running fetch runs, missed-slot recoverability, reconstructed radius scope status, and next safe action from existing local tables. It does not call providers, arm Watch execution, hydrate metadata, create Evidence, mutate Discovery refs, or persist sequencer packets.
+
 ## Forward Sequencer Distinction
 
 Future sequencing work should keep three lanes separate:
