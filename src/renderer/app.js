@@ -7,6 +7,7 @@ const state = {
   scopeDefaults: null,
   queueSelection: null,
   watchSchedule: null,
+  watchOfflineReadout: null,
   tasks: [],
   selectedTaskId: null,
   selectedTask: null,
@@ -131,6 +132,12 @@ const els = {
   manualExpansionTask: document.querySelector('#manual-expansion-task'),
   queueRefList: document.querySelector('#queue-ref-list'),
   refreshWatchStatus: document.querySelector('#refresh-watch-status'),
+  rScannerState: document.querySelector('#r-scanner-state'),
+  rScannerFaceState: document.querySelector('#r-scanner-face-state'),
+  rScannerSummary: document.querySelector('#r-scanner-summary'),
+  rScannerSignals: document.querySelector('#r-scanner-signals'),
+  rScannerBoundary: document.querySelector('#r-scanner-boundary'),
+  rScannerWatchOfflineDetail: document.querySelector('#r-scanner-watch-offline-detail'),
   watchSessionArmed: document.querySelector('#watch-session-armed'),
   watchLiveApiEnabled: document.querySelector('#watch-live-api-enabled'),
   armWatchSession: document.querySelector('#arm-watch-session'),
@@ -241,7 +248,7 @@ async function init() {
       loadReadiness(),
       loadScopeDefaults(),
       loadQueueSelection(),
-      loadWatchSchedule(),
+      loadWatchStatus(),
       loadWatchExecutorStatus(),
       loadTasks(),
       loadAssessmentArtifacts(),
@@ -273,7 +280,7 @@ function bindEvents() {
   els.previewQueueSelection.addEventListener('click', loadQueueSelection);
   els.preflightManualExpansion.addEventListener('click', preflightManualExpansion);
   els.runManualExpansion.addEventListener('click', runManualExpansion);
-  els.refreshWatchStatus.addEventListener('click', loadWatchSchedule);
+  els.refreshWatchStatus.addEventListener('click', loadWatchStatus);
   els.armWatchSession.addEventListener('click', armWatchSession);
   els.disarmWatchSession.addEventListener('click', disarmWatchSession);
   els.saveActorWatch.addEventListener('click', saveActorWatch);

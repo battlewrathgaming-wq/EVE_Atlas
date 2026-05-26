@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Active Dev packet - R-Scanner renderer prototype
+Status: Resting after accepted HS93 R-Scanner prototype
 Last updated: 2026-05-26
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS93 opens a bounded, lightweight renderer-only R-Scanner prototype using `watch.offline_readout` as the source model.
+Current focus: HS94 accepted DevHS93 and captured operator-intent direction for R-Scanner, Sequencer patience, retention/storage, Assessment entities, and Observation as the story layer. Atlas is resting.
 
 Source of intent:
 
@@ -17,6 +17,8 @@ Source of intent:
 - Human preference on 2026-05-26: focus on runtime evidence before UI presentation because Atlas has nothing useful to show if the system state is broken.
 - Human accepted on 2026-05-26: proceed with a targeted runtime/use observation pass before UI.
 - Human accepted on 2026-05-26: proceed with the R-Scanner renderer prototype, keeping frontend/render work light because a facelift is expected soon.
+- Human product direction on 2026-05-26: Atlas should answer "Do I need to do anything?", surface action-needed states as light diagnostic rows, treat R-Scanner/Sequencer as patient background discovery, require honest storage/deletion posture, and treat Observation as the layer that pulls connected records into story.
+- `workspace/OverseerHS94-hs93-review-and-operator-intent-note.md`
 - `workspace/OverseerHS93-r-scanner-renderer-prototype-runway.md`
 - `workspace/OverseerHS92-hs91-alpha-observation-review.md`
 - `workspace/DevHS91-watch-offline-alpha-observation.md`
@@ -63,23 +65,23 @@ Accepted presentation guidance:
 
 ## Executor
 
-Current executor: Dev
+Current executor: None
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS93-r-scanner-watch-offline-renderer-prototype.md
+None
 ```
 
-## Ordered Runway
+## Resting State
 
-1. Re-read the accepted `Watch_offline` source meaning, HS92 closeout, and R-Scanner presentation guidance.
-2. Inspect the current renderer routes/modules and identify the smallest place to expose a prototype R-Scanner powered-down/offline surface.
-3. Add a lightweight renderer-only surface or panel that consumes existing `watch.offline_readout` state.
-4. Map raw readout values into operator-facing display labels for at least: disarmed/offline, pending local Discovery refs, provider deferred/waiting, missed slot recoverable, orphan review, and malformed/missing radius scope.
-5. Keep Discovery refs, Evidence/EVEidence, Watch, and hydration meanings visibly separate where those concepts appear.
-6. Add or update renderer verification/smoke coverage only as needed for this bounded surface.
-7. Create the expected Dev handoff with files changed, screenshots or visual-smoke evidence if available, verification results, and any presentation gaps that should wait for the facelift.
+No Dev or specialist work is currently open.
+
+Next likely candidate lanes:
+
+1. Human/UIUX review of the R-Scanner prototype against the operator-intent note.
+2. A small renderer polish packet only if the prototype blocks understanding before the facelift.
+3. Storage/runtime hardening for storage path/budget or sequencer progress behavior.
 
 ## Guardrails And Non-Goals
 
@@ -126,7 +128,9 @@ Stop and return to Overseer/Human before implementation if:
 
 ## Required Verification
 
-Run:
+No active implementation packet is open.
+
+Recent closeout verification:
 
 ```powershell
 npm.cmd run verify:renderer-shell
@@ -136,8 +140,6 @@ npm.cmd run verify:protected-terms
 git diff --check
 git status --short --branch
 ```
-
-If source/service/verifier files change beyond renderer scope, explain why and run the relevant narrower verifier. Run `npm.cmd run verify:all` only if the blast radius expands beyond the bounded renderer surface.
 
 ## Evidence
 
@@ -440,3 +442,93 @@ Accepted:
 - `watch.offline_readout` remains the source model.
 - R-Scanner / R-scan is presentation-only language.
 - No backend, IPC, payload, schema, persistence, provider, scheduler, Watch semantic, Discovery ref, Evidence/EVEidence, hydration, deletion/retention, or terminology rename work is opened.
+
+HS93 Dev renderer prototype complete.
+
+Files reviewed:
+
+- `AGENTS.md`
+- `workspace/current.md`
+- `workspace/OverseerHS93-r-scanner-renderer-prototype-runway.md`
+- `workspace/OverseerHS92-hs91-alpha-observation-review.md`
+- `workspace/DevHS91-watch-offline-alpha-observation.md`
+- `workspace/DisplayResponseHS86-atlas-r-scanner-powered-down-console.md`
+- `workspace/UIUXHS84-watch-recovery-readout-interpretation.md`
+- `workspace/critical/critical-terms.md`
+- `src/renderer/index.html`
+- `src/renderer/app.js`
+- `src/renderer/queueWatch.js`
+- `src/renderer/shared.js`
+- `src/renderer/styles.css`
+- `scripts/verify-renderer-shell.js`
+- `scripts/electron-visual-smoke.ps1`
+- `src/main/main.js`
+
+Files changed:
+
+- `src/renderer/index.html`
+- `src/renderer/app.js`
+- `src/renderer/queueWatch.js`
+- `src/renderer/styles.css`
+- `scripts/verify-renderer-shell.js`
+- `workspace/current.md`
+- `workspace/DevHS93-r-scanner-watch-offline-renderer-prototype.md`
+
+Implementation:
+
+- Added a compact R-Scanner panel to the existing Queue / Watch view.
+- The panel consumes `watch.offline_readout` through the existing renderer service bridge.
+- The panel keeps `Watch_offline` as source model and labels R-Scanner / R-scan as presentation-only language.
+- The scanner face is static/powered-down; it does not imply background surveillance, active checking, or live coverage.
+- Mapped raw readout state to operator-facing labels for disarmed/offline, pending local Discovery refs, provider deferred/waiting, missed slot recovery, orphan review, and missing/malformed radius scope.
+- Kept Discovery refs, Evidence/EVEidence, Watch, and hydration boundaries visible in the panel.
+
+Visual smoke evidence:
+
+- `npm.cmd run smoke:electron` passed.
+- Smoke result: `.tmp/electron-visual-smoke/visual-smoke-result.json`
+- Queue / Watch screenshot: `.tmp/electron-visual-smoke/queue-watch.png`
+- Result status: `passed`.
+
+Verification:
+
+- `npm.cmd run verify:renderer-shell` passed.
+- `npm.cmd run verify:watch-offline-readout` passed and printed runtime evidence JSON.
+- `npm.cmd run smoke:electron` passed.
+- `npm.cmd run verify:protected-terms` passed with exit code 0, warning-only.
+- Protected-term discovery ran in working-set mode against 6 files.
+- Warning count: 1487.
+- Warning classes: atlas-candidate 902, lab-quarantine-borrowing 511, cross-project-borrowing 74.
+- `git diff --check` passed with existing LF-to-CRLF working-copy warnings for changed renderer/verifier/workspace files.
+- `git status --short --branch` reported expected HS93 renderer/verifier/workspace file changes.
+
+Boundary confirmation:
+
+- No live/private/API/provider calls were added.
+- No backend, IPC, schema, service, payload, persistence, scheduler, Watch semantic, Discovery ref, Evidence/EVEidence, hydration, deletion/retention, source-term, or bridge-term changes were made.
+
+Dev handoff:
+
+```txt
+workspace/DevHS93-r-scanner-watch-offline-renderer-prototype.md
+```
+
+HS94 accepted DevHS93 and captured product intent.
+
+Files added:
+
+- `workspace/OverseerHS94-hs93-review-and-operator-intent-note.md`
+
+Accepted:
+
+- HS93 is accepted as a renderer-only display-contract proof, not final UI.
+- The R-Scanner panel may remain a light prototype until the larger facelift.
+- Atlas should answer "Do I need to do anything?" as a primary operator-state question.
+- Action-needed states should use light diagnostic rows shaped as `[Situation] [brief insight] [needed action]`.
+- R-Scanner / Sequencer is a patient discovery and enrichment engine, not instant search presentation.
+- Deletion of active local records should be absolute, with snapshots/backups disclosed as separate support/recovery artifacts.
+- Storage path and budget remain important future product work before meaningful high-volume collection.
+- Assessments should be their own linked entities.
+- Observation is the middle layer that pulls connected records into a story.
+
+No active handoff is expected.

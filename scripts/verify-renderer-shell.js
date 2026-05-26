@@ -138,6 +138,10 @@ function main() {
   assert(htmlText.includes('task-progress'), 'task view should include progress timeline');
   assert(htmlText.includes('cancel-task'), 'task view should include cancellation control');
   assert(htmlText.includes('view-queue-watch'), 'renderer should include queue/watch status view');
+  assert(htmlText.includes('r-scanner-panel'), 'queue/watch view should include the R-Scanner prototype panel');
+  assert(htmlText.includes('R-Scanner powered-down Watch_offline prototype'), 'R-Scanner panel should name the Watch_offline source prototype');
+  assert(htmlText.includes('No background scan, provider call, Evidence write, Discovery mutation, hydration, or Watch execution starts here'), 'R-Scanner panel should state passive/offline boundary');
+  assert(htmlText.includes('Discovery refs are possible leads. Evidence/EVEidence requires Enrich selected. Hydration is readability-only. Watch remains the source active-check term.'), 'R-Scanner panel should preserve Discovery/Evidence/EVEidence/Watch/hydration boundaries');
   assert(htmlText.includes('preview-queue-selection'), 'queue view should include selection preview action');
   assert(htmlText.includes('queue-selection-summary'), 'queue view should include selection summary');
   assert(htmlText.includes('queue-ref-list'), 'queue view should include queued ref list');
@@ -283,6 +287,15 @@ function main() {
   assert(rendererText.includes('Enrich selected explicitly calls ESI and stores expanded killmail evidence from selected queued refs'), 'manual expansion preflight should state evidence effect');
   assert(rendererText.includes('Readability-only label hydration is separate from evidence enrichment'), 'manual expansion preflight should separate metadata hydration from evidence enrichment');
   assert(rendererText.includes("service.invoke('watch.schedule'"), 'renderer should call watch.schedule through service bridge');
+  assert(rendererText.includes("service.invoke('watch.offline_readout'"), 'renderer should call watch.offline_readout through service bridge');
+  assert(rendererText.includes('renderRScanner'), 'renderer should render the R-Scanner Watch_offline prototype');
+  assert(rendererText.includes('R-Scanner / R-scan labels only; not source or bridge terms'), 'R-Scanner rendering should keep presentation labels separate from source terms');
+  assert(rendererText.includes('Atlas is intentionally disarmed/offline after restart'), 'R-Scanner rendering should present disarmed/offline as intentional');
+  assert(rendererText.includes('Review local Discovery refs before fresh zKill Discovery'), 'R-Scanner should map pending local Discovery refs to operator-facing copy');
+  assert(rendererText.includes('Wait: schedule, gate, or provider capacity is holding safely'), 'R-Scanner should map provider/wait state without failure language');
+  assert(rendererText.includes('Recover missed slot when capacity allows'), 'R-Scanner should map missed-slot recovery');
+  assert(rendererText.includes('Review orphaned run before moving on'), 'R-Scanner should map orphan review');
+  assert(rendererText.includes('do not draw exact coverage'), 'R-Scanner should preserve malformed radius scope limitation');
   assert(rendererText.includes("service.invoke('watch.list'"), 'renderer should call watch.list through service bridge');
   assert(rendererText.includes("service.invoke('watch.create'"), 'renderer should create watches through service bridge');
   assert(rendererText.includes("service.invoke('watch.executor.status'"), 'renderer should read watch executor state through service bridge');
@@ -351,6 +364,9 @@ function main() {
   assert(styleText.includes('.timeline-row'), 'renderer styles should define progress timeline rows');
   assert(styleText.includes('.queue-ref-list'), 'renderer styles should define queue ref list');
   assert(styleText.includes('.watch-list'), 'renderer styles should define watch list');
+  assert(styleText.includes('.r-scanner-panel'), 'renderer styles should define R-Scanner panel');
+  assert(styleText.includes('.r-scanner-rings'), 'renderer styles should define static R-Scanner face rings');
+  assert(styleText.includes('.r-scanner-signals'), 'renderer styles should define R-Scanner signal grid');
   assert(styleText.includes('.status-badge'), 'renderer styles should define queue/watch status badges');
   assert(styleText.includes('.observation-table'), 'renderer styles should define actor observation tables');
   assert(styleText.includes('.report-status'), 'renderer styles should define report status callout');

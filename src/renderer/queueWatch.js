@@ -201,7 +201,6 @@ function queuePreviewRows(ref) {
 }
 
 async function loadWatchSchedule() {
-  setBusy(els.refreshWatchStatus, true);
   try {
     await service.invoke('watch.list');
     state.watchSchedule = await service.invoke('watch.schedule', {
@@ -212,6 +211,28 @@ async function loadWatchSchedule() {
   } catch (error) {
     renderError(els.watchSummary, error);
     els.watchList.textContent = 'Watch schedule unavailable.';
+  }
+}
+
+async function loadWatchOfflineReadout() {
+  try {
+    state.watchOfflineReadout = await service.invoke('watch.offline_readout');
+    renderRScanner(state.watchOfflineReadout);
+  } catch (error) {
+    renderError(els.rScannerWatchOfflineDetail, error);
+    els.rScannerState.textContent = 'R-Scanner readout unavailable';
+    els.rScannerSummary.textContent = 'The renderer could not read Watch_offline. No provider work was started.';
+  }
+}
+
+async function loadWatchStatus() {
+  setBusy(els.refreshWatchStatus, true);
+  try {
+    await Promise.all([
+      loadWatchSchedule(),
+      loadWatchOfflineReadout(),
+      loadWatchExecutorStatus()
+    ]);
   } finally {
     setBusy(els.refreshWatchStatus, false);
   }
@@ -236,6 +257,7 @@ async function armWatchSession() {
     els.watchSessionArmed.checked = status.session_armed === true;
     renderWatchExecutor(status);
     renderWatchSchedule(status.schedule);
+    await loadWatchOfflineReadout();
     await loadTasks();
   } catch (error) {
     renderError(els.watchExecutorState, error);
@@ -253,6 +275,7 @@ async function disarmWatchSession() {
     els.watchSessionArmed.checked = false;
     renderWatchExecutor(status);
     renderWatchSchedule(status.schedule);
+    await loadWatchOfflineReadout();
   } catch (error) {
     renderError(els.watchExecutorState, error);
   } finally {
@@ -282,7 +305,7 @@ async function saveActorWatch() {
       ['Evidence Effect', 'none; watch authoring is metadata-only']
     ]);
     await loadTasks();
-    await loadWatchSchedule();
+    await loadWatchStatus();
   } catch (error) {
     renderError(els.watchAuthoringStatus, error);
   } finally {
@@ -313,7 +336,7 @@ async function saveSystemWatch() {
       ['Evidence Effect', 'none; watch authoring is metadata-only']
     ]);
     await loadTasks();
-    await loadWatchSchedule();
+    await loadWatchStatus();
   } catch (error) {
     renderError(els.watchAuthoringStatus, error);
   } finally {
@@ -371,6 +394,134 @@ function renderWatchSchedule(schedule) {
     ].join('');
     els.watchList.appendChild(row);
   });
+}
+
+function renderRScanner(readout) {
+  const watches = readout?.watches || [];
+  const summary = rScannerSummaryForReadout(readout);
+  els.rScannerFaceState.textContent = summary.faceState;
+  els.rScannerState.textContent = summary.title;
+  els.rScannerSummary.textContent = summary.message;
+  els.rScannerSignals.innerHTML = '';
+  summary.signals.forEach((signal) => {
+    const item = document.createElement('div');
+    item.className = `r-scanner-signal ${signal.tone}`;
+    item.innerHTML = `<strong>${escapeHtml(signal.label)}</strong><span>${escapeHtml(signal.value)}</span>`;
+    els.rScannerSignals.appendChild(item);
+  });
+  renderRows(els.rScannerWatchOfflineDetail, [
+    ['Source Model', readout?.model || 'Watch_offline'],
+    ['Presentation', 'R-Scanner / R-scan labels only; not source or bridge terms'],
+    ['Session', readout?.session_armed ? 'armed' : 'disarmed/offline'],
+    ['Collection', readout?.collection_active ? 'active task reported' : 'no active collection'],
+    ['Configured Watches', readout?.summary?.configured_watches ?? watches.length],
+    ['Eligible If Armed', readout?.summary?.eligible_if_armed ?? 0],
+    ['Next Safe Action', summary.primaryActionLabel],
+    ['Boundary', 'Reading this panel does not discover, enrich, hydrate, assess, mutate Discovery refs, write Evidence/EVEidence, or run Watch execution']
+  ]);
+}
+
+function rScannerSummaryForReadout(readout = {}) {
+  const watches = readout.watches || [];
+  const actions = watches.map((watch) => watch.next_safe_action || watch.recovery?.next_safe_action).filter(Boolean);
+  const pendingRefs = sumWatches(watches, (watch) => watch.recovery?.pending_refs_count || 0);
+  const providerDeferred = countWatches(watches, (watch) => watch.recovery?.provider_deferral?.present === true);
+  const missedSlots = countWatches(watches, (watch) => watch.recovery?.missed_slot?.present === true);
+  const orphanedRuns = countWatches(watches, (watch) => watch.recovery?.orphaned_run?.present === true);
+  const missingScope = countWatches(watches, (watch) => watch.recovery?.reconstructed_scope?.scope_status === 'not_stored');
+  const malformedScope = countWatches(watches, (watch) => watch.recovery?.reconstructed_scope?.scope_status === 'malformed');
+  const primaryAction = priorityAction(actions);
+  const signals = [
+    {
+      label: 'Discovery refs',
+      value: pendingRefs ? `${pendingRefs} local possible lead(s) waiting before fresh Discovery` : 'No pending local Discovery refs in readout',
+      tone: pendingRefs ? 'attention' : 'quiet'
+    },
+    {
+      label: 'Provider state',
+      value: providerDeferred ? `${providerDeferred} Watch readout(s) waiting on provider capacity` : 'No provider deferral reported',
+      tone: providerDeferred ? 'waiting' : 'quiet'
+    },
+    {
+      label: 'Timer recovery',
+      value: missedSlots ? `${missedSlots} missed slot signal(s) recoverable when capacity allows` : 'No missed-slot recovery signal',
+      tone: missedSlots ? 'attention' : 'quiet'
+    },
+    {
+      label: 'Review signal',
+      value: orphanedRuns ? `${orphanedRuns} orphaned run(s) need review` : 'No orphaned run signal',
+      tone: orphanedRuns ? 'review' : 'quiet'
+    },
+    {
+      label: 'Radius scope',
+      value: scopeSignalText(missingScope, malformedScope),
+      tone: missingScope || malformedScope ? 'limited' : 'quiet'
+    }
+  ];
+  if (!watches.length) {
+    signals.unshift({
+      label: 'Configured Watch',
+      value: 'No Watch_offline rows are configured yet',
+      tone: 'quiet'
+    });
+  }
+  const active = readout.collection_active === true;
+  const armed = readout.session_armed === true;
+  return {
+    title: active ? 'R-Scanner reports active collection' : armed ? 'R-Scanner armed state visible' : 'R-Scanner powered down / offline',
+    faceState: active ? 'Active' : armed ? 'Armed' : 'Powered down',
+    message: active
+      ? 'A Watch executor task is active. This display is still read-only and does not start additional work.'
+      : armed
+        ? 'Atlas has an armed Watch session. R-Scanner remains a presentation layer over Watch_offline state.'
+        : 'Atlas is intentionally disarmed/offline after restart. The scanner face is static: no background surveillance, active checking, or live coverage is implied.',
+    primaryAction,
+    primaryActionLabel: rScannerActionLabel(primaryAction),
+    signals
+  };
+}
+
+function priorityAction(actions) {
+  const priority = [
+    'review_orphan',
+    'wait',
+    'drain_pending_refs',
+    'recover_missed_slot_when_capacity_allows',
+    'arm_required',
+    'ready_for_discovery',
+    'complete_enough_alpha'
+  ];
+  return priority.find((action) => actions.includes(action)) || 'complete_enough_alpha';
+}
+
+function rScannerActionLabel(action) {
+  return {
+    arm_required: 'R-scan unavailable: arm Watch session before routine checking',
+    wait: 'Wait: schedule, gate, or provider capacity is holding safely',
+    drain_pending_refs: 'Review local Discovery refs before fresh zKill Discovery',
+    ready_for_discovery: 'Ready only after explicit operator-controlled Watch action',
+    review_orphan: 'Review orphaned run before moving on',
+    recover_missed_slot_when_capacity_allows: 'Recover missed slot when capacity allows',
+    complete_enough_alpha: 'No immediate recovery action from this readout'
+  }[action] || 'No immediate recovery action from this readout';
+}
+
+function scopeSignalText(missingScope, malformedScope) {
+  if (malformedScope) {
+    return `${malformedScope} malformed radius scope(s); do not draw exact coverage`;
+  }
+  if (missingScope) {
+    return `${missingScope} radius scope(s) missing stored included systems; center-system fallback only`;
+  }
+  return 'Stored radius scope is valid where radius watches appear';
+}
+
+function countWatches(watches, predicate) {
+  return watches.filter(predicate).length;
+}
+
+function sumWatches(watches, getter) {
+  return watches.reduce((sum, watch) => sum + Number(getter(watch) || 0), 0);
 }
 
 function renderWatchExecutor(status) {
