@@ -1,19 +1,21 @@
 # AURA Atlas Current Work
 
-Status: Resting after accepted display request
+Status: Resting after accepted Lab display response
 Last updated: 2026-05-26
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS86 created an Atlas-local Lab display request for the R-Scanner powered-down console comparison. Atlas is resting until the Human / Overseer submits it to Lab or selects another bounded packet.
+Current focus: HS87 accepted the Lab response to the R-Scanner powered-down console request as advisory display comparison material. Atlas is resting until the Human / Overseer selects a bounded adoption or runtime packet.
 
 Source of intent:
 
 - Human storage/runtime hardening direction accepted on 2026-05-25.
 - Human accepted the post-HS82 next step: inspect how the `Watch_offline` recovery state should read to an operator before adding more machinery.
 - Human advisory on 2026-05-26: final presentation may not expose Watch directly; R-Scanner / R-scan is a candidate presentation metaphor.
+- `workspace/OverseerHS87-hs86-lab-response-review.md`
+- `workspace/DisplayResponseHS86-atlas-r-scanner-powered-down-console.md`
 - `workspace/OverseerHS85-hs84-watch-recovery-interpretation-review.md`
 - `workspace/OverseerHS86-r-scanner-display-request-review.md`
 - `workspace/RequestDisplayHS86-r-scanner-powered-down-console.md`
@@ -64,11 +66,10 @@ No Dev or specialist work is currently open.
 
 Next likely candidate lanes, for Human / Overseer selection:
 
-1. Submit `workspace/RequestDisplayHS86-r-scanner-powered-down-console.md` to Aura Lab intake.
-2. Small renderer presentation packet consuming existing `Watch_offline` only, after Lab/Human review if adopted.
-3. Runtime evidence from alpha use of `Watch_offline` recovery diagnostics.
-4. Minimal durable Watch movement checkpoint only if real runtime evidence shows derived movement is insufficient.
-5. Discovery Sequencer / Enrichment Sequencer architecture note and first implementation slice.
+1. Small renderer presentation packet consuming existing `Watch_offline` only, if the Human adopts the HS87 advisory material.
+2. Runtime evidence from alpha use of `Watch_offline` recovery diagnostics.
+3. Minimal durable Watch movement checkpoint only if real runtime evidence shows derived movement is insufficient.
+4. Discovery Sequencer / Enrichment Sequencer architecture note and first implementation slice.
 
 ## Guardrails And Non-Goals
 
@@ -144,6 +145,23 @@ Accepted:
 - Warning count: 124.
 - Warning classes: cross-project-borrowing 32, lab-quarantine-borrowing 79, atlas-candidate 13.
 - `git diff --check` passed.
+
+HS87 accepted the Lab response as advisory display comparison material.
+
+Files added:
+
+- `workspace/DisplayResponseHS86-atlas-r-scanner-powered-down-console.md`
+- `workspace/OverseerHS87-hs86-lab-response-review.md`
+
+Accepted:
+
+- Lab response matches the HS86 request.
+- Preferred advisory method: Powered-Down Central Console.
+- Fallback advisory method: Status Envelope With Scanner Face.
+- Recovery Status Rail is parked as a primary method and may be considered as a subcomponent later.
+- R-Scanner / R-scan remain presentation candidates only.
+- `Watch`, `Watch_offline`, Discovery, Evidence/EVEidence, hydration, provenance, storage, and External API meanings remain Atlas-owned.
+- No implementation, Dev runway, backend, bridge, IPC, payload, persistence, schema, service, live/API, scheduler, test, or terminology change is opened.
 
 Verification:
 
