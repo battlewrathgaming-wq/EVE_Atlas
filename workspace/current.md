@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after accepted HS88 runtime evidence
+Status: Active Dev packet - Watch_offline alpha observation
 Last updated: 2026-05-26
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS89 accepted DevHS88 runtime evidence for existing `Watch_offline` recovery diagnostics. HS90 completed local keyword housekeeping. Atlas is resting until the Human / Overseer selects the next bounded packet.
+Current focus: HS91 opens a bounded targeted alpha/runtime observation pass using the existing `Watch_offline` readout before renderer presentation work.
 
 Source of intent:
 
@@ -15,6 +15,8 @@ Source of intent:
 - Human accepted the post-HS82 next step: inspect how the `Watch_offline` recovery state should read to an operator before adding more machinery.
 - Human advisory on 2026-05-26: final presentation may not expose Watch directly; R-Scanner / R-scan is a candidate presentation metaphor.
 - Human preference on 2026-05-26: focus on runtime evidence before UI presentation because Atlas has nothing useful to show if the system state is broken.
+- Human accepted on 2026-05-26: proceed with a targeted runtime/use observation pass before UI.
+- `workspace/OverseerHS91-watch-offline-alpha-observation-runway.md`
 - `workspace/OverseerHS89-hs88-runtime-evidence-review.md`
 - `workspace/OverseerHS90-keyword-housekeeping-review.md`
 - `workspace/DevHS88-watch-offline-runtime-evidence.md`
@@ -57,36 +59,38 @@ Accepted presentation guidance:
 
 ## Executor
 
-Current executor: None
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-None until the next runway is opened.
+workspace/DevHS91-watch-offline-alpha-observation.md
 ```
 
-## Resting State
+## Ordered Runway
 
-No Dev or specialist work is currently open.
-
-Next likely candidate lanes, for Human / Overseer selection:
-
-1. Bounded renderer-only R-Scanner / `Watch_offline` presentation prototype.
-2. Minimal durable Watch movement checkpoint design, only if derived readout proves insufficient.
-3. Targeted alpha/runtime observation pass using existing `Watch_offline` readout.
-4. Discovery Sequencer / Enrichment Sequencer architecture note and first implementation slice.
+1. Re-read the accepted `Watch_offline` state, HS88/HS89 evidence, and HS90 keyword boundary.
+2. Inspect the existing operator-facing or service/report surfaces that can currently expose `Watch_offline`, readiness, queue, debug trace, and local context without UI redesign.
+3. Run the offline fixture/runtime path from disk and capture what a fresh operator can observe after restart or disarmed startup.
+4. Compare observed state against the intended user questions: disarmed/active, local context, pending local Discovery refs, provider deferral, missed slot recovery, orphan review, radius scope quality, and next safe action.
+5. Record gaps as observation findings, not implementation decisions.
+6. Do not change behavior unless a direct verifier/readout defect blocks the observation.
+7. Create the expected Dev handoff with observed evidence, operator-readability gaps, and recommendation: renderer prototype next, checkpoint design next, or more runtime hardening next.
 
 ## Guardrails And Non-Goals
 
 - No renderer work.
 - No UI redesign.
-- No live/private/API calls unless explicitly authorized.
-- No backend behavior changes unless needed to fix a direct evidence-capture defect.
+- No live/private/API calls.
+- No new provider calls.
+- No backend behavior changes unless needed to fix a direct observation-blocking defect.
 - No broad provider work queue.
 - No high-volume request-attempt ledger.
 - No persisted sequencer packet table.
-- No schema migration unless a future packet explicitly opens one.
+- No durable movement checkpoint implementation.
+- No schema migration.
 - No stale/expired Discovery ref mutation.
+- No deletion/retention work.
 - Do not make `discovered_killmail_refs` the sequencer.
 - Do not treat queued refs as Evidence/EVEidence.
 - Do not treat waiting as failure.
@@ -94,6 +98,7 @@ Next likely candidate lanes, for Human / Overseer selection:
 - Do not rename backend Watch, `Watch_offline`, scheduler, service, IPC, schema, command, or payload terms.
 - Do not treat R-Scanner / R-scan as Atlas source or bridge authority yet.
 - Do not adopt R-Scanner presentation into implementation in this packet.
+- Do not treat shared keyword references as Atlas authority.
 
 ## Stop Conditions
 
@@ -109,12 +114,12 @@ Stop and return to Overseer/Human before implementation if:
 - evidence capture requires renderer/UI work
 - behavior changes expand beyond a direct testability defect
 - the packet turns into sequencer architecture implementation
+- observation requires live provider access
+- observation requires schema or persistence changes
 
 ## Required Verification
 
-No active implementation packet is open.
-
-Recent closeout verification:
+Run:
 
 ```powershell
 npm.cmd run verify:watch-offline-readout
@@ -123,14 +128,18 @@ npm.cmd run verify:watch-executor
 npm.cmd run verify:restart-recovery
 npm.cmd run verify:queue-api-evidence-write
 npm.cmd run verify:queue-selection
-npm.cmd run verify:queue-scope-isolation
-npm.cmd run verify:hydration
-npm.cmd run verify:db-integrity
-npm.cmd run verify:service-registry
+npm.cmd run verify:queue-report
+npm.cmd run verify:app-readiness
+npm.cmd run verify:operator-debug-trace
 npm.cmd run verify:protected-terms
 git diff --check
-npm.cmd run verify:all
 git status --short --branch
+```
+
+If any verifier or source file changes, also run:
+
+```powershell
+npm.cmd run verify:all
 ```
 
 ## Evidence
