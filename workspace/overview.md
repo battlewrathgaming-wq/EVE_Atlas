@@ -30,10 +30,11 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Atlas Storage And Runtime Hardening
 Roadmap source: Human storage/runtime hardening direction accepted on 2026-05-25
 Current packet: `workspace/current.md`
-Current sequence: HS84 Watch recovery readout interpretation accepted; no runway is open
-Latest accepted coordination artifact: `workspace/OverseerHS85-hs84-watch-recovery-interpretation-review.md`
+Current sequence: HS86 R-Scanner display request created; no implementation runway is open
+Latest accepted coordination artifact: `workspace/OverseerHS86-r-scanner-display-request-review.md`
 Latest advisory artifact: `workspace/UIUXHS84-watch-recovery-readout-interpretation.md`
 Latest advisory runway: `workspace/OverseerHS84-watch-recovery-readout-interpretation-runway.md`
+Latest display request: `workspace/RequestDisplayHS86-r-scanner-powered-down-console.md`
 Latest advisory request: `workspace/OverseerHS81-watch-recovery-systems-design-request.md`
 Display workflow support: `workspace/display_inventory.md`, `workspace/DisplayInventoryAuditHS49-ingest-to-userdisplay.md`, `workspace/request_display.md`, `workspace/display-request-workflow-hardening-contract.md`, `workspace/RequestDisplayHS50-atlas-initial-display-requests.md`, `workspace/DisplayResponseHS51-atlas-lab-m24-response-relay.md`
 Runtime/record integrity design input: `workspace/OverseerHS52-runtime-record-integrity-design-input.md`
@@ -128,6 +129,7 @@ Watch_offline aggregation ADR: `docs/adr/ADR-0005-watch-offline-readout-aggregat
 - HS83 accepted DevHS82: `Watch_offline` now includes per-Watch recovery diagnostics and `next_safe_action`, distinguishing valid/missing/malformed radius scope, orphaned runs, provider deferral, missed timer slots, and pending local refs without provider calls or state mutation.
 - HS84 opens a UIUX / product interpretation pass for `Watch_offline`: map recovery states and `next_safe_action` values into operator-facing status meaning before renderer implementation or more backend machinery.
 - HS85 accepted UIUXHS84: future presentation may use R-Scanner as the surface and R-scan as the short action, with a powered-down central console as preferred display method; Watch and `Watch_offline` remain source/bridge terms underneath.
+- HS86 created an Atlas-local Lab display request for R-Scanner powered-down console comparison; it is advisory only and does not authorize implementation or source/bridge terminology changes.
 - Future sequencing should keep Discovery Sequencer, Enrichment Sequencer, and Hydration separate: zKill returns Discovery refs, ESI expansion writes Evidence, and hydration repairs local readability/metadata.
 - Queue batch cadence and UX pacing is parked as a future product/UX lane after evidence-write correctness; it should decide batch size, timing, throttling, External API state behavior, and operator-facing working/waiting/throttled/failed/retry states.
 - Native picker/UI rigging, broader support-artifact budget coverage, active DB relocation, restore, automatic cleanup/pruning, snapshot deletion, and deletion execution remain out of scope until explicitly opened.

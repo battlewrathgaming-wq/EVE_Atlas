@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after accepted advisory
+Status: Resting after accepted display request
 Last updated: 2026-05-26
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS84 Watch recovery readout interpretation is accepted. Atlas is resting until the Human / Overseer selects the next bounded packet.
+Current focus: HS86 created an Atlas-local Lab display request for the R-Scanner powered-down console comparison. Atlas is resting until the Human / Overseer submits it to Lab or selects another bounded packet.
 
 Source of intent:
 
@@ -15,6 +15,8 @@ Source of intent:
 - Human accepted the post-HS82 next step: inspect how the `Watch_offline` recovery state should read to an operator before adding more machinery.
 - Human advisory on 2026-05-26: final presentation may not expose Watch directly; R-Scanner / R-scan is a candidate presentation metaphor.
 - `workspace/OverseerHS85-hs84-watch-recovery-interpretation-review.md`
+- `workspace/OverseerHS86-r-scanner-display-request-review.md`
+- `workspace/RequestDisplayHS86-r-scanner-powered-down-console.md`
 - `workspace/UIUXHS84-watch-recovery-readout-interpretation.md`
 - `workspace/OverseerHS84-watch-recovery-readout-interpretation-runway.md`
 - `workspace/OverseerHS83-hs82-watch-recovery-review.md`
@@ -62,8 +64,8 @@ No Dev or specialist work is currently open.
 
 Next likely candidate lanes, for Human / Overseer selection:
 
-1. Lab display request for R-Scanner / powered-down console comparison.
-2. Small renderer presentation packet consuming existing `Watch_offline` only.
+1. Submit `workspace/RequestDisplayHS86-r-scanner-powered-down-console.md` to Aura Lab intake.
+2. Small renderer presentation packet consuming existing `Watch_offline` only, after Lab/Human review if adopted.
 3. Runtime evidence from alpha use of `Watch_offline` recovery diagnostics.
 4. Minimal durable Watch movement checkpoint only if real runtime evidence shows derived movement is insufficient.
 5. Discovery Sequencer / Enrichment Sequencer architecture note and first implementation slice.
@@ -123,6 +125,25 @@ Accepted:
 - Powered-down central console is the preferred future presentation method.
 - Watch and `Watch_offline` remain source/bridge terms underneath.
 - No code, schema, bridge, renderer, service, payload, live/API, or persistence work was opened.
+
+HS86 created an Atlas-local Lab display request.
+
+Files created:
+
+- `workspace/RequestDisplayHS86-r-scanner-powered-down-console.md`
+- `workspace/OverseerHS86-r-scanner-display-request-review.md`
+
+Accepted:
+
+- The request is advisory only.
+- Lab may compare up to three display methods for R-Scanner powered-down console.
+- Atlas retains source meaning and final adoption authority.
+- No implementation, backend, bridge, IPC, payload, persistence, schema, service, live/API, or terminology rename was opened.
+- `npm.cmd run verify:protected-terms` passed with exit code 0, warning-only.
+- Protected-term discovery ran in working-set mode against 4 files.
+- Warning count: 124.
+- Warning classes: cross-project-borrowing 32, lab-quarantine-borrowing 79, atlas-candidate 13.
+- `git diff --check` passed.
 
 Verification:
 
