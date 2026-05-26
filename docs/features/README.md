@@ -24,6 +24,8 @@ Current core feature areas:
 - persistent discovery ref queue
 - entity interest and assessment artifacts
 - evidence compaction preflight and assessment preservation
+- Observation lookup model
+- R-Scanner and Sequencer presentation
 - UI triggers and scope mapping
 - presentation layer information index
 

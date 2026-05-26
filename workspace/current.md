@@ -7,7 +7,7 @@ Last updated: 2026-05-26
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS95 captured Observation lookup product direction. Atlas is resting with no active Dev runway.
+Current focus: HS96 consolidates durable memory into docs while Atlas rests with no active Dev runway.
 
 Source of intent:
 
@@ -19,6 +19,10 @@ Source of intent:
 - Human accepted on 2026-05-26: proceed with the R-Scanner renderer prototype, keeping frontend/render work light because a facelift is expected soon.
 - Human product direction on 2026-05-26: Atlas should answer "Do I need to do anything?", surface action-needed states as light diagnostic rows, treat R-Scanner/Sequencer as patient background discovery, require honest storage/deletion posture, and treat Observation as the layer that pulls connected records into story.
 - Human product direction on 2026-05-26: Observation is a presentation/query layer that starts from anchors such as killmail ID, pilot ID, corporation ID, or system ID and pulls connected records into story without creating new truth.
+- Human direction on 2026-05-27: keep immediate effects in `workspace/current.md`, offload elements that creep beyond current working memory into durable docs, and preserve UI spatial guidance as presentation workflow rather than Atlas source authority.
+- `docs/current-state/current-storage-runtime-hardening.md`
+- `docs/features/observation-lookup-model.md`
+- `docs/features/r-scanner-sequencer-presentation.md`
 - `workspace/OverseerHS95-observation-lookup-product-note.md`
 - `workspace/OverseerHS94-hs93-review-and-operator-intent-note.md`
 - `workspace/OverseerHS93-r-scanner-renderer-prototype-runway.md`
@@ -535,6 +539,23 @@ Accepted:
 - Observation is the middle layer that pulls connected records into a story.
 
 No active handoff is expected.
+
+HS96 consolidated workspace memory into durable docs.
+
+Files added/updated:
+
+- `docs/current-state/current-storage-runtime-hardening.md`
+- `docs/features/observation-lookup-model.md`
+- `docs/features/r-scanner-sequencer-presentation.md`
+- `docs/index.md`
+- `docs/features/README.md`
+- `workspace/overview.md`
+
+Accepted:
+
+- `workspace/current.md` should keep immediate active state and current packet effects.
+- Product/body direction that outgrows immediate packet memory should move into durable docs.
+- UI spatial guidance from the Human/agent channel is useful presentation workflow, not Atlas source meaning or implementation authority.
 
 HS95 captured Observation lookup product direction.
 
