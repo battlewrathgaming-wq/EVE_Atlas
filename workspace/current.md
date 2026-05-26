@@ -1,19 +1,21 @@
 # AURA Atlas Current Work
 
-Status: Resting after accepted Lab display response
+Status: Active Dev packet - Watch_offline runtime evidence
 Last updated: 2026-05-26
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS87 accepted the Lab response to the R-Scanner powered-down console request as advisory display comparison material. Atlas is resting until the Human / Overseer selects a bounded adoption or runtime packet.
+Current focus: HS88 opens a bounded Dev packet to gather runtime evidence for existing `Watch_offline` recovery diagnostics before renderer presentation work.
 
 Source of intent:
 
 - Human storage/runtime hardening direction accepted on 2026-05-25.
 - Human accepted the post-HS82 next step: inspect how the `Watch_offline` recovery state should read to an operator before adding more machinery.
 - Human advisory on 2026-05-26: final presentation may not expose Watch directly; R-Scanner / R-scan is a candidate presentation metaphor.
+- Human preference on 2026-05-26: focus on runtime evidence before UI presentation because Atlas has nothing useful to show if the system state is broken.
+- `workspace/OverseerHS88-watch-offline-runtime-evidence-runway.md`
 - `workspace/OverseerHS87-hs86-lab-response-review.md`
 - `workspace/DisplayResponseHS86-atlas-r-scanner-powered-down-console.md`
 - `workspace/OverseerHS85-hs84-watch-recovery-interpretation-review.md`
@@ -52,28 +54,30 @@ Accepted presentation guidance:
 
 ## Executor
 
-Current executor: None
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-None until the next runway is opened.
+workspace/DevHS88-watch-offline-runtime-evidence.md
 ```
 
-## Resting State
+## Ordered Runway
 
-No Dev or specialist work is currently open.
-
-Next likely candidate lanes, for Human / Overseer selection:
-
-1. Small renderer presentation packet consuming existing `Watch_offline` only, if the Human adopts the HS87 advisory material.
-2. Runtime evidence from alpha use of `Watch_offline` recovery diagnostics.
-3. Minimal durable Watch movement checkpoint only if real runtime evidence shows derived movement is insufficient.
-4. Discovery Sequencer / Enrichment Sequencer architecture note and first implementation slice.
+1. Re-read the accepted `Watch_offline` authority and HS82/HS87 context.
+2. Inspect the existing `Watch_offline` readout implementation and verification fixture.
+3. Run the focused offline proof set from disk without live/API calls.
+4. Capture evidence for the important runtime states: unarmed restart, due-if-armed, pending local Discovery refs, provider deferred, missed slot recoverable, orphan/review, valid/missing/malformed radius scope, and no mutation from readout.
+5. If the existing verifier does not expose enough evidence, add or refine a small offline fixture/verifier or diagnostic output only. Do not change product behavior unless the gap is a direct testability bug.
+6. Update durable current-state documentation only if the evidence changes or clarifies the accepted runtime model.
+7. Create the expected Dev handoff with commands run, evidence observed, gaps found, and recommended next packet.
 
 ## Guardrails And Non-Goals
 
+- No renderer work.
+- No UI redesign.
 - No live/private/API calls unless explicitly authorized.
+- No backend behavior changes unless needed to fix a direct evidence-capture defect.
 - No broad provider work queue.
 - No high-volume request-attempt ledger.
 - No persisted sequencer packet table.
@@ -85,6 +89,7 @@ Next likely candidate lanes, for Human / Overseer selection:
 - Do not couple metadata hydration to Watch recovery.
 - Do not rename backend Watch, `Watch_offline`, scheduler, service, IPC, schema, command, or payload terms.
 - Do not treat R-Scanner / R-scan as Atlas source or bridge authority yet.
+- Do not adopt R-Scanner presentation into implementation in this packet.
 
 ## Stop Conditions
 
@@ -97,17 +102,34 @@ Stop and return to Overseer/Human before implementation if:
 - implementation would make offline/disarmed state look live
 - implementation would make waiting/provider deferral look like failure
 - implementation would import Lab presentation authority into Atlas source meaning
+- evidence capture requires renderer/UI work
+- behavior changes expand beyond a direct testability defect
+- the packet turns into sequencer architecture implementation
 
 ## Required Verification
 
-No active implementation packet is open.
-
-HS84 advisory capture verification:
+Run the focused checks:
 
 ```powershell
+npm.cmd run verify:watch-offline-readout
+npm.cmd run verify:watch-scheduler
+npm.cmd run verify:watch-executor
+npm.cmd run verify:restart-recovery
+npm.cmd run verify:queue-api-evidence-write
+npm.cmd run verify:queue-selection
+npm.cmd run verify:queue-scope-isolation
+npm.cmd run verify:hydration
+npm.cmd run verify:db-integrity
+npm.cmd run verify:service-registry
 npm.cmd run verify:protected-terms
 git diff --check
 git status --short --branch
+```
+
+If a verifier or fixture is changed, also run:
+
+```powershell
+npm.cmd run verify:all
 ```
 
 ## Evidence
@@ -163,6 +185,18 @@ Accepted:
 - `Watch`, `Watch_offline`, Discovery, Evidence/EVEidence, hydration, provenance, storage, and External API meanings remain Atlas-owned.
 - No implementation, Dev runway, backend, bridge, IPC, payload, persistence, schema, service, live/API, scheduler, test, or terminology change is opened.
 
+HS88 opens the runtime-evidence packet.
+
+Files added:
+
+- `workspace/OverseerHS88-watch-offline-runtime-evidence-runway.md`
+
+Expected:
+
+- Dev should produce `workspace/DevHS88-watch-offline-runtime-evidence.md`.
+- Evidence should prove existing `Watch_offline` recovery states from offline fixtures/runtime checks before UI work.
+- No live/API calls, renderer work, schema migration, broad sequencer architecture, provider queue, Discovery ref mutation, Evidence writes, hydration coupling, or terminology rename is authorized.
+
 Verification:
 
 - `npm.cmd run verify:protected-terms` passed with exit code 0, warning-only.
@@ -171,6 +205,10 @@ Verification:
 - Warning classes: cross-project-borrowing 30, lab-quarantine-borrowing 77, atlas-candidate 20.
 - `git diff --check` passed.
 
-## Handoff
+## Dev Handoff
 
-No active handoff expected.
+Expected from Dev:
+
+```txt
+workspace/DevHS88-watch-offline-runtime-evidence.md
+```

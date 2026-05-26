@@ -30,8 +30,8 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Atlas Storage And Runtime Hardening
 Roadmap source: Human storage/runtime hardening direction accepted on 2026-05-25
 Current packet: `workspace/current.md`
-Current sequence: HS87 Lab response to the R-Scanner display request accepted as advisory material; no implementation runway is open
-Latest accepted coordination artifact: `workspace/OverseerHS87-hs86-lab-response-review.md`
+Current sequence: HS88 Watch_offline runtime evidence packet opened for Dev
+Latest accepted coordination artifact: `workspace/OverseerHS88-watch-offline-runtime-evidence-runway.md`
 Latest advisory artifact: `workspace/UIUXHS84-watch-recovery-readout-interpretation.md`
 Latest advisory runway: `workspace/OverseerHS84-watch-recovery-readout-interpretation-runway.md`
 Latest display request: `workspace/RequestDisplayHS86-r-scanner-powered-down-console.md`
@@ -132,6 +132,7 @@ Watch_offline aggregation ADR: `docs/adr/ADR-0005-watch-offline-readout-aggregat
 - HS85 accepted UIUXHS84: future presentation may use R-Scanner as the surface and R-scan as the short action, with a powered-down central console as preferred display method; Watch and `Watch_offline` remain source/bridge terms underneath.
 - HS86 created an Atlas-local Lab display request for R-Scanner powered-down console comparison; it is advisory only and does not authorize implementation or source/bridge terminology changes.
 - HS87 accepted Lab's HS86 response as advisory display comparison material: Powered-Down Central Console is the preferred future method, Status Envelope With Scanner Face is the fallback, Recovery Status Rail is parked as primary, and no implementation or source/bridge terminology change is authorized.
+- HS88 opens a bounded Dev packet to gather runtime evidence for existing `Watch_offline` recovery diagnostics before renderer presentation work; no live/API calls, UI work, schema migration, broad sequencer architecture, or terminology rename is authorized.
 - Future sequencing should keep Discovery Sequencer, Enrichment Sequencer, and Hydration separate: zKill returns Discovery refs, ESI expansion writes Evidence, and hydration repairs local readability/metadata.
 - Queue batch cadence and UX pacing is parked as a future product/UX lane after evidence-write correctness; it should decide batch size, timing, throttling, External API state behavior, and operator-facing working/waiting/throttled/failed/retry states.
 - Native picker/UI rigging, broader support-artifact budget coverage, active DB relocation, restore, automatic cleanup/pruning, snapshot deletion, and deletion execution remain out of scope until explicitly opened.
