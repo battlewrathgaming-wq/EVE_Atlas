@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after accepted HS93 R-Scanner prototype
-Last updated: 2026-05-26
+Status: Resting after systems audit synthesis
+Last updated: 2026-05-27
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS96 consolidates durable memory into docs while Atlas rests with no active Dev runway.
+Current focus: HS104 accepts HS100-HS103 systems audit inputs as advisory review material while Atlas rests with no active Dev runway.
 
 Source of intent:
 
@@ -24,6 +24,12 @@ Source of intent:
 - Human storage path direction on 2026-05-27: Atlas should behave as a portable briefcase with app-local storage config, not hidden Windows settings; no silent relocation if storage disappears; migration/copy/move is out of scope unless explicitly opened.
 - Human pruning direction on 2026-05-27: pruning should support variable time windows, no-interest/Marked filtering, entity ID filtering, and Assessment reference review; noise means stale or excessive records that no longer serve target hunting, threat detection, or current pattern recognition.
 - Human local lookup direction on 2026-05-27: local records are the preferred cheap substrate for story formation; ESI enrichment can fill gaps but is explicit, provider-gated, slower, and not a silent substitute for healthy local storage. Long-term ambition is listening-post style workflows that learn corporation behavior.
+- Systems audits HS100-HS103 on 2026-05-27 accepted as advisory review input: storage authority preflight/inventory is the strongest next system candidate; typed actor name live-gate classification, pruning relationship preview, and Sequencer cadence readout are secondary bounded candidates.
+- `workspace/OverseerHS104-systems-audit-synthesis-review.md`
+- `workspace/SystemsAuditHS100-storage-path-budget-authority.md`
+- `workspace/SystemsAuditHS101-local-lookup-vs-esi-enrichment.md`
+- `workspace/SystemsAuditHS102-pruning-readiness.md`
+- `workspace/SystemsAuditHS103-sequencer-provider-cadence.md`
 - `docs/current-state/current-storage-runtime-hardening.md`
 - `docs/features/observation-lookup-model.md`
 - `docs/features/r-scanner-sequencer-presentation.md`
@@ -89,10 +95,12 @@ No Dev or specialist work is currently open.
 
 Next likely candidate lanes:
 
-1. Human/UIUX review of the R-Scanner prototype against the operator-intent note.
-2. A small renderer polish packet only if the prototype blocks understanding before the facelift.
-3. Observation lookup advisory or inventory pass to identify first strong anchor relationships.
-4. Storage/runtime hardening for storage path/budget or sequencer progress behavior.
+1. Read-only storage authority preflight/inventory for current DB path mode, DB/WAL/SHM, snapshot settings/destination, trace packs, temp/cache/SDE paths, window/settings path, and current Atlas-controlled byte usage.
+2. Explicit live-gate classification for uncached typed actor name resolution.
+3. Read-only pruning relationship preview hardening.
+4. Sequencer cadence phase readout from existing state.
+5. Human/UIUX review of the R-Scanner prototype against the operator-intent note.
+6. Observation lookup advisory or inventory pass to identify first strong anchor relationships.
 
 ## Guardrails And Non-Goals
 
@@ -626,3 +634,23 @@ Accepted:
 - Atlas should use local lookup first, then controlled enrichment or degraded display when optional lookup metadata is incomplete.
 - Rich story telling should eventually answer who was killed, by whom, when, corporation relationships, prior sightings, and behavior patterns.
 - Long-term ambition includes listening-post style workflows that learn corporation behavior through patient scoped acquisition, enrichment, local lookup, pruning, and Observation.
+
+HS104 accepted systems audit inputs.
+
+Files added/updated:
+
+- `workspace/SystemsAuditHS100-storage-path-budget-authority.md`
+- `workspace/SystemsAuditHS101-local-lookup-vs-esi-enrichment.md`
+- `workspace/SystemsAuditHS102-pruning-readiness.md`
+- `workspace/SystemsAuditHS103-sequencer-provider-cadence.md`
+- `workspace/OverseerHS104-systems-audit-synthesis-review.md`
+- `docs/current-state/current-storage-runtime-hardening.md`
+- `workspace/overview.md`
+- `workspace/current.md`
+
+Accepted:
+
+- The audits are advisory review input, not Dev authorization.
+- The strongest next systems candidate is read-only storage authority preflight/inventory.
+- Secondary bounded candidates are typed actor name live-gate classification, pruning relationship preview, and Sequencer cadence readout.
+- Destructive pruning, broad provider queue architecture, persisted Sequencer packets, stale/expired Discovery ref mutation, storage migration, and storage hard-lock enforcement remain parked until explicitly opened.

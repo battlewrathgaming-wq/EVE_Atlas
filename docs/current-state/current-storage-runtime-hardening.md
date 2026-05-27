@@ -193,3 +193,30 @@ Likely future bounded lanes:
 - durable movement checkpointing only if derived `Watch_offline` state proves insufficient
 
 UI/body work should remain requirement context unless explicitly opened by `workspace/current.md`.
+
+## Systems Audit Synthesis 2026-05-27
+
+Accepted advisory inputs:
+
+- `workspace/SystemsAuditHS100-storage-path-budget-authority.md`
+- `workspace/SystemsAuditHS101-local-lookup-vs-esi-enrichment.md`
+- `workspace/SystemsAuditHS102-pruning-readiness.md`
+- `workspace/SystemsAuditHS103-sequencer-provider-cadence.md`
+- `workspace/OverseerHS104-systems-audit-synthesis-review.md`
+
+Synthesis:
+
+- Prove and expose current runtime state before enforcement.
+- Keep storage authority, provider cadence, local lookup, pruning, Discovery, Evidence/EVEidence, hydration, Watch, and Assessment Memory separate.
+- Prefer read-only diagnostics and relationship previews before write enforcement or destructive behavior.
+- Do not open broad Sequencer architecture, persisted provider queues, Discovery ref stale/expired mutation, storage migration, or destructive pruning until a bounded packet explicitly selects them.
+
+Strongest next system candidate:
+
+- read-only storage authority preflight/inventory for current DB path mode, DB/WAL/SHM, snapshot settings/destination, trace packs, temp/cache/SDE paths, window/settings path, and current Atlas-controlled byte usage
+
+Secondary candidates:
+
+- explicit live-gate classification for uncached typed actor name resolution
+- richer read-only pruning relationship preview
+- Sequencer cadence phase readout from existing state
