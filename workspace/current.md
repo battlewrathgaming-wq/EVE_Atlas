@@ -1404,3 +1404,41 @@ Guardrails:
 - Do not add persistent Hydration backlog tables yet.
 - Do not open DataHS116/DataHS117 follow-up Dev work unless Human/Overseer selects it.
 - Do not alter shared protected-word JSON from Atlas sniff output.
+
+HS120 accepted surface discovery as advisory input.
+
+Files added:
+
+- `workspace/OverseerHS120-surface-discovery-review.md`
+
+Reviewed:
+
+- `workspace/surfaces/README.md`
+- `workspace/surfaces/atlas-surface-index.md`
+- `workspace/surfaces/surface-consolidation-note.md`
+- Surface notes under `workspace/surfaces/`
+
+Accepted advisory shape:
+
+- Storage widget with setup pop-out.
+- External I/O widget.
+- R-Scanner central display and setup/manage pane.
+- Live Search surface.
+- Observation pane.
+
+Embedded/state mapping:
+
+- Discovery leads / Queue Review live inside Live Search and R-Scanner/manage flows.
+- Hydration / Refresh labels should mostly behave as an auto resolver: local lookup first, then ESI when gated.
+- Evidence/EVEidence stack lives inside Observation as a tier/basis stack.
+- Assessment Memory lives inside Observation as a drawer anchored on the entity of interest.
+- Pruning likely lives inside Observation as sample review and decision support.
+- Deletion preflight, support artifacts, snapshots, trace packs, and storage budget live in the Storage widget/pop-out.
+- `Watch_offline` maps behind R-Scanner state.
+- `held_by_external_io` maps behind the External I/O widget.
+- `scope_status` remains unresolved diagnostic language.
+
+Boundary:
+
+- `workspace/surfaces/` is advisory discovery input only.
+- It is not product authority, final UI specification, Lab adoption, request_display submission, Dev authorization, or source-term rename.
