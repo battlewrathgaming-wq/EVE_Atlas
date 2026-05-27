@@ -21,6 +21,8 @@ Source of intent:
 - Human product direction on 2026-05-26: Observation is a presentation/query layer that starts from anchors such as killmail ID, pilot ID, corporation ID, or system ID and pulls connected records into story without creating new truth.
 - Human direction on 2026-05-27: keep immediate effects in `workspace/current.md`, offload elements that creep beyond current working memory into durable docs, and preserve UI spatial guidance as presentation workflow rather than Atlas source authority.
 - Human storage direction on 2026-05-27: real/alpha collection should lock until storage location is explicit; budget means disk-space used in the pointed Atlas location, not scan credits; 70%/95% warn and 100% hard-lock writes/acquisition; missing/unavailable storage should hard-lock instead of silently relocating; pruning is a future intelligence-formation suite.
+- Human storage path direction on 2026-05-27: Atlas should behave as a portable briefcase with app-local storage config, not hidden Windows settings; no silent relocation if storage disappears; migration/copy/move is out of scope unless explicitly opened.
+- Human pruning direction on 2026-05-27: pruning should support variable time windows, no-interest/Marked filtering, entity ID filtering, and Assessment reference review; noise means stale or excessive records that no longer serve target hunting, threat detection, or current pattern recognition.
 - `docs/current-state/current-storage-runtime-hardening.md`
 - `docs/features/observation-lookup-model.md`
 - `docs/features/r-scanner-sequencer-presentation.md`
@@ -592,3 +594,20 @@ Accepted:
 - Snapshots support accidental deletion recovery, not protection against deliberate user behavior.
 - Pruning should become a future suite for reducing noise from interest while preserving Evidence/EVEidence and deletion boundaries.
 - Request pacing belongs to Sequencer/provider cadence, not storage budget.
+
+HS98 captured storage path behavior and pruning direction.
+
+Files updated:
+
+- `docs/current-state/current-storage-runtime-hardening.md`
+
+Accepted:
+
+- Storage config should be portable and app/project-local, not hidden in Windows app/user settings.
+- Atlas should behave like a self-contained briefcase that can boot locally and select suitable storage.
+- "Current file" means the packaged app/local app folder as the self-contained host.
+- Moving/copying storage is out of scope as migration tooling unless explicitly opened later.
+- Missing storage should return to the setup/re-establish flow and must not silently create a new active DB elsewhere.
+- First implementation may choose total lockout or narrower write/provider/acquisition lockout, but meaningful collection/writes must wait for storage authority.
+- Pruning is a suite: time-window pruning, no-interest/Marked pruning, entity ID pruning, and Assessment reference review are accepted product directions.
+- Noise means stale or excessive records that no longer help target hunting, threat detection, or current behavior pattern recognition.

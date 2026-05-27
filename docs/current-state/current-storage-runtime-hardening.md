@@ -90,6 +90,56 @@ Budget here is disk-space authority, not request/API pacing. Earlier "scan budge
 
 Pruning is a first-class future suite, not just cleanup. It is the other half of intelligence formation: working noise away from operator interest while preserving honest deletion, snapshot disclosure, and Evidence/EVEidence boundaries.
 
+## Storage Path Behavior Direction
+
+Atlas should behave like a self-contained briefcase: portable, boot-ready, and able to select suitable storage without relying on hidden Windows app/user settings.
+
+Accepted direction:
+
+- Storage configuration should be stored in a portable project/app-local file.
+- Do not hide core Atlas storage authority in Windows app data or user settings directories.
+- The app should be able to run from its packaged/local folder and let the operator select suitable storage.
+- "Current file" means the packaged app/local app folder as the default self-contained host.
+- Atlas should not become a migration tool. Moving storage by copying/moving existing data is out of scope unless explicitly opened later.
+- The operator may select storage, but copy/move/migration should rely on higher-authority local tooling unless a future packet explicitly scopes safe migration.
+- If the chosen storage folder disappears, Atlas should return to the storage setup/re-establish flow and require explicit operator action.
+- Atlas should not silently relocate active records or create a surprise new database elsewhere.
+
+Open implementation choice:
+
+- The first implementation can choose between total app lockout or narrower write/provider/acquisition lockout, but must preserve the rule that meaningful collection and storage writes do not proceed until storage authority is established.
+
+Likely allowed while locked:
+
+- storage setup/re-establish screen
+- settings needed to fix the storage path
+- read-only help/status explaining the lockout
+- demo/fixture mode if clearly separated from real/alpha collection
+
+## Pruning Direction
+
+Pruning is future product/system work and should be treated as a suite, not a single delete button.
+
+Accepted direction:
+
+- Pruning may operate by variable time window, such as one month, two months, or another operator-selected interval.
+- Pruning may operate by no-interest state; Marked is useful input for distinguishing interest from noise.
+- Pruning may operate by entity ID.
+- Assessment Memory should participate in the pruning suite. It may be pruned by reference ID and should not silently protect related records from pruning.
+- Assessment-linked records should be shown in pruning review so the operator understands affected relationships.
+- Discovery refs likely live as metadata/provenance and need a separate pruning treatment from Evidence/EVEidence; confirm the exact data relationship before implementation.
+
+Noise means Atlas holds more entities/records than are useful for target hunting, threat detection, or current pattern recognition.
+
+Atlas is temporal. Information becomes stale. A system-radius search is meant to reveal current/recent behavior patterns around a condition, not catalogue every EVE player indefinitely.
+
+Open implementation questions:
+
+- Which Discovery ref rows are safe to prune independently from Evidence/EVEidence?
+- How should stale but Marked entities be handled?
+- Should pruning preview group candidates by time, entity, Watch scope, or Observation story impact?
+- Which support artifacts should be pruned separately from active records?
+
 ## Deletion And Retention Direction
 
 Accepted posture:
