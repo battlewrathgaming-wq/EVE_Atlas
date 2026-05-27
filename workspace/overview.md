@@ -30,8 +30,8 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Atlas Storage And Runtime Hardening
 Roadmap source: Human storage/runtime hardening direction accepted on 2026-05-25
 Current packet: `workspace/current.md`
-Current sequence: HS104 accepted systems audit inputs and keeps Atlas resting; no implementation runway is open
-Latest accepted coordination artifact: `workspace/OverseerHS104-systems-audit-synthesis-review.md`
+Current sequence: HS105 opens read-only storage authority preflight/inventory Dev runway
+Latest accepted coordination artifact: `workspace/OverseerHS105-storage-authority-preflight-runway.md`
 Latest systems audit inputs: `workspace/SystemsAuditHS100-storage-path-budget-authority.md`, `workspace/SystemsAuditHS101-local-lookup-vs-esi-enrichment.md`, `workspace/SystemsAuditHS102-pruning-readiness.md`, `workspace/SystemsAuditHS103-sequencer-provider-cadence.md`
 Latest advisory artifact: `workspace/UIUXHS84-watch-recovery-readout-interpretation.md`
 Latest advisory runway: `workspace/OverseerHS84-watch-recovery-readout-interpretation-runway.md`
@@ -152,6 +152,7 @@ Observation lookup model: `docs/features/observation-lookup-model.md`
 - HS98 captured storage path behavior and pruning direction in `docs/current-state/current-storage-runtime-hardening.md`: storage config should be portable/app-local, Atlas should behave like a self-contained briefcase, moving/copying storage is out of scope unless explicitly opened, missing storage returns to setup/re-establish flow, and pruning should support time windows, no-interest/Marked filtering, entity ID filtering, and Assessment reference review.
 - HS99 captured local lookup and long-term discovery ambition in `docs/current-state/current-storage-runtime-hardening.md`: local records are the preferred cheap substrate for story formation, ESI enrichment is explicit/provider-gated gap filling rather than a silent substitute, and future listening-post workflows should learn corporation behavior through patient scoped acquisition, enrichment, local lookup, pruning, and Observation.
 - HS104 accepted systems audit inputs HS100-HS103 as advisory review material: the strongest next system candidate is read-only storage authority preflight/inventory; typed actor name live-gate classification, pruning relationship preview, and Sequencer cadence readout are secondary bounded candidates; no Dev runway is open.
+- HS105 opens the read-only storage authority preflight/inventory Dev runway: prove current DB/storage/support-artifact posture before lockout, migration, pruning, or broad storage policy enforcement.
 - Future sequencing should keep Discovery Sequencer, Enrichment Sequencer, and Hydration separate: zKill returns Discovery refs, ESI expansion writes Evidence, and hydration repairs local readability/metadata.
 - Queue batch cadence and UX pacing is parked as a future product/UX lane after evidence-write correctness; it should decide batch size, timing, throttling, External API state behavior, and operator-facing working/waiting/throttled/failed/retry states.
 - Native picker/UI rigging, broader support-artifact budget coverage, active DB relocation, restore, automatic cleanup/pruning, snapshot deletion, and deletion execution remain out of scope until explicitly opened.

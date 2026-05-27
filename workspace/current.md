@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after systems audit synthesis
+Status: Active Dev runway - storage authority preflight
 Last updated: 2026-05-27
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS104 accepts HS100-HS103 systems audit inputs as advisory review material while Atlas rests with no active Dev runway.
+Current focus: HS105 opens a read-only storage authority preflight/inventory packet. This is instrumentation before lockout policy.
 
 Source of intent:
 
@@ -25,6 +25,8 @@ Source of intent:
 - Human pruning direction on 2026-05-27: pruning should support variable time windows, no-interest/Marked filtering, entity ID filtering, and Assessment reference review; noise means stale or excessive records that no longer serve target hunting, threat detection, or current pattern recognition.
 - Human local lookup direction on 2026-05-27: local records are the preferred cheap substrate for story formation; ESI enrichment can fill gaps but is explicit, provider-gated, slower, and not a silent substitute for healthy local storage. Long-term ambition is listening-post style workflows that learn corporation behavior.
 - Systems audits HS100-HS103 on 2026-05-27 accepted as advisory review input: storage authority preflight/inventory is the strongest next system candidate; typed actor name live-gate classification, pruning relationship preview, and Sequencer cadence readout are secondary bounded candidates.
+- Human `Go ahead` on 2026-05-27 accepted opening the storage authority preflight/inventory runway.
+- `workspace/OverseerHS105-storage-authority-preflight-runway.md`
 - `workspace/OverseerHS104-systems-audit-synthesis-review.md`
 - `workspace/SystemsAuditHS100-storage-path-budget-authority.md`
 - `workspace/SystemsAuditHS101-local-lookup-vs-esi-enrichment.md`
@@ -81,43 +83,47 @@ Accepted presentation guidance:
 
 ## Executor
 
-Current executor: None
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-None
+workspace/DevHS105-storage-authority-preflight.md
 ```
 
-## Resting State
+## Active Runway
 
-No Dev or specialist work is currently open.
+Dev should implement a read-only storage authority preflight/inventory proof layer.
 
-Next likely candidate lanes:
+Ordered steps:
 
-1. Read-only storage authority preflight/inventory for current DB path mode, DB/WAL/SHM, snapshot settings/destination, trace packs, temp/cache/SDE paths, window/settings path, and current Atlas-controlled byte usage.
-2. Explicit live-gate classification for uncached typed actor name resolution.
-3. Read-only pruning relationship preview hardening.
-4. Sequencer cadence phase readout from existing state.
-5. Human/UIUX review of the R-Scanner prototype against the operator-intent note.
-6. Observation lookup advisory or inventory pass to identify first strong anchor relationships.
+1. Read current storage/runtime path code and existing readiness/snapshot/debug trace services.
+2. Add or extend a read-only storage authority status model/service that reports current DB path mode, DB/WAL/SHM, snapshot settings/destination, trace-pack output, temp/cache/SDE paths, window/settings path where available, and current byte usage for known Atlas-controlled locations where practical.
+3. Expose the preflight through an existing appropriate read-only service/report surface, or add a narrowly named read-only service if cleaner.
+4. Add offline fixture or script verification proving configured path, fallback path, missing path, and known support-artifact inventory behavior without live/API calls.
+5. Update Evidence / Dev Handoff and create the expected Dev handoff file.
 
 ## Guardrails And Non-Goals
 
-- Renderer-only.
-- Keep styling light, replaceable, and local to this prototype.
-- No full app redesign.
-- No final facelift implementation.
+- Read-only storage authority preflight/inventory only.
+- No storage config writing.
+- No DB movement, copy, migration, relocation, or deletion.
+- No lockout enforcement.
+- No pruning.
+- No snapshot creation unless an existing verifier already uses disposable fixture paths and does not change real runtime state.
 - No live/private/API calls.
 - No new provider calls.
-- No backend behavior changes unless needed to fix a direct observation-blocking defect.
 - No broad provider work queue.
 - No high-volume request-attempt ledger.
 - No persisted sequencer packet table.
 - No durable movement checkpoint implementation.
 - No schema migration.
 - No stale/expired Discovery ref mutation.
-- No deletion/retention work.
+- No deletion/retention execution.
+- No broad storage manifest format unless required for read-only reporting and approved by Overseer.
+- No renderer redesign.
+- No Electron hidden-path behavior change yet.
+- No change to provider behavior, Watch behavior, Sequencer behavior, Discovery refs, Evidence/EVEidence writes, hydration, or Assessment Memory.
 - Do not make `discovered_killmail_refs` the sequencer.
 - Do not treat queued refs as Evidence/EVEidence.
 - Do not treat waiting as failure.
@@ -132,8 +138,14 @@ Next likely candidate lanes:
 
 Stop and return to Overseer/Human before implementation if:
 
+- implementation needs to choose the final storage config filename/location
+- implementation would enforce app lockout or write/provider/acquisition lockout
+- implementation would move, create, copy, or delete a real active DB
 - implementation requires live provider access
 - implementation requires schema migration
+- implementation turns into storage migration tooling
+- implementation needs broad UI work
+- storage path state cannot be classified without changing startup behavior
 - implementation would rename source/bridge terms
 - implementation would blur Watch with Discovery/Evidence/EVEidence
 - implementation would make offline/disarmed state look live
@@ -147,17 +159,29 @@ Stop and return to Overseer/Human before implementation if:
 
 ## Required Verification
 
-No active implementation packet is open.
-
-Recent closeout verification:
+Run:
 
 ```powershell
-npm.cmd run verify:renderer-shell
-npm.cmd run verify:watch-offline-readout
-npm.cmd run smoke:electron
+npm.cmd run verify:app-readiness
+npm.cmd run verify:runtime-snapshot
+npm.cmd run verify:operator-debug-trace
+npm.cmd run verify:sde-build-lookups
+npm.cmd run verify:sde-fixture
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:task-concurrency
+npm.cmd run verify:db-integrity
 npm.cmd run verify:protected-terms
 git diff --check
 git status --short --branch
+```
+
+If Electron startup or renderer readiness is touched, also run:
+
+```powershell
+npm.cmd run verify:electron-runtime
+npm.cmd run verify:renderer-shell
+npm.cmd run smoke:electron
 ```
 
 ## Evidence
@@ -654,3 +678,28 @@ Accepted:
 - The strongest next systems candidate is read-only storage authority preflight/inventory.
 - Secondary bounded candidates are typed actor name live-gate classification, pruning relationship preview, and Sequencer cadence readout.
 - Destructive pruning, broad provider queue architecture, persisted Sequencer packets, stale/expired Discovery ref mutation, storage migration, and storage hard-lock enforcement remain parked until explicitly opened.
+
+HS105 opens the read-only storage authority preflight runway.
+
+Files added/updated:
+
+- `workspace/OverseerHS105-storage-authority-preflight-runway.md`
+- `workspace/current.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS105-storage-authority-preflight.md
+```
+
+Expected evidence:
+
+- files changed
+- service/report command added or extended
+- sample preflight output
+- path modes demonstrated
+- byte usage fields demonstrated
+- confirmation that no storage config was written
+- confirmation that no DB move/copy/delete/relocation occurred
+- confirmation that no lockout, pruning, live/API/provider, schema, renderer redesign, or storage migration behavior was added
+- verification commands and results
