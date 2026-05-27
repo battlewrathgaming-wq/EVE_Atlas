@@ -6,19 +6,41 @@ Status: Advisory proposal based on current implementation knowledge
 
 This proposal does not implement code, change schema, create a Dev runway, rename terms, or change product authority.
 
+## Overseer Revision Note 2026-05-27
+
+Human/Overseer follow-up accepted the useful separation in this proposal, but refined the clock names and provider-pressure model.
+
+Durable terms now preferred:
+
+```txt
+Acquisition Clock = builds the local evidence corpus.
+Hydration Recovery Clock = makes local facts readable.
+```
+
+The earlier "grandfather fanout clock" and "spinning wheel clock" language should be treated as Human discussion metaphor, not source terminology.
+
+Accepted correction:
+
+- Acquisition Clock includes a zKill Discovery lane and an ESI Evidence expansion lane.
+- Hydration Recovery Clock includes a Watch hydration lane and a view/local-record hydration lane.
+- Hydration fanout from unresolved IDs is likely the larger provider-pressure bottleneck.
+- Future provider work should sit under an `external_io` family as the operator trust boundary.
+- Existing `watch.executor.arm` remains Watch/session arming only and should not become the global provider gate.
+
+This proposal remains useful as advisory design input, but future packets should follow `docs/features/acquisition-and-hydration-clocks.md` for the accepted model.
+
 ## Executive Summary
 
 Atlas should separate provider-driven acquisition into two clocks:
 
-1. **Grandfather fanout clock**: a scheduled or immediate discovery clock that asks a narrow provider question and records returned candidates.
-2. **Spinning wheel clock**: a recovery/enrichment clock that slowly releases selected candidate work for ESI expansion or readability hydration.
+1. **Acquisition Clock**: a patient acquisition clock that asks provider questions and records local facts through zKill Discovery and ESI Evidence expansion lanes.
+2. **Hydration Recovery Clock**: a recovery/readability clock that slowly repairs missing labels and metadata for Watch-originated or view/local-record needs.
 
 The key rule:
 
 ```txt
-Fanout creates or refreshes candidate work.
-Recovery spends provider calls on selected candidate work.
-Fanout does not drain its own fanout.
+Acquisition creates local facts.
+Hydration Recovery makes local facts readable.
 ```
 
 This preserves Atlas boundaries: zKill remains Discovery, ESI expansion creates Evidence/EVEidence, hydration repairs readability, and provider calls remain explicit and controlled.

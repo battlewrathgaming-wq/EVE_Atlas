@@ -25,6 +25,7 @@ Source of intent:
 - Human pruning direction on 2026-05-27: pruning should support variable time windows, no-interest/Marked filtering, entity ID filtering, and Assessment reference review; noise means stale or excessive records that no longer serve target hunting, threat detection, or current pattern recognition.
 - Human local lookup direction on 2026-05-27: local records are the preferred cheap substrate for story formation; ESI enrichment can fill gaps but is explicit, provider-gated, slower, and not a silent substitute for healthy local storage. Long-term ambition is listening-post style workflows that learn corporation behavior.
 - Human/Overseer direction on 2026-05-27: Acquisition Clock builds the local evidence corpus through zKill Discovery and ESI Evidence expansion lanes; Hydration Recovery Clock handles Watch and view/local-record readability repair; hydration fanout is the likely provider-pressure bottleneck.
+- Human/Overseer direction on 2026-05-27: future provider movement should sit under an `external_io` trust-boundary family; existing `watch.executor.arm` remains Watch/session arming only, and `live.gate` remains per-action/provider/cadence control.
 - Systems audits HS100-HS103 on 2026-05-27 accepted as advisory review input: storage authority preflight/inventory is the strongest next system candidate; typed actor name live-gate classification, pruning relationship preview, and Sequencer cadence readout are secondary bounded candidates.
 - Human `Go ahead` on 2026-05-27 accepted opening the storage authority preflight/inventory runway.
 - HS106 accepted HS105 with small Overseer hardening: renderer payloads cannot override arbitrary filesystem paths for DB, trace-pack, or snapshot-settings inspection.
@@ -829,3 +830,24 @@ Accepted:
 - Hydration Recovery Clock makes local facts readable through Watch hydration and view/local-record hydration lanes.
 - Hydration fanout from unresolved IDs is likely the real provider-pressure bottleneck.
 - Future implementation should prove readout and boundaries before adding schema-backed queues, broad provider orchestration, or new persistence.
+
+HS108 clarified the provider gate hierarchy and revised the clock proposal.
+
+Files updated:
+
+- `docs/features/acquisition-and-hydration-clocks.md`
+- `docs/current-state/current-storage-runtime-hardening.md`
+- `workspace/SystemsProposalHS104-two-clock-recovery-sequencer.md`
+- `workspace/critical/critical-terms.md`
+- `workspace/overview.md`
+- `workspace/current.md`
+
+Accepted:
+
+- `external_io` is the future operator trust-boundary family for external/downstream provider movement.
+- `watch.executor.arm` remains Watch/session arming only.
+- `live.gate` remains per-action/provider/cadence control.
+- Storage authority remains storage safety.
+- External I/O off / local mode should keep local reports, stored Evidence/EVEidence views, Observation from local records, Assessment notes, and read-only preflights available.
+- External I/O off / local mode should block zKill Discovery, ESI Evidence expansion, ESI metadata hydration, SDE download, and Watch provider dispatch.
+- The earlier two-clock metaphor remains historical advisory language; future packets should use Acquisition Clock and Hydration Recovery Clock.

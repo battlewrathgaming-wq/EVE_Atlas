@@ -55,6 +55,22 @@ Current implementation state:
 - `Watch_offline` derives read-only restart/recovery state from durable local rows.
 - Durable movement checkpointing and broad provider work queues are deferred.
 
+## External I/O Gate Direction
+
+Future provider movement should be organized under an `external_io` family.
+
+`external_io` means the operator trust boundary for external provider contact. It should be the product-level answer to whether Atlas may use zKill, ESI, SDE download, or other external/downstream provider movement.
+
+This does not replace existing gates:
+
+- `watch.executor.arm` remains the session-level switch for scheduled Watch execution.
+- `live.gate` remains per-action/provider/cadence control for live/manual provider actions.
+- storage authority remains the storage-safety gate.
+
+When external I/O is off / local mode, Atlas should still allow local reports, stored Evidence/EVEidence views, Observation from local records, Assessment notes, and read-only preflights. It should block zKill Discovery, ESI Evidence expansion, ESI metadata hydration, SDE download, and Watch provider dispatch.
+
+Provider-backed movement should pass all relevant gates instead of treating any one gate as universal: `external_io`, per-action/provider cadence, storage safety, confirmation, and Watch arming when Watch-driven.
+
 ## Watch_offline Current Role
 
 `Watch_offline` is the accepted read-only post-restart/offline Watch support model.
@@ -245,4 +261,5 @@ Accepted synthesis:
 - Acquisition Clock creates local facts through zKill Discovery and ESI Evidence expansion lanes.
 - Hydration Recovery Clock makes local facts readable through Watch hydration and view/local-record hydration lanes.
 - The main provider pressure may be hydration fanout from many unresolved IDs, not only zKill or ESI killmail expansion.
+- `external_io` is the future operator trust boundary for provider movement; `watch.executor.arm` remains Watch/session arming only.
 - Future packets should prove readout and boundaries before adding schema-backed queues, broad provider orchestration, or new persistence.

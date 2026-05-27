@@ -132,6 +132,23 @@ Additional rules:
 - Live search can remain immediate and narrow; any larger downstream acquisition or hydration must respect the relevant clock/lane.
 - Hydration should not be blocked by an unrelated deep Evidence backlog unless a shared gate truly applies.
 
+## External I/O Gate Direction
+
+Future provider work should sit under an `external_io` family.
+
+`external_io` is the operator trust boundary: whether Atlas may contact external providers. It is not the same as `watch.executor.arm`.
+
+When external I/O is off / local mode:
+
+- allowed: local reports, stored Evidence / EVEidence views, Observation from local records, Assessment notes, queue/readiness/storage/retention preflights
+- blocked: zKill Discovery, ESI Evidence expansion, ESI metadata hydration, SDE download, Watch provider dispatch
+
+Existing `watch.executor.arm` remains the session-level switch for scheduled Watch execution. It should consume `external_io` when provider movement is needed; it should not become the global provider gate.
+
+`live.gate` remains per-action/provider/cadence control. Storage authority remains storage safety. A provider-backed action should pass all relevant gates: `external_io` enabled, `live.gate` allowed, storage safe, cadence safe, confirmation if needed, and Watch armed if Watch-driven.
+
+This direction prevents the Hydration Recovery Clock from being collapsed into Watch arming. Hydration may be Watch-originated or view-originated, but provider-backed hydration still belongs under the external I/O trust boundary.
+
 ## Bottleneck
 
 The bottleneck to design around is usually:

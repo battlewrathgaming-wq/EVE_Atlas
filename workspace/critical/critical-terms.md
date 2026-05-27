@@ -27,6 +27,7 @@ Lab may use its own product-agnostic presentation vocabulary after the bridge, b
 | `Refresh labels` | Readability-only metadata hydration. | Prevents metadata refresh from sounding like evidence creation. | Do not call evidence enrichment. |
 | `Expanded ESI killmail` | Full killmail record retrieved from ESI after zKill gives ID/hash. | Primary Atlas evidence source. | Preserve evidence role exactly. |
 | `External API` | Current Atlas label for zKill/ESI/live provider availability and kill-switch state. | Active current-pass provider authority wording. | Long-term preserve-exact status still needs Human/Overseer decision. |
+| `external_io` | Future Atlas provider trust-boundary family for whether Atlas may contact external/downstream providers. | Prevents `watch.executor.arm` or `live.gate` from becoming overloaded global disconnect semantics. | Not implemented yet; do not rename existing commands without an explicit packet. |
 
 ## Atlas-Owned Terms
 
@@ -41,6 +42,8 @@ Lab may use its own product-agnostic presentation vocabulary after the bridge, b
 | `assessment_artifact` | Backend persistence row for Assessment Memory. | UI should prefer `Assessment Memory` unless inspecting raw detail. |
 | `watchlist_entities` | Legacy/internal attention and watch preference persistence. | User copy should prefer `Marked` when meaning is attention. |
 | `actor.watch` / `system.radius.watch` | Watch-management commands. | Active routine checking, not passive startup collection. |
+| `watch.executor.arm` | Existing session-level switch for scheduled Watch execution. | Watch-specific arming only; not the global provider trust boundary. |
+| `live.gate` | Existing per-action/provider/cadence gate for live/manual provider actions. | Does not replace storage authority or future `external_io`. |
 | `fetch_runs` / `api_request_logs` | Provider/run provenance and provider call history. | Support/provenance, not evidence itself. |
 | `Runtime snapshot` | Local DB support artifact. | Not Sense lane snapshot and not retention/pruning policy. |
 | `Record`, `Intelligence`, `Finding` | Unresolved final naming candidates. | Do not standardize or export as Lab defaults. |
