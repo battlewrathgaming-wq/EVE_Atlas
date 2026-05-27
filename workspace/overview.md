@@ -30,8 +30,9 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Atlas Storage And Runtime Hardening
 Roadmap source: Human storage/runtime hardening direction accepted on 2026-05-25
 Current packet: `workspace/current.md`
-Current sequence: Resting after HS114 accepted the HS113 cadence simulation proof
+Current sequence: HS115 opens storage setup gate readout proof
 Latest accepted coordination artifact: `workspace/OverseerHS114-hs113-cadence-simulation-review.md`
+Latest active runway: `workspace/OverseerHS115-storage-setup-gate-readout-runway.md`
 Latest systems audit inputs: `workspace/SystemsAuditHS100-storage-path-budget-authority.md`, `workspace/SystemsAuditHS101-local-lookup-vs-esi-enrichment.md`, `workspace/SystemsAuditHS102-pruning-readiness.md`, `workspace/SystemsAuditHS103-sequencer-provider-cadence.md`
 Latest advisory artifact: `workspace/UIUXHS84-watch-recovery-readout-interpretation.md`
 Latest advisory runway: `workspace/OverseerHS84-watch-recovery-readout-interpretation-runway.md`
@@ -163,6 +164,7 @@ Acquisition / Hydration clocks: `docs/features/acquisition-and-hydration-clocks.
 - Future rollout cadence should avoid synchronized clients by using stable per-install/lane phase plus small jitter, respecting provider `Retry-After`, and never catch-up flooding after restart, storage unlock, or `external_io` re-enable.
 - HS113 opens a read-only cadence simulation proof to model Acquisition/Hydration due, held, next-eligible, jitter, retry-after, missed-slot, pending-ref, storage-lock, and `external_io` states without provider calls or runtime mutation.
 - HS114 accepted DevHS113: `verify:cadence-simulation` now proves fixture-only cadence behavior across Acquisition zKill Discovery, Acquisition ESI Evidence expansion, Hydration Watch, and Hydration view/local-record lanes; no runtime policy, provider release, storage lockout, `external_io` enforcement, schema, scheduler, hydration, Evidence/EVEidence write, or renderer behavior changed.
+- HS115 opens a read-only storage setup gate readout proof before real lockout: Dev should report explicit configured storage, current-file/project fallback, demo/fixture-only, missing/unavailable storage, invalid/degraded settings, budget warning/hard-lock states, and allowed/blocked work classes without enforcing storage policy.
 - Future sequencing should keep Discovery Sequencer, Enrichment Sequencer, and Hydration separate: zKill returns Discovery refs, ESI expansion writes Evidence, and hydration repairs local readability/metadata.
 - Queue batch cadence and UX pacing is parked as a future product/UX lane after evidence-write correctness; it should decide batch size, timing, throttling, External API state behavior, and operator-facing working/waiting/throttled/failed/retry states.
 - Native picker/UI rigging, broader support-artifact budget coverage, active DB relocation, restore, automatic cleanup/pruning, snapshot deletion, and deletion execution remain out of scope until explicitly opened.

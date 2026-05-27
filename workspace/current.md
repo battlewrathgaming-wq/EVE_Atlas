@@ -1189,3 +1189,29 @@ Likely next candidates:
 - Cadence follow-up: decide readout-only versus first tiny enforcement slice.
 - Typed actor name live-gate classification.
 - Read-only pruning relationship preview.
+
+HS115 opens the storage setup gate readout runway.
+
+Files added:
+
+- `workspace/OverseerHS115-storage-setup-gate-readout-runway.md`
+
+Accepted:
+
+- The next bounded step is a read-only storage setup gate readout, not enforcement.
+- Dev should turn accepted storage path and budget authority into inspectable posture over existing storage preflight facts.
+- The readout should distinguish explicit configured storage, current-file/project fallback requiring explicit operator acknowledgement, demo/fixture-only posture, missing/unavailable storage, invalid/degraded settings, and budget warning/hard-lock states.
+- The readout should name allowed and blocked work classes while storage is locked or setup-required.
+- No lockout enforcement, storage config write, file selector, DB move/copy/migration/delete/create, pruning/deletion execution, provider calls, scheduler changes, hydration changes, Evidence/EVEidence writes, or renderer redesign is opened.
+
+Current executor:
+
+```txt
+Dev
+```
+
+Dev handoff expected:
+
+```txt
+workspace/DevHS115-storage-setup-gate-readout.md
+```
