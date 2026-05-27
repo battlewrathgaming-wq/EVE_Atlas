@@ -61,6 +61,7 @@ These terms are Atlas support/readout vocabulary. They may be emitted by Atlas f
 | `recovery` | Per-Watch derived recovery diagnostic block. | Support/readout layer only; not persisted recovery state. |
 | `next_safe_action` | Derived operator/system-safe next action label. | Presentation may translate later, but source meaning stays Atlas-owned. |
 | `provider_deferral` | Provider/capacity wait signal surfaced as availability state. | Waiting is not failure and does not mark refs failed. |
+| `held_by_external_io` | Future readout/status value for provider-backed work that is due or eligible but held because external I/O is off. | Not failure, not cancellation, and not permission to catch up flood when external I/O is released. |
 | `missed_slot` | Expected Watch timing moved past observed movement and may be recoverable. | Does not replay exact sequencer packets. |
 | `orphaned_run` | Previously running fetch/run state needs review after restart. | Should request review, not auto-resume. |
 | `reconstructed_scope` | Readout of recoverable Watch scope basis from durable local state. | Must expose limitation rather than guess exact coverage. |

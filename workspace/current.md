@@ -26,6 +26,7 @@ Source of intent:
 - Human local lookup direction on 2026-05-27: local records are the preferred cheap substrate for story formation; ESI enrichment can fill gaps but is explicit, provider-gated, slower, and not a silent substitute for healthy local storage. Long-term ambition is listening-post style workflows that learn corporation behavior.
 - Human/Overseer direction on 2026-05-27: Acquisition Clock builds the local evidence corpus through zKill Discovery and ESI Evidence expansion lanes; Hydration Recovery Clock handles Watch and view/local-record readability repair; hydration fanout is the likely provider-pressure bottleneck.
 - Human/Overseer direction on 2026-05-27: future provider movement should sit under an `external_io` trust-boundary family; existing `watch.executor.arm` remains Watch/session arming only, and `live.gate` remains per-action/provider/cadence control.
+- Human direction on 2026-05-27: when external I/O is off, clocks may keep readout/schedule posture but provider movement is held as `held_by_external_io`; releasing external I/O must not cause catch-up flooding.
 - Systems audits HS100-HS103 on 2026-05-27 accepted as advisory review input: storage authority preflight/inventory is the strongest next system candidate; typed actor name live-gate classification, pruning relationship preview, and Sequencer cadence readout are secondary bounded candidates.
 - Human `Go ahead` on 2026-05-27 accepted opening the storage authority preflight/inventory runway.
 - HS106 accepted HS105 with small Overseer hardening: renderer payloads cannot override arbitrary filesystem paths for DB, trace-pack, or snapshot-settings inspection.
@@ -851,3 +852,23 @@ Accepted:
 - External I/O off / local mode should keep local reports, stored Evidence/EVEidence views, Observation from local records, Assessment notes, and read-only preflights available.
 - External I/O off / local mode should block zKill Discovery, ESI Evidence expansion, ESI metadata hydration, SDE download, and Watch provider dispatch.
 - The earlier two-clock metaphor remains historical advisory language; future packets should use Acquisition Clock and Hydration Recovery Clock.
+
+HS109 external I/O policy-fit audit landed and Human accepted clock hold policy.
+
+Files added/updated:
+
+- `workspace/SystemsAuditHS109-external-io-policy-fit.md`
+- `docs/features/acquisition-and-hydration-clocks.md`
+- `docs/current-state/current-storage-runtime-hardening.md`
+- `workspace/overview.md`
+- `workspace/current.md`
+
+Accepted:
+
+- HS109 is advisory assurance input only, not implementation authority.
+- Atlas does not currently implement an `external_io` command, service, table, IPC channel, or runtime switch.
+- Future `external_io` fits as a higher-level hold/release boundary above current `External API` wording, `live.gate`, `watch.executor.arm`, and storage authority preflight.
+- When external I/O is off, Acquisition and Hydration Recovery clocks may continue schedule/readout posture.
+- Provider-backed due work should be held as `held_by_external_io`, not failed.
+- Releasing external I/O must not immediately catch up all held work or flood providers.
+- Held work should re-enter normal cadence/provider controls, storage safety, and required confirmations.

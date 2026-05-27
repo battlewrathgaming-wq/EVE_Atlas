@@ -71,6 +71,14 @@ When external I/O is off / local mode, Atlas should still allow local reports, s
 
 Provider-backed movement should pass all relevant gates instead of treating any one gate as universal: `external_io`, per-action/provider cadence, storage safety, confirmation, and Watch arming when Watch-driven.
 
+Clock behavior while external I/O is off:
+
+- Acquisition and Hydration Recovery clocks may keep schedule/readout calculations alive.
+- Provider-backed work should be held as `held_by_external_io`, not failed.
+- Local-only readout, reports, queue previews, Assessment work, and preflights remain available.
+- Releasing external I/O must not trigger immediate catch-up flooding.
+- Previously held work should resume only through normal cadence/provider controls, storage safety, and any required operator confirmation.
+
 ## Watch_offline Current Role
 
 `Watch_offline` is the accepted read-only post-restart/offline Watch support model.
@@ -262,4 +270,5 @@ Accepted synthesis:
 - Hydration Recovery Clock makes local facts readable through Watch hydration and view/local-record hydration lanes.
 - The main provider pressure may be hydration fanout from many unresolved IDs, not only zKill or ESI killmail expansion.
 - `external_io` is the future operator trust boundary for provider movement; `watch.executor.arm` remains Watch/session arming only.
+- When `external_io` is off, due provider work should be held as `held_by_external_io`; release does not authorize catch-up flooding.
 - Future packets should prove readout and boundaries before adding schema-backed queues, broad provider orchestration, or new persistence.

@@ -149,6 +149,24 @@ Existing `watch.executor.arm` remains the session-level switch for scheduled Wat
 
 This direction prevents the Hydration Recovery Clock from being collapsed into Watch arming. Hydration may be Watch-originated or view-originated, but provider-backed hydration still belongs under the external I/O trust boundary.
 
+## External I/O Clock Hold Policy
+
+When `external_io` is off, clocks should not die and should not secretly move provider work.
+
+Accepted policy:
+
+- clock schedules/readouts may continue calculating due, held, and next-eligible posture
+- provider-backed release is blocked while external I/O is off
+- due provider work should read as `held_by_external_io`, not failed
+- missed slots remain recoverable state, not urgent errors
+- local-only readout, reports, queue previews, Assessment work, and preflights remain available
+- local-only lookup/hydration may remain available when it does not contact providers
+- provider-backed hydration waits under the same external I/O trust boundary
+
+Releasing external I/O must not mean catch-up flood.
+
+When external I/O is turned back on, Atlas should resume under normal cadence/provider controls. It should not immediately fire every due, missed, or held acquisition/hydration action. Previously held work should be re-evaluated through the relevant clock, lane, provider/cadence gate, storage safety gate, and operator confirmation rules.
+
 ## Bottleneck
 
 The bottleneck to design around is usually:
