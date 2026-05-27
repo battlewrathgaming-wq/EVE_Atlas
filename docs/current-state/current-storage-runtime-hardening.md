@@ -69,12 +69,26 @@ Atlas may become data-heavy. Human direction accepts storage path and budget aut
 
 Accepted direction:
 
+- Atlas should block meaningful real/alpha collection until the operator chooses a storage location.
+- Demo/fixture mode may remain available without the real storage setup gate.
+- A "current file" or default project-local choice may be offered, but Atlas should make local machine storage use explicit.
 - Operator-defined storage location is important before meaningful high-volume collection.
-- Operator-defined storage budget is important.
-- Atlas should warn near configured limits and point toward pruning/cleanup.
-- Atlas should stop acquisition at hard/full limits to preserve existing records rather than overwrite or malform datasets.
+- Operator-defined storage budget is important, and means physical disk-space use under the pointed Atlas storage location.
+- Budget accounting should cover space Atlas takes in that location, including the main database, journals, snapshots, trace packs, logs, and other support artifacts stored there.
+- Atlas should be lighter in deployment than the current development tree; large import material such as SDE zip files should not be treated as ordinary Atlas runtime data if the deployed runtime uses lighter local lookup tables.
+- Around 70% of budget, Atlas should show a prune/cleanup reminder.
+- Around 95% of budget, Atlas should show a stronger prune/cleanup reminder.
+- At 100% or full budget, Atlas should hard-lock acquisition/write behavior and instruct the operator to fix storage, prune, or expand the budget.
+- The hard lock should preserve existing records rather than overwrite, truncate, or malform datasets.
+- Moving storage should remain under full user control, but the migration/change function needs hardening against misuse or exploitation.
 - Snapshot destination and snapshot/support-artifact budget authority already exist for runtime snapshots.
+- Snapshots are for accidental deletion/recovery support, not protection against deliberate user behavior.
 - Snapshot opt-in/default behavior for broader storage policy should wait until snapshot size and data growth are better proven.
+- Missing, unavailable, or corrupt storage path should hard-lock and require fix/recovery rather than silently creating a surprise new database elsewhere.
+
+Budget here is disk-space authority, not request/API pacing. Earlier "scan budget" ideas are superseded by Sequencer/provider cadence: Live search remains narrow and gated, while Watch / Sequencer controls respectful paced acquisition over time.
+
+Pruning is a first-class future suite, not just cleanup. It is the other half of intelligence formation: working noise away from operator interest while preserving honest deletion, snapshot disclosure, and Evidence/EVEidence boundaries.
 
 ## Deletion And Retention Direction
 

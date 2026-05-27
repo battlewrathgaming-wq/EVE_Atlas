@@ -20,6 +20,7 @@ Source of intent:
 - Human product direction on 2026-05-26: Atlas should answer "Do I need to do anything?", surface action-needed states as light diagnostic rows, treat R-Scanner/Sequencer as patient background discovery, require honest storage/deletion posture, and treat Observation as the layer that pulls connected records into story.
 - Human product direction on 2026-05-26: Observation is a presentation/query layer that starts from anchors such as killmail ID, pilot ID, corporation ID, or system ID and pulls connected records into story without creating new truth.
 - Human direction on 2026-05-27: keep immediate effects in `workspace/current.md`, offload elements that creep beyond current working memory into durable docs, and preserve UI spatial guidance as presentation workflow rather than Atlas source authority.
+- Human storage direction on 2026-05-27: real/alpha collection should lock until storage location is explicit; budget means disk-space used in the pointed Atlas location, not scan credits; 70%/95% warn and 100% hard-lock writes/acquisition; missing/unavailable storage should hard-lock instead of silently relocating; pruning is a future intelligence-formation suite.
 - `docs/current-state/current-storage-runtime-hardening.md`
 - `docs/features/observation-lookup-model.md`
 - `docs/features/r-scanner-sequencer-presentation.md`
@@ -572,3 +573,22 @@ Accepted:
 - Corporation lookup should assemble known members, member sightings, related killmails, recurring systems/regions, assessments, and traceable observed patterns.
 - Evidence/EVEidence, Discovery, Assessment, Hydration, and Observation boundaries remain distinct.
 - Future implementation questions are parked until opened through a bounded packet or advisory pass.
+
+HS97 captured storage path and budget authority decisions.
+
+Files updated:
+
+- `docs/current-state/current-storage-runtime-hardening.md`
+
+Accepted:
+
+- Meaningful real/alpha collection should be locked until the operator selects or explicitly accepts a storage location.
+- Budget means physical disk-space use in the pointed Atlas storage location, not scan/API credits.
+- 70% budget should remind the operator to prune/clean up.
+- 95% budget should warn more strongly.
+- 100% budget should hard-lock acquisition/write behavior until the operator fixes storage, prunes, or expands budget.
+- Missing, unavailable, or corrupt storage should hard-lock and require fix/recovery instead of silently creating a new DB elsewhere.
+- Moving storage should be user-controlled but hardened.
+- Snapshots support accidental deletion recovery, not protection against deliberate user behavior.
+- Pruning should become a future suite for reducing noise from interest while preserving Evidence/EVEidence and deletion boundaries.
+- Request pacing belongs to Sequencer/provider cadence, not storage budget.
