@@ -47,6 +47,7 @@ async function main() {
     const watchExecutorDisarmCommand = commands.find((entry) => entry.command === 'watch.executor.disarm');
     const watchExecutorTickCommand = commands.find((entry) => entry.command === 'watch.executor.tick');
     const storageAuthorityPreflightCommand = commands.find((entry) => entry.command === 'storage.authority_preflight');
+    const gateStackReadoutCommand = commands.find((entry) => entry.command === 'support.gate_stack_readout');
     const snapshotSettingsGetCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.get');
     const snapshotSettingsUpdateCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.update');
     assert(readinessCommand, 'app.readiness should be listed');
@@ -90,6 +91,7 @@ async function main() {
     assert(watchExecutorDisarmCommand?.classification === 'metadata-only', 'watch.executor.disarm should be metadata-only');
     assert(watchExecutorTickCommand?.classification === 'evidence-creating', 'watch.executor.tick should be evidence-creating');
     assert(storageAuthorityPreflightCommand?.classification === 'read-only', 'storage authority preflight should be read-only');
+    assert(gateStackReadoutCommand?.classification === 'read-only', 'gate stack readout should be read-only');
     assert(snapshotSettingsGetCommand?.classification === 'read-only', 'runtime snapshot settings get should be read-only');
     assert(snapshotSettingsUpdateCommand?.classification === 'metadata-only', 'runtime snapshot settings update should be metadata-only');
 
@@ -106,6 +108,13 @@ async function main() {
     });
     assert(storagePreflight.read_only === true, 'storage authority preflight should declare read-only behavior');
     assert(storagePreflight.database.path.endsWith('service-registry.sqlite'), 'storage authority preflight should use context DB path');
+
+    const gateStack = await invokeServiceCommand('support.gate_stack_readout', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(gateStack.read_only === true, 'gate stack readout should declare read-only behavior');
+    assert(gateStack.external_io.implementation_state === 'policy_only_not_implemented', 'gate stack readout should report external_io as policy-only');
 
     const liveGate = await invokeServiceCommand('live.gate', {
       action: 'manual.expansion',

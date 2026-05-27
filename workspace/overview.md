@@ -30,8 +30,8 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Atlas Storage And Runtime Hardening
 Roadmap source: Human storage/runtime hardening direction accepted on 2026-05-25
 Current packet: `workspace/current.md`
-Current sequence: HS111 opens a read-only gate-stack readout proof before enforcement
-Latest accepted coordination artifact: `workspace/OverseerHS111-gate-stack-readout-proof-runway.md`
+Current sequence: HS112 accepted HS111 gate-stack readout proof; no implementation runway is open
+Latest accepted coordination artifact: `workspace/OverseerHS112-hs111-gate-stack-readout-review.md`
 Latest systems audit inputs: `workspace/SystemsAuditHS100-storage-path-budget-authority.md`, `workspace/SystemsAuditHS101-local-lookup-vs-esi-enrichment.md`, `workspace/SystemsAuditHS102-pruning-readiness.md`, `workspace/SystemsAuditHS103-sequencer-provider-cadence.md`
 Latest advisory artifact: `workspace/UIUXHS84-watch-recovery-readout-interpretation.md`
 Latest advisory runway: `workspace/OverseerHS84-watch-recovery-readout-interpretation-runway.md`
@@ -159,6 +159,8 @@ Acquisition / Hydration clocks: `docs/features/acquisition-and-hydration-clocks.
 - HS108 clarified the provider gate hierarchy: future external/downstream provider movement should sit under an `external_io` trust-boundary family, while existing `watch.executor.arm` remains Watch/session arming and `live.gate` remains per-action/provider/cadence control.
 - HS109 accepted external I/O policy-fit assurance: `external_io` is not implemented yet, but future clock behavior should hold provider-backed work as `held_by_external_io` while keeping readout alive; release must not trigger catch-up flooding.
 - HS110 accepted the external I/O/storage edge policy table as advisory assurance; HS111 opens a read-only Dev runway for gate-stack readout proof before enforcement.
+- HS112 accepted DevHS111: `support.gate_stack_readout` now proves the gate stack as read-only support posture, with `external_io` policy-only/not implemented and no provider/storage/Watch behavior changes.
+- Future rollout cadence should avoid synchronized clients by using stable per-install/lane phase plus small jitter, respecting provider `Retry-After`, and never catch-up flooding after restart, storage unlock, or `external_io` re-enable.
 - Future sequencing should keep Discovery Sequencer, Enrichment Sequencer, and Hydration separate: zKill returns Discovery refs, ESI expansion writes Evidence, and hydration repairs local readability/metadata.
 - Queue batch cadence and UX pacing is parked as a future product/UX lane after evidence-write correctness; it should decide batch size, timing, throttling, External API state behavior, and operator-facing working/waiting/throttled/failed/retry states.
 - Native picker/UI rigging, broader support-artifact budget coverage, active DB relocation, restore, automatic cleanup/pruning, snapshot deletion, and deletion execution remain out of scope until explicitly opened.

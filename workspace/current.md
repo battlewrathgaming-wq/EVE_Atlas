@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Active Dev runway for HS111 gate-stack readout proof
+Status: Resting after accepted HS111 gate-stack readout proof
 Last updated: 2026-05-27
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS111 opens a read-only gate-stack readout proof before any `external_io`, storage lockout, provider enforcement, or catch-up behavior implementation.
+Current focus: HS112 accepts HS111 gate-stack readout proof and parks enforcement/cadence decisions until the next bounded packet is selected.
 
 Source of intent:
 
@@ -28,6 +28,7 @@ Source of intent:
 - Human/Overseer direction on 2026-05-27: future provider movement should sit under an `external_io` trust-boundary family; existing `watch.executor.arm` remains Watch/session arming only, and `live.gate` remains per-action/provider/cadence control.
 - Human direction on 2026-05-27: when external I/O is off, clocks may keep readout/schedule posture but provider movement is held as `held_by_external_io`; releasing external I/O must not cause catch-up flooding.
 - Human accepted on 2026-05-27: use HS110 to open a bounded Dev packet for a read-only gate-stack/readout proof.
+- Human future cadence concern on 2026-05-27: avoid hard-coded shared provider cadence across clients; future release should use stable per-install/lane phase plus small jitter, respect provider `Retry-After`, and never catch-up flood after restart, storage unlock, or `external_io` re-enable.
 - Systems audits HS100-HS103 on 2026-05-27 accepted as advisory review input: storage authority preflight/inventory is the strongest next system candidate; typed actor name live-gate classification, pruning relationship preview, and Sequencer cadence readout are secondary bounded candidates.
 - Human `Go ahead` on 2026-05-27 accepted opening the storage authority preflight/inventory runway.
 - HS106 accepted HS105 with small Overseer hardening: renderer payloads cannot override arbitrary filesystem paths for DB, trace-pack, or snapshot-settings inspection.
@@ -36,6 +37,7 @@ Source of intent:
 - `workspace/SystemsAuditHS110-external-io-storage-edge-policy-table.md`
 - `workspace/SystemsAuditHS109-external-io-policy-fit.md`
 - `workspace/OverseerHS111-gate-stack-readout-proof-runway.md`
+- `workspace/OverseerHS112-hs111-gate-stack-readout-review.md`
 - `workspace/SystemsProposalHS104-two-clock-recovery-sequencer.md`
 - `workspace/SystemsTraceHS105-search-watch-recovery-rewire-map.md`
 - `workspace/OverseerHS106-hs105-storage-preflight-review.md`
@@ -96,26 +98,27 @@ Accepted presentation guidance:
 
 ## Executor
 
-Current executor: Dev
+Current executor: None
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS111-gate-stack-readout-proof.md
+None
 ```
 
-## Active Runway
+## Resting State
 
-Dev should execute `workspace/OverseerHS111-gate-stack-readout-proof-runway.md`.
+No Dev or specialist work is currently open.
 
-Ordered steps:
+Next likely candidate lanes:
 
-1. Inspect existing readiness, live gate, storage preflight, Watch executor/scheduler, command authority, and `Watch_offline` readout code.
-2. Add or extend one read-only support/readout surface that reports a gate stack for provider-backed work.
-3. Report due/scheduled posture, Watch armed state, future `external_io` policy-only/not-implemented state, live/API env and User-Agent posture, `live.gate`/cadence result, storage authority summary, active task posture, and confirmation requirement separately.
-4. Include held/blocked/waiting posture without changing runtime behavior; `held_by_external_io` is policy/readout only for this packet.
-5. Add offline verifier coverage proving no provider calls and no gate collapse.
-6. Update Evidence / Dev Handoff with sample output and verification.
+1. Read-only cadence simulation for Acquisition/Hydration lanes: stable per-install/lane phase, bounded jitter, retry-after, missed slots, pending refs, storage locked/unlocked, `external_io` off/on, and no catch-up flood.
+2. Storage setup/authority policy decision: total lockout versus narrower write/provider/acquisition lockout.
+3. Explicit live-gate classification for uncached typed actor name resolution.
+4. Read-only pruning relationship preview hardening.
+5. Acquisition/Hydration clock readout proof: show zKill Discovery, ESI Evidence expansion, Watch hydration, and view hydration pressure separately.
+6. Human/UIUX review of the R-Scanner prototype against the operator-intent note.
+7. Observation lookup advisory or inventory pass to identify first strong anchor relationships.
 
 ## Guardrails And Non-Goals
 
@@ -902,3 +905,136 @@ Dev handoff expected:
 ```txt
 workspace/DevHS111-gate-stack-readout-proof.md
 ```
+
+HS111 Dev gate-stack readout proof complete.
+
+Files reviewed:
+
+- `AGENTS.md`
+- `workspace/current.md`
+- `workspace/OverseerHS111-gate-stack-readout-proof-runway.md`
+- `workspace/SystemsAuditHS109-external-io-policy-fit.md`
+- `workspace/SystemsAuditHS110-external-io-storage-edge-policy-table.md`
+- `docs/features/acquisition-and-hydration-clocks.md`
+- `docs/current-state/current-storage-runtime-hardening.md`
+- `workspace/critical/critical-terms.md`
+- `src/main/services/liveApiGateService.js`
+- `src/main/services/appReadinessService.js`
+- `src/main/services/storageAuthorityPreflightService.js`
+- `src/main/services/serviceRegistry.js`
+- `src/main/watchlist/watchExecutor.js`
+- `src/main/watchlist/watchScheduler.js`
+- `src/main/watchlist/watchOfflineReadout.js`
+
+Files changed:
+
+- `src/main/services/gateStackReadoutService.js`
+- `src/main/services/serviceRegistry.js`
+- `scripts/verify-gate-stack-readout.js`
+- `scripts/verify-service-registry.js`
+- `scripts/verify-command-authority.js`
+- `scripts/verify-passive-side-effects.js`
+- `package.json`
+- `workspace/current.md`
+- `workspace/DevHS111-gate-stack-readout-proof.md`
+
+Implementation:
+
+- Added read-only service command `support.gate_stack_readout`.
+- Reports future `external_io` as `policy_only_not_implemented` and `enforced=false`.
+- Reports `External API` env/User-Agent posture, Watch arming, due/scheduled posture, `live.gate`/cadence, storage authority summary, active task posture, and confirmation requirements as separate gates.
+- Reports `held_by_external_io` only as future/readout posture for provider-backed work if future external I/O is off.
+- Added `npm.cmd run verify:gate-stack-readout` focused offline coverage.
+
+Sample gate-stack output from focused verifier:
+
+```json
+{
+  "external_io": {
+    "implementation_state": "policy_only_not_implemented",
+    "enforced": false,
+    "provider_backed_if_off": "held_by_external_io"
+  },
+  "sample_actor_watch_stack": {
+    "action": "actor.watch",
+    "provider_backed": true,
+    "schedule_state": "due_consider_gates",
+    "watch_arming_state": "armed",
+    "external_io_if_off": "held_by_external_io",
+    "live_gate_allowed": false,
+    "storage_enforcement": "not_implemented_in_hs111",
+    "active_task_state": "duplicate_or_active_task",
+    "confirmation_required": true
+  },
+  "sample_local_stack": {
+    "action": "report.view",
+    "provider_backed": false,
+    "external_io_if_off": "local_only_available"
+  }
+}
+```
+
+Boundary confirmation:
+
+- No `external_io` enforcement, persisted setting, command switch, storage lockout, provider dispatch change, catch-up/release behavior, queue/sequencer architecture, schema migration, provider call, renderer redesign, or Watch behavior change was added.
+- No storage config was written.
+- No DB movement, creation, copy, migration, relocation, pruning, or deletion was added.
+- No Discovery refs, Evidence/EVEidence writes, hydration, or Assessment Memory behavior was changed.
+- Waiting and `held_by_external_io` remain readout posture, not failure.
+
+Verification:
+
+- `npm.cmd run verify:gate-stack-readout` passed and printed sample gate-stack JSON.
+- `npm.cmd run verify:app-readiness` passed.
+- `npm.cmd run verify:service-registry` passed.
+- `npm.cmd run verify:command-authority` passed.
+- `npm.cmd run verify:passive-side-effects` passed.
+- `npm.cmd run verify:watch-executor` passed.
+- `npm.cmd run verify:watch-scheduler` passed.
+- `npm.cmd run verify:watch-offline-readout` passed.
+- `npm.cmd run verify:storage-authority-preflight` passed.
+- `npm.cmd run verify:task-concurrency` passed.
+- `npm.cmd run verify:db-integrity` passed.
+- `npm.cmd run verify:protected-terms` passed with exit code 0, warning-only; 8 files scanned and 841 warnings.
+- `git diff --check` passed with LF-to-CRLF working-copy warnings only.
+- `git status --short --branch` reported expected HS111 source/verifier/package/workspace changes.
+
+Dev handoff:
+
+```txt
+workspace/DevHS111-gate-stack-readout-proof.md
+```
+
+HS112 accepted DevHS111.
+
+Files added:
+
+- `workspace/OverseerHS112-hs111-gate-stack-readout-review.md`
+
+Accepted:
+
+- `support.gate_stack_readout` is accepted as a read-only support/readout proof.
+- It reports `external_io` as `policy_only_not_implemented` and `enforced=false`.
+- It keeps Watch arming, schedule/due posture, future `external_io`, current `External API`/User-Agent posture, `live.gate`/cadence, storage safety, active task posture, and confirmation requirement separate.
+- `held_by_external_io` remains readout posture only, not enforced state.
+- No provider calls, `external_io` enforcement, storage lockout, provider dispatch change, catch-up/release behavior, schema migration, renderer redesign, Watch behavior change, storage writes, DB movement, Discovery ref mutation, Evidence/EVEidence writes, hydration, or Assessment Memory behavior change occurred.
+
+Overseer verification:
+
+- `npm.cmd run verify:gate-stack-readout` passed.
+- `npm.cmd run verify:app-readiness` passed.
+- `npm.cmd run verify:service-registry` passed.
+- `npm.cmd run verify:command-authority` passed.
+- `npm.cmd run verify:passive-side-effects` passed.
+- `npm.cmd run verify:watch-executor` passed.
+- `npm.cmd run verify:watch-scheduler` passed.
+- `npm.cmd run verify:watch-offline-readout` passed.
+- `npm.cmd run verify:storage-authority-preflight` passed.
+- `npm.cmd run verify:task-concurrency` passed.
+- `npm.cmd run verify:db-integrity` passed.
+- `npm.cmd run verify:protected-terms` passed with exit code 0, warning-only.
+- `git diff --check` passed with LF-to-CRLF working-copy warnings only.
+
+Parked:
+
+- Future rollout-cadence proof should avoid synchronized client cadence by using stable per-install/lane phase plus small jitter, respecting provider `Retry-After`, and never catch-up flooding after restart, storage unlock, or `external_io` re-enable.

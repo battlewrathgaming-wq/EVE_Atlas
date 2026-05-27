@@ -32,6 +32,7 @@ const {
   loadRuntimeSnapshotSettings,
   saveRuntimeSnapshotSettings
 } = require('./runtimeSnapshotService');
+const { buildGateStackReadout } = require('./gateStackReadoutService');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
 const { writeOperatorDebugTracePack } = require('../support/operatorDebugTracePack');
 const { getScopeDefaults, validateScope } = require('./scopeService');
@@ -327,6 +328,16 @@ const COMMANDS = {
     renderer: true,
     description: 'Report runtime DB, support-artifact, temp/cache/SDE, and byte-usage posture without writing',
     handler: ({ payload, ...context }) => buildStorageAuthorityPreflight(payload, context)
+  },
+  'support.gate_stack_readout': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Read provider-backed work gate stack posture without enforcing external_io, storage, or provider movement',
+    handler: ({ payload, ...context }) => buildGateStackReadout(context.db, payload, {
+      ...context,
+      commandMetadata: listServiceCommands()
+    })
   },
   'runtime.db_snapshot.settings.get': {
     classification: 'read-only',
