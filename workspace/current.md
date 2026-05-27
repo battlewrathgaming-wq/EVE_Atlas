@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Active Dev runway - storage authority preflight
+Status: Resting after accepted HS105 storage authority preflight
 Last updated: 2026-05-27
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS105 opens a read-only storage authority preflight/inventory packet. This is instrumentation before lockout policy.
+Current focus: HS106 accepts HS105 storage authority preflight and parks storage enforcement decisions until Human selects the next bounded packet.
 
 Source of intent:
 
@@ -26,6 +26,8 @@ Source of intent:
 - Human local lookup direction on 2026-05-27: local records are the preferred cheap substrate for story formation; ESI enrichment can fill gaps but is explicit, provider-gated, slower, and not a silent substitute for healthy local storage. Long-term ambition is listening-post style workflows that learn corporation behavior.
 - Systems audits HS100-HS103 on 2026-05-27 accepted as advisory review input: storage authority preflight/inventory is the strongest next system candidate; typed actor name live-gate classification, pruning relationship preview, and Sequencer cadence readout are secondary bounded candidates.
 - Human `Go ahead` on 2026-05-27 accepted opening the storage authority preflight/inventory runway.
+- HS106 accepted HS105 with small Overseer hardening: renderer payloads cannot override arbitrary filesystem paths for DB, trace-pack, or snapshot-settings inspection.
+- `workspace/OverseerHS106-hs105-storage-preflight-review.md`
 - `workspace/OverseerHS105-storage-authority-preflight-runway.md`
 - `workspace/OverseerHS104-systems-audit-synthesis-review.md`
 - `workspace/SystemsAuditHS100-storage-path-budget-authority.md`
@@ -83,25 +85,26 @@ Accepted presentation guidance:
 
 ## Executor
 
-Current executor: Dev
+Current executor: None
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS105-storage-authority-preflight.md
+None
 ```
 
-## Active Runway
+## Resting State
 
-Dev should implement a read-only storage authority preflight/inventory proof layer.
+No Dev or specialist work is currently open.
 
-Ordered steps:
+Next likely candidate lanes:
 
-1. Read current storage/runtime path code and existing readiness/snapshot/debug trace services.
-2. Add or extend a read-only storage authority status model/service that reports current DB path mode, DB/WAL/SHM, snapshot settings/destination, trace-pack output, temp/cache/SDE paths, window/settings path where available, and current byte usage for known Atlas-controlled locations where practical.
-3. Expose the preflight through an existing appropriate read-only service/report surface, or add a narrowly named read-only service if cleaner.
-4. Add offline fixture or script verification proving configured path, fallback path, missing path, and known support-artifact inventory behavior without live/API calls.
-5. Update Evidence / Dev Handoff and create the expected Dev handoff file.
+1. Storage setup/authority policy decision: total lockout versus narrower write/provider/acquisition lockout.
+2. Explicit live-gate classification for uncached typed actor name resolution.
+3. Read-only pruning relationship preview hardening.
+4. Sequencer cadence phase readout from existing state.
+5. Human/UIUX review of the R-Scanner prototype against the operator-intent note.
+6. Observation lookup advisory or inventory pass to identify first strong anchor relationships.
 
 ## Guardrails And Non-Goals
 
@@ -159,9 +162,12 @@ Stop and return to Overseer/Human before implementation if:
 
 ## Required Verification
 
-Run:
+No active implementation packet is open.
+
+Recent closeout verification:
 
 ```powershell
+npm.cmd run verify:storage-authority-preflight
 npm.cmd run verify:app-readiness
 npm.cmd run verify:runtime-snapshot
 npm.cmd run verify:operator-debug-trace
@@ -169,19 +175,10 @@ npm.cmd run verify:sde-build-lookups
 npm.cmd run verify:sde-fixture
 npm.cmd run verify:service-registry
 npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
 npm.cmd run verify:task-concurrency
 npm.cmd run verify:db-integrity
 npm.cmd run verify:protected-terms
-git diff --check
-git status --short --branch
-```
-
-If Electron startup or renderer readiness is touched, also run:
-
-```powershell
-npm.cmd run verify:electron-runtime
-npm.cmd run verify:renderer-shell
-npm.cmd run smoke:electron
 ```
 
 ## Evidence
@@ -703,3 +700,102 @@ Expected evidence:
 - confirmation that no DB move/copy/delete/relocation occurred
 - confirmation that no lockout, pruning, live/API/provider, schema, renderer redesign, or storage migration behavior was added
 - verification commands and results
+
+HS105 Dev storage authority preflight complete.
+
+Files reviewed:
+
+- `AGENTS.md`
+- `workspace/current.md`
+- `workspace/OverseerHS105-storage-authority-preflight-runway.md`
+- `workspace/OverseerHS104-systems-audit-synthesis-review.md`
+- `workspace/SystemsAuditHS100-storage-path-budget-authority.md`
+- `docs/current-state/current-storage-runtime-hardening.md`
+- `workspace/critical/README.md`
+- `workspace/critical/critical-terms.md`
+- current DB, readiness, snapshot, debug trace, temp/cache/SDE, service registry, and verifier code paths
+
+Files changed:
+
+- `src/main/services/storageAuthorityPreflightService.js`
+- `src/main/services/serviceRegistry.js`
+- `scripts/verify-storage-authority-preflight.js`
+- `scripts/verify-service-registry.js`
+- `scripts/verify-command-authority.js`
+- `scripts/verify-passive-side-effects.js`
+- `package.json`
+- `workspace/current.md`
+- `workspace/DevHS105-storage-authority-preflight.md`
+
+Implementation:
+
+- Added read-only service command `storage.authority_preflight`.
+- Reports DB source/mode/flags, DB parent, DB/WAL/SHM existence and byte sizes, snapshot settings/destination status, trace-pack output status, temp/cache/SDE path posture, exposed window/settings path, and known Atlas-controlled byte usage where practical.
+- Added `npm.cmd run verify:storage-authority-preflight` offline fixture coverage for configured path, fallback path, missing path, and support-artifact inventory behavior.
+- Updated registry/authority/passive-side-effect verification to include the new read-only service.
+
+Sample preflight output from focused verifier:
+
+```json
+{
+  "status": "storage authority preflight verified",
+  "path_modes": {
+    "configured": "configured",
+    "fallback": "fallback",
+    "missing": "missing"
+  },
+  "sample_byte_usage": {
+    "configured_database_bytes": 25,
+    "support_known_controlled_locations_bytes": 265,
+    "trace_pack_usage_bytes": 11,
+    "snapshot_destination_usage_bytes": 14
+  }
+}
+```
+
+Boundary confirmation:
+
+- No storage config was written.
+- No real active DB was moved, copied, deleted, created, relocated, or migrated.
+- No lockout, pruning, live/API/provider behavior, schema migration, renderer redesign, or storage migration behavior was added.
+- No provider, Watch, Sequencer, Discovery refs, Evidence/EVEidence, hydration, or Assessment Memory behavior was changed.
+
+Verification:
+
+- `git pull` passed; repository was already up to date.
+- `npm.cmd run verify:storage-authority-preflight` passed.
+- `npm.cmd run verify:app-readiness` passed.
+- `npm.cmd run verify:runtime-snapshot` passed.
+- `npm.cmd run verify:operator-debug-trace` passed.
+- `npm.cmd run verify:sde-build-lookups` passed.
+- `npm.cmd run verify:sde-fixture` passed.
+- `npm.cmd run verify:service-registry` passed.
+- `npm.cmd run verify:command-authority` passed.
+- `npm.cmd run verify:task-concurrency` passed.
+- `npm.cmd run verify:db-integrity` passed.
+- `npm.cmd run verify:protected-terms` passed with exit code 0, warning-only; 6 files scanned and 448 warnings.
+- `git diff --check` passed with LF-to-CRLF working-copy warnings only.
+- `git status --short --branch` reported expected HS105 changes on `main...origin/main`.
+
+Dev handoff:
+
+```txt
+workspace/DevHS105-storage-authority-preflight.md
+```
+
+HS106 accepted DevHS105.
+
+Files added/updated:
+
+- `workspace/OverseerHS106-hs105-storage-preflight-review.md`
+- `src/main/services/storageAuthorityPreflightService.js`
+- `scripts/verify-storage-authority-preflight.js`
+- `workspace/current.md`
+
+Accepted:
+
+- `storage.authority_preflight` is accepted as a read-only storage authority inventory proof layer.
+- It reports DB/storage/support-artifact posture without lockout, migration, pruning, provider behavior, schema changes, or renderer redesign.
+- Overseer tightened the renderer boundary so payload path overrides are ignored unless trusted context sets `allowStorageAuthorityPathOverrides: true`.
+- Focused verifier now proves ordinary renderer-style payloads cannot override trusted DB path, trace-pack path, or snapshot-settings path.
+- All required verification passed in Overseer review.

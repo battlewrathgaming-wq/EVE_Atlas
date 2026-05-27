@@ -46,6 +46,7 @@ async function main() {
     const watchExecutorArmCommand = commands.find((entry) => entry.command === 'watch.executor.arm');
     const watchExecutorDisarmCommand = commands.find((entry) => entry.command === 'watch.executor.disarm');
     const watchExecutorTickCommand = commands.find((entry) => entry.command === 'watch.executor.tick');
+    const storageAuthorityPreflightCommand = commands.find((entry) => entry.command === 'storage.authority_preflight');
     const snapshotSettingsGetCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.get');
     const snapshotSettingsUpdateCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.update');
     assert(readinessCommand, 'app.readiness should be listed');
@@ -88,6 +89,7 @@ async function main() {
     assert(watchExecutorArmCommand?.classification === 'evidence-creating', 'watch.executor.arm should be evidence-creating');
     assert(watchExecutorDisarmCommand?.classification === 'metadata-only', 'watch.executor.disarm should be metadata-only');
     assert(watchExecutorTickCommand?.classification === 'evidence-creating', 'watch.executor.tick should be evidence-creating');
+    assert(storageAuthorityPreflightCommand?.classification === 'read-only', 'storage authority preflight should be read-only');
     assert(snapshotSettingsGetCommand?.classification === 'read-only', 'runtime snapshot settings get should be read-only');
     assert(snapshotSettingsUpdateCommand?.classification === 'metadata-only', 'runtime snapshot settings update should be metadata-only');
 
@@ -97,6 +99,13 @@ async function main() {
     });
     assert(readiness.checks.migrations_applied === true, 'readiness command should return migrated DB state');
     assert(readiness.app.name === 'AURA Atlas', 'readiness command should return app identity');
+
+    const storagePreflight = await invokeServiceCommand('storage.authority_preflight', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(storagePreflight.read_only === true, 'storage authority preflight should declare read-only behavior');
+    assert(storagePreflight.database.path.endsWith('service-registry.sqlite'), 'storage authority preflight should use context DB path');
 
     const liveGate = await invokeServiceCommand('live.gate', {
       action: 'manual.expansion',

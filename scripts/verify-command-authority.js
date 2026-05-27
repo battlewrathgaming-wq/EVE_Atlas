@@ -21,6 +21,8 @@ async function main() {
     assert(commands.get('metadata.hydration')?.effects.includes('metadata-readability'), 'metadata.hydration should declare readability metadata effect');
     assert(commands.get('runtime.db_snapshot.create')?.effects.includes('support-artifact'), 'snapshot create should declare support artifact effect');
     assert(commands.get('support.debug_trace_pack')?.effects.includes('support-artifact'), 'trace pack should declare support artifact effect');
+    assert(commands.get('storage.authority_preflight')?.classification === 'read-only', 'storage authority preflight should be read-only');
+    assert(commands.get('storage.authority_preflight')?.effects.includes('read-only'), 'storage authority preflight should declare read-only effect');
     assert(commands.get('task.cancel')?.classification === 'runtime-control', 'task.cancel should be runtime-control');
     assert(commands.get('task.cancel')?.effects.includes('runtime-control'), 'task.cancel should declare runtime control effect');
 
@@ -30,6 +32,7 @@ async function main() {
     const rendererCommands = listServiceCommands({ forRenderer: true });
     const rendererNames = new Set(rendererCommands.map((entry) => entry.command));
     assert(rendererNames.has('manual.expansion'), 'manual.expansion should be renderer eligible');
+    assert(rendererNames.has('storage.authority_preflight'), 'storage authority preflight should be renderer eligible');
     assert(rendererNames.has('runtime.db_snapshot.create'), 'snapshot create should be renderer eligible');
     assert(!rendererNames.has('sde.import.topology'), 'SDE import should not be renderer eligible');
     assert(!rendererNames.has('watch.executor.tick'), 'watch executor tick should not be renderer eligible');

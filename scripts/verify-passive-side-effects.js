@@ -96,6 +96,7 @@ async function verifySeededDb(root) {
         entityName: 'Signal Cartel Test'
       })],
       ['runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],
+      ['storage.authority_preflight', () => invokeServiceCommand('storage.authority_preflight', {}, context)],
       ['task.list', () => invokeServiceCommand('task.list', { limit: 10 }, context)],
       ['assessment.list', () => invokeServiceCommand('assessment.list', {
         entityType: 'character',
@@ -130,6 +131,7 @@ async function verifyEmptyDb(root) {
       ['empty watch.schedule', () => invokeServiceCommand('watch.schedule', {}, context)],
       ['empty task.list', () => invokeServiceCommand('task.list', { limit: 5 }, context)],
       ['empty runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],
+      ['empty storage.authority_preflight', () => invokeServiceCommand('storage.authority_preflight', {}, context)],
       ['empty assessment.list', () => invokeServiceCommand('assessment.list', {}, context)]
     ];
 

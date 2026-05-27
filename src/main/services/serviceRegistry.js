@@ -32,6 +32,7 @@ const {
   loadRuntimeSnapshotSettings,
   saveRuntimeSnapshotSettings
 } = require('./runtimeSnapshotService');
+const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
 const { writeOperatorDebugTracePack } = require('../support/operatorDebugTracePack');
 const { getScopeDefaults, validateScope } = require('./scopeService');
 const { defaultTaskRunner } = require('./taskRunner');
@@ -319,6 +320,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview runtime DB snapshot destination, counts, and freshness without writing',
     handler: ({ db, payload, ...context }) => buildRuntimeDbSnapshotPreflight(db, payload, context)
+  },
+  'storage.authority_preflight': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Report runtime DB, support-artifact, temp/cache/SDE, and byte-usage posture without writing',
+    handler: ({ payload, ...context }) => buildStorageAuthorityPreflight(payload, context)
   },
   'runtime.db_snapshot.settings.get': {
     classification: 'read-only',

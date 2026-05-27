@@ -45,6 +45,7 @@
     "verify:retention-preflight": "node scripts/verify-retention-preflight.js",
     "verify:retention-deletion-boundary": "node scripts/verify-retention-deletion-boundary.js",
     "verify:runtime-snapshot": "node scripts/verify-runtime-db-snapshot.js",
+    "verify:storage-authority-preflight": "node scripts/verify-storage-authority-preflight.js",
     "verify:assessment-artifacts": "node scripts/verify-assessment-artifacts.js",
     "verify:assessment-review": "node scripts/verify-assessment-review-surface.js",
     "verify:evidence-rules": "node scripts/verify-evidence-rule-regressions.js",
