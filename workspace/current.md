@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after accepted HS111 gate-stack readout proof
+Status: Active Dev runway for HS113 cadence simulation proof
 Last updated: 2026-05-27
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS112 accepts HS111 gate-stack readout proof and parks enforcement/cadence decisions until the next bounded packet is selected.
+Current focus: HS113 opens a read-only cadence simulation proof before provider release, queue/sequencer machinery, storage unlock behavior, or `external_io` enforcement.
 
 Source of intent:
 
@@ -29,6 +29,7 @@ Source of intent:
 - Human direction on 2026-05-27: when external I/O is off, clocks may keep readout/schedule posture but provider movement is held as `held_by_external_io`; releasing external I/O must not cause catch-up flooding.
 - Human accepted on 2026-05-27: use HS110 to open a bounded Dev packet for a read-only gate-stack/readout proof.
 - Human future cadence concern on 2026-05-27: avoid hard-coded shared provider cadence across clients; future release should use stable per-install/lane phase plus small jitter, respect provider `Retry-After`, and never catch-up flood after restart, storage unlock, or `external_io` re-enable.
+- Human accepted on 2026-05-27: proceed to read-only cadence simulation proof as the next bounded packet.
 - Systems audits HS100-HS103 on 2026-05-27 accepted as advisory review input: storage authority preflight/inventory is the strongest next system candidate; typed actor name live-gate classification, pruning relationship preview, and Sequencer cadence readout are secondary bounded candidates.
 - Human `Go ahead` on 2026-05-27 accepted opening the storage authority preflight/inventory runway.
 - HS106 accepted HS105 with small Overseer hardening: renderer payloads cannot override arbitrary filesystem paths for DB, trace-pack, or snapshot-settings inspection.
@@ -38,6 +39,7 @@ Source of intent:
 - `workspace/SystemsAuditHS109-external-io-policy-fit.md`
 - `workspace/OverseerHS111-gate-stack-readout-proof-runway.md`
 - `workspace/OverseerHS112-hs111-gate-stack-readout-review.md`
+- `workspace/OverseerHS113-cadence-simulation-proof-runway.md`
 - `workspace/SystemsProposalHS104-two-clock-recovery-sequencer.md`
 - `workspace/SystemsTraceHS105-search-watch-recovery-rewire-map.md`
 - `workspace/OverseerHS106-hs105-storage-preflight-review.md`
@@ -98,31 +100,31 @@ Accepted presentation guidance:
 
 ## Executor
 
-Current executor: None
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-None
+workspace/DevHS113-cadence-simulation-proof.md
 ```
 
-## Resting State
+## Active Runway
 
-No Dev or specialist work is currently open.
+Dev should execute `workspace/OverseerHS113-cadence-simulation-proof-runway.md`.
 
-Next likely candidate lanes:
+Ordered steps:
 
-1. Read-only cadence simulation for Acquisition/Hydration lanes: stable per-install/lane phase, bounded jitter, retry-after, missed slots, pending refs, storage locked/unlocked, `external_io` off/on, and no catch-up flood.
-2. Storage setup/authority policy decision: total lockout versus narrower write/provider/acquisition lockout.
-3. Explicit live-gate classification for uncached typed actor name resolution.
-4. Read-only pruning relationship preview hardening.
-5. Acquisition/Hydration clock readout proof: show zKill Discovery, ESI Evidence expansion, Watch hydration, and view hydration pressure separately.
-6. Human/UIUX review of the R-Scanner prototype against the operator-intent note.
-7. Observation lookup advisory or inventory pass to identify first strong anchor relationships.
+1. Inspect existing Watch scheduler, `Watch_offline`, gate-stack readout, live gate, and verifier patterns.
+2. Add a fixture-only, read-only cadence simulation helper or verifier surface.
+3. Simulate Acquisition zKill Discovery, Acquisition ESI Evidence expansion, Watch hydration, and view/local-record hydration lanes separately.
+4. Demonstrate stable per-install/lane phase, bounded jitter, provider `Retry-After`, due/held/next eligible, `external_io` off/on, storage locked/unlocked, missed slots, pending refs, restart, and no catch-up flood.
+5. Add focused verification and sample JSON output.
+6. Update Evidence / Dev Handoff with files changed, sample output, verification, and boundary confirmation.
 
 ## Guardrails And Non-Goals
 
-- Read-only gate-stack/support readout only.
+- Read-only cadence simulation proof only.
+- Simulation output is not active runtime policy.
 - `external_io` is policy-only/not implemented in this packet.
 - No storage config writing.
 - No DB movement, copy, migration, relocation, or deletion.
@@ -133,6 +135,8 @@ Next likely candidate lanes:
 - No new provider calls.
 - No new provider movement.
 - No provider dispatch behavior changes.
+- No Watch scheduler behavior changes.
+- No persisted cadence setting.
 - No broad provider work queue.
 - No high-volume request-attempt ledger.
 - No persisted sequencer packet table.
@@ -163,6 +167,9 @@ Stop and return to Overseer/Human before implementation if:
 - implementation needs to choose the final storage config filename/location
 - implementation would enforce app lockout or write/provider/acquisition lockout
 - implementation would implement `external_io` as a persisted setting, command switch, or enforcement layer
+- implementation would introduce persisted cadence state
+- implementation would change Watch scheduler/runtime behavior
+- implementation would create queue/sequencer machinery
 - implementation would cancel active provider work
 - implementation would change provider dispatch behavior
 - implementation would move, create, copy, or delete a real active DB
@@ -184,19 +191,16 @@ Stop and return to Overseer/Human before implementation if:
 
 ## Required Verification
 
-Run focused verification for any new/changed readout plus:
+Run focused verification for the simulation plus:
 
 ```powershell
-npm.cmd run verify:app-readiness
+npm.cmd run verify:gate-stack-readout
+npm.cmd run verify:watch-scheduler
+npm.cmd run verify:watch-offline-readout
 npm.cmd run verify:service-registry
 npm.cmd run verify:command-authority
 npm.cmd run verify:passive-side-effects
-npm.cmd run verify:watch-executor
-npm.cmd run verify:watch-scheduler
-npm.cmd run verify:watch-offline-readout
-npm.cmd run verify:storage-authority-preflight
 npm.cmd run verify:task-concurrency
-npm.cmd run verify:db-integrity
 npm.cmd run verify:protected-terms
 git diff --check
 git status --short --branch
@@ -1038,3 +1042,22 @@ Overseer verification:
 Parked:
 
 - Future rollout-cadence proof should avoid synchronized client cadence by using stable per-install/lane phase plus small jitter, respecting provider `Retry-After`, and never catch-up flooding after restart, storage unlock, or `external_io` re-enable.
+
+HS113 opens the read-only cadence simulation proof runway.
+
+Files added:
+
+- `workspace/OverseerHS113-cadence-simulation-proof-runway.md`
+
+Accepted:
+
+- The next bounded step is simulation proof, not runtime policy enforcement.
+- Dev should model Acquisition and Hydration cadence using fixtures only.
+- The proof should show stable per-install/lane phase, bounded jitter, provider `Retry-After`, held/due/next-eligible posture, storage/external I/O holds, missed slots, pending refs, restart/re-enable/unlock behavior, and no catch-up flood.
+- No provider calls, runtime mutation, schema migration, queue/sequencer implementation, persisted cadence setting, storage lockout, `external_io` enforcement, Watch scheduler behavior change, or renderer work is opened.
+
+Dev handoff expected:
+
+```txt
+workspace/DevHS113-cadence-simulation-proof.md
+```
