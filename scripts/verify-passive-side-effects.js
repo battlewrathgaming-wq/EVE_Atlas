@@ -97,6 +97,7 @@ async function verifySeededDb(root) {
       })],
       ['runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],
       ['storage.authority_preflight', () => invokeServiceCommand('storage.authority_preflight', {}, context)],
+      ['storage.setup_gate_readout', () => invokeServiceCommand('storage.setup_gate_readout', {}, context)],
       ['support.gate_stack_readout', () => invokeServiceCommand('support.gate_stack_readout', {}, context)],
       ['task.list', () => invokeServiceCommand('task.list', { limit: 10 }, context)],
       ['assessment.list', () => invokeServiceCommand('assessment.list', {
@@ -133,6 +134,7 @@ async function verifyEmptyDb(root) {
       ['empty task.list', () => invokeServiceCommand('task.list', { limit: 5 }, context)],
       ['empty runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],
       ['empty storage.authority_preflight', () => invokeServiceCommand('storage.authority_preflight', {}, context)],
+      ['empty storage.setup_gate_readout', () => invokeServiceCommand('storage.setup_gate_readout', {}, context)],
       ['empty support.gate_stack_readout', () => invokeServiceCommand('support.gate_stack_readout', {}, context)],
       ['empty assessment.list', () => invokeServiceCommand('assessment.list', {}, context)]
     ];

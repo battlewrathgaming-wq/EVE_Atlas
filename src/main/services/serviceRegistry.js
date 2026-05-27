@@ -34,6 +34,7 @@ const {
 } = require('./runtimeSnapshotService');
 const { buildGateStackReadout } = require('./gateStackReadoutService');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
+const { buildStorageSetupGateReadout } = require('./storageSetupGateReadoutService');
 const { writeOperatorDebugTracePack } = require('../support/operatorDebugTracePack');
 const { getScopeDefaults, validateScope } = require('./scopeService');
 const { defaultTaskRunner } = require('./taskRunner');
@@ -328,6 +329,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Report runtime DB, support-artifact, temp/cache/SDE, and byte-usage posture without writing',
     handler: ({ payload, ...context }) => buildStorageAuthorityPreflight(payload, context)
+  },
+  'storage.setup_gate_readout': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Report storage setup and disk-budget gate posture without enforcing lockout or changing storage',
+    handler: ({ payload, ...context }) => buildStorageSetupGateReadout(payload, context)
   },
   'support.gate_stack_readout': {
     classification: 'read-only',

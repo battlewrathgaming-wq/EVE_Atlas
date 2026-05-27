@@ -53,6 +53,7 @@ Current implementation state:
 - Per-fingerprint cooldown/lockout exists service-memory-only.
 - Watch schedule diagnostics exist.
 - `Watch_offline` derives read-only restart/recovery state from durable local rows.
+- `storage.setup_gate_readout` derives read-only storage setup and disk-budget posture from existing storage authority facts.
 - Durable movement checkpointing and broad provider work queues are deferred.
 
 ## External I/O Gate Direction
@@ -141,6 +142,10 @@ Accepted direction:
 Open implementation choice:
 
 - The first implementation can choose between total app lockout or narrower write/provider/acquisition lockout, but must preserve the rule that meaningful collection and storage writes do not proceed until storage authority is established.
+
+Current implementation note:
+
+- HS115 added `storage.setup_gate_readout` as posture only. It reports configured-ready, fallback acknowledgement-required, demo/fixture-only, missing/unavailable, invalid/degraded, and budget warning/hard-lock states without enforcing them.
 
 Likely allowed while locked:
 

@@ -1215,3 +1215,158 @@ Dev handoff expected:
 ```txt
 workspace/DevHS115-storage-setup-gate-readout.md
 ```
+
+HS115 Dev storage setup gate readout complete.
+
+Files reviewed:
+
+- `AGENTS.md`
+- `workspace/current.md`
+- `workspace/OverseerHS115-storage-setup-gate-readout-runway.md`
+- `docs/current-state/current-storage-runtime-hardening.md`
+- `src/main/services/storageAuthorityPreflightService.js`
+- `src/main/services/gateStackReadoutService.js`
+- `src/main/services/serviceRegistry.js`
+- existing storage, gate-stack, registry, command-authority, and passive-side-effect verifier patterns
+
+Files changed:
+
+- `src/main/services/storageSetupGateReadoutService.js`
+- `src/main/services/serviceRegistry.js`
+- `scripts/verify-storage-setup-gate.js`
+- `scripts/verify-service-registry.js`
+- `scripts/verify-command-authority.js`
+- `scripts/verify-passive-side-effects.js`
+- `package.json`
+- `workspace/current.md`
+- `workspace/DevHS115-storage-setup-gate-readout.md`
+
+Implementation:
+
+- Added read-only service command `storage.setup_gate_readout`.
+- Added `npm.cmd run verify:storage-setup-gate`.
+- Reports storage setup posture from existing preflight-style facts without enforcing lockout.
+- Distinguishes configured ready, fallback/current-file acknowledgement required, demo/fixture only, missing/unavailable blocked, invalid/degraded setup-required, budget unconfigured, within budget, warning, strong warning, and hard-lock budget posture.
+- Names allowed and blocked work classes while locked and keeps local read/report posture separate from provider-backed acquisition and write behavior.
+- Proves renderer payloads cannot override trusted storage facts or probe arbitrary storage paths through this readout.
+
+Sample readout output:
+
+```json
+{
+  "status": "storage setup gate readout verified",
+  "sample_ready": {
+    "storage_state": "configured_ready",
+    "setup_gate": "ready",
+    "budget_state": "within_budget",
+    "locked": false,
+    "local_read_report": "available_if_records_accessible",
+    "blocked_reasons": []
+  },
+  "sample_fallback": {
+    "storage_state": "fallback_ack_required",
+    "setup_gate": "operator_ack_required",
+    "budget_state": "within_budget",
+    "locked": true,
+    "local_read_report": "available_if_records_accessible",
+    "blocked_reasons": [
+      "fallback_ack_required"
+    ]
+  },
+  "sample_missing": {
+    "storage_state": "missing_unavailable_blocked",
+    "setup_gate": "setup_required",
+    "budget_state": "within_budget",
+    "locked": true,
+    "local_read_report": "blocked_storage_unavailable",
+    "blocked_reasons": [
+      "missing_unavailable_blocked"
+    ]
+  },
+  "sample_budget_states": {
+    "unconfigured": "budget_unconfigured",
+    "within": "within_budget",
+    "warning": "budget_warning",
+    "strong_warning": "budget_strong_warning",
+    "hard_lock": "budget_hard_lock"
+  }
+}
+```
+
+Boundary confirmation:
+
+- No storage config was written.
+- No final storage config filename/location was chosen.
+- No active DB was moved, copied, migrated, created, restored, relocated, or deleted.
+- No lockout enforcement, pruning/deletion execution, provider calls, Evidence/EVEidence writes, hydration writes, Watch scheduler change, Acquisition/Hydration cadence change, provider dispatch change, schema change, renderer layout change, or file selector work occurred.
+- Budget is reported as Atlas-controlled disk usage posture, not provider/API request pacing.
+
+Verification:
+
+- `npm.cmd run verify:storage-setup-gate` passed.
+- `npm.cmd run verify:storage-authority-preflight` passed.
+- `npm.cmd run verify:gate-stack-readout` passed after sequential rerun; an earlier parallel run collided with another verifier's temporary fixture cleanup.
+- `npm.cmd run verify:service-registry` passed after sequential rerun; an earlier parallel run collided with another verifier's temporary fixture cleanup.
+- `npm.cmd run verify:command-authority` passed.
+- `npm.cmd run verify:passive-side-effects` passed.
+- `npm.cmd run verify:protected-terms` passed with exit code 0, warning-only; 8 changed files scanned.
+- `git diff --check` passed with LF-to-CRLF working-copy warnings only.
+- `git status --short --branch` reported expected HS115 source/verifier/package/workspace changes on `main...origin/main`.
+
+Dev handoff:
+
+```txt
+workspace/DevHS115-storage-setup-gate-readout.md
+```
+
+HS118 accepted DevHS115.
+
+Files added:
+
+- `workspace/OverseerHS118-hs115-storage-setup-gate-review.md`
+
+Files updated:
+
+- `docs/current-state/current-storage-runtime-hardening.md`
+- `workspace/overview.md`
+- `workspace/current.md`
+
+Accepted:
+
+- `storage.setup_gate_readout` is accepted as a read-only storage setup and disk-budget posture readout.
+- It distinguishes configured ready, fallback/current-file acknowledgement required, demo/fixture only, missing/unavailable blocked, invalid/degraded setup-required, budget unconfigured, within budget, warning, strong warning, and hard-lock posture.
+- It names allowed/blocked work classes while locked and keeps local read/report posture separate from provider-backed acquisition and write behavior.
+- Renderer payloads cannot override trusted storage facts or probe arbitrary storage paths through this readout.
+
+Boundary confirmation:
+
+- No storage config was written.
+- No final storage config filename/location was chosen.
+- No active DB was moved, copied, migrated, created, restored, relocated, or deleted.
+- No lockout enforcement, pruning/deletion execution, provider calls, Evidence/EVEidence writes, hydration writes, Watch scheduler change, Acquisition/Hydration cadence change, provider dispatch change, schema change, renderer layout change, or file selector work occurred.
+- Budget is reported as Atlas-controlled disk usage posture, not provider/API request pacing.
+
+Overseer verification:
+
+- `npm.cmd run verify:storage-setup-gate` passed.
+- `npm.cmd run verify:storage-authority-preflight` passed.
+- `npm.cmd run verify:gate-stack-readout` passed.
+- `npm.cmd run verify:service-registry` passed.
+- `npm.cmd run verify:command-authority` passed.
+- `npm.cmd run verify:passive-side-effects` passed.
+- `npm.cmd run verify:protected-terms` passed with exit code 0, warning-only.
+- `git diff --check` passed with LF-to-CRLF working-copy warnings only.
+
+Resting state:
+
+- No Dev runway is open.
+- Atlas Storage And Runtime Hardening remains the active milestone.
+- Next bounded packet should be selected by Human / Overseer.
+
+Likely next candidates:
+
+- Storage setup config persistence and acknowledgement readout.
+- Storage setup enforcement for provider-backed acquisition/write classes.
+- Hydration backlog preview derived from existing rows, using `workspace/DataHS116-local-data-shape-hydration-backlog-review.md`.
+- Relationship pivot proof report, using `workspace/DataHS117-relationship-pivot-data-substrate-assurance.md`.
+- `external_io` policy implementation/readout follow-up.

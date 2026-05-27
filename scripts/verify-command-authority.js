@@ -23,6 +23,8 @@ async function main() {
     assert(commands.get('support.debug_trace_pack')?.effects.includes('support-artifact'), 'trace pack should declare support artifact effect');
     assert(commands.get('storage.authority_preflight')?.classification === 'read-only', 'storage authority preflight should be read-only');
     assert(commands.get('storage.authority_preflight')?.effects.includes('read-only'), 'storage authority preflight should declare read-only effect');
+    assert(commands.get('storage.setup_gate_readout')?.classification === 'read-only', 'storage setup gate readout should be read-only');
+    assert(commands.get('storage.setup_gate_readout')?.effects.includes('read-only'), 'storage setup gate readout should declare read-only effect');
     assert(commands.get('support.gate_stack_readout')?.classification === 'read-only', 'gate stack readout should be read-only');
     assert(commands.get('support.gate_stack_readout')?.effects.includes('read-only'), 'gate stack readout should declare read-only effect');
     assert(commands.get('task.cancel')?.classification === 'runtime-control', 'task.cancel should be runtime-control');
@@ -35,6 +37,7 @@ async function main() {
     const rendererNames = new Set(rendererCommands.map((entry) => entry.command));
     assert(rendererNames.has('manual.expansion'), 'manual.expansion should be renderer eligible');
     assert(rendererNames.has('storage.authority_preflight'), 'storage authority preflight should be renderer eligible');
+    assert(rendererNames.has('storage.setup_gate_readout'), 'storage setup gate readout should be renderer eligible');
     assert(rendererNames.has('support.gate_stack_readout'), 'gate stack readout should be renderer eligible');
     assert(rendererNames.has('runtime.db_snapshot.create'), 'snapshot create should be renderer eligible');
     assert(!rendererNames.has('sde.import.topology'), 'SDE import should not be renderer eligible');
