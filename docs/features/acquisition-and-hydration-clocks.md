@@ -167,6 +167,22 @@ Releasing external I/O must not mean catch-up flood.
 
 When external I/O is turned back on, Atlas should resume under normal cadence/provider controls. It should not immediately fire every due, missed, or held acquisition/hydration action. Previously held work should be re-evaluated through the relevant clock, lane, provider/cadence gate, storage safety gate, and operator confirmation rules.
 
+## Cadence Simulation Proof
+
+HS113 added a read-only fixture simulation for future cadence behavior. It is proof material only, not active runtime policy.
+
+Accepted simulation principles:
+
+- use stable per-install/lane phase plus bounded jitter instead of a shared hard-coded release instant
+- keep Acquisition lanes and Hydration Recovery lanes separate
+- respect provider `Retry-After` over local cadence
+- treat storage lock and future `external_io` off states as held posture, not failure
+- do not accumulate request debt from missed slots
+- do not catch-up flood after restart, storage unlock, or future `external_io` re-enable
+- let pending Discovery refs hold fresh zKill Discovery without blocking separate ESI Evidence expansion as the same concept
+
+This proof does not authorize provider release behavior, persisted cadence settings, schema changes, queue/sequencer implementation, storage lockout, `external_io` enforcement, Watch scheduler behavior changes, hydration changes, or Evidence/EVEidence write changes.
+
 ## Bottleneck
 
 The bottleneck to design around is usually:

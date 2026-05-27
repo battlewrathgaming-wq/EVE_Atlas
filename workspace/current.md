@@ -1061,3 +1061,131 @@ Dev handoff expected:
 ```txt
 workspace/DevHS113-cadence-simulation-proof.md
 ```
+
+HS113 Dev cadence simulation proof complete.
+
+Files reviewed:
+
+- `AGENTS.md`
+- `workspace/current.md`
+- `workspace/OverseerHS113-cadence-simulation-proof-runway.md`
+- `src/main/watchlist/watchScheduler.js`
+- `src/main/watchlist/watchOfflineReadout.js`
+- `src/main/services/gateStackReadoutService.js`
+- `src/main/services/liveApiGateService.js`
+- `src/main/services/storageAuthorityPreflightService.js`
+- verifier patterns under `scripts/`
+
+Files changed:
+
+- `src/main/support/cadenceSimulation.js`
+- `scripts/verify-cadence-simulation.js`
+- `package.json`
+- `workspace/current.md`
+- `workspace/DevHS113-cadence-simulation-proof.md`
+
+Implementation:
+
+- Added fixture-only support helper `buildCadenceSimulation`.
+- Added `npm.cmd run verify:cadence-simulation`.
+- Simulates `acquisition.zkill_discovery`, `acquisition.esi_evidence_expansion`, `hydration.watch`, and `hydration.view_local_record` as separate lanes.
+- Demonstrates stable per-install/lane phase, bounded jitter, provider `Retry-After`, due/held/next eligible posture, `external_io` off/on, storage locked/unlocked, missed slots, pending refs, restart/re-enable/unlock no-catch-up behavior.
+
+Sample simulation output:
+
+```json
+{
+  "status": "cadence simulation verified",
+  "proofs": {
+    "simulated_installs_do_not_synchronize": true,
+    "install_next_eligible_times": [
+      "2026-05-27T12:03:04.000Z",
+      "2026-05-27T12:00:32.000Z",
+      "2026-05-27T12:10:53.000Z",
+      "2026-05-27T12:14:38.000Z"
+    ],
+    "no_catch_up_after_restart": true,
+    "no_catch_up_after_external_io_reenable": true,
+    "no_catch_up_after_storage_unlock": true,
+    "retry_after_overrides_local_cadence": true,
+    "pending_refs_hold_fresh_zkill_discovery": true,
+    "acquisition_and_hydration_lanes_separate": true,
+    "runtime_policy_created": false,
+    "provider_calls": 0
+  }
+}
+```
+
+Boundary confirmation:
+
+- No provider calls, runtime dispatch, runtime mutation, storage writes, DB movement, schema migration, persisted cadence setting, queue/sequencer machinery, provider release behavior, `external_io` enforcement, storage lockout enforcement, Watch scheduler behavior change, provider dispatch behavior change, hydration behavior change, Evidence/EVEidence write behavior change, or renderer work occurred.
+- Simulation output is explicitly not active runtime policy.
+
+Verification:
+
+- `npm.cmd run verify:cadence-simulation` passed and printed sample JSON.
+- `npm.cmd run verify:gate-stack-readout` passed.
+- `npm.cmd run verify:watch-scheduler` passed.
+- `npm.cmd run verify:watch-offline-readout` passed.
+- `npm.cmd run verify:service-registry` passed.
+- `npm.cmd run verify:command-authority` passed.
+- `npm.cmd run verify:passive-side-effects` passed.
+- `npm.cmd run verify:task-concurrency` passed.
+- `npm.cmd run verify:protected-terms` passed with exit code 0, warning-only; 4 changed files scanned.
+- `git diff --check` passed with LF-to-CRLF working-copy warnings only.
+- `git status --short --branch` reported expected HS113 source/verifier/package/workspace changes.
+
+Dev handoff:
+
+```txt
+workspace/DevHS113-cadence-simulation-proof.md
+```
+
+HS114 accepted DevHS113.
+
+Files added:
+
+- `workspace/OverseerHS114-hs113-cadence-simulation-review.md`
+
+Files updated:
+
+- `docs/features/acquisition-and-hydration-clocks.md`
+- `workspace/overview.md`
+- `workspace/current.md`
+
+Accepted:
+
+- `verify:cadence-simulation` is accepted as an offline fixture proof, not runtime policy.
+- The simulation demonstrates stable per-install/lane phase, bounded jitter, provider `Retry-After`, due/held/next-eligible posture, storage lock, future `external_io` hold, missed slots, pending refs, restart/re-enable/unlock no-catch-up behavior, and separated Acquisition/Hydration lanes.
+- The proof supports the future direction that Atlas should avoid synchronized provider release across clients and must not catch-up flood after restart, storage unlock, or external I/O re-enable.
+
+Boundary confirmation:
+
+- No provider calls, runtime dispatch, runtime mutation, storage writes, DB movement, schema migration, persisted cadence setting, queue/sequencer machinery, provider release behavior, `external_io` enforcement, storage lockout enforcement, Watch scheduler behavior change, provider dispatch behavior change, hydration behavior change, Evidence/EVEidence write behavior change, or renderer work occurred.
+
+Overseer verification:
+
+- `npm.cmd run verify:cadence-simulation` passed.
+- `npm.cmd run verify:gate-stack-readout` passed.
+- `npm.cmd run verify:watch-scheduler` passed.
+- `npm.cmd run verify:watch-offline-readout` passed.
+- `npm.cmd run verify:service-registry` passed.
+- `npm.cmd run verify:command-authority` passed.
+- `npm.cmd run verify:passive-side-effects` passed.
+- `npm.cmd run verify:task-concurrency` passed.
+- `npm.cmd run verify:protected-terms` passed with exit code 0, warning-only.
+- `git diff --check` passed with LF-to-CRLF working-copy warnings only.
+
+Resting state:
+
+- No Dev runway is open.
+- Atlas Storage And Runtime Hardening remains the active milestone.
+- Next bounded packet should be selected by Human / Overseer.
+
+Likely next candidates:
+
+- Storage setup / authority enforcement design or readout.
+- `external_io` policy implementation design/readout.
+- Cadence follow-up: decide readout-only versus first tiny enforcement slice.
+- Typed actor name live-gate classification.
+- Read-only pruning relationship preview.
