@@ -162,6 +162,24 @@ Hardening remains focused on preserving coherent local state under:
 - snapshot/support artifact generation
 - deletion preflight and future deletion execution
 
+## Local Lookup And Enrichment Direction
+
+Local records are the preferred substrate for fast, cheap Atlas story formation.
+
+Atlas can use ESI enrichment to fill missing context, but enrichment is explicit, provider-gated, slower, rate-limited, and more expensive than local lookup. ESI enrichment is not a silent substitute for healthy local storage.
+
+Accepted direction:
+
+- Use healthy local records first.
+- Treat ESI enrichment as controlled gap filling or recovery, not normal baseline lookup behavior.
+- If storage is unavailable or broken, hard-lock writes/acquisition until fixed.
+- If optional lookup metadata is incomplete, Atlas may allow controlled enrichment or degraded display with honest basis/cost.
+- Do not silently replace local lookup with provider calls.
+
+The long-term product goal is rich story telling and discovery from connected local records: who was killed, by whom, exactly when, which pilots were in a corporation together, how many killmails Atlas has seen before, and what behavior patterns emerge over time.
+
+Longer-term ambition: Atlas should support listening-post style workflows that learn corporation behavior through patient scoped acquisition, enrichment, local lookup, pruning, and Observation.
+
 ## Parked Or Future Lanes
 
 Likely future bounded lanes:
@@ -170,6 +188,8 @@ Likely future bounded lanes:
 - sequencer progress and recovery readout
 - provider cadence and capacity policy
 - deletion execution after storage/snapshot authority is accepted
+- local lookup completeness and controlled enrichment policy
+- listening-post/corporation-behavior discovery model
 - durable movement checkpointing only if derived `Watch_offline` state proves insufficient
 
 UI/body work should remain requirement context unless explicitly opened by `workspace/current.md`.

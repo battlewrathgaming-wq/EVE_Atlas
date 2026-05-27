@@ -23,6 +23,7 @@ Source of intent:
 - Human storage direction on 2026-05-27: real/alpha collection should lock until storage location is explicit; budget means disk-space used in the pointed Atlas location, not scan credits; 70%/95% warn and 100% hard-lock writes/acquisition; missing/unavailable storage should hard-lock instead of silently relocating; pruning is a future intelligence-formation suite.
 - Human storage path direction on 2026-05-27: Atlas should behave as a portable briefcase with app-local storage config, not hidden Windows settings; no silent relocation if storage disappears; migration/copy/move is out of scope unless explicitly opened.
 - Human pruning direction on 2026-05-27: pruning should support variable time windows, no-interest/Marked filtering, entity ID filtering, and Assessment reference review; noise means stale or excessive records that no longer serve target hunting, threat detection, or current pattern recognition.
+- Human local lookup direction on 2026-05-27: local records are the preferred cheap substrate for story formation; ESI enrichment can fill gaps but is explicit, provider-gated, slower, and not a silent substitute for healthy local storage. Long-term ambition is listening-post style workflows that learn corporation behavior.
 - `docs/current-state/current-storage-runtime-hardening.md`
 - `docs/features/observation-lookup-model.md`
 - `docs/features/r-scanner-sequencer-presentation.md`
@@ -611,3 +612,17 @@ Accepted:
 - First implementation may choose total lockout or narrower write/provider/acquisition lockout, but meaningful collection/writes must wait for storage authority.
 - Pruning is a suite: time-window pruning, no-interest/Marked pruning, entity ID pruning, and Assessment reference review are accepted product directions.
 - Noise means stale or excessive records that no longer help target hunting, threat detection, or current behavior pattern recognition.
+
+HS99 captured local lookup and long-term discovery ambition.
+
+Files updated:
+
+- `docs/current-state/current-storage-runtime-hardening.md`
+
+Accepted:
+
+- Local records are the preferred substrate for fast, cheap story formation.
+- ESI enrichment may fill gaps, but it is explicit, provider-gated, slower, rate-limited, and not a silent substitute for healthy local storage.
+- Atlas should use local lookup first, then controlled enrichment or degraded display when optional lookup metadata is incomplete.
+- Rich story telling should eventually answer who was killed, by whom, when, corporation relationships, prior sightings, and behavior patterns.
+- Long-term ambition includes listening-post style workflows that learn corporation behavior through patient scoped acquisition, enrichment, local lookup, pruning, and Observation.
