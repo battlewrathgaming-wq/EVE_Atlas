@@ -34,7 +34,7 @@ function main() {
   const warnings = [
     ...findBorrowingWarnings(files, lookup),
     ...findBoundaryWarnings(files),
-    ...discoverCandidates(files, lookup)
+    ...(options.includeAtlasCandidates ? discoverCandidates(files, lookup) : [])
   ].sort(compareWarnings);
 
   console.log('Atlas protected-term discovery');
@@ -42,6 +42,7 @@ function main() {
   console.log(`source: ${source}`);
   console.log('authority: advisory evidence only; shared spelling does not imply shared meaning');
   console.log('protected-word files: lookup inputs, not a universal glossary or rename mandate');
+  console.log(`atlas-owned candidate discovery: ${options.includeAtlasCandidates ? 'included by --include-atlas-candidates' : 'filtered by default'}`);
   console.log(`files scanned: ${files.length}`);
   for (const file of files) {
     console.log(`- scanned: ${rel(file)}`);
@@ -74,13 +75,18 @@ function main() {
 function parseArgs(args) {
   const options = {
     baseline: false,
-    maxWarnings: DEFAULT_MAX_REPORT
+    maxWarnings: DEFAULT_MAX_REPORT,
+    includeAtlasCandidates: false
   };
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
     if (arg === '--baseline') {
       options.baseline = true;
+      continue;
+    }
+    if (arg === '--include-atlas-candidates') {
+      options.includeAtlasCandidates = true;
       continue;
     }
     if (arg === '--max-warnings') {
@@ -227,9 +233,11 @@ function shouldScanFile(file) {
 function findBorrowingWarnings(files, lookup) {
   const warnings = [];
   const externalTerms = [...lookup.external, ...lookup.quarantine];
+  const atlasOwnedTerms = new Set(lookup.own.map((entry) => entry.term.toLowerCase()));
   forEachLine(files, (line, file, lineNumber) => {
     if (isProtectiveOrReferenceLine(line)) return;
     for (const entry of externalTerms) {
+      if (atlasOwnedTerms.has(entry.term.toLowerCase())) continue;
       if (!includesTerm(line, entry.term)) continue;
       const owner = entry.owner || (lookup.quarantine.includes(entry) ? 'Lab quarantine' : 'external protected term');
       warnings.push({
