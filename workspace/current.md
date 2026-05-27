@@ -1370,3 +1370,37 @@ Likely next candidates:
 - Hydration backlog preview derived from existing rows, using `workspace/DataHS116-local-data-shape-hydration-backlog-review.md`.
 - Relationship pivot proof report, using `workspace/DataHS117-relationship-pivot-data-substrate-assurance.md`.
 - `external_io` policy implementation/readout follow-up.
+
+HS119 restart-state audit complete.
+
+Files added:
+
+- `workspace/OverseerHS119-restart-state-audit.md`
+
+Files updated:
+
+- `workspace/overview.md`
+- `workspace/current.md`
+
+Accepted restart posture:
+
+- No Dev runway is open.
+- Atlas Storage And Runtime Hardening remains the active milestone.
+- HS115/HS118 accepted `storage.setup_gate_readout` as read-only posture only.
+- `verify:protected-terms` is Atlas-local and now filters Atlas-owned/candidate terms by default; `--include-atlas-candidates` remains available for deliberate Atlas term hunting.
+- `workspace/DataHS116-local-data-shape-hydration-backlog-review.md` and `workspace/DataHS117-relationship-pivot-data-substrate-assurance.md` are advisory inputs, not active runways.
+
+Recommended restart decision order:
+
+1. Storage setup config persistence / acknowledgement readout.
+2. Storage setup enforcement for provider-backed acquisition/write classes.
+3. Read-only Hydration backlog preview from existing rows.
+4. Read-only relationship pivot proof.
+5. `external_io` implementation/readout follow-up.
+
+Guardrails:
+
+- Do not implement storage enforcement before portable config/acknowledgement behavior is accepted.
+- Do not add persistent Hydration backlog tables yet.
+- Do not open DataHS116/DataHS117 follow-up Dev work unless Human/Overseer selects it.
+- Do not alter shared protected-word JSON from Atlas sniff output.
