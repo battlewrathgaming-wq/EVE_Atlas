@@ -24,9 +24,14 @@ Source of intent:
 - Human storage path direction on 2026-05-27: Atlas should behave as a portable briefcase with app-local storage config, not hidden Windows settings; no silent relocation if storage disappears; migration/copy/move is out of scope unless explicitly opened.
 - Human pruning direction on 2026-05-27: pruning should support variable time windows, no-interest/Marked filtering, entity ID filtering, and Assessment reference review; noise means stale or excessive records that no longer serve target hunting, threat detection, or current pattern recognition.
 - Human local lookup direction on 2026-05-27: local records are the preferred cheap substrate for story formation; ESI enrichment can fill gaps but is explicit, provider-gated, slower, and not a silent substitute for healthy local storage. Long-term ambition is listening-post style workflows that learn corporation behavior.
+- Human/Overseer direction on 2026-05-27: Acquisition Clock builds the local evidence corpus through zKill Discovery and ESI Evidence expansion lanes; Hydration Recovery Clock handles Watch and view/local-record readability repair; hydration fanout is the likely provider-pressure bottleneck.
 - Systems audits HS100-HS103 on 2026-05-27 accepted as advisory review input: storage authority preflight/inventory is the strongest next system candidate; typed actor name live-gate classification, pruning relationship preview, and Sequencer cadence readout are secondary bounded candidates.
 - Human `Go ahead` on 2026-05-27 accepted opening the storage authority preflight/inventory runway.
 - HS106 accepted HS105 with small Overseer hardening: renderer payloads cannot override arbitrary filesystem paths for DB, trace-pack, or snapshot-settings inspection.
+- `docs/features/acquisition-and-hydration-clocks.md`
+- `workspace/SystemsAuditHS107-zkill-esi-trust-boundary.md`
+- `workspace/SystemsProposalHS104-two-clock-recovery-sequencer.md`
+- `workspace/SystemsTraceHS105-search-watch-recovery-rewire-map.md`
 - `workspace/OverseerHS106-hs105-storage-preflight-review.md`
 - `workspace/OverseerHS105-storage-authority-preflight-runway.md`
 - `workspace/OverseerHS104-systems-audit-synthesis-review.md`
@@ -103,8 +108,9 @@ Next likely candidate lanes:
 2. Explicit live-gate classification for uncached typed actor name resolution.
 3. Read-only pruning relationship preview hardening.
 4. Sequencer cadence phase readout from existing state.
-5. Human/UIUX review of the R-Scanner prototype against the operator-intent note.
-6. Observation lookup advisory or inventory pass to identify first strong anchor relationships.
+5. Acquisition/Hydration clock readout proof: show zKill Discovery, ESI Evidence expansion, Watch hydration, and view hydration pressure separately.
+6. Human/UIUX review of the R-Scanner prototype against the operator-intent note.
+7. Observation lookup advisory or inventory pass to identify first strong anchor relationships.
 
 ## Guardrails And Non-Goals
 
@@ -799,3 +805,27 @@ Accepted:
 - Overseer tightened the renderer boundary so payload path overrides are ignored unless trusted context sets `allowStorageAuthorityPathOverrides: true`.
 - Focused verifier now proves ordinary renderer-style payloads cannot override trusted DB path, trace-pack path, or snapshot-settings path.
 - All required verification passed in Overseer review.
+
+HS107 and follow-up Human/Overseer discussion clarified the acquisition/hydration clock model.
+
+Files added/updated:
+
+- `workspace/SystemsProposalHS104-two-clock-recovery-sequencer.md`
+- `workspace/SystemsTraceHS105-search-watch-recovery-rewire-map.md`
+- `workspace/SystemsAuditHS107-zkill-esi-trust-boundary.md`
+- `docs/features/acquisition-and-hydration-clocks.md`
+- `docs/current-state/current-evidence-pipeline.md`
+- `docs/current-state/current-storage-runtime-hardening.md`
+- `docs/features/README.md`
+- `docs/index.md`
+- `workspace/overview.md`
+- `workspace/current.md`
+
+Accepted:
+
+- zKill remains Discovery only.
+- ESI-expanded killmail payloads written locally are Evidence / EVEidence.
+- Acquisition Clock creates local facts through zKill Discovery and ESI Evidence expansion lanes.
+- Hydration Recovery Clock makes local facts readable through Watch hydration and view/local-record hydration lanes.
+- Hydration fanout from unresolved IDs is likely the real provider-pressure bottleneck.
+- Future implementation should prove readout and boundaries before adding schema-backed queues, broad provider orchestration, or new persistence.

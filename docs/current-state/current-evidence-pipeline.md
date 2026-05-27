@@ -150,15 +150,28 @@ Retryable ESI/provider capacity waits are not terminal Evidence failures. They c
 
 `Watch_offline` includes a read-only recovery diagnostic per configured Watch. It derives durable intent, expected next run time, observed movement, pending Discovery refs, latest fetch/API activity, provider deferral, orphaned running fetch runs, missed-slot recoverability, reconstructed radius scope status, and next safe action from existing local tables. It does not call providers, arm Watch execution, hydrate metadata, create Evidence, mutate Discovery refs, or persist sequencer packets.
 
-## Forward Sequencer Distinction
+## Acquisition And Hydration Clock Direction
 
-Future sequencing work should keep three lanes separate:
+Accepted design direction now distinguishes the evidence-building clock from the readability-recovery clock:
 
-- Discovery Sequencer: paced zKill acquisition over a scoped target, time window, and radius/lookback envelope. Its output is Discovery refs.
-- Enrichment Sequencer: paced ESI expansion of known refs into stored Evidence.
-- Hydration: readability and metadata repair for known local records. It is not request-control sequencing.
+- Acquisition Clock: builds the local evidence corpus.
+- Hydration Recovery Clock: makes local facts readable.
+
+Acquisition has two conceptual lanes:
+
+- zKill Discovery lane: paced/scoped acquisition of Discovery refs and optional preview metadata.
+- ESI Evidence expansion lane: selected or policy-eligible `killmail_id` / hash pairs expand into provider-complete local Evidence / EVEidence.
+
+Hydration Recovery has two conceptual lanes:
+
+- Watch hydration lane: repairs readability for Watch/acquisition-produced records.
+- View hydration lane: repairs readability for the local record, report, or Observation surface the operator is inspecting.
+
+The pressure point is usually not just zKill volume or ESI killmail expansion volume. One expanded killmail can expose many unresolved IDs. Hydration/name lookup fanout is the bottleneck that needs careful pacing and lane separation.
 
 zKill batch support is useful design input for future packet sizing, but it does not make Live search a radius or large-envelope acquisition path. Live remains immediate and narrow; Watch / Sequencer owns patient scoped acquisition.
+
+Detailed design direction is recorded in `docs/features/acquisition-and-hydration-clocks.md`.
 
 ## Current Retention / Deletion State
 

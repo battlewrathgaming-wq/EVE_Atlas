@@ -31,11 +31,20 @@ Accepted split:
 
 - Live search is immediate, narrow, and provider-style.
 - Watch / Sequencer is patient scoped acquisition over time.
-- Discovery Sequencer should pace zKill acquisition and return Discovery refs.
-- Enrichment Sequencer should pace ESI expansion of known refs into Evidence/EVEidence.
-- Hydration stays separate from request-control sequencing.
+- Acquisition Clock builds the local evidence corpus through separate zKill Discovery and ESI Evidence expansion lanes.
+- Hydration Recovery Clock repairs readability through separate Watch hydration and view/local-record hydration lanes.
+- Hydration stays separate from Evidence/EVEidence creation.
 
 R-Scanner / Sequencer is not an instant response interface. It can run background acquisition/enrichment for minutes if Atlas is honest about schedule, provider wait, progress, and whether operator action is needed.
+
+Accepted bottleneck clarification:
+
+- zKill and ESI killmail expansion are comparatively compact acquisition steps.
+- the larger fanout pressure is often hydration: expanded killmails expose many IDs that may need names/labels
+- Evidence acquisition should not be blurred with readability recovery
+- view/local-record hydration should not be starved behind an unrelated deep Evidence backlog unless a shared provider/storage gate truly applies
+
+Detailed design direction is recorded in `docs/features/acquisition-and-hydration-clocks.md`.
 
 Current implementation state:
 
@@ -220,3 +229,20 @@ Secondary candidates:
 - explicit live-gate classification for uncached typed actor name resolution
 - richer read-only pruning relationship preview
 - Sequencer cadence phase readout from existing state
+
+## Acquisition / Hydration Clock Clarification 2026-05-27
+
+Accepted advisory inputs:
+
+- `workspace/SystemsProposalHS104-two-clock-recovery-sequencer.md`
+- `workspace/SystemsTraceHS105-search-watch-recovery-rewire-map.md`
+- `workspace/SystemsAuditHS107-zkill-esi-trust-boundary.md`
+
+Accepted synthesis:
+
+- zKill remains Discovery only.
+- ESI-expanded killmail payloads written locally are Evidence / EVEidence.
+- Acquisition Clock creates local facts through zKill Discovery and ESI Evidence expansion lanes.
+- Hydration Recovery Clock makes local facts readable through Watch hydration and view/local-record hydration lanes.
+- The main provider pressure may be hydration fanout from many unresolved IDs, not only zKill or ESI killmail expansion.
+- Future packets should prove readout and boundaries before adding schema-backed queues, broad provider orchestration, or new persistence.

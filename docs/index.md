@@ -76,6 +76,7 @@ Start here:
 - `docs/current-state/current-ipc-ui-preparation.md`
 - `docs/current-state/current-display-inventory.md`
 - `docs/features/observation-lookup-model.md`
+- `docs/features/acquisition-and-hydration-clocks.md`
 - `docs/features/r-scanner-sequencer-presentation.md`
 - `docs/tenets/tenets.md`
 - `workspace/overview.md`

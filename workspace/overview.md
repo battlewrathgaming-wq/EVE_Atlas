@@ -46,6 +46,7 @@ Watch_offline aggregation ADR: `docs/adr/ADR-0005-watch-offline-readout-aggregat
 Storage/runtime hardening state: `docs/current-state/current-storage-runtime-hardening.md`
 R-Scanner / Sequencer presentation: `docs/features/r-scanner-sequencer-presentation.md`
 Observation lookup model: `docs/features/observation-lookup-model.md`
+Acquisition / Hydration clocks: `docs/features/acquisition-and-hydration-clocks.md`
 
 ## Durable Record Index
 
@@ -154,6 +155,7 @@ Observation lookup model: `docs/features/observation-lookup-model.md`
 - HS104 accepted systems audit inputs HS100-HS103 as advisory review material: the strongest next system candidate is read-only storage authority preflight/inventory; typed actor name live-gate classification, pruning relationship preview, and Sequencer cadence readout are secondary bounded candidates; no Dev runway is open.
 - HS105 opens the read-only storage authority preflight/inventory Dev runway: prove current DB/storage/support-artifact posture before lockout, migration, pruning, or broad storage policy enforcement.
 - HS106 accepted DevHS105: `storage.authority_preflight` now provides a read-only storage authority inventory proof layer, with renderer payload path overrides blocked unless trusted context explicitly allows them.
+- HS107 and follow-up Human/Overseer discussion clarified the provider-pressure model: Acquisition Clock builds the local evidence corpus through zKill Discovery and ESI Evidence expansion lanes, while Hydration Recovery Clock handles Watch and view/local-record readability repair; hydration fanout is the likely pressure point.
 - Future sequencing should keep Discovery Sequencer, Enrichment Sequencer, and Hydration separate: zKill returns Discovery refs, ESI expansion writes Evidence, and hydration repairs local readability/metadata.
 - Queue batch cadence and UX pacing is parked as a future product/UX lane after evidence-write correctness; it should decide batch size, timing, throttling, External API state behavior, and operator-facing working/waiting/throttled/failed/retry states.
 - Native picker/UI rigging, broader support-artifact budget coverage, active DB relocation, restore, automatic cleanup/pruning, snapshot deletion, and deletion execution remain out of scope until explicitly opened.
