@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after accepted HS105 storage authority preflight
+Status: Active Dev runway for HS111 gate-stack readout proof
 Last updated: 2026-05-27
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS106 accepts HS105 storage authority preflight and parks storage enforcement decisions until Human selects the next bounded packet.
+Current focus: HS111 opens a read-only gate-stack readout proof before any `external_io`, storage lockout, provider enforcement, or catch-up behavior implementation.
 
 Source of intent:
 
@@ -27,11 +27,15 @@ Source of intent:
 - Human/Overseer direction on 2026-05-27: Acquisition Clock builds the local evidence corpus through zKill Discovery and ESI Evidence expansion lanes; Hydration Recovery Clock handles Watch and view/local-record readability repair; hydration fanout is the likely provider-pressure bottleneck.
 - Human/Overseer direction on 2026-05-27: future provider movement should sit under an `external_io` trust-boundary family; existing `watch.executor.arm` remains Watch/session arming only, and `live.gate` remains per-action/provider/cadence control.
 - Human direction on 2026-05-27: when external I/O is off, clocks may keep readout/schedule posture but provider movement is held as `held_by_external_io`; releasing external I/O must not cause catch-up flooding.
+- Human accepted on 2026-05-27: use HS110 to open a bounded Dev packet for a read-only gate-stack/readout proof.
 - Systems audits HS100-HS103 on 2026-05-27 accepted as advisory review input: storage authority preflight/inventory is the strongest next system candidate; typed actor name live-gate classification, pruning relationship preview, and Sequencer cadence readout are secondary bounded candidates.
 - Human `Go ahead` on 2026-05-27 accepted opening the storage authority preflight/inventory runway.
 - HS106 accepted HS105 with small Overseer hardening: renderer payloads cannot override arbitrary filesystem paths for DB, trace-pack, or snapshot-settings inspection.
 - `docs/features/acquisition-and-hydration-clocks.md`
 - `workspace/SystemsAuditHS107-zkill-esi-trust-boundary.md`
+- `workspace/SystemsAuditHS110-external-io-storage-edge-policy-table.md`
+- `workspace/SystemsAuditHS109-external-io-policy-fit.md`
+- `workspace/OverseerHS111-gate-stack-readout-proof-runway.md`
 - `workspace/SystemsProposalHS104-two-clock-recovery-sequencer.md`
 - `workspace/SystemsTraceHS105-search-watch-recovery-rewire-map.md`
 - `workspace/OverseerHS106-hs105-storage-preflight-review.md`
@@ -92,31 +96,31 @@ Accepted presentation guidance:
 
 ## Executor
 
-Current executor: None
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-None
+workspace/DevHS111-gate-stack-readout-proof.md
 ```
 
-## Resting State
+## Active Runway
 
-No Dev or specialist work is currently open.
+Dev should execute `workspace/OverseerHS111-gate-stack-readout-proof-runway.md`.
 
-Next likely candidate lanes:
+Ordered steps:
 
-1. Storage setup/authority policy decision: total lockout versus narrower write/provider/acquisition lockout.
-2. Explicit live-gate classification for uncached typed actor name resolution.
-3. Read-only pruning relationship preview hardening.
-4. Sequencer cadence phase readout from existing state.
-5. Acquisition/Hydration clock readout proof: show zKill Discovery, ESI Evidence expansion, Watch hydration, and view hydration pressure separately.
-6. Human/UIUX review of the R-Scanner prototype against the operator-intent note.
-7. Observation lookup advisory or inventory pass to identify first strong anchor relationships.
+1. Inspect existing readiness, live gate, storage preflight, Watch executor/scheduler, command authority, and `Watch_offline` readout code.
+2. Add or extend one read-only support/readout surface that reports a gate stack for provider-backed work.
+3. Report due/scheduled posture, Watch armed state, future `external_io` policy-only/not-implemented state, live/API env and User-Agent posture, `live.gate`/cadence result, storage authority summary, active task posture, and confirmation requirement separately.
+4. Include held/blocked/waiting posture without changing runtime behavior; `held_by_external_io` is policy/readout only for this packet.
+5. Add offline verifier coverage proving no provider calls and no gate collapse.
+6. Update Evidence / Dev Handoff with sample output and verification.
 
 ## Guardrails And Non-Goals
 
-- Read-only storage authority preflight/inventory only.
+- Read-only gate-stack/support readout only.
+- `external_io` is policy-only/not implemented in this packet.
 - No storage config writing.
 - No DB movement, copy, migration, relocation, or deletion.
 - No lockout enforcement.
@@ -124,6 +128,8 @@ Next likely candidate lanes:
 - No snapshot creation unless an existing verifier already uses disposable fixture paths and does not change real runtime state.
 - No live/private/API calls.
 - No new provider calls.
+- No new provider movement.
+- No provider dispatch behavior changes.
 - No broad provider work queue.
 - No high-volume request-attempt ledger.
 - No persisted sequencer packet table.
@@ -144,6 +150,8 @@ Next likely candidate lanes:
 - Do not imply background surveillance, active checking, or live coverage while disarmed/offline.
 - Do not draw exact radius coverage when scope is missing or malformed.
 - Do not treat shared keyword references as Atlas authority.
+- Do not imply `held_by_external_io` is enforced.
+- Do not implement release/catch-up behavior.
 
 ## Stop Conditions
 
@@ -151,6 +159,9 @@ Stop and return to Overseer/Human before implementation if:
 
 - implementation needs to choose the final storage config filename/location
 - implementation would enforce app lockout or write/provider/acquisition lockout
+- implementation would implement `external_io` as a persisted setting, command switch, or enforcement layer
+- implementation would cancel active provider work
+- implementation would change provider dispatch behavior
 - implementation would move, create, copy, or delete a real active DB
 - implementation requires live provider access
 - implementation requires schema migration
@@ -170,23 +181,22 @@ Stop and return to Overseer/Human before implementation if:
 
 ## Required Verification
 
-No active implementation packet is open.
-
-Recent closeout verification:
+Run focused verification for any new/changed readout plus:
 
 ```powershell
-npm.cmd run verify:storage-authority-preflight
 npm.cmd run verify:app-readiness
-npm.cmd run verify:runtime-snapshot
-npm.cmd run verify:operator-debug-trace
-npm.cmd run verify:sde-build-lookups
-npm.cmd run verify:sde-fixture
 npm.cmd run verify:service-registry
 npm.cmd run verify:command-authority
 npm.cmd run verify:passive-side-effects
+npm.cmd run verify:watch-executor
+npm.cmd run verify:watch-scheduler
+npm.cmd run verify:watch-offline-readout
+npm.cmd run verify:storage-authority-preflight
 npm.cmd run verify:task-concurrency
 npm.cmd run verify:db-integrity
 npm.cmd run verify:protected-terms
+git diff --check
+git status --short --branch
 ```
 
 ## Evidence
@@ -872,3 +882,23 @@ Accepted:
 - Provider-backed due work should be held as `held_by_external_io`, not failed.
 - Releasing external I/O must not immediately catch up all held work or flood providers.
 - Held work should re-enter normal cadence/provider controls, storage safety, and required confirmations.
+
+HS110 landed and HS111 opens a read-only Dev runway.
+
+Files added:
+
+- `workspace/SystemsAuditHS110-external-io-storage-edge-policy-table.md`
+- `workspace/OverseerHS111-gate-stack-readout-proof-runway.md`
+
+Accepted:
+
+- HS110 is advisory assurance input only, not implementation authority.
+- The smallest safe next packet is a read-only gate-stack/readout proof before enforcement.
+- Dev should prove Atlas can explain due/scheduled posture, Watch arming, future `external_io`, live gate/cadence, storage safety, confirmation requirement, and active task state without collapsing them.
+- No `external_io` enforcement, storage lockout, provider dispatch change, schema migration, provider call, or renderer redesign is opened.
+
+Dev handoff expected:
+
+```txt
+workspace/DevHS111-gate-stack-readout-proof.md
+```

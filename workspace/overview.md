@@ -30,8 +30,8 @@ It stores expanded ESI killmails as evidence, keeps zKillboard as discovery only
 Milestone: Atlas Storage And Runtime Hardening
 Roadmap source: Human storage/runtime hardening direction accepted on 2026-05-25
 Current packet: `workspace/current.md`
-Current sequence: HS106 accepted HS105 storage authority preflight; no implementation runway is open
-Latest accepted coordination artifact: `workspace/OverseerHS106-hs105-storage-preflight-review.md`
+Current sequence: HS111 opens a read-only gate-stack readout proof before enforcement
+Latest accepted coordination artifact: `workspace/OverseerHS111-gate-stack-readout-proof-runway.md`
 Latest systems audit inputs: `workspace/SystemsAuditHS100-storage-path-budget-authority.md`, `workspace/SystemsAuditHS101-local-lookup-vs-esi-enrichment.md`, `workspace/SystemsAuditHS102-pruning-readiness.md`, `workspace/SystemsAuditHS103-sequencer-provider-cadence.md`
 Latest advisory artifact: `workspace/UIUXHS84-watch-recovery-readout-interpretation.md`
 Latest advisory runway: `workspace/OverseerHS84-watch-recovery-readout-interpretation-runway.md`
@@ -158,6 +158,7 @@ Acquisition / Hydration clocks: `docs/features/acquisition-and-hydration-clocks.
 - HS107 and follow-up Human/Overseer discussion clarified the provider-pressure model: Acquisition Clock builds the local evidence corpus through zKill Discovery and ESI Evidence expansion lanes, while Hydration Recovery Clock handles Watch and view/local-record readability repair; hydration fanout is the likely pressure point.
 - HS108 clarified the provider gate hierarchy: future external/downstream provider movement should sit under an `external_io` trust-boundary family, while existing `watch.executor.arm` remains Watch/session arming and `live.gate` remains per-action/provider/cadence control.
 - HS109 accepted external I/O policy-fit assurance: `external_io` is not implemented yet, but future clock behavior should hold provider-backed work as `held_by_external_io` while keeping readout alive; release must not trigger catch-up flooding.
+- HS110 accepted the external I/O/storage edge policy table as advisory assurance; HS111 opens a read-only Dev runway for gate-stack readout proof before enforcement.
 - Future sequencing should keep Discovery Sequencer, Enrichment Sequencer, and Hydration separate: zKill returns Discovery refs, ESI expansion writes Evidence, and hydration repairs local readability/metadata.
 - Queue batch cadence and UX pacing is parked as a future product/UX lane after evidence-write correctness; it should decide batch size, timing, throttling, External API state behavior, and operator-facing working/waiting/throttled/failed/retry states.
 - Native picker/UI rigging, broader support-artifact budget coverage, active DB relocation, restore, automatic cleanup/pruning, snapshot deletion, and deletion execution remain out of scope until explicitly opened.
