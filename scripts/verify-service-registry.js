@@ -48,6 +48,7 @@ async function main() {
     const watchExecutorTickCommand = commands.find((entry) => entry.command === 'watch.executor.tick');
     const storageAuthorityPreflightCommand = commands.find((entry) => entry.command === 'storage.authority_preflight');
     const storageSetupGateReadoutCommand = commands.find((entry) => entry.command === 'storage.setup_gate_readout');
+    const storageAuthorityConfigWriteCommand = commands.find((entry) => entry.command === 'storage.authority_config.write_proof');
     const gateStackReadoutCommand = commands.find((entry) => entry.command === 'support.gate_stack_readout');
     const snapshotSettingsGetCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.get');
     const snapshotSettingsUpdateCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.update');
@@ -93,6 +94,8 @@ async function main() {
     assert(watchExecutorTickCommand?.classification === 'evidence-creating', 'watch.executor.tick should be evidence-creating');
     assert(storageAuthorityPreflightCommand?.classification === 'read-only', 'storage authority preflight should be read-only');
     assert(storageSetupGateReadoutCommand?.classification === 'read-only', 'storage setup gate readout should be read-only');
+    assert(storageAuthorityConfigWriteCommand?.classification === 'metadata-only', 'storage authority config write proof should be metadata-only');
+    assert(storageAuthorityConfigWriteCommand?.renderer_allowed === false, 'storage authority config write proof should not be renderer eligible');
     assert(gateStackReadoutCommand?.classification === 'read-only', 'gate stack readout should be read-only');
     assert(snapshotSettingsGetCommand?.classification === 'read-only', 'runtime snapshot settings get should be read-only');
     assert(snapshotSettingsUpdateCommand?.classification === 'metadata-only', 'runtime snapshot settings update should be metadata-only');

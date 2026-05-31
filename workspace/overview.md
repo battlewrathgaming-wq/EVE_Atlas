@@ -35,9 +35,9 @@ Milestone: Atlas Storage And Runtime Hardening
 
 Current state:
 
-- active Dev runway opened for HS133
-- current executor is Dev
-- next work is a bounded storage config write proof, not enforcement
+- no active Dev runway
+- current executor is Overseer / Human discussion
+- next work should be selected deliberately, not inferred from older artifacts
 
 Current heading:
 
@@ -48,11 +48,10 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Review HS133 storage config write proof when Dev returns.
-2. Acknowledgement persistence proof.
-3. Enforcement dry-run / command-effect mapping.
-4. External I/O held-state follow-up.
-5. Hydration backlog preview.
+1. Acknowledgement persistence proof.
+2. Enforcement dry-run / command-effect mapping.
+3. External I/O held-state follow-up.
+4. Hydration backlog preview.
 
 See `workspace/current.md` for current truth.
 
@@ -74,6 +73,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS131 opened the storage config dry-run runway: Atlas is file-portable, target pattern is `<Atlas app/root>/config/storage-authority.json`, acknowledged fallback remains distinct, budget is mandatory before provider-backed acquisition/EVEidence writes, and the proof must not write config.
 - HS132 accepted HS131: `storage.setup_gate_readout.storage_config_dry_run` now proves target path, would-write validation, simulated payload/readback, renderer safety, and no real config file creation.
 - HS133 opened a bounded storage config write proof: fixture/offline write/readback behavior only, with no enforcement, no UI setup flow, no provider calls, and no operator-real config write outside fixture/test control.
+- HS134 accepted HS133 after Overseer correction: `storage.authority_config.write_proof` now requires an explicit trusted allowed fixture root, proves atomic/staged write-readback behavior, remains non-renderer eligible, and does not create the real project-root config file.
 
 ## Accepted Boundaries
 
