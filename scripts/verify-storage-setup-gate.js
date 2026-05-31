@@ -40,6 +40,7 @@ async function main() {
       snapshotStatus: 'degraded'
     }));
     const budget = verifyBudgetStates(root);
+    const authority = verifyStorageAuthorityReadout(root);
     const matrix = verifyActionClassMatrix(root);
     await verifyRendererPayloadCannotOverrideStorageFacts(root);
     verifyCommand();
@@ -50,6 +51,7 @@ async function main() {
       sample_fallback: compactReadout(fallback),
       sample_missing: compactReadout(missing),
       sample_budget_states: budget,
+      sample_storage_authority: authority,
       sample_action_matrix: matrix,
       sample_allowed_while_locked: missing.work_classes.allowed_while_locked,
       sample_blocked_while_locked: missing.work_classes.blocked_while_locked,
@@ -143,6 +145,195 @@ function verifyBudgetStates(root) {
     strong_warning: strong.budget.state,
     hard_lock: hardLock.budget.state,
     hard_lock_blocks: hardLock.work_classes.blocked_reasons
+  };
+}
+
+function verifyStorageAuthorityReadout(root) {
+  const noStorage = buildFixtureReadout({
+    mode: 'no_storage_selected',
+    source: 'fallback',
+    path: null,
+    exists: false,
+    budgetBytes: 4096
+  });
+  const selected = buildFixtureReadout({
+    mode: 'configured',
+    source: 'configured',
+    path: path.join(root, 'authority', 'selected', 'atlas.sqlite'),
+    exists: true,
+    budgetBytes: 4096,
+    storageAuthority: {
+      mode: 'selected_storage',
+      selected: true,
+      config_source: 'fixture_explicit_selection',
+      config_version: 1,
+      budget_bytes: 4096
+    }
+  });
+  const fallbackAvailable = buildFixtureReadout({
+    mode: 'fallback',
+    source: 'fallback',
+    path: path.join(root, 'authority', 'fallback', 'atlas.sqlite'),
+    exists: true,
+    budgetBytes: 4096,
+    storageAuthority: {
+      mode: 'app_local_fallback_available',
+      fallback_available: true,
+      acknowledgement_status: 'not_acknowledged',
+      config_source: 'fixture_no_config',
+      config_version: 1
+    }
+  });
+  const fallbackAcknowledged = buildFixtureReadout({
+    mode: 'fallback',
+    source: 'fallback',
+    path: path.join(root, 'authority', 'fallback-ack', 'atlas.sqlite'),
+    exists: true,
+    budgetBytes: 4096,
+    storageAuthority: {
+      mode: 'app_local_fallback_acknowledged',
+      fallback_available: true,
+      acknowledgement_status: 'acknowledged',
+      acknowledgement_basis: 'fixture operator accepted app-local fallback',
+      config_source: 'fixture_acknowledgement',
+      config_version: 1,
+      budget_bytes: 4096
+    }
+  });
+  const acknowledgementInvalidated = buildFixtureReadout({
+    mode: 'fallback',
+    source: 'fallback',
+    path: path.join(root, 'authority', 'fallback-invalid', 'atlas.sqlite'),
+    exists: true,
+    budgetBytes: 4096,
+    storageAuthority: {
+      mode: 'acknowledgement_invalidated',
+      fallback_available: true,
+      acknowledgement_status: 'invalidated',
+      acknowledgement_basis: 'fixture previous acknowledgement',
+      acknowledgement_invalid_reason: 'app path changed',
+      config_source: 'fixture_acknowledgement',
+      config_version: 1
+    }
+  });
+  const missing = buildFixtureReadout({
+    mode: 'missing',
+    source: 'configured',
+    path: path.join(root, 'authority', 'missing', 'atlas.sqlite'),
+    exists: false,
+    budgetBytes: 4096,
+    storageAuthority: {
+      mode: 'selected_storage_missing_unavailable',
+      selected: true,
+      config_source: 'fixture_config',
+      config_version: 1
+    }
+  });
+  const degraded = buildFixtureReadout({
+    mode: 'configured',
+    source: 'configured',
+    path: path.join(root, 'authority', 'degraded', 'atlas.sqlite'),
+    exists: true,
+    snapshotStatus: 'degraded',
+    budgetBytes: 4096,
+    storageAuthority: {
+      mode: 'selected_storage_invalid_degraded',
+      selected: true,
+      validation_status: 'invalid_degraded',
+      config_source: 'fixture_config',
+      config_version: 1
+    }
+  });
+  const budgetWarning = buildFixtureReadout({
+    mode: 'configured',
+    source: 'configured',
+    path: path.join(root, 'authority', 'budget-warning', 'atlas.sqlite'),
+    exists: true,
+    databaseBytes: 700,
+    controlledBytes: 300,
+    budgetBytes: 1400,
+    storageAuthority: {
+      mode: 'selected_storage',
+      selected: true,
+      budget_source: 'fixture_configured',
+      budget_bytes: 1400,
+      config_version: 1
+    }
+  });
+  const budgetStrong = buildFixtureReadout({
+    mode: 'configured',
+    source: 'configured',
+    path: path.join(root, 'authority', 'budget-strong', 'atlas.sqlite'),
+    exists: true,
+    databaseBytes: 700,
+    controlledBytes: 300,
+    budgetBytes: 1050,
+    storageAuthority: {
+      mode: 'selected_storage',
+      selected: true,
+      budget_source: 'fixture_configured',
+      budget_bytes: 1050,
+      config_version: 1
+    }
+  });
+  const budgetHardLock = buildFixtureReadout({
+    mode: 'configured',
+    source: 'configured',
+    path: path.join(root, 'authority', 'budget-hard-lock', 'atlas.sqlite'),
+    exists: true,
+    databaseBytes: 700,
+    controlledBytes: 300,
+    budgetBytes: 1000,
+    storageAuthority: {
+      mode: 'selected_storage',
+      selected: true,
+      budget_source: 'fixture_configured',
+      budget_bytes: 1000,
+      config_version: 1
+    }
+  });
+
+  assert(noStorage.storage_authority.mode === 'no_storage_selected', 'no storage selected should be visible');
+  assert(noStorage.storage_authority.selected === false, 'no storage selected should not be selected');
+  assert(noStorage.storage_authority.read_allowed === false, 'no storage selected should not allow reads by default');
+  assert(noStorage.storage_authority.budget_source === 'trusted_context', 'trusted budget should be visible even when storage is not selected');
+  assert(noStorage.storage_authority.budget_bytes === 4096, 'trusted budget bytes should be visible even when storage is not selected');
+  assert(selected.storage_authority.mode === 'selected_storage', 'explicit selected storage should be visible');
+  assert(selected.storage_authority.selected === true, 'explicit selected storage should be selected');
+  assert(selected.storage_authority.write_allowed_if_enforced_later === true, 'explicit selected storage should allow writes if enforced later');
+  assert(fallbackAvailable.storage_authority.mode === 'app_local_fallback_available', 'fallback available should be visible');
+  assert(fallbackAvailable.storage_authority.fallback_available === true, 'fallback availability should be true');
+  assert(fallbackAvailable.storage_authority.fallback_acknowledged === false, 'fallback available should not be acknowledged');
+  assert(fallbackAvailable.storage_authority.write_allowed_if_enforced_later === false, 'unacknowledged fallback should not allow writes');
+  assert(fallbackAcknowledged.storage_authority.mode === 'app_local_fallback_acknowledged', 'acknowledged fallback should be visible');
+  assert(fallbackAcknowledged.storage_authority.fallback_acknowledged === true, 'acknowledged fallback should expose acknowledgement');
+  assert(fallbackAcknowledged.storage_authority.write_allowed_if_enforced_later === true, 'acknowledged fallback should allow writes if enforced later');
+  assert(fallbackAcknowledged.storage.state === 'configured_ready', 'acknowledged fallback should feed ready setup posture for fixture proof');
+  assert(acknowledgementInvalidated.storage_authority.acknowledgement_status === 'invalidated', 'invalidated acknowledgement should be visible');
+  assert(acknowledgementInvalidated.storage_authority.acknowledgement_invalid_reason === 'app path changed', 'invalidated acknowledgement should name reason');
+  assert(acknowledgementInvalidated.storage_authority.write_allowed_if_enforced_later === false, 'invalidated acknowledgement should block writes');
+  assert(missing.storage_authority.validation_status === 'missing_unavailable', 'missing selected storage should show unavailable validation');
+  assert(missing.storage_authority.write_allowed_if_enforced_later === false, 'missing selected storage should block writes');
+  assert(degraded.storage_authority.validation_status === 'invalid_degraded', 'degraded selected storage should show degraded validation');
+  assert(degraded.storage_authority.write_allowed_if_enforced_later === false, 'degraded selected storage should block writes');
+  assert(budgetWarning.budget.state === 'budget_warning', 'budget warning should be visible through storage authority fixture');
+  assert(budgetWarning.storage_authority.budget_bytes === 1400, 'budget warning bytes should be visible');
+  assert(budgetStrong.budget.state === 'budget_strong_warning', 'budget strong warning should be visible through storage authority fixture');
+  assert(budgetHardLock.budget.state === 'budget_hard_lock', 'budget hard-lock should be visible through storage authority fixture');
+  assert(budgetHardLock.storage_authority.write_allowed_if_enforced_later === false, 'budget hard-lock should block future writes in authority readout');
+  assert(budgetHardLock.storage_authority.provider_movement_allowed_if_enforced_later === false, 'budget hard-lock should block future provider movement in authority readout');
+
+  return {
+    no_storage_selected: compactAuthority(noStorage),
+    selected_storage: compactAuthority(selected),
+    app_local_fallback_available: compactAuthority(fallbackAvailable),
+    app_local_fallback_acknowledged: compactAuthority(fallbackAcknowledged),
+    acknowledgement_invalidated: compactAuthority(acknowledgementInvalidated),
+    selected_storage_missing_unavailable: compactAuthority(missing),
+    selected_storage_invalid_degraded: compactAuthority(degraded),
+    budget_warning: compactAuthority(budgetWarning),
+    budget_strong_warning: compactAuthority(budgetStrong),
+    budget_hard_lock: compactAuthority(budgetHardLock)
   };
 }
 
@@ -333,7 +524,8 @@ function buildFixtureReadout({
   snapshotStatus,
   databaseBytes,
   controlledBytes,
-  budgetBytes
+  budgetBytes,
+  storageAuthority
 }) {
   return buildStorageSetupGateReadout({
     storagePreflight: fixturePreflight({
@@ -346,7 +538,8 @@ function buildFixtureReadout({
       snapshotStatus,
       databaseBytes,
       controlledBytes
-    })
+    }),
+    storageAuthority
   }, {
     allowStorageSetupGateFixtureInput: true,
     storageBudgetBytes: budgetBytes
@@ -382,6 +575,12 @@ async function verifyRendererPayloadCannotOverrideStorageFacts(root) {
         path: payloadPath,
         exists: false
       }),
+      storageAuthority: {
+        mode: 'app_local_fallback_acknowledged',
+        acknowledgement_status: 'acknowledged',
+        database_path: payloadPath,
+        budget_bytes: 1
+      },
       storageBudgetBytes: 1
     }, {
       db,
@@ -391,6 +590,9 @@ async function verifyRendererPayloadCannotOverrideStorageFacts(root) {
     });
     assert(readout.storage.database.path === trustedPath, 'renderer payload must not override trusted storage path');
     assert(readout.storage.state === 'configured_ready', `renderer payload should not override storage facts, got ${readout.storage.state}`);
+    assert(readout.storage_authority.mode === 'selected_storage', 'renderer payload must not override storage authority mode');
+    assert(readout.storage_authority.database_path === trustedPath, 'renderer payload must not override storage authority DB path');
+    assert(readout.storage_authority.fallback_acknowledged === false, 'renderer payload must not forge fallback acknowledgement');
     assert(readout.budget.state === 'within_budget', 'renderer payload budget should not override trusted context budget');
     assert(readout.source.renderer_payload_storage_facts_ignored === true, 'renderer safety flag should be visible');
   } finally {
@@ -523,6 +725,24 @@ function compactReadout(readout) {
     locked: readout.work_classes.locked,
     local_read_report: readout.work_classes.local_read_report.state,
     blocked_reasons: readout.work_classes.blocked_reasons
+  };
+}
+
+function compactAuthority(readout) {
+  return {
+    mode: readout.storage_authority.mode,
+    selected: readout.storage_authority.selected,
+    fallback_available: readout.storage_authority.fallback_available,
+    fallback_acknowledged: readout.storage_authority.fallback_acknowledged,
+    acknowledgement_status: readout.storage_authority.acknowledgement_status,
+    acknowledgement_invalid_reason: readout.storage_authority.acknowledgement_invalid_reason,
+    config_source: readout.storage_authority.config_source,
+    validation_status: readout.storage_authority.validation_status,
+    budget_source: readout.storage_authority.budget_source,
+    budget_bytes: readout.storage_authority.budget_bytes,
+    read_allowed: readout.storage_authority.read_allowed,
+    write_allowed_if_enforced_later: readout.storage_authority.write_allowed_if_enforced_later,
+    provider_movement_allowed_if_enforced_later: readout.storage_authority.provider_movement_allowed_if_enforced_later
   };
 }
 

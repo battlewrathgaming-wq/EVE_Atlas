@@ -68,6 +68,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS124 accepted HS123 after Overseer correction: `storage.setup_gate_readout.action_class_matrix` is read-only proof, and storage validity now takes precedence over budget hard-lock when classifying matrix state.
 - HS126 accepted DevHS125 orientation: the next storage seam should be storage config / acknowledgement proof before enforcement.
 - HS127 shaped the storage config / acknowledgement proof: Atlas must make selected storage, app-local fallback, fallback acknowledgement, invalidated acknowledgement, and budget config visible before enforcement.
+- HS129 accepted HS128 after Overseer correction: `storage.setup_gate_readout.storage_authority` is read-only proof, renderer payloads cannot forge acknowledgement/path/budget facts, and trusted context budget now stays coherent in the authority readout.
 
 ## Accepted Boundaries
 

@@ -8,8 +8,10 @@ function buildStorageSetupGateReadout(input = {}, context = {}) {
   const preflight = storagePreflightFor(input, context);
   const budgetBytes = budgetBytesFor(input, context);
   const usageBytes = usageBytesFor(preflight);
-  const storagePosture = classifyStoragePosture(preflight);
+  const rawStorageAuthority = buildStorageAuthorityReadout(input, context, preflight, budgetBytes);
   const budgetPosture = classifyBudgetPosture({ budgetBytes, usageBytes });
+  const storageAuthority = applyBudgetToStorageAuthority(rawStorageAuthority, budgetPosture);
+  const storagePosture = classifyStoragePosture(preflight, storageAuthority);
   const locked = storagePosture.blocks_real_collection === true || budgetPosture.blocks_writes === true;
   const actionClassMatrix = buildActionClassMatrix({ storagePosture, budgetPosture });
 
@@ -20,6 +22,7 @@ function buildStorageSetupGateReadout(input = {}, context = {}) {
     read_only: true,
     mutates_state: false,
     enforcement_state: 'not_implemented_readout_only',
+    storage_authority: storageAuthority,
     storage: storagePosture,
     budget: budgetPosture,
     action_class_matrix: actionClassMatrix,
@@ -29,6 +32,7 @@ function buildStorageSetupGateReadout(input = {}, context = {}) {
       database_mode: preflight.database?.mode || null,
       database_source: preflight.database?.source || null,
       byte_usage_source: 'storage.authority_preflight byte_usage; main Atlas storage budget is readout-only in HS115',
+      storage_authority_config_source: storageAuthority.config_source,
       renderer_payload_storage_facts_ignored: context.source === 'renderer'
     },
     boundary: [
@@ -39,6 +43,196 @@ function buildStorageSetupGateReadout(input = {}, context = {}) {
       'Budget means Atlas-controlled disk usage under storage authority, not provider/API request pacing.'
     ]
   };
+}
+
+function applyBudgetToStorageAuthority(storageAuthority, budgetPosture) {
+  if (budgetPosture.state !== 'budget_hard_lock') {
+    return storageAuthority;
+  }
+  return {
+    ...storageAuthority,
+    write_allowed_if_enforced_later: false,
+    provider_movement_allowed_if_enforced_later: false
+  };
+}
+
+function buildStorageAuthorityReadout(input = {}, context = {}, preflight = {}, trustedBudgetBytes = null) {
+  const fixtureInput = context.allowStorageSetupGateFixtureInput === true && input.storageAuthority;
+  const trustedInput = context.storageAuthority || (fixtureInput ? input.storageAuthority : null);
+  const database = preflight.database || {};
+  const selectedByPreflight = database.source === 'configured' && Boolean(database.path);
+  const fallbackAvailableByPreflight = database.source === 'fallback' && Boolean(database.path);
+  const config = trustedInput || {};
+  const configSource = trustedInput?.config_source || trustedInput?.configSource || (trustedInput ? 'fixture' : 'derived_from_preflight');
+  const mode = config.mode || derivedAuthorityMode({ config, selectedByPreflight, fallbackAvailableByPreflight, database });
+  const acknowledgement = acknowledgementReadout(config, mode);
+  const selected = config.selected === undefined
+    ? mode === 'selected_storage'
+    : config.selected === true;
+  const fallbackAvailable = config.fallback_available === undefined && config.fallbackAvailable === undefined
+    ? fallbackAvailableByPreflight || mode.startsWith('app_local_fallback')
+    : (config.fallback_available ?? config.fallbackAvailable) === true;
+  const fallbackAcknowledged = acknowledgement.status === 'acknowledged';
+  const storageRoot = config.storage_root || config.storageRoot || (database.path ? dirnameOrNull(database.path) : null);
+  const databasePath = config.database_path || config.databasePath || database.path || null;
+  const validationStatus = validationStatusFor({ mode, database, config });
+  const configBudgetBytes = config.budget_bytes ?? config.budgetBytes;
+  const hasConfigBudget = Number.isFinite(Number(configBudgetBytes));
+  const hasTrustedBudget = Number.isFinite(Number(trustedBudgetBytes)) && Number(trustedBudgetBytes) > 0;
+  const budgetSource = config.budget_source || config.budgetSource || (hasConfigBudget
+    ? 'fixture_configured'
+    : hasTrustedBudget
+      ? 'trusted_context'
+      : 'unconfigured');
+  const budgetBytes = hasConfigBudget
+    ? Number(config.budget_bytes ?? config.budgetBytes)
+    : hasTrustedBudget
+      ? Number(trustedBudgetBytes)
+      : null;
+  const readAllowed = readAllowedFor({ mode, database, validationStatus });
+  const writeAllowed = writeAllowedFor({ mode, validationStatus, acknowledgement });
+  const providerAllowed = writeAllowed && mode !== 'demo_fixture_mode';
+
+  return {
+    mode,
+    selected,
+    fallback_available: fallbackAvailable,
+    fallback_acknowledged: fallbackAcknowledged,
+    acknowledgement_status: acknowledgement.status,
+    acknowledgement_basis: acknowledgement.basis,
+    acknowledgement_invalid_reason: acknowledgement.invalid_reason,
+    config_source: configSource,
+    config_version: Number(config.config_version ?? config.configVersion ?? 0) || null,
+    storage_root: storageRoot,
+    database_path: databasePath,
+    path_basis: config.path_basis || config.pathBasis || pathBasisFor({ mode, selected, fallbackAvailable }),
+    validation_status: validationStatus,
+    budget_source: budgetSource,
+    budget_bytes: budgetBytes,
+    read_allowed: readAllowed,
+    write_allowed_if_enforced_later: writeAllowed,
+    provider_movement_allowed_if_enforced_later: providerAllowed,
+    unresolved_decisions: [
+      'final portable config filename/location',
+      'whether acknowledged fallback becomes selected storage or remains distinct',
+      'whether budget must be explicit before real provider-backed work'
+    ],
+    read_only: true,
+    mutates_state: false
+  };
+}
+
+function derivedAuthorityMode({ config, selectedByPreflight, fallbackAvailableByPreflight, database }) {
+  if (config.acknowledgement_status === 'invalidated' || config.acknowledgementStatus === 'invalidated') {
+    return 'acknowledgement_invalidated';
+  }
+  if (selectedByPreflight) {
+    if (database.mode === 'missing') {
+      return 'selected_storage_missing_unavailable';
+    }
+    if (database.mode === 'outside_policy') {
+      return 'selected_storage_invalid_degraded';
+    }
+    return 'selected_storage';
+  }
+  if (fallbackAvailableByPreflight) {
+    return 'app_local_fallback_available';
+  }
+  return 'no_storage_selected';
+}
+
+function acknowledgementReadout(config = {}, mode) {
+  const explicitStatus = config.acknowledgement_status || config.acknowledgementStatus || null;
+  const invalidReason = config.acknowledgement_invalid_reason || config.acknowledgementInvalidReason || null;
+  if (explicitStatus === 'invalidated' || mode === 'acknowledgement_invalidated') {
+    return {
+      status: 'invalidated',
+      basis: config.acknowledgement_basis || config.acknowledgementBasis || 'fixture_invalidated',
+      invalid_reason: invalidReason || 'fixture invalidation reason not specified'
+    };
+  }
+  if (explicitStatus === 'acknowledged' || mode === 'app_local_fallback_acknowledged') {
+    return {
+      status: 'acknowledged',
+      basis: config.acknowledgement_basis || config.acknowledgementBasis || 'fixture_operator_acknowledgement',
+      invalid_reason: null
+    };
+  }
+  if (mode === 'app_local_fallback_available') {
+    return {
+      status: 'not_acknowledged',
+      basis: config.acknowledgement_basis || config.acknowledgementBasis || 'fallback_available_without_operator_acknowledgement',
+      invalid_reason: null
+    };
+  }
+  return {
+    status: explicitStatus || 'not_required',
+    basis: config.acknowledgement_basis || config.acknowledgementBasis || 'explicit_selected_storage_or_no_fallback',
+    invalid_reason: null
+  };
+}
+
+function validationStatusFor({ mode, database, config }) {
+  if (config.validation_status || config.validationStatus) {
+    return config.validation_status || config.validationStatus;
+  }
+  if (mode === 'no_storage_selected') {
+    return 'not_selected';
+  }
+  if (mode === 'acknowledgement_invalidated') {
+    return 'invalidated';
+  }
+  if (mode === 'selected_storage_missing_unavailable' || database.mode === 'missing') {
+    return 'missing_unavailable';
+  }
+  if (mode === 'selected_storage_invalid_degraded' || database.mode === 'outside_policy') {
+    return 'invalid_degraded';
+  }
+  return 'valid';
+}
+
+function readAllowedFor({ mode, database, validationStatus }) {
+  if (mode === 'no_storage_selected') {
+    return false;
+  }
+  if (validationStatus === 'missing_unavailable') {
+    return false;
+  }
+  if (validationStatus === 'invalid_degraded') {
+    return database.exists === true;
+  }
+  return mode !== 'acknowledgement_invalidated';
+}
+
+function writeAllowedFor({ mode, validationStatus, acknowledgement }) {
+  if (validationStatus !== 'valid') {
+    return false;
+  }
+  if (mode === 'selected_storage') {
+    return true;
+  }
+  if (mode === 'app_local_fallback_acknowledged') {
+    return acknowledgement.status === 'acknowledged';
+  }
+  return false;
+}
+
+function pathBasisFor({ mode, selected, fallbackAvailable }) {
+  if (selected) {
+    return 'explicit_selected_storage';
+  }
+  if (fallbackAvailable || mode.startsWith('app_local_fallback')) {
+    return 'app_local_current_file_fallback';
+  }
+  return 'not_selected';
+}
+
+function dirnameOrNull(filePath) {
+  if (!filePath) {
+    return null;
+  }
+  const path = require('node:path');
+  return path.dirname(filePath);
 }
 
 function storagePreflightFor(input = {}, context = {}) {
@@ -69,7 +263,7 @@ function usageBytesFor(preflight = {}) {
   return Number(byteUsage.known_controlled_locations_bytes || 0) + Number(byteUsage.database_bytes || 0);
 }
 
-function classifyStoragePosture(preflight = {}) {
+function classifyStoragePosture(preflight = {}, storageAuthority = {}) {
   const database = preflight.database || {};
   const mode = database.mode || 'missing';
   const hasPath = typeof database.path === 'string' && database.path.trim().length > 0;
@@ -87,6 +281,26 @@ function classifyStoragePosture(preflight = {}) {
       real_alpha_collection: 'blocked_until_explicit_storage',
       blocks_real_collection: true,
       reason: 'Demo/fixture posture is allowed only for separated demo or fixture work.',
+      database
+    });
+  }
+  if (storageAuthority.mode === 'app_local_fallback_acknowledged') {
+    return posture({
+      state: 'configured_ready',
+      setup_gate: 'ready',
+      real_alpha_collection: 'ready_subject_to_budget_and_other_gates',
+      blocks_real_collection: false,
+      reason: 'App-local/current-file fallback is explicitly acknowledged in fixture readout.',
+      database
+    });
+  }
+  if (storageAuthority.mode === 'acknowledgement_invalidated') {
+    return posture({
+      state: 'fallback_ack_required',
+      setup_gate: 'operator_ack_required',
+      real_alpha_collection: 'blocked_until_explicit_acknowledgement',
+      blocks_real_collection: true,
+      reason: 'Previous fallback acknowledgement is invalidated.',
       database
     });
   }

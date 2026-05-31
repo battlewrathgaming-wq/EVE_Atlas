@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Active Dev runway for HS128 storage config acknowledgement proof
+Status: Resting / no active Dev runway
 Last updated: 2026-05-31
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: prove a read-only/fixture storage config and acknowledgement readout before any storage enforcement or real config writing.
+Current focus: rest after accepted HS128 storage config acknowledgement proof and prepare for the next bounded Atlas hardening seam.
 
 Current heading:
 
@@ -16,19 +16,9 @@ Current heading:
 - one hardening seam at a time
 - project root and Atlas-local context remain the anchor
 
-## Executor
-
-Current executor: Dev
-
-Expected handoff filename:
-
-```txt
-workspace/DevHS128-storage-config-acknowledgement-proof.md
-```
-
 ## Current State
 
-Active Dev runway is open for a read-only/fixture proof.
+No active Dev runway is open.
 
 Atlas has accepted storage/runtime hardening proofs:
 
@@ -37,6 +27,7 @@ Atlas has accepted storage/runtime hardening proofs:
 - `verify:cadence-simulation`
 - `storage.setup_gate_readout`
 - `storage.setup_gate_readout.action_class_matrix`
+- `storage.setup_gate_readout.storage_authority`
 
 Recent accepted state:
 
@@ -47,6 +38,7 @@ Recent accepted state:
 - `workspace/OverseerHS124-hs123-storage-gate-action-matrix-review.md`
 - `workspace/OverseerHS126-hs125-storage-hardening-orientation-review.md`
 - `workspace/OverseerHS127-storage-config-acknowledgement-proof-scope.md`
+- `workspace/OverseerHS129-hs128-storage-config-acknowledgement-review.md`
 
 Recent advisory inputs still visible in the active workspace:
 
@@ -80,103 +72,80 @@ That folder is an inactive sorting tray, not an archive, backlog, authority sour
 - Waiting is not failure.
 - Atlas should remain local-first: inspect local records before provider movement.
 
-## Active Runway
+## Next Shaping Direction
 
-Dev should implement a read-only/fixture proof for storage config and fallback acknowledgement posture.
+Do not open Dev work until the next seam is deliberately selected.
 
-Source of intent:
+Likely next shaping candidates:
 
-- `workspace/OverseerHS126-hs125-storage-hardening-orientation-review.md`
-- `workspace/OverseerHS127-storage-config-acknowledgement-proof-scope.md`
-- existing `storage.authority_preflight`
-- existing `storage.setup_gate_readout`
-- existing storage setup/gate verifier patterns
+1. Write-capable storage config shape.
+   - Decide whether Atlas is ready to move from readout proof to a first persisted storage config model.
+   - Requires Human/Overseer decision on portable config filename/location.
 
-Ordered steps:
+2. Acknowledgement persistence proof.
+   - Prove how app-local/current-file fallback acknowledgement would be recorded, cleared, and invalidated.
+   - Still avoid enforcement unless explicitly selected.
 
-1. Inspect current storage authority/preflight/setup gate services, service registry, runtime snapshot settings service, and relevant verifiers.
-2. Add a read-only or fixture-only storage authority/config acknowledgement readout shape, preferably integrated with or adjacent to `storage.setup_gate_readout`.
-3. Prove these states:
-   - no storage selected
-   - explicit configured storage selected
-   - app-local/current-file fallback available but unacknowledged
-   - app-local/current-file fallback acknowledged
-   - acknowledgement invalidated
-   - selected storage missing/unavailable
-   - selected storage invalid/degraded
-   - budget unconfigured
-   - budget warning / strong warning / hard-lock
-4. Expose fields sufficient for later enforcement decisions, such as:
-   - mode
-   - selected true/false
-   - fallback available true/false
-   - fallback acknowledged true/false
-   - acknowledgement status
-   - acknowledgement basis
-   - acknowledgement invalid reason
-   - config source
-   - config version
-   - storage root or DB path basis
-   - validation status
-   - budget source
-   - budget bytes
-   - read allowed
-   - write allowed if enforced later
-   - provider movement allowed if enforced later
-5. Prove renderer payloads cannot select, override, or probe arbitrary filesystem paths through the readout payload.
-6. Add or update focused fixture/offline verification.
-7. Update Evidence / Dev Handoff in `workspace/current.md` and create the expected DevHS file with files changed, sample output, verification commands, and boundary confirmation.
+3. Enforcement dry-run / command-effect mapping.
+   - Use `storage.setup_gate_readout.action_class_matrix` and `storage_authority` to report would-block decisions by service command/effect class.
+   - Do not enforce until config/acknowledgement persistence is accepted.
+
+4. External I/O held-state follow-up.
+   - Clarify due work while off, re-enable behavior, and no-catch-up-flood posture.
+
+5. Hydration backlog preview.
+   - Derive unresolved ID/readability pressure from existing rows before adding durable hydration queues.
 
 ## Guardrails
 
-- Read-only proof only.
-- Fixture-only config/acknowledgement inputs are allowed for verification.
-- Use existing storage setup/gate facts where possible.
-- No storage enforcement.
-- No runtime lockout enforcement.
-- No real storage config writing.
-- No persisted acknowledgement writing.
-- No DB movement, copy, migration, relocation, restore, or deletion.
-- No real pruning/deletion execution.
-- No snapshot creation against real operator paths.
-- No live/provider/API/private calls.
-- No zKill calls.
-- No ESI calls.
-- No Evidence/EVEidence writes.
-- No hydration writes.
-- No schema migration unless Dev can prove it is purely fixture/test support and stops for Overseer if runtime schema is needed.
-- No renderer redesign.
-- No UI presentation/copy finalization.
-- No bridge/IPC/service/payload rename unless unavoidable and approved by Overseer.
-- Do not treat app-local/current-file fallback as accepted storage without an explicit acknowledgement state.
-- Do not decide final portable config filename/location unless the proof only reports an unresolved decision.
+- No active Dev work while resting.
 - Do not treat action-class posture as enforcement yet.
+- Do not treat storage authority readout as persisted config.
+- Do not treat app-local/current-file fallback as accepted storage without explicit acknowledgement state.
+- Do not write real storage config without accepted runway.
+- Do not persist acknowledgement without accepted runway.
+- Do not enforce lockout without accepted config/acknowledgement model.
+- Do not move, copy, migrate, relocate, restore, or delete DB/storage without explicit runway.
+- Do not run live/provider/private/destructive actions without explicit Human authorization and accepted runway.
 - Do not treat `workspace/to-be-sorted/` as active work.
-- Do not use archived or sorted material as task queues.
-- Do not treat Shapespace, Orchestration shelves, or shared checkpoints as Atlas authority.
-- Do not implement persistent hydration backlog tables yet.
 - Do not broaden into UI work while the current heading is system hardening.
-- Do not rename Atlas source/bridge terms from advisory or shaping material.
 
 ## Stop Conditions
 
 Stop and return to Overseer/Human before implementation if:
 
-- the proof requires writing real storage config
-- the proof requires persisting acknowledgement
-- the proof requires choosing the final portable config filename/location as production truth
-- the proof requires moving, copying, migrating, relocating, restoring, or deleting DB/storage
-- the proof requires live/provider/API calls
-- the proof requires changing runtime provider behavior
-- the proof requires changing Discovery/Evidence/Hydration semantics
-- the proof requires treating `workspace/to-be-sorted/` as current task input
-- the proof requires UI wording or renderer design
+- the next seam would choose final portable config filename/location without Human/Overseer decision
+- the next seam would write real storage config
+- the next seam would persist acknowledgement
+- the next seam would enforce storage lockout
+- the next seam would move, copy, migrate, relocate, restore, or delete DB/storage
+- the next seam would run live/provider/API calls
+- the next seam would change Discovery/Evidence/Hydration semantics
+- the next seam would treat `workspace/to-be-sorted/` as current task input
+- the next seam would broaden into UI wording or renderer design
 
 ## Required Verification
 
-Run:
+No verification is required while resting.
+
+Future Dev packets should name exact commands.
+
+## Evidence
+
+HS128 accepted with Overseer correction.
+
+Accepted implementation:
+
+- `storage.setup_gate_readout` now includes read-only `storage_authority`.
+- `storage_authority` exposes selected storage, fallback availability, fallback acknowledgement, acknowledgement invalidation, selected storage validation, budget posture, and future enforcement allowance fields.
+- Renderer-style payloads cannot forge storage authority, fallback acknowledgement, database path, or budget bytes.
+- Overseer corrected budget-source coherence so trusted context budget appears in `storage_authority` when no fixture/config budget is supplied.
+
+Overseer verification:
 
 ```powershell
+node --check src\main\services\storageSetupGateReadoutService.js
+node --check scripts\verify-storage-setup-gate.js
 npm.cmd run verify:storage-setup-gate
 npm.cmd run verify:storage-authority-preflight
 npm.cmd run verify:service-registry
@@ -184,30 +153,14 @@ npm.cmd run verify:command-authority
 npm.cmd run verify:passive-side-effects
 npm.cmd run verify:protected-terms
 git diff --check
-git status --short --branch
 ```
 
-Run `node --check` on any new or changed JavaScript files.
+Result:
 
-If snapshot/support settings are touched, also run:
-
-```powershell
-npm.cmd run verify:runtime-snapshot
-```
-
-## Evidence
-
-HS128 opens from:
-
-- HS126 accepted DevHS125 orientation: next selected seam should be storage config / acknowledgement proof, not real enforcement.
-- HS127 shaped storage config / acknowledgement proof: selected storage, app-local fallback available, app-local fallback acknowledged, acknowledgement invalidated, and budget config should be visible before enforcement.
-
-Dev should replace this section with concise proof evidence after implementation.
+- all commands passed
+- `verify:protected-terms` passed as warning-only with no renames and no protected-word JSON updates
+- `git diff --check` passed with LF-to-CRLF working-copy warnings only
 
 ## Dev Handoff
 
-Pending Dev handoff.
-
-Expected:
-
-- `workspace/DevHS128-storage-config-acknowledgement-proof.md`
+No Dev handoff is expected while resting.
