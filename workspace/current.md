@@ -39,6 +39,7 @@ Recent accepted state:
 - `workspace/OverseerHS126-hs125-storage-hardening-orientation-review.md`
 - `workspace/OverseerHS127-storage-config-acknowledgement-proof-scope.md`
 - `workspace/OverseerHS129-hs128-storage-config-acknowledgement-review.md`
+- `workspace/OverseerHS130-storage-config-decision-brief.md`
 
 Recent advisory inputs still visible in the active workspace:
 
@@ -81,6 +82,7 @@ Likely next shaping candidates:
 1. Write-capable storage config shape.
    - Decide whether Atlas is ready to move from readout proof to a first persisted storage config model.
    - Requires Human/Overseer decision on portable config filename/location.
+   - Decision brief: `workspace/OverseerHS130-storage-config-decision-brief.md`.
 
 2. Acknowledgement persistence proof.
    - Prove how app-local/current-file fallback acknowledgement would be recorded, cleared, and invalidated.
@@ -140,6 +142,7 @@ Accepted implementation:
 - `storage_authority` exposes selected storage, fallback availability, fallback acknowledgement, acknowledgement invalidation, selected storage validation, budget posture, and future enforcement allowance fields.
 - Renderer-style payloads cannot forge storage authority, fallback acknowledgement, database path, or budget bytes.
 - Overseer corrected budget-source coherence so trusted context budget appears in `storage_authority` when no fixture/config budget is supplied.
+- HS130 captured the decision cluster required before write-capable storage config: portable config home, config contents, fallback acknowledgement meaning, acknowledgement invalidation, budget requirement, and renderer authority.
 
 Overseer verification:
 

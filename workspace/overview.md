@@ -48,10 +48,11 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Storage gate action matrix.
-2. Local-first API lane model assurance.
-3. External I/O held-state follow-up.
-4. Hydration backlog preview.
+1. Write-capable storage config shape.
+2. Acknowledgement persistence proof.
+3. Enforcement dry-run / command-effect mapping.
+4. External I/O held-state follow-up.
+5. Hydration backlog preview.
 
 See `workspace/current.md` for current truth.
 
@@ -69,6 +70,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS126 accepted DevHS125 orientation: the next storage seam should be storage config / acknowledgement proof before enforcement.
 - HS127 shaped the storage config / acknowledgement proof: Atlas must make selected storage, app-local fallback, fallback acknowledgement, invalidated acknowledgement, and budget config visible before enforcement.
 - HS129 accepted HS128 after Overseer correction: `storage.setup_gate_readout.storage_authority` is read-only proof, renderer payloads cannot forge acknowledgement/path/budget facts, and trusted context budget now stays coherent in the authority readout.
+- HS130 captured the storage config decision cluster that must be accepted before write-capable config: portable config home, config contents, fallback acknowledgement meaning, invalidation, budget requirement, and renderer authority.
 
 ## Accepted Boundaries
 
