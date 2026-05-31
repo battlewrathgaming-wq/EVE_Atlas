@@ -1,5 +1,6 @@
 const { USER_AGENT } = require('../../shared/constants');
 const { buildAppReadiness } = require('./appReadinessService');
+const { buildCommandCoverageReport } = require('./enforcementDryRunService');
 const { actionGate } = require('./liveApiGateService');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
 const { defaultTaskRunner } = require('./taskRunner');
@@ -29,6 +30,11 @@ function buildGateStackReadout(db, input = {}, context = {}) {
     databasePath: context.databasePath
   });
   const actions = actionList(input);
+  const externalIo = externalIoPolicyReadout(input);
+  const commandCoverage = buildCommandCoverageReport(commandMetadata);
+  const commandExternalIoPosture = commandMetadata
+    .map((entry) => commandExternalIoReadout(entry, commandCoverage, externalIo))
+    .sort((left, right) => left.command.localeCompare(right.command));
   const activeTasks = taskRunner.listTasks ? taskRunner.listTasks({ limit: input.taskLimit || 50 }) : [];
   const providerBackedCommands = commandMetadata
     .filter((entry) => (entry.effects || []).includes('external-live-api'))
@@ -45,7 +51,7 @@ function buildGateStackReadout(db, input = {}, context = {}) {
     generated_at: new Date().toISOString(),
     read_only: true,
     mutates_state: false,
-    external_io: externalIoPolicyReadout(input),
+    external_io: externalIo,
     external_api: {
       label: 'External API',
       live_api_enabled: process.env.AURA_ATLAS_LIVE_API === '1',
@@ -62,8 +68,15 @@ function buildGateStackReadout(db, input = {}, context = {}) {
       local_only: localOnlyCommands,
       basis: 'service command effects; external-live-api means provider-backed for this readout'
     },
+    command_external_io_posture: {
+      basis: 'HS139 command coverage plus service command effects; External I/O is readout-only and not enforced',
+      coverage_status: commandCoverage.status,
+      commands: commandExternalIoPosture
+    },
     gate_stacks: actions.map((action) => gateStackForAction(action, {
       commandMetadata,
+      commandCoverage,
+      externalIo,
       executorStatus,
       storage,
       taskRunner,
@@ -90,15 +103,34 @@ function actionList(input = {}) {
 }
 
 function externalIoPolicyReadout(input = {}) {
-  const requested = input.externalIoState || input.external_io_state || null;
+  const requested = normalizeExternalIoState(input.externalIoState || input.external_io_state || 'off');
+  const providerBackedPosture = requested === 'off'
+    ? 'held_by_external_io'
+    : 'released_to_normal_gates';
   return {
     family: 'external_io',
     implementation_state: 'policy_only_not_implemented',
     enforced: false,
     requested_readout_state: requested,
-    provider_backed_if_off: 'held_by_external_io',
-    release_policy: 'future release must re-enter normal cadence/provider controls, storage safety, Watch arming, and confirmation rules; no catch-up flood'
+    provider_backed_posture: providerBackedPosture,
+    local_only_posture: 'available',
+    held_is_failure: false,
+    release_policy: 'Re-enable releases provider-capable work only to normal cadence/provider controls, storage safety, Watch arming, and confirmation rules; no catch-up flood.',
+    reenable_catch_up_policy: {
+      catch_up_flood: false,
+      release_count_now: 'bounded_by_normal_lane_policy',
+      missed_slots_create_request_debt: false,
+      next_step: 're_enter_normal_gates'
+    }
   };
+}
+
+function normalizeExternalIoState(value) {
+  const normalized = String(value || '').trim().toLowerCase();
+  if (['on', 'enabled', 'allow', 'allowed'].includes(normalized)) {
+    return 'on';
+  }
+  return 'off';
 }
 
 function watchSummary(executorStatus = {}) {
@@ -168,6 +200,12 @@ function gateStackForAction(action, context) {
   const providerBacked = command
     ? (command.effects || []).includes('external-live-api')
     : liveGate?.mode === 'live-required';
+  const externalIoGate = externalIoGateFor({
+    command,
+    providerBacked,
+    commandCoverage: context.commandCoverage,
+    externalIo: context.externalIo
+  });
 
   return {
     action,
@@ -176,11 +214,7 @@ function gateStackForAction(action, context) {
     gates: {
       schedule: scheduleGateForAction(action, context.executorStatus.schedule),
       watch_arming: watchGate,
-      external_io: {
-        implementation_state: 'policy_only_not_implemented',
-        enforced: false,
-        readout_if_future_off: providerBacked ? 'held_by_external_io' : 'local_only_available'
-      },
+      external_io: externalIoGate,
       external_api: liveGate ? {
         mode: liveGate.mode,
         allowed: liveGate.allowed,
@@ -202,6 +236,7 @@ function gateStackForAction(action, context) {
     },
     readout_posture: postureFor({
       providerBacked,
+      externalIoGate,
       liveGate,
       watchGate,
       activeTask,
@@ -210,6 +245,55 @@ function gateStackForAction(action, context) {
     no_provider_call: true,
     mutates_state: false
   };
+}
+
+function commandExternalIoReadout(command, commandCoverage, externalIo) {
+  const coverage = coverageForCommand(commandCoverage, command.command);
+  const providerCapable = commandProviderCapable(command, coverage);
+  const posture = providerCapable
+    ? externalIo.provider_backed_posture
+    : 'local_only_available';
+  return {
+    command: command.command,
+    provider_capable: providerCapable,
+    external_io_dependency: coverage?.external_io_dependency || (providerCapable ? 'declared_by_service_effect' : 'none'),
+    storage_action_class: coverage?.storage_action_class || null,
+    runtime_context: coverage?.runtime_context || null,
+    external_io_state: externalIo.requested_readout_state,
+    posture,
+    available_when_external_io_off: !providerCapable,
+    held_is_failure: false,
+    enforcement_active: false
+  };
+}
+
+function externalIoGateFor({ command, providerBacked, commandCoverage, externalIo }) {
+  const coverage = command ? coverageForCommand(commandCoverage, command.command) : null;
+  const providerCapable = commandProviderCapable(command, coverage) || providerBacked === true;
+  const state = providerCapable
+    ? externalIo.provider_backed_posture
+    : 'local_only_available';
+  return {
+    implementation_state: externalIo.implementation_state,
+    enforced: false,
+    state,
+    requested_readout_state: externalIo.requested_readout_state,
+    provider_capable: providerCapable,
+    external_io_dependency: coverage?.external_io_dependency || (providerCapable ? 'declared_by_live_gate' : 'none'),
+    storage_action_class: coverage?.storage_action_class || null,
+    held_is_failure: false,
+    reenable_next_step: providerCapable ? externalIo.reenable_catch_up_policy.next_step : 'local_work_remains_available',
+    catch_up_flood_on_reenable: false
+  };
+}
+
+function coverageForCommand(commandCoverage = {}, commandName) {
+  return (commandCoverage.commands || []).find((entry) => entry.command === commandName) || null;
+}
+
+function commandProviderCapable(command = {}, coverage = null) {
+  return (command.effects || []).includes('external-live-api') ||
+    Boolean(coverage && coverage.external_io_dependency !== 'none');
 }
 
 function commandForAction(action, commands = []) {
@@ -346,12 +430,14 @@ function matchingActiveTask(action, fingerprint, tasks = []) {
   };
 }
 
-function postureFor({ providerBacked, liveGate, watchGate, activeTask, confirmation }) {
+function postureFor({ providerBacked, externalIoGate, liveGate, watchGate, activeTask, confirmation }) {
   const states = [];
   if (!providerBacked) {
     states.push('local_only_available');
+  } else if (externalIoGate?.state === 'held_by_external_io') {
+    states.push('held_by_external_io');
   } else {
-    states.push('future_external_io_if_off=held_by_external_io');
+    states.push('external_io_released_to_normal_gates');
   }
   if (watchGate.applies && !watchGate.session_armed) {
     states.push('watch_arm_required');

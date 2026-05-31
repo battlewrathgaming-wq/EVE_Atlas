@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Active Dev runway for HS142 External I/O held-state proof
+Status: Resting after accepted HS142 External I/O held-state proof
 Last updated: 2026-05-31
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: prove External I/O held-state composition without runtime enforcement, provider calls, or catch-up flooding.
+Current focus: storage/runtime hardening remains the next heading, but no Dev runway is currently open.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human discussion
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS142-external-io-held-state-proof.md
+none
 ```
 
 ## Current State
 
-HS139 is accepted. HS142 is open.
+HS142 is accepted.
 
 Accepted Human decisions:
 
@@ -57,6 +57,7 @@ Atlas has accepted storage/runtime hardening proofs:
 - `storage.authority_config.acknowledgement_persistence_proof`
 - `storage.enforcement_dry_run.command_effect_map`
 - complete enforcement classification coverage for all current service commands
+- read-only External I/O held-state proof through `support.gate_stack_readout`
 
 Recent accepted state:
 
@@ -81,6 +82,7 @@ Recent accepted state:
 - `workspace/OverseerHS141-security-audit-hs140-review.md`
 - `workspace/SystemsAuditHS109-external-io-policy-fit.md`
 - `workspace/OverseerHS142-external-io-held-state-runway.md`
+- `workspace/OverseerHS143-hs142-external-io-held-state-review.md`
 
 ## Accepted Boundaries
 
@@ -96,28 +98,15 @@ Recent accepted state:
 
 ## Active Runway
 
-Dev should implement a bounded read-only External I/O held-state proof.
+No active Dev runway.
 
-Source of intent:
+Likely next storage/runtime seams, to choose deliberately:
 
-- Human direction to continue the External I/O held-state line.
-- `workspace/SystemsAuditHS109-external-io-policy-fit.md`
-- `workspace/SecuritySafetyAuditHS140-enforcement-classification-posture.md`
-- `workspace/OverseerHS141-security-audit-hs140-review.md`
-- accepted HS139 enforcement classification coverage
-- `workspace/OverseerHS142-external-io-held-state-runway.md`
+1. Hydration backlog preview.
+2. Real enforcement design discussion using composed gate state.
+3. Support-artifact path authority review if Human wants to stay on security hardening.
 
-Ordered steps:
-
-1. Inspect existing `live.gate`, `support.gate_stack_readout`, Watch executor/session posture, storage setup/gate posture, command metadata, and HS139 enforcement classification coverage.
-2. Add or refine a read-only External I/O held-state readout/proof.
-3. Report provider-capable commands as `held_by_external_io` when External I/O is off.
-4. Report local-only read/report/preflight commands as available when External I/O is off.
-5. Keep Watch arming/session state separate from provider movement permission.
-6. Show that External I/O re-enable does not imply catch-up flooding; released work must re-enter normal cadence/provider/storage/confirmation rules.
-7. Keep `would_allow` from storage dry-run separate from final runtime authorization.
-8. Add focused offline verification.
-9. Update Evidence / Dev Handoff and create the expected DevHS file.
+The next packet should remain one bounded hardening seam.
 
 ## Guardrails
 
@@ -162,7 +151,9 @@ Before opening the next runway, stop and return to Overseer/Human if:
 
 ## Required Verification
 
-Run:
+No verification is required while resting.
+
+If the next storage packet changes the same surface, likely baseline verification is:
 
 ```powershell
 npm.cmd run verify:gate-stack-readout
@@ -183,15 +174,41 @@ Run `node --check` on any new or changed JavaScript files.
 
 ## Evidence
 
-HS142 opens from HS141 Security audit and HS109 external_io policy fit.
+HS142 Dev implementation accepted.
 
-Dev should replace this section with concise proof evidence after implementation.
+- Refined read-only `support.gate_stack_readout` rather than adding a new runtime command.
+- Added per-command External I/O posture from HS139 command coverage plus service command effects.
+- Provider-capable commands report `held_by_external_io` when External I/O readout state is off.
+- Local-only read/report/preflight commands report `local_only_available` when External I/O is off.
+- Watch arming/session state remains separate from provider movement permission.
+- External I/O re-enable reports `released_to_normal_gates`, with no catch-up flood, no request debt from missed slots, and normal cadence/provider/storage/confirmation rules preserved.
+- Storage dry-run/`would_allow` remains separate from full runtime authorization; the gate-stack readout exposes separate External I/O, External API/live.gate, Watch arming, storage safety, active task, and confirmation posture.
+- Boundary preserved: no runtime interception, command blocking, provider calls, Evidence/EVEidence writes, hydration writes, storage movement, pruning/deletion execution, schema change, persisted External I/O setting, or renderer/UI work.
 
-## Dev Handoff
+HS142 verification:
 
-Pending Dev handoff.
+```powershell
+node --check src\main\services\gateStackReadoutService.js
+node --check scripts\verify-gate-stack-readout.js
+npm.cmd run verify:gate-stack-readout
+npm.cmd run verify:cadence-simulation
+npm.cmd run verify:enforcement-dry-run
+npm.cmd run verify:app-readiness
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:watch-executor
+npm.cmd run verify:watch-scheduler
+npm.cmd run verify:protected-terms
+```
 
-Expected:
+All listed commands passed. `verify:protected-terms` completed with warning-only discovery output and exit code 0.
+
+Overseer review:
+
+- `workspace/OverseerHS143-hs142-external-io-held-state-review.md`
+
+Completed handoff:
 
 - `workspace/DevHS142-external-io-held-state-proof.md`
 

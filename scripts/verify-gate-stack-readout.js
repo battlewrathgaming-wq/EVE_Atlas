@@ -41,11 +41,13 @@ async function main() {
 
     verifyArmedReadout(armedReadout);
     verifyDisarmedReadout(disarmedReadout);
+    verifyExternalIoReenableReadout(db, taskRunner);
     verifyCommand();
 
     console.log(JSON.stringify({
       status: 'gate stack readout verified',
       external_io: armedReadout.external_io,
+      sample_command_external_io: compactCommandPosture(commandPosture(armedReadout, 'manual.expansion')),
       sample_actor_watch_stack: compactStack(stackFor(armedReadout, 'actor.watch')),
       sample_local_stack: compactStack(stackFor(armedReadout, 'report.view')),
       active_task_count: armedReadout.active_tasks.active_count,
@@ -118,26 +120,46 @@ function verifyArmedReadout(readout) {
   assert(readout.mutates_state === false, 'gate-stack readout should not mutate state');
   assert(readout.external_io.implementation_state === 'policy_only_not_implemented', 'external_io should be policy-only/not implemented');
   assert(readout.external_io.enforced === false, 'external_io should not be enforced');
+  assert(readout.external_io.requested_readout_state === 'off', 'fixture should report external_io off');
+  assert(readout.external_io.provider_backed_posture === 'held_by_external_io', 'provider-backed work should be held when external_io is off');
+  assert(readout.external_io.held_is_failure === false, 'external_io held state should not be failure');
+  assert(readout.external_io.reenable_catch_up_policy.catch_up_flood === false, 're-enable should not imply catch-up flooding');
   assert(readout.command_inventory.provider_backed.includes('manual.discovery'), 'provider-backed inventory should include manual.discovery');
   assert(readout.command_inventory.local_only.includes('app.readiness'), 'local-only inventory should include app.readiness');
+  assert(readout.command_external_io_posture.coverage_status === 'complete', 'external_io posture should consume complete command coverage');
+
+  for (const commandName of ['manual.discovery', 'manual.expansion', 'actor.watch', 'system.radius.watch', 'metadata.hydration', 'sde.build-lookups', 'watch.executor.arm', 'watch.executor.tick']) {
+    const posture = commandPosture(readout, commandName);
+    assert(posture.provider_capable === true, `${commandName} should be provider-capable`);
+    assert(posture.posture === 'held_by_external_io', `${commandName} should be held by external_io when off`);
+    assert(posture.held_is_failure === false, `${commandName} held state should not be failure`);
+    assert(posture.enforcement_active === false, `${commandName} external_io posture should not enforce`);
+  }
+
+  for (const commandName of ['app.readiness', 'report.actor', 'queue.selection', 'storage.authority_preflight', 'storage.setup_gate_readout', 'watch.schedule', 'watch.offline_readout']) {
+    const posture = commandPosture(readout, commandName);
+    assert(posture.provider_capable === false, `${commandName} should be local-only`);
+    assert(posture.posture === 'local_only_available', `${commandName} should remain available when external_io is off`);
+    assert(posture.available_when_external_io_off === true, `${commandName} should explicitly remain available`);
+  }
 
   const actorWatch = stackFor(readout, 'actor.watch');
   assert(actorWatch.provider_backed === true, 'actor.watch should be provider-backed');
   assert(actorWatch.gates.schedule.due_count === 1, 'actor.watch schedule should report due posture');
   assert(actorWatch.gates.watch_arming.state === 'armed', 'Watch arming should be reported separately as armed');
-  assert(actorWatch.gates.external_io.readout_if_future_off === 'held_by_external_io', 'future external_io-off posture should be held_by_external_io');
+  assert(actorWatch.gates.external_io.state === 'held_by_external_io', 'external_io-off posture should be held_by_external_io');
   assert(actorWatch.gates.external_io.enforced === false, 'held_by_external_io must not be enforced');
   assert(actorWatch.gates.external_api.allowed === false, 'live.gate should remain blocked while live API env is disabled');
   assert(actorWatch.gates.external_api.blockers.some((entry) => entry.code === 'LIVE_API_DISABLED'), 'live.gate blocker should remain visible');
   assert(actorWatch.gates.storage_safety.enforcement_state === 'not_implemented_in_hs111', 'storage safety should stay separate and non-enforcing');
   assert(actorWatch.gates.confirmation.confirmation_required === true, 'confirmation requirement should be reported separately');
   assert(actorWatch.gates.active_task.present === true, 'active duplicate task should be reported separately');
-  assert(actorWatch.readout_posture.includes('future_external_io_if_off=held_by_external_io'), 'posture should include future external_io hold');
+  assert(actorWatch.readout_posture.includes('held_by_external_io'), 'posture should include external_io hold');
   assert(actorWatch.readout_posture.includes('blocked_by_live_gate'), 'posture should include live.gate block separately');
 
   const local = stackFor(readout, 'report.view');
   assert(local.provider_backed === false, 'report.view should be local-only');
-  assert(local.gates.external_io.readout_if_future_off === 'local_only_available', 'local-only surfaces should remain available under future external_io off');
+  assert(local.gates.external_io.state === 'local_only_available', 'local-only surfaces should remain available under external_io off');
   assert(local.readout_posture.includes('local_only_available'), 'local-only posture should be distinct from provider-backed posture');
 }
 
@@ -146,6 +168,28 @@ function verifyDisarmedReadout(readout) {
   assert(actorWatch.gates.watch_arming.state === 'disarmed', 'disarmed Watch state should be reported separately');
   assert(actorWatch.readout_posture.includes('watch_arm_required'), 'disarmed provider-backed work should report arm requirement');
   assert(actorWatch.gates.schedule.state === 'waiting_or_blocked', 'disarmed schedule should remain waiting/blocked, not failed');
+}
+
+async function verifyExternalIoReenableReadout(db, taskRunner) {
+  const readout = await invokeServiceCommand('support.gate_stack_readout', {
+    externalIoState: 'on'
+  }, {
+    db,
+    databasePath: path.join(auraTempRoot(), 'gate-stack-readout-reenabled.sqlite'),
+    taskRunner,
+    watchExecutor: fixtureWatchExecutor({ sessionArmed: true, liveApiEnabled: true })
+  });
+  const actorWatch = stackFor(readout, 'actor.watch');
+  assert(readout.external_io.requested_readout_state === 'on', 'external_io on fixture should report on state');
+  assert(readout.external_io.provider_backed_posture === 'released_to_normal_gates', 're-enable should release only to normal gates');
+  assert(readout.external_io.reenable_catch_up_policy.catch_up_flood === false, 're-enable should not catch up flood');
+  assert(readout.external_io.reenable_catch_up_policy.missed_slots_create_request_debt === false, 'missed slots should not create request debt');
+  assert(actorWatch.gates.external_io.state === 'released_to_normal_gates', 'provider-backed Watch should be released only to normal gates');
+  assert(actorWatch.gates.external_io.catch_up_flood_on_reenable === false, 'Watch re-enable should not imply catch-up flood');
+  assert(actorWatch.gates.watch_arming.state === 'armed', 'Watch arming should remain separate when external_io is on');
+  assert(actorWatch.gates.external_api.allowed === false, 'External I/O on should not bypass live.gate');
+  assert(actorWatch.gates.active_task.present === true, 'External I/O on should not bypass active task duplicate posture');
+  assert(actorWatch.readout_posture.includes('external_io_released_to_normal_gates'), 'posture should show release to normal gates only');
 }
 
 function verifyCommand() {
@@ -162,18 +206,37 @@ function stackFor(readout, action) {
   return stack;
 }
 
+function commandPosture(readout, commandName) {
+  const entry = readout.command_external_io_posture.commands.find((candidate) => candidate.command === commandName);
+  assert(entry, `${commandName} external_io posture should exist`);
+  return entry;
+}
+
 function compactStack(stack) {
   return {
     action: stack.action,
     provider_backed: stack.provider_backed,
     schedule_state: stack.gates.schedule.state,
     watch_arming_state: stack.gates.watch_arming.state,
-    external_io_if_off: stack.gates.external_io.readout_if_future_off,
+    external_io_state: stack.gates.external_io.state,
     live_gate_allowed: stack.gates.external_api.allowed,
     storage_enforcement: stack.gates.storage_safety.enforcement_state,
     active_task_state: stack.gates.active_task.state,
     confirmation_required: stack.gates.confirmation.confirmation_required,
     readout_posture: stack.readout_posture
+  };
+}
+
+function compactCommandPosture(posture) {
+  return {
+    command: posture.command,
+    provider_capable: posture.provider_capable,
+    external_io_dependency: posture.external_io_dependency,
+    storage_action_class: posture.storage_action_class,
+    external_io_state: posture.external_io_state,
+    posture: posture.posture,
+    held_is_failure: posture.held_is_failure,
+    enforcement_active: posture.enforcement_active
   };
 }
 
