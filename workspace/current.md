@@ -34,6 +34,7 @@ Recent accepted restart/surface state:
 - `workspace/OverseerHS121-local-first-api-lane-model-adoption.md`
 - `workspace/OverseerHS122-storage-gate-action-matrix.md`
 - `workspace/OverseerHS124-hs123-storage-gate-action-matrix-review.md`
+- `workspace/OverseerHS126-hs125-storage-hardening-orientation-review.md`
 
 Recent advisory inputs still visible in the active workspace:
 
@@ -75,9 +76,12 @@ Likely next shaping candidates:
 
 1. Storage config and acknowledgement behavior.
    - Decide how explicit storage setup, app-local/current-file fallback acknowledgement, missing storage recovery, and portable config should behave.
+   - Accepted as the recommended next seam in `workspace/OverseerHS126-hs125-storage-hardening-orientation-review.md`.
+   - Prefer read-only or fixture-only proof before any real storage config write.
 
 2. Storage enforcement dry-run / lockout boundary.
    - Use `storage.setup_gate_readout.action_class_matrix` as proof input, but do not enforce until the acknowledgement/config model is accepted.
+   - Viable later, but do not jump to real enforcement before storage config/acknowledgement is shaped.
 
 3. External I/O held-state follow-up.
    - Clarify due work while off, re-enable behavior, and no-catch-up-flood posture.
@@ -142,6 +146,7 @@ Accepted implementation:
 - The matrix reports action-class posture for HS122 storage states and action classes.
 - Verifier coverage proves every state/action-class mapping and basis fields.
 - Overseer corrected matrix state precedence so missing/unselected storage is not hidden by budget hard-lock.
+- HS126 accepted DevHS125 orientation: next selected seam should be storage config / acknowledgement proof, not real enforcement.
 
 Overseer verification:
 
