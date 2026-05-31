@@ -33,6 +33,7 @@ const {
   saveRuntimeSnapshotSettings
 } = require('./runtimeSnapshotService');
 const { buildGateStackReadout } = require('./gateStackReadoutService');
+const { buildEnforcementDryRunCommandEffectMap } = require('./enforcementDryRunService');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
 const {
   buildStorageAuthorityConfigWriteProof,
@@ -361,6 +362,16 @@ const COMMANDS = {
     renderer: true,
     description: 'Read provider-backed work gate stack posture without enforcing external_io, storage, or provider movement',
     handler: ({ payload, ...context }) => buildGateStackReadout(context.db, payload, {
+      ...context,
+      commandMetadata: listServiceCommands()
+    })
+  },
+  'storage.enforcement_dry_run.command_effect_map': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Read dry-run allow/block/conditional command-effect posture without enforcing runtime command blocking',
+    handler: ({ payload, ...context }) => buildEnforcementDryRunCommandEffectMap(payload, {
       ...context,
       commandMetadata: listServiceCommands()
     })

@@ -49,6 +49,7 @@
     "verify:storage-authority-config-write": "node scripts/verify-storage-authority-config-write.js",
     "verify:storage-acknowledgement-persistence": "node scripts/verify-storage-acknowledgement-persistence.js",
     "verify:storage-setup-gate": "node scripts/verify-storage-setup-gate.js",
+    "verify:enforcement-dry-run": "node scripts/verify-enforcement-dry-run.js",
     "verify:gate-stack-readout": "node scripts/verify-gate-stack-readout.js",
     "verify:cadence-simulation": "node scripts/verify-cadence-simulation.js",
     "verify:assessment-artifacts": "node scripts/verify-assessment-artifacts.js",

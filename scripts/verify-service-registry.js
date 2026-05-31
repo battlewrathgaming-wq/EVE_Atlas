@@ -50,6 +50,7 @@ async function main() {
     const storageSetupGateReadoutCommand = commands.find((entry) => entry.command === 'storage.setup_gate_readout');
     const storageAuthorityConfigWriteCommand = commands.find((entry) => entry.command === 'storage.authority_config.write_proof');
     const storageAcknowledgementPersistenceCommand = commands.find((entry) => entry.command === 'storage.authority_config.acknowledgement_persistence_proof');
+    const enforcementDryRunCommand = commands.find((entry) => entry.command === 'storage.enforcement_dry_run.command_effect_map');
     const gateStackReadoutCommand = commands.find((entry) => entry.command === 'support.gate_stack_readout');
     const snapshotSettingsGetCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.get');
     const snapshotSettingsUpdateCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.update');
@@ -99,6 +100,8 @@ async function main() {
     assert(storageAuthorityConfigWriteCommand?.renderer_allowed === false, 'storage authority config write proof should not be renderer eligible');
     assert(storageAcknowledgementPersistenceCommand?.classification === 'metadata-only', 'storage acknowledgement persistence proof should be metadata-only');
     assert(storageAcknowledgementPersistenceCommand?.renderer_allowed === false, 'storage acknowledgement persistence proof should not be renderer eligible');
+    assert(enforcementDryRunCommand?.classification === 'read-only', 'enforcement dry-run map should be read-only');
+    assert(enforcementDryRunCommand?.renderer_allowed === true, 'enforcement dry-run map should be renderer eligible');
     assert(gateStackReadoutCommand?.classification === 'read-only', 'gate stack readout should be read-only');
     assert(snapshotSettingsGetCommand?.classification === 'read-only', 'runtime snapshot settings get should be read-only');
     assert(snapshotSettingsUpdateCommand?.classification === 'metadata-only', 'runtime snapshot settings update should be metadata-only');
@@ -123,6 +126,13 @@ async function main() {
     });
     assert(storageSetupGate.read_only === true, 'storage setup gate readout should declare read-only behavior');
     assert(storageSetupGate.enforcement_state === 'not_implemented_readout_only', 'storage setup gate readout should not enforce lockout');
+
+    const enforcementDryRun = await invokeServiceCommand('storage.enforcement_dry_run.command_effect_map', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(enforcementDryRun.read_only === true, 'enforcement dry-run map should be read-only');
+    assert(enforcementDryRun.enforcement_active === false, 'enforcement dry-run map should not activate enforcement');
 
     const gateStack = await invokeServiceCommand('support.gate_stack_readout', {}, {
       db,

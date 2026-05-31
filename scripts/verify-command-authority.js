@@ -29,6 +29,8 @@ async function main() {
     assert(commands.get('storage.authority_config.write_proof')?.effects.includes('local-data-mutation'), 'storage config write proof should declare local mutation effect');
     assert(commands.get('storage.authority_config.acknowledgement_persistence_proof')?.classification === 'metadata-only', 'storage acknowledgement persistence proof should be metadata-only');
     assert(commands.get('storage.authority_config.acknowledgement_persistence_proof')?.effects.includes('local-data-mutation'), 'storage acknowledgement persistence proof should declare local mutation effect');
+    assert(commands.get('storage.enforcement_dry_run.command_effect_map')?.classification === 'read-only', 'enforcement dry-run map should be read-only');
+    assert(commands.get('storage.enforcement_dry_run.command_effect_map')?.effects.includes('read-only'), 'enforcement dry-run map should declare read-only effect');
     assert(commands.get('support.gate_stack_readout')?.classification === 'read-only', 'gate stack readout should be read-only');
     assert(commands.get('support.gate_stack_readout')?.effects.includes('read-only'), 'gate stack readout should declare read-only effect');
     assert(commands.get('task.cancel')?.classification === 'runtime-control', 'task.cancel should be runtime-control');
@@ -44,6 +46,7 @@ async function main() {
     assert(rendererNames.has('storage.setup_gate_readout'), 'storage setup gate readout should be renderer eligible');
     assert(!rendererNames.has('storage.authority_config.write_proof'), 'storage config write proof should not be renderer eligible');
     assert(!rendererNames.has('storage.authority_config.acknowledgement_persistence_proof'), 'storage acknowledgement persistence proof should not be renderer eligible');
+    assert(rendererNames.has('storage.enforcement_dry_run.command_effect_map'), 'enforcement dry-run map should be renderer eligible as read-only');
     assert(rendererNames.has('support.gate_stack_readout'), 'gate stack readout should be renderer eligible');
     assert(rendererNames.has('runtime.db_snapshot.create'), 'snapshot create should be renderer eligible');
     assert(!rendererNames.has('sde.import.topology'), 'SDE import should not be renderer eligible');
