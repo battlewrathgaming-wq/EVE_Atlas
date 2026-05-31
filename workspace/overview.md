@@ -35,9 +35,9 @@ Milestone: Atlas Storage And Runtime Hardening
 
 Current state:
 
-- HS139 enforcement classification coverage accepted
-- no active Dev runway is open
-- current executor is Overseer / Human discussion
+- active Dev runway opened for HS142
+- current executor is Dev
+- next work is External I/O held-state readout/proof, not runtime enforcement
 
 Current heading:
 
@@ -48,9 +48,9 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. External I/O held-state follow-up.
+1. Review HS142 External I/O held-state proof when Dev returns.
 2. Hydration backlog preview.
-3. Real enforcement design discussion, if Human wants to move from proof to implementation.
+3. Real enforcement design discussion, only after held-state proof is accepted.
 
 See `workspace/current.md` for current truth.
 
@@ -79,6 +79,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS138 accepted HS137: `storage.enforcement_dry_run.command_effect_map` now proves representative command/effect allow, block, and conditional posture from storage gate state and service metadata while leaving runtime enforcement inactive.
 - HS139/HS140 closed the HS138 coverage gap: every current `serviceRegistry` command now has enforcement classification metadata or explicit fixture/non-production posture, and the dry-run verifier exposes missing classifications as gaps.
 - HS141 accepted Security audit input: enforcement classification is healthy inventory, not runtime policy; future enforcement needs composed gate state, and External I/O held-state is the preferred next safe seam.
+- HS142 opened the External I/O held-state proof runway: provider-capable work should read as held when External I/O is off, local-only work should stay available, and re-enable must not imply catch-up flooding.
 
 ## Accepted Boundaries
 

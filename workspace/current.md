@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after accepted HS139 enforcement classification coverage
+Status: Active Dev runway for HS142 External I/O held-state proof
 Last updated: 2026-05-31
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: storage/runtime hardening remains the next heading, but no Dev runway is currently open.
+Current focus: prove External I/O held-state composition without runtime enforcement, provider calls, or catch-up flooding.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human discussion
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none
+workspace/DevHS142-external-io-held-state-proof.md
 ```
 
 ## Current State
 
-HS139 is accepted.
+HS139 is accepted. HS142 is open.
 
 Accepted Human decisions:
 
@@ -79,6 +79,8 @@ Recent accepted state:
 - `workspace/OverseerHS140-hs139-enforcement-classification-coverage-review.md`
 - `workspace/SecuritySafetyAuditHS140-enforcement-classification-posture.md`
 - `workspace/OverseerHS141-security-audit-hs140-review.md`
+- `workspace/SystemsAuditHS109-external-io-policy-fit.md`
+- `workspace/OverseerHS142-external-io-held-state-runway.md`
 
 ## Accepted Boundaries
 
@@ -94,19 +96,34 @@ Recent accepted state:
 
 ## Active Runway
 
-No active Dev runway.
+Dev should implement a bounded read-only External I/O held-state proof.
 
-Likely next storage/runtime seams, to choose deliberately:
+Source of intent:
 
-1. External I/O held-state follow-up.
-2. Hydration backlog preview.
-3. Real enforcement design discussion, if Human wants to move from proof to implementation.
+- Human direction to continue the External I/O held-state line.
+- `workspace/SystemsAuditHS109-external-io-policy-fit.md`
+- `workspace/SecuritySafetyAuditHS140-enforcement-classification-posture.md`
+- `workspace/OverseerHS141-security-audit-hs140-review.md`
+- accepted HS139 enforcement classification coverage
+- `workspace/OverseerHS142-external-io-held-state-runway.md`
 
-The next packet should remain one bounded hardening seam.
+Ordered steps:
+
+1. Inspect existing `live.gate`, `support.gate_stack_readout`, Watch executor/session posture, storage setup/gate posture, command metadata, and HS139 enforcement classification coverage.
+2. Add or refine a read-only External I/O held-state readout/proof.
+3. Report provider-capable commands as `held_by_external_io` when External I/O is off.
+4. Report local-only read/report/preflight commands as available when External I/O is off.
+5. Keep Watch arming/session state separate from provider movement permission.
+6. Show that External I/O re-enable does not imply catch-up flooding; released work must re-enter normal cadence/provider/storage/confirmation rules.
+7. Keep `would_allow` from storage dry-run separate from final runtime authorization.
+8. Add focused offline verification.
+9. Update Evidence / Dev Handoff and create the expected DevHS file.
 
 ## Guardrails
 
 - No broad enforcement without a dedicated runway.
+- No runtime command interception.
+- No actual command blocking.
 - No provider-backed movement.
 - No zKill calls.
 - No ESI calls.
@@ -118,6 +135,9 @@ The next packet should remain one bounded hardening seam.
 - No schema migration unless Dev can prove it is purely fixture/test support and stops for Overseer if runtime schema is needed.
 - No renderer redesign.
 - No UI presentation/copy finalization.
+- No persisted External I/O setting in this packet.
+- Do not collapse Watch arming into External I/O.
+- Do not treat External I/O off as failure.
 - Do not treat app-local/current-file fallback as selected storage.
 - Do not treat app-local/current-file fallback as accepted storage without explicit acknowledgement state.
 - Do not allow renderer payloads to choose arbitrary paths, forge acknowledgement, forge budget, or probe the filesystem.
@@ -129,6 +149,7 @@ The next packet should remain one bounded hardening seam.
 Before opening the next runway, stop and return to Overseer/Human if:
 
 - the proof requires runtime interception or actual command blocking without explicit Human/Overseer decision
+- the proof requires persisted External I/O state
 - the proof requires moving, copying, migrating, relocating, restoring, or deleting DB/storage
 - the proof requires live/provider/API calls
 - the proof requires changing Discovery/Evidence/Hydration semantics
@@ -136,31 +157,45 @@ Before opening the next runway, stop and return to Overseer/Human if:
 - the proof requires treating fallback acknowledgement as selected storage
 - the proof requires treating `workspace/to-be-sorted/` as current task input
 - the proof requires UI wording or renderer design
+- local-only work becomes unavailable solely because External I/O is off
+- re-enable behavior implies catch-up flooding
 
 ## Required Verification
 
-No verification is required while resting.
-
-If the next storage packet changes the same surface, likely baseline verification is:
+Run:
 
 ```powershell
+npm.cmd run verify:gate-stack-readout
+npm.cmd run verify:cadence-simulation
 npm.cmd run verify:enforcement-dry-run
-npm.cmd run verify:storage-acknowledgement-persistence
-npm.cmd run verify:storage-authority-config-write
-npm.cmd run verify:storage-setup-gate
-npm.cmd run verify:storage-authority-preflight
+npm.cmd run verify:app-readiness
 npm.cmd run verify:service-registry
 npm.cmd run verify:command-authority
 npm.cmd run verify:passive-side-effects
+npm.cmd run verify:watch-executor
+npm.cmd run verify:watch-scheduler
 npm.cmd run verify:protected-terms
 git diff --check
 git status --short --branch
-Test-Path config\storage-authority.json
 ```
 
 Run `node --check` on any new or changed JavaScript files.
 
 ## Evidence
+
+HS142 opens from HS141 Security audit and HS109 external_io policy fit.
+
+Dev should replace this section with concise proof evidence after implementation.
+
+## Dev Handoff
+
+Pending Dev handoff.
+
+Expected:
+
+- `workspace/DevHS142-external-io-held-state-proof.md`
+
+Prior evidence:
 
 HS140 Security audit accepted as advisory input.
 
@@ -245,9 +280,7 @@ Test-Path config\storage-authority.json
 
 All listed commands passed. `verify:protected-terms` completed with warning-only discovery output and exit code 0. `git diff --check` passed with line-ending warnings only. `Test-Path config\storage-authority.json` returned `False`.
 
-## Dev Handoff
-
-Complete:
+Completed prior handoffs:
 
 - `workspace/DevHS139-enforcement-classification-coverage.md`
 - `workspace/DevHS137-enforcement-dry-run-command-effect.md`
