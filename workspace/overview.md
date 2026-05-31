@@ -35,9 +35,9 @@ Milestone: Atlas Storage And Runtime Hardening
 
 Current state:
 
-- no active Dev runway
-- current executor is Overseer / Human discussion
-- next work should be selected deliberately, not inferred from older artifacts
+- active Dev runway opened for HS135
+- current executor is Dev
+- next work is acknowledgement persistence proof, not enforcement
 
 Current heading:
 
@@ -48,7 +48,7 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Acknowledgement persistence proof.
+1. Review HS135 acknowledgement persistence proof when Dev returns.
 2. Enforcement dry-run / command-effect mapping.
 3. External I/O held-state follow-up.
 4. Hydration backlog preview.
@@ -74,6 +74,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS132 accepted HS131: `storage.setup_gate_readout.storage_config_dry_run` now proves target path, would-write validation, simulated payload/readback, renderer safety, and no real config file creation.
 - HS133 opened a bounded storage config write proof: fixture/offline write/readback behavior only, with no enforcement, no UI setup flow, no provider calls, and no operator-real config write outside fixture/test control.
 - HS134 accepted HS133 after Overseer correction: `storage.authority_config.write_proof` now requires an explicit trusted allowed fixture root, proves atomic/staged write-readback behavior, remains non-renderer eligible, and does not create the real project-root config file.
+- HS135 opened a bounded acknowledgement persistence proof: persist/read back app-local fallback acknowledgement as storage-authority memory, preserve fallback as distinct from selected storage, prove invalidation and missing-budget behavior, and avoid enforcement.
 
 ## Accepted Boundaries
 

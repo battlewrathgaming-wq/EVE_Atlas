@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after accepted HS133 storage config write proof
+Status: Active Dev runway for HS135 acknowledgement persistence proof
 Last updated: 2026-05-31
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: storage/runtime hardening remains the next heading, but no Dev runway is currently open.
+Current focus: prove fallback acknowledgement persistence as Atlas storage-authority memory before enforcement.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human discussion
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none
+workspace/DevHS135-acknowledgement-persistence-proof.md
 ```
 
 ## Current State
 
-HS133 is accepted after Overseer correction.
+HS133/HS134 accepted the fixture/offline storage config write proof.
 
 Accepted Human decisions:
 
@@ -42,7 +42,7 @@ Accepted Human decisions:
 
 - Acknowledged app-local/current-file fallback counts as accepted storage for action posture, but remains visibly distinct as fallback mode.
 - Budget is mandatory before real provider-backed acquisition or EVEidence writes.
-- HS133 was a fixture/offline write proof, not enforcement.
+- The next seam is acknowledgement persistence, not enforcement.
 
 Atlas has accepted storage/runtime hardening proofs:
 
@@ -68,6 +68,7 @@ Recent accepted state:
 - `workspace/OverseerHS132-hs131-storage-config-dry-run-review.md`
 - `workspace/OverseerHS133-storage-config-write-proof-scope.md`
 - `workspace/OverseerHS134-hs133-storage-config-write-proof-review.md`
+- `workspace/OverseerHS135-acknowledgement-persistence-proof-scope.md`
 
 ## Accepted Boundaries
 
@@ -83,20 +84,39 @@ Recent accepted state:
 
 ## Active Runway
 
-No active Dev runway.
+Dev should implement a bounded acknowledgement persistence proof.
 
-Likely next storage/runtime seams, to choose deliberately:
+Source of intent:
 
-1. Acknowledgement persistence proof.
-2. Enforcement dry-run / command-effect mapping.
-3. External I/O held-state follow-up.
-4. Hydration backlog preview.
+- `workspace/OverseerHS130-storage-config-decision-brief.md`
+- `workspace/OverseerHS132-hs131-storage-config-dry-run-review.md`
+- `workspace/OverseerHS134-hs133-storage-config-write-proof-review.md`
+- `workspace/OverseerHS135-acknowledgement-persistence-proof-scope.md`
+- existing `storage.authority_config.write_proof`
 
-The next packet should remain one bounded hardening seam.
+Ordered steps:
+
+1. Inspect storage setup/gate, storage authority preflight, storage config write proof, service registry, and verifier patterns.
+2. Add fixture/offline proof that persists an acknowledged app-local/current-file fallback state into an allowed fixture config.
+3. Read it back and show storage setup/readout posture treats it as acknowledged fallback, not selected storage.
+4. Preserve acknowledgement facts:
+   - acknowledgement status
+   - acknowledgement basis/provenance
+   - storage root or DB path basis
+   - app/root or fallback path basis used for invalidation comparison
+   - budget bytes/source when accepted
+5. Prove invalidation when the fallback/app path basis changes.
+6. Prove missing budget prevents provider-backed write posture even if fallback acknowledgement exists.
+7. Prove renderer-origin payloads cannot forge acknowledgement, storage root/path, or budget.
+8. Keep the command/service non-renderer or otherwise main-process gated.
+9. Add focused fixture/offline verification and update existing verification if needed.
+10. Update Evidence / Dev Handoff in `workspace/current.md` and create the expected DevHS file with files changed, sample output, verification commands, and boundary confirmation.
 
 ## Guardrails
 
-- No broad enforcement without a dedicated runway.
+- Fixture/offline proof only.
+- No broad enforcement.
+- No runtime storage lockout enforcement.
 - No provider-backed movement.
 - No zKill calls.
 - No ESI calls.
@@ -108,6 +128,7 @@ The next packet should remain one bounded hardening seam.
 - No schema migration unless Dev can prove it is purely fixture/test support and stops for Overseer if runtime schema is needed.
 - No renderer redesign.
 - No UI presentation/copy finalization.
+- Do not treat app-local/current-file fallback as selected storage.
 - Do not treat app-local/current-file fallback as accepted storage without explicit acknowledgement state.
 - Do not allow renderer payloads to choose arbitrary paths, forge acknowledgement, forge budget, or probe the filesystem.
 - Do not treat `workspace/to-be-sorted/` as active work.
@@ -115,21 +136,20 @@ The next packet should remain one bounded hardening seam.
 
 ## Stop Conditions
 
-Before opening the next runway, stop and return to Overseer/Human if:
+Stop and return to Overseer/Human before implementation if:
 
-- the proof requires broad runtime enforcement instead of a bounded seam
+- the proof requires broad runtime enforcement instead of acknowledgement persistence proof
 - the proof requires moving, copying, migrating, relocating, restoring, or deleting DB/storage
 - the proof requires live/provider/API calls
 - the proof requires changing Discovery/Evidence/Hydration semantics
 - the proof requires renderer path selection or filesystem probing
+- the proof requires treating fallback acknowledgement as selected storage
 - the proof requires treating `workspace/to-be-sorted/` as current task input
 - the proof requires UI wording or renderer design
 
 ## Required Verification
 
-No verification is required while resting.
-
-If the next storage packet changes the same surface, likely baseline verification is:
+Run:
 
 ```powershell
 npm.cmd run verify:storage-authority-config-write
@@ -148,41 +168,14 @@ Run `node --check` on any new or changed JavaScript files.
 
 ## Evidence
 
-HS133 Dev implementation accepted after Overseer correction.
+HS135 opens from HS134 accepted write proof.
 
-- Added `storage.authority_config.write_proof` as a non-renderer fixture/offline write proof command.
-- Added `buildStorageAuthorityConfigWriteProof` helper that reuses the HS131 `storage_config_dry_run` payload posture.
-- Default production target is derived as `<Atlas app/root>/config/storage-authority.json`, but HS133 writes only trusted fixture/test targets.
-- Fixture writes require trusted context flags and an explicit allowed fixture root; renderer payload cannot provide the target.
-- Write behavior uses a same-directory temp file followed by rename, then reads back the written file and verifies payload equality.
-- Verified valid selected storage with budget writes/readbacks successfully.
-- Verified acknowledged app-local fallback with budget writes/readbacks successfully while preserving distinct fallback mode.
-- Verified invalidated acknowledgement, missing provider-backed budget, unsafe target outside allowed root, and missing explicit allowed root do not write.
-- Verified renderer-origin invocation is rejected as not renderer eligible.
-- Boundary preserved: no real project-root config write, no enforcement/lockout, no provider calls, no storage movement, no Evidence/EVEidence writes, no hydration writes, no schema migration, no renderer redesign.
-
-Verification:
-
-```powershell
-node --check src\main\services\storageAuthorityConfigWriteService.js
-node --check src\main\services\serviceRegistry.js
-node --check scripts\verify-storage-authority-config-write.js
-npm.cmd run verify:storage-authority-config-write
-npm.cmd run verify:storage-setup-gate
-npm.cmd run verify:storage-authority-preflight
-npm.cmd run verify:service-registry
-npm.cmd run verify:command-authority
-npm.cmd run verify:passive-side-effects
-npm.cmd run verify:protected-terms
-Test-Path config\storage-authority.json
-git diff --check
-git status --short --branch
-```
-
-All listed commands passed. `verify:protected-terms` completed with warning-only discovery output and exit code 0. `git diff --check` passed with line-ending warnings only. `Test-Path config\storage-authority.json` returned `False`, confirming HS133 did not write the future real project-root config file.
+Dev should replace this section with concise proof evidence after implementation.
 
 ## Dev Handoff
 
-Complete:
+Pending Dev handoff.
 
-- `workspace/DevHS133-storage-config-write-proof.md`
+Expected:
+
+- `workspace/DevHS135-acknowledgement-persistence-proof.md`
