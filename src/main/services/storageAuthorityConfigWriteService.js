@@ -47,6 +47,261 @@ function buildStorageAuthorityConfigWriteProof(input = {}, context = {}) {
   });
 }
 
+function buildStorageAuthorityAcknowledgementPersistenceProof(input = {}, context = {}) {
+  const validation = validateAcknowledgementProofRequest(input, context);
+  const rendererPayloadIgnored = context.source === 'renderer';
+  if (!validation.valid) {
+    return acknowledgementProofResult({
+      validation,
+      rendererPayloadIgnored,
+      writeProof: null,
+      readbackAuthority: null,
+      readbackPosture: null,
+      invalidation: null,
+      missingBudget: null
+    });
+  }
+
+  const writeProof = buildStorageAuthorityConfigWriteProof(input, {
+    ...context,
+    allowStorageSetupGateFixtureInput: true,
+    allowStorageConfigWriteProof: true,
+    allowStorageConfigWriteFixtureTarget: true
+  });
+  if (writeProof.would_write !== true || writeProof.readback?.matches_payload !== true) {
+    return acknowledgementProofResult({
+      validation: {
+        valid: false,
+        status: writeProof.validation_result?.status || 'write_proof_failed',
+        issues: writeProof.validation_result?.issues || ['write_proof_failed'],
+        enforcement_state: 'not_implemented_readout_only'
+      },
+      rendererPayloadIgnored,
+      writeProof,
+      readbackAuthority: null,
+      readbackPosture: null,
+      invalidation: null,
+      missingBudget: null
+    });
+  }
+
+  const persistedPayload = writeProof.readback.payload;
+  const readbackAuthority = authorityFromPersistedPayload(persistedPayload);
+  const readbackPosture = buildStorageSetupGateReadout({
+    storagePreflight: input.storagePreflight,
+    storageAuthority: readbackAuthority
+  }, {
+    ...context,
+    allowStorageSetupGateFixtureInput: true,
+    storageBudgetBytes: persistedPayload.budget_bytes
+  });
+  const invalidation = buildAcknowledgementInvalidationProof(input, context, persistedPayload);
+  const missingBudget = buildMissingBudgetProof(input, context, persistedPayload);
+
+  return acknowledgementProofResult({
+    validation,
+    rendererPayloadIgnored,
+    writeProof,
+    readbackAuthority,
+    readbackPosture,
+    invalidation,
+    missingBudget
+  });
+}
+
+function validateAcknowledgementProofRequest(input = {}, context = {}) {
+  const issues = [];
+  const authority = input.storageAuthority || {};
+  if (context.source === 'renderer') {
+    issues.push('renderer_not_allowed_to_persist_acknowledgement');
+  }
+  if (context.allowStorageAcknowledgementPersistenceProof !== true) {
+    issues.push('trusted_acknowledgement_persistence_context_required');
+  }
+  if (context.allowStorageConfigWriteFixtureTarget !== true || !context.storageConfigWriteTargetPath) {
+    issues.push('trusted_fixture_target_required');
+  }
+  if (!context.storageConfigWriteAllowedRoot) {
+    issues.push('trusted_allowed_root_required_for_acknowledgement_proof');
+  }
+  if (authority.mode !== 'app_local_fallback_acknowledged') {
+    issues.push('app_local_fallback_acknowledged_required');
+  }
+  if (authority.acknowledgement_status !== 'acknowledged') {
+    issues.push('acknowledgement_status_acknowledged_required');
+  }
+
+  const uniqueIssues = [...new Set(issues)];
+  return {
+    valid: uniqueIssues.length === 0,
+    status: uniqueIssues.length === 0 ? 'acknowledgement_persistence_valid' : uniqueIssues[0],
+    issues: uniqueIssues,
+    enforcement_state: 'not_implemented_readout_only'
+  };
+}
+
+function authorityFromPersistedPayload(payload = {}, overrides = {}) {
+  return {
+    mode: overrides.mode || payload.selected_storage_mode || null,
+    selected: false,
+    fallback_available: true,
+    acknowledgement_status: overrides.acknowledgement_status || payload.fallback_acknowledgement?.status || null,
+    acknowledgement_basis: overrides.acknowledgement_basis || payload.fallback_acknowledgement?.provenance || null,
+    acknowledgement_invalid_reason: overrides.acknowledgement_invalid_reason || payload.fallback_acknowledgement?.invalidation_basis || null,
+    config_source: 'persisted_storage_authority_fixture',
+    config_version: payload.version || null,
+    storage_root: payload.selected_storage_root || null,
+    database_path: payload.selected_database_path || null,
+    path_basis: payload.path_basis || null,
+    validation_status: overrides.validation_status || payload.validation_status || null,
+    budget_source: payload.budget_source || null,
+    budget_bytes: overrides.budget_bytes === undefined ? payload.budget_bytes : overrides.budget_bytes
+  };
+}
+
+function buildAcknowledgementInvalidationProof(input = {}, context = {}, persistedPayload = {}) {
+  const originalPath = persistedPayload.selected_database_path || null;
+  const changedPath = context.acknowledgementInvalidationDatabasePath || (originalPath
+    ? path.join(path.dirname(originalPath), 'changed-app-root', path.basename(originalPath))
+    : null);
+  const changedPreflight = clonePreflightWithDatabasePath(input.storagePreflight, changedPath);
+  const pathChanged = Boolean(originalPath && changedPath && path.resolve(originalPath) !== path.resolve(changedPath));
+  const invalidatedAuthority = authorityFromPersistedPayload(persistedPayload, pathChanged
+    ? {
+      mode: 'acknowledgement_invalidated',
+      acknowledgement_status: 'invalidated',
+      acknowledgement_invalid_reason: 'fallback_path_basis_changed',
+      validation_status: 'invalidated'
+    }
+    : {});
+  const readout = buildStorageSetupGateReadout({
+    storagePreflight: changedPreflight,
+    storageAuthority: invalidatedAuthority
+  }, {
+    ...context,
+    allowStorageSetupGateFixtureInput: true,
+    storageBudgetBytes: persistedPayload.budget_bytes
+  });
+
+  return {
+    status: pathChanged ? 'invalidated' : 'unchanged',
+    comparison_basis: {
+      persisted_database_path: originalPath,
+      current_database_path: changedPath,
+      path_changed: pathChanged
+    },
+    readout: compactSetupReadout(readout)
+  };
+}
+
+function buildMissingBudgetProof(input = {}, context = {}, persistedPayload = {}) {
+  const noBudgetPayload = {
+    ...persistedPayload,
+    budget_bytes: null,
+    budget_source: 'unconfigured'
+  };
+  const authority = authorityFromPersistedPayload(noBudgetPayload, { budget_bytes: null });
+  const readout = buildStorageSetupGateReadout({
+    storagePreflight: input.storagePreflight,
+    storageAuthority: authority
+  }, {
+    ...context,
+    allowStorageSetupGateFixtureInput: true,
+    storageBudgetBytes: null
+  });
+
+  return {
+    status: readout.storage_config_dry_run.validation_result.status,
+    issues: readout.storage_config_dry_run.validation_result.issues,
+    provider_backed_write_posture: readout.storage_config_dry_run.would_write === true
+      ? 'allowed_subject_to_future_gates'
+      : 'blocked_budget_required',
+    provider_backed_config_write_allowed: readout.storage_config_dry_run.would_write === true,
+    write_allowed_if_enforced_later: readout.storage_authority.write_allowed_if_enforced_later,
+    provider_movement_allowed_if_enforced_later: readout.storage_authority.provider_movement_allowed_if_enforced_later,
+    dry_run_would_write: readout.storage_config_dry_run.would_write,
+    budget_state: readout.budget.state,
+    readout: compactSetupReadout(readout)
+  };
+}
+
+function clonePreflightWithDatabasePath(preflight = {}, dbPath) {
+  const database = preflight.database || {};
+  return {
+    ...preflight,
+    database: {
+      ...database,
+      path: dbPath,
+      parent: {
+        ...(database.parent || {}),
+        path: dbPath ? path.dirname(dbPath) : null,
+        exists: database.parent?.exists !== false,
+        is_directory: database.parent?.is_directory !== false
+      }
+    }
+  };
+}
+
+function compactSetupReadout(readout = {}) {
+  return {
+    storage_authority_mode: readout.storage_authority?.mode || null,
+    selected: readout.storage_authority?.selected === true,
+    fallback_acknowledged: readout.storage_authority?.fallback_acknowledged === true,
+    acknowledgement_status: readout.storage_authority?.acknowledgement_status || null,
+    acknowledgement_basis: readout.storage_authority?.acknowledgement_basis || null,
+    acknowledgement_invalid_reason: readout.storage_authority?.acknowledgement_invalid_reason || null,
+    storage_state: readout.storage?.state || null,
+    setup_gate: readout.storage?.setup_gate || null,
+    dry_run_would_write: readout.storage_config_dry_run?.would_write === true,
+    dry_run_status: readout.storage_config_dry_run?.validation_result?.status || null,
+    budget_state: readout.budget?.state || null,
+    write_allowed_if_enforced_later: readout.storage_authority?.write_allowed_if_enforced_later === true,
+    provider_movement_allowed_if_enforced_later: readout.storage_authority?.provider_movement_allowed_if_enforced_later === true
+  };
+}
+
+function acknowledgementProofResult({
+  validation,
+  rendererPayloadIgnored,
+  writeProof,
+  readbackAuthority,
+  readbackPosture,
+  invalidation,
+  missingBudget
+}) {
+  return {
+    action: 'storage.authority_config.acknowledgement_persistence_proof',
+    classification: 'fixture/offline storage authority acknowledgement persistence proof',
+    generated_at: new Date().toISOString(),
+    read_only: false,
+    mutates_state: true,
+    fixture_offline_only: true,
+    enforcement_state: 'not_implemented_readout_only',
+    validation_result: validation,
+    renderer_payload_ignored: rendererPayloadIgnored,
+    write_proof: writeProof ? {
+      would_write: writeProof.would_write,
+      target_path: writeProof.target_path,
+      target_path_basis: writeProof.target_path_basis,
+      readback_matches_payload: writeProof.readback?.matches_payload === true,
+      write_status: writeProof.write?.status || null
+    } : null,
+    persisted_acknowledgement_payload: writeProof?.readback?.payload || null,
+    readback_authority: readbackAuthority,
+    readback_posture: readbackPosture ? compactSetupReadout(readbackPosture) : null,
+    invalidation,
+    missing_budget: missingBudget,
+    boundary: [
+      'Fixture/offline acknowledgement persistence proof only; it is not storage enforcement.',
+      'It writes only when trusted main-process/test context supplies an allowed fixture target.',
+      'It keeps app-local/current-file fallback distinct from selected storage.',
+      'It does not write the real project-root storage authority config during verification.',
+      'It does not move, copy, migrate, create, relocate, restore, or delete active DB files.',
+      'It does not call providers, create Evidence/EVEidence, hydrate metadata, prune/delete records, change schema, or redesign renderer UI.'
+    ]
+  };
+}
+
 function resolveWriteTarget(context = {}, defaultTargetPath) {
   const root = path.resolve(projectRoot());
   const defaultConfigRoot = path.join(root, 'config');
@@ -200,5 +455,6 @@ function isInsidePath(targetPath, rootPath) {
 }
 
 module.exports = {
-  buildStorageAuthorityConfigWriteProof
+  buildStorageAuthorityConfigWriteProof,
+  buildStorageAuthorityAcknowledgementPersistenceProof
 };

@@ -34,7 +34,10 @@ const {
 } = require('./runtimeSnapshotService');
 const { buildGateStackReadout } = require('./gateStackReadoutService');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
-const { buildStorageAuthorityConfigWriteProof } = require('./storageAuthorityConfigWriteService');
+const {
+  buildStorageAuthorityConfigWriteProof,
+  buildStorageAuthorityAcknowledgementPersistenceProof
+} = require('./storageAuthorityConfigWriteService');
 const { buildStorageSetupGateReadout } = require('./storageSetupGateReadoutService');
 const { writeOperatorDebugTracePack } = require('../support/operatorDebugTracePack');
 const { getScopeDefaults, validateScope } = require('./scopeService');
@@ -344,6 +347,13 @@ const COMMANDS = {
     renderer: false,
     description: 'Write and read back a fixture-only storage authority config proof without enforcement or provider movement',
     handler: ({ payload, ...context }) => buildStorageAuthorityConfigWriteProof(payload, context)
+  },
+  'storage.authority_config.acknowledgement_persistence_proof': {
+    classification: 'metadata-only',
+    effects: [EFFECTS.LOCAL_DATA_MUTATION],
+    renderer: false,
+    description: 'Write and read back fixture-only fallback acknowledgement storage-authority memory without enforcement',
+    handler: ({ payload, ...context }) => buildStorageAuthorityAcknowledgementPersistenceProof(payload, context)
   },
   'support.gate_stack_readout': {
     classification: 'read-only',

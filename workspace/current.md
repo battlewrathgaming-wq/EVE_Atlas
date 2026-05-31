@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Active Dev runway for HS135 acknowledgement persistence proof
+Status: Resting after accepted HS135 acknowledgement persistence proof
 Last updated: 2026-05-31
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: prove fallback acknowledgement persistence as Atlas storage-authority memory before enforcement.
+Current focus: storage/runtime hardening remains the next heading, but no Dev runway is currently open.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human discussion
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS135-acknowledgement-persistence-proof.md
+none
 ```
 
 ## Current State
 
-HS133/HS134 accepted the fixture/offline storage config write proof.
+HS135 is accepted after Overseer correction.
 
 Accepted Human decisions:
 
@@ -42,7 +42,7 @@ Accepted Human decisions:
 
 - Acknowledged app-local/current-file fallback counts as accepted storage for action posture, but remains visibly distinct as fallback mode.
 - Budget is mandatory before real provider-backed acquisition or EVEidence writes.
-- The next seam is acknowledgement persistence, not enforcement.
+- HS135 was an acknowledgement persistence proof, not enforcement.
 
 Atlas has accepted storage/runtime hardening proofs:
 
@@ -54,6 +54,7 @@ Atlas has accepted storage/runtime hardening proofs:
 - `storage.setup_gate_readout.storage_authority`
 - `storage.setup_gate_readout.storage_config_dry_run`
 - `storage.authority_config.write_proof`
+- `storage.authority_config.acknowledgement_persistence_proof`
 
 Recent accepted state:
 
@@ -69,6 +70,7 @@ Recent accepted state:
 - `workspace/OverseerHS133-storage-config-write-proof-scope.md`
 - `workspace/OverseerHS134-hs133-storage-config-write-proof-review.md`
 - `workspace/OverseerHS135-acknowledgement-persistence-proof-scope.md`
+- `workspace/OverseerHS136-hs135-acknowledgement-persistence-review.md`
 
 ## Accepted Boundaries
 
@@ -84,39 +86,19 @@ Recent accepted state:
 
 ## Active Runway
 
-Dev should implement a bounded acknowledgement persistence proof.
+No active Dev runway.
 
-Source of intent:
+Likely next storage/runtime seams, to choose deliberately:
 
-- `workspace/OverseerHS130-storage-config-decision-brief.md`
-- `workspace/OverseerHS132-hs131-storage-config-dry-run-review.md`
-- `workspace/OverseerHS134-hs133-storage-config-write-proof-review.md`
-- `workspace/OverseerHS135-acknowledgement-persistence-proof-scope.md`
-- existing `storage.authority_config.write_proof`
+1. Enforcement dry-run / command-effect mapping.
+2. External I/O held-state follow-up.
+3. Hydration backlog preview.
 
-Ordered steps:
-
-1. Inspect storage setup/gate, storage authority preflight, storage config write proof, service registry, and verifier patterns.
-2. Add fixture/offline proof that persists an acknowledged app-local/current-file fallback state into an allowed fixture config.
-3. Read it back and show storage setup/readout posture treats it as acknowledged fallback, not selected storage.
-4. Preserve acknowledgement facts:
-   - acknowledgement status
-   - acknowledgement basis/provenance
-   - storage root or DB path basis
-   - app/root or fallback path basis used for invalidation comparison
-   - budget bytes/source when accepted
-5. Prove invalidation when the fallback/app path basis changes.
-6. Prove missing budget prevents provider-backed write posture even if fallback acknowledgement exists.
-7. Prove renderer-origin payloads cannot forge acknowledgement, storage root/path, or budget.
-8. Keep the command/service non-renderer or otherwise main-process gated.
-9. Add focused fixture/offline verification and update existing verification if needed.
-10. Update Evidence / Dev Handoff in `workspace/current.md` and create the expected DevHS file with files changed, sample output, verification commands, and boundary confirmation.
+The next packet should remain one bounded hardening seam.
 
 ## Guardrails
 
-- Fixture/offline proof only.
-- No broad enforcement.
-- No runtime storage lockout enforcement.
+- No broad enforcement without a dedicated runway.
 - No provider-backed movement.
 - No zKill calls.
 - No ESI calls.
@@ -136,9 +118,9 @@ Ordered steps:
 
 ## Stop Conditions
 
-Stop and return to Overseer/Human before implementation if:
+Before opening the next runway, stop and return to Overseer/Human if:
 
-- the proof requires broad runtime enforcement instead of acknowledgement persistence proof
+- the proof requires broad runtime enforcement instead of a bounded seam
 - the proof requires moving, copying, migrating, relocating, restoring, or deleting DB/storage
 - the proof requires live/provider/API calls
 - the proof requires changing Discovery/Evidence/Hydration semantics
@@ -149,9 +131,12 @@ Stop and return to Overseer/Human before implementation if:
 
 ## Required Verification
 
-Run:
+No verification is required while resting.
+
+If the next storage packet changes the same surface, likely baseline verification is:
 
 ```powershell
+npm.cmd run verify:storage-acknowledgement-persistence
 npm.cmd run verify:storage-authority-config-write
 npm.cmd run verify:storage-setup-gate
 npm.cmd run verify:storage-authority-preflight
@@ -168,14 +153,45 @@ Run `node --check` on any new or changed JavaScript files.
 
 ## Evidence
 
-HS135 opens from HS134 accepted write proof.
+HS135 Dev implementation accepted after Overseer correction.
 
-Dev should replace this section with concise proof evidence after implementation.
+- Added non-renderer `storage.authority_config.acknowledgement_persistence_proof`.
+- Added fixture/offline verifier `verify:storage-acknowledgement-persistence`.
+- Persisted acknowledged app-local/current-file fallback into allowed fixture config and read it back as storage-authority memory.
+- Readback posture proves mode remains `app_local_fallback_acknowledged`, `selected` remains false, `fallback_acknowledged` is true, and storage posture becomes `configured_ready`.
+- Persisted acknowledgement memory preserves acknowledgement status, acknowledgement basis/provenance, fallback storage root, fallback DB path, path basis, budget bytes, and budget source.
+- Invalidation proof changes fallback/app path basis and returns `acknowledgement_invalidated`, `fallback_path_basis_changed`, `fallback_ack_required`, and no future write posture.
+- Missing-budget proof returns `budget_required_for_provider_backed_work`, `blocked_budget_required`, and no provider-backed config/write progression even though fallback acknowledgement memory exists.
+- Non-fallback selected-storage input is rejected and does not write.
+- Renderer-origin invocation is rejected as not renderer eligible.
+- Boundary preserved: no real project-root config write, no enforcement/lockout, no provider calls, no storage movement, no Evidence/EVEidence writes, no hydration writes, no schema migration, no renderer redesign.
+
+Verification:
+
+```powershell
+node --check src\main\services\storageAuthorityConfigWriteService.js
+node --check src\main\services\serviceRegistry.js
+node --check scripts\verify-storage-acknowledgement-persistence.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-storage-authority-config-write.js
+npm.cmd run verify:storage-acknowledgement-persistence
+npm.cmd run verify:storage-authority-config-write
+npm.cmd run verify:storage-setup-gate
+npm.cmd run verify:storage-authority-preflight
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:protected-terms
+git diff --check
+git status --short --branch
+Test-Path config\storage-authority.json
+```
+
+All listed commands passed. `verify:protected-terms` completed with warning-only discovery output and exit code 0. `git diff --check` passed with line-ending warnings only. `Test-Path config\storage-authority.json` returned `False`.
 
 ## Dev Handoff
 
-Pending Dev handoff.
-
-Expected:
+Complete:
 
 - `workspace/DevHS135-acknowledgement-persistence-proof.md`

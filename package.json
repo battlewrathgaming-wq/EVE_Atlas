@@ -47,6 +47,7 @@
     "verify:runtime-snapshot": "node scripts/verify-runtime-db-snapshot.js",
     "verify:storage-authority-preflight": "node scripts/verify-storage-authority-preflight.js",
     "verify:storage-authority-config-write": "node scripts/verify-storage-authority-config-write.js",
+    "verify:storage-acknowledgement-persistence": "node scripts/verify-storage-acknowledgement-persistence.js",
     "verify:storage-setup-gate": "node scripts/verify-storage-setup-gate.js",
     "verify:gate-stack-readout": "node scripts/verify-gate-stack-readout.js",
     "verify:cadence-simulation": "node scripts/verify-cadence-simulation.js",
