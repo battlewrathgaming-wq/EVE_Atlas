@@ -15,6 +15,41 @@ Atlas is prioritizing the storage/runtime spine before expanding the product bod
 
 UI and Observation direction now exist as useful pressure tests, but the active priority remains making the underlying system trustworthy for heavy local data, patient acquisition, restart recovery, deletion safety, and provider pacing.
 
+## Accepted Proof Spine 2026-05-31
+
+Atlas has completed a sequence of read-only/offline proofs that make the storage/runtime spine inspectable without activating enforcement or provider movement.
+
+Accepted proof surfaces:
+
+- `storage.authority_preflight`
+- `storage.setup_gate_readout`
+- `storage.setup_gate_readout.action_class_matrix`
+- `storage.setup_gate_readout.storage_authority`
+- `storage.setup_gate_readout.storage_config_dry_run`
+- `storage.authority_config.write_proof`
+- `storage.authority_config.acknowledgement_persistence_proof`
+- `storage.enforcement_dry_run.command_effect_map`
+- `support.gate_stack_readout`
+- `metadata.hydration_backlog.preview`
+
+Accepted shape:
+
+- storage authority and budget posture are visible before runtime enforcement
+- selected storage, app-local fallback, acknowledged fallback, invalidated acknowledgement, missing storage, and budget hard-lock remain distinct
+- fixture write proofs remain trusted-context only and do not create the real project-root config file
+- `would_allow` / `would_block` / `conditional` are dry-run classifications, not runtime authorization
+- all current `serviceRegistry` commands have enforcement classification coverage or explicit fixture/non-production posture
+- External I/O off holds provider-backed movement as `held_by_external_io`, while local-only read/report/preflight paths remain available
+- External I/O re-enable releases work only to normal cadence/provider/storage/confirmation gates and must not create catch-up flooding
+- Hydration backlog preview is read-only local data understanding: it distinguishes provider-needed labels, known local labels, and local SDE gaps without writing hydration output or creating a persisted queue
+
+Current resting state:
+
+- no active Dev runway is open
+- future runtime enforcement still needs composed gate-state policy before command blocking
+- future Hydration execution still needs a dedicated runway before provider calls or writes
+- support artifacts, snapshots, trace packs, logs, and pruning/deletion remain separate future seams
+
 ## Accepted Runtime Boundaries
 
 - Discovery refs are returned zKill refs and possible leads.
