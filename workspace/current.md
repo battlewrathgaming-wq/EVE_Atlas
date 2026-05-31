@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after accepted HS142 External I/O held-state proof
+Status: Active Dev runway for HS144 Hydration backlog preview
 Last updated: 2026-05-31
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: storage/runtime hardening remains the next heading, but no Dev runway is currently open.
+Current focus: prove a read-only Hydration backlog preview from local records without provider calls, hydration writes, queues, or schema changes.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human discussion
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none
+workspace/DevHS144-hydration-backlog-preview.md
 ```
 
 ## Current State
 
-HS142 is accepted.
+HS142 is accepted. HS144 is open.
 
 Accepted Human decisions:
 
@@ -83,6 +83,7 @@ Recent accepted state:
 - `workspace/SystemsAuditHS109-external-io-policy-fit.md`
 - `workspace/OverseerHS142-external-io-held-state-runway.md`
 - `workspace/OverseerHS143-hs142-external-io-held-state-review.md`
+- `workspace/OverseerHS144-hydration-backlog-preview-runway.md`
 
 ## Accepted Boundaries
 
@@ -98,15 +99,29 @@ Recent accepted state:
 
 ## Active Runway
 
-No active Dev runway.
+Dev should implement a bounded read-only Hydration backlog preview.
 
-Likely next storage/runtime seams, to choose deliberately:
+Source of intent:
 
-1. Hydration backlog preview.
-2. Real enforcement design discussion using composed gate state.
-3. Support-artifact path authority review if Human wants to stay on security hardening.
+- Human direction: better understanding our data.
+- `docs/contracts/metadata-hydration-contract.md`
+- `docs/features/acquisition-and-hydration-clocks.md`
+- `workspace/SystemsAuditHS101-local-lookup-vs-esi-enrichment.md`
+- accepted HS142 External I/O held-state proof
+- `workspace/OverseerHS144-hydration-backlog-preview-runway.md`
 
-The next packet should remain one bounded hardening seam.
+Ordered steps:
+
+1. Inspect existing metadata hydration, metadata status/readiness, report candidate collection, local SDE lookup, service registry, and HS142 External I/O held-state readout.
+2. Add a read-only hydration backlog preview command/readout.
+3. Report missing label candidates from local records without calling ESI.
+4. Distinguish locally known labels from provider-needed labels.
+5. Distinguish Evidence/EVEidence facts from readability metadata.
+6. Group candidates into view/local-record, Watch/background, target/report-scoped if computable, and corpus hygiene/low-priority lanes.
+7. Include capped representative IDs and basis/freshness where possible.
+8. Show that provider-backed hydration would be held when External I/O is off.
+9. Add focused offline verification.
+10. Update Evidence / Dev Handoff and create the expected DevHS file.
 
 ## Guardrails
 
@@ -118,6 +133,7 @@ The next packet should remain one bounded hardening seam.
 - No ESI calls.
 - No Evidence/EVEidence writes.
 - No hydration writes.
+- No hydration queue or persisted backlog.
 - No DB movement, copy, migration, relocation, restore, or deletion.
 - No real pruning/deletion execution.
 - No snapshot creation against real operator paths.
@@ -141,6 +157,8 @@ Before opening the next runway, stop and return to Overseer/Human if:
 - the proof requires persisted External I/O state
 - the proof requires moving, copying, migrating, relocating, restoring, or deleting DB/storage
 - the proof requires live/provider/API calls
+- the proof requires writing entities, metadata runs, activity event labels, or hydration output
+- the proof requires schema changes or persisted backlog state
 - the proof requires changing Discovery/Evidence/Hydration semantics
 - the proof requires renderer path selection or filesystem probing
 - the proof requires treating fallback acknowledgement as selected storage
@@ -148,23 +166,23 @@ Before opening the next runway, stop and return to Overseer/Human if:
 - the proof requires UI wording or renderer design
 - local-only work becomes unavailable solely because External I/O is off
 - re-enable behavior implies catch-up flooding
+- missing labels are treated as report failure
 
 ## Required Verification
 
-No verification is required while resting.
-
-If the next storage packet changes the same surface, likely baseline verification is:
+Run:
 
 ```powershell
+npm.cmd run verify:hydration
+npm.cmd run verify:metadata-status
+npm.cmd run verify:metadata-lookup
+npm.cmd run verify:actor-metadata
+npm.cmd run verify:corporation-metadata
 npm.cmd run verify:gate-stack-readout
-npm.cmd run verify:cadence-simulation
 npm.cmd run verify:enforcement-dry-run
-npm.cmd run verify:app-readiness
 npm.cmd run verify:service-registry
 npm.cmd run verify:command-authority
 npm.cmd run verify:passive-side-effects
-npm.cmd run verify:watch-executor
-npm.cmd run verify:watch-scheduler
 npm.cmd run verify:protected-terms
 git diff --check
 git status --short --branch
@@ -173,6 +191,20 @@ git status --short --branch
 Run `node --check` on any new or changed JavaScript files.
 
 ## Evidence
+
+HS144 opens from the accepted hydration contract, acquisition/hydration clock model, and HS101 local lookup audit.
+
+Dev should replace this section with concise proof evidence after implementation.
+
+## Dev Handoff
+
+Pending Dev handoff.
+
+Expected:
+
+- `workspace/DevHS144-hydration-backlog-preview.md`
+
+Prior evidence:
 
 HS142 Dev implementation accepted.
 
