@@ -32,6 +32,7 @@ Recent accepted restart/surface state:
 - `workspace/OverseerHS119-restart-state-audit.md`
 - `workspace/OverseerHS120-surface-discovery-review.md`
 - `workspace/OverseerHS121-local-first-api-lane-model-adoption.md`
+- `workspace/OverseerHS122-storage-gate-action-matrix.md`
 
 Recent advisory inputs still visible in the active workspace:
 
@@ -72,8 +73,9 @@ Do not open Dev work until the next seam is deliberately selected.
 Likely next shaping candidates:
 
 1. Storage gate action matrix.
-   - Define which action classes are allowed, blocked, demo-only, warning, or hard-locked under each storage posture.
-   - Keep this operational and bounded; do not solve all future storage architecture.
+   - Shaped in `workspace/OverseerHS122-storage-gate-action-matrix.md`.
+   - Next likely Dev packet: extend `storage.setup_gate_readout` with read-only action-class posture proof.
+   - Do not enforce lockout yet.
 
 2. Local-first API lane model assurance.
    - Accepted locally as steering context in `workspace/OverseerHS121-local-first-api-lane-model-adoption.md`.
