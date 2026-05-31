@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after accepted HS135 acknowledgement persistence proof
+Status: Active Dev runway for HS137 enforcement dry-run command-effect map
 Last updated: 2026-05-31
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: storage/runtime hardening remains the next heading, but no Dev runway is currently open.
+Current focus: prove command/effect allow-block decisions as a read-only dry-run before any runtime enforcement.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human discussion
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none
+workspace/DevHS137-enforcement-dry-run-command-effect.md
 ```
 
 ## Current State
 
-HS135 is accepted after Overseer correction.
+HS135/HS136 accepted fallback acknowledgement persistence as storage-authority memory.
 
 Accepted Human decisions:
 
@@ -42,7 +42,7 @@ Accepted Human decisions:
 
 - Acknowledged app-local/current-file fallback counts as accepted storage for action posture, but remains visibly distinct as fallback mode.
 - Budget is mandatory before real provider-backed acquisition or EVEidence writes.
-- HS135 was an acknowledgement persistence proof, not enforcement.
+- The next seam is enforcement dry-run, not enforcement.
 
 Atlas has accepted storage/runtime hardening proofs:
 
@@ -71,6 +71,7 @@ Recent accepted state:
 - `workspace/OverseerHS134-hs133-storage-config-write-proof-review.md`
 - `workspace/OverseerHS135-acknowledgement-persistence-proof-scope.md`
 - `workspace/OverseerHS136-hs135-acknowledgement-persistence-review.md`
+- `workspace/OverseerHS137-enforcement-dry-run-command-effect-scope.md`
 
 ## Accepted Boundaries
 
@@ -86,19 +87,43 @@ Recent accepted state:
 
 ## Active Runway
 
-No active Dev runway.
+Dev should implement a bounded enforcement dry-run / command-effect map.
 
-Likely next storage/runtime seams, to choose deliberately:
+Source of intent:
 
-1. Enforcement dry-run / command-effect mapping.
-2. External I/O held-state follow-up.
-3. Hydration backlog preview.
+- `workspace/OverseerHS122-storage-gate-action-matrix.md`
+- `workspace/OverseerHS134-hs133-storage-config-write-proof-review.md`
+- `workspace/OverseerHS136-hs135-acknowledgement-persistence-review.md`
+- `workspace/OverseerHS137-enforcement-dry-run-command-effect-scope.md`
+- existing service command authority/effect metadata
+- existing `storage.setup_gate_readout.action_class_matrix`
 
-The next packet should remain one bounded hardening seam.
+Ordered steps:
+
+1. Inspect service command metadata/effects, storage setup/gate readout, action class matrix, and command authority verifiers.
+2. Add a read-only enforcement dry-run readout that maps representative commands/effects to allow/block/conditional decisions under storage/budget states.
+3. Report, for each representative command/effect:
+   - command/effect
+   - storage state
+   - budget state
+   - external I/O assumption if represented
+   - decision: `would_allow`, `would_block`, or `conditional`
+   - reason codes
+   - enforcement active state
+4. Prove local read/status/report posture remains allowed where accepted.
+5. Prove provider-backed acquisition, ESI expansion, hydration writes, snapshots/support artifacts, and destructive pruning/deletion execution are blocked or conditional according to accepted storage/budget state.
+6. Prove acknowledged fallback behaves as accepted storage while remaining distinct from selected storage.
+7. Prove invalidated acknowledgement and missing/unavailable storage block provider-backed movement/write classes.
+8. Prove budget hard-lock blocks writes/provider movement while preserving safe local read/status paths.
+9. Keep the proof read-only: do not intercept or block commands at runtime.
+10. Add focused fixture/offline verification and update existing verification if needed.
+11. Update Evidence / Dev Handoff in `workspace/current.md` and create the expected DevHS file with files changed, sample output, verification commands, and boundary confirmation.
 
 ## Guardrails
 
-- No broad enforcement without a dedicated runway.
+- Read-only dry-run proof only.
+- No runtime command interception.
+- No real storage lockout enforcement.
 - No provider-backed movement.
 - No zKill calls.
 - No ESI calls.
@@ -118,9 +143,9 @@ The next packet should remain one bounded hardening seam.
 
 ## Stop Conditions
 
-Before opening the next runway, stop and return to Overseer/Human if:
+Stop and return to Overseer/Human before implementation if:
 
-- the proof requires broad runtime enforcement instead of a bounded seam
+- the proof requires runtime interception or actual command blocking
 - the proof requires moving, copying, migrating, relocating, restoring, or deleting DB/storage
 - the proof requires live/provider/API calls
 - the proof requires changing Discovery/Evidence/Hydration semantics
@@ -131,9 +156,7 @@ Before opening the next runway, stop and return to Overseer/Human if:
 
 ## Required Verification
 
-No verification is required while resting.
-
-If the next storage packet changes the same surface, likely baseline verification is:
+Run:
 
 ```powershell
 npm.cmd run verify:storage-acknowledgement-persistence
@@ -153,45 +176,14 @@ Run `node --check` on any new or changed JavaScript files.
 
 ## Evidence
 
-HS135 Dev implementation accepted after Overseer correction.
+HS137 opens from HS136 accepted acknowledgement persistence proof.
 
-- Added non-renderer `storage.authority_config.acknowledgement_persistence_proof`.
-- Added fixture/offline verifier `verify:storage-acknowledgement-persistence`.
-- Persisted acknowledged app-local/current-file fallback into allowed fixture config and read it back as storage-authority memory.
-- Readback posture proves mode remains `app_local_fallback_acknowledged`, `selected` remains false, `fallback_acknowledged` is true, and storage posture becomes `configured_ready`.
-- Persisted acknowledgement memory preserves acknowledgement status, acknowledgement basis/provenance, fallback storage root, fallback DB path, path basis, budget bytes, and budget source.
-- Invalidation proof changes fallback/app path basis and returns `acknowledgement_invalidated`, `fallback_path_basis_changed`, `fallback_ack_required`, and no future write posture.
-- Missing-budget proof returns `budget_required_for_provider_backed_work`, `blocked_budget_required`, and no provider-backed config/write progression even though fallback acknowledgement memory exists.
-- Non-fallback selected-storage input is rejected and does not write.
-- Renderer-origin invocation is rejected as not renderer eligible.
-- Boundary preserved: no real project-root config write, no enforcement/lockout, no provider calls, no storage movement, no Evidence/EVEidence writes, no hydration writes, no schema migration, no renderer redesign.
-
-Verification:
-
-```powershell
-node --check src\main\services\storageAuthorityConfigWriteService.js
-node --check src\main\services\serviceRegistry.js
-node --check scripts\verify-storage-acknowledgement-persistence.js
-node --check scripts\verify-command-authority.js
-node --check scripts\verify-service-registry.js
-node --check scripts\verify-storage-authority-config-write.js
-npm.cmd run verify:storage-acknowledgement-persistence
-npm.cmd run verify:storage-authority-config-write
-npm.cmd run verify:storage-setup-gate
-npm.cmd run verify:storage-authority-preflight
-npm.cmd run verify:service-registry
-npm.cmd run verify:command-authority
-npm.cmd run verify:passive-side-effects
-npm.cmd run verify:protected-terms
-git diff --check
-git status --short --branch
-Test-Path config\storage-authority.json
-```
-
-All listed commands passed. `verify:protected-terms` completed with warning-only discovery output and exit code 0. `git diff --check` passed with line-ending warnings only. `Test-Path config\storage-authority.json` returned `False`.
+Dev should replace this section with concise proof evidence after implementation.
 
 ## Dev Handoff
 
-Complete:
+Pending Dev handoff.
 
-- `workspace/DevHS135-acknowledgement-persistence-proof.md`
+Expected:
+
+- `workspace/DevHS137-enforcement-dry-run-command-effect.md`
