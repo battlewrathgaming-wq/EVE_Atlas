@@ -1,7 +1,7 @@
-﻿# Dot Protocol
+﻿# Dot And Context Protocol
 
 Status: Active
-Signal: `.`
+Signals: `.`, `#`
 
 ## Meaning
 
@@ -12,6 +12,29 @@ If your role is unclear after context loss or compaction, stop before action and
 Do not infer your role solely from the existence of Dev and Overseer instructions.
 
 `workspace/current.md` may identify the expected executor, but you must still confirm that this chat/session is intended to act as that executor before executing `.`.
+
+## Context Attention Meaning
+
+If the user sends only `#`, toggle Context Attention Mode.
+
+`#` creates a container for useful, messy discussion so agents can classify developing context without mistaking it for conflicting instructions or automatic authorization.
+
+When Context Attention Mode turns on:
+
+- treat following discussion as intentional context
+- listen for developing intent, preferences, constraints, metaphors, examples, reactions, and decisions
+- do not implement code or update files unless explicitly instructed
+- track likely accepted direction, advisory context, parked ideas, unresolved questions, and possible future runways
+
+When Context Attention Mode turns off, classify the discussion since the mode was turned on and report:
+
+1. accepted direction
+2. advisory context
+3. parked ideas
+4. unresolved questions
+5. whether any file update or Dev runway is recommended
+
+`#` is not Dev authorization, does not override `workspace/current.md`, does not make advisory input doctrine, does not permit live/private/destructive actions, and does not authorize file edits unless the Human explicitly asks after the capture.
 
 ## Dev Meaning
 
