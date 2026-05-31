@@ -11,6 +11,7 @@ function buildStorageSetupGateReadout(input = {}, context = {}) {
   const storagePosture = classifyStoragePosture(preflight);
   const budgetPosture = classifyBudgetPosture({ budgetBytes, usageBytes });
   const locked = storagePosture.blocks_real_collection === true || budgetPosture.blocks_writes === true;
+  const actionClassMatrix = buildActionClassMatrix({ storagePosture, budgetPosture });
 
   return {
     action: 'storage.setup_gate_readout',
@@ -21,6 +22,7 @@ function buildStorageSetupGateReadout(input = {}, context = {}) {
     enforcement_state: 'not_implemented_readout_only',
     storage: storagePosture,
     budget: budgetPosture,
+    action_class_matrix: actionClassMatrix,
     work_classes: workClasses({ locked, storagePosture, budgetPosture }),
     source: {
       preflight_action: preflight.action || 'fixture.storage_authority_preflight',
@@ -70,6 +72,7 @@ function usageBytesFor(preflight = {}) {
 function classifyStoragePosture(preflight = {}) {
   const database = preflight.database || {};
   const mode = database.mode || 'missing';
+  const hasPath = typeof database.path === 'string' && database.path.trim().length > 0;
   const exists = database.exists === true;
   const parentAvailable = database.parent?.exists === true && database.parent?.is_directory !== false;
   const outsidePolicy = database.mode_flags?.outside_policy === true || mode === 'outside_policy';
@@ -84,6 +87,16 @@ function classifyStoragePosture(preflight = {}) {
       real_alpha_collection: 'blocked_until_explicit_storage',
       blocks_real_collection: true,
       reason: 'Demo/fixture posture is allowed only for separated demo or fixture work.',
+      database
+    });
+  }
+  if (!hasPath || mode === 'no_storage_selected') {
+    return posture({
+      state: 'no_storage_selected',
+      setup_gate: 'setup_required',
+      real_alpha_collection: 'blocked',
+      blocks_real_collection: true,
+      reason: 'No explicit Atlas storage location is selected.',
       database
     });
   }
@@ -228,6 +241,467 @@ function workClasses({ locked, storagePosture, budgetPosture }) {
       storagePosture.blocks_real_collection ? storagePosture.state : null,
       budgetPosture.blocks_writes ? budgetPosture.state : null
     ].filter(Boolean)
+  };
+}
+
+function buildActionClassMatrix({ storagePosture, budgetPosture }) {
+  const state = matrixStateFor({ storagePosture, budgetPosture });
+  const context = matrixContext({ state, storagePosture, budgetPosture });
+  const actions = Object.fromEntries(actionClassNames().map((actionClass) => [
+    actionClass,
+    decisionFor(actionClass, context)
+  ]));
+
+  return {
+    storage_state: state,
+    enforcement_state: 'not_implemented_readout_only',
+    basis: {
+      storage_state: storagePosture.state,
+      setup_gate: storagePosture.setup_gate,
+      budget_state: budgetPosture.state,
+      local_inspection_available: context.localInspectionAvailable,
+      local_inspection_basis: context.localInspectionBasis,
+      provider_movement_allowed_by_storage: context.providerMovementAllowedByStorage,
+      write_posture: context.writePosture,
+      block_hold_reason: context.blockHoldReason,
+      result_basis: context.resultBasis
+    },
+    actions
+  };
+}
+
+function matrixStateFor({ storagePosture, budgetPosture }) {
+  if (storagePosture.state === 'no_storage_selected') {
+    return 'no_storage_selected';
+  }
+  if (storagePosture.state === 'fallback_ack_required') {
+    return 'current_file_fallback_unacknowledged';
+  }
+  if (storagePosture.state === 'demo_fixture_only') {
+    return 'demo_fixture_mode';
+  }
+  if (storagePosture.state === 'missing_unavailable_blocked') {
+    return 'configured_storage_missing_unavailable';
+  }
+  if (storagePosture.state !== 'configured_ready') {
+    return 'configured_storage_invalid_degraded';
+  }
+  if (budgetPosture.state === 'budget_hard_lock') {
+    return 'budget_hard_lock_full';
+  }
+  if (budgetPosture.state === 'budget_strong_warning') {
+    return 'budget_strong_warning';
+  }
+  if (budgetPosture.state === 'budget_warning') {
+    return 'budget_warning';
+  }
+  return 'configured_storage_ready';
+}
+
+function matrixContext({ state, storagePosture, budgetPosture }) {
+  const dbExists = storagePosture.database.exists === true;
+  const fixture = state === 'demo_fixture_mode';
+  const degraded = state === 'configured_storage_invalid_degraded';
+  const missing = state === 'configured_storage_missing_unavailable';
+  const noStorage = state === 'no_storage_selected';
+  const fallback = state === 'current_file_fallback_unacknowledged';
+  const hardLock = state === 'budget_hard_lock_full';
+  const localInspectionAvailable = dbExists || fixture || fallback || hardLock;
+  const localInspectionBasis = fixture
+    ? 'fixture'
+    : degraded
+      ? 'read-only degraded'
+      : missing || noStorage
+        ? 'conditional safe handle only'
+        : 'local';
+  const providerMovementAllowedByStorage = [
+    'configured_storage_ready',
+    'budget_warning',
+    'budget_strong_warning'
+  ].includes(state);
+  const writePosture = writePostureForState(state);
+  const blockHoldReason = blockReasonForState(state, storagePosture, budgetPosture);
+
+  return {
+    state,
+    storagePosture,
+    budgetPosture,
+    fixture,
+    degraded,
+    missing,
+    noStorage,
+    fallback,
+    hardLock,
+    localInspectionAvailable,
+    localInspectionBasis,
+    providerMovementAllowedByStorage,
+    writePosture,
+    blockHoldReason,
+    resultBasis: resultBasisForState(state)
+  };
+}
+
+function writePostureForState(state) {
+  if (state === 'configured_storage_ready' || state === 'budget_warning') {
+    return 'writes_allowed_subject_to_action_gates';
+  }
+  if (state === 'budget_strong_warning') {
+    return 'conditional_projected_safe_writes_only';
+  }
+  if (state === 'demo_fixture_mode') {
+    return 'fixture_only_writes';
+  }
+  if (state === 'budget_hard_lock_full') {
+    return 'writes_blocked_by_budget';
+  }
+  return 'writes_blocked_by_storage';
+}
+
+function blockReasonForState(state, storagePosture, budgetPosture) {
+  if (state === 'configured_storage_ready') {
+    return null;
+  }
+  if (state === 'budget_warning') {
+    return 'budget_warning';
+  }
+  if (state === 'budget_strong_warning') {
+    return 'budget_strong_warning';
+  }
+  if (state === 'budget_hard_lock_full') {
+    return 'write_blocked_by_budget';
+  }
+  if (state === 'current_file_fallback_unacknowledged') {
+    return 'fallback_acknowledgement_required';
+  }
+  if (state === 'demo_fixture_mode') {
+    return 'demo_fixture_only';
+  }
+  if (state === 'no_storage_selected') {
+    return 'storage_setup_required';
+  }
+  if (state === 'configured_storage_missing_unavailable') {
+    return 'storage_unavailable';
+  }
+  if (state === 'configured_storage_invalid_degraded') {
+    return 'storage_degraded';
+  }
+  return storagePosture.state || budgetPosture.state || 'storage_review_required';
+}
+
+function resultBasisForState(state) {
+  if (state === 'demo_fixture_mode') {
+    return ['fixture', 'read-only'];
+  }
+  if (state === 'configured_storage_invalid_degraded') {
+    return ['local', 'degraded', 'read-only'];
+  }
+  if (state === 'budget_warning' || state === 'budget_strong_warning') {
+    return ['local', 'provider-backed-conditional'];
+  }
+  if (state === 'configured_storage_ready') {
+    return ['local', 'provider-backed-eligible'];
+  }
+  return ['local', 'read-only'];
+}
+
+function actionClassNames() {
+  return [
+    'setup_config_changes',
+    'local_db_inspection',
+    'local_reports_observation',
+    'assessment_writing',
+    'zkill_discovery',
+    'esi_evidence_expansion',
+    'fast_view_metadata_hydration',
+    'background_hydration',
+    'snapshot_support_artifact_write',
+    'pruning_deletion_preflight',
+    'pruning_deletion_execution'
+  ];
+}
+
+function decisionFor(actionClass, context) {
+  const state = context.state;
+  if (actionClass === 'setup_config_changes') {
+    return decision('allow', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'setup_config_surface_allowed',
+      resultBasis: ['local', 'read-only']
+    });
+  }
+  if (actionClass === 'local_db_inspection') {
+    return localInspectionDecision(actionClass, context);
+  }
+  if (actionClass === 'local_reports_observation') {
+    return localReportDecision(actionClass, context);
+  }
+  if (actionClass === 'assessment_writing') {
+    return assessmentDecision(actionClass, context);
+  }
+  if (actionClass === 'zkill_discovery' || actionClass === 'esi_evidence_expansion') {
+    return providerEvidenceDecision(actionClass, context);
+  }
+  if (actionClass === 'fast_view_metadata_hydration') {
+    return fastHydrationDecision(actionClass, context);
+  }
+  if (actionClass === 'background_hydration') {
+    return backgroundHydrationDecision(actionClass, context);
+  }
+  if (actionClass === 'snapshot_support_artifact_write') {
+    return snapshotDecision(actionClass, context);
+  }
+  if (actionClass === 'pruning_deletion_preflight') {
+    return pruningPreflightDecision(actionClass, context);
+  }
+  if (actionClass === 'pruning_deletion_execution') {
+    return pruningExecutionDecision(actionClass, context);
+  }
+  return decision('block', actionClass, context);
+}
+
+function localInspectionDecision(actionClass, context) {
+  if (context.state === 'demo_fixture_mode') {
+    return decision('fixture_only', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'read_only',
+      resultBasis: ['fixture', 'read-only']
+    });
+  }
+  if (context.state === 'configured_storage_invalid_degraded') {
+    return decision('read_only_only', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'read_only',
+      resultBasis: ['local', 'degraded', 'read-only']
+    });
+  }
+  if (context.state === 'no_storage_selected' || context.state === 'configured_storage_missing_unavailable') {
+    return decision('conditional', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'read_only_if_safe_handle_exists',
+      blockHoldReason: context.state === 'no_storage_selected' ? 'storage_setup_required' : 'storage_unavailable'
+    });
+  }
+  if (context.state === 'budget_hard_lock_full') {
+    return decision('allow_if_safe', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'read_only'
+    });
+  }
+  return decision('allow', actionClass, context, {
+    providerMovementRequired: false,
+    writePosture: 'read_only'
+  });
+}
+
+function localReportDecision(actionClass, context) {
+  if (context.state === 'demo_fixture_mode') {
+    return decision('fixture_only', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'read_only',
+      resultBasis: ['fixture', 'read-only']
+    });
+  }
+  if (context.state === 'configured_storage_invalid_degraded') {
+    return decision('degraded_read_only', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'read_only',
+      resultBasis: ['local', 'degraded', 'read-only']
+    });
+  }
+  if (context.state === 'no_storage_selected' || context.state === 'configured_storage_missing_unavailable') {
+    return decision('conditional', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'read_only_if_safe_handle_exists'
+    });
+  }
+  if (context.state === 'budget_hard_lock_full') {
+    return decision('allow_if_safe', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'read_only'
+    });
+  }
+  return decision('allow', actionClass, context, {
+    providerMovementRequired: false,
+    writePosture: 'read_only'
+  });
+}
+
+function assessmentDecision(actionClass, context) {
+  if (context.state === 'configured_storage_ready' || context.state === 'budget_warning') {
+    return decision('allow', actionClass, context, { providerMovementRequired: false });
+  }
+  if (context.state === 'budget_strong_warning') {
+    return decision('conditional', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'conditional_projected_safe_writes_only'
+    });
+  }
+  if (context.state === 'demo_fixture_mode') {
+    return decision('fixture_only', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'fixture_only_writes',
+      resultBasis: ['fixture']
+    });
+  }
+  return decision('block', actionClass, context, { providerMovementRequired: false });
+}
+
+function providerEvidenceDecision(actionClass, context) {
+  if (context.state === 'configured_storage_ready' || context.state === 'budget_warning') {
+    return decision('provider_gated', actionClass, context, {
+      providerMovementRequired: true,
+      resultBasis: ['provider-backed', 'local-write']
+    });
+  }
+  if (context.state === 'budget_strong_warning') {
+    return decision('conditional', actionClass, context, {
+      providerMovementRequired: true,
+      writePosture: 'conditional_projected_safe_writes_only',
+      blockHoldReason: 'budget_strong_warning'
+    });
+  }
+  return decision('block', actionClass, context, {
+    providerMovementRequired: true
+  });
+}
+
+function fastHydrationDecision(actionClass, context) {
+  if (context.state === 'configured_storage_ready' || context.state === 'budget_warning') {
+    return decision('provider_gated', actionClass, context, {
+      providerMovementRequired: true,
+      resultBasis: ['provider-backed', 'metadata-readability']
+    });
+  }
+  if (context.state === 'budget_strong_warning') {
+    return decision('active_view_only', actionClass, context, {
+      providerMovementRequired: true,
+      writePosture: 'conditional_projected_safe_writes_only',
+      blockHoldReason: 'budget_strong_warning',
+      resultBasis: ['provider-backed-conditional', 'metadata-readability']
+    });
+  }
+  if (context.state === 'demo_fixture_mode') {
+    return decision('fixture_only', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'fixture_only_writes',
+      resultBasis: ['fixture']
+    });
+  }
+  return decision('block_writes', actionClass, context, {
+    providerMovementRequired: true
+  });
+}
+
+function backgroundHydrationDecision(actionClass, context) {
+  if (context.state === 'configured_storage_ready' || context.state === 'budget_warning') {
+    return decision('provider_gated', actionClass, context, {
+      providerMovementRequired: true,
+      resultBasis: ['provider-backed', 'metadata-readability']
+    });
+  }
+  if (context.state === 'budget_strong_warning') {
+    return decision('defer_by_default', actionClass, context, {
+      providerMovementRequired: true,
+      writePosture: 'conditional_projected_safe_writes_only',
+      blockHoldReason: 'budget_strong_warning'
+    });
+  }
+  return decision('block', actionClass, context, {
+    providerMovementRequired: true
+  });
+}
+
+function snapshotDecision(actionClass, context) {
+  if (context.state === 'configured_storage_ready') {
+    return decision('allow_if_destination_safe', actionClass, context, { providerMovementRequired: false });
+  }
+  if (context.state === 'budget_warning') {
+    return decision('allow_if_projected_safe', actionClass, context, { providerMovementRequired: false });
+  }
+  if (context.state === 'budget_strong_warning') {
+    return decision('conditional', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'conditional_projected_safe_writes_only'
+    });
+  }
+  if (context.state === 'demo_fixture_mode') {
+    return decision('fixture_disposable_only', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'fixture_only_writes',
+      resultBasis: ['fixture']
+    });
+  }
+  if (context.state === 'configured_storage_missing_unavailable' || context.state === 'configured_storage_invalid_degraded') {
+    return decision('conditional_alternate', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'conditional_independently_valid_destination'
+    });
+  }
+  return decision('block', actionClass, context, { providerMovementRequired: false });
+}
+
+function pruningPreflightDecision(actionClass, context) {
+  if (['configured_storage_ready', 'budget_warning', 'budget_strong_warning'].includes(context.state)) {
+    return decision('allow', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'read_only'
+    });
+  }
+  if (context.state === 'budget_hard_lock_full') {
+    return decision('allow_readout', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'read_only'
+    });
+  }
+  if (context.state === 'configured_storage_invalid_degraded') {
+    return decision('read_only_only', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'read_only'
+    });
+  }
+  if (context.state === 'demo_fixture_mode') {
+    return decision('fixture_only', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'read_only',
+      resultBasis: ['fixture', 'read-only']
+    });
+  }
+  return decision('block', actionClass, context, { providerMovementRequired: false });
+}
+
+function pruningExecutionDecision(actionClass, context) {
+  if (['configured_storage_ready', 'budget_warning', 'budget_strong_warning', 'budget_hard_lock_full'].includes(context.state)) {
+    return decision('future_runway_only', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'destructive_execution_blocked_without_future_runway',
+      blockHoldReason: 'future_accepted_runway_required'
+    });
+  }
+  if (context.state === 'demo_fixture_mode') {
+    return decision('fixture_only', actionClass, context, {
+      providerMovementRequired: false,
+      writePosture: 'fixture_only_destructive_execution',
+      resultBasis: ['fixture']
+    });
+  }
+  return decision('block', actionClass, context, { providerMovementRequired: false });
+}
+
+function decision(posture, actionClass, context, overrides = {}) {
+  const providerMovementRequired = overrides.providerMovementRequired === true;
+  return {
+    action_class: actionClass,
+    posture,
+    enforcement_state: 'not_implemented_readout_only',
+    basis: {
+      storage_state: context.state,
+      local_inspection_available: context.localInspectionAvailable,
+      local_inspection_basis: context.localInspectionBasis,
+      provider_movement_required: providerMovementRequired,
+      write_posture: overrides.writePosture || context.writePosture,
+      block_hold_reason: overrides.blockHoldReason === undefined ? context.blockHoldReason : overrides.blockHoldReason,
+      result_basis: overrides.resultBasis || context.resultBasis
+    }
   };
 }
 

@@ -65,6 +65,7 @@ Keep these as the near-memory breadcrumb trail:
 - Workspace desk clearing moved inactive UI/display/deletion/watch-recovery/shaping material to `workspace/to-be-sorted/`.
 - HS121 accepted the Shapespace engineering model into Atlas as steering context: local DB inspection first, then provider lanes for zKill Discovery, ESI killmail expansion, fast/view metadata hydration, and background/patient metadata hydration.
 - HS122 shaped the storage gate action matrix: local inspection first, provider movement only when needed and gated, writes only when storage trust is sufficient, and no enforcement before a bounded Dev proof.
+- HS124 accepted HS123 after Overseer correction: `storage.setup_gate_readout.action_class_matrix` is read-only proof, and storage validity now takes precedence over budget hard-lock when classifying matrix state.
 
 ## Accepted Boundaries
 

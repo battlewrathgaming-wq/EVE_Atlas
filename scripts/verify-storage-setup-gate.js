@@ -40,6 +40,7 @@ async function main() {
       snapshotStatus: 'degraded'
     }));
     const budget = verifyBudgetStates(root);
+    const matrix = verifyActionClassMatrix(root);
     await verifyRendererPayloadCannotOverrideStorageFacts(root);
     verifyCommand();
 
@@ -49,6 +50,7 @@ async function main() {
       sample_fallback: compactReadout(fallback),
       sample_missing: compactReadout(missing),
       sample_budget_states: budget,
+      sample_action_matrix: matrix,
       sample_allowed_while_locked: missing.work_classes.allowed_while_locked,
       sample_blocked_while_locked: missing.work_classes.blocked_while_locked,
       boundary: ready.boundary
@@ -144,6 +146,213 @@ function verifyBudgetStates(root) {
   };
 }
 
+function verifyActionClassMatrix(root) {
+  const states = {
+    configured_storage_ready: buildFixtureReadout({
+      mode: 'configured',
+      source: 'configured',
+      path: path.join(root, 'matrix', 'ready.sqlite'),
+      exists: true,
+      budgetBytes: 4096
+    }),
+    no_storage_selected: buildFixtureReadout({
+      mode: 'no_storage_selected',
+      source: 'fallback',
+      path: null,
+      exists: false,
+      budgetBytes: 4096
+    }),
+    current_file_fallback_unacknowledged: buildFixtureReadout({
+      mode: 'fallback',
+      source: 'fallback',
+      path: path.join(root, 'matrix', 'fallback.sqlite'),
+      exists: true,
+      budgetBytes: 4096
+    }),
+    demo_fixture_mode: buildFixtureReadout({
+      mode: 'demo_fixture',
+      source: 'fallback',
+      path: path.join(root, 'matrix', 'demo-fixture.sqlite'),
+      exists: true,
+      demoFixture: true,
+      budgetBytes: 4096
+    }),
+    configured_storage_missing_unavailable: buildFixtureReadout({
+      mode: 'missing',
+      source: 'configured',
+      path: path.join(root, 'matrix', 'missing.sqlite'),
+      exists: false,
+      budgetBytes: 4096
+    }),
+    configured_storage_invalid_degraded: buildFixtureReadout({
+      mode: 'configured',
+      source: 'configured',
+      path: path.join(root, 'matrix', 'degraded.sqlite'),
+      exists: true,
+      snapshotStatus: 'degraded',
+      budgetBytes: 4096
+    }),
+    budget_warning: buildFixtureReadout({
+      mode: 'configured',
+      source: 'configured',
+      path: path.join(root, 'matrix', 'warning.sqlite'),
+      exists: true,
+      databaseBytes: 700,
+      controlledBytes: 300,
+      budgetBytes: 1400
+    }),
+    budget_strong_warning: buildFixtureReadout({
+      mode: 'configured',
+      source: 'configured',
+      path: path.join(root, 'matrix', 'strong-warning.sqlite'),
+      exists: true,
+      databaseBytes: 700,
+      controlledBytes: 300,
+      budgetBytes: 1050
+    }),
+    budget_hard_lock_full: buildFixtureReadout({
+      mode: 'configured',
+      source: 'configured',
+      path: path.join(root, 'matrix', 'hard-lock.sqlite'),
+      exists: true,
+      databaseBytes: 700,
+      controlledBytes: 300,
+      budgetBytes: 1000
+    })
+  };
+
+  for (const [expectedState, readout] of Object.entries(states)) {
+    assert(readout.action_class_matrix.storage_state === expectedState, `matrix should report ${expectedState}, got ${readout.action_class_matrix.storage_state}`);
+    verifyAllActionClassesPresent(readout, expectedState);
+    verifyBasisFields(readout, expectedState);
+  }
+
+  assertAction(states.configured_storage_ready, 'setup_config_changes', 'allow');
+  assertAction(states.configured_storage_ready, 'local_db_inspection', 'allow');
+  assertAction(states.configured_storage_ready, 'local_reports_observation', 'allow');
+  assertAction(states.configured_storage_ready, 'assessment_writing', 'allow');
+  assertAction(states.configured_storage_ready, 'zkill_discovery', 'provider_gated');
+  assertAction(states.configured_storage_ready, 'esi_evidence_expansion', 'provider_gated');
+  assertAction(states.configured_storage_ready, 'fast_view_metadata_hydration', 'provider_gated');
+  assertAction(states.configured_storage_ready, 'background_hydration', 'provider_gated');
+  assertAction(states.configured_storage_ready, 'snapshot_support_artifact_write', 'allow_if_destination_safe');
+  assertAction(states.configured_storage_ready, 'pruning_deletion_preflight', 'allow');
+  assertAction(states.configured_storage_ready, 'pruning_deletion_execution', 'future_runway_only');
+
+  assertAction(states.no_storage_selected, 'local_db_inspection', 'conditional');
+  assertAction(states.no_storage_selected, 'local_reports_observation', 'conditional');
+  assertAction(states.no_storage_selected, 'assessment_writing', 'block');
+  assertAction(states.no_storage_selected, 'zkill_discovery', 'block');
+  assertAction(states.no_storage_selected, 'fast_view_metadata_hydration', 'block_writes');
+  assertAction(states.no_storage_selected, 'snapshot_support_artifact_write', 'block');
+  assertAction(states.no_storage_selected, 'pruning_deletion_execution', 'block');
+
+  assertAction(states.current_file_fallback_unacknowledged, 'local_db_inspection', 'allow');
+  assertAction(states.current_file_fallback_unacknowledged, 'local_reports_observation', 'allow');
+  assertAction(states.current_file_fallback_unacknowledged, 'assessment_writing', 'block');
+  assertAction(states.current_file_fallback_unacknowledged, 'zkill_discovery', 'block');
+  assertAction(states.current_file_fallback_unacknowledged, 'snapshot_support_artifact_write', 'block');
+
+  assertAction(states.demo_fixture_mode, 'local_db_inspection', 'fixture_only');
+  assertAction(states.demo_fixture_mode, 'local_reports_observation', 'fixture_only');
+  assertAction(states.demo_fixture_mode, 'assessment_writing', 'fixture_only');
+  assertAction(states.demo_fixture_mode, 'zkill_discovery', 'block');
+  assertAction(states.demo_fixture_mode, 'fast_view_metadata_hydration', 'fixture_only');
+  assertAction(states.demo_fixture_mode, 'snapshot_support_artifact_write', 'fixture_disposable_only');
+  assertAction(states.demo_fixture_mode, 'pruning_deletion_execution', 'fixture_only');
+
+  assertAction(states.configured_storage_missing_unavailable, 'local_db_inspection', 'conditional');
+  assertAction(states.configured_storage_missing_unavailable, 'local_reports_observation', 'conditional');
+  assertAction(states.configured_storage_missing_unavailable, 'zkill_discovery', 'block');
+  assertAction(states.configured_storage_missing_unavailable, 'snapshot_support_artifact_write', 'conditional_alternate');
+
+  assertAction(states.configured_storage_invalid_degraded, 'local_db_inspection', 'read_only_only');
+  assertAction(states.configured_storage_invalid_degraded, 'local_reports_observation', 'degraded_read_only');
+  assertAction(states.configured_storage_invalid_degraded, 'assessment_writing', 'block');
+  assertAction(states.configured_storage_invalid_degraded, 'pruning_deletion_preflight', 'read_only_only');
+
+  assertAction(states.budget_warning, 'assessment_writing', 'allow');
+  assertAction(states.budget_warning, 'zkill_discovery', 'provider_gated');
+  assertAction(states.budget_warning, 'snapshot_support_artifact_write', 'allow_if_projected_safe');
+
+  assertAction(states.budget_strong_warning, 'assessment_writing', 'conditional');
+  assertAction(states.budget_strong_warning, 'zkill_discovery', 'conditional');
+  assertAction(states.budget_strong_warning, 'fast_view_metadata_hydration', 'active_view_only');
+  assertAction(states.budget_strong_warning, 'background_hydration', 'defer_by_default');
+  assertAction(states.budget_strong_warning, 'snapshot_support_artifact_write', 'conditional');
+
+  assertAction(states.budget_hard_lock_full, 'local_db_inspection', 'allow_if_safe');
+  assertAction(states.budget_hard_lock_full, 'local_reports_observation', 'allow_if_safe');
+  assertAction(states.budget_hard_lock_full, 'assessment_writing', 'block');
+  assertAction(states.budget_hard_lock_full, 'zkill_discovery', 'block');
+  assertAction(states.budget_hard_lock_full, 'fast_view_metadata_hydration', 'block_writes');
+  assertAction(states.budget_hard_lock_full, 'snapshot_support_artifact_write', 'block');
+  assertAction(states.budget_hard_lock_full, 'pruning_deletion_preflight', 'allow_readout');
+  assertAction(states.budget_hard_lock_full, 'pruning_deletion_execution', 'future_runway_only');
+
+  assert(states.configured_storage_ready.action_class_matrix.actions.zkill_discovery.basis.provider_movement_required === true, 'zKill Discovery should disclose provider movement');
+  assert(states.configured_storage_ready.action_class_matrix.actions.local_reports_observation.basis.provider_movement_required === false, 'local Observation/report should not require provider movement');
+  assert(states.budget_hard_lock_full.action_class_matrix.actions.esi_evidence_expansion.basis.block_hold_reason === 'write_blocked_by_budget', 'hard-lock expansion should name budget block');
+  assert(states.demo_fixture_mode.action_class_matrix.actions.local_reports_observation.basis.result_basis.includes('fixture'), 'demo local reports should disclose fixture basis');
+  assert(states.configured_storage_invalid_degraded.action_class_matrix.actions.local_db_inspection.basis.result_basis.includes('degraded'), 'degraded local inspection should disclose degraded basis');
+  assert(buildFixtureReadout({
+    mode: 'missing',
+    source: 'configured',
+    path: path.join(root, 'matrix', 'missing-over-budget.sqlite'),
+    exists: false,
+    databaseBytes: 700,
+    controlledBytes: 300,
+    budgetBytes: 1000
+  }).action_class_matrix.storage_state === 'configured_storage_missing_unavailable', 'missing storage should not be hidden by budget hard-lock');
+  assert(buildFixtureReadout({
+    mode: 'no_storage_selected',
+    source: 'fallback',
+    path: null,
+    exists: false,
+    databaseBytes: 700,
+    controlledBytes: 300,
+    budgetBytes: 1000
+  }).action_class_matrix.storage_state === 'no_storage_selected', 'no selected storage should not be hidden by budget hard-lock');
+
+  return {
+    states: Object.fromEntries(Object.entries(states).map(([key, readout]) => [
+      key,
+      compactMatrix(readout)
+    ])),
+    action_classes: Object.keys(states.configured_storage_ready.action_class_matrix.actions)
+  };
+}
+
+function buildFixtureReadout({
+  mode,
+  source,
+  path: dbPath,
+  exists,
+  outsidePolicy,
+  demoFixture,
+  snapshotStatus,
+  databaseBytes,
+  controlledBytes,
+  budgetBytes
+}) {
+  return buildStorageSetupGateReadout({
+    storagePreflight: fixturePreflight({
+      mode,
+      source,
+      path: dbPath,
+      exists,
+      outsidePolicy,
+      demoFixture,
+      snapshotStatus,
+      databaseBytes,
+      controlledBytes
+    })
+  }, {
+    allowStorageSetupGateFixtureInput: true,
+    storageBudgetBytes: budgetBytes
+  });
+}
+
 function budgetReadout(preflight, budgetBytes) {
   return buildStorageSetupGateReadout({
     storagePreflight: preflight
@@ -208,6 +417,7 @@ function fixturePreflight({
   databaseBytes = 32,
   controlledBytes = 96
 }) {
+  const parentPath = dbPath ? path.dirname(dbPath) : null;
   return {
     action: 'storage.authority_preflight',
     read_only: true,
@@ -224,9 +434,9 @@ function fixturePreflight({
         demo_fixture: demoFixture
       },
       parent: {
-        path: path.dirname(dbPath),
+        path: parentPath,
         exists: exists !== false,
-        is_directory: exists !== false
+        is_directory: exists !== false && Boolean(parentPath)
       },
       exists: exists === true,
       total_bytes: databaseBytes
@@ -240,6 +450,68 @@ function fixturePreflight({
       database_bytes: databaseBytes,
       known_controlled_locations_bytes: controlledBytes
     }
+  };
+}
+
+function verifyAllActionClassesPresent(readout, expectedState) {
+  const actions = readout.action_class_matrix.actions;
+  for (const actionClass of expectedActionClasses()) {
+    assert(actions[actionClass], `${expectedState} should include ${actionClass}`);
+    assert(actions[actionClass].enforcement_state === 'not_implemented_readout_only', `${actionClass} should remain readout-only`);
+  }
+}
+
+function verifyBasisFields(readout, expectedState) {
+  const basis = readout.action_class_matrix.basis;
+  assert(basis.storage_state, `${expectedState} should include storage state basis`);
+  assert(basis.budget_state, `${expectedState} should include budget state basis`);
+  assert(typeof basis.local_inspection_available === 'boolean', `${expectedState} should expose local inspection availability`);
+  assert(basis.write_posture, `${expectedState} should expose write posture`);
+  assert(Array.isArray(basis.result_basis), `${expectedState} should expose result basis`);
+  for (const [actionClass, decision] of Object.entries(readout.action_class_matrix.actions)) {
+    assert(decision.basis.storage_state === expectedState, `${actionClass} should carry matrix storage state`);
+    assert(typeof decision.basis.provider_movement_required === 'boolean', `${actionClass} should expose provider movement requirement`);
+    assert(decision.basis.write_posture, `${actionClass} should expose write posture`);
+    assert(Array.isArray(decision.basis.result_basis), `${actionClass} should expose result basis`);
+  }
+}
+
+function expectedActionClasses() {
+  return [
+    'setup_config_changes',
+    'local_db_inspection',
+    'local_reports_observation',
+    'assessment_writing',
+    'zkill_discovery',
+    'esi_evidence_expansion',
+    'fast_view_metadata_hydration',
+    'background_hydration',
+    'snapshot_support_artifact_write',
+    'pruning_deletion_preflight',
+    'pruning_deletion_execution'
+  ];
+}
+
+function assertAction(readout, actionClass, posture) {
+  const decision = readout.action_class_matrix.actions[actionClass];
+  assert(decision, `${actionClass} should exist for ${readout.action_class_matrix.storage_state}`);
+  assert(decision.posture === posture, `${readout.action_class_matrix.storage_state} ${actionClass} should be ${posture}, got ${decision.posture}`);
+}
+
+function compactMatrix(readout) {
+  const actions = readout.action_class_matrix.actions;
+  return {
+    storage_state: readout.action_class_matrix.storage_state,
+    local_db_inspection: actions.local_db_inspection.posture,
+    local_reports_observation: actions.local_reports_observation.posture,
+    assessment_writing: actions.assessment_writing.posture,
+    zkill_discovery: actions.zkill_discovery.posture,
+    esi_evidence_expansion: actions.esi_evidence_expansion.posture,
+    fast_view_metadata_hydration: actions.fast_view_metadata_hydration.posture,
+    background_hydration: actions.background_hydration.posture,
+    snapshot_support_artifact_write: actions.snapshot_support_artifact_write.posture,
+    pruning_deletion_preflight: actions.pruning_deletion_preflight.posture,
+    pruning_deletion_execution: actions.pruning_deletion_execution.posture
   };
 }
 
