@@ -1,8 +1,13 @@
+const path = require('node:path');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
+const { projectRoot } = require('../util/tempPaths');
 
 const BUDGET_WARNING_RATIO = 0.7;
 const BUDGET_STRONG_WARNING_RATIO = 0.95;
 const BUDGET_HARD_LOCK_RATIO = 1;
+const STORAGE_AUTHORITY_CONFIG_VERSION = 1;
+const STORAGE_AUTHORITY_CONFIG_SCHEMA = 'aura.atlas.storage_authority';
+const DRY_RUN_TIMESTAMP_PLACEHOLDER = 'DRY_RUN_TIMESTAMP_PLACEHOLDER';
 
 function buildStorageSetupGateReadout(input = {}, context = {}) {
   const preflight = storagePreflightFor(input, context);
@@ -14,6 +19,13 @@ function buildStorageSetupGateReadout(input = {}, context = {}) {
   const storagePosture = classifyStoragePosture(preflight, storageAuthority);
   const locked = storagePosture.blocks_real_collection === true || budgetPosture.blocks_writes === true;
   const actionClassMatrix = buildActionClassMatrix({ storagePosture, budgetPosture });
+  const storageConfigDryRun = buildStorageConfigDryRun({
+    input,
+    context,
+    storageAuthority,
+    storagePosture,
+    budgetPosture
+  });
 
   return {
     action: 'storage.setup_gate_readout',
@@ -23,6 +35,7 @@ function buildStorageSetupGateReadout(input = {}, context = {}) {
     mutates_state: false,
     enforcement_state: 'not_implemented_readout_only',
     storage_authority: storageAuthority,
+    storage_config_dry_run: storageConfigDryRun,
     storage: storagePosture,
     budget: budgetPosture,
     action_class_matrix: actionClassMatrix,
@@ -33,16 +46,176 @@ function buildStorageSetupGateReadout(input = {}, context = {}) {
       database_source: preflight.database?.source || null,
       byte_usage_source: 'storage.authority_preflight byte_usage; main Atlas storage budget is readout-only in HS115',
       storage_authority_config_source: storageAuthority.config_source,
+      storage_config_dry_run_target_basis: storageConfigDryRun.target_path_basis,
       renderer_payload_storage_facts_ignored: context.source === 'renderer'
     },
     boundary: [
       'Read-only setup gate readout only; it does not enforce storage lockout.',
-      'It does not write storage config, choose a final storage config path, or persist a budget.',
+      'It does not write storage config, persist acknowledgement, or persist a budget.',
       'It does not move, copy, migrate, create, relocate, restore, or delete active DB files.',
       'It does not call providers, create Evidence/EVEidence, hydrate metadata, prune/delete records, change schema, or redesign renderer UI.',
       'Budget means Atlas-controlled disk usage under storage authority, not provider/API request pacing.'
     ]
   };
+}
+
+function buildStorageConfigDryRun({
+  input = {},
+  context = {},
+  storageAuthority = {},
+  storagePosture = {},
+  budgetPosture = {}
+}) {
+  const root = path.resolve(projectRoot());
+  const targetPath = path.join(root, 'config', 'storage-authority.json');
+  const pathAllowed = isInsidePath(targetPath, root);
+  const pathBlockReason = pathAllowed ? null : 'target_path_outside_atlas_app_root';
+  const rendererPayloadIgnored = context.source === 'renderer' && rendererPayloadHasStorageConfigClaims(input);
+  const validationResult = validateStorageConfigDryRun({
+    pathAllowed,
+    pathBlockReason,
+    storageAuthority,
+    storagePosture,
+    budgetPosture
+  });
+  const wouldWrite = validationResult.valid === true;
+  const payload = wouldWrite
+    ? simulatedStorageAuthorityPayload({ storageAuthority, validationResult })
+    : null;
+
+  return {
+    dry_run: true,
+    would_write: wouldWrite,
+    target_path: targetPath,
+    target_path_basis: '<Atlas app/root>/config/storage-authority.json',
+    path_allowed: pathAllowed,
+    path_block_reason: pathBlockReason,
+    payload,
+    readback_simulation: wouldWrite
+      ? {
+        status: 'would_read_back',
+        equals_payload: true,
+        payload
+      }
+      : {
+        status: 'not_simulated',
+        reason: validationResult.status
+      },
+    validation_result: validationResult,
+    renderer_payload_ignored: rendererPayloadIgnored,
+    enforcement_state: 'not_implemented_readout_only',
+    read_only: true,
+    mutates_state: false
+  };
+}
+
+function validateStorageConfigDryRun({
+  pathAllowed,
+  pathBlockReason,
+  storageAuthority = {},
+  storagePosture = {},
+  budgetPosture = {}
+}) {
+  const issues = [];
+  if (!pathAllowed) {
+    issues.push(pathBlockReason || 'target_path_blocked');
+  }
+  if (storageAuthority.mode === 'no_storage_selected' || storagePosture.state === 'no_storage_selected') {
+    issues.push('storage_not_selected');
+  }
+  if (storageAuthority.mode === 'app_local_fallback_available') {
+    issues.push('fallback_acknowledgement_required');
+  }
+  if (storageAuthority.mode === 'acknowledgement_invalidated' || storageAuthority.acknowledgement_status === 'invalidated') {
+    issues.push('fallback_acknowledgement_invalidated');
+  }
+  if (storageAuthority.validation_status === 'missing_unavailable' || storagePosture.state === 'missing_unavailable_blocked') {
+    issues.push('selected_storage_missing_unavailable');
+  }
+  if (storageAuthority.validation_status === 'invalid_degraded' || storagePosture.state === 'invalid_degraded_setup_required') {
+    issues.push('selected_storage_invalid_degraded');
+  }
+  if (storageAuthority.validation_status !== 'valid') {
+    issues.push('storage_validation_not_valid');
+  }
+  if (storageAuthority.write_allowed_if_enforced_later !== true) {
+    issues.push('storage_write_posture_not_ready');
+  }
+  if (!hasExplicitBudget(storageAuthority)) {
+    issues.push('budget_required_for_provider_backed_work');
+  }
+  if (budgetPosture.state === 'budget_hard_lock') {
+    issues.push('budget_hard_lock');
+  }
+
+  const uniqueIssues = [...new Set(issues)];
+  return {
+    valid: uniqueIssues.length === 0,
+    status: uniqueIssues.length === 0 ? 'would_write_valid' : uniqueIssues[0],
+    issues: uniqueIssues,
+    budget_state: budgetPosture.state || null,
+    storage_state: storagePosture.state || null,
+    provider_backed_budget_required: true,
+    invalidation_basis: storageAuthority.acknowledgement_invalid_reason || null
+  };
+}
+
+function simulatedStorageAuthorityPayload({ storageAuthority = {}, validationResult = {} }) {
+  return {
+    schema: STORAGE_AUTHORITY_CONFIG_SCHEMA,
+    version: STORAGE_AUTHORITY_CONFIG_VERSION,
+    selected_storage_mode: storageAuthority.mode || null,
+    selected_storage_root: storageAuthority.storage_root || null,
+    selected_database_path: storageAuthority.database_path || null,
+    path_basis: storageAuthority.path_basis || null,
+    validation_status: storageAuthority.validation_status || null,
+    fallback_acknowledgement: {
+      status: storageAuthority.acknowledgement_status || null,
+      acknowledged: storageAuthority.fallback_acknowledged === true,
+      provenance: storageAuthority.acknowledgement_basis || null,
+      invalidation_basis: storageAuthority.acknowledgement_invalid_reason || null
+    },
+    budget_bytes: storageAuthority.budget_bytes,
+    budget_source: storageAuthority.budget_source || null,
+    config_source: storageAuthority.config_source || null,
+    config_version_basis: storageAuthority.config_version || null,
+    created_at: DRY_RUN_TIMESTAMP_PLACEHOLDER,
+    updated_at: DRY_RUN_TIMESTAMP_PLACEHOLDER,
+    dry_run: true,
+    validation_basis: validationResult.status
+  };
+}
+
+function hasExplicitBudget(storageAuthority = {}) {
+  return Number.isFinite(Number(storageAuthority.budget_bytes)) && Number(storageAuthority.budget_bytes) > 0;
+}
+
+function rendererPayloadHasStorageConfigClaims(input = {}) {
+  const forbiddenKeys = [
+    'storageConfigDryRun',
+    'storage_config_dry_run',
+    'targetPath',
+    'target_path',
+    'configPath',
+    'config_path',
+    'storageRoot',
+    'storage_root',
+    'databasePath',
+    'database_path',
+    'storagePreflight',
+    'storage_preflight',
+    'storageAuthority',
+    'storage_authority',
+    'storageBudgetBytes',
+    'storage_budget_bytes',
+    'budgetBytes',
+    'budget_bytes',
+    'fallbackAcknowledgement',
+    'fallback_acknowledgement',
+    'acknowledgementStatus',
+    'acknowledgement_status'
+  ];
+  return forbiddenKeys.some((key) => Object.prototype.hasOwnProperty.call(input, key));
 }
 
 function applyBudgetToStorageAuthority(storageAuthority, budgetPosture) {
@@ -231,8 +404,12 @@ function dirnameOrNull(filePath) {
   if (!filePath) {
     return null;
   }
-  const path = require('node:path');
   return path.dirname(filePath);
+}
+
+function isInsidePath(targetPath, rootPath) {
+  const relative = path.relative(path.resolve(rootPath), path.resolve(targetPath));
+  return relative === '' || (!relative.startsWith('..') && !path.isAbsolute(relative));
 }
 
 function storagePreflightFor(input = {}, context = {}) {

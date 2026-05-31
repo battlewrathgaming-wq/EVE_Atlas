@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Active Dev runway for HS131 storage config persistence dry-run
+Status: Resting after accepted HS131 storage config persistence dry-run
 Last updated: 2026-05-31
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: prove the future storage authority config write as a dry run before any persisted config, acknowledgement, or enforcement.
+Current focus: storage/runtime hardening remains the next heading, but no Dev runway is currently open.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human discussion
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS131-storage-config-persistence-dry-run.md
+none
 ```
 
 ## Current State
 
-Active Dev runway is open for a fixture/offline dry run.
+HS131 is accepted. Atlas has a read-only dry-run proof for the future storage authority config write.
 
 Accepted Human decisions:
 
@@ -42,7 +42,7 @@ Accepted Human decisions:
 
 - Acknowledged app-local/current-file fallback counts as accepted storage for action posture, but remains visibly distinct as fallback mode.
 - Budget is mandatory before real provider-backed acquisition or EVEidence writes.
-- This packet is one more dry run, not persisted config.
+- HS131 was one more dry run, not persisted config.
 
 Atlas has accepted storage/runtime hardening proofs:
 
@@ -52,6 +52,7 @@ Atlas has accepted storage/runtime hardening proofs:
 - `storage.setup_gate_readout`
 - `storage.setup_gate_readout.action_class_matrix`
 - `storage.setup_gate_readout.storage_authority`
+- `storage.setup_gate_readout.storage_config_dry_run`
 
 Recent accepted state:
 
@@ -63,6 +64,7 @@ Recent accepted state:
 - `workspace/OverseerHS129-hs128-storage-config-acknowledgement-review.md`
 - `workspace/OverseerHS130-storage-config-decision-brief.md`
 - `workspace/OverseerHS131-storage-config-dry-run-scope.md`
+- `workspace/OverseerHS132-hs131-storage-config-dry-run-review.md`
 
 ## Accepted Boundaries
 
@@ -78,61 +80,17 @@ Recent accepted state:
 
 ## Active Runway
 
-Dev should implement a fixture/offline dry-run readout for the future storage authority config write.
+No active Dev runway.
 
-Source of intent:
+Likely next storage/runtime seams, to choose deliberately:
 
-- `workspace/OverseerHS130-storage-config-decision-brief.md`
-- `workspace/OverseerHS131-storage-config-dry-run-scope.md`
-- existing `storage.setup_gate_readout.storage_authority`
-- existing storage setup/gate verifier patterns
+1. Write-capable storage config proof.
+2. Acknowledgement persistence proof.
+3. Enforcement dry-run / command-effect mapping.
+4. External I/O held-state follow-up.
+5. Hydration backlog preview.
 
-Ordered steps:
-
-1. Inspect storage setup/gate, storage authority/preflight, service registry, and verifier patterns.
-2. Add a dry-run readout for the future storage authority config write, integrated with or adjacent to `storage.setup_gate_readout`.
-3. Use the accepted target path pattern:
-
-```text
-<Atlas app/root>/config/storage-authority.json
-```
-
-4. Do not write the file. Simulate only.
-5. Prove the dry-run payload shape includes:
-   - schema/version
-   - selected storage mode
-   - selected storage root or DB path basis
-   - fallback acknowledgement status
-   - fallback acknowledgement provenance
-   - budget bytes
-   - path basis
-   - validation status
-   - simulated created/updated timestamp or placeholder
-   - invalidation basis if applicable
-6. Prove states:
-   - explicit selected storage with budget
-   - app-local fallback available but unacknowledged
-   - app-local fallback acknowledged with budget
-   - acknowledgement invalidated
-   - no storage selected
-   - selected storage missing/unavailable
-   - selected storage invalid/degraded
-   - budget missing while provider-backed work would be requested
-7. Expose dry-run readout fields:
-   - `dry_run`
-   - `would_write`
-   - `target_path`
-   - `target_path_basis`
-   - `path_allowed`
-   - `path_block_reason`
-   - `payload`
-   - `readback_simulation`
-   - `validation_result`
-   - `renderer_payload_ignored`
-   - `enforcement_state`
-8. Prove renderer payloads cannot choose arbitrary config paths, storage roots, fallback acknowledgement, or budget bytes through the readout payload.
-9. Add or update focused fixture/offline verification.
-10. Update Evidence / Dev Handoff in `workspace/current.md` and create the expected DevHS file with files changed, sample output, verification commands, and boundary confirmation.
+The next packet should remain one bounded hardening seam.
 
 ## Guardrails
 
@@ -161,11 +119,9 @@ Ordered steps:
 
 ## Stop Conditions
 
-Stop and return to Overseer/Human before implementation if:
+Before opening the next runway, stop and return to Overseer/Human if:
 
-- the proof requires writing a real config file
-- the proof requires persisting acknowledgement
-- the proof requires enforcing storage lockout
+- writing a real config file, persisting acknowledgement, or enforcing storage lockout is being proposed without a bounded packet
 - the proof requires moving, copying, migrating, relocating, restoring, or deleting DB/storage
 - the proof requires live/provider/API calls
 - the proof requires changing Discovery/Evidence/Hydration semantics
@@ -174,6 +130,10 @@ Stop and return to Overseer/Human before implementation if:
 - the proof requires UI wording or renderer design
 
 ## Required Verification
+
+No verification is required while resting.
+
+If the next storage packet changes the same surface, likely baseline verification is:
 
 Run:
 
@@ -198,17 +158,36 @@ npm.cmd run verify:runtime-snapshot
 
 ## Evidence
 
-HS131 opens from:
+HS131 Dev implementation completed.
 
-- HS130 decisions: file-portable config home, acknowledged fallback remains visibly distinct, budget mandatory before provider-backed acquisition/EVEidence writes, one more dry run before persisted config.
-- HS131 scope: prove would-write payload, target path, simulated readback, and renderer safety before real writes.
+- Extended `storage.setup_gate_readout` with read-only `storage_config_dry_run`.
+- Dry-run target path is derived in main process as `<Atlas app/root>/config/storage-authority.json`.
+- Simulated payload includes schema/version, selected storage mode/root/DB basis, fallback acknowledgement status/provenance, budget bytes/source, path basis, validation status, timestamp placeholders, and invalidation basis where applicable.
+- Simulated readback reports `would_read_back` only for valid would-write states.
+- Fixture proof covers explicit selected storage with budget, app-local fallback unacknowledged, app-local fallback acknowledged with budget, acknowledgement invalidated, no storage selected, selected storage missing/unavailable, selected storage invalid/degraded, and missing budget while provider-backed work would be requested.
+- Renderer proof confirms payloads cannot choose arbitrary config paths, storage roots, fallback acknowledgement, or budget bytes through this readout.
+- Boundary preserved: no real config writes, no persisted acknowledgement, no enforcement/lockout, no storage movement, no provider calls, no Evidence/EVEidence writes, no hydration writes, no schema migration, no renderer redesign.
 
-Dev should replace this section with concise proof evidence after implementation.
+Verification:
+
+```powershell
+node --check src\main\services\storageSetupGateReadoutService.js
+node --check scripts\verify-storage-setup-gate.js
+npm.cmd run verify:storage-setup-gate
+npm.cmd run verify:storage-authority-preflight
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:protected-terms
+git diff --check
+git status --short --branch
+Test-Path config\storage-authority.json
+```
+
+All listed commands passed. `verify:protected-terms` completed with warning-only discovery output and exit code 0. `git diff --check` passed with line-ending warnings only. `Test-Path config\storage-authority.json` returned `False`, confirming the dry run did not create the future config file. One initial parallel `verify:service-registry` run failed because another verifier removed its temp fixture during concurrent execution; standalone rerun passed.
 
 ## Dev Handoff
 
-Pending Dev handoff.
-
-Expected:
+Complete:
 
 - `workspace/DevHS131-storage-config-persistence-dry-run.md`

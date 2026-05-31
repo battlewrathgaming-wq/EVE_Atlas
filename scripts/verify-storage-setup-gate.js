@@ -42,6 +42,7 @@ async function main() {
     const budget = verifyBudgetStates(root);
     const authority = verifyStorageAuthorityReadout(root);
     const matrix = verifyActionClassMatrix(root);
+    const dryRun = verifyStorageConfigDryRun(root);
     await verifyRendererPayloadCannotOverrideStorageFacts(root);
     verifyCommand();
 
@@ -52,6 +53,7 @@ async function main() {
       sample_missing: compactReadout(missing),
       sample_budget_states: budget,
       sample_storage_authority: authority,
+      sample_storage_config_dry_run: dryRun,
       sample_action_matrix: matrix,
       sample_allowed_while_locked: missing.work_classes.allowed_while_locked,
       sample_blocked_while_locked: missing.work_classes.blocked_while_locked,
@@ -514,6 +516,171 @@ function verifyActionClassMatrix(root) {
   };
 }
 
+function verifyStorageConfigDryRun(root) {
+  const selected = buildFixtureReadout({
+    mode: 'configured',
+    source: 'configured',
+    path: path.join(root, 'dry-run', 'selected', 'atlas.sqlite'),
+    exists: true,
+    budgetBytes: 4096,
+    storageAuthority: {
+      mode: 'selected_storage',
+      selected: true,
+      config_source: 'fixture_explicit_selection',
+      config_version: 1,
+      budget_source: 'fixture_configured',
+      budget_bytes: 4096
+    }
+  });
+  const fallbackAvailable = buildFixtureReadout({
+    mode: 'fallback',
+    source: 'fallback',
+    path: path.join(root, 'dry-run', 'fallback', 'atlas.sqlite'),
+    exists: true,
+    budgetBytes: 4096,
+    storageAuthority: {
+      mode: 'app_local_fallback_available',
+      fallback_available: true,
+      acknowledgement_status: 'not_acknowledged',
+      config_source: 'fixture_no_config',
+      config_version: 1
+    }
+  });
+  const fallbackAcknowledged = buildFixtureReadout({
+    mode: 'fallback',
+    source: 'fallback',
+    path: path.join(root, 'dry-run', 'fallback-ack', 'atlas.sqlite'),
+    exists: true,
+    budgetBytes: 4096,
+    storageAuthority: {
+      mode: 'app_local_fallback_acknowledged',
+      fallback_available: true,
+      acknowledgement_status: 'acknowledged',
+      acknowledgement_basis: 'fixture operator accepted app-local fallback',
+      config_source: 'fixture_acknowledgement',
+      config_version: 1,
+      budget_source: 'fixture_configured',
+      budget_bytes: 4096
+    }
+  });
+  const acknowledgementInvalidated = buildFixtureReadout({
+    mode: 'fallback',
+    source: 'fallback',
+    path: path.join(root, 'dry-run', 'fallback-invalid', 'atlas.sqlite'),
+    exists: true,
+    budgetBytes: 4096,
+    storageAuthority: {
+      mode: 'acknowledgement_invalidated',
+      fallback_available: true,
+      acknowledgement_status: 'invalidated',
+      acknowledgement_basis: 'fixture previous acknowledgement',
+      acknowledgement_invalid_reason: 'app path changed',
+      config_source: 'fixture_acknowledgement',
+      config_version: 1,
+      budget_source: 'fixture_configured',
+      budget_bytes: 4096
+    }
+  });
+  const noStorage = buildFixtureReadout({
+    mode: 'no_storage_selected',
+    source: 'fallback',
+    path: null,
+    exists: false,
+    budgetBytes: 4096
+  });
+  const missing = buildFixtureReadout({
+    mode: 'missing',
+    source: 'configured',
+    path: path.join(root, 'dry-run', 'missing', 'atlas.sqlite'),
+    exists: false,
+    budgetBytes: 4096,
+    storageAuthority: {
+      mode: 'selected_storage_missing_unavailable',
+      selected: true,
+      config_source: 'fixture_config',
+      config_version: 1,
+      budget_source: 'fixture_configured',
+      budget_bytes: 4096
+    }
+  });
+  const degraded = buildFixtureReadout({
+    mode: 'configured',
+    source: 'configured',
+    path: path.join(root, 'dry-run', 'degraded', 'atlas.sqlite'),
+    exists: true,
+    snapshotStatus: 'degraded',
+    budgetBytes: 4096,
+    storageAuthority: {
+      mode: 'selected_storage_invalid_degraded',
+      selected: true,
+      validation_status: 'invalid_degraded',
+      config_source: 'fixture_config',
+      config_version: 1,
+      budget_source: 'fixture_configured',
+      budget_bytes: 4096
+    }
+  });
+  const budgetMissing = buildFixtureReadout({
+    mode: 'configured',
+    source: 'configured',
+    path: path.join(root, 'dry-run', 'budget-missing', 'atlas.sqlite'),
+    exists: true,
+    storageAuthority: {
+      mode: 'selected_storage',
+      selected: true,
+      config_source: 'fixture_explicit_selection',
+      config_version: 1
+    }
+  });
+
+  assert(selected.storage_config_dry_run.dry_run === true, 'storage config readout should be dry-run only');
+  assert(selected.storage_config_dry_run.would_write === true, 'selected storage with budget should simulate a write');
+  assert(selected.storage_config_dry_run.target_path === path.join(projectRoot(), 'config', 'storage-authority.json'), 'dry-run target should use app-root config path');
+  assert(selected.storage_config_dry_run.target_path_basis === '<Atlas app/root>/config/storage-authority.json', 'dry-run target should name accepted pattern');
+  assert(selected.storage_config_dry_run.path_allowed === true, 'app-root config path should be allowed');
+  assert(selected.storage_config_dry_run.path_block_reason === null, 'allowed target should have no path block reason');
+  assert(selected.storage_config_dry_run.payload.schema === 'aura.atlas.storage_authority', 'dry-run payload should include schema');
+  assert(selected.storage_config_dry_run.payload.version === 1, 'dry-run payload should include version');
+  assert(selected.storage_config_dry_run.payload.selected_storage_mode === 'selected_storage', 'dry-run payload should include selected mode');
+  assert(selected.storage_config_dry_run.payload.selected_database_path.endsWith(path.join('dry-run', 'selected', 'atlas.sqlite')), 'dry-run payload should include selected DB path basis');
+  assert(selected.storage_config_dry_run.payload.fallback_acknowledgement.status === 'not_required', 'selected storage should not require fallback acknowledgement');
+  assert(selected.storage_config_dry_run.payload.fallback_acknowledgement.provenance, 'dry-run payload should include acknowledgement provenance');
+  assert(selected.storage_config_dry_run.payload.budget_bytes === 4096, 'dry-run payload should include budget bytes');
+  assert(selected.storage_config_dry_run.payload.path_basis === 'explicit_selected_storage', 'dry-run payload should include path basis');
+  assert(selected.storage_config_dry_run.payload.validation_status === 'valid', 'dry-run payload should include validation status');
+  assert(selected.storage_config_dry_run.payload.created_at === 'DRY_RUN_TIMESTAMP_PLACEHOLDER', 'dry-run payload should use a timestamp placeholder');
+  assert(selected.storage_config_dry_run.payload.updated_at === 'DRY_RUN_TIMESTAMP_PLACEHOLDER', 'dry-run payload should use an updated timestamp placeholder');
+  assert(selected.storage_config_dry_run.readback_simulation.status === 'would_read_back', 'valid dry-run should simulate readback');
+  assert(selected.storage_config_dry_run.readback_simulation.equals_payload === true, 'readback simulation should match payload');
+  assert(selected.storage_config_dry_run.enforcement_state === 'not_implemented_readout_only', 'dry-run must not enforce storage');
+
+  assert(fallbackAvailable.storage_config_dry_run.would_write === false, 'unacknowledged fallback should not simulate write');
+  assert(fallbackAvailable.storage_config_dry_run.validation_result.issues.includes('fallback_acknowledgement_required'), 'fallback available should require acknowledgement');
+  assert(fallbackAcknowledged.storage_config_dry_run.would_write === true, 'acknowledged fallback with budget should simulate write');
+  assert(fallbackAcknowledged.storage_config_dry_run.payload.fallback_acknowledgement.status === 'acknowledged', 'acknowledged fallback should persist acknowledgement status in simulated payload');
+  assert(acknowledgementInvalidated.storage_config_dry_run.would_write === false, 'invalidated acknowledgement should not simulate write');
+  assert(acknowledgementInvalidated.storage_config_dry_run.validation_result.invalidation_basis === 'app path changed', 'invalidated acknowledgement should expose invalidation basis');
+  assert(noStorage.storage_config_dry_run.would_write === false, 'no storage selected should not simulate write');
+  assert(noStorage.storage_config_dry_run.validation_result.issues.includes('storage_not_selected'), 'no storage selected should block dry-run write');
+  assert(missing.storage_config_dry_run.would_write === false, 'missing selected storage should not simulate write');
+  assert(missing.storage_config_dry_run.validation_result.issues.includes('selected_storage_missing_unavailable'), 'missing storage should expose unavailable issue');
+  assert(degraded.storage_config_dry_run.would_write === false, 'degraded selected storage should not simulate write');
+  assert(degraded.storage_config_dry_run.validation_result.issues.includes('selected_storage_invalid_degraded'), 'degraded storage should expose degraded issue');
+  assert(budgetMissing.storage_config_dry_run.would_write === false, 'missing budget should block provider-backed dry-run write');
+  assert(budgetMissing.storage_config_dry_run.validation_result.issues.includes('budget_required_for_provider_backed_work'), 'missing budget should be visible as provider-backed block');
+
+  return {
+    selected_storage: compactDryRun(selected),
+    app_local_fallback_available: compactDryRun(fallbackAvailable),
+    app_local_fallback_acknowledged: compactDryRun(fallbackAcknowledged),
+    acknowledgement_invalidated: compactDryRun(acknowledgementInvalidated),
+    no_storage_selected: compactDryRun(noStorage),
+    selected_storage_missing_unavailable: compactDryRun(missing),
+    selected_storage_invalid_degraded: compactDryRun(degraded),
+    budget_missing_provider_backed: compactDryRun(budgetMissing)
+  };
+}
+
 function buildFixtureReadout({
   mode,
   source,
@@ -579,9 +746,13 @@ async function verifyRendererPayloadCannotOverrideStorageFacts(root) {
         mode: 'app_local_fallback_acknowledged',
         acknowledgement_status: 'acknowledged',
         database_path: payloadPath,
+        storage_root: path.dirname(payloadPath),
         budget_bytes: 1
       },
-      storageBudgetBytes: 1
+      storageBudgetBytes: 1,
+      storageConfigDryRun: {
+        target_path: path.join(root, 'renderer-safe', 'forged', 'storage-authority.json')
+      }
     }, {
       db,
       databasePath: trustedPath,
@@ -595,6 +766,12 @@ async function verifyRendererPayloadCannotOverrideStorageFacts(root) {
     assert(readout.storage_authority.fallback_acknowledged === false, 'renderer payload must not forge fallback acknowledgement');
     assert(readout.budget.state === 'within_budget', 'renderer payload budget should not override trusted context budget');
     assert(readout.source.renderer_payload_storage_facts_ignored === true, 'renderer safety flag should be visible');
+    assert(readout.storage_config_dry_run.target_path === path.join(projectRoot(), 'config', 'storage-authority.json'), 'renderer payload must not choose config target path');
+    assert(readout.storage_config_dry_run.payload.selected_database_path === trustedPath, 'renderer payload must not choose storage DB path in dry-run payload');
+    assert(readout.storage_config_dry_run.payload.selected_storage_root === path.dirname(trustedPath), 'renderer payload must not choose storage root in dry-run payload');
+    assert(readout.storage_config_dry_run.payload.fallback_acknowledgement.status === 'not_required', 'renderer payload must not forge fallback acknowledgement in dry-run payload');
+    assert(readout.storage_config_dry_run.payload.budget_bytes === 4096, 'renderer payload must not forge budget bytes in dry-run payload');
+    assert(readout.storage_config_dry_run.renderer_payload_ignored === true, 'dry-run should flag ignored renderer config claims');
   } finally {
     closeDatabase(db);
   }
@@ -743,6 +920,19 @@ function compactAuthority(readout) {
     read_allowed: readout.storage_authority.read_allowed,
     write_allowed_if_enforced_later: readout.storage_authority.write_allowed_if_enforced_later,
     provider_movement_allowed_if_enforced_later: readout.storage_authority.provider_movement_allowed_if_enforced_later
+  };
+}
+
+function compactDryRun(readout) {
+  return {
+    would_write: readout.storage_config_dry_run.would_write,
+    target_path_basis: readout.storage_config_dry_run.target_path_basis,
+    path_allowed: readout.storage_config_dry_run.path_allowed,
+    validation_status: readout.storage_config_dry_run.validation_result.status,
+    issues: readout.storage_config_dry_run.validation_result.issues,
+    readback_status: readout.storage_config_dry_run.readback_simulation.status,
+    renderer_payload_ignored: readout.storage_config_dry_run.renderer_payload_ignored,
+    enforcement_state: readout.storage_config_dry_run.enforcement_state
   };
 }
 
