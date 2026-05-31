@@ -70,6 +70,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS126 accepted DevHS125 orientation: the next storage seam should be storage config / acknowledgement proof before enforcement.
 - HS127 shaped the storage config / acknowledgement proof: Atlas must make selected storage, app-local fallback, fallback acknowledgement, invalidated acknowledgement, and budget config visible before enforcement.
 - HS129 accepted HS128 after Overseer correction: `storage.setup_gate_readout.storage_authority` is read-only proof, renderer payloads cannot forge acknowledgement/path/budget facts, and trusted context budget now stays coherent in the authority readout.
+- HS131 accepted Human storage config decisions and opened a dry-run runway: Atlas is file-portable, target pattern is `<Atlas app/root>/config/storage-authority.json`, acknowledged fallback remains distinct, budget is mandatory before provider-backed acquisition/EVEidence writes, and the next proof must not write config.
 - HS130 captured the storage config decision cluster that must be accepted before write-capable config: portable config home, config contents, fallback acknowledgement meaning, invalidation, budget requirement, and renderer authority.
 
 ## Accepted Boundaries
