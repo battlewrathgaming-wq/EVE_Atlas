@@ -78,6 +78,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS137 opened an enforcement dry-run command/effect map: read-only allow/block/conditional decisions before any runtime interception or command blocking.
 - HS138 accepted HS137: `storage.enforcement_dry_run.command_effect_map` now proves representative command/effect allow, block, and conditional posture from storage gate state and service metadata while leaving runtime enforcement inactive.
 - HS139/HS140 closed the HS138 coverage gap: every current `serviceRegistry` command now has enforcement classification metadata or explicit fixture/non-production posture, and the dry-run verifier exposes missing classifications as gaps.
+- HS141 accepted Security audit input: enforcement classification is healthy inventory, not runtime policy; future enforcement needs composed gate state, and External I/O held-state is the preferred next safe seam.
 
 ## Accepted Boundaries
 

@@ -77,6 +77,8 @@ Recent accepted state:
 - `workspace/OverseerHS138-hs137-enforcement-dry-run-review.md`
 - `workspace/EngineeringSafetyAuditHS138-enforcement-dry-run-coverage-review.md`
 - `workspace/OverseerHS140-hs139-enforcement-classification-coverage-review.md`
+- `workspace/SecuritySafetyAuditHS140-enforcement-classification-posture.md`
+- `workspace/OverseerHS141-security-audit-hs140-review.md`
 
 ## Accepted Boundaries
 
@@ -159,6 +161,22 @@ Test-Path config\storage-authority.json
 Run `node --check` on any new or changed JavaScript files.
 
 ## Evidence
+
+HS140 Security audit accepted as advisory input.
+
+- Accepted as breadcrumb, not runtime enforcement authority.
+- Atlas is in a healthy pre-enforcement posture.
+- `would_allow` must not become a runtime allow decision; future runtime policy needs composed gate state.
+- Confirmation tokens remain UX/operator-friction metadata, not security secrets or authorization authority.
+- Fixture/proof commands must remain non-renderer, trusted-context only, and excluded from production enforcement surfaces.
+- Future runtime enforcement should fail closed for unknown/unclassified commands unless deliberately exempted.
+- `setup_config_changes` is broad and should split before enforcement.
+- Support artifacts, snapshots, trace packs, retention previews, provider calls, Evidence writes, and hydration writes are separate risk classes.
+- Security recommends External I/O held-state follow-up as the next safe seam.
+
+Overseer review:
+
+- `workspace/OverseerHS141-security-audit-hs140-review.md`
 
 HS139 Dev implementation accepted.
 
