@@ -1,6 +1,6 @@
 # AURA Atlas Current Work
 
-Status: Resting after accepted HS137 enforcement dry-run command-effect map
+Status: Resting after accepted HS139 enforcement classification coverage
 Last updated: 2026-05-31
 
 ## Active Milestone
@@ -28,7 +28,7 @@ none
 
 ## Current State
 
-HS137 is accepted.
+HS139 is accepted.
 
 Accepted Human decisions:
 
@@ -56,6 +56,7 @@ Atlas has accepted storage/runtime hardening proofs:
 - `storage.authority_config.write_proof`
 - `storage.authority_config.acknowledgement_persistence_proof`
 - `storage.enforcement_dry_run.command_effect_map`
+- complete enforcement classification coverage for all current service commands
 
 Recent accepted state:
 
@@ -74,6 +75,8 @@ Recent accepted state:
 - `workspace/OverseerHS136-hs135-acknowledgement-persistence-review.md`
 - `workspace/OverseerHS137-enforcement-dry-run-command-effect-scope.md`
 - `workspace/OverseerHS138-hs137-enforcement-dry-run-review.md`
+- `workspace/EngineeringSafetyAuditHS138-enforcement-dry-run-coverage-review.md`
+- `workspace/OverseerHS140-hs139-enforcement-classification-coverage-review.md`
 
 ## Accepted Boundaries
 
@@ -157,6 +160,35 @@ Run `node --check` on any new or changed JavaScript files.
 
 ## Evidence
 
+HS139 Dev implementation accepted.
+
+- Added complete read-only classification coverage metadata for all 51 current `serviceRegistry` commands.
+- Coverage metadata includes `storage_action_class`, `external_io_dependency`, `runtime_context`, `enforcement_status`, and notes.
+- Scheduled/background Watch paths are classified, including `actor.watch`, `system.radius.watch`, `watch.executor.arm`, and `watch.executor.tick`.
+- Provider/Evidence-capable commands declare External I/O separately from storage/action posture.
+- Fixture/proof commands are marked `fixture_only_non_production`.
+- `storage.enforcement_dry_run.command_effect_map` now reports `coverage.status`, command counts, gap commands, provider/external-I/O commands, fixture-only commands, and scheduled/background Watch commands.
+- `verify:enforcement-dry-run` now fails if a service command appears without classification and demonstrates the missing-classification signal with a fixture command.
+- Boundary preserved: enforcement remains inactive; no runtime interception, command blocking, provider calls, Evidence/EVEidence writes, hydration writes, storage movement, pruning/deletion execution, schema change, or renderer/UI work was added.
+
+HS139 verification:
+
+```powershell
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-enforcement-dry-run.js
+npm.cmd run verify:enforcement-dry-run
+npm.cmd run verify:command-authority
+npm.cmd run verify:service-registry
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:protected-terms
+```
+
+All listed HS139 commands passed. `verify:protected-terms` completed with warning-only discovery output and exit code 0.
+
+Overseer review:
+
+- `workspace/OverseerHS140-hs139-enforcement-classification-coverage-review.md`
+
 HS137 Dev implementation accepted.
 
 - Added read-only `storage.enforcement_dry_run.command_effect_map`.
@@ -199,4 +231,5 @@ All listed commands passed. `verify:protected-terms` completed with warning-only
 
 Complete:
 
+- `workspace/DevHS139-enforcement-classification-coverage.md`
 - `workspace/DevHS137-enforcement-dry-run-command-effect.md`

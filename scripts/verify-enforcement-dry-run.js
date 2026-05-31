@@ -1,6 +1,7 @@
 const path = require('node:path');
 const { openDatabase, migrate, closeDatabase } = require('../src/main/db/database');
 const { invokeServiceCommand, listServiceCommands } = require('../src/main/services/serviceRegistry');
+const { buildCommandCoverageReport } = require('../src/main/services/enforcementDryRunService');
 const { projectRoot } = require('../src/main/util/tempPaths');
 
 async function main() {
@@ -99,6 +100,8 @@ async function main() {
     verifyMissingStorage(missing);
     verifyBudgetHardLock(hardLock);
     verifyCommandRegistration();
+    verifyCoverageMetadata(ready);
+    verifyCoverageGapFailureSignal();
 
     console.log(JSON.stringify({
       status: 'enforcement dry-run command-effect map verified',
@@ -107,6 +110,7 @@ async function main() {
       sample_invalidated_acknowledgement: compactMap(invalidated),
       sample_missing_storage: compactMap(missing),
       sample_budget_hard_lock: compactMap(hardLock),
+      coverage: compactCoverage(ready),
       reason_codes: ready.reason_codes,
       boundary: ready.boundary
     }, null, 2));
@@ -141,6 +145,56 @@ function verifyReadOnlyMap(map) {
   assert(map.enforcement_state === 'not_implemented_readout_only', 'dry-run map should not implement enforcement');
   assert(map.commands.every((entry) => entry.enforcement_active === false), 'command entries should not activate enforcement');
   assert(map.effect_classes.every((entry) => entry.enforcement_active === false), 'effect entries should not activate enforcement');
+}
+
+function verifyCoverageMetadata(map) {
+  const registryCommands = listServiceCommands().map((entry) => entry.command);
+  assert(map.coverage.status === 'complete', `coverage should be complete; gaps: ${map.coverage.gap_commands.join(', ')}`);
+  assert(map.coverage.total_commands === registryCommands.length, 'coverage should count every service registry command');
+  assert(map.coverage.covered_commands === registryCommands.length, 'coverage should cover every service registry command');
+  assert(map.coverage.gap_commands.length === 0, 'coverage should not report gaps');
+  for (const commandName of registryCommands) {
+    assert(command(map, commandName), `${commandName} should have a dry-run classification row`);
+  }
+
+  assert(command(map, 'actor.watch').runtime_context === 'scheduled_or_direct_watch_collection', 'actor.watch should be classified as Watch collection');
+  assert(command(map, 'system.radius.watch').runtime_context === 'scheduled_or_direct_watch_collection', 'system.radius.watch should be classified as Watch collection');
+  assert(command(map, 'watch.executor.arm').runtime_context === 'background_watch_dispatch', 'watch.executor.arm should be classified as background Watch dispatch');
+  assert(command(map, 'watch.executor.tick').runtime_context === 'background_watch_dispatch', 'watch.executor.tick should be classified as background Watch dispatch');
+  assert(map.coverage.scheduled_background_watch_commands.includes('watch.executor.tick'), 'coverage summary should expose background Watch commands');
+
+  for (const commandName of ['manual.discovery', 'manual.expansion', 'actor.watch', 'system.radius.watch', 'watch.executor.arm', 'watch.executor.tick', 'metadata.hydration', 'sde.build-lookups']) {
+    assert(command(map, commandName).external_io_dependency !== 'none', `${commandName} should declare External I/O dependency separately`);
+    assert(map.coverage.provider_or_external_io_commands.includes(commandName), `${commandName} should appear in provider/external I/O coverage summary`);
+  }
+  assert(command(map, 'manual.discovery').storage_action_class === 'zkill_discovery', 'manual.discovery should map to zKill discovery storage/action class');
+  assert(command(map, 'manual.expansion').storage_action_class === 'esi_evidence_expansion', 'manual.expansion should map to ESI evidence expansion storage/action class');
+  assert(command(map, 'metadata.hydration').storage_action_class === 'fast_view_metadata_hydration', 'metadata.hydration should map to fast hydration storage/action class');
+  assert(command(map, 'sde.build-lookups').storage_action_class === 'background_hydration', 'sde.build-lookups should map to background hydration storage/action class');
+
+  for (const commandName of ['storage.authority_config.write_proof', 'storage.authority_config.acknowledgement_persistence_proof']) {
+    assert(command(map, commandName).enforcement_status === 'fixture_only_non_production', `${commandName} should be fixture-only/non-production`);
+    assert(map.coverage.fixture_only_commands.includes(commandName), `${commandName} should appear in fixture-only coverage summary`);
+  }
+  assert(command(map, 'storage.enforcement_dry_run.command_effect_map').enforcement_status === 'read_only_non_enforcing_proof', 'dry-run command should identify itself as a non-enforcing proof');
+  assert(command(map, 'storage.enforcement_dry_run.command_effect_map').enforcement_active === false, 'dry-run command should keep enforcement inactive');
+}
+
+function verifyCoverageGapFailureSignal() {
+  const commands = [
+    ...listServiceCommands(),
+    {
+      command: 'fixture.unclassified.command',
+      classification: 'metadata-only',
+      effects: ['local-data-mutation'],
+      renderer_allowed: false,
+      authority: { confirmation_required: false },
+      description: 'fixture command used to prove coverage gap behavior'
+    }
+  ];
+  const coverage = buildCommandCoverageReport(commands);
+  assert(coverage.status === 'gaps', 'coverage report should expose missing classifications');
+  assert(coverage.gap_commands.includes('fixture.unclassified.command'), 'coverage report should name missing service command classifications');
 }
 
 function verifyReadyState(map) {
@@ -227,6 +281,18 @@ function compactMap(map) {
     hydration: command(map, 'metadata.hydration').decision,
     snapshot_support: command(map, 'runtime.db_snapshot.create').decision,
     pruning_execution: effect(map, 'pruning_deletion_execution').decision
+  };
+}
+
+function compactCoverage(map) {
+  return {
+    status: map.coverage.status,
+    total_commands: map.coverage.total_commands,
+    covered_commands: map.coverage.covered_commands,
+    gap_commands: map.coverage.gap_commands,
+    provider_or_external_io_commands: map.coverage.provider_or_external_io_commands,
+    fixture_only_commands: map.coverage.fixture_only_commands,
+    scheduled_background_watch_commands: map.coverage.scheduled_background_watch_commands
   };
 }
 

@@ -35,7 +35,7 @@ Milestone: Atlas Storage And Runtime Hardening
 
 Current state:
 
-- HS137 enforcement dry-run command/effect map accepted
+- HS139 enforcement classification coverage accepted
 - no active Dev runway is open
 - current executor is Overseer / Human discussion
 
@@ -77,6 +77,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS136 accepted HS135 after Overseer correction: `storage.authority_config.acknowledgement_persistence_proof` now proves app-local fallback acknowledgement memory, rejects selected-storage input, proves invalidation/missing-budget behavior, remains non-renderer eligible, and does not create the real project-root config file.
 - HS137 opened an enforcement dry-run command/effect map: read-only allow/block/conditional decisions before any runtime interception or command blocking.
 - HS138 accepted HS137: `storage.enforcement_dry_run.command_effect_map` now proves representative command/effect allow, block, and conditional posture from storage gate state and service metadata while leaving runtime enforcement inactive.
+- HS139/HS140 closed the HS138 coverage gap: every current `serviceRegistry` command now has enforcement classification metadata or explicit fixture/non-production posture, and the dry-run verifier exposes missing classifications as gaps.
 
 ## Accepted Boundaries
 
