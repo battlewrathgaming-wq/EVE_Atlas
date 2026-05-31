@@ -35,9 +35,10 @@ Milestone: Atlas Storage And Runtime Hardening
 
 Current state:
 
-- active Dev runway opened for HS144
-- current executor is Dev
-- next work is Hydration backlog preview, not hydration execution
+- HS144 accepted
+- no active Dev runway is open
+- current executor is Human / Overseer shaping
+- next work should remain one bounded storage/runtime hardening seam
 
 Current heading:
 
@@ -48,9 +49,9 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Review HS144 Hydration backlog preview when Dev returns.
-2. Real enforcement design discussion using composed gate state.
-3. Support-artifact path authority review if Human wants to stay on security hardening.
+1. Real enforcement design discussion using composed gate state.
+2. Support-artifact path authority review if Human wants to stay on security hardening.
+3. Hydration execution policy shaping from the accepted backlog preview.
 
 See `workspace/current.md` for current truth.
 
@@ -82,6 +83,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS142 opened the External I/O held-state proof runway: provider-capable work should read as held when External I/O is off, local-only work should stay available, and re-enable must not imply catch-up flooding.
 - HS143 accepted HS142: `support.gate_stack_readout` now proves External I/O held-state composition as read-only posture while keeping live.gate, Watch arming, storage safety, active task, and confirmation gates separate.
 - HS144 opened a Hydration backlog preview runway: understand missing readability metadata from local records without provider calls, hydration writes, persisted queues, schema changes, or UI work.
+- HS145 accepted HS144: `metadata.hydration_backlog.preview` now proves read-only local Hydration backlog shape, separates Evidence/EVEidence from readability metadata, separates local SDE gaps from provider-needed labels, and keeps External I/O held state as non-failure.
 
 ## Accepted Boundaries
 

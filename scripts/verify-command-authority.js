@@ -19,6 +19,8 @@ async function main() {
     assert(!commands.get('manual.discovery')?.effects.includes('evidence-creation'), 'manual.discovery must not claim evidence creation');
     assert(commands.get('manual.expansion')?.effects.includes('evidence-creation'), 'manual.expansion should declare evidence creation');
     assert(commands.get('metadata.hydration')?.effects.includes('metadata-readability'), 'metadata.hydration should declare readability metadata effect');
+    assert(commands.get('metadata.hydration_backlog.preview')?.classification === 'read-only', 'metadata.hydration_backlog.preview should be read-only');
+    assert(commands.get('metadata.hydration_backlog.preview')?.effects.includes('read-only'), 'metadata.hydration_backlog.preview should declare read-only effect');
     assert(commands.get('runtime.db_snapshot.create')?.effects.includes('support-artifact'), 'snapshot create should declare support artifact effect');
     assert(commands.get('support.debug_trace_pack')?.effects.includes('support-artifact'), 'trace pack should declare support artifact effect');
     assert(commands.get('storage.authority_preflight')?.classification === 'read-only', 'storage authority preflight should be read-only');

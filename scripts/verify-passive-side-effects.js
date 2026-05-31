@@ -95,6 +95,7 @@ async function verifySeededDb(root) {
         entityId: 98000002,
         entityName: 'Signal Cartel Test'
       })],
+      ['metadata.hydration_backlog.preview', () => invokeServiceCommand('metadata.hydration_backlog.preview', {}, context)],
       ['runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],
       ['storage.authority_preflight', () => invokeServiceCommand('storage.authority_preflight', {}, context)],
       ['storage.setup_gate_readout', () => invokeServiceCommand('storage.setup_gate_readout', {}, context)],
@@ -133,6 +134,7 @@ async function verifyEmptyDb(root) {
       ['empty queue.selection', () => invokeServiceCommand('queue.selection', { maxExpansions: 1 }, context)],
       ['empty watch.schedule', () => invokeServiceCommand('watch.schedule', {}, context)],
       ['empty task.list', () => invokeServiceCommand('task.list', { limit: 5 }, context)],
+      ['empty metadata.hydration_backlog.preview', () => invokeServiceCommand('metadata.hydration_backlog.preview', {}, context)],
       ['empty runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],
       ['empty storage.authority_preflight', () => invokeServiceCommand('storage.authority_preflight', {}, context)],
       ['empty storage.setup_gate_readout', () => invokeServiceCommand('storage.setup_gate_readout', {}, context)],

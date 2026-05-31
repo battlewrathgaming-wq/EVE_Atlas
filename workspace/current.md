@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Active Dev runway for HS144 Hydration backlog preview
+Status: HS144 Hydration backlog preview accepted; project resting before next hardening seam
 Last updated: 2026-05-31
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: prove a read-only Hydration backlog preview from local records without provider calls, hydration writes, queues, or schema changes.
+Current focus: Hydration backlog preview accepted as read-only local data understanding; no active Dev runway is open.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Human / Overseer shaping
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS144-hydration-backlog-preview.md
+none
 ```
 
 ## Current State
 
-HS142 is accepted. HS144 is open.
+HS142 and HS144 are accepted. The project is resting before the next bounded hardening seam.
 
 Accepted Human decisions:
 
@@ -99,7 +99,19 @@ Recent accepted state:
 
 ## Active Runway
 
-Dev should implement a bounded read-only Hydration backlog preview.
+No active Dev runway.
+
+Next suitable seams, when Human chooses:
+
+1. Real enforcement design discussion using composed gate state.
+2. Support-artifact path authority review.
+3. Hydration execution policy shaping from the accepted backlog preview.
+
+Do not open Dev work until the next seam is deliberately selected.
+
+## Last Runway Accepted
+
+HS144 implemented a bounded read-only Hydration backlog preview.
 
 Source of intent:
 
@@ -192,15 +204,47 @@ Run `node --check` on any new or changed JavaScript files.
 
 ## Evidence
 
-HS144 opens from the accepted hydration contract, acquisition/hydration clock model, and HS101 local lookup audit.
+HS144 Dev implementation accepted.
 
-Dev should replace this section with concise proof evidence after implementation.
+- Added read-only `metadata.hydration_backlog.preview`.
+- Preview derives missing readability labels from local `activity_events`, `entities`, local SDE lookup tables, Watch/discovery route hints, assessment interest context, and recent `metadata_runs`.
+- Distinguishes locally known labels from provider-needed entity labels.
+- Distinguishes local SDE/type/system lookup gaps from provider-needed ESI name labels.
+- Separates Hydration from Evidence/EVEidence creation and Discovery refs.
+- Groups representative candidates into `view_local_record`, `watch_background`, `target_report_scoped`, and `corpus_hygiene_low_priority` lanes.
+- Shows External I/O posture for future provider-backed hydration: off means `held_by_external_io`, not failure; on means release to normal gates, not catch-up flood.
+- Boundary preserved: no ESI/zKill/SDE provider calls, no hydration writes, no Evidence/EVEidence writes, no Discovery ref mutation, no queue or persisted backlog, no schema change, no UI work.
+
+HS144 verification:
+
+```powershell
+node --check src\main\services\hydrationBacklogPreviewService.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-hydration-backlog-preview.js
+npm.cmd run verify:hydration-backlog-preview
+npm.cmd run verify:hydration
+npm.cmd run verify:metadata-status
+npm.cmd run verify:metadata-lookup
+npm.cmd run verify:actor-metadata
+npm.cmd run verify:corporation-metadata
+npm.cmd run verify:gate-stack-readout
+npm.cmd run verify:enforcement-dry-run
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:protected-terms
+```
+
+All listed commands passed. `verify:protected-terms` completed with warning-only discovery output and exit code 0.
+
+Overseer review:
+
+- `workspace/OverseerHS145-hs144-hydration-backlog-preview-review.md`
 
 ## Dev Handoff
 
-Pending Dev handoff.
-
-Expected:
+Completed handoff:
 
 - `workspace/DevHS144-hydration-backlog-preview.md`
 

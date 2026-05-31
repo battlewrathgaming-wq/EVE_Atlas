@@ -34,6 +34,7 @@ const {
 } = require('./runtimeSnapshotService');
 const { buildGateStackReadout } = require('./gateStackReadoutService');
 const { buildEnforcementDryRunCommandEffectMap } = require('./enforcementDryRunService');
+const { buildHydrationBacklogPreview } = require('./hydrationBacklogPreviewService');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
 const {
   buildStorageAuthorityConfigWriteProof,
@@ -132,6 +133,16 @@ const COMMANDS = {
     authority: confirmationAuthority(CONFIRMATION.METADATA_HYDRATION, 'Metadata hydration calls ESI names and updates readability labels only.'),
     description: 'Hydrate report-scoped entity labels through ESI names',
     handler: ({ db, payload, ...context }) => runMetadataHydrationService(db, payload, context)
+  },
+  'metadata.hydration_backlog.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview local hydration readability backlog without provider calls, writes, queues, or schema changes',
+    handler: ({ db, payload, ...context }) => buildHydrationBacklogPreview(db, payload, {
+      ...context,
+      commandMetadata: listServiceCommands()
+    })
   },
   'sde.import.topology': {
     classification: 'exclusive',

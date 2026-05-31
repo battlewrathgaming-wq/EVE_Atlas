@@ -37,6 +37,7 @@ async function main() {
     const actorWatchCommand = commands.find((entry) => entry.command === 'actor.watch');
     const systemRadiusWatchCommand = commands.find((entry) => entry.command === 'system.radius.watch');
     const metadataHydrationCommand = commands.find((entry) => entry.command === 'metadata.hydration');
+    const hydrationBacklogPreviewCommand = commands.find((entry) => entry.command === 'metadata.hydration_backlog.preview');
     const sdeBuildLookupsCommand = commands.find((entry) => entry.command === 'sde.build-lookups');
     const watchCreateCommand = commands.find((entry) => entry.command === 'watch.create');
     const watchListCommand = commands.find((entry) => entry.command === 'watch.list');
@@ -85,6 +86,9 @@ async function main() {
     assert(actorWatchCommand?.classification === 'evidence-creating', 'actor.watch should be evidence-creating');
     assert(systemRadiusWatchCommand?.classification === 'evidence-creating', 'system.radius.watch should be evidence-creating');
     assert(metadataHydrationCommand?.classification === 'metadata-only', 'metadata.hydration should be metadata-only');
+    assert(hydrationBacklogPreviewCommand?.classification === 'read-only', 'metadata.hydration_backlog.preview should be read-only');
+    assert(hydrationBacklogPreviewCommand?.effects.includes('read-only'), 'metadata.hydration_backlog.preview should declare read-only effect');
+    assert(hydrationBacklogPreviewCommand?.renderer_allowed === true, 'metadata.hydration_backlog.preview should be renderer eligible');
     assert(sdeBuildLookupsCommand?.classification === 'exclusive', 'sde.build-lookups should be exclusive');
     assert(watchCreateCommand?.classification === 'metadata-only', 'watch.create should be metadata-only');
     assert(watchListCommand?.classification === 'read-only', 'watch.list should be read-only');
@@ -133,6 +137,14 @@ async function main() {
     });
     assert(enforcementDryRun.read_only === true, 'enforcement dry-run map should be read-only');
     assert(enforcementDryRun.enforcement_active === false, 'enforcement dry-run map should not activate enforcement');
+
+    const hydrationBacklog = await invokeServiceCommand('metadata.hydration_backlog.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(hydrationBacklog.read_only === true, 'hydration backlog preview should be read-only');
+    assert(hydrationBacklog.provider_calls === 0, 'hydration backlog preview should not call providers');
+    assert(hydrationBacklog.hydration_writes === 0, 'hydration backlog preview should not write hydration output');
 
     const gateStack = await invokeServiceCommand('support.gate_stack_readout', {}, {
       db,

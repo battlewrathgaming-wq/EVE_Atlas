@@ -76,6 +76,7 @@
     "verify:hydration": "node scripts/verify-hydration.js",
     "verify:metadata-lookup": "node scripts/verify-metadata-lookup.js",
     "verify:metadata-status": "node scripts/verify-metadata-status.js",
+    "verify:hydration-backlog-preview": "node scripts/verify-hydration-backlog-preview.js",
     "verify:corpus-health": "node scripts/verify-corpus-health-report.js",
     "verify:bulk-synthetic": "node scripts/verify-bulk-synthetic.js",
     "verify:local-scale-smoke": "node scripts/verify-local-scale-smoke.js",
