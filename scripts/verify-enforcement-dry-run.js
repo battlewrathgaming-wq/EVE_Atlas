@@ -178,6 +178,9 @@ function verifyCoverageMetadata(map) {
   }
   assert(command(map, 'storage.enforcement_dry_run.command_effect_map').enforcement_status === 'read_only_non_enforcing_proof', 'dry-run command should identify itself as a non-enforcing proof');
   assert(command(map, 'storage.enforcement_dry_run.command_effect_map').enforcement_active === false, 'dry-run command should keep enforcement inactive');
+  assert(command(map, 'storage.composed_gate_policy.preview').runtime_context === 'composed_gate_policy_readout', 'composed gate policy should be classified as a readout');
+  assert(command(map, 'storage.composed_gate_policy.preview').enforcement_status === 'read_only_non_enforcing_proof', 'composed gate policy should identify itself as a non-enforcing proof');
+  assert(command(map, 'storage.composed_gate_policy.preview').external_io_dependency === 'none', 'composed gate policy should not declare External I/O dependency');
   assert(command(map, 'support.artifact_path_authority.preview').runtime_context === 'support_artifact_path_authority_readout', 'support artifact path authority should be classified as a readout');
   assert(command(map, 'support.artifact_path_authority.preview').enforcement_status === 'covered_read_only', 'support artifact path authority should be covered as read-only');
   assert(command(map, 'support.artifact_path_authority.preview').external_io_dependency === 'none', 'support artifact path authority should not declare External I/O dependency');

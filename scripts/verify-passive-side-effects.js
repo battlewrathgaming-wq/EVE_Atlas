@@ -100,6 +100,7 @@ async function verifySeededDb(root) {
       ['storage.authority_preflight', () => invokeServiceCommand('storage.authority_preflight', {}, context)],
       ['storage.setup_gate_readout', () => invokeServiceCommand('storage.setup_gate_readout', {}, context)],
       ['storage.enforcement_dry_run.command_effect_map', () => invokeServiceCommand('storage.enforcement_dry_run.command_effect_map', {}, context)],
+      ['storage.composed_gate_policy.preview', () => invokeServiceCommand('storage.composed_gate_policy.preview', {}, context)],
       ['support.gate_stack_readout', () => invokeServiceCommand('support.gate_stack_readout', {}, context)],
       ['support.artifact_path_authority.preview', () => invokeServiceCommand('support.artifact_path_authority.preview', {}, context)],
       ['task.list', () => invokeServiceCommand('task.list', { limit: 10 }, context)],
@@ -140,6 +141,7 @@ async function verifyEmptyDb(root) {
       ['empty storage.authority_preflight', () => invokeServiceCommand('storage.authority_preflight', {}, context)],
       ['empty storage.setup_gate_readout', () => invokeServiceCommand('storage.setup_gate_readout', {}, context)],
       ['empty storage.enforcement_dry_run.command_effect_map', () => invokeServiceCommand('storage.enforcement_dry_run.command_effect_map', {}, context)],
+      ['empty storage.composed_gate_policy.preview', () => invokeServiceCommand('storage.composed_gate_policy.preview', {}, context)],
       ['empty support.gate_stack_readout', () => invokeServiceCommand('support.gate_stack_readout', {}, context)],
       ['empty support.artifact_path_authority.preview', () => invokeServiceCommand('support.artifact_path_authority.preview', {}, context)],
       ['empty assessment.list', () => invokeServiceCommand('assessment.list', {}, context)]

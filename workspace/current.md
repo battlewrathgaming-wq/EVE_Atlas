@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Active Dev runway for HS148 Composed gate enforcement policy preview
+Status: HS148 accepted; project resting before next hardening seam
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: prove a read-only composed gate policy preview before any runtime enforcement or command blocking exists.
+Current focus: rest after accepting the read-only composed gate policy preview; select the next bounded hardening seam deliberately.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Human / Overseer shaping
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS148-composed-gate-policy.md
+None. No active Dev handoff is expected.
 ```
 
 ## Current State
 
-HS142, HS144, and HS146 are accepted. HS148 is open as the next bounded hardening seam.
+HS142, HS144, HS146, and HS148 are accepted. No active Dev runway is open.
 
 Accepted Human decisions:
 
@@ -61,6 +61,7 @@ Atlas has accepted storage/runtime hardening proofs:
 - complete enforcement classification coverage for all current service commands
 - read-only External I/O held-state proof through `support.gate_stack_readout`
 - read-only support-artifact path authority proof through `support.artifact_path_authority.preview`
+- read-only composed gate policy proof through `storage.composed_gate_policy.preview`
 
 Recent accepted state:
 
@@ -91,6 +92,8 @@ Recent accepted state:
 - `workspace/OverseerHS146-support-artifact-path-authority-runway.md`
 - `workspace/OverseerHS147-hs146-support-artifact-path-authority-review.md`
 - `workspace/OverseerHS148-composed-gate-enforcement-policy-runway.md`
+- `workspace/DevHS148-composed-gate-policy.md`
+- `workspace/OverseerHS149-hs148-composed-gate-policy-review.md`
 
 ## Accepted Boundaries
 
@@ -106,30 +109,15 @@ Recent accepted state:
 
 ## Active Runway
 
-Dev should implement a bounded read-only composed gate policy preview.
+No active Dev runway.
 
-Source of intent:
+Resting choices for the next hardening seam:
 
-- Human direction: continue down the memory lane with composed gate enforcement design.
-- `workspace/SecuritySafetyAuditHS140-enforcement-classification-posture.md`
-- `workspace/OverseerHS141-security-audit-hs140-review.md`
-- `workspace/OverseerHS143-hs142-external-io-held-state-review.md`
-- `workspace/OverseerHS147-hs146-support-artifact-path-authority-review.md`
-- `docs/current-state/current-storage-runtime-hardening.md`
-- `workspace/OverseerHS148-composed-gate-enforcement-policy-runway.md`
+1. Snapshot/trace-pack creation enforcement policy, if staying on support artifacts.
+2. Hydration execution policy shaping, if moving toward controlled readability repair.
+3. First runtime enforcement design packet, only after explicit Human/Overseer selection.
 
-Ordered steps:
-
-1. Inspect service registry, enforcement dry-run, storage setup gate/action matrix, gate-stack readout, support artifact path authority preview, live gate, task/watch command metadata, and existing verification.
-2. Add a read-only composed gate policy preview command/readout.
-3. Keep `would_allow` separate from runtime authorization; label it as one input only.
-4. Add representative composed gate rows and reason codes.
-5. Include representative families: local read/report/preflight, Assessment/Watch metadata writes, zKill Discovery, ESI Evidence/EVEidence expansion, Hydration writes, SDE import/download, snapshot creation, trace-pack creation, pruning/deletion, runtime control/task cancellation, fixture-only proofs, and unknown/unclassified command example.
-6. Mark or split overly broad classes in the preview where needed.
-7. Include unknown/unclassified future command posture as fail-closed policy intent without implementing runtime fail-closed behavior.
-8. Add focused offline verification proving no runtime interception, no command blocking, no provider calls, no filesystem writes, no DB mutations, and no schema changes.
-9. Add command-authority, service-registry, enforcement dry-run, and passive side-effect coverage as needed.
-10. Update Evidence / Dev Handoff and create the expected DevHS file.
+Do not open Dev work until the next seam is selected.
 
 ## Last Runway Accepted
 
@@ -276,15 +264,54 @@ Run `node --check` on any new or changed JavaScript files.
 
 ## Evidence
 
-HS148 opened from accepted security/enforcement breadcrumbs.
+HS148 Dev implementation completed.
 
-Dev should replace this section with concise proof evidence after implementation.
+- Added read-only `storage.composed_gate_policy.preview`.
+- Preview composes existing service metadata, enforcement dry-run coverage, storage setup/action matrix, External I/O gate-stack readout, live/API gate posture, confirmation metadata, Watch/task posture, and support-artifact path authority.
+- Preview includes 15 representative rows: local read/report/preflight, Assessment local metadata write, Watch local metadata write, zKill Discovery, ESI Evidence/EVEidence expansion, Hydration write, SDE local import/rewrite, SDE download/build, runtime snapshot creation, trace-pack creation, pruning/deletion preflight, pruning/deletion execution, runtime control/task cancellation, fixture-only proof command, and unknown/unclassified future command.
+- `would_allow` is explicitly labeled as dry-run input only and not runtime authorization.
+- Unknown/unclassified future command posture is represented as future fail-closed policy intent while remaining inactive.
+- Broad classes are marked for future splitting: `setup_config_changes`, `background_hydration`, and `snapshot_support_artifact_write`.
+- Confirmation tokens remain UX/operator-friction metadata, not security secrets or authorization authority.
+- Focused verifier proves no runtime interception, command blocking, provider calls, filesystem writes, DB table mutations, or schema changes.
+- Added command/service/enforcement/passive-side-effect coverage for the new read-only command.
+- Boundary preserved: no runtime enforcement, command interception/blocking, provider calls, storage config writes, support artifact creation, snapshot/trace-pack creation, cleanup/delete/prune/restore/move/copy/migration/upload, Evidence/EVEidence writes, Hydration writes, schema changes, or UI/renderer redesign.
+
+HS148 verification:
+
+```powershell
+node --check src\main\services\composedGatePolicyService.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-composed-gate-policy.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-passive-side-effects.js
+node --check scripts\verify-enforcement-dry-run.js
+npm.cmd run verify:support-artifact-path-authority
+npm.cmd run verify:composed-gate-policy
+npm.cmd run verify:storage-authority-preflight
+npm.cmd run verify:storage-setup-gate
+npm.cmd run verify:hydration
+npm.cmd run verify:metadata-status
+npm.cmd run verify:metadata-lookup
+npm.cmd run verify:actor-metadata
+npm.cmd run verify:corporation-metadata
+npm.cmd run verify:gate-stack-readout
+npm.cmd run verify:enforcement-dry-run
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:protected-terms
+git diff --check
+git status --short --branch
+```
+
+All listed commands passed. `verify:protected-terms` completed with warning-only discovery output and exit code 0. `git diff --check` passed with line-ending warnings only. `git status --short --branch` showed `main...origin/main [ahead 25]` plus the HS148 working-tree changes.
 
 ## Dev Handoff
 
-Pending Dev handoff.
-
-Expected:
+Completed Dev handoff:
 
 - `workspace/DevHS148-composed-gate-policy.md`
 

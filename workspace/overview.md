@@ -1,7 +1,7 @@
 # AURA Atlas Workspace Overview
 
 Status: Active breadcrumb map
-Last reviewed: 2026-05-31
+Last reviewed: 2026-06-01
 
 ## Vision Statement
 
@@ -35,10 +35,10 @@ Milestone: Atlas Storage And Runtime Hardening
 
 Current state:
 
-- HS146 accepted
-- active Dev runway opened for HS148
-- current executor is Dev
-- next work is Composed gate enforcement policy preview, not runtime enforcement
+- HS148 accepted
+- no active Dev runway
+- current executor is Human / Overseer shaping
+- next work should select one bounded hardening seam, not open runtime enforcement by default
 
 Current heading:
 
@@ -49,9 +49,9 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Review HS148 Composed gate enforcement policy preview when Dev returns.
-2. Snapshot/trace-pack creation enforcement policy if Human wants to stay on support artifacts.
-3. Hydration execution policy shaping from the accepted backlog preview.
+1. Snapshot/trace-pack creation enforcement policy if Human wants to stay on support artifacts.
+2. Hydration execution policy shaping from the accepted backlog preview.
+3. First runtime enforcement design packet only after explicit Human/Overseer selection.
 
 See `workspace/current.md` for current truth.
 
@@ -87,6 +87,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS146 opened a Support artifact path authority inventory runway: classify snapshots, trace packs, logs, temp/cache, SDE/import material, and related support artifacts by path authority, budget posture, External I/O relevance, cleanup stage, renderer safety, and sensitivity without creating or deleting files.
 - HS147 accepted HS146: `support.artifact_path_authority.preview` now proves read-only support-artifact path authority, separates operational support from corpus-adjacent support, classifies cache by origin, splits rolling and retained snapshot posture, and ignores renderer-forged path claims.
 - HS148 opened a Composed gate enforcement policy preview runway: define how storage, External I/O, live/provider cadence, Watch arming, active task, confirmation, destination/path authority, command classification, and trusted context would compose before any runtime command blocking exists.
+- HS149 accepted HS148: `storage.composed_gate_policy.preview` now proves composed gate policy posture as a read-only preview, keeps `would_allow` as input only, marks unknown/unclassified future commands as inactive fail-closed policy intent, and leaves runtime enforcement unimplemented.
 
 ## Accepted Boundaries
 

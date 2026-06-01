@@ -52,6 +52,7 @@ async function main() {
     const storageAuthorityConfigWriteCommand = commands.find((entry) => entry.command === 'storage.authority_config.write_proof');
     const storageAcknowledgementPersistenceCommand = commands.find((entry) => entry.command === 'storage.authority_config.acknowledgement_persistence_proof');
     const enforcementDryRunCommand = commands.find((entry) => entry.command === 'storage.enforcement_dry_run.command_effect_map');
+    const composedGatePolicyCommand = commands.find((entry) => entry.command === 'storage.composed_gate_policy.preview');
     const gateStackReadoutCommand = commands.find((entry) => entry.command === 'support.gate_stack_readout');
     const supportArtifactPathAuthorityCommand = commands.find((entry) => entry.command === 'support.artifact_path_authority.preview');
     const snapshotSettingsGetCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.get');
@@ -107,6 +108,8 @@ async function main() {
     assert(storageAcknowledgementPersistenceCommand?.renderer_allowed === false, 'storage acknowledgement persistence proof should not be renderer eligible');
     assert(enforcementDryRunCommand?.classification === 'read-only', 'enforcement dry-run map should be read-only');
     assert(enforcementDryRunCommand?.renderer_allowed === true, 'enforcement dry-run map should be renderer eligible');
+    assert(composedGatePolicyCommand?.classification === 'read-only', 'composed gate policy preview should be read-only');
+    assert(composedGatePolicyCommand?.renderer_allowed === true, 'composed gate policy preview should be renderer eligible');
     assert(gateStackReadoutCommand?.classification === 'read-only', 'gate stack readout should be read-only');
     assert(supportArtifactPathAuthorityCommand?.classification === 'read-only', 'support artifact path authority should be read-only');
     assert(supportArtifactPathAuthorityCommand?.renderer_allowed === true, 'support artifact path authority should be renderer eligible');
@@ -140,6 +143,14 @@ async function main() {
     });
     assert(enforcementDryRun.read_only === true, 'enforcement dry-run map should be read-only');
     assert(enforcementDryRun.enforcement_active === false, 'enforcement dry-run map should not activate enforcement');
+
+    const composedGatePolicy = await invokeServiceCommand('storage.composed_gate_policy.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(composedGatePolicy.read_only === true, 'composed gate policy preview should be read-only');
+    assert(composedGatePolicy.enforcement_active === false, 'composed gate policy preview should not activate enforcement');
+    assert(composedGatePolicy.authorization_semantics.would_allow_is_authorization === false, 'composed gate policy should not treat would_allow as authorization');
 
     const hydrationBacklog = await invokeServiceCommand('metadata.hydration_backlog.preview', {}, {
       db,

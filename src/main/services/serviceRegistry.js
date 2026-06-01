@@ -34,6 +34,7 @@ const {
 } = require('./runtimeSnapshotService');
 const { buildGateStackReadout } = require('./gateStackReadoutService');
 const { buildEnforcementDryRunCommandEffectMap } = require('./enforcementDryRunService');
+const { buildComposedGatePolicyPreview } = require('./composedGatePolicyService');
 const { buildHydrationBacklogPreview } = require('./hydrationBacklogPreviewService');
 const { buildSupportArtifactPathAuthorityPreview } = require('./supportArtifactPathAuthorityService');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
@@ -394,6 +395,16 @@ const COMMANDS = {
     renderer: true,
     description: 'Read dry-run allow/block/conditional command-effect posture without enforcing runtime command blocking',
     handler: ({ payload, ...context }) => buildEnforcementDryRunCommandEffectMap(payload, {
+      ...context,
+      commandMetadata: listServiceCommands()
+    })
+  },
+  'storage.composed_gate_policy.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview future composed gate policy inputs without runtime authorization, interception, or blocking',
+    handler: ({ db, payload, ...context }) => buildComposedGatePolicyPreview(db, payload, {
       ...context,
       commandMetadata: listServiceCommands()
     })

@@ -1,6 +1,6 @@
 # Current State: Storage And Runtime Hardening
 
-Date: 2026-05-27
+Date: 2026-06-01
 Status: Current milestone summary
 
 ## Purpose
@@ -32,6 +32,7 @@ Accepted proof surfaces:
 - `support.gate_stack_readout`
 - `metadata.hydration_backlog.preview`
 - `support.artifact_path_authority.preview`
+- `storage.composed_gate_policy.preview`
 
 Accepted shape:
 
@@ -44,11 +45,12 @@ Accepted shape:
 - External I/O re-enable releases work only to normal cadence/provider/storage/confirmation gates and must not create catch-up flooding
 - Hydration backlog preview is read-only local data understanding: it distinguishes provider-needed labels, known local labels, and local SDE gaps without writing hydration output or creating a persisted queue
 - Support artifact path authority preview is read-only local trust posture: it classifies snapshots, trace packs, logs, temp/cache, SDE/import material, and fixture proof artifacts without creating, deleting, moving, packaging, or uploading files
+- Composed gate policy preview is read-only enforcement policy understanding: it composes service command classification, storage authority, budget posture, External I/O, live/provider gate, cadence/rate safety, Watch arming, active task/duplicate prevention, confirmation UX, destination/path authority, and trusted-context posture without making runtime authorization active
 
 Current resting state:
 
 - no active Dev runway is open
-- future runtime enforcement still needs composed gate-state policy before command blocking
+- future runtime enforcement now has composed gate-state preview evidence, but still needs an explicit implementation/design runway before command blocking
 - future Hydration execution still needs a dedicated runway before provider calls or writes
 - support artifact creation, snapshot creation, trace-pack creation, cleanup, and pruning/deletion remain separate future seams
 
