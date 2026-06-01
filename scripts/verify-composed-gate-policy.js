@@ -90,6 +90,7 @@ function verifyRepresentativeRows(preview) {
     'runtime_snapshot_creation',
     'trace_pack_creation',
     'support_artifact_creation_policy_readout',
+    'runtime_enforcement_boundary_readout',
     'pruning_deletion_preflight',
     'pruning_deletion_execution',
     'runtime_control_task_cancel',
@@ -115,6 +116,8 @@ function verifyRepresentativeRows(preview) {
   assert(row(preview, 'trace_pack_creation').gates.destination_path_authority.reason === 'trace_pack_destination_authority_required', 'trace pack creation should require destination authority');
   assert(row(preview, 'support_artifact_creation_policy_readout').effects_classification_basis.runtime_context === 'support_artifact_creation_policy_readout', 'support artifact creation policy should be represented as a readout');
   assert(row(preview, 'support_artifact_creation_policy_readout').gates.external_io.state === 'not_applicable', 'support artifact creation policy readout should not require External I/O');
+  assert(row(preview, 'runtime_enforcement_boundary_readout').effects_classification_basis.runtime_context === 'runtime_enforcement_boundary_readout', 'runtime enforcement boundary should be represented as a readout');
+  assert(row(preview, 'runtime_enforcement_boundary_readout').gates.external_io.state === 'not_applicable', 'runtime enforcement boundary readout should not require External I/O');
   assert(row(preview, 'pruning_deletion_preflight').effects_classification_basis.storage_action_class === 'pruning_deletion_preflight', 'retention preflight should have preflight class');
   assert(row(preview, 'pruning_deletion_execution').effects_classification_basis.storage_action_class === 'pruning_deletion_execution', 'retention action definitions should expose future deletion class');
   assert(row(preview, 'runtime_control_task_cancel').gates.confirmation_ux.reason === 'confirmation_ux_required_not_security_secret', 'task cancel should preserve confirmation UX posture');

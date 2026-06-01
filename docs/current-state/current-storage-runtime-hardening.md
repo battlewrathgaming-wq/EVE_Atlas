@@ -42,6 +42,7 @@ Accepted proof surfaces:
 - `storage.authority_config.write`
 - `metadata.hydration_write_fixture_proof`
 - `support.artifact_creation_policy.preview`
+- `runtime.enforcement_boundary.preview`
 
 Accepted shape:
 
@@ -61,11 +62,12 @@ Accepted shape:
 - Storage authority real operator config is app-local trust posture: trusted context can write/read `<Atlas app/root>/config/storage-authority.json`, renderer code can only read safe posture, selected storage and app-local fallback storage remain distinct, `fallback_acknowledgement_needs_reconfirm` is visible, and 5GB is suggestion only rather than hidden acceptance
 - Hydration writer fixture proof is fixture/offline readability write posture: it patches activity-event label columns from existing local `entities`, records one `metadata_runs` proof row, keeps numeric IDs as facts, and leaves Evidence/EVEidence, Discovery refs, Watch state, queues, providers, schema, storage config, and renderer UI untouched
 - Support artifact creation policy preview is read-only creation posture: it classifies rolling snapshots, retained snapshots, operator debug trace packs, and future readiness/preflight export posture without creating artifacts, files, directories, providers, Evidence/EVEidence, Discovery mutations, Hydration writes, storage config writes, runtime enforcement, or UI work
+- Runtime enforcement boundary preview is read-only service-boundary posture: it proves a future insertion point in `invokeServiceCommand(command, payload, context)` after renderer eligibility and confirmation checks, before task wrapping and handler dispatch, while keeping `would_allow`, External I/O on, and unknown/unclassified fail-closed as non-authorizing preview/policy posture
 
 Current resting state:
 
 - no active Dev runway is open
-- future runtime enforcement now has composed gate-state preview evidence, but still needs an explicit implementation/design runway before command blocking
+- future runtime enforcement now has composed gate-state and service-boundary preview evidence, but still needs an explicit implementation/design runway before command blocking
 - future Hydration execution now has policy preview evidence, but still needs a dedicated write-capable or provider-capable runway before calls or writes
 - future real/operator Hydration writes now have fixture write proof evidence, but still need a dedicated runway before provider-backed or operator-real Hydration exists
 - real operator External I/O config is now supported as app-local operator posture, but runtime enforcement still needs a dedicated runway before command blocking or provider release behavior exists

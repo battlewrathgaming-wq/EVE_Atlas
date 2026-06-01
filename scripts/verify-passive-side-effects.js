@@ -123,6 +123,7 @@ async function verifySeededDb(root) {
       ['support.gate_stack_readout', () => invokeServiceCommand('support.gate_stack_readout', {}, context)],
       ['support.artifact_path_authority.preview', () => invokeServiceCommand('support.artifact_path_authority.preview', {}, context)],
       ['support.artifact_creation_policy.preview', () => invokeServiceCommand('support.artifact_creation_policy.preview', {}, context)],
+      ['runtime.enforcement_boundary.preview', () => invokeServiceCommand('runtime.enforcement_boundary.preview', {}, context)],
       ['task.list', () => invokeServiceCommand('task.list', { limit: 10 }, context)],
       ['assessment.list', () => invokeServiceCommand('assessment.list', {
         entityType: 'character',
@@ -179,6 +180,7 @@ async function verifyEmptyDb(root) {
       ['empty support.gate_stack_readout', () => invokeServiceCommand('support.gate_stack_readout', {}, context)],
       ['empty support.artifact_path_authority.preview', () => invokeServiceCommand('support.artifact_path_authority.preview', {}, context)],
       ['empty support.artifact_creation_policy.preview', () => invokeServiceCommand('support.artifact_creation_policy.preview', {}, context)],
+      ['empty runtime.enforcement_boundary.preview', () => invokeServiceCommand('runtime.enforcement_boundary.preview', {}, context)],
       ['empty assessment.list', () => invokeServiceCommand('assessment.list', {}, context)]
     ];
 

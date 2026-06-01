@@ -42,10 +42,10 @@ Current state:
 - HS156 accepted
 - HS158 accepted
 - HS160 accepted
-- HS162 open
-- current executor is Dev
-- active Dev runway is runtime enforcement boundary preview
-- current work is first enforcement-boundary proof, not active command blocking, artifact creation, provider-backed Hydration, or runtime enforcement activation
+- HS162 accepted
+- current executor is Human/Overseer shaping
+- no active Dev runway is open
+- current work is at a resting point after first enforcement-boundary proof; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
 
 Current heading:
 
@@ -56,11 +56,10 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Accept or redirect HS162 after Dev proves the runtime enforcement boundary preview.
-2. First active runtime enforcement slice only after explicit Human/Overseer acceptance.
-3. Actual support artifact creation hardening if continuing the snapshot/trace-pack lane.
-4. Real Hydration writer design or provider-backed Hydration gate, only after data-shape ambiguity is resolved.
-5. Storage setup UI/renderer posture later, not now.
+1. First active runtime enforcement slice only after explicit Human/Overseer acceptance.
+2. Actual support artifact creation hardening if continuing the snapshot/trace-pack lane.
+3. Real Hydration writer design or provider-backed Hydration gate, only after data-shape ambiguity is resolved.
+4. Storage setup UI/renderer posture later, not now.
 
 See `workspace/current.md` for current truth.
 
@@ -110,6 +109,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS160 opened a Support artifact creation policy preview runway: define read-only snapshot and trace-pack creation posture from accepted path authority, storage authority, budget, External I/O, command metadata, composed-gate, and enforcement dry-run state before any support artifacts are actually created.
 - HS161 accepted HS160: `support.artifact_creation_policy.preview` now proves read-only snapshot/trace-pack creation policy posture, renderer-forgery resistance, External I/O local-only behavior, and budget/path/confirmation/trusted-context classification before artifact creation exists.
 - HS162 opened a Runtime enforcement boundary preview runway: prove the service-command insertion point and representative composed decisions before any runtime command blocking or handler interception is activated.
+- HS163 accepted HS162: `runtime.enforcement_boundary.preview` now proves the future service-command enforcement insertion point after renderer eligibility and confirmation checks, before task wrapping/handler dispatch, while keeping `would_allow`, External I/O on, and unknown/unclassified fail-closed as non-authorizing preview/policy posture.
 
 ## Accepted Boundaries
 

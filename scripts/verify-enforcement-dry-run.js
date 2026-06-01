@@ -201,6 +201,9 @@ function verifyCoverageMetadata(map) {
   assert(command(map, 'support.artifact_creation_policy.preview').runtime_context === 'support_artifact_creation_policy_readout', 'support artifact creation policy should be classified as a readout');
   assert(command(map, 'support.artifact_creation_policy.preview').enforcement_status === 'covered_read_only', 'support artifact creation policy should be covered as read-only');
   assert(command(map, 'support.artifact_creation_policy.preview').external_io_dependency === 'none', 'support artifact creation policy should not declare External I/O dependency');
+  assert(command(map, 'runtime.enforcement_boundary.preview').runtime_context === 'runtime_enforcement_boundary_readout', 'runtime enforcement boundary should be classified as a readout');
+  assert(command(map, 'runtime.enforcement_boundary.preview').enforcement_status === 'read_only_non_enforcing_proof', 'runtime enforcement boundary should identify itself as a non-enforcing proof');
+  assert(command(map, 'runtime.enforcement_boundary.preview').external_io_dependency === 'none', 'runtime enforcement boundary should not declare External I/O dependency');
 }
 
 function verifyCoverageGapFailureSignal() {

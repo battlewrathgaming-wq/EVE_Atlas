@@ -25,6 +25,7 @@ const {
 const { buildQueueExpansionSelection } = require('./queueSelectionService');
 const { buildReportResponse } = require('./reportResponseService');
 const { buildRetentionPreflight, listRetentionActions } = require('./retentionActionService');
+const { buildRuntimeEnforcementBoundaryPreview } = require('./runtimeEnforcementBoundaryService');
 const { buildSdeLookupTables } = require('../sde/sdeLookupBuilder');
 const {
   buildRuntimeDbSnapshotPreflight,
@@ -465,6 +466,16 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview snapshot and trace-pack creation policy posture without creating support artifacts',
     handler: ({ payload, ...context }) => buildSupportArtifactCreationPolicyPreview(payload, {
+      ...context,
+      commandMetadata: listServiceCommands()
+    })
+  },
+  'runtime.enforcement_boundary.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview the service invocation enforcement boundary before task wrapping or handler dispatch',
+    handler: ({ db, payload, ...context }) => buildRuntimeEnforcementBoundaryPreview(db, payload, {
       ...context,
       commandMetadata: listServiceCommands()
     })

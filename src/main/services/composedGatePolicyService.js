@@ -17,6 +17,7 @@ const REPRESENTATIVE_ROWS = Object.freeze([
   rowSpec('runtime_snapshot_creation', 'runtime.db_snapshot.create', 'Runtime snapshot creation'),
   rowSpec('trace_pack_creation', 'support.debug_trace_pack', 'Trace-pack creation'),
   rowSpec('support_artifact_creation_policy_readout', 'support.artifact_creation_policy.preview', 'Support artifact creation policy readout'),
+  rowSpec('runtime_enforcement_boundary_readout', 'runtime.enforcement_boundary.preview', 'Runtime enforcement boundary readout'),
   rowSpec('pruning_deletion_preflight', 'retention.preflight', 'Pruning/deletion preflight'),
   rowSpec('pruning_deletion_execution', 'retention.actions', 'Pruning/deletion execution'),
   rowSpec('runtime_control_task_cancel', 'task.cancel', 'Runtime control / task cancellation'),
