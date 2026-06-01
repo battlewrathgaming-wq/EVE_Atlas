@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after HS171 accepted HS170 inactive service-boundary hook
+Status: HS172 Runtime hook coverage fact runway open
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: preserve the accepted inactive runtime-enforcement hook and choose the next hardening seam.
+Current focus: close one missing runtime-enforcement fact class safely by sourcing command classification coverage inside the inactive service-boundary hook.
 
 Current heading:
 
@@ -18,15 +18,13 @@ Current heading:
 
 ## Executor
 
-Current executor: Human / Overseer shaping
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none
+workspace/DevHS172-runtime-hook-coverage-fact.md
 ```
-
-No active Dev runway is open.
 
 ## Source Of Intent
 
@@ -41,6 +39,7 @@ Recent accepted runtime-enforcement spine:
 - HS169 accepted HS168.
 - HS170 added the first inactive service-boundary hook.
 - HS171 accepted HS170 after proof-language correction.
+- HS172 selects command classification coverage as the first canonical read-only fact class to source inside the hook.
 
 Human / Overseer direction:
 
@@ -54,23 +53,24 @@ Accepted interpretation:
 
 - Atlas is still not ready for active runtime blocking.
 - Atlas now has a non-blocking live service-boundary preview hook.
-- The hook is boundary plumbing proof, not authorization or enforcement.
-- The next seam should either expose hook telemetry/readout, close one missing fact class safely, or pause runtime enforcement and continue another storage/runtime lane.
+- The next seam should close exactly one safe missing fact class.
+- Command classification coverage is the safest first fact class because it is already an in-memory classification map.
+- This packet should not source storage, budget, External I/O, provider/live gate, Watch/task, destination/path, DB, config, or runtime state facts.
 
 Accepted source material:
 
-- `workspace/EngineeringSafetyAuditHS168-runtime-enforcement-activation-readiness.md`
-- `workspace/OverseerHS169-hs168-runtime-enforcement-readiness-review.md`
-- `workspace/OverseerHS170-inactive-service-boundary-hook-runway.md`
 - `workspace/OverseerHS171-hs170-inactive-service-boundary-hook-review.md`
+- `workspace/OverseerHS172-runtime-hook-coverage-fact-runway.md`
 - `workspace/DevHS170-inactive-service-boundary-hook.md`
+- `workspace/EngineeringSafetyAuditHS168-runtime-enforcement-activation-readiness.md`
 - `docs/current-state/current-storage-runtime-hardening.md`
 - `src/main/services/serviceRegistry.js`
-- `src/main/services/runtimeEnforcementBoundaryService.js`
-- `src/main/services/runtimeEnforcementEvaluator.js`
 - `src/main/services/runtimeEnforcementDryAdapter.js`
-- `src/main/services/composedGatePolicyService.js`
+- `src/main/services/runtimeEnforcementEvaluator.js`
 - `src/main/services/enforcementDryRunService.js`
+- `scripts/verify-runtime-enforcement-hook.js`
+- `scripts/verify-runtime-enforcement-adapter.js`
+- `scripts/verify-enforcement-dry-run.js`
 
 ## Current State
 
@@ -95,17 +95,31 @@ Accepted HS170 facts:
 - The inactive hook does not block, authorize, dispatch differently, alter payload, alter handler result, alter task wrapping, or activate unknown/unclassified fail-closed.
 - The inactive hook does not source broad canonical facts.
 
-## Resting State
+## Active Runway
 
-No implementation packet is open.
+Source command classification coverage inside the inactive service-boundary hook.
 
-Likely next shaping candidates:
+Ordered steps:
 
-1. Add a read-only hook telemetry/readout surface from captured previews, still no blocking.
-2. Close one missing fact class by sourcing one canonical read-only fact safely.
-3. Pause runtime enforcement and continue support artifact creation hardening.
-
-Do not jump directly to active runtime blocking.
+1. Read the accepted source material and inspect the HS170 hook.
+2. Import or otherwise access the existing command enforcement coverage map/report in a read-only way.
+3. When the inactive hook builds preview facts, attach coverage for the current command from the existing coverage map.
+4. Preserve explicitly supplied `context.runtimeEnforcementFacts` / `context.runtime_enforcement_facts`.
+5. If supplied facts already include coverage, do not overwrite them unless the implementation clearly documents and tests the merge order.
+6. If coverage is missing for a known command, report it as missing classification coverage; do not invent coverage.
+7. Do not source any other canonical fact class in this packet.
+8. Do not call readout builders, config readbacks, DB readouts, providers, repositories, task runners, file writers, config writers, or mutating services.
+9. Keep the hook non-blocking and behavior-preserving.
+10. Add focused verification proving:
+   - the hook preview includes coverage for a covered known command without context-supplied facts
+   - context-supplied facts are preserved
+   - supplied coverage is not silently overwritten, or merge order is explicitly proven
+   - missing coverage remains a visible missing fact class
+   - no storage, budget, External I/O, provider/live gate, destination/path, Watch/task, DB, config, or runtime state facts are sourced
+   - command behavior is unchanged
+   - renderer-ineligible and missing-confirmation commands still stop before the hook
+   - the hook still does not block or authorize
+11. Update Evidence / Dev Handoff and create the expected DevHS file.
 
 ## Guardrails
 
@@ -129,14 +143,35 @@ Do not jump directly to active runtime blocking.
 - No cleanup, deletion, pruning, restore, move, copy, migration, upload, or packaging.
 - No schema migration.
 - No renderer redesign or UI wording work.
+- Do not source storage authority facts.
+- Do not source storage budget facts.
+- Do not source External I/O facts.
+- Do not source provider/live gate facts.
+- Do not source Watch/task runtime facts.
+- Do not source destination/path authority facts.
+- Do not source DB/config/runtime state facts.
 - Do not promote dry-run `would_allow` into authorization.
 - Do not treat External I/O on as authorization.
 - Do not treat trusted/internal confirmation bypass as confirmation satisfaction.
 - Do not activate unknown/unclassified fail-closed behavior.
 
+## Stop Conditions
+
+Stop and return to Overseer/Human if:
+
+- command coverage cannot be sourced without importing a side-effectful module
+- sourcing coverage requires DB/config/provider/runtime reads
+- the hook would need to block, throw, or alter dispatch
+- the hook would change trusted/internal confirmation behavior
+- the hook would change renderer confirmation behavior
+- the implementation starts sourcing more than command coverage
+- the implementation starts becoming active enforcement
+
 ## Required Verification
 
-Latest accepted HS170 verification:
+Run syntax checks for every changed JavaScript file.
+
+Run:
 
 ```powershell
 node --check src\main\services\serviceRegistry.js
@@ -158,22 +193,22 @@ git diff --check
 git status --short --branch
 ```
 
-`verify:protected-terms` completed exit code 0 with advisory warnings only; no protected-term JSON updates or renames were performed.
+If Dev adds a focused verifier for coverage fact sourcing, run it and list it in the handoff.
+
+No live/API/provider verification is authorized.
 
 ## Evidence
 
-HS170 Dev implementation accepted after Overseer review.
+HS172 opened as Dev runway.
 
-Accepted Dev handoff:
-
-- `workspace/DevHS170-inactive-service-boundary-hook.md`
-
-Latest Overseer review:
-
-- `workspace/OverseerHS171-hs170-inactive-service-boundary-hook-review.md`
+No implementation evidence yet.
 
 ## Dev Handoff
 
-No Dev handoff expected.
+Expected Dev handoff:
 
-No active Dev runway is open.
+- `workspace/DevHS172-runtime-hook-coverage-fact.md`
+
+Latest accepted Overseer review:
+
+- `workspace/OverseerHS171-hs170-inactive-service-boundary-hook-review.md`

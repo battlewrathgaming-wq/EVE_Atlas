@@ -47,9 +47,9 @@ Current state:
 - HS166 accepted
 - HS168 accepted
 - HS170 accepted
-- current executor is Human/Overseer shaping
-- no active Dev runway is open
-- current work is at a resting point after non-blocking boundary plumbing proof; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
+- current executor is Dev
+- active Dev runway is HS172 runtime hook coverage fact sourcing
+- current work is closing one safe runtime-enforcement missing fact class; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
 
 Current heading:
 
@@ -60,9 +60,9 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Add a read-only hook telemetry/readout surface from captured previews, still no blocking.
+1. Review HS172 runtime hook coverage fact sourcing after Dev completes it.
 2. Actual support artifact creation hardening if continuing the snapshot/trace-pack lane.
-3. Close one missing runtime-enforcement fact class by sourcing one canonical read-only fact safely.
+3. Add a read-only hook telemetry/readout surface from captured previews, still no blocking.
 4. Storage setup UI/renderer posture later, not now.
 
 See `workspace/current.md` for current truth.
@@ -122,6 +122,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS169 accepted HS168: Atlas is not ready for active runtime blocking, but is ready for a narrower non-blocking service-boundary integration hook if Human/Overseer accepts touching `invokeServiceCommand` without behavior change.
 - HS170 opened the first inactive service-boundary hook runway: Dev may touch `invokeServiceCommand` only to add a non-blocking preview hook after eligibility/confirmation and before task wrapping/dispatch, with no behavior change.
 - HS171 accepted HS170 after Overseer proof-language correction: `invokeServiceCommand` now has a non-blocking inactive preview hook after eligibility/confirmation and before task wrapping/dispatch; active runtime blocking remains unopened.
+- HS172 opened the first missing-fact closure runway: source only command classification coverage inside the inactive hook, with no storage, budget, External I/O, provider/live, Watch/task, DB/config/runtime facts and no blocking.
 
 ## Accepted Boundaries
 
