@@ -18,6 +18,10 @@ async function main() {
     assert(commands.get('manual.discovery')?.effects.includes('external-live-api'), 'manual.discovery should declare live provider effect');
     assert(!commands.get('manual.discovery')?.effects.includes('evidence-creation'), 'manual.discovery must not claim evidence creation');
     assert(commands.get('manual.expansion')?.effects.includes('evidence-creation'), 'manual.expansion should declare evidence creation');
+    assert(commands.get('external_io.state_readout')?.classification === 'read-only', 'external_io.state_readout should be read-only');
+    assert(commands.get('external_io.state_readout')?.effects.includes('read-only'), 'external_io.state_readout should declare read-only effect');
+    assert(commands.get('external_io.state_persistence_proof')?.classification === 'metadata-only', 'external_io.state_persistence_proof should be metadata-only');
+    assert(commands.get('external_io.state_persistence_proof')?.effects.includes('local-data-mutation'), 'external_io.state_persistence_proof should declare fixture local mutation effect');
     assert(commands.get('metadata.hydration')?.effects.includes('metadata-readability'), 'metadata.hydration should declare readability metadata effect');
     assert(commands.get('metadata.hydration_backlog.preview')?.classification === 'read-only', 'metadata.hydration_backlog.preview should be read-only');
     assert(commands.get('metadata.hydration_backlog.preview')?.effects.includes('read-only'), 'metadata.hydration_backlog.preview should declare read-only effect');
@@ -50,6 +54,8 @@ async function main() {
     const rendererCommands = listServiceCommands({ forRenderer: true });
     const rendererNames = new Set(rendererCommands.map((entry) => entry.command));
     assert(rendererNames.has('manual.expansion'), 'manual.expansion should be renderer eligible');
+    assert(rendererNames.has('external_io.state_readout'), 'external_io.state_readout should be renderer eligible');
+    assert(!rendererNames.has('external_io.state_persistence_proof'), 'external_io.state_persistence_proof should not be renderer eligible');
     assert(rendererNames.has('metadata.hydration_execution_policy.preview'), 'metadata.hydration_execution_policy.preview should be renderer eligible');
     assert(rendererNames.has('storage.authority_preflight'), 'storage authority preflight should be renderer eligible');
     assert(rendererNames.has('storage.setup_gate_readout'), 'storage setup gate readout should be renderer eligible');
@@ -89,6 +95,11 @@ async function main() {
       () => invoke(null, { command: 'sde.import.topology', payload: { path: 'fixture.jsonl' } }),
       'SERVICE_COMMAND_NOT_RENDERER_ELIGIBLE',
       'renderer IPC should reject non-eligible commands'
+    );
+    await assertRejects(
+      () => invoke(null, { command: 'external_io.state_persistence_proof', payload: { state: 'on' } }),
+      'SERVICE_COMMAND_NOT_RENDERER_ELIGIBLE',
+      'renderer IPC should reject External I/O persistence proof'
     );
     await assertRejects(
       () => invoke(null, { command: 'manual.discovery', payload: { scope: 'actor', entityType: 'character', entityId: 90000002 } }),

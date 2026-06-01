@@ -95,6 +95,13 @@ async function verifySeededDb(root) {
         entityId: 98000002,
         entityName: 'Signal Cartel Test'
       })],
+      ['external_io.state_readout', () => invokeServiceCommand('external_io.state_readout', {
+        state: 'on',
+        path: path.join(root, 'renderer-forged-external-io-state.json')
+      }, {
+        ...context,
+        source: 'renderer'
+      })],
       ['metadata.hydration_backlog.preview', () => invokeServiceCommand('metadata.hydration_backlog.preview', {}, context)],
       ['metadata.hydration_execution_policy.preview', () => invokeServiceCommand('metadata.hydration_execution_policy.preview', {}, context)],
       ['runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],
@@ -137,6 +144,13 @@ async function verifyEmptyDb(root) {
       ['empty queue.selection', () => invokeServiceCommand('queue.selection', { maxExpansions: 1 }, context)],
       ['empty watch.schedule', () => invokeServiceCommand('watch.schedule', {}, context)],
       ['empty task.list', () => invokeServiceCommand('task.list', { limit: 5 }, context)],
+      ['empty external_io.state_readout', () => invokeServiceCommand('external_io.state_readout', {
+        state: 'on',
+        path: path.join(root, 'empty-renderer-forged-external-io-state.json')
+      }, {
+        ...context,
+        source: 'renderer'
+      })],
       ['empty metadata.hydration_backlog.preview', () => invokeServiceCommand('metadata.hydration_backlog.preview', {}, context)],
       ['empty metadata.hydration_execution_policy.preview', () => invokeServiceCommand('metadata.hydration_execution_policy.preview', {}, context)],
       ['empty runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],

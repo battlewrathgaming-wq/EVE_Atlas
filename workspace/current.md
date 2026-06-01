@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Active Dev runway for HS152 External I/O persisted state proof
+Status: Resting after HS152 External I/O persisted state proof accepted
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: prove fixture/offline External I/O persisted state before provider-backed writes or runtime enforcement exist.
+Current focus: hold at an Overseer/Human selection point after accepting fixture/offline External I/O persisted state proof.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Human / Overseer shaping
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS152-external-io-persisted-state.md
+None. No active Dev runway is open.
 ```
 
 ## Current State
 
-HS142, HS144, HS146, HS148, and HS150 are accepted. HS152 is open as the next bounded hardening seam.
+HS142, HS144, HS146, HS148, HS150, and HS152 are accepted. No active Dev runway is open.
 
 Accepted Human decisions:
 
@@ -63,6 +63,7 @@ Atlas has accepted storage/runtime hardening proofs:
 - read-only support-artifact path authority proof through `support.artifact_path_authority.preview`
 - read-only composed gate policy proof through `storage.composed_gate_policy.preview`
 - read-only Hydration execution policy proof through `metadata.hydration_execution_policy.preview`
+- fixture/offline External I/O persisted state proof through `external_io.state_readout` and `external_io.state_persistence_proof`
 
 Recent accepted state:
 
@@ -99,6 +100,8 @@ Recent accepted state:
 - `workspace/DevHS150-hydration-execution-policy.md`
 - `workspace/OverseerHS151-hs150-hydration-execution-policy-review.md`
 - `workspace/OverseerHS152-external-io-persisted-state-runway.md`
+- `workspace/DevHS152-external-io-persisted-state.md`
+- `workspace/OverseerHS153-hs152-external-io-persisted-state-review.md`
 
 ## Accepted Boundaries
 
@@ -114,39 +117,16 @@ Recent accepted state:
 
 ## Active Runway
 
-Dev should implement a bounded fixture/offline External I/O persisted state proof.
+No active Dev runway is open.
 
-Source of intent:
+Likely next selectable seams:
 
-- Human decision: External contact should be conscious.
-- `workspace/SystemsAuditHS109-external-io-policy-fit.md`
-- `workspace/OverseerHS143-hs142-external-io-held-state-review.md`
-- `workspace/OverseerHS149-hs148-composed-gate-policy-review.md`
-- `workspace/OverseerHS151-hs150-hydration-execution-policy-review.md`
-- `workspace/OverseerHS152-external-io-persisted-state-runway.md`
-- `docs/features/acquisition-and-hydration-clocks.md`
-- `docs/current-state/current-storage-runtime-hardening.md`
+1. Hydration writer fixture proof: smallest write-capable Hydration step, still fixture/offline and provider-free.
+2. Real operator External I/O config: make the provider trust switch real only if Human wants the setting to move out of fixture proof.
+3. Snapshot/trace-pack creation policy: return to support-artifact creation once path authority is proven.
+4. First runtime enforcement design: only after explicit Human/Overseer selection, because command blocking changes runtime behavior.
 
-Expected command/readout candidates:
-
-```text
-external_io.state_readout
-external_io.state_persistence_proof
-```
-
-Ordered steps:
-
-1. Inspect current External API/live gate, gate-stack readout, composed gate policy preview, storage config proof patterns, service registry command metadata, passive side-effect verifier, and current config/temp path helpers.
-2. Add a read-only External I/O persisted-state readout if needed.
-3. Add a trusted-context-only fixture persistence proof for External I/O state.
-4. Store fixture proof state under an explicit allowed fixture root only; do not create the real project-root config unless a later packet explicitly opens real operator config.
-5. Accept only narrow states such as `off` / `on` or `disabled` / `enabled`; normalize output to accepted Atlas state labels.
-6. Include state meaning: off means provider-backed movement is held, not failed; on means provider-backed movement re-enters normal storage/live/cadence/Watch/confirmation gates; on does not mean catch-up flood or immediate dispatch.
-7. Prove renderer payloads cannot forge persisted state, path, acknowledgement, or arbitrary file probing.
-8. Keep `watch.executor.arm`, `live.gate`, storage authority, and External I/O distinct.
-9. Add focused verification proving no provider calls, no runtime enforcement, no command blocking, no Evidence/EVEidence writes, no Hydration writes, no queue dispatch, no schema changes, no real config write, and no UI work.
-10. Add service registry, command authority, enforcement dry-run/composed policy, gate-stack, and passive side-effect coverage as needed.
-11. Update Evidence / Dev Handoff and create the expected DevHS file.
+Do not open the next packet until the Human selects the next seam or explicitly asks Overseer to choose.
 
 ## Last Runway Accepted
 
@@ -311,9 +291,54 @@ Run `node --check` on any new or changed JavaScript files.
 
 ## Evidence
 
-HS152 opened from accepted External I/O held-state readout and Human direction that external contact should be a conscious act.
+HS152 Dev implementation completed.
 
-Dev should replace this HS152 note with concise proof evidence after implementation.
+- Added read-only `external_io.state_readout`.
+- Added trusted-context-only fixture proof `external_io.state_persistence_proof`.
+- Fixture proof writes only when a trusted main-process/test context supplies `allowExternalIoStatePersistenceProof`, an explicit fixture target, and an explicit allowed root.
+- The proof writes and reads back only fixture state under `.tmp` verification roots; it does not create or write `<Atlas app/root>/config/external-io-state.json`.
+- Accepted input states are normalized to `off` / `on`; `disabled` maps to `off` and `enabled` maps to `on`.
+- Readout meaning is explicit: `off` means provider-backed movement is `held_by_external_io`, not failure; `on` means provider-backed work is released only to normal storage/live/cadence/Watch/confirmation gates.
+- Re-enable posture explicitly carries no catch-up flood, no immediate dispatch, and no missed-slot request debt.
+- Renderer-origin readout ignores forged state/path/acknowledgement/budget payload fields and does not read arbitrary renderer-supplied paths.
+- Renderer cannot invoke the fixture persistence proof because it is not renderer eligible.
+- Added service registry, command authority, enforcement dry-run coverage, and passive side-effect coverage for the new commands.
+- Boundary preserved: no provider calls, no runtime enforcement, no command interception/blocking, no queue dispatch, no Watch execution behavior change, no Evidence/EVEidence writes, no Hydration writes, no schema changes, no real config write, and no UI work.
+
+HS152 verification:
+
+```powershell
+node --check src\main\services\externalIoStateService.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-external-io-state.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-passive-side-effects.js
+node --check scripts\verify-enforcement-dry-run.js
+npm.cmd run verify:support-artifact-path-authority
+npm.cmd run verify:external-io-state
+npm.cmd run verify:composed-gate-policy
+npm.cmd run verify:hydration-execution-policy
+npm.cmd run verify:hydration-backlog-preview
+npm.cmd run verify:storage-authority-preflight
+npm.cmd run verify:storage-setup-gate
+npm.cmd run verify:hydration
+npm.cmd run verify:metadata-status
+npm.cmd run verify:metadata-lookup
+npm.cmd run verify:actor-metadata
+npm.cmd run verify:corporation-metadata
+npm.cmd run verify:gate-stack-readout
+npm.cmd run verify:enforcement-dry-run
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:protected-terms
+git diff --check
+git status --short --branch
+```
+
+All listed commands passed. `verify:protected-terms` completed with warning-only discovery output and exit code 0. `git diff --check` passed with line-ending warnings only. `git status --short --branch` showed `main...origin/main [ahead 29]` plus the HS152 working-tree changes.
 
 Prior evidence:
 
@@ -413,6 +438,14 @@ All listed commands passed. `verify:protected-terms` completed with warning-only
 ## Dev Handoff
 
 Completed Dev handoff:
+
+- `workspace/DevHS152-external-io-persisted-state.md`
+
+Overseer review:
+
+- `workspace/OverseerHS153-hs152-external-io-persisted-state-review.md`
+
+Prior completed Dev handoff:
 
 - `workspace/DevHS150-hydration-execution-policy.md`
 

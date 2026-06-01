@@ -4,6 +4,8 @@ const COMMAND_ENFORCEMENT_COVERAGE = Object.freeze({
   'app.readiness': coverage('local_reports_observation', 'none', 'renderer_status', 'covered_read_only', 'Read-only readiness and posture report.'),
   'app.prepare': coverage('setup_config_changes', 'none', 'runtime_path_preparation', 'covered_local_mutation', 'Creates approved runtime/cache directories; future enforcement should treat it as setup support, not provider movement.'),
   'live.gate': coverage('local_db_inspection', 'none', 'provider_gate_readout', 'covered_read_only', 'Read-only live/API gate posture report.'),
+  'external_io.state_readout': coverage('local_db_inspection', 'none', 'external_io_state_readout', 'covered_read_only', 'Read-only External I/O persisted posture; does not enforce or call providers.'),
+  'external_io.state_persistence_proof': coverage('setup_config_changes', 'none', 'fixture_external_io_state_persistence_proof', 'fixture_only_non_production', 'Fixture-only External I/O state write/readback proof; not renderer eligible and not operator-real config writes.'),
   'manual.discovery': coverage('zkill_discovery', 'zkill_provider_required', 'operator_provider_discovery', 'covered_provider_and_storage_gated', 'Calls zKill and writes Discovery refs as possible leads; does not create Evidence/EVEidence.'),
   'manual.expansion': coverage('esi_evidence_expansion', 'esi_provider_required', 'operator_esi_evidence_expansion', 'covered_provider_and_storage_gated', 'Calls ESI and writes selected expanded killmail Evidence/EVEidence.'),
   'actor.watch': coverage('esi_evidence_expansion', 'provider_required', 'scheduled_or_direct_watch_collection', 'covered_provider_and_storage_gated', 'Watch execution can call providers and write Evidence/EVEidence.'),

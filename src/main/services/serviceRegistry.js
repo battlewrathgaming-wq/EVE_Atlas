@@ -37,6 +37,10 @@ const { buildEnforcementDryRunCommandEffectMap } = require('./enforcementDryRunS
 const { buildComposedGatePolicyPreview } = require('./composedGatePolicyService');
 const { buildHydrationBacklogPreview } = require('./hydrationBacklogPreviewService');
 const { buildHydrationExecutionPolicyPreview } = require('./hydrationExecutionPolicyPreviewService');
+const {
+  buildExternalIoStateReadout,
+  buildExternalIoStatePersistenceProof
+} = require('./externalIoStateService');
 const { buildSupportArtifactPathAuthorityPreview } = require('./supportArtifactPathAuthorityService');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
 const {
@@ -96,6 +100,20 @@ const COMMANDS = {
     renderer: true,
     description: 'Return live API gate state for all actions or one scoped action',
     handler: ({ payload }) => getLiveApiGateState(payload)
+  },
+  'external_io.state_readout': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Read External I/O persisted posture without provider calls, movement, enforcement, or path probing',
+    handler: ({ payload, ...context }) => buildExternalIoStateReadout(payload, context)
+  },
+  'external_io.state_persistence_proof': {
+    classification: 'metadata-only',
+    effects: [EFFECTS.LOCAL_DATA_MUTATION],
+    renderer: false,
+    description: 'Write and read back fixture-only External I/O state without provider calls, dispatch, or enforcement',
+    handler: ({ payload, ...context }) => buildExternalIoStatePersistenceProof(payload, context)
   },
   'manual.discovery': {
     classification: 'evidence-creating',

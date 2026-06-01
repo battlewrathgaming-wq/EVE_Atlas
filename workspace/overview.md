@@ -37,9 +37,10 @@ Current state:
 
 - HS148 accepted
 - HS150 accepted
-- active Dev runway opened for HS152
-- current executor is Dev
-- next work is External I/O persisted state proof, not runtime enforcement or provider movement
+- HS152 accepted
+- current executor is Human / Overseer shaping
+- no active Dev runway is open
+- next work is seam selection, not automatic runtime enforcement or provider movement
 
 Current heading:
 
@@ -50,8 +51,8 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Review HS152 External I/O persisted state proof when Dev returns.
-2. Hydration writer fixture proof, if the Human wants a tiny write-capable Hydration step next.
+1. Hydration writer fixture proof, if the Human wants a tiny write-capable Hydration step next.
+2. Real operator External I/O config, if the Human wants the trust switch made real outside fixture proof.
 3. Snapshot/trace-pack creation policy if returning to support artifacts.
 4. First runtime enforcement design packet only after explicit Human/Overseer selection.
 
@@ -93,6 +94,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS150 opened a Hydration execution policy preview runway: define which Hydration work would be eligible, held, blocked, local-only, provider-needed, or deferred before any provider-backed Hydration writes or runtime enforcement exist.
 - HS151 accepted HS150: `metadata.hydration_execution_policy.preview` now proves future Hydration execution posture as read-only policy, separates view/local-record, Watch/background, target/report-scoped, corpus hygiene, and local SDE lookup lanes, and keeps eligible states separate from authorization.
 - HS152 opened an External I/O persisted state runway: prove fixture/offline persist-readback for the provider trust switch so external contact remains a conscious act before provider-backed writes or runtime enforcement exist.
+- HS153 accepted HS152: `external_io.state_readout` and `external_io.state_persistence_proof` now prove fixture/offline External I/O state posture, renderer-forgery resistance, and no real config write while preserving External I/O on as release to normal gates rather than authorization.
 
 ## Accepted Boundaries
 

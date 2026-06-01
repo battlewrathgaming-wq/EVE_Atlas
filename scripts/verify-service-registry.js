@@ -22,6 +22,8 @@ async function main() {
     const readinessCommand = commands.find((entry) => entry.command === 'app.readiness');
     const prepareCommand = commands.find((entry) => entry.command === 'app.prepare');
     const liveGateCommand = commands.find((entry) => entry.command === 'live.gate');
+    const externalIoStateReadoutCommand = commands.find((entry) => entry.command === 'external_io.state_readout');
+    const externalIoStatePersistenceCommand = commands.find((entry) => entry.command === 'external_io.state_persistence_proof');
     const reportActorCommand = commands.find((entry) => entry.command === 'report.actor');
     const queueSelectionCommand = commands.find((entry) => entry.command === 'queue.selection');
     const retentionPreflightCommand = commands.find((entry) => entry.command === 'retention.preflight');
@@ -64,6 +66,12 @@ async function main() {
     assert(prepareCommand.classification === 'metadata-only', 'app.prepare should be metadata-only');
     assert(liveGateCommand, 'live.gate should be listed');
     assert(liveGateCommand.classification === 'read-only', 'live.gate should be read-only');
+    assert(externalIoStateReadoutCommand, 'external_io.state_readout should be listed');
+    assert(externalIoStateReadoutCommand.classification === 'read-only', 'external_io.state_readout should be read-only');
+    assert(externalIoStateReadoutCommand.renderer_allowed === true, 'external_io.state_readout should be renderer eligible');
+    assert(externalIoStatePersistenceCommand, 'external_io.state_persistence_proof should be listed');
+    assert(externalIoStatePersistenceCommand.classification === 'metadata-only', 'external_io.state_persistence_proof should be metadata-only');
+    assert(externalIoStatePersistenceCommand.renderer_allowed === false, 'external_io.state_persistence_proof should not be renderer eligible');
     assert(reportActorCommand, 'report.actor should be listed');
     assert(reportActorCommand.classification === 'read-only', 'report.actor should be read-only');
     assert(queueSelectionCommand, 'queue.selection should be listed');
@@ -133,6 +141,17 @@ async function main() {
     });
     assert(storagePreflight.read_only === true, 'storage authority preflight should declare read-only behavior');
     assert(storagePreflight.database.path.endsWith('service-registry.sqlite'), 'storage authority preflight should use context DB path');
+
+    const externalIoStateReadout = await invokeServiceCommand('external_io.state_readout', {
+      state: 'on',
+      path: 'C:\\renderer-forged-external-io-state.json'
+    }, {
+      db,
+      source: 'renderer'
+    });
+    assert(externalIoStateReadout.read_only === true, 'external_io.state_readout should be read-only');
+    assert(externalIoStateReadout.state === 'off', 'renderer payload should not forge External I/O state');
+    assert(externalIoStateReadout.provider_backed_posture === 'held_by_external_io', 'forged renderer state should not release provider-backed posture');
 
     const storageSetupGate = await invokeServiceCommand('storage.setup_gate_readout', {}, {
       db,
