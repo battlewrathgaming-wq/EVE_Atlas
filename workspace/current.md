@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS176 Hydration candidate preview runway open
+Status: Resting after HS177 accepted HS176 Hydration candidate preview
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: prove the shape of deduped Hydration candidates from local records before any persisted queue, provider call, schema change, or Hydration write.
+Current focus: preserve the accepted Hydration candidate preview and choose the next storage/runtime seam deliberately.
 
 Current heading:
 
@@ -18,12 +18,12 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Human / Overseer shaping
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS176-hydration-candidate-preview.md
+none
 ```
 
 ## Source Of Intent
@@ -64,50 +64,40 @@ Relevant existing proof surfaces:
 
 - `metadata.hydration_backlog.preview` already previews local Hydration backlog shape.
 - `metadata.hydration_execution_policy.preview` already previews future Hydration execution posture.
+- `metadata.hydration_candidates.preview` now previews deduped local Hydration candidate demand by lane and basis.
 - `metadata.hydration_write_fixture_proof` proves fixture-only local readability writes from existing entities.
 
-HS176 should add candidate-shape clarity, not provider movement.
+HS176 added candidate-shape clarity, not provider movement.
 
-## Ordered Runway
+## Current State
 
-1. Inspect the existing Hydration backlog and execution policy preview services and their verifiers.
-2. Add a read-only Hydration candidate preview, preferably as a new service command named:
+HS176 is accepted.
 
-```txt
-metadata.hydration_candidates.preview
-```
+Accepted facts:
 
-3. Build candidates only from local records, especially `activity_events`, `entities`, `metadata_runs`, and local SDE lookup tables.
-4. Deduplicate candidate demand by stable key, such as `entity_type:entity_id` for provider-backed entity labels and separate local-SDE lookup keys for local lookup gaps.
-5. Group candidates into lanes:
+- `metadata.hydration_candidates.preview` is read-only and renderer-eligible.
+- It derives candidates only from local records.
+- It dedupes provider-backed entity label demand by stable entity key.
+- It dedupes local SDE gaps separately.
+- It exposes lane membership, source anchors, priority rationale, and boundary statements.
+- It keeps view/local-record demand ahead of Watch/background demand.
+- It treats External I/O off as held posture, not failure.
+- It does not persist a queue, call providers, write Hydration output, mutate Evidence/EVEidence, mutate Discovery refs, mutate Watch rows, create support artifacts, or change schema.
 
-- `view_local_record`
-- `watch_background`
-- `target_report_scoped`
-- `corpus_hygiene_low_priority`
+Review note:
 
-6. For each representative candidate, expose at least:
+`appearance_count` can include multiple label bases from one event. Use it as a readability-demand signal, not as a Human-facing killmail count. Prefer `killmail_count` for story/readout meaning unless a future runway defines otherwise.
 
-- `dedupe_key`
-- entity or lookup type and ID
-- label state such as `known_local_label`, `provider_needed`, `stale_local_label`, or `local_sde_gap`
-- source anchors / source basis, such as killmail IDs, report target, Watch-derived route, Marked/Assessment presence, or local lookup table
-- appearance / killmail counts where available
-- priority rationale
-- provider-needed boolean
-- Hydration boundary statement
-- Evidence/EVEidence boundary statement
+## Resting State
 
-7. Add focused verification that proves:
+No implementation packet is open.
 
-- one ID appears once per dedupe key even when many local rows or reports need it
-- selected/report-visible candidates are represented separately from Watch/background candidates
-- Watch/background candidates do not starve view/local-record candidates in the preview order
-- local SDE gaps are not treated as ESI provider-needed entity Hydration
-- labels remain readability and IDs remain facts
-- provider-needed Hydration candidates are not Evidence/EVEidence work
-- External I/O off is held posture, not failure
-- no queue, schema, provider call, Hydration write, metadata run, Evidence write, Discovery mutation, or support artifact is created
+Likely next shaping candidates:
+
+1. Decide whether Hydration candidate preview is enough to pause Hydration queue design for now.
+2. Consider patient provider packet preview only if movement-control pressure becomes the next chosen seam.
+3. Consider support artifact creation hardening only after confirming what artifact contents must preserve.
+4. Keep runtime enforcement resting until a stronger need for active blocking appears.
 
 ## Guardrails And Non-Goals
 
@@ -184,16 +174,83 @@ node --check src\main\services\hydrationCandidatePreviewService.js
 
 ## Evidence
 
-Dev should update this section in the handoff with:
+HS176 implemented by Dev.
 
-- files changed
-- command added, if any
-- sample output summary
-- candidate lane counts
-- representative candidate examples
-- proof that no writes/provider calls/schema changes occurred
-- verification commands and results
-- any noisy protected-term warnings
+Files changed:
+
+- `src/main/services/hydrationCandidatePreviewService.js`
+- `src/main/services/serviceRegistry.js`
+- `src/main/services/enforcementDryRunService.js`
+- `scripts/verify-hydration-candidate-preview.js`
+- `scripts/verify-service-registry.js`
+- `scripts/verify-command-authority.js`
+- `scripts/verify-passive-side-effects.js`
+- `package.json`
+- `workspace/current.md`
+- `workspace/DevHS176-hydration-candidate-preview.md`
+- `workspace/OverseerHS177-hs176-hydration-candidate-preview-review.md`
+
+Command added:
+
+- `metadata.hydration_candidates.preview`
+
+Sample output summary:
+
+- total candidates: 4
+- unique dedupe keys: 4
+- provider-needed candidates: 3
+- local SDE gap candidates: 1
+- known/stale local label candidates: 1
+
+Candidate lane counts:
+
+- `view_local_record`: 4
+- `target_report_scoped`: 2
+- `watch_background`: 2
+- `corpus_hygiene_low_priority`: 4
+
+Representative candidates:
+
+- `entity:character:90000003`: report/interest-scoped provider-needed label, deduped across two local killmails.
+- `entity:character:90000004`: Watch/background provider-needed label, separate from selected/report-scoped membership.
+- `local_sde:inventory_type:999999`: local SDE lookup gap, not ESI provider-needed entity Hydration.
+
+Boundary proof:
+
+- provider calls: 0
+- Hydration writes: 0
+- metadata run writes: 0
+- entity writes: 0
+- activity event label patches: 0
+- Evidence/EVEidence writes: 0
+- Discovery ref mutations: 0
+- Watch mutations: 0
+- support artifacts created: 0
+- persisted queue: false
+- schema changes: false
+
+Verification evidence:
+
+- `node --check src\main\services\serviceRegistry.js` passed.
+- `node --check src\main\services\hydrationBacklogPreviewService.js` passed.
+- `node --check src\main\services\hydrationExecutionPolicyPreviewService.js` passed.
+- `node --check src\main\services\hydrationCandidatePreviewService.js` passed.
+- `node --check scripts\verify-hydration-backlog-preview.js` passed.
+- `node --check scripts\verify-hydration-execution-policy.js` passed.
+- `node --check scripts\verify-hydration-candidate-preview.js` passed.
+- `node --check scripts\verify-service-registry.js` passed.
+- `node --check scripts\verify-passive-side-effects.js` passed.
+- `node --check scripts\verify-command-authority.js` passed.
+- `npm.cmd run verify:hydration-backlog-preview` passed.
+- `npm.cmd run verify:hydration-execution-policy` passed.
+- `npm.cmd run verify:hydration-candidate-preview` passed.
+- `npm.cmd run verify:service-registry` passed.
+- `npm.cmd run verify:passive-side-effects` passed.
+- `npm.cmd run verify:protected-terms` passed with advisory warning-only output.
+- `npm.cmd run verify:command-authority` passed.
+- `npm.cmd run verify:enforcement-dry-run` passed and reports coverage complete for 66 commands.
+- `git diff --check` passed with Git CRLF-normalization warnings.
+- `git status --short --branch` completed.
 
 ## Dev Handoff
 
@@ -203,4 +260,10 @@ Expected file:
 workspace/DevHS176-hydration-candidate-preview.md
 ```
 
-The handoff must state whether the candidate preview is complete, incomplete, or blocked.
+Created:
+
+```txt
+workspace/DevHS176-hydration-candidate-preview.md
+```
+
+Candidate preview status: accepted.

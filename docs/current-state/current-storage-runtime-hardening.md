@@ -31,6 +31,7 @@ Accepted proof surfaces:
 - `storage.enforcement_dry_run.command_effect_map`
 - `support.gate_stack_readout`
 - `metadata.hydration_backlog.preview`
+- `metadata.hydration_candidates.preview`
 - `support.artifact_path_authority.preview`
 - `storage.composed_gate_policy.preview`
 - `metadata.hydration_execution_policy.preview`
@@ -57,6 +58,7 @@ Accepted shape:
 - External I/O off holds provider-backed movement as `held_by_external_io`, while local-only read/report/preflight paths remain available
 - External I/O re-enable releases work only to normal cadence/provider/storage/confirmation gates and must not create catch-up flooding
 - Hydration backlog preview is read-only local data understanding: it distinguishes provider-needed labels, known local labels, and local SDE gaps without writing hydration output or creating a persisted queue
+- Hydration candidate preview is read-only local data understanding: it dedupes readability demand by stable candidate key, groups candidates by view/local-record, target/report-scoped, Watch/background, and corpus hygiene lanes, and exposes source anchors and basis without provider calls, writes, queues, or schema changes
 - Support artifact path authority preview is read-only local trust posture: it classifies snapshots, trace packs, logs, temp/cache, SDE/import material, and fixture proof artifacts without creating, deleting, moving, packaging, or uploading files
 - Composed gate policy preview is read-only enforcement policy understanding: it composes service command classification, storage authority, budget posture, External I/O, live/provider gate, cadence/rate safety, Watch arming, active task/duplicate prevention, confirmation UX, destination/path authority, and trusted-context posture without making runtime authorization active
 - Hydration execution policy preview is read-only readability-repair policy understanding: it separates view/local-record, Watch/background, target/report-scoped, corpus hygiene, and local SDE lookup lanes without provider calls, label writes, queue persistence, or runtime authorization
@@ -79,6 +81,7 @@ Current resting state:
 - HS172 accepted the first canonical read-only fact class in that hook: command classification coverage from the existing in-memory coverage map, while preserving supplied facts and not sourcing storage, budget, External I/O, provider/live, Watch/task, DB/config/runtime, or path facts
 - HS174 accepted read-only inspection of inactive hook preview evidence through `runtime.enforcement_hook_telemetry.readout`; it does not persist telemetry, create support artifacts, source new fact classes, or activate enforcement
 - future Hydration execution now has policy preview evidence, but still needs a dedicated write-capable or provider-capable runway before calls or writes
+- future Hydration candidate demand now has dedupe and lane preview evidence, but still needs a dedicated runway before persisted Hydration queues, scheduling, retry state, provider movement, or writes
 - future real/operator Hydration writes now have fixture write proof evidence, but still need a dedicated runway before provider-backed or operator-real Hydration exists
 - real operator External I/O config is now supported as app-local operator posture, but runtime enforcement still needs a dedicated runway before command blocking or provider release behavior exists
 - real operator storage authority config is now supported as app-local operator posture, but runtime enforcement still needs a dedicated runway before command blocking or provider-backed storage gating exists

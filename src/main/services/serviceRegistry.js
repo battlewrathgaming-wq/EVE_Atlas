@@ -40,6 +40,7 @@ const {
 } = require('./enforcementDryRunService');
 const { buildComposedGatePolicyPreview } = require('./composedGatePolicyService');
 const { buildHydrationBacklogPreview } = require('./hydrationBacklogPreviewService');
+const { buildHydrationCandidatePreview } = require('./hydrationCandidatePreviewService');
 const { buildHydrationExecutionPolicyPreview } = require('./hydrationExecutionPolicyPreviewService');
 const { buildHydrationWriteFixtureProof } = require('./hydrationWriteFixtureProofService');
 const { buildRuntimeHookTelemetryReadout } = require('./runtimeHookTelemetryReadoutService');
@@ -200,6 +201,13 @@ const COMMANDS = {
       ...context,
       commandMetadata: listServiceCommands()
     })
+  },
+  'metadata.hydration_candidates.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview deduped local Hydration candidate demand without provider calls, queues, writes, or schema changes',
+    handler: ({ db, payload }) => buildHydrationCandidatePreview(db, payload)
   },
   'metadata.hydration_write_fixture_proof': {
     classification: 'metadata-only',

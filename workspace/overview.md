@@ -36,7 +36,7 @@ Milestone: Atlas Storage And Runtime Hardening
 Current state:
 
 - data-layer boundary support note accepted
-- HS176 Hydration candidate preview runway open
+- HS176 accepted
 - HS148 accepted
 - HS150 accepted
 - HS152 accepted
@@ -51,8 +51,8 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is HS176 Hydration candidate preview
+- current executor is Human/Overseer shaping
+- no active Dev runway is open
 - current work is at a resting point after making inactive hook preview evidence inspectable; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
@@ -65,10 +65,10 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Complete HS176 Hydration candidate preview.
-2. Review whether the candidate preview makes Hydration demand clear enough before persisted queues.
-3. Pause runtime enforcement and support artifact creation until the data shape says what must be preserved.
-4. Patient provider packet preview remains later, not now.
+1. Decide whether Hydration candidate preview is enough to pause Hydration queue design for now.
+2. Consider patient provider packet preview only if movement-control pressure becomes the next chosen seam.
+3. Consider support artifact creation hardening only after confirming what artifact contents must preserve.
+4. Runtime enforcement remains resting.
 
 See `workspace/current.md` for current truth.
 
@@ -133,6 +133,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS175 accepted HS174: `runtime.enforcement_hook_telemetry.readout` now summarizes supplied inactive hook previews without capture, persistence, support artifacts, new fact sourcing, provider calls, or blocking.
 - Data-layer boundary support note accepted: `docs/features/data-layer-boundaries.md` records Discovery Ref, ESI Evidence Expansion, Evidence/EVEidence, relationships/appearances, Hydration, Watch, Observation, Assessment Memory, Marked, and support-artifact boundaries before later schema or support-artifact work.
 - HS176 opened a Hydration candidate preview runway: prove deduped local Hydration demand by lane and basis before persisted queues, provider calls, Hydration writes, schema changes, support artifacts, or renderer/UI work.
+- HS177 accepted HS176: `metadata.hydration_candidates.preview` now proves deduped local Hydration demand by lane, source anchors, priority rationale, and boundary statements without persisted queue, provider movement, writes, schema changes, or support artifact creation.
 
 ## Accepted Boundaries
 

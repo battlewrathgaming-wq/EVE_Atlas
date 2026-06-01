@@ -104,6 +104,7 @@ async function verifySeededDb(root) {
       })],
       ['metadata.hydration_backlog.preview', () => invokeServiceCommand('metadata.hydration_backlog.preview', {}, context)],
       ['metadata.hydration_execution_policy.preview', () => invokeServiceCommand('metadata.hydration_execution_policy.preview', {}, context)],
+      ['metadata.hydration_candidates.preview', () => invokeServiceCommand('metadata.hydration_candidates.preview', {}, context)],
       ['runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],
       ['storage.authority_preflight', () => invokeServiceCommand('storage.authority_preflight', {}, context)],
       ['storage.authority_config.readback', () => invokeServiceCommand('storage.authority_config.readback', {
@@ -167,6 +168,7 @@ async function verifyEmptyDb(root) {
       })],
       ['empty metadata.hydration_backlog.preview', () => invokeServiceCommand('metadata.hydration_backlog.preview', {}, context)],
       ['empty metadata.hydration_execution_policy.preview', () => invokeServiceCommand('metadata.hydration_execution_policy.preview', {}, context)],
+      ['empty metadata.hydration_candidates.preview', () => invokeServiceCommand('metadata.hydration_candidates.preview', {}, context)],
       ['empty runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],
       ['empty storage.authority_preflight', () => invokeServiceCommand('storage.authority_preflight', {}, context)],
       ['empty storage.authority_config.readback', () => invokeServiceCommand('storage.authority_config.readback', {
