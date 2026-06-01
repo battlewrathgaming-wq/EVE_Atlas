@@ -59,6 +59,7 @@ const COMMAND_ENFORCEMENT_COVERAGE = Object.freeze({
   'runtime.db_snapshot.settings.update': coverage('setup_config_changes', 'none', 'snapshot_settings_update', 'covered_local_mutation', 'Validates and persists runtime snapshot destination/budget settings.'),
   'runtime.db_snapshot.create': coverage('snapshot_support_artifact_write', 'none', 'snapshot_support_artifact_write', 'covered_support_artifact_gated', 'Writes a bounded local runtime DB snapshot support artifact.'),
   'support.debug_trace_pack': coverage('snapshot_support_artifact_write', 'none', 'support_trace_artifact_write', 'covered_support_artifact_gated', 'Writes a bounded local operator debug trace pack.'),
+  'runtime.enforcement_hook_telemetry.readout': coverage('local_db_inspection', 'none', 'runtime_hook_telemetry_readout', 'read_only_non_enforcing_proof', 'Read-only inactive hook preview telemetry summary; does not capture, persist, block, or dispatch target handlers.'),
   'queue.selection': coverage('local_db_inspection', 'none', 'queue_selection_readout', 'covered_read_only', 'Read-only Discovery ref selection preview.'),
   'scope.defaults': coverage('local_db_inspection', 'none', 'scope_control_readout', 'covered_read_only', 'Read-only scope defaults.'),
   'scope.validate': coverage('local_db_inspection', 'none', 'scope_control_readout', 'covered_read_only', 'Read-only scope validation/normalization.'),

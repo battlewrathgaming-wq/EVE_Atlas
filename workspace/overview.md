@@ -48,9 +48,10 @@ Current state:
 - HS168 accepted
 - HS170 accepted
 - HS172 accepted
-- current executor is Dev
-- active Dev runway is HS174 runtime hook telemetry readout
-- current work is making inactive hook preview evidence inspectable; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
+- HS174 accepted
+- current executor is Human/Overseer shaping
+- no active Dev runway is open
+- current work is at a resting point after making inactive hook preview evidence inspectable; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
 
 Current heading:
 
@@ -61,9 +62,9 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Review HS174 runtime hook telemetry/readout after Dev completes it.
+1. Pause runtime enforcement and continue support artifact creation hardening.
 2. Actual support artifact creation hardening if continuing the snapshot/trace-pack lane.
-3. Close one more runtime-enforcement fact class only if it can be sourced without DB/config/provider/runtime side effects.
+3. Close one more runtime-enforcement fact class only after a fresh advisory decision.
 4. Storage setup UI/renderer posture later, not now.
 
 See `workspace/current.md` for current truth.
@@ -126,6 +127,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS172 opened the first missing-fact closure runway: source only command classification coverage inside the inactive hook, with no storage, budget, External I/O, provider/live, Watch/task, DB/config/runtime facts and no blocking.
 - HS173 accepted HS172: the inactive runtime hook now sources only command classification coverage from the existing in-memory coverage map while preserving supplied facts and keeping active enforcement unopened.
 - HS174 opened a runtime hook telemetry/readout runway: make inactive preview evidence inspectable without persistence, support artifacts, new fact sourcing, provider calls, or blocking.
+- HS175 accepted HS174: `runtime.enforcement_hook_telemetry.readout` now summarizes supplied inactive hook previews without capture, persistence, support artifacts, new fact sourcing, provider calls, or blocking.
 
 ## Accepted Boundaries
 

@@ -73,11 +73,11 @@ Accepted shape:
 
 Current resting state:
 
-- HS174 runtime hook telemetry/readout Dev runway is open
+- no active Dev runway is open
 - future runtime enforcement now has composed gate-state, service-boundary, pure evaluator, dry adapter, and activation-readiness evidence, but still needs an explicit implementation/design runway before command blocking
 - HS170 accepted the first inactive service-boundary hook: `invokeServiceCommand` now calls a behavior-preserving non-blocking preview hook after eligibility/confirmation and before task wrapping/dispatch, without command blocking, dispatch changes, provider calls, broad fact sourcing, writes, or runtime authorization
 - HS172 accepted the first canonical read-only fact class in that hook: command classification coverage from the existing in-memory coverage map, while preserving supplied facts and not sourcing storage, budget, External I/O, provider/live, Watch/task, DB/config/runtime, or path facts
-- HS174 is limited to read-only inspection of inactive hook preview evidence; it must not persist telemetry, create support artifacts, source new fact classes, or activate enforcement
+- HS174 accepted read-only inspection of inactive hook preview evidence through `runtime.enforcement_hook_telemetry.readout`; it does not persist telemetry, create support artifacts, source new fact classes, or activate enforcement
 - future Hydration execution now has policy preview evidence, but still needs a dedicated write-capable or provider-capable runway before calls or writes
 - future real/operator Hydration writes now have fixture write proof evidence, but still need a dedicated runway before provider-backed or operator-real Hydration exists
 - real operator External I/O config is now supported as app-local operator posture, but runtime enforcement still needs a dedicated runway before command blocking or provider release behavior exists

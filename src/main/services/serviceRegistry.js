@@ -42,6 +42,7 @@ const { buildComposedGatePolicyPreview } = require('./composedGatePolicyService'
 const { buildHydrationBacklogPreview } = require('./hydrationBacklogPreviewService');
 const { buildHydrationExecutionPolicyPreview } = require('./hydrationExecutionPolicyPreviewService');
 const { buildHydrationWriteFixtureProof } = require('./hydrationWriteFixtureProofService');
+const { buildRuntimeHookTelemetryReadout } = require('./runtimeHookTelemetryReadoutService');
 const {
   buildExternalIoStateConfigReadback,
   buildExternalIoStateConfigWrite,
@@ -483,6 +484,13 @@ const COMMANDS = {
       ...context,
       commandMetadata: listServiceCommands()
     })
+  },
+  'runtime.enforcement_hook_telemetry.readout': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Summarize supplied inactive runtime hook preview telemetry without capture, persistence, enforcement, or handler dispatch',
+    handler: ({ payload }) => buildRuntimeHookTelemetryReadout(payload)
   },
   'storage.enforcement_dry_run.command_effect_map': {
     classification: 'read-only',
