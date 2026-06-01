@@ -24,6 +24,8 @@ async function main() {
     const liveGateCommand = commands.find((entry) => entry.command === 'live.gate');
     const externalIoStateReadoutCommand = commands.find((entry) => entry.command === 'external_io.state_readout');
     const externalIoStatePersistenceCommand = commands.find((entry) => entry.command === 'external_io.state_persistence_proof');
+    const externalIoStateConfigReadbackCommand = commands.find((entry) => entry.command === 'external_io.state_config_readback');
+    const externalIoStateConfigWriteCommand = commands.find((entry) => entry.command === 'external_io.state_config_write');
     const reportActorCommand = commands.find((entry) => entry.command === 'report.actor');
     const queueSelectionCommand = commands.find((entry) => entry.command === 'queue.selection');
     const retentionPreflightCommand = commands.find((entry) => entry.command === 'retention.preflight');
@@ -73,6 +75,12 @@ async function main() {
     assert(externalIoStatePersistenceCommand, 'external_io.state_persistence_proof should be listed');
     assert(externalIoStatePersistenceCommand.classification === 'metadata-only', 'external_io.state_persistence_proof should be metadata-only');
     assert(externalIoStatePersistenceCommand.renderer_allowed === false, 'external_io.state_persistence_proof should not be renderer eligible');
+    assert(externalIoStateConfigReadbackCommand, 'external_io.state_config_readback should be listed');
+    assert(externalIoStateConfigReadbackCommand.classification === 'read-only', 'external_io.state_config_readback should be read-only');
+    assert(externalIoStateConfigReadbackCommand.renderer_allowed === true, 'external_io.state_config_readback should be renderer eligible');
+    assert(externalIoStateConfigWriteCommand, 'external_io.state_config_write should be listed');
+    assert(externalIoStateConfigWriteCommand.classification === 'metadata-only', 'external_io.state_config_write should be metadata-only');
+    assert(externalIoStateConfigWriteCommand.renderer_allowed === false, 'external_io.state_config_write should not be renderer eligible');
     assert(reportActorCommand, 'report.actor should be listed');
     assert(reportActorCommand.classification === 'read-only', 'report.actor should be read-only');
     assert(queueSelectionCommand, 'queue.selection should be listed');
@@ -200,7 +208,8 @@ async function main() {
       databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
     });
     assert(gateStack.read_only === true, 'gate stack readout should declare read-only behavior');
-    assert(gateStack.external_io.implementation_state === 'policy_only_not_implemented', 'gate stack readout should report external_io as policy-only');
+    assert(gateStack.external_io.implementation_state === 'operator_config_readout', 'gate stack readout should report External I/O operator config posture');
+    assert(gateStack.external_io.enforced === false, 'gate stack readout should not enforce External I/O');
 
     const supportArtifactPathAuthority = await invokeServiceCommand('support.artifact_path_authority.preview', {
       outputDir: 'C:\\renderer-forged-support-output'

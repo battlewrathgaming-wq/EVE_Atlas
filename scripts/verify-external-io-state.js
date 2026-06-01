@@ -16,6 +16,7 @@ async function main() {
   try {
     const offProof = await verifyPersistence(db, root, 'off');
     const onProof = await verifyPersistence(db, root, 'enabled');
+    const configWrite = await verifyOperatorConfigWrite(db, root);
     const blocked = await verifyBlockedInputs(db, root);
     const renderer = await verifyRendererCannotForge(db, root);
     verifyCommandRegistration();
@@ -27,6 +28,7 @@ async function main() {
       status: 'external io state persistence proof verified',
       sample_off: compactProof(offProof),
       sample_on: compactProof(onProof),
+      sample_operator_config_write: compactConfigWrite(configWrite),
       sample_blocked: blocked,
       sample_renderer_readout: renderer,
       real_project_config_exists_before: realConfigExistedBefore,
@@ -37,6 +39,75 @@ async function main() {
     closeDatabase(db);
     fs.rmSync(root, { recursive: true, force: true });
   }
+}
+
+async function verifyOperatorConfigWrite(db, root) {
+  const targetPath = path.join(root, 'operator-config', 'config', 'external-io-state.json');
+  const result = await invokeServiceCommand('external_io.state_config_write', {
+    state: 'enabled',
+    path: 'C:\\renderer-style-forged-config-path',
+    acknowledgement: 'ignored config payload field',
+    budgetBytes: 1
+  }, {
+    db,
+    allowExternalIoStateConfigWrite: true,
+    allowExternalIoStateConfigFixtureTarget: true,
+    externalIoStateConfigWriteTargetPath: targetPath,
+    externalIoStateConfigAllowedRoot: path.join(root, 'operator-config')
+  });
+
+  assert(result.validation_result.valid === true, 'operator config write should be valid in trusted context');
+  assert(result.would_write === true, 'operator config write should write trusted target');
+  assert(result.write.status === 'written_atomically', 'operator config write should write atomically');
+  assert(result.write.temp_exists_after_rename === false, 'operator config temp file should not remain');
+  assert(result.readback.matches_payload === true, 'operator config readback should match payload');
+  assert(result.normalized_state === 'on', 'enabled should normalize to on');
+  assert(result.real_config_write === false, 'fixture verification should not write real project config');
+  assert(result.readout.state === 'on', 'config readout should return written state');
+  assert(result.readout.provider_backed_posture === 'released_to_normal_gates', 'on should release only to normal gates');
+  assert(result.readout.on_is_authorization === false, 'on should not be authorization');
+  assert(result.readout.catch_up_flood === false, 'on should not create catch-up flood');
+  assert(result.readout.immediate_dispatch === false, 'on should not immediately dispatch');
+  assert(result.provider_calls === 0, 'operator config write should not call providers');
+  assert(result.queue_dispatches === 0, 'operator config write should not dispatch queues');
+  assert(result.evidence_writes === 0, 'operator config write should not write Evidence/EVEidence');
+  assert(result.hydration_writes === 0, 'operator config write should not write Hydration');
+  assert(result.schema_changes === 0, 'operator config write should not change schema');
+  assert(result.forged_renderer_readout.renderer_payload_ignored === true, 'operator config write should demonstrate renderer payload ignored');
+  assert(fs.existsSync(targetPath), 'operator config fixture target should exist');
+
+  const readback = await invokeServiceCommand('external_io.state_config_readback', {
+    state: 'off',
+    path: 'C:\\renderer-forged-readback-path'
+  }, {
+    db,
+    source: 'renderer',
+    externalIoStateReadPath: targetPath,
+    externalIoStateAllowedRoot: path.join(root, 'operator-config')
+  });
+  assert(readback.read_only === true, 'operator config readback should be read-only');
+  assert(readback.state === 'on', 'trusted readback should read persisted config state');
+  assert(readback.renderer_payload_ignored === true, 'renderer readback should ignore forged payload state/path');
+  assert(readback.provider_calls === 0, 'operator config readback should not call providers');
+  assert(readback.filesystem_writes === 0, 'operator config readback should not write files');
+
+  await assertRejects(
+    () => invokeServiceCommand('external_io.state_config_write', {
+      state: 'on',
+      path: targetPath
+    }, {
+      db,
+      source: 'renderer',
+      allowExternalIoStateConfigWrite: true,
+      allowExternalIoStateConfigFixtureTarget: true,
+      externalIoStateConfigWriteTargetPath: targetPath,
+      externalIoStateConfigAllowedRoot: root
+    }),
+    'SERVICE_COMMAND_NOT_RENDERER_ELIGIBLE',
+    'renderer should not be eligible for External I/O config write'
+  );
+
+  return result;
 }
 
 async function verifyPersistence(db, root, requestedState) {
@@ -136,9 +207,7 @@ async function verifyRendererCannotForge(db, root) {
     source: 'renderer'
   });
   assert(readout.renderer_payload_ignored === true, 'renderer readout should ignore forged payload fields');
-  assert(readout.state === 'off', 'renderer readout should not accept forged state');
-  assert(readout.provider_backed_posture === 'held_by_external_io', 'renderer forged state should not release providers');
-  assert(readout.persisted_state.read_allowed === false, 'renderer readout should not probe forged paths');
+  assert(readout.persisted_state.path !== rendererTarget, 'renderer readout should not accept forged path');
   assert(readout.on_is_authorization === false, 'readout should not authorize runtime work');
 
   return {
@@ -154,6 +223,8 @@ function verifyCommandRegistration() {
   const commands = new Map(listServiceCommands().map((entry) => [entry.command, entry]));
   const readout = commands.get('external_io.state_readout');
   const proof = commands.get('external_io.state_persistence_proof');
+  const configReadback = commands.get('external_io.state_config_readback');
+  const configWrite = commands.get('external_io.state_config_write');
   assert(readout, 'External I/O state readout should be listed');
   assert(readout.classification === 'read-only', 'External I/O state readout should be read-only');
   assert(readout.effects.includes('read-only'), 'External I/O state readout should declare read-only effect');
@@ -162,6 +233,13 @@ function verifyCommandRegistration() {
   assert(proof.classification === 'metadata-only', 'External I/O state persistence proof should be metadata-only');
   assert(proof.effects.includes('local-data-mutation'), 'External I/O state persistence proof should declare fixture mutation');
   assert(proof.renderer_allowed === false, 'External I/O state persistence proof should not be renderer eligible');
+  assert(configReadback, 'External I/O state config readback should be listed');
+  assert(configReadback.classification === 'read-only', 'External I/O state config readback should be read-only');
+  assert(configReadback.renderer_allowed === true, 'External I/O state config readback should be renderer eligible');
+  assert(configWrite, 'External I/O state config write should be listed');
+  assert(configWrite.classification === 'metadata-only', 'External I/O state config write should be metadata-only');
+  assert(configWrite.effects.includes('local-data-mutation'), 'External I/O state config write should declare local mutation');
+  assert(configWrite.renderer_allowed === false, 'External I/O state config write should not be renderer eligible');
 }
 
 function trustedContext(db, root, targetPath) {
@@ -189,6 +267,27 @@ function compactProof(proof) {
     queue_dispatches: proof.queue_dispatches,
     provider_calls: proof.provider_calls,
     real_config_write: proof.real_config_write
+  };
+}
+
+function compactConfigWrite(result) {
+  return {
+    action: result.action,
+    default_config_path: result.default_config_path,
+    target_path_basis: result.target_path_basis,
+    requested_state: result.requested_state,
+    normalized_state: result.normalized_state,
+    would_write: result.would_write,
+    validation_status: result.validation_result.status,
+    write_status: result.write?.status || null,
+    readback_matches_payload: result.readback?.matches_payload ?? null,
+    readout_state: result.readout?.state || null,
+    provider_backed_posture: result.readout?.provider_backed_posture || null,
+    on_is_authorization: result.readout?.on_is_authorization ?? null,
+    catch_up_flood: result.readout?.catch_up_flood ?? null,
+    queue_dispatches: result.queue_dispatches,
+    provider_calls: result.provider_calls,
+    real_config_write: result.real_config_write
   };
 }
 

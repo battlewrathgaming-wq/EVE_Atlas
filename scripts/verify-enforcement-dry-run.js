@@ -177,6 +177,10 @@ function verifyCoverageMetadata(map) {
   assert(command(map, 'metadata.hydration_write_fixture_proof').external_io_dependency === 'none', 'Hydration write fixture proof should not declare provider dependency');
   assert(command(map, 'external_io.state_readout').runtime_context === 'external_io_state_readout', 'External I/O state readout should be classified as a readout');
   assert(command(map, 'external_io.state_readout').external_io_dependency === 'none', 'External I/O state readout should not declare provider dependency');
+  assert(command(map, 'external_io.state_config_readback').runtime_context === 'external_io_config_readback', 'External I/O config readback should be classified as readback');
+  assert(command(map, 'external_io.state_config_readback').external_io_dependency === 'none', 'External I/O config readback should not declare provider dependency');
+  assert(command(map, 'external_io.state_config_write').runtime_context === 'external_io_operator_config_write', 'External I/O config write should be classified as operator config write');
+  assert(command(map, 'external_io.state_config_write').external_io_dependency === 'none', 'External I/O config write should not declare provider dependency');
 
   for (const commandName of ['storage.authority_config.write_proof', 'storage.authority_config.acknowledgement_persistence_proof', 'external_io.state_persistence_proof', 'metadata.hydration_write_fixture_proof']) {
     assert(command(map, commandName).enforcement_status === 'fixture_only_non_production', `${commandName} should be fixture-only/non-production`);

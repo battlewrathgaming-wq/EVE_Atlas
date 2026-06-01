@@ -3,6 +3,7 @@ const { buildAppReadiness } = require('./appReadinessService');
 const { buildCommandCoverageReport } = require('./enforcementDryRunService');
 const { actionGate } = require('./liveApiGateService');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
+const { buildExternalIoStateReadout } = require('./externalIoStateService');
 const { defaultTaskRunner } = require('./taskRunner');
 const { defaultWatchSessionExecutor, dispatchFor } = require('../watchlist/watchExecutor');
 
@@ -30,7 +31,7 @@ function buildGateStackReadout(db, input = {}, context = {}) {
     databasePath: context.databasePath
   });
   const actions = actionList(input);
-  const externalIo = externalIoPolicyReadout(input);
+  const externalIo = externalIoPolicyReadout(input, context);
   const commandCoverage = buildCommandCoverageReport(commandMetadata);
   const commandExternalIoPosture = commandMetadata
     .map((entry) => commandExternalIoReadout(entry, commandCoverage, externalIo))
@@ -85,7 +86,7 @@ function buildGateStackReadout(db, input = {}, context = {}) {
     })),
     boundary: [
       'Read-only support readout only; it does not enforce external_io, storage lockout, live.gate, or Watch behavior.',
-      'external_io is reported as policy-only/not implemented in this packet.',
+      'external_io is reported from operator config posture but remains non-enforcing.',
       'Due means consider work, not run now.',
       'waiting and held_by_external_io are not failures.',
       'Releasing any future external I/O must not imply catch-up flooding.',
@@ -102,35 +103,21 @@ function actionList(input = {}) {
   return requested.map(String);
 }
 
-function externalIoPolicyReadout(input = {}) {
-  const requested = normalizeExternalIoState(input.externalIoState || input.external_io_state || 'off');
-  const providerBackedPosture = requested === 'off'
-    ? 'held_by_external_io'
-    : 'released_to_normal_gates';
+function externalIoPolicyReadout(input = {}, context = {}) {
+  const readout = buildExternalIoStateReadout(input, context);
   return {
     family: 'external_io',
-    implementation_state: 'policy_only_not_implemented',
-    enforced: false,
-    requested_readout_state: requested,
-    provider_backed_posture: providerBackedPosture,
-    local_only_posture: 'available',
-    held_is_failure: false,
+    implementation_state: readout.implementation_state,
+    enforced: readout.enforced === true,
+    requested_readout_state: readout.requested_readout_state,
+    state_source: readout.state_source,
+    persisted_state: readout.persisted_state,
+    provider_backed_posture: readout.provider_backed_posture,
+    local_only_posture: readout.local_only_posture,
+    held_is_failure: readout.held_is_failure,
     release_policy: 'Re-enable releases provider-capable work only to normal cadence/provider controls, storage safety, Watch arming, and confirmation rules; no catch-up flood.',
-    reenable_catch_up_policy: {
-      catch_up_flood: false,
-      release_count_now: 'bounded_by_normal_lane_policy',
-      missed_slots_create_request_debt: false,
-      next_step: 're_enter_normal_gates'
-    }
+    reenable_catch_up_policy: readout.reenable_catch_up_policy
   };
-}
-
-function normalizeExternalIoState(value) {
-  const normalized = String(value || '').trim().toLowerCase();
-  if (['on', 'enabled', 'allow', 'allowed'].includes(normalized)) {
-    return 'on';
-  }
-  return 'off';
 }
 
 function watchSummary(executorStatus = {}) {

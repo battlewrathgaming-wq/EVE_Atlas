@@ -22,6 +22,10 @@ async function main() {
     assert(commands.get('external_io.state_readout')?.effects.includes('read-only'), 'external_io.state_readout should declare read-only effect');
     assert(commands.get('external_io.state_persistence_proof')?.classification === 'metadata-only', 'external_io.state_persistence_proof should be metadata-only');
     assert(commands.get('external_io.state_persistence_proof')?.effects.includes('local-data-mutation'), 'external_io.state_persistence_proof should declare fixture local mutation effect');
+    assert(commands.get('external_io.state_config_readback')?.classification === 'read-only', 'external_io.state_config_readback should be read-only');
+    assert(commands.get('external_io.state_config_readback')?.effects.includes('read-only'), 'external_io.state_config_readback should declare read-only effect');
+    assert(commands.get('external_io.state_config_write')?.classification === 'metadata-only', 'external_io.state_config_write should be metadata-only');
+    assert(commands.get('external_io.state_config_write')?.effects.includes('local-data-mutation'), 'external_io.state_config_write should declare local mutation effect');
     assert(commands.get('metadata.hydration')?.effects.includes('metadata-readability'), 'metadata.hydration should declare readability metadata effect');
     assert(commands.get('metadata.hydration_backlog.preview')?.classification === 'read-only', 'metadata.hydration_backlog.preview should be read-only');
     assert(commands.get('metadata.hydration_backlog.preview')?.effects.includes('read-only'), 'metadata.hydration_backlog.preview should declare read-only effect');
@@ -57,6 +61,8 @@ async function main() {
     const rendererNames = new Set(rendererCommands.map((entry) => entry.command));
     assert(rendererNames.has('manual.expansion'), 'manual.expansion should be renderer eligible');
     assert(rendererNames.has('external_io.state_readout'), 'external_io.state_readout should be renderer eligible');
+    assert(rendererNames.has('external_io.state_config_readback'), 'external_io.state_config_readback should be renderer eligible');
+    assert(!rendererNames.has('external_io.state_config_write'), 'external_io.state_config_write should not be renderer eligible');
     assert(!rendererNames.has('external_io.state_persistence_proof'), 'external_io.state_persistence_proof should not be renderer eligible');
     assert(rendererNames.has('metadata.hydration_execution_policy.preview'), 'metadata.hydration_execution_policy.preview should be renderer eligible');
     assert(!rendererNames.has('metadata.hydration_write_fixture_proof'), 'metadata.hydration_write_fixture_proof should not be renderer eligible');
@@ -103,6 +109,11 @@ async function main() {
       () => invoke(null, { command: 'external_io.state_persistence_proof', payload: { state: 'on' } }),
       'SERVICE_COMMAND_NOT_RENDERER_ELIGIBLE',
       'renderer IPC should reject External I/O persistence proof'
+    );
+    await assertRejects(
+      () => invoke(null, { command: 'external_io.state_config_write', payload: { state: 'on' } }),
+      'SERVICE_COMMAND_NOT_RENDERER_ELIGIBLE',
+      'renderer IPC should reject External I/O config write'
     );
     await assertRejects(
       () => invoke(null, { command: 'metadata.hydration_write_fixture_proof', payload: { entityIds: [90000001] } }),

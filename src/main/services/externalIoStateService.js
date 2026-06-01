@@ -31,6 +31,80 @@ function buildExternalIoStateReadout(input = {}, context = {}) {
   });
 }
 
+function buildExternalIoStateConfigReadback(input = {}, context = {}) {
+  const readout = buildExternalIoStateReadout(input, context);
+  return {
+    ...readout,
+    action: 'external_io.state_config_readback',
+    classification: 'read-only External I/O operator config readback',
+    boundary: [
+      'Read-only External I/O operator config readback only; it does not write config or call providers.',
+      'It reads only the canonical app-local External I/O config path unless trusted fixture context supplies an allowed fixture path.',
+      'External I/O off holds provider-backed movement; it is not failure.',
+      'External I/O on releases provider-backed work only to normal storage, live/provider, cadence, Watch, and confirmation gates.',
+      'External I/O on is not authorization and does not dispatch held work or create catch-up debt.'
+    ]
+  };
+}
+
+function buildExternalIoStateConfigWrite(input = {}, context = {}) {
+  const target = resolveConfigWriteTarget(context, DEFAULT_PRODUCTION_TARGET);
+  const requested = normalizeExternalIoState(input.state || input.externalIoState || input.external_io_state);
+  const rendererPayloadIgnored = context.source === 'renderer' && Boolean(
+    input.state || input.externalIoState || input.external_io_state || input.path || input.statePath || input.state_path
+  );
+  const validation = validateConfigWrite({ context, target, requested });
+
+  if (!validation.valid) {
+    return configWriteResult({
+      target,
+      requested,
+      validation,
+      rendererPayloadIgnored,
+      write: null,
+      readback: null,
+      readout: null,
+      forgedRendererReadout: null
+    });
+  }
+
+  const payload = writablePayload(requested.state, input.reason || 'operator External I/O config write', {
+    fixtureOfflineOnly: target.fixture_target === true
+  });
+  const write = writeJsonAtomically(target.path, payload);
+  const readbackPayload = JSON.parse(fs.readFileSync(target.path, 'utf8'));
+  const readback = {
+    status: 'read_back_verified',
+    path: target.path,
+    matches_payload: stableJson(readbackPayload) === stableJson(payload),
+    payload: readbackPayload
+  };
+  const readout = buildExternalIoStateReadout({}, {
+    ...context,
+    externalIoStateReadPath: target.path,
+    externalIoStateAllowedRoot: target.allowed_root
+  });
+  const forgedRendererReadout = buildExternalIoStateReadout({
+    state: requested.state === 'on' ? 'off' : 'on',
+    path: path.join(path.dirname(target.allowed_root), 'renderer-forged', 'external-io-state.json'),
+    acknowledgement: 'renderer forged acknowledgement',
+    budgetBytes: 1
+  }, {
+    source: 'renderer'
+  });
+
+  return configWriteResult({
+    target,
+    requested,
+    validation,
+    rendererPayloadIgnored,
+    write,
+    readback,
+    readout,
+    forgedRendererReadout
+  });
+}
+
 function buildExternalIoStatePersistenceProof(input = {}, context = {}) {
   const target = resolveStateTarget(context, DEFAULT_PRODUCTION_TARGET);
   const requested = normalizeExternalIoState(input.state || input.externalIoState || input.external_io_state);
@@ -50,7 +124,7 @@ function buildExternalIoStatePersistenceProof(input = {}, context = {}) {
     });
   }
 
-  const payload = writablePayload(requested.state, input.reason);
+  const payload = writablePayload(requested.state, input.reason, { fixtureOfflineOnly: true });
   const write = writeJsonAtomically(target.path, payload);
   const readbackPayload = JSON.parse(fs.readFileSync(target.path, 'utf8'));
   const readback = {
@@ -115,6 +189,9 @@ function stateReadoutResult({ state, stateSource, target, persisted, rendererPay
       read_error: persisted.error || null
     },
     provider_backed_posture: posture.provider_backed_posture,
+    implementation_state: 'operator_config_readout',
+    enforced: false,
+    requested_readout_state: state,
     local_only_posture: 'available',
     held_is_failure: false,
     on_is_authorization: false,
@@ -138,6 +215,49 @@ function stateReadoutResult({ state, stateSource, target, persisted, rendererPay
       'External I/O on releases provider-backed work only to normal storage, live/provider, cadence, Watch, and confirmation gates.',
       'External I/O on is not authorization and does not dispatch held work or create catch-up debt.',
       'Renderer payloads cannot choose persisted state paths, forge state, forge acknowledgement, forge budget, or probe arbitrary files.'
+    ]
+  };
+}
+
+function configWriteResult({ target, requested, validation, rendererPayloadIgnored, write, readback, readout, forgedRendererReadout }) {
+  return {
+    action: 'external_io.state_config_write',
+    classification: 'trusted External I/O operator config write/readback',
+    generated_at: new Date().toISOString(),
+    read_only: false,
+    mutates_state: validation.valid === true,
+    fixture_offline_only: target.fixture_target === true,
+    provider_calls: 0,
+    runtime_enforcement_active: false,
+    command_blocking_active: false,
+    queue_dispatches: 0,
+    evidence_writes: 0,
+    hydration_writes: 0,
+    schema_changes: 0,
+    real_config_write: validation.valid === true && target.fixture_target !== true,
+    ui_work: false,
+    default_config_path: target.default_production_path,
+    target_path: target.path,
+    target_path_basis: target.basis,
+    allowed_root: target.allowed_root,
+    path_allowed: target.path_allowed,
+    would_write: validation.valid === true,
+    requested_state: requested.state,
+    normalized_state: requested.state,
+    accepted_states: ['off', 'on'],
+    validation_result: validation,
+    renderer_payload_ignored: rendererPayloadIgnored,
+    write,
+    readback,
+    readout: readout ? compactReadout(readout) : null,
+    forged_renderer_readout: forgedRendererReadout ? compactReadout(forgedRendererReadout) : null,
+    state_meaning: postureForState(requested.state),
+    boundary: [
+      'Trusted External I/O operator config write/readback only; it is not runtime enforcement.',
+      'Renderer payloads cannot choose paths, forge trusted context, forge state authority, forge acknowledgement, forge budget, or probe arbitrary files.',
+      'It writes only the External I/O state config and does not write storage authority config.',
+      'It does not call providers, dispatch queues, create Evidence/EVEidence, hydrate metadata, mutate Watch execution, change schema, or redesign renderer UI.',
+      'External I/O on remains release to normal gates, not authorization or immediate dispatch.'
     ]
   };
 }
@@ -209,6 +329,7 @@ function resolveStateTarget(context = {}, defaultTargetPath) {
   const allowedRoot = fixtureRoot || path.dirname(defaultTargetPath);
   const allowed = isInsidePath(targetPath, allowedRoot);
   const trustedReadPath = Boolean(context.externalIoStateReadPath && fixtureRoot);
+  const canonicalReadPath = !fixtureTarget;
   const trustedWriteTarget = Boolean(context.allowExternalIoStateFixtureTarget === true && context.externalIoStateTargetPath && fixtureRoot);
 
   return {
@@ -222,8 +343,35 @@ function resolveStateTarget(context = {}, defaultTargetPath) {
     path_allowed: allowed,
     path_block_reason: allowed ? null : 'target_path_outside_allowed_external_io_root',
     fixture_target: trustedWriteTarget,
-    can_read: trustedReadPath && allowed,
+    can_read: (trustedReadPath || canonicalReadPath) && allowed,
     can_write: trustedWriteTarget && allowed
+  };
+}
+
+function resolveConfigWriteTarget(context = {}, defaultTargetPath) {
+  const defaultConfigRoot = path.dirname(defaultTargetPath);
+  const fixtureTarget = context.allowExternalIoStateConfigFixtureTarget === true
+    ? context.externalIoStateConfigWriteTargetPath
+    : null;
+  const fixtureRoot = context.allowExternalIoStateConfigFixtureTarget === true && context.externalIoStateConfigAllowedRoot
+    ? path.resolve(context.externalIoStateConfigAllowedRoot)
+    : null;
+  const targetPath = path.resolve(fixtureTarget || defaultTargetPath);
+  const allowedRoot = fixtureRoot || defaultConfigRoot;
+  const allowed = isInsidePath(targetPath, allowedRoot);
+
+  return {
+    path: targetPath,
+    default_production_path: defaultTargetPath,
+    basis: fixtureTarget
+      ? 'trusted_fixture_context_target'
+      : '<Atlas app/root>/config/external-io-state.json',
+    allowed_root: path.resolve(allowedRoot),
+    allowed_root_explicit: Boolean(fixtureRoot),
+    path_allowed: allowed,
+    path_block_reason: allowed ? null : 'target_path_outside_allowed_external_io_config_root',
+    fixture_target: Boolean(fixtureTarget),
+    can_write: allowed
   };
 }
 
@@ -257,6 +405,33 @@ function validatePersistenceProof({ context = {}, target = {}, requested = {} })
   };
 }
 
+function validateConfigWrite({ context = {}, target = {}, requested = {} }) {
+  const issues = [];
+  if (context.source === 'renderer') {
+    issues.push('renderer_not_allowed_to_write_external_io_config');
+  }
+  if (context.allowExternalIoStateConfigWrite !== true) {
+    issues.push('trusted_external_io_config_write_context_required');
+  }
+  if (target.fixture_target === true && target.allowed_root_explicit !== true) {
+    issues.push('trusted_allowed_root_required_for_external_io_config_fixture');
+  }
+  if (target.path_allowed !== true) {
+    issues.push(target.path_block_reason || 'target_path_blocked');
+  }
+  if (requested.valid !== true) {
+    issues.push('invalid_external_io_state');
+  }
+
+  const uniqueIssues = [...new Set(issues)];
+  return {
+    valid: uniqueIssues.length === 0,
+    status: uniqueIssues.length === 0 ? 'external_io_config_write_valid' : uniqueIssues[0],
+    issues: uniqueIssues,
+    enforcement_state: 'not_implemented_readout_only'
+  };
+}
+
 function readPersistedState(target = {}) {
   if (target.can_read !== true) {
     return {
@@ -275,9 +450,12 @@ function readPersistedState(target = {}) {
   try {
     const payload = JSON.parse(fs.readFileSync(target.path, 'utf8'));
     const normalized = normalizeExternalIoState(payload.external_io_state || payload.state);
+    const source = target.fixture_target === true || target.basis === 'trusted_fixture_context_target'
+      ? 'trusted_fixture_persisted_state'
+      : 'operator_config_persisted_state';
     return {
       status: normalized.valid ? 'read' : 'invalid_state',
-      source: normalized.valid ? 'trusted_fixture_persisted_state' : 'default_safe_off',
+      source: normalized.valid ? source : 'default_safe_off',
       state: normalized.valid ? normalized.state : null,
       payload: normalized.valid ? payload : null,
       error: normalized.valid ? null : 'invalid_external_io_state'
@@ -292,13 +470,14 @@ function readPersistedState(target = {}) {
   }
 }
 
-function writablePayload(state, reason) {
+function writablePayload(state, reason, options = {}) {
   return {
     version: 1,
     external_io_state: state,
+    config_kind: 'external_io_operator_state',
     state_meaning: postureForState(state),
-    reason: reason || 'fixture External I/O state persistence proof',
-    fixture_offline_only: true,
+    reason: reason || 'External I/O state persistence',
+    fixture_offline_only: options.fixtureOfflineOnly === true,
     written_at: 'EXTERNAL_IO_STATE_PROOF_TIMESTAMP_PLACEHOLDER'
   };
 }
@@ -397,6 +576,8 @@ function isInsidePath(targetPath, rootPath) {
 }
 
 module.exports = {
+  buildExternalIoStateConfigReadback,
+  buildExternalIoStateConfigWrite,
   buildExternalIoStateReadout,
   buildExternalIoStatePersistenceProof,
   normalizeExternalIoState

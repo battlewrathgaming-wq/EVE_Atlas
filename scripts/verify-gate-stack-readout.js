@@ -118,7 +118,7 @@ function fixtureWatchExecutor({ sessionArmed, liveApiEnabled }) {
 function verifyArmedReadout(readout) {
   assert(readout.read_only === true, 'gate-stack readout should be read-only');
   assert(readout.mutates_state === false, 'gate-stack readout should not mutate state');
-  assert(readout.external_io.implementation_state === 'policy_only_not_implemented', 'external_io should be policy-only/not implemented');
+  assert(readout.external_io.implementation_state === 'operator_config_readout', 'external_io should report operator config posture');
   assert(readout.external_io.enforced === false, 'external_io should not be enforced');
   assert(readout.external_io.requested_readout_state === 'off', 'fixture should report external_io off');
   assert(readout.external_io.provider_backed_posture === 'held_by_external_io', 'provider-backed work should be held when external_io is off');

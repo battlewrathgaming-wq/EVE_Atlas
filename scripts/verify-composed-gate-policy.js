@@ -92,6 +92,7 @@ function verifyRepresentativeRows(preview) {
     'pruning_deletion_preflight',
     'pruning_deletion_execution',
     'runtime_control_task_cancel',
+    'external_io_operator_config_write',
     'fixture_only_write_proof',
     'unknown_unclassified_future_command'
   ];
@@ -113,6 +114,8 @@ function verifyRepresentativeRows(preview) {
   assert(row(preview, 'pruning_deletion_preflight').effects_classification_basis.storage_action_class === 'pruning_deletion_preflight', 'retention preflight should have preflight class');
   assert(row(preview, 'pruning_deletion_execution').effects_classification_basis.storage_action_class === 'pruning_deletion_execution', 'retention action definitions should expose future deletion class');
   assert(row(preview, 'runtime_control_task_cancel').gates.confirmation_ux.reason === 'confirmation_ux_required_not_security_secret', 'task cancel should preserve confirmation UX posture');
+  assert(row(preview, 'external_io_operator_config_write').effects_classification_basis.runtime_context === 'external_io_operator_config_write', 'External I/O operator config write should be represented separately');
+  assert(row(preview, 'external_io_operator_config_write').gates.external_io.state === 'not_applicable', 'External I/O config writes should not require provider movement permission');
   assert(row(preview, 'fixture_only_write_proof').gates.trusted_context_fixture_exclusion.reason === 'fixture_only_non_production_trusted_context_required', 'fixture proof should remain trusted-context only');
   assert(row(preview, 'unknown_unclassified_future_command').composed_state === 'block', 'unknown future command should fail closed in policy intent');
 }

@@ -39,6 +39,8 @@ const { buildHydrationBacklogPreview } = require('./hydrationBacklogPreviewServi
 const { buildHydrationExecutionPolicyPreview } = require('./hydrationExecutionPolicyPreviewService');
 const { buildHydrationWriteFixtureProof } = require('./hydrationWriteFixtureProofService');
 const {
+  buildExternalIoStateConfigReadback,
+  buildExternalIoStateConfigWrite,
   buildExternalIoStateReadout,
   buildExternalIoStatePersistenceProof
 } = require('./externalIoStateService');
@@ -115,6 +117,20 @@ const COMMANDS = {
     renderer: false,
     description: 'Write and read back fixture-only External I/O state without provider calls, dispatch, or enforcement',
     handler: ({ payload, ...context }) => buildExternalIoStatePersistenceProof(payload, context)
+  },
+  'external_io.state_config_readback': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Read back app-local External I/O operator config without provider calls, movement, enforcement, or path probing',
+    handler: ({ payload, ...context }) => buildExternalIoStateConfigReadback(payload, context)
+  },
+  'external_io.state_config_write': {
+    classification: 'metadata-only',
+    effects: [EFFECTS.LOCAL_DATA_MUTATION],
+    renderer: false,
+    description: 'Write and read back trusted app-local External I/O operator config without provider calls, dispatch, or enforcement',
+    handler: ({ payload, ...context }) => buildExternalIoStateConfigWrite(payload, context)
   },
   'manual.discovery': {
     classification: 'evidence-creating',
