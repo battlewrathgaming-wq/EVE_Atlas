@@ -36,9 +36,9 @@ Milestone: Atlas Storage And Runtime Hardening
 Current state:
 
 - HS146 accepted
-- no active Dev runway is open
-- current executor is Human / Overseer shaping
-- next work should remain one bounded storage/runtime hardening seam
+- active Dev runway opened for HS148
+- current executor is Dev
+- next work is Composed gate enforcement policy preview, not runtime enforcement
 
 Current heading:
 
@@ -49,7 +49,7 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Composed gate enforcement design using storage, External I/O, command classification, active task, and confirmation posture.
+1. Review HS148 Composed gate enforcement policy preview when Dev returns.
 2. Snapshot/trace-pack creation enforcement policy if Human wants to stay on support artifacts.
 3. Hydration execution policy shaping from the accepted backlog preview.
 
@@ -86,6 +86,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS145 accepted HS144: `metadata.hydration_backlog.preview` now proves read-only local Hydration backlog shape, separates Evidence/EVEidence from readability metadata, separates local SDE gaps from provider-needed labels, and keeps External I/O held state as non-failure.
 - HS146 opened a Support artifact path authority inventory runway: classify snapshots, trace packs, logs, temp/cache, SDE/import material, and related support artifacts by path authority, budget posture, External I/O relevance, cleanup stage, renderer safety, and sensitivity without creating or deleting files.
 - HS147 accepted HS146: `support.artifact_path_authority.preview` now proves read-only support-artifact path authority, separates operational support from corpus-adjacent support, classifies cache by origin, splits rolling and retained snapshot posture, and ignores renderer-forged path claims.
+- HS148 opened a Composed gate enforcement policy preview runway: define how storage, External I/O, live/provider cadence, Watch arming, active task, confirmation, destination/path authority, command classification, and trusted context would compose before any runtime command blocking exists.
 
 ## Accepted Boundaries
 

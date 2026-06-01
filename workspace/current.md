@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS146 Support artifact path authority inventory accepted; project resting before next hardening seam
+Status: Active Dev runway for HS148 Composed gate enforcement policy preview
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Support artifact path authority inventory accepted as read-only local trust posture; no active Dev runway is open.
+Current focus: prove a read-only composed gate policy preview before any runtime enforcement or command blocking exists.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Human / Overseer shaping
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none
+workspace/DevHS148-composed-gate-policy.md
 ```
 
 ## Current State
 
-HS142, HS144, and HS146 are accepted. The project is resting before the next bounded hardening seam.
+HS142, HS144, and HS146 are accepted. HS148 is open as the next bounded hardening seam.
 
 Accepted Human decisions:
 
@@ -44,6 +44,7 @@ Accepted Human decisions:
 - Budget is mandatory before real provider-backed acquisition or EVEidence writes.
 - HS137 was an enforcement dry-run map, not runtime enforcement.
 - Support artifacts need explicit path/budget/trust posture before cleanup, snapshot, trace-pack, or enforcement execution.
+- Runtime enforcement must be composed from multiple gates and must not treat `would_allow` as authorization.
 
 Atlas has accepted storage/runtime hardening proofs:
 
@@ -89,6 +90,7 @@ Recent accepted state:
 - `workspace/OverseerHS145-hs144-hydration-backlog-preview-review.md`
 - `workspace/OverseerHS146-support-artifact-path-authority-runway.md`
 - `workspace/OverseerHS147-hs146-support-artifact-path-authority-review.md`
+- `workspace/OverseerHS148-composed-gate-enforcement-policy-runway.md`
 
 ## Accepted Boundaries
 
@@ -104,15 +106,30 @@ Recent accepted state:
 
 ## Active Runway
 
-No active Dev runway.
+Dev should implement a bounded read-only composed gate policy preview.
 
-Next suitable seams, when Human chooses:
+Source of intent:
 
-1. Composed gate enforcement design using storage, External I/O, command classification, active task, and confirmation posture.
-2. Snapshot/trace-pack creation enforcement policy if staying on support artifacts.
-3. Hydration execution policy shaping from the accepted backlog preview.
+- Human direction: continue down the memory lane with composed gate enforcement design.
+- `workspace/SecuritySafetyAuditHS140-enforcement-classification-posture.md`
+- `workspace/OverseerHS141-security-audit-hs140-review.md`
+- `workspace/OverseerHS143-hs142-external-io-held-state-review.md`
+- `workspace/OverseerHS147-hs146-support-artifact-path-authority-review.md`
+- `docs/current-state/current-storage-runtime-hardening.md`
+- `workspace/OverseerHS148-composed-gate-enforcement-policy-runway.md`
 
-Do not open Dev work until the next seam is deliberately selected.
+Ordered steps:
+
+1. Inspect service registry, enforcement dry-run, storage setup gate/action matrix, gate-stack readout, support artifact path authority preview, live gate, task/watch command metadata, and existing verification.
+2. Add a read-only composed gate policy preview command/readout.
+3. Keep `would_allow` separate from runtime authorization; label it as one input only.
+4. Add representative composed gate rows and reason codes.
+5. Include representative families: local read/report/preflight, Assessment/Watch metadata writes, zKill Discovery, ESI Evidence/EVEidence expansion, Hydration writes, SDE import/download, snapshot creation, trace-pack creation, pruning/deletion, runtime control/task cancellation, fixture-only proofs, and unknown/unclassified command example.
+6. Mark or split overly broad classes in the preview where needed.
+7. Include unknown/unclassified future command posture as fail-closed policy intent without implementing runtime fail-closed behavior.
+8. Add focused offline verification proving no runtime interception, no command blocking, no provider calls, no filesystem writes, no DB mutations, and no schema changes.
+9. Add command-authority, service-registry, enforcement dry-run, and passive side-effect coverage as needed.
+10. Update Evidence / Dev Handoff and create the expected DevHS file.
 
 ## Last Runway Accepted
 
@@ -189,8 +206,12 @@ Ordered steps:
 - No cleanup/delete/prune/restore/move/copy/migration.
 - No storage config write.
 - No filesystem probing from renderer-provided arbitrary paths.
+- No runtime authorization activation.
+- No future fail-closed behavior activation.
 - Do not collapse Watch arming into External I/O.
 - Do not treat External I/O off as failure.
+- Do not treat `would_allow` as runtime authorization.
+- Do not treat confirmation tokens as security secrets.
 - Do not treat support artifacts as Evidence/EVEidence.
 - Do not treat trace packs as evidence export.
 - Do not make snapshots invisible hidden storage.
@@ -219,6 +240,10 @@ Before opening the next runway, stop and return to Overseer/Human if:
 - the proof requires filesystem probing from renderer-provided arbitrary paths
 - support artifacts blur into Evidence/EVEidence, Discovery, Observation, or Assessment Memory
 - cache cannot be classified without inventing runtime policy
+- the proof requires changing how commands execute
+- the proof would make runtime authorization decisions active
+- unknown/unclassified command handling would become active runtime behavior
+- class splitting requires source command renames or broad registry refactor
 - local-only work becomes unavailable solely because External I/O is off
 - re-enable behavior implies catch-up flooding
 - missing labels are treated as report failure
@@ -229,6 +254,7 @@ Run:
 
 ```powershell
 npm.cmd run verify:support-artifact-path-authority
+npm.cmd run verify:composed-gate-policy
 npm.cmd run verify:storage-authority-preflight
 npm.cmd run verify:storage-setup-gate
 npm.cmd run verify:hydration
@@ -249,6 +275,20 @@ git status --short --branch
 Run `node --check` on any new or changed JavaScript files.
 
 ## Evidence
+
+HS148 opened from accepted security/enforcement breadcrumbs.
+
+Dev should replace this section with concise proof evidence after implementation.
+
+## Dev Handoff
+
+Pending Dev handoff.
+
+Expected:
+
+- `workspace/DevHS148-composed-gate-policy.md`
+
+Prior evidence:
 
 HS146 Dev implementation accepted.
 
@@ -297,8 +337,6 @@ All listed commands passed. `verify:protected-terms` completed with warning-only
 Overseer review:
 
 - `workspace/OverseerHS147-hs146-support-artifact-path-authority-review.md`
-
-## Dev Handoff
 
 Completed handoff:
 
