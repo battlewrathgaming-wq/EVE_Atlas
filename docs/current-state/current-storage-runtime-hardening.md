@@ -36,6 +36,7 @@ Accepted proof surfaces:
 - `metadata.hydration_execution_policy.preview`
 - `external_io.state_readout`
 - `external_io.state_persistence_proof`
+- `metadata.hydration_write_fixture_proof`
 
 Accepted shape:
 
@@ -51,12 +52,14 @@ Accepted shape:
 - Composed gate policy preview is read-only enforcement policy understanding: it composes service command classification, storage authority, budget posture, External I/O, live/provider gate, cadence/rate safety, Watch arming, active task/duplicate prevention, confirmation UX, destination/path authority, and trusted-context posture without making runtime authorization active
 - Hydration execution policy preview is read-only readability-repair policy understanding: it separates view/local-record, Watch/background, target/report-scoped, corpus hygiene, and local SDE lookup lanes without provider calls, label writes, queue persistence, or runtime authorization
 - External I/O persisted state proof is fixture/offline local trust posture: `off` holds provider-backed movement, `on` releases only to normal gates, renderer payloads cannot forge state/path/acknowledgement/budget, and the real project-root config remains untouched
+- Hydration writer fixture proof is fixture/offline readability write posture: it patches activity-event label columns from existing local `entities`, records one `metadata_runs` proof row, keeps numeric IDs as facts, and leaves Evidence/EVEidence, Discovery refs, Watch state, queues, providers, schema, storage config, and renderer UI untouched
 
 Current resting state:
 
 - no active Dev runway is open
 - future runtime enforcement now has composed gate-state preview evidence, but still needs an explicit implementation/design runway before command blocking
 - future Hydration execution now has policy preview evidence, but still needs a dedicated write-capable or provider-capable runway before calls or writes
+- future real/operator Hydration writes now have fixture write proof evidence, but still need a dedicated runway before provider-backed or operator-real Hydration exists
 - future real operator External I/O config now has fixture persistence proof evidence, but still needs a dedicated runway before writing the real project-root External I/O config
 - support artifact creation, snapshot creation, trace-pack creation, cleanup, and pruning/deletion remain separate future seams
 

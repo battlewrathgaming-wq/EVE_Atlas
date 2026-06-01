@@ -173,10 +173,12 @@ function verifyCoverageMetadata(map) {
   assert(command(map, 'sde.build-lookups').storage_action_class === 'background_hydration', 'sde.build-lookups should map to background hydration storage/action class');
   assert(command(map, 'metadata.hydration_execution_policy.preview').runtime_context === 'hydration_execution_policy_readout', 'hydration execution policy should be classified as a readout');
   assert(command(map, 'metadata.hydration_execution_policy.preview').external_io_dependency === 'none', 'hydration execution policy readout should not declare External I/O dependency');
+  assert(command(map, 'metadata.hydration_write_fixture_proof').runtime_context === 'fixture_hydration_write_proof', 'Hydration write fixture proof should be classified as fixture proof');
+  assert(command(map, 'metadata.hydration_write_fixture_proof').external_io_dependency === 'none', 'Hydration write fixture proof should not declare provider dependency');
   assert(command(map, 'external_io.state_readout').runtime_context === 'external_io_state_readout', 'External I/O state readout should be classified as a readout');
   assert(command(map, 'external_io.state_readout').external_io_dependency === 'none', 'External I/O state readout should not declare provider dependency');
 
-  for (const commandName of ['storage.authority_config.write_proof', 'storage.authority_config.acknowledgement_persistence_proof', 'external_io.state_persistence_proof']) {
+  for (const commandName of ['storage.authority_config.write_proof', 'storage.authority_config.acknowledgement_persistence_proof', 'external_io.state_persistence_proof', 'metadata.hydration_write_fixture_proof']) {
     assert(command(map, commandName).enforcement_status === 'fixture_only_non_production', `${commandName} should be fixture-only/non-production`);
     assert(map.coverage.fixture_only_commands.includes(commandName), `${commandName} should appear in fixture-only coverage summary`);
   }

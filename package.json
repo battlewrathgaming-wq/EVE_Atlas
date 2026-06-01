@@ -78,6 +78,7 @@
     "verify:metadata-status": "node scripts/verify-metadata-status.js",
     "verify:hydration-backlog-preview": "node scripts/verify-hydration-backlog-preview.js",
     "verify:hydration-execution-policy": "node scripts/verify-hydration-execution-policy.js",
+    "verify:hydration-write-fixture": "node scripts/verify-hydration-write-fixture.js",
     "verify:external-io-state": "node scripts/verify-external-io-state.js",
     "verify:support-artifact-path-authority": "node scripts/verify-support-artifact-path-authority.js",
     "verify:composed-gate-policy": "node scripts/verify-composed-gate-policy.js",

@@ -41,6 +41,7 @@ async function main() {
     const metadataHydrationCommand = commands.find((entry) => entry.command === 'metadata.hydration');
     const hydrationBacklogPreviewCommand = commands.find((entry) => entry.command === 'metadata.hydration_backlog.preview');
     const hydrationExecutionPolicyCommand = commands.find((entry) => entry.command === 'metadata.hydration_execution_policy.preview');
+    const hydrationWriteFixtureCommand = commands.find((entry) => entry.command === 'metadata.hydration_write_fixture_proof');
     const sdeBuildLookupsCommand = commands.find((entry) => entry.command === 'sde.build-lookups');
     const watchCreateCommand = commands.find((entry) => entry.command === 'watch.create');
     const watchListCommand = commands.find((entry) => entry.command === 'watch.list');
@@ -103,6 +104,9 @@ async function main() {
     assert(hydrationExecutionPolicyCommand?.classification === 'read-only', 'metadata.hydration_execution_policy.preview should be read-only');
     assert(hydrationExecutionPolicyCommand?.effects.includes('read-only'), 'metadata.hydration_execution_policy.preview should declare read-only effect');
     assert(hydrationExecutionPolicyCommand?.renderer_allowed === true, 'metadata.hydration_execution_policy.preview should be renderer eligible');
+    assert(hydrationWriteFixtureCommand?.classification === 'metadata-only', 'metadata.hydration_write_fixture_proof should be metadata-only');
+    assert(hydrationWriteFixtureCommand?.effects.includes('metadata-readability'), 'metadata.hydration_write_fixture_proof should declare metadata readability');
+    assert(hydrationWriteFixtureCommand?.renderer_allowed === false, 'metadata.hydration_write_fixture_proof should not be renderer eligible');
     assert(sdeBuildLookupsCommand?.classification === 'exclusive', 'sde.build-lookups should be exclusive');
     assert(watchCreateCommand?.classification === 'metadata-only', 'watch.create should be metadata-only');
     assert(watchListCommand?.classification === 'read-only', 'watch.list should be read-only');

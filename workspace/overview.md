@@ -38,10 +38,10 @@ Current state:
 - HS148 accepted
 - HS150 accepted
 - HS152 accepted
-- HS154 opened
-- current executor is Dev
-- active Dev runway is Hydration writer fixture proof
-- next work is fixture/offline readability metadata write proof, not provider-backed Hydration or runtime enforcement
+- HS154 accepted
+- current executor is Human / Overseer shaping
+- no active Dev runway is open
+- next work is seam selection, not automatic provider-backed Hydration or runtime enforcement
 
 Current heading:
 
@@ -52,9 +52,9 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Review HS154 Hydration writer fixture proof when Dev returns.
-2. Real operator External I/O config, if the Human wants the trust switch made real outside fixture proof.
-3. Snapshot/trace-pack creation policy if returning to support artifacts.
+1. Real operator External I/O config, if the Human wants the trust switch made real outside fixture proof.
+2. Snapshot/trace-pack creation policy if returning to support artifacts.
+3. Real Hydration writer design or provider-backed Hydration gate, only after explicit selection.
 4. First runtime enforcement design packet only after explicit Human/Overseer selection.
 
 See `workspace/current.md` for current truth.
@@ -97,6 +97,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS152 opened an External I/O persisted state runway: prove fixture/offline persist-readback for the provider trust switch so external contact remains a conscious act before provider-backed writes or runtime enforcement exist.
 - HS153 accepted HS152: `external_io.state_readout` and `external_io.state_persistence_proof` now prove fixture/offline External I/O state posture, renderer-forgery resistance, and no real config write while preserving External I/O on as release to normal gates rather than authorization.
 - HS154 opened a Hydration writer fixture proof runway: prove the smallest trusted fixture/test Hydration write path for labels/readability metadata while preserving IDs as facts and avoiding provider calls, runtime enforcement, Evidence/EVEidence writes, Discovery mutation, and UI work.
+- HS155 accepted HS154: `metadata.hydration_write_fixture_proof` now proves trusted fixture/test Hydration writes can patch activity-event readability labels from existing local `entities` while numeric IDs remain facts and Evidence/EVEidence, Discovery refs, Watch state, queues, providers, schema, and renderer UI remain untouched.
 
 ## Accepted Boundaries
 

@@ -37,6 +37,7 @@ const { buildEnforcementDryRunCommandEffectMap } = require('./enforcementDryRunS
 const { buildComposedGatePolicyPreview } = require('./composedGatePolicyService');
 const { buildHydrationBacklogPreview } = require('./hydrationBacklogPreviewService');
 const { buildHydrationExecutionPolicyPreview } = require('./hydrationExecutionPolicyPreviewService');
+const { buildHydrationWriteFixtureProof } = require('./hydrationWriteFixtureProofService');
 const {
   buildExternalIoStateReadout,
   buildExternalIoStatePersistenceProof
@@ -174,6 +175,13 @@ const COMMANDS = {
       ...context,
       commandMetadata: listServiceCommands()
     })
+  },
+  'metadata.hydration_write_fixture_proof': {
+    classification: 'metadata-only',
+    effects: [EFFECTS.LOCAL_DATA_MUTATION, EFFECTS.METADATA_READABILITY],
+    renderer: false,
+    description: 'Write fixture-only Hydration readability labels from local entities without providers, Evidence writes, queues, or enforcement',
+    handler: ({ db, payload, ...context }) => buildHydrationWriteFixtureProof(db, payload, context)
   },
   'sde.import.topology': {
     classification: 'exclusive',
