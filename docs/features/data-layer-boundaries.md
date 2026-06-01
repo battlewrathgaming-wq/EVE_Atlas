@@ -111,11 +111,11 @@ This layer supports pivots, timelines, seen-before checks, repeated appearances,
 
 Numeric IDs remain the factual string. Readable labels may be duplicated for convenience, but they are not the fact basis.
 
-A **Relationship** is a computed connection between appearances or anchors. It is not automatically a stored truth table.
+A **Relationship** is a computed connection between appearances, Evidence anchors, or Watch-derived context. It is used to group killmails into local story/context. It is not necessarily stored, and it is not durable truth unless backed by disclosed basis.
 
 Today, the strongest relationship basis comes from an ESI-expanded killmail and the appearances normalized from it. Watch-derived results may later support relationship views or readouts, but that extension remains future/unknown until a dedicated runway defines it.
 
-Relationship grouping exists to keep multiple killmails and appearances coherent in context. It should help Atlas preserve discovery and expansion context, provenance, and basis so records do not become a bottomless undifferentiated database. It must not inflate a computed grouping into new Evidence / EVEidence.
+Relationship grouping should help Atlas preserve discovery and expansion context, provenance, and basis so records do not become a bottomless undifferentiated database. It must not inflate a computed grouping into new Evidence / EVEidence.
 
 ## Hydration
 
