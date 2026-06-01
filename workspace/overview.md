@@ -45,9 +45,10 @@ Current state:
 - HS162 accepted
 - HS164 accepted
 - HS166 accepted
+- HS168 accepted
 - current executor is Human/Overseer shaping
 - no active Dev runway is open
-- current work is at a resting point after non-enforcing runtime evaluator extraction and dry adapter proof; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
+- current work is at a Human/Overseer decision point after runtime enforcement activation readiness audit; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
 
 Current heading:
 
@@ -58,7 +59,7 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. First inactive service-boundary integration hook or active-enforcement policy review, still no broad command blocking.
+1. First inactive service-boundary integration hook, if Human/Overseer accepts touching `invokeServiceCommand` in a non-blocking behavior-preserving way.
 2. Actual support artifact creation hardening if continuing the snapshot/trace-pack lane.
 3. Real Hydration writer design or provider-backed Hydration gate, only after data-shape ambiguity is resolved.
 4. Storage setup UI/renderer posture later, not now.
@@ -116,6 +117,8 @@ Keep these as the near-memory breadcrumb trail:
 - HS165 accepted HS164: `runtimeEnforcementEvaluator.evaluateRuntimeEnforcementDecision` now provides a reusable inactive decision shape with stable reason codes, while keeping dry-run `would_allow` and External I/O on non-authorizing.
 - HS166 opened a dry runtime enforcement adapter runway: prove service-boundary fact assembly for the inactive evaluator without inserting enforcement into `invokeServiceCommand`.
 - HS167 accepted HS166 after Overseer correction: `runtime.enforcement_adapter.dry_preview` now proves dry adapter fact assembly from command metadata/definition, payload, context, and explicit supplied gate facts; missing facts remain explicit; dry-run `would_allow` remains non-authorizing; and trusted/internal confirmation bypass is distinct from confirmation satisfaction.
+- HS168 audited runtime enforcement activation readiness.
+- HS169 accepted HS168: Atlas is not ready for active runtime blocking, but is ready for a narrower non-blocking service-boundary integration hook if Human/Overseer accepts touching `invokeServiceCommand` without behavior change.
 
 ## Accepted Boundaries
 
