@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS148 accepted; project resting before next hardening seam
+Status: Active Dev runway for HS150 Hydration execution policy preview
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: rest after accepting the read-only composed gate policy preview; select the next bounded hardening seam deliberately.
+Current focus: prove a read-only Hydration execution policy preview before provider-backed Hydration writes or runtime enforcement exist.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Human / Overseer shaping
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-None. No active Dev handoff is expected.
+workspace/DevHS150-hydration-execution-policy.md
 ```
 
 ## Current State
 
-HS142, HS144, HS146, and HS148 are accepted. No active Dev runway is open.
+HS142, HS144, HS146, and HS148 are accepted. HS150 is open as the next bounded hardening seam.
 
 Accepted Human decisions:
 
@@ -94,6 +94,7 @@ Recent accepted state:
 - `workspace/OverseerHS148-composed-gate-enforcement-policy-runway.md`
 - `workspace/DevHS148-composed-gate-policy.md`
 - `workspace/OverseerHS149-hs148-composed-gate-policy-review.md`
+- `workspace/OverseerHS150-hydration-execution-policy-runway.md`
 
 ## Accepted Boundaries
 
@@ -109,15 +110,36 @@ Recent accepted state:
 
 ## Active Runway
 
-No active Dev runway.
+Dev should implement a bounded read-only Hydration execution policy preview.
 
-Resting choices for the next hardening seam:
+Source of intent:
 
-1. Snapshot/trace-pack creation enforcement policy, if staying on support artifacts.
-2. Hydration execution policy shaping, if moving toward controlled readability repair.
-3. First runtime enforcement design packet, only after explicit Human/Overseer selection.
+- Human decision: follow the Hydration line after HS148.
+- `workspace/OverseerHS145-hs144-hydration-backlog-preview-review.md`
+- `workspace/OverseerHS149-hs148-composed-gate-policy-review.md`
+- `workspace/OverseerHS150-hydration-execution-policy-runway.md`
+- `docs/contracts/metadata-hydration-contract.md`
+- `docs/features/acquisition-and-hydration-clocks.md`
+- `docs/current-state/current-storage-runtime-hardening.md`
 
-Do not open Dev work until the next seam is selected.
+Expected command/readout:
+
+```text
+metadata.hydration_execution_policy.preview
+```
+
+Ordered steps:
+
+1. Inspect current metadata hydration, Hydration backlog preview, metadata status/lookup reports, service registry command metadata, gate-stack readout, composed gate policy preview, storage setup gate, and passive side-effect verifier.
+2. Add a read-only Hydration execution policy preview command/readout.
+3. Use existing local backlog/candidate data as input; do not create a persisted Hydration queue.
+4. Separate candidate lanes: view/local-record hydration, Watch/background hydration, target/report-scoped hydration, corpus hygiene/low-priority hydration, and local SDE/type/geography lookup gaps.
+5. For each lane or representative candidate group, report policy state such as `eligible_local`, `eligible_provider_if_gates_pass`, `held_by_external_io`, `blocked_by_storage`, `deferred_by_priority`, `local_lookup_gap`, or `not_applicable`.
+6. Compose policy from existing read-only gates where available: storage authority/budget, External I/O, live/provider gate and cadence posture, composed gate policy preview, local SDE availability, and command authority/renderer eligibility.
+7. Preserve the boundary: Hydration repairs names/labels/readability and never creates Evidence/EVEidence or replaces IDs as facts.
+8. Add focused verification proving the preview makes no provider calls, no metadata writes, no entity label patches, no activity-event label patches, no DB mutations, no queue persistence, no schema changes, and no UI work.
+9. Add service registry, command authority, enforcement dry-run/composed policy, and passive side-effect coverage as needed.
+10. Update Evidence / Dev Handoff and create the expected DevHS file.
 
 ## Last Runway Accepted
 
@@ -178,9 +200,13 @@ Ordered steps:
 - No provider-backed movement.
 - No zKill calls.
 - No ESI calls.
+- No SDE download calls.
 - No Evidence/EVEidence writes.
 - No hydration writes.
 - No hydration queue or persisted backlog.
+- No entity label writes.
+- No activity event label patching.
+- No metadata run writes.
 - No DB movement, copy, migration, relocation, restore, or deletion.
 - No real pruning/deletion execution.
 - No snapshot creation against real operator paths.
@@ -199,6 +225,7 @@ Ordered steps:
 - Do not collapse Watch arming into External I/O.
 - Do not treat External I/O off as failure.
 - Do not treat `would_allow` as runtime authorization.
+- Do not treat Hydration `eligible` posture as runtime authorization.
 - Do not treat confirmation tokens as security secrets.
 - Do not treat support artifacts as Evidence/EVEidence.
 - Do not treat trace packs as evidence export.
@@ -235,6 +262,8 @@ Before opening the next runway, stop and return to Overseer/Human if:
 - local-only work becomes unavailable solely because External I/O is off
 - re-enable behavior implies catch-up flooding
 - missing labels are treated as report failure
+- provider-needed labels are treated as Evidence/EVEidence work
+- view/local-record hydration is starved behind broad Watch/background backlog in the policy model
 
 ## Required Verification
 
@@ -243,6 +272,8 @@ Run:
 ```powershell
 npm.cmd run verify:support-artifact-path-authority
 npm.cmd run verify:composed-gate-policy
+npm.cmd run verify:hydration-execution-policy
+npm.cmd run verify:hydration-backlog-preview
 npm.cmd run verify:storage-authority-preflight
 npm.cmd run verify:storage-setup-gate
 npm.cmd run verify:hydration
@@ -263,6 +294,12 @@ git status --short --branch
 Run `node --check` on any new or changed JavaScript files.
 
 ## Evidence
+
+HS150 opened from accepted Hydration backlog preview and composed gate policy preview.
+
+Dev should replace this HS150 note with concise proof evidence after implementation.
+
+Prior evidence:
 
 HS148 Dev implementation completed.
 
