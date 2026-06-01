@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after HS181 accepted HS180 security review
+Status: HS182 Support artifact writer conformance gap map runway open
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: support artifact contents contract accepted and security-reviewed; next seam should be a read-only writer conformance gap map if support artifacts continue.
+Current focus: read-only writer conformance gap map between existing support artifact writer shapes and the accepted contents contract.
 
 Current heading:
 
@@ -18,15 +18,15 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none
+workspace/DevHS182-support-artifact-writer-conformance-gap-map.md
 ```
 
-No Dev runway is currently open.
+Dev runway is open.
 
 ## Accepted HS178 Context
 
@@ -256,3 +256,33 @@ Accepted 2026-06-02:
 - `workspace/OverseerHS181-hs180-security-review-acceptance.md`
 
 HS180 found no blocking issue in the contract preview and recommended a read-only writer conformance gap map before any support artifact writer changes.
+
+## Active HS182 Runway
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS182-support-artifact-writer-conformance-gap-map-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS182-support-artifact-writer-conformance-gap-map.md
+```
+
+Task:
+
+Add a read-only support artifact writer conformance gap map, preferably:
+
+```txt
+support.artifact_writer_conformance_gap_map.preview
+```
+
+It should compare existing snapshot, trace-pack, readiness/preflight, and light-log writer/output posture against `support.artifact_contents_contract.preview` without changing writer behavior or creating artifacts.
+
+Preserve:
+
+- no writer behavior changes
+- no support artifact creation
+- no snapshot/trace-pack/log/export/file/directory creation
+- no provider calls
+- no Evidence/EVEidence, Discovery, Hydration, Assessment, Watch, storage config, schema, runtime enforcement, command blocking, or UI work
