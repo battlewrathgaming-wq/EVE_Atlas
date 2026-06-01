@@ -39,9 +39,9 @@ Current state:
 - HS150 accepted
 - HS152 accepted
 - HS154 accepted
-- current executor is Human / Overseer shaping
-- no active Dev runway is open
-- next work is seam selection, not automatic provider-backed Hydration or runtime enforcement
+- current executor is Dev
+- HS156 Real operator External I/O config runway is open
+- next work is canonical External I/O config, not provider-backed Hydration or runtime enforcement
 
 Current heading:
 
@@ -52,8 +52,8 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Real operator External I/O config, if the Human wants the trust switch made real outside fixture proof.
-2. Snapshot/trace-pack creation policy if returning to support artifacts.
+1. HS156 Real operator External I/O config is active.
+2. Snapshot/trace-pack creation policy if returning to support artifacts after HS156.
 3. Real Hydration writer design or provider-backed Hydration gate, only after explicit selection.
 4. First runtime enforcement design packet only after explicit Human/Overseer selection.
 
@@ -98,6 +98,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS153 accepted HS152: `external_io.state_readout` and `external_io.state_persistence_proof` now prove fixture/offline External I/O state posture, renderer-forgery resistance, and no real config write while preserving External I/O on as release to normal gates rather than authorization.
 - HS154 opened a Hydration writer fixture proof runway: prove the smallest trusted fixture/test Hydration write path for labels/readability metadata while preserving IDs as facts and avoiding provider calls, runtime enforcement, Evidence/EVEidence writes, Discovery mutation, and UI work.
 - HS155 accepted HS154: `metadata.hydration_write_fixture_proof` now proves trusted fixture/test Hydration writes can patch activity-event readability labels from existing local `entities` while numeric IDs remain facts and Evidence/EVEidence, Discovery refs, Watch state, queues, providers, schema, and renderer UI remain untouched.
+- HS156 opened a Real operator External I/O config runway: persist/read the provider trust switch from canonical app-local config while keeping External I/O separate from provider execution, runtime authorization, Watch arming, and catch-up behavior.
 
 ## Accepted Boundaries
 

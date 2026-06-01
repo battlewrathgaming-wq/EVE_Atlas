@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after HS154 Hydration writer fixture proof accepted
+Status: Active HS156 Real operator External I/O config runway
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: hold at an Overseer/Human selection point after accepting fixture/offline Hydration writer proof.
+Current focus: make External I/O a real app-local operator config while keeping it separate from provider execution, runtime authorization, Watch arming, and catch-up behavior.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Human / Overseer shaping
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-None. No active Dev runway is open.
+workspace/DevHS156-external-io-real-config.md
 ```
 
 ## Current State
 
-HS142, HS144, HS146, HS148, HS150, HS152, and HS154 are accepted. No active Dev runway is open.
+HS142, HS144, HS146, HS148, HS150, HS152, and HS154 are accepted. HS156 is open as the next bounded Dev runway.
 
 Accepted Human decisions:
 
@@ -106,6 +106,7 @@ Recent accepted state:
 - `workspace/OverseerHS154-hydration-writer-fixture-proof-runway.md`
 - `workspace/DevHS154-hydration-writer-fixture-proof.md`
 - `workspace/OverseerHS155-hs154-hydration-writer-fixture-review.md`
+- `workspace/OverseerHS156-external-io-real-config-runway.md`
 
 ## Accepted Boundaries
 
@@ -121,41 +122,65 @@ Recent accepted state:
 
 ## Active Runway
 
-No active Dev runway is open.
-
-Likely next selectable seams:
-
-1. Real operator External I/O config: make the trust switch real outside fixture proof if the Human wants contact posture to persist for operator use.
-2. Snapshot/trace-pack creation policy: return to support-artifact creation once path authority is proven.
-3. Real Hydration writer design or provider-backed Hydration gate: only after explicit selection because it moves beyond fixture proof.
-4. First runtime enforcement design: only after explicit Human/Overseer selection, because command blocking changes runtime behavior.
-
-Do not open the next packet until the Human selects the next seam or explicitly asks Overseer to choose.
-
-## Last Runway Accepted
-
-HS146 implemented a bounded read-only support-artifact path authority inventory.
+HS156: Real operator External I/O config.
 
 Source of intent:
 
-- Human direction: support artifacts should be explicit before cleanup, snapshot, trace-pack, or enforcement execution.
-- Human shaping note: `F:\Obsidian\Projects_Aura\AURA-Atlas\Atlas_Human notes\Atlas Support Artifact Path Authority Human Notes.md`
+- Human selected seam `1`: Real operator External I/O config.
+- Human direction: external contact should be conscious, and `external_io` off should hold provider-backed movement without creating catch-up flood.
+- `workspace/OverseerHS152-external-io-persisted-state-runway.md`
+- `workspace/OverseerHS153-hs152-external-io-persisted-state-review.md`
+- `workspace/OverseerHS155-hs154-hydration-writer-fixture-review.md`
+- `workspace/OverseerHS156-external-io-real-config-runway.md`
+- `docs/features/acquisition-and-hydration-clocks.md`
 - `docs/current-state/current-storage-runtime-hardening.md`
-- `workspace/OverseerHS145-hs144-hydration-backlog-preview-review.md`
-- `workspace/OverseerHS146-support-artifact-path-authority-runway.md`
+- `workspace/critical/critical-terms.md`
+
+Command/readout candidates:
+
+```text
+external_io.state_readout
+external_io.state_config_write
+external_io.state_config_readback
+```
+
+Dev may choose tighter names if they fit existing service patterns, but the handoff must state final command names and renderer eligibility.
+
+Ordered runway:
+
+1. Inspect existing External I/O state readout, fixture persistence proof, service registry metadata, command authority checks, passive side-effect checks, gate-stack readout, composed gate policy preview, storage config proof patterns, and config path helpers.
+2. Define the canonical real External I/O config target under the Atlas app/root config folder, expected as `<Atlas app/root>/config/external-io-state.json` unless existing helpers dictate a safer exact path.
+3. Add a trusted-context-only operator config write/readback path for External I/O state.
+4. Keep renderer payloads from choosing arbitrary paths, forging trusted context, forging state, probing the filesystem, or writing config directly.
+5. Preserve accepted state meaning: `off` means provider-backed movement is `held_by_external_io`; `on` releases provider-backed work only to normal storage, live/provider, cadence, Watch, and confirmation gates; `on` is not authorization; re-enable creates no catch-up flood, request debt, or immediate dispatch.
+6. Integrate readout so the canonical config can be reported as operator posture without requiring fixture-only parameters.
+7. Keep `watch.executor.arm`, `live.gate`, storage authority, runtime authorization, and External I/O separate.
+8. Add focused verification for canonical config write/readback, state normalization, forged renderer payload resistance, no provider calls, no runtime enforcement, no command blocking, no queue dispatch, and no Evidence/Hydration writes.
+9. Update service registry, command authority, enforcement dry-run, composed gate policy, gate-stack, and passive side-effect coverage as needed.
+10. Update Evidence / Dev Handoff and create the expected DevHS file.
+
+## Last Runway Accepted
+
+HS154 implemented a bounded fixture/offline Hydration writer proof.
+
+Source of intent:
+
+- Human direction: continue down the memory lane and make contact a conscious act.
+- `workspace/OverseerHS150-hydration-execution-policy-runway.md`
+- `workspace/OverseerHS151-hs150-hydration-execution-policy-review.md`
+- `workspace/OverseerHS154-hydration-writer-fixture-proof-runway.md`
+- `docs/current-state/current-storage-runtime-hardening.md`
 
 Ordered steps:
 
-1. Inspect existing snapshot, trace pack, storage preflight, storage setup gate, enforcement dry-run, service registry, support/debug, temp/cache/SDE path handling, and passive side-effect verifier code.
-2. Identify existing support artifact classes and current path sources.
-3. Add a read-only support-artifact path authority preview/readout command.
-4. Classify artifact classes as operational support or corpus-adjacent support.
-5. Report path basis, storage authority requirement, pre-storage allowance, budget inclusion, External I/O relevance, renderer/trusted-context posture, cleanup stage, and privacy/sensitivity posture.
-6. Distinguish cache by origin where possible rather than treating all cache as one policy bucket.
-7. Distinguish rolling snapshot posture from retained snapshot posture where relevant.
-8. Prove the preview creates no files/directories and mutates no DB tables.
-9. Add focused offline verification plus command/service/enforcement/passive-side-effect coverage as needed.
-10. Update Evidence / Dev Handoff and create the expected DevHS file.
+1. Inspect Hydration backlog/execution policy, metadata hydration, existing label patching, report label use, service registry, passive side-effect checks, command authority, and fixture DB helpers.
+2. Add a trusted-context-only fixture Hydration write proof.
+3. Use existing local `entities` rows as the only label authority in the proof.
+4. Patch only readability label columns on existing `activity_events`.
+5. Record proof metadata in `metadata_runs` without provider calls.
+6. Prove numeric IDs remain the factual basis and labels/names remain Hydration metadata.
+7. Prove no Evidence/EVEidence writes, Discovery ref mutation, queue dispatch, Watch changes, provider calls, schema changes, storage config writes, runtime enforcement, or UI work.
+8. Update Evidence / Dev Handoff and create the expected DevHS file.
 
 ## Prior Accepted Runway
 
@@ -207,12 +232,12 @@ Ordered steps:
 - No schema migration unless Dev can prove it is purely fixture/test support and stops for Overseer if runtime schema is needed.
 - No renderer redesign.
 - No UI presentation/copy finalization.
-- No persisted External I/O setting in this packet.
+- No persisted External I/O setting outside the canonical External I/O config opened by HS156.
 - No support artifact creation.
 - No snapshot creation.
 - No trace-pack creation.
 - No cleanup/delete/prune/restore/move/copy/migration.
-- No storage config write.
+- No storage authority config write.
 - No filesystem probing from renderer-provided arbitrary paths.
 - No runtime authorization activation.
 - No future fail-closed behavior activation.
@@ -235,10 +260,10 @@ Ordered steps:
 
 ## Stop Conditions
 
-Before opening the next runway, stop and return to Overseer/Human if:
+During HS156, stop and return to Overseer/Human if:
 
 - the proof requires runtime interception or actual command blocking without explicit Human/Overseer decision
-- the proof requires real project-root External I/O config writes
+- the proof requires config writes outside the canonical External I/O config opened by HS156
 - the proof requires moving, copying, migrating, relocating, restoring, or deleting DB/storage
 - the proof requires live/provider/API calls
 - the proof requires writing entities, metadata runs, activity event labels, or hydration output outside trusted fixture/test control
@@ -270,6 +295,15 @@ Before opening the next runway, stop and return to Overseer/Human if:
 Run:
 
 ```powershell
+node --check src\main\services\externalIoStateService.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check src\main\services\gateStackReadoutService.js
+node --check src\main\services\composedGatePolicyService.js
+node --check scripts\verify-external-io-state.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-passive-side-effects.js
 npm.cmd run verify:support-artifact-path-authority
 npm.cmd run verify:external-io-state
 npm.cmd run verify:composed-gate-policy
@@ -293,9 +327,21 @@ git diff --check
 git status --short --branch
 ```
 
-Run `node --check` on any new or changed JavaScript files.
+If Dev adds a new focused verifier such as `verify:external-io-config`, run it and list it in the handoff.
+
+Run `node --check` on any additional new or changed JavaScript files.
 
 ## Evidence
+
+HS156 is open and not yet implemented.
+
+Expected Dev evidence:
+
+- canonical External I/O config path and state schema
+- trusted-context-only config write/readback behavior
+- renderer-forgery resistance
+- preservation of `off` / `on` state meaning
+- no provider calls, runtime enforcement, command blocking, queue dispatch, Evidence/EVEidence writes, Discovery ref mutation, Hydration writes, schema changes, or UI work
 
 HS154 Dev implementation completed.
 
@@ -532,6 +578,10 @@ git status --short --branch
 All listed commands passed. `verify:protected-terms` completed with warning-only discovery output and exit code 0. `git diff --check` passed with line-ending warnings only. `git status --short --branch` showed `main...origin/main [ahead 25]` plus the HS148 working-tree changes.
 
 ## Dev Handoff
+
+Expected Dev handoff:
+
+- `workspace/DevHS156-external-io-real-config.md`
 
 Completed Dev handoff:
 
