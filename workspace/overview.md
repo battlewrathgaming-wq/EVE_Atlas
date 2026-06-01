@@ -40,10 +40,10 @@ Current state:
 - HS152 accepted
 - HS154 accepted
 - HS156 accepted
-- HS158 open
-- current executor is Dev
-- active Dev runway is real operator storage authority config
-- next work is storage authority config posture, not provider-backed Hydration or runtime enforcement
+- HS158 accepted
+- current executor is Human / Overseer shaping
+- no active Dev runway is open
+- next work is seam selection, not provider-backed Hydration or runtime enforcement
 
 Current heading:
 
@@ -52,11 +52,12 @@ Current heading:
 - one hardening seam at a time
 - Atlas project root remains the anchor
 
-Active shaping:
+Likely next shaping candidates:
 
-1. HS158 Real operator storage authority config: make `<Atlas app/root>/config/storage-authority.json` real as trusted app-local operator posture.
-2. Keep storage authority separate from runtime enforcement, storage migration, provider movement, and UI setup.
-3. Preserve app-local fallback storage, explicit acknowledgement, `fallback_acknowledgement_needs_reconfirm`, and operator-controlled budget meaning.
+1. Snapshot/trace-pack creation policy if returning to support artifacts.
+2. First runtime enforcement design packet only after explicit Human/Overseer selection.
+3. Real Hydration writer design or provider-backed Hydration gate, only after explicit selection.
+4. Storage setup UI/renderer posture later, not now.
 
 See `workspace/current.md` for current truth.
 
@@ -102,6 +103,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS156 opened a Real operator External I/O config runway: persist/read the provider trust switch from canonical app-local config while keeping External I/O separate from provider execution, runtime authorization, Watch arming, and catch-up behavior.
 - HS157 accepted HS156: `external_io.state_config_readback` and `external_io.state_config_write` now make External I/O app-local operator config real while preserving `off` as held, `on` as release to normal gates, no runtime authorization, no catch-up flood, and no provider movement.
 - HS158 opened a Real operator storage authority config runway: make storage setup and budget authority real at `<Atlas app/root>/config/storage-authority.json`, preserve app-local fallback storage as explicit operator posture, use `fallback_acknowledgement_needs_reconfirm`, and avoid enforcement, migration, provider movement, UI setup, and hidden device-invasive storage authority.
+- HS159 accepted HS158 after Overseer cleanup: `storage.authority_config.readback` and `storage.authority_config.write` now make storage authority app-local operator config real while preserving 5GB as suggestion only, explicit operator budget persistence, renderer-forgery resistance, no runtime enforcement, no storage migration, and no real config file left by verification.
 
 ## Accepted Boundaries
 

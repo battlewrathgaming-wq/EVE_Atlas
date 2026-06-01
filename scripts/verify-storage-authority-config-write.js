@@ -14,6 +14,7 @@ async function main() {
   try {
     const selected = await verifySelectedStorageWrite(db, root);
     const fallback = await verifyAcknowledgedFallbackWrite(db, root);
+    const realConfig = await verifyRealOperatorConfigWrite(db, root);
     const blocked = await verifyBlockedStates(db, root);
     const unsafe = await verifyUnsafePathRejection(db, root);
     const missingAllowedRoot = await verifyMissingAllowedRootRejection(db, root);
@@ -24,6 +25,7 @@ async function main() {
       status: 'storage authority config write proof verified',
       sample_selected_storage: compactWrite(selected),
       sample_acknowledged_fallback: compactWrite(fallback),
+      sample_real_operator_config: compactRealConfig(realConfig),
       sample_blocked_states: blocked,
       sample_unsafe_path: compactWrite(unsafe),
       sample_missing_allowed_root: compactWrite(missingAllowedRoot),
@@ -34,6 +36,118 @@ async function main() {
     closeDatabase(db);
     fs.rmSync(root, { recursive: true, force: true });
   }
+}
+
+async function verifyRealOperatorConfigWrite(db, root) {
+  const targetPath = path.join(root, 'real-config-fixture', 'config', 'storage-authority.json');
+  const selectedDbPath = path.join(root, 'real-config-fixture', 'selected-storage', 'atlas.sqlite');
+  const defaultConfigPath = path.join(projectRoot(), 'config', 'storage-authority.json');
+  const missingReadback = await invokeServiceCommand('storage.authority_config.readback', {
+    storageAuthority: {
+      mode: 'app_local_fallback_acknowledged',
+      acknowledgement_status: 'acknowledged',
+      budget_bytes: 1
+    },
+    configPath: 'C:\\renderer-forged-storage-authority.json',
+    appRoot: 'C:\\renderer-forged-app-root'
+  }, {
+    db,
+    source: 'renderer'
+  });
+  assert(missingReadback.read_only === true, 'storage authority config readback should be read-only');
+  assert(missingReadback.default_config_path === defaultConfigPath, 'readback should report canonical default config path');
+  assert(missingReadback.target_path === defaultConfigPath, 'readback should use canonical target path');
+  assert(missingReadback.persisted_config.status === 'missing', 'canonical readback should safely report missing config');
+  assert(missingReadback.renderer_payload_ignored === true, 'renderer readback should ignore forged payload authority');
+  assert(missingReadback.filesystem_writes === 0, 'readback should not write files');
+
+  const result = await invokeServiceCommand('storage.authority_config.write', {
+    operatorLabel: 'Fixture operator selected storage',
+    storagePreflight: fixturePreflight({
+      mode: 'configured',
+      source: 'configured',
+      path: selectedDbPath,
+      exists: true
+    }),
+    storageAuthority: {
+      mode: 'selected_storage',
+      selected: true,
+      config_source: 'fixture_explicit_selection',
+      config_version: 1,
+      budget_source: 'operator_selected',
+      budget_bytes: 10 * 1024 * 1024 * 1024
+    },
+    storageBudgetBytes: 1,
+    storageConfigPath: 'C:\\renderer-style-forged-config-path',
+    appRoot: 'C:\\renderer-forged-app-root'
+  }, {
+    db,
+    allowStorageAuthorityConfigWrite: true,
+    allowStorageAuthorityConfigFixtureTarget: true,
+    storageAuthorityConfigWriteTargetPath: targetPath,
+    storageAuthorityConfigAllowedRoot: path.join(root, 'real-config-fixture'),
+    storageBudgetBytes: 10 * 1024 * 1024 * 1024
+  });
+
+  assert(result.action === 'storage.authority_config.write', 'real config command should be named');
+  assert(result.validation_result.status === 'storage_authority_config_write_valid', 'real config write should validate');
+  assert(result.would_write === true, 'real config write should write trusted target');
+  assert(result.write.status === 'written_atomically', 'real config write should write atomically');
+  assert(result.write.temp_exists_after_rename === false, 'real config temp file should not remain');
+  assert(result.readback.matches_payload === true, 'real config readback should match payload');
+  assert(result.readback.payload.real_operator_config === false, 'fixture verification should not claim real project config write');
+  assert(result.readback.payload.fixture_offline_only === true, 'fixture-target write should mark fixture-only');
+  assert(result.readback.payload.selected_storage_mode === 'selected_storage', 'selected storage mode should persist');
+  assert(result.readback.payload.selected_database_path === selectedDbPath, 'selected DB path should persist');
+  assert(result.readback.payload.budget_bytes === 10 * 1024 * 1024 * 1024, 'operator-selected budget should persist');
+  assert(result.readback.payload.suggested_default_budget_bytes === 5 * 1024 * 1024 * 1024, '5GB suggestion should be visible');
+  assert(result.readback.payload.suggested_default_budget_is_acceptance === false, '5GB suggestion must not be hidden acceptance');
+  assert(result.readback_posture.storage_authority_mode === 'selected_storage', 'readback posture should preserve selected storage');
+  assert(result.readback_posture.selected === true, 'readback posture should mark selected storage only for selected mode');
+  assert(result.readback_posture.budget_state === 'within_budget', 'readback posture should use explicit operator budget');
+  assert(result.forged_renderer_readback.renderer_payload_ignored === true, 'forged renderer readback should ignore payload claims');
+  assert(result.provider_calls === 0, 'real config write should not call providers');
+  assert(result.queue_dispatches === 0, 'real config write should not dispatch queues');
+  assert(result.evidence_writes === 0, 'real config write should not write Evidence/EVEidence');
+  assert(result.hydration_writes === 0, 'real config write should not write Hydration');
+  assert(result.schema_changes === 0, 'real config write should not change schema');
+  assert(result.storage_movement === false, 'real config write should not move storage');
+  assert(fs.existsSync(targetPath), 'fixture real-config target should be written');
+
+  const trustedReadback = await invokeServiceCommand('storage.authority_config.readback', {}, {
+    db,
+    storageAuthorityConfigReadPath: targetPath,
+    storageAuthorityConfigAllowedRoot: path.join(root, 'real-config-fixture')
+  });
+  assert(trustedReadback.persisted_config.status === 'read', 'trusted fixture readback should read written config');
+  assert(trustedReadback.storage_authority.mode === 'selected_storage', 'trusted readback should expose selected storage');
+  assert(trustedReadback.readback_posture.selected === true, 'trusted readback posture should preserve selected storage');
+
+  await assertRejects(
+    () => invokeServiceCommand('storage.authority_config.write', {
+      storageAuthority: {
+        mode: 'selected_storage',
+        selected: true,
+        budget_bytes: 1
+      },
+      storageConfigPath: targetPath
+    }, {
+      db,
+      source: 'renderer',
+      allowStorageAuthorityConfigWrite: true,
+      allowStorageAuthorityConfigFixtureTarget: true,
+      storageAuthorityConfigWriteTargetPath: targetPath,
+      storageAuthorityConfigAllowedRoot: root
+    }),
+    'SERVICE_COMMAND_NOT_RENDERER_ELIGIBLE',
+    'renderer should not be eligible for real storage config write'
+  );
+
+  return {
+    write: result,
+    missing_readback: missingReadback,
+    trusted_readback: trustedReadback
+  };
 }
 
 async function verifySelectedStorageWrite(db, root) {
@@ -239,10 +353,19 @@ async function verifyRendererCannotInvokeWriteProof(db, root) {
 function verifyCommandRegistration() {
   const commands = listServiceCommands();
   const command = commands.find((entry) => entry.command === 'storage.authority_config.write_proof');
+  const readback = commands.find((entry) => entry.command === 'storage.authority_config.readback');
+  const write = commands.find((entry) => entry.command === 'storage.authority_config.write');
   assert(command, 'storage authority config write proof should be listed');
   assert(command.classification === 'metadata-only', 'write proof should be metadata-only');
   assert(command.effects.includes('local-data-mutation'), 'write proof should declare local mutation effect');
   assert(command.renderer_allowed === false, 'write proof should not be renderer eligible');
+  assert(readback, 'storage authority config readback should be listed');
+  assert(readback.classification === 'read-only', 'real config readback should be read-only');
+  assert(readback.renderer_allowed === true, 'real config readback should be renderer eligible');
+  assert(write, 'storage authority config write should be listed');
+  assert(write.classification === 'metadata-only', 'real config write should be metadata-only');
+  assert(write.effects.includes('local-data-mutation'), 'real config write should declare local mutation');
+  assert(write.renderer_allowed === false, 'real config write should not be renderer eligible');
 }
 
 function trustedWriteContext(db, root, targetPath, options = {}) {
@@ -313,6 +436,28 @@ function compactWrite(readout) {
     readback_status: readout.readback?.status || null,
     readback_matches_payload: readout.readback?.matches_payload ?? null,
     enforcement_state: readout.enforcement_state
+  };
+}
+
+function compactRealConfig(result) {
+  return {
+    missing_readback_status: result.missing_readback.persisted_config.status,
+    default_config_path: result.write.default_config_path,
+    write_target_basis: result.write.target_path_basis,
+    would_write: result.write.would_write,
+    validation_status: result.write.validation_result.status,
+    write_status: result.write.write?.status || null,
+    readback_matches_payload: result.write.readback?.matches_payload ?? null,
+    selected_storage_mode: result.write.readback?.payload?.selected_storage_mode || null,
+    budget_bytes: result.write.readback?.payload?.budget_bytes || null,
+    suggested_default_budget_bytes: result.write.readback?.payload?.suggested_default_budget_bytes || null,
+    suggested_default_budget_is_acceptance: result.write.readback?.payload?.suggested_default_budget_is_acceptance,
+    readback_posture: result.write.readback_posture,
+    provider_calls: result.write.provider_calls,
+    queue_dispatches: result.write.queue_dispatches,
+    evidence_writes: result.write.evidence_writes,
+    hydration_writes: result.write.hydration_writes,
+    real_config_write: result.write.real_config_write
   };
 }
 

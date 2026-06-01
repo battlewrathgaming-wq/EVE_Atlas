@@ -47,6 +47,8 @@ const {
 const { buildSupportArtifactPathAuthorityPreview } = require('./supportArtifactPathAuthorityService');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
 const {
+  buildStorageAuthorityConfigReadback,
+  buildStorageAuthorityConfigWrite,
   buildStorageAuthorityConfigWriteProof,
   buildStorageAuthorityAcknowledgementPersistenceProof
 } = require('./storageAuthorityConfigWriteService');
@@ -414,6 +416,20 @@ const COMMANDS = {
     renderer: false,
     description: 'Write and read back a fixture-only storage authority config proof without enforcement or provider movement',
     handler: ({ payload, ...context }) => buildStorageAuthorityConfigWriteProof(payload, context)
+  },
+  'storage.authority_config.readback': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Read app-local storage authority config posture without enforcement, migration, provider movement, or path probing',
+    handler: ({ payload, ...context }) => buildStorageAuthorityConfigReadback(payload, context)
+  },
+  'storage.authority_config.write': {
+    classification: 'metadata-only',
+    effects: [EFFECTS.LOCAL_DATA_MUTATION],
+    renderer: false,
+    description: 'Write and read back trusted app-local storage authority config without enforcement, migration, or provider movement',
+    handler: ({ payload, ...context }) => buildStorageAuthorityConfigWrite(payload, context)
   },
   'storage.authority_config.acknowledgement_persistence_proof': {
     classification: 'metadata-only',

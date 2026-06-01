@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS158 Real operator storage authority config runway open
+Status: Resting after HS158 Real operator storage authority config accepted
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: make storage authority config real as app-local operator posture, without activating enforcement, migration, provider movement, or UI setup.
+Current focus: hold at an Overseer/Human selection point after accepting real operator storage authority config.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Human / Overseer shaping
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS158-storage-authority-real-config.md
+None. No active Dev runway is open.
 ```
 
 ## Current State
 
-HS142, HS144, HS146, HS148, HS150, HS152, HS154, and HS156 are accepted. HS158 is open as a bounded Dev runway.
+HS142, HS144, HS146, HS148, HS150, HS152, HS154, HS156, and HS158 are accepted. No active Dev runway is open.
 
 Accepted Human decisions:
 
@@ -65,6 +65,7 @@ Atlas has accepted storage/runtime hardening proofs:
 - read-only Hydration execution policy proof through `metadata.hydration_execution_policy.preview`
 - fixture/offline External I/O persisted state proof through `external_io.state_readout` and `external_io.state_persistence_proof`
 - real operator External I/O config posture through `external_io.state_config_readback` and `external_io.state_config_write`
+- real operator storage authority config posture through `storage.authority_config.readback` and `storage.authority_config.write`
 - fixture/offline Hydration writer proof through `metadata.hydration_write_fixture_proof`
 
 Recent accepted state:
@@ -111,6 +112,9 @@ Recent accepted state:
 - `workspace/DevHS156-external-io-real-config.md`
 - `workspace/OverseerHS157-hs156-external-io-real-config-review.md`
 - `workspace/OverseerHS158-storage-authority-real-config-decision.md`
+- `workspace/OverseerHS158-storage-authority-real-config-runway.md`
+- `workspace/DevHS158-storage-authority-real-config.md`
+- `workspace/OverseerHS159-hs158-storage-authority-real-config-review.md`
 
 ## Accepted Boundaries
 
@@ -126,41 +130,35 @@ Recent accepted state:
 
 ## Active Runway
 
-HS158: Real operator storage authority config.
+No active Dev runway is open.
+
+Likely next selectable seams:
+
+1. Snapshot/trace-pack creation policy: return to support-artifact creation now that path authority and storage authority posture are stronger.
+2. First runtime enforcement design: only after explicit Human/Overseer selection, because command blocking changes runtime behavior.
+3. Real Hydration writer design or provider-backed Hydration gate: only after explicit selection because it moves beyond fixture proof.
+4. Storage setup UI/renderer posture: later, not now, because the current heading remains system hardening.
+
+Do not open the next packet until the Human selects the next seam or explicitly asks Overseer to choose.
+
+## Last Runway Accepted
+
+HS158 implemented real operator storage authority config posture.
 
 Source of intent:
 
-- Human selected the storage-memory lane and accepted a real storage authority config seam.
+- Human selected the storage-memory lane.
 - Human direction: Atlas is file-portable and must not invade the user's device silently.
 - Human direction: app-local fallback storage is acceptable only as explicit operator posture, not hidden authority.
 - Human direction: 5GB may be the suggested/default budget, but the operator can choose another amount.
 - Human direction: use `fallback_acknowledgement_needs_reconfirm`; do not use `Corpus_fallback` in Dev wording.
-- Human shaping note: `F:\Obsidian\Projects_Aura\Atlas Ovy\Real operator storage authority config.md`
 - `workspace/OverseerHS158-storage-authority-real-config-decision.md`
 - `workspace/OverseerHS158-storage-authority-real-config-runway.md`
-- `workspace/OverseerHS130-storage-config-decision-brief.md`
-- `workspace/OverseerHS131-storage-config-dry-run-scope.md`
-- `workspace/OverseerHS132-hs131-storage-config-dry-run-review.md`
-- `workspace/OverseerHS133-storage-config-write-proof-scope.md`
-- `workspace/OverseerHS134-hs133-storage-config-write-proof-review.md`
-- `workspace/OverseerHS135-acknowledgement-persistence-proof-scope.md`
-- `workspace/OverseerHS136-hs135-acknowledgement-persistence-review.md`
-- `workspace/OverseerHS157-hs156-external-io-real-config-review.md`
+- `workspace/DevHS158-storage-authority-real-config.md`
+- `workspace/OverseerHS159-hs158-storage-authority-real-config-review.md`
 - `docs/current-state/current-storage-runtime-hardening.md`
 
-Accepted target:
-
-```text
-<Atlas app/root>/config/storage-authority.json
-```
-
-Accepted wording:
-
-`app-local fallback storage` means Atlas-controlled user activity storage under the Atlas app/root, used only when no selected storage path is configured and the operator has explicitly acknowledged that posture.
-
-`fallback_acknowledgement_needs_reconfirm` means app-local fallback storage is still discoverable, but the prior acknowledgement basis is stale and should be reconfirmed before meaningful collection or writes are treated as accepted.
-
-Ordered runway:
+Ordered steps:
 
 1. Inspect existing storage authority preflight, setup gate readout, storage config dry-run, fixture write proof, acknowledgement persistence proof, service registry metadata, command authority checks, passive side-effect checks, enforcement dry-run, composed gate policy preview, and HS156 External I/O real config patterns.
 2. Define the canonical real storage authority config target under the Atlas app/root config folder.
@@ -172,33 +170,6 @@ Ordered runway:
 8. Allow creation only of the canonical `config/` folder and `storage-authority.json` during the trusted write path.
 9. Add focused verification and update service registry, command authority, passive side-effect, enforcement dry-run, and gate/composed-policy coverage as needed.
 10. Update Evidence / Dev Handoff and create the expected DevHS file.
-
-## Last Runway Accepted
-
-HS156 implemented real operator External I/O config posture.
-
-Source of intent:
-
-- Human selected seam `1`: Real operator External I/O config.
-- Human direction: external contact should be conscious, and `external_io` off should hold provider-backed movement without creating catch-up flood.
-- `workspace/OverseerHS152-external-io-persisted-state-runway.md`
-- `workspace/OverseerHS153-hs152-external-io-persisted-state-review.md`
-- `workspace/OverseerHS156-external-io-real-config-runway.md`
-- `workspace/OverseerHS157-hs156-external-io-real-config-review.md`
-- `docs/features/acquisition-and-hydration-clocks.md`
-- `docs/current-state/current-storage-runtime-hardening.md`
-
-Ordered steps:
-
-1. Inspect existing External I/O state readout, fixture persistence proof, service registry metadata, command authority checks, passive side-effect checks, gate-stack readout, composed gate policy preview, storage config proof patterns, and config path helpers.
-2. Define the canonical real External I/O config target under the Atlas app/root config folder.
-3. Add trusted-context-only operator config write/readback behavior.
-4. Keep renderer payloads from choosing arbitrary paths, forging trusted context, forging state, probing the filesystem, or writing config directly.
-5. Preserve accepted `off` / `on` state meaning and no catch-up-flood posture.
-6. Integrate readout so the canonical config reports operator posture without fixture-only parameters.
-7. Keep `watch.executor.arm`, `live.gate`, storage authority, runtime authorization, and External I/O separate.
-8. Add focused verification and update command coverage/readout surfaces.
-9. Update Evidence / Dev Handoff and create the expected DevHS file.
 
 ## Prior Accepted Runway
 
@@ -361,6 +332,111 @@ If Dev adds a new focused verifier such as `verify:storage-authority-real-config
 Run `node --check` on any additional new or changed JavaScript files.
 
 ## Evidence
+
+HS158 Dev implementation completed.
+
+- Added real operator storage authority config posture at `<Atlas app/root>/config/storage-authority.json`.
+- In this repo the canonical path resolves to `F:\Projects\AURA-Atlas\config\storage-authority.json`.
+- Added read-only `storage.authority_config.readback`.
+- Added trusted-context-only, non-renderer `storage.authority_config.write`.
+- Retained fixture-only `storage.authority_config.write_proof` and `storage.authority_config.acknowledgement_persistence_proof`.
+- Integrated canonical storage authority config posture into `storage.setup_gate_readout` through persisted config readback.
+- Preserved distinct states for selected storage, app-local fallback storage, fallback acknowledgement, `fallback_acknowledgement_needs_reconfirm`, missing/unavailable storage, invalid/degraded storage, and budget posture.
+- App-local fallback storage remains distinct from selected storage and is not accepted without explicit acknowledgement posture.
+- The 5GB suggested/default budget is exposed as `suggested_default_budget_bytes = 5368709120` and `suggested_default_budget_is_acceptance = false`; it is not treated as hidden acceptance.
+- The focused verifier demonstrates an explicit 10GB operator-selected budget.
+- Renderer-origin payloads cannot invoke the write command and cannot choose arbitrary paths, forge trusted context, forge acknowledgement, forge budget, forge app-root identity, or probe the filesystem.
+- Added service registry, command authority, passive side-effect, enforcement dry-run, composed gate policy, storage setup gate, and focused storage config verification coverage.
+- Boundary preserved: no runtime enforcement/interception/blocking, no provider movement, no zKill/ESI/SDE calls, no Evidence/EVEidence writes, no Discovery ref mutation, no Hydration writes, no queue dispatch, no Watch execution behavior change, no DB creation, no storage migration/move/copy/delete/relocation/restore/pruning/cleanup, no support artifact/snapshot/trace-pack creation, no schema change, and no renderer UI/setup flow.
+- Verification used fixture-controlled write targets and confirmed `config\storage-authority.json` did not exist after the focused verifier.
+
+HS158 sample real storage authority config output:
+
+```json
+{
+  "sample_real_operator_config": {
+    "missing_readback_status": "missing",
+    "default_config_path": "F:\\Projects\\AURA-Atlas\\config\\storage-authority.json",
+    "write_target_basis": "trusted_fixture_context_target",
+    "would_write": true,
+    "validation_status": "storage_authority_config_write_valid",
+    "write_status": "written_atomically",
+    "readback_matches_payload": true,
+    "selected_storage_mode": "selected_storage",
+    "budget_bytes": 10737418240,
+    "suggested_default_budget_bytes": 5368709120,
+    "suggested_default_budget_is_acceptance": false,
+    "readback_posture": {
+      "storage_authority_mode": "selected_storage",
+      "selected": true,
+      "fallback_available": false,
+      "fallback_acknowledged": false,
+      "acknowledgement_status": "not_required",
+      "storage_state": "configured_ready",
+      "setup_gate": "ready",
+      "budget_state": "within_budget",
+      "budget_bytes": 10737418240,
+      "suggested_default_budget_is_acceptance": false,
+      "write_allowed_if_enforced_later": true,
+      "provider_movement_allowed_if_enforced_later": true
+    },
+    "provider_calls": 0,
+    "queue_dispatches": 0,
+    "evidence_writes": 0,
+    "hydration_writes": 0,
+    "real_config_write": false
+  },
+  "real_project_config_exists": false
+}
+```
+
+HS158 verification:
+
+```powershell
+node --check src\main\services\externalIoStateService.js
+node --check src\main\services\storageAuthorityConfigWriteService.js
+node --check src\main\services\storageSetupGateReadoutService.js
+node --check src\main\services\storageAuthorityPreflightService.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check src\main\services\gateStackReadoutService.js
+node --check src\main\services\composedGatePolicyService.js
+node --check scripts\verify-external-io-state.js
+node --check scripts\verify-storage-authority-config-write.js
+node --check scripts\verify-storage-acknowledgement-persistence.js
+node --check scripts\verify-storage-setup-gate.js
+node --check scripts\verify-storage-authority-preflight.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-passive-side-effects.js
+npm.cmd run verify:storage-authority-config-write
+npm.cmd run verify:storage-acknowledgement-persistence
+npm.cmd run verify:storage-authority-preflight
+npm.cmd run verify:storage-setup-gate
+npm.cmd run verify:support-artifact-path-authority
+npm.cmd run verify:external-io-state
+npm.cmd run verify:composed-gate-policy
+npm.cmd run verify:hydration-execution-policy
+npm.cmd run verify:hydration-backlog-preview
+npm.cmd run verify:hydration
+npm.cmd run verify:hydration-write-fixture
+npm.cmd run verify:metadata-status
+npm.cmd run verify:metadata-lookup
+npm.cmd run verify:actor-metadata
+npm.cmd run verify:corporation-metadata
+npm.cmd run verify:gate-stack-readout
+npm.cmd run verify:enforcement-dry-run
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:protected-terms
+git diff --check
+git status --short --branch
+```
+
+All listed commands passed. `verify:protected-terms` completed with warning-only discovery output and exit code 0. `git diff --check` passed with line-ending warnings only. `git status --short --branch` showed `main...origin/main [ahead 35]` plus the HS158 working-tree changes.
+
+Prior evidence:
 
 HS156 Dev implementation accepted.
 
@@ -693,9 +769,13 @@ All listed commands passed. `verify:protected-terms` completed with warning-only
 
 Expected Dev handoff:
 
-- `workspace/DevHS158-storage-authority-real-config.md`
+- None; HS158 Dev handoff is complete.
 
 Completed Dev handoff:
+
+- `workspace/DevHS158-storage-authority-real-config.md`
+
+Prior completed Dev handoff:
 
 - `workspace/DevHS156-external-io-real-config.md`
 

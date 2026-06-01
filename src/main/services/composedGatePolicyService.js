@@ -19,6 +19,7 @@ const REPRESENTATIVE_ROWS = Object.freeze([
   rowSpec('pruning_deletion_execution', 'retention.actions', 'Pruning/deletion execution'),
   rowSpec('runtime_control_task_cancel', 'task.cancel', 'Runtime control / task cancellation'),
   rowSpec('external_io_operator_config_write', 'external_io.state_config_write', 'External I/O operator config write'),
+  rowSpec('storage_authority_operator_config_write', 'storage.authority_config.write', 'Storage authority operator config write'),
   rowSpec('fixture_only_write_proof', 'storage.authority_config.write_proof', 'Fixture-only proof command'),
   rowSpec('unknown_unclassified_future_command', 'future.unclassified.command', 'Unknown/unclassified future command', null)
 ]);

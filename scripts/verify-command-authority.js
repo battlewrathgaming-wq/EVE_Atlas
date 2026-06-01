@@ -41,6 +41,10 @@ async function main() {
     assert(commands.get('storage.setup_gate_readout')?.effects.includes('read-only'), 'storage setup gate readout should declare read-only effect');
     assert(commands.get('storage.authority_config.write_proof')?.classification === 'metadata-only', 'storage config write proof should be metadata-only');
     assert(commands.get('storage.authority_config.write_proof')?.effects.includes('local-data-mutation'), 'storage config write proof should declare local mutation effect');
+    assert(commands.get('storage.authority_config.readback')?.classification === 'read-only', 'storage config readback should be read-only');
+    assert(commands.get('storage.authority_config.readback')?.effects.includes('read-only'), 'storage config readback should declare read-only effect');
+    assert(commands.get('storage.authority_config.write')?.classification === 'metadata-only', 'storage config write should be metadata-only');
+    assert(commands.get('storage.authority_config.write')?.effects.includes('local-data-mutation'), 'storage config write should declare local mutation effect');
     assert(commands.get('storage.authority_config.acknowledgement_persistence_proof')?.classification === 'metadata-only', 'storage acknowledgement persistence proof should be metadata-only');
     assert(commands.get('storage.authority_config.acknowledgement_persistence_proof')?.effects.includes('local-data-mutation'), 'storage acknowledgement persistence proof should declare local mutation effect');
     assert(commands.get('storage.enforcement_dry_run.command_effect_map')?.classification === 'read-only', 'enforcement dry-run map should be read-only');
@@ -69,6 +73,8 @@ async function main() {
     assert(rendererNames.has('storage.authority_preflight'), 'storage authority preflight should be renderer eligible');
     assert(rendererNames.has('storage.setup_gate_readout'), 'storage setup gate readout should be renderer eligible');
     assert(!rendererNames.has('storage.authority_config.write_proof'), 'storage config write proof should not be renderer eligible');
+    assert(rendererNames.has('storage.authority_config.readback'), 'storage config readback should be renderer eligible');
+    assert(!rendererNames.has('storage.authority_config.write'), 'storage config write should not be renderer eligible');
     assert(!rendererNames.has('storage.authority_config.acknowledgement_persistence_proof'), 'storage acknowledgement persistence proof should not be renderer eligible');
     assert(rendererNames.has('storage.enforcement_dry_run.command_effect_map'), 'enforcement dry-run map should be renderer eligible as read-only');
     assert(rendererNames.has('storage.composed_gate_policy.preview'), 'composed gate policy preview should be renderer eligible as read-only');
@@ -114,6 +120,11 @@ async function main() {
       () => invoke(null, { command: 'external_io.state_config_write', payload: { state: 'on' } }),
       'SERVICE_COMMAND_NOT_RENDERER_ELIGIBLE',
       'renderer IPC should reject External I/O config write'
+    );
+    await assertRejects(
+      () => invoke(null, { command: 'storage.authority_config.write', payload: { storageAuthority: { mode: 'selected_storage' } } }),
+      'SERVICE_COMMAND_NOT_RENDERER_ELIGIBLE',
+      'renderer IPC should reject storage authority config write'
     );
     await assertRejects(
       () => invoke(null, { command: 'metadata.hydration_write_fixture_proof', payload: { entityIds: [90000001] } }),

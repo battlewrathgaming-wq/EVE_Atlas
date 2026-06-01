@@ -1,3 +1,4 @@
+const fs = require('node:fs');
 const path = require('node:path');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
 const { projectRoot } = require('../util/tempPaths');
@@ -5,6 +6,7 @@ const { projectRoot } = require('../util/tempPaths');
 const BUDGET_WARNING_RATIO = 0.7;
 const BUDGET_STRONG_WARNING_RATIO = 0.95;
 const BUDGET_HARD_LOCK_RATIO = 1;
+const SUGGESTED_DEFAULT_BUDGET_BYTES = 5 * 1024 * 1024 * 1024;
 const STORAGE_AUTHORITY_CONFIG_VERSION = 1;
 const STORAGE_AUTHORITY_CONFIG_SCHEMA = 'aura.atlas.storage_authority';
 const DRY_RUN_TIMESTAMP_PLACEHOLDER = 'DRY_RUN_TIMESTAMP_PLACEHOLDER';
@@ -129,6 +131,9 @@ function validateStorageConfigDryRun({
   if (storageAuthority.mode === 'acknowledgement_invalidated' || storageAuthority.acknowledgement_status === 'invalidated') {
     issues.push('fallback_acknowledgement_invalidated');
   }
+  if (storageAuthority.mode === 'fallback_acknowledgement_needs_reconfirm' || storageAuthority.acknowledgement_status === 'fallback_acknowledgement_needs_reconfirm') {
+    issues.push('fallback_acknowledgement_needs_reconfirm');
+  }
   if (storageAuthority.validation_status === 'missing_unavailable' || storagePosture.state === 'missing_unavailable_blocked') {
     issues.push('selected_storage_missing_unavailable');
   }
@@ -231,12 +236,15 @@ function applyBudgetToStorageAuthority(storageAuthority, budgetPosture) {
 
 function buildStorageAuthorityReadout(input = {}, context = {}, preflight = {}, trustedBudgetBytes = null) {
   const fixtureInput = context.allowStorageSetupGateFixtureInput === true && input.storageAuthority;
-  const trustedInput = context.storageAuthority || (fixtureInput ? input.storageAuthority : null);
+  const persistedConfig = (context.storageAuthority || fixtureInput)
+    ? null
+    : readStorageAuthorityConfig(context);
+  const trustedInput = context.storageAuthority || (fixtureInput ? input.storageAuthority : null) || persistedConfig?.authority || null;
   const database = preflight.database || {};
   const selectedByPreflight = database.source === 'configured' && Boolean(database.path);
   const fallbackAvailableByPreflight = database.source === 'fallback' && Boolean(database.path);
   const config = trustedInput || {};
-  const configSource = trustedInput?.config_source || trustedInput?.configSource || (trustedInput ? 'fixture' : 'derived_from_preflight');
+  const configSource = trustedInput?.config_source || trustedInput?.configSource || (persistedConfig?.source || (trustedInput ? 'fixture' : 'derived_from_preflight'));
   const mode = config.mode || derivedAuthorityMode({ config, selectedByPreflight, fallbackAvailableByPreflight, database });
   const acknowledgement = acknowledgementReadout(config, mode);
   const selected = config.selected === undefined
@@ -282,6 +290,8 @@ function buildStorageAuthorityReadout(input = {}, context = {}, preflight = {}, 
     validation_status: validationStatus,
     budget_source: budgetSource,
     budget_bytes: budgetBytes,
+    config_path: persistedConfig?.path || null,
+    config_read_status: persistedConfig?.status || null,
     read_allowed: readAllowed,
     write_allowed_if_enforced_later: writeAllowed,
     provider_movement_allowed_if_enforced_later: providerAllowed,
@@ -298,6 +308,9 @@ function buildStorageAuthorityReadout(input = {}, context = {}, preflight = {}, 
 function derivedAuthorityMode({ config, selectedByPreflight, fallbackAvailableByPreflight, database }) {
   if (config.acknowledgement_status === 'invalidated' || config.acknowledgementStatus === 'invalidated') {
     return 'acknowledgement_invalidated';
+  }
+  if (config.acknowledgement_status === 'fallback_acknowledgement_needs_reconfirm' || config.acknowledgementStatus === 'fallback_acknowledgement_needs_reconfirm') {
+    return 'fallback_acknowledgement_needs_reconfirm';
   }
   if (selectedByPreflight) {
     if (database.mode === 'missing') {
@@ -322,6 +335,13 @@ function acknowledgementReadout(config = {}, mode) {
       status: 'invalidated',
       basis: config.acknowledgement_basis || config.acknowledgementBasis || 'fixture_invalidated',
       invalid_reason: invalidReason || 'fixture invalidation reason not specified'
+    };
+  }
+  if (explicitStatus === 'fallback_acknowledgement_needs_reconfirm' || mode === 'fallback_acknowledgement_needs_reconfirm') {
+    return {
+      status: 'fallback_acknowledgement_needs_reconfirm',
+      basis: config.acknowledgement_basis || config.acknowledgementBasis || 'persisted_fallback_acknowledgement_needs_reconfirm',
+      invalid_reason: invalidReason || 'fallback_acknowledgement_basis_stale'
     };
   }
   if (explicitStatus === 'acknowledged' || mode === 'app_local_fallback_acknowledged') {
@@ -352,7 +372,7 @@ function validationStatusFor({ mode, database, config }) {
   if (mode === 'no_storage_selected') {
     return 'not_selected';
   }
-  if (mode === 'acknowledgement_invalidated') {
+  if (mode === 'acknowledgement_invalidated' || mode === 'fallback_acknowledgement_needs_reconfirm') {
     return 'invalidated';
   }
   if (mode === 'selected_storage_missing_unavailable' || database.mode === 'missing') {
@@ -398,6 +418,69 @@ function pathBasisFor({ mode, selected, fallbackAvailable }) {
     return 'app_local_current_file_fallback';
   }
   return 'not_selected';
+}
+
+function readStorageAuthorityConfig(context = {}) {
+  const root = path.resolve(projectRoot());
+  const defaultPath = path.join(root, 'config', 'storage-authority.json');
+  const targetPath = path.resolve(context.storageAuthorityConfigReadPath || defaultPath);
+  const allowedRoot = path.resolve(context.storageAuthorityConfigAllowedRoot || path.join(root, 'config'));
+  if (!isInsidePath(targetPath, allowedRoot)) {
+    return {
+      status: 'blocked_path',
+      source: 'default_no_config',
+      path: targetPath,
+      authority: null
+    };
+  }
+  if (!context.storageAuthorityConfigReadPath && context.source === 'renderer') {
+    // Renderer may read the canonical app-local posture, never a renderer-supplied path.
+  }
+  if (!fs.existsSync(targetPath)) {
+    return {
+      status: 'missing',
+      source: 'default_no_config',
+      path: targetPath,
+      authority: null
+    };
+  }
+  try {
+    const payload = JSON.parse(fs.readFileSync(targetPath, 'utf8'));
+    return {
+      status: payload?.schema === STORAGE_AUTHORITY_CONFIG_SCHEMA ? 'read' : 'invalid_schema',
+      source: payload?.schema === STORAGE_AUTHORITY_CONFIG_SCHEMA ? 'persisted_storage_authority_config' : 'default_no_config',
+      path: targetPath,
+      payload,
+      authority: payload?.schema === STORAGE_AUTHORITY_CONFIG_SCHEMA ? authorityFromPayload(payload) : null
+    };
+  } catch (error) {
+    return {
+      status: 'unparseable',
+      source: 'default_no_config',
+      path: targetPath,
+      error: error.message,
+      authority: null
+    };
+  }
+}
+
+function authorityFromPayload(payload = {}) {
+  return {
+    mode: payload.selected_storage_mode || null,
+    selected: payload.selected_storage_mode === 'selected_storage',
+    fallback_available: payload.selected_storage_mode?.startsWith('app_local_fallback') || payload.selected_storage_mode === 'fallback_acknowledgement_needs_reconfirm',
+    acknowledgement_status: payload.fallback_acknowledgement?.status || null,
+    acknowledgement_basis: payload.fallback_acknowledgement?.provenance || null,
+    acknowledgement_invalid_reason: payload.fallback_acknowledgement?.invalidation_basis || null,
+    config_source: 'persisted_storage_authority_config',
+    config_version: payload.version || null,
+    storage_root: payload.selected_storage_root || null,
+    database_path: payload.selected_database_path || null,
+    path_basis: payload.path_basis || null,
+    validation_status: payload.validation_status || null,
+    budget_source: payload.budget_source || null,
+    budget_bytes: payload.budget_bytes
+  };
 }
 
 function dirnameOrNull(filePath) {
@@ -471,13 +554,45 @@ function classifyStoragePosture(preflight = {}, storageAuthority = {}) {
       database
     });
   }
-  if (storageAuthority.mode === 'acknowledgement_invalidated') {
+  if (storageAuthority.mode === 'acknowledgement_invalidated' || storageAuthority.mode === 'fallback_acknowledgement_needs_reconfirm') {
     return posture({
       state: 'fallback_ack_required',
       setup_gate: 'operator_ack_required',
       real_alpha_collection: 'blocked_until_explicit_acknowledgement',
       blocks_real_collection: true,
-      reason: 'Previous fallback acknowledgement is invalidated.',
+      reason: storageAuthority.mode === 'fallback_acknowledgement_needs_reconfirm'
+        ? 'Previous app-local fallback acknowledgement needs reconfirmation.'
+        : 'Previous fallback acknowledgement is invalidated.',
+      database
+    });
+  }
+  if (storageAuthority.mode === 'selected_storage_missing_unavailable') {
+    return posture({
+      state: 'missing_unavailable_blocked',
+      setup_gate: 'setup_required',
+      real_alpha_collection: 'blocked_until_storage_available',
+      blocks_real_collection: true,
+      reason: 'Selected storage is missing or unavailable.',
+      database
+    });
+  }
+  if (storageAuthority.mode === 'selected_storage_invalid_degraded') {
+    return posture({
+      state: 'invalid_degraded_setup_required',
+      setup_gate: 'setup_required',
+      real_alpha_collection: 'blocked_until_storage_validated',
+      blocks_real_collection: true,
+      reason: 'Selected storage is invalid or degraded.',
+      database
+    });
+  }
+  if (!hasPath && storageAuthority.mode === 'selected_storage' && storageAuthority.validation_status === 'valid') {
+    return posture({
+      state: 'configured_ready',
+      setup_gate: 'ready',
+      real_alpha_collection: 'ready_subject_to_budget_and_other_gates',
+      blocks_real_collection: false,
+      reason: 'Selected storage authority config is valid; runtime enforcement remains inactive.',
       database
     });
   }
@@ -567,6 +682,8 @@ function classifyBudgetPosture({ budgetBytes, usageBytes }) {
     return {
       state: 'budget_unconfigured',
       budget_bytes: null,
+      suggested_default_budget_bytes: SUGGESTED_DEFAULT_BUDGET_BYTES,
+      suggested_default_is_acceptance: false,
       usage_bytes: usageBytes,
       usage_ratio: null,
       warning_level: 'unconfigured',
@@ -1097,5 +1214,6 @@ function decision(posture, actionClass, context, overrides = {}) {
 }
 
 module.exports = {
+  SUGGESTED_DEFAULT_BUDGET_BYTES,
   buildStorageSetupGateReadout
 };

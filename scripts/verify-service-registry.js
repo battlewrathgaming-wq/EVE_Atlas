@@ -56,6 +56,8 @@ async function main() {
     const storageAuthorityPreflightCommand = commands.find((entry) => entry.command === 'storage.authority_preflight');
     const storageSetupGateReadoutCommand = commands.find((entry) => entry.command === 'storage.setup_gate_readout');
     const storageAuthorityConfigWriteCommand = commands.find((entry) => entry.command === 'storage.authority_config.write_proof');
+    const storageAuthorityConfigReadbackCommand = commands.find((entry) => entry.command === 'storage.authority_config.readback');
+    const storageAuthorityOperatorConfigWriteCommand = commands.find((entry) => entry.command === 'storage.authority_config.write');
     const storageAcknowledgementPersistenceCommand = commands.find((entry) => entry.command === 'storage.authority_config.acknowledgement_persistence_proof');
     const enforcementDryRunCommand = commands.find((entry) => entry.command === 'storage.enforcement_dry_run.command_effect_map');
     const composedGatePolicyCommand = commands.find((entry) => entry.command === 'storage.composed_gate_policy.preview');
@@ -128,6 +130,10 @@ async function main() {
     assert(storageSetupGateReadoutCommand?.classification === 'read-only', 'storage setup gate readout should be read-only');
     assert(storageAuthorityConfigWriteCommand?.classification === 'metadata-only', 'storage authority config write proof should be metadata-only');
     assert(storageAuthorityConfigWriteCommand?.renderer_allowed === false, 'storage authority config write proof should not be renderer eligible');
+    assert(storageAuthorityConfigReadbackCommand?.classification === 'read-only', 'storage authority config readback should be read-only');
+    assert(storageAuthorityConfigReadbackCommand?.renderer_allowed === true, 'storage authority config readback should be renderer eligible');
+    assert(storageAuthorityOperatorConfigWriteCommand?.classification === 'metadata-only', 'storage authority config write should be metadata-only');
+    assert(storageAuthorityOperatorConfigWriteCommand?.renderer_allowed === false, 'storage authority config write should not be renderer eligible');
     assert(storageAcknowledgementPersistenceCommand?.classification === 'metadata-only', 'storage acknowledgement persistence proof should be metadata-only');
     assert(storageAcknowledgementPersistenceCommand?.renderer_allowed === false, 'storage acknowledgement persistence proof should not be renderer eligible');
     assert(enforcementDryRunCommand?.classification === 'read-only', 'enforcement dry-run map should be read-only');
@@ -171,6 +177,21 @@ async function main() {
     });
     assert(storageSetupGate.read_only === true, 'storage setup gate readout should declare read-only behavior');
     assert(storageSetupGate.enforcement_state === 'not_implemented_readout_only', 'storage setup gate readout should not enforce lockout');
+
+    const storageAuthorityReadback = await invokeServiceCommand('storage.authority_config.readback', {
+      storageAuthority: {
+        mode: 'app_local_fallback_acknowledged',
+        acknowledgement_status: 'acknowledged',
+        budget_bytes: 1
+      },
+      configPath: 'C:\\renderer-forged-storage-authority.json'
+    }, {
+      db,
+      source: 'renderer'
+    });
+    assert(storageAuthorityReadback.read_only === true, 'storage authority config readback should be read-only');
+    assert(storageAuthorityReadback.renderer_payload_ignored === true, 'storage authority readback should ignore renderer claims');
+    assert(storageAuthorityReadback.filesystem_writes === 0, 'storage authority readback should not write files');
 
     const enforcementDryRun = await invokeServiceCommand('storage.enforcement_dry_run.command_effect_map', {}, {
       db,

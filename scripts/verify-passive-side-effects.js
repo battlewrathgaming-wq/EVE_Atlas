@@ -106,6 +106,17 @@ async function verifySeededDb(root) {
       ['metadata.hydration_execution_policy.preview', () => invokeServiceCommand('metadata.hydration_execution_policy.preview', {}, context)],
       ['runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],
       ['storage.authority_preflight', () => invokeServiceCommand('storage.authority_preflight', {}, context)],
+      ['storage.authority_config.readback', () => invokeServiceCommand('storage.authority_config.readback', {
+        storageAuthority: {
+          mode: 'app_local_fallback_acknowledged',
+          acknowledgement_status: 'acknowledged',
+          budget_bytes: 1
+        },
+        configPath: path.join(root, 'renderer-forged-storage-authority.json')
+      }, {
+        ...context,
+        source: 'renderer'
+      })],
       ['storage.setup_gate_readout', () => invokeServiceCommand('storage.setup_gate_readout', {}, context)],
       ['storage.enforcement_dry_run.command_effect_map', () => invokeServiceCommand('storage.enforcement_dry_run.command_effect_map', {}, context)],
       ['storage.composed_gate_policy.preview', () => invokeServiceCommand('storage.composed_gate_policy.preview', {}, context)],
@@ -155,6 +166,12 @@ async function verifyEmptyDb(root) {
       ['empty metadata.hydration_execution_policy.preview', () => invokeServiceCommand('metadata.hydration_execution_policy.preview', {}, context)],
       ['empty runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],
       ['empty storage.authority_preflight', () => invokeServiceCommand('storage.authority_preflight', {}, context)],
+      ['empty storage.authority_config.readback', () => invokeServiceCommand('storage.authority_config.readback', {
+        configPath: path.join(root, 'empty-renderer-forged-storage-authority.json')
+      }, {
+        ...context,
+        source: 'renderer'
+      })],
       ['empty storage.setup_gate_readout', () => invokeServiceCommand('storage.setup_gate_readout', {}, context)],
       ['empty storage.enforcement_dry_run.command_effect_map', () => invokeServiceCommand('storage.enforcement_dry_run.command_effect_map', {}, context)],
       ['empty storage.composed_gate_policy.preview', () => invokeServiceCommand('storage.composed_gate_policy.preview', {}, context)],

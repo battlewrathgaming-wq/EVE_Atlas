@@ -218,6 +218,22 @@ function verifyStorageAuthorityReadout(root) {
       config_version: 1
     }
   });
+  const acknowledgementNeedsReconfirm = buildFixtureReadout({
+    mode: 'fallback',
+    source: 'fallback',
+    path: path.join(root, 'authority', 'fallback-reconfirm', 'atlas.sqlite'),
+    exists: true,
+    budgetBytes: 4096,
+    storageAuthority: {
+      mode: 'fallback_acknowledgement_needs_reconfirm',
+      fallback_available: true,
+      acknowledgement_status: 'fallback_acknowledgement_needs_reconfirm',
+      acknowledgement_basis: 'fixture previous acknowledgement',
+      acknowledgement_invalid_reason: 'fallback_path_basis_changed',
+      config_source: 'persisted_storage_authority_config',
+      config_version: 1
+    }
+  });
   const missing = buildFixtureReadout({
     mode: 'missing',
     source: 'configured',
@@ -314,6 +330,10 @@ function verifyStorageAuthorityReadout(root) {
   assert(acknowledgementInvalidated.storage_authority.acknowledgement_status === 'invalidated', 'invalidated acknowledgement should be visible');
   assert(acknowledgementInvalidated.storage_authority.acknowledgement_invalid_reason === 'app path changed', 'invalidated acknowledgement should name reason');
   assert(acknowledgementInvalidated.storage_authority.write_allowed_if_enforced_later === false, 'invalidated acknowledgement should block writes');
+  assert(acknowledgementNeedsReconfirm.storage_authority.mode === 'fallback_acknowledgement_needs_reconfirm', 'fallback acknowledgement reconfirm state should be visible');
+  assert(acknowledgementNeedsReconfirm.storage_authority.acknowledgement_status === 'fallback_acknowledgement_needs_reconfirm', 'fallback acknowledgement reconfirm status should be visible');
+  assert(acknowledgementNeedsReconfirm.storage_authority.write_allowed_if_enforced_later === false, 'fallback acknowledgement needing reconfirm should block writes');
+  assert(acknowledgementNeedsReconfirm.storage.state === 'fallback_ack_required', 'fallback acknowledgement reconfirm should require operator acknowledgement');
   assert(missing.storage_authority.validation_status === 'missing_unavailable', 'missing selected storage should show unavailable validation');
   assert(missing.storage_authority.write_allowed_if_enforced_later === false, 'missing selected storage should block writes');
   assert(degraded.storage_authority.validation_status === 'invalid_degraded', 'degraded selected storage should show degraded validation');
@@ -331,6 +351,7 @@ function verifyStorageAuthorityReadout(root) {
     app_local_fallback_available: compactAuthority(fallbackAvailable),
     app_local_fallback_acknowledged: compactAuthority(fallbackAcknowledged),
     acknowledgement_invalidated: compactAuthority(acknowledgementInvalidated),
+    fallback_acknowledgement_needs_reconfirm: compactAuthority(acknowledgementNeedsReconfirm),
     selected_storage_missing_unavailable: compactAuthority(missing),
     selected_storage_invalid_degraded: compactAuthority(degraded),
     budget_warning: compactAuthority(budgetWarning),
