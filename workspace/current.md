@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS150 accepted; project resting before next hardening seam
+Status: Active Dev runway for HS152 External I/O persisted state proof
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: rest after accepting the read-only Hydration execution policy preview; select the next bounded hardening seam deliberately.
+Current focus: prove fixture/offline External I/O persisted state before provider-backed writes or runtime enforcement exist.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Human / Overseer shaping
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-None. No active Dev handoff is expected.
+workspace/DevHS152-external-io-persisted-state.md
 ```
 
 ## Current State
 
-HS142, HS144, HS146, HS148, and HS150 are accepted. No active Dev runway is open.
+HS142, HS144, HS146, HS148, and HS150 are accepted. HS152 is open as the next bounded hardening seam.
 
 Accepted Human decisions:
 
@@ -98,6 +98,7 @@ Recent accepted state:
 - `workspace/OverseerHS150-hydration-execution-policy-runway.md`
 - `workspace/DevHS150-hydration-execution-policy.md`
 - `workspace/OverseerHS151-hs150-hydration-execution-policy-review.md`
+- `workspace/OverseerHS152-external-io-persisted-state-runway.md`
 
 ## Accepted Boundaries
 
@@ -113,16 +114,39 @@ Recent accepted state:
 
 ## Active Runway
 
-No active Dev runway.
+Dev should implement a bounded fixture/offline External I/O persisted state proof.
 
-Resting choices for the next hardening seam:
+Source of intent:
 
-1. Hydration writer fixture proof, if the Human wants a tiny write-capable Hydration step next.
-2. External I/O persisted state, if the Human wants the provider trust switch to become durable before writes.
-3. Snapshot/trace-pack creation policy, if returning to support artifacts.
-4. First runtime enforcement design, only after explicit Human/Overseer selection.
+- Human decision: External contact should be conscious.
+- `workspace/SystemsAuditHS109-external-io-policy-fit.md`
+- `workspace/OverseerHS143-hs142-external-io-held-state-review.md`
+- `workspace/OverseerHS149-hs148-composed-gate-policy-review.md`
+- `workspace/OverseerHS151-hs150-hydration-execution-policy-review.md`
+- `workspace/OverseerHS152-external-io-persisted-state-runway.md`
+- `docs/features/acquisition-and-hydration-clocks.md`
+- `docs/current-state/current-storage-runtime-hardening.md`
 
-Do not open Dev work until the next seam is selected.
+Expected command/readout candidates:
+
+```text
+external_io.state_readout
+external_io.state_persistence_proof
+```
+
+Ordered steps:
+
+1. Inspect current External API/live gate, gate-stack readout, composed gate policy preview, storage config proof patterns, service registry command metadata, passive side-effect verifier, and current config/temp path helpers.
+2. Add a read-only External I/O persisted-state readout if needed.
+3. Add a trusted-context-only fixture persistence proof for External I/O state.
+4. Store fixture proof state under an explicit allowed fixture root only; do not create the real project-root config unless a later packet explicitly opens real operator config.
+5. Accept only narrow states such as `off` / `on` or `disabled` / `enabled`; normalize output to accepted Atlas state labels.
+6. Include state meaning: off means provider-backed movement is held, not failed; on means provider-backed movement re-enters normal storage/live/cadence/Watch/confirmation gates; on does not mean catch-up flood or immediate dispatch.
+7. Prove renderer payloads cannot forge persisted state, path, acknowledgement, or arbitrary file probing.
+8. Keep `watch.executor.arm`, `live.gate`, storage authority, and External I/O distinct.
+9. Add focused verification proving no provider calls, no runtime enforcement, no command blocking, no Evidence/EVEidence writes, no Hydration writes, no queue dispatch, no schema changes, no real config write, and no UI work.
+10. Add service registry, command authority, enforcement dry-run/composed policy, gate-stack, and passive side-effect coverage as needed.
+11. Update Evidence / Dev Handoff and create the expected DevHS file.
 
 ## Last Runway Accepted
 
@@ -190,6 +214,8 @@ Ordered steps:
 - No entity label writes.
 - No activity event label patching.
 - No metadata run writes.
+- No queue dispatch.
+- No Watch execution behavior changes.
 - No DB movement, copy, migration, relocation, restore, or deletion.
 - No real pruning/deletion execution.
 - No snapshot creation against real operator paths.
@@ -207,6 +233,9 @@ Ordered steps:
 - No future fail-closed behavior activation.
 - Do not collapse Watch arming into External I/O.
 - Do not treat External I/O off as failure.
+- Do not treat External I/O on as authorization.
+- Do not create catch-up debt while External I/O is off.
+- Do not dispatch held work immediately when External I/O is re-enabled.
 - Do not treat `would_allow` as runtime authorization.
 - Do not treat Hydration `eligible` posture as runtime authorization.
 - Do not treat confirmation tokens as security secrets.
@@ -224,11 +253,13 @@ Ordered steps:
 Before opening the next runway, stop and return to Overseer/Human if:
 
 - the proof requires runtime interception or actual command blocking without explicit Human/Overseer decision
-- the proof requires persisted External I/O state
+- the proof requires real project-root External I/O config writes
 - the proof requires moving, copying, migrating, relocating, restoring, or deleting DB/storage
 - the proof requires live/provider/API calls
 - the proof requires writing entities, metadata runs, activity event labels, or hydration output
 - the proof requires schema changes or persisted backlog state
+- the proof requires Watch executor behavior changes
+- the proof requires treating `external_io` as a provider queue
 - the proof requires changing Discovery/Evidence/Hydration semantics
 - the proof requires renderer path selection or filesystem probing
 - the proof requires treating fallback acknowledgement as selected storage
@@ -244,6 +275,7 @@ Before opening the next runway, stop and return to Overseer/Human if:
 - class splitting requires source command renames or broad registry refactor
 - local-only work becomes unavailable solely because External I/O is off
 - re-enable behavior implies catch-up flooding
+- External I/O on would become runtime authorization
 - missing labels are treated as report failure
 - provider-needed labels are treated as Evidence/EVEidence work
 - view/local-record hydration is starved behind broad Watch/background backlog in the policy model
@@ -254,6 +286,7 @@ Run:
 
 ```powershell
 npm.cmd run verify:support-artifact-path-authority
+npm.cmd run verify:external-io-state
 npm.cmd run verify:composed-gate-policy
 npm.cmd run verify:hydration-execution-policy
 npm.cmd run verify:hydration-backlog-preview
@@ -277,6 +310,12 @@ git status --short --branch
 Run `node --check` on any new or changed JavaScript files.
 
 ## Evidence
+
+HS152 opened from accepted External I/O held-state readout and Human direction that external contact should be a conscious act.
+
+Dev should replace this HS152 note with concise proof evidence after implementation.
+
+Prior evidence:
 
 HS150 Dev implementation completed.
 
