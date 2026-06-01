@@ -1,6 +1,6 @@
 # Current State: Storage And Runtime Hardening
 
-Date: 2026-06-01
+Date: 2026-06-02
 Status: Current milestone summary
 
 ## Purpose
@@ -43,6 +43,7 @@ Accepted proof surfaces:
 - `storage.authority_config.write`
 - `metadata.hydration_write_fixture_proof`
 - `support.artifact_creation_policy.preview`
+- `support.artifact_contents_contract.preview`
 - `runtime.enforcement_boundary.preview`
 - `runtimeEnforcementEvaluator.evaluateRuntimeEnforcementDecision`
 - `runtime.enforcement_adapter.dry_preview`
@@ -67,6 +68,7 @@ Accepted shape:
 - Storage authority real operator config is app-local trust posture: trusted context can write/read `<Atlas app/root>/config/storage-authority.json`, renderer code can only read safe posture, selected storage and app-local fallback storage remain distinct, `fallback_acknowledgement_needs_reconfirm` is visible, and 5GB is suggestion only rather than hidden acceptance
 - Hydration writer fixture proof is fixture/offline readability write posture: it patches activity-event label columns from existing local `entities`, records one `metadata_runs` proof row, keeps numeric IDs as facts, and leaves Evidence/EVEidence, Discovery refs, Watch state, queues, providers, schema, storage config, and renderer UI untouched
 - Support artifact creation policy preview is read-only creation posture: it classifies rolling snapshots, retained snapshots, operator debug trace packs, and future readiness/preflight export posture without creating artifacts, files, directories, providers, Evidence/EVEidence, Discovery mutations, Hydration writes, storage config writes, runtime enforcement, or UI work
+- Support artifact contents contract preview is read-only content posture: it classifies rolling snapshots, retained snapshots, operator debug trace packs, light operational logs, and readiness/preflight exports by allowed content, forbidden content, redaction/omission rules, raw ESI posture, Discovery/Evidence/Hydration/Assessment/Watch posture, basis/provenance disclosure, sensitivity, and non-authority posture
 - Runtime enforcement boundary preview is read-only service-boundary posture: it proves a future insertion point in `invokeServiceCommand(command, payload, context)` after renderer eligibility and confirmation checks, before task wrapping and handler dispatch, while keeping `would_allow`, External I/O on, and unknown/unclassified fail-closed as non-authorizing preview/policy posture
 - Runtime enforcement evaluator is a pure inactive decision helper: it accepts explicit facts, returns `pass`, `block`, `conditional`, or `stop_before_boundary` with stable reason codes, and does not call handlers, task runners, providers, repositories, file writers, config writers, or DB APIs
 - Runtime enforcement dry adapter is inactive service-boundary fact assembly proof: it assembles evaluator facts from command metadata/definition, payload, context, and explicit supplied gate facts; reports missing fact classes; refuses to treat dry-run `would_allow` as authorization; and remains outside `invokeServiceCommand`
@@ -86,6 +88,7 @@ Current resting state:
 - real operator External I/O config is now supported as app-local operator posture, but runtime enforcement still needs a dedicated runway before command blocking or provider release behavior exists
 - real operator storage authority config is now supported as app-local operator posture, but runtime enforcement still needs a dedicated runway before command blocking or provider-backed storage gating exists
 - support artifact creation policy can now be inspected before creation, but actual support artifact creation, snapshot creation, trace-pack creation, cleanup, and pruning/deletion remain separate future seams
+- support artifact contents can now be inspected before creation/writer hardening; actual support artifact creation, snapshot creation, trace-pack creation, cleanup, and pruning/deletion remain separate future seams
 
 ## Accepted Runtime Boundaries
 

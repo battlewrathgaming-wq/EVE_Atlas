@@ -52,6 +52,7 @@ const {
 } = require('./externalIoStateService');
 const { buildSupportArtifactPathAuthorityPreview } = require('./supportArtifactPathAuthorityService');
 const { buildSupportArtifactCreationPolicyPreview } = require('./supportArtifactCreationPolicyService');
+const { buildSupportArtifactContentsContractPreview } = require('./supportArtifactContentsContractService');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
 const {
   buildStorageAuthorityConfigReadback,
@@ -482,6 +483,13 @@ const COMMANDS = {
       ...context,
       commandMetadata: listServiceCommands()
     })
+  },
+  'support.artifact_contents_contract.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview support artifact content rules without creating artifacts, reading artifact files, or changing runtime behavior',
+    handler: () => buildSupportArtifactContentsContractPreview()
   },
   'runtime.enforcement_boundary.preview': {
     classification: 'read-only',

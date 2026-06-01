@@ -65,6 +65,7 @@ async function main() {
     const gateStackReadoutCommand = commands.find((entry) => entry.command === 'support.gate_stack_readout');
     const supportArtifactPathAuthorityCommand = commands.find((entry) => entry.command === 'support.artifact_path_authority.preview');
     const supportArtifactCreationPolicyCommand = commands.find((entry) => entry.command === 'support.artifact_creation_policy.preview');
+    const supportArtifactContentsContractCommand = commands.find((entry) => entry.command === 'support.artifact_contents_contract.preview');
     const runtimeEnforcementBoundaryCommand = commands.find((entry) => entry.command === 'runtime.enforcement_boundary.preview');
     const runtimeHookTelemetryCommand = commands.find((entry) => entry.command === 'runtime.enforcement_hook_telemetry.readout');
     const snapshotSettingsGetCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.get');
@@ -152,6 +153,8 @@ async function main() {
     assert(supportArtifactPathAuthorityCommand?.renderer_allowed === true, 'support artifact path authority should be renderer eligible');
     assert(supportArtifactCreationPolicyCommand?.classification === 'read-only', 'support artifact creation policy should be read-only');
     assert(supportArtifactCreationPolicyCommand?.renderer_allowed === true, 'support artifact creation policy should be renderer eligible');
+    assert(supportArtifactContentsContractCommand?.classification === 'read-only', 'support artifact contents contract should be read-only');
+    assert(supportArtifactContentsContractCommand?.renderer_allowed === true, 'support artifact contents contract should be renderer eligible');
     assert(runtimeEnforcementBoundaryCommand?.classification === 'read-only', 'runtime enforcement boundary preview should be read-only');
     assert(runtimeEnforcementBoundaryCommand?.renderer_allowed === true, 'runtime enforcement boundary preview should be renderer eligible');
     assert(runtimeHookTelemetryCommand?.classification === 'read-only', 'runtime hook telemetry readout should be read-only');
@@ -278,6 +281,15 @@ async function main() {
     assert(supportArtifactCreationPolicy.renderer_payload_ignored === true, 'support artifact creation policy should ignore renderer forged claims');
     assert(supportArtifactCreationPolicy.creates_support_artifacts === false, 'support artifact creation policy should not create artifacts');
     assert(supportArtifactCreationPolicy.provider_calls === 0, 'support artifact creation policy should not call providers');
+
+    const supportArtifactContentsContract = await invokeServiceCommand('support.artifact_contents_contract.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite'),
+      source: 'renderer'
+    });
+    assert(supportArtifactContentsContract.read_only === true, 'support artifact contents contract should declare read-only behavior');
+    assert(supportArtifactContentsContract.creates_support_artifacts === false, 'support artifact contents contract should not create artifacts');
+    assert(supportArtifactContentsContract.provider_calls === 0, 'support artifact contents contract should not call providers');
 
     const runtimeEnforcementBoundary = await invokeServiceCommand('runtime.enforcement_boundary.preview', {}, {
       db,

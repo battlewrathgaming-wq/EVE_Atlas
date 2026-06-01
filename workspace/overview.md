@@ -1,7 +1,7 @@
 # AURA Atlas Workspace Overview
 
 Status: Active breadcrumb map
-Last reviewed: 2026-06-01
+Last reviewed: 2026-06-02
 
 ## Vision Statement
 
@@ -35,7 +35,7 @@ Milestone: Atlas Storage And Runtime Hardening
 
 Current state:
 
-- HS178 Support artifact contents contract runway open
+- HS178 accepted by HS179
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -52,8 +52,8 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is HS178 Support artifact contents contract
+- current executor is Overseer
+- no active Dev runway is open
 - current work is at a resting point after making inactive hook preview evidence inspectable; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
@@ -66,9 +66,9 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Complete HS178 support artifact contents contract preview.
-2. Review whether the contents contract is sufficient before actual support artifact creation hardening.
-3. Consider specialist/security review after HS178 if content classification or redaction posture needs correction.
+1. Consider security/specialist review of support artifact content classes and redaction posture.
+2. Map existing snapshot/trace-pack behavior against the accepted contents contract before changing writers.
+3. Continue a different storage/runtime seam if support artifacts should rest.
 4. Runtime enforcement remains resting.
 
 See `workspace/current.md` for current truth.
@@ -135,7 +135,7 @@ Keep these as the near-memory breadcrumb trail:
 - Data-layer boundary support note accepted: `docs/features/data-layer-boundaries.md` records Discovery Ref, ESI Evidence Expansion, Evidence/EVEidence, relationships/appearances, Hydration, Watch, Observation, Assessment Memory, Marked, and support-artifact boundaries before later schema or support-artifact work.
 - HS176 opened a Hydration candidate preview runway: prove deduped local Hydration demand by lane and basis before persisted queues, provider calls, Hydration writes, schema changes, support artifacts, or renderer/UI work.
 - HS177 accepted HS176: `metadata.hydration_candidates.preview` now proves deduped local Hydration demand by lane, source anchors, priority rationale, and boundary statements without persisted queue, provider movement, writes, schema changes, or support artifact creation.
-- HS178 opened a support artifact contents contract runway: define allowed, forbidden, redacted, sensitivity, and authority posture for snapshots, trace packs, logs, and readiness/preflight exports before any new support artifact creation behavior.
+- HS178/HS179 accepted support artifact contents contract preview: `support.artifact_contents_contract.preview` now defines allowed, forbidden, redacted, sensitivity, provenance, and non-authority posture for snapshots, trace packs, logs, and readiness/preflight exports before any new support artifact creation behavior.
 
 ## Accepted Boundaries
 

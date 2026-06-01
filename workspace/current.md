@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS178 Support artifact contents contract runway open
+Status: Resting after HS179 accepted HS178
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: prove a read-only support-artifact contents contract before any new support artifact creation hardening or broader snapshot/trace-pack behavior.
+Current focus: support artifact contents contract accepted; next seam should decide whether existing artifact-producing behavior needs conformance review before any creation hardening.
 
 Current heading:
 
@@ -18,15 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS178-support-artifact-contents-contract.md
+none
 ```
 
-## Source Of Intent
+No Dev runway is currently open.
+
+## Accepted HS178 Context
 
 Human / Overseer direction:
 
@@ -53,7 +55,7 @@ Accepted context:
 - `support.artifact_creation_policy.preview` proves creation posture before creation.
 - The missing piece is a contents contract: what each support artifact class may contain, must exclude, must redact, must classify, and must disclose.
 
-## Ordered Runway
+## Completed HS178 Scope
 
 1. Inspect existing support artifact path authority, creation policy, runtime snapshot, operator debug trace pack, readiness/preflight, runtime boundary, and related verifiers.
 2. Add a read-only support artifact contents contract preview, preferably as:
@@ -109,7 +111,7 @@ support.artifact_contents_contract.preview
 - snapshot contract classifies DB copies as high-sensitivity corpus-adjacent support
 - support artifacts are explicitly non-authoritative for Evidence/EVEidence, Observation, Assessment, and deletion/pruning decisions
 
-## Guardrails And Non-Goals
+## Accepted HS178 Boundaries And Non-Goals
 
 - No actual support artifact creation.
 - No snapshot creation.
@@ -135,9 +137,9 @@ support.artifact_contents_contract.preview
 - Do not treat trace packs as evidence exports.
 - Do not let renderer payloads define path/content authority.
 
-## Stop Conditions
+## Historical HS178 Stop Conditions
 
-Stop and return to Overseer if:
+During HS178, Dev was required to stop and return to Overseer if:
 
 - implementation needs to create, read, package, export, or inspect real artifact files
 - implementation needs to change snapshot or trace-pack creation behavior
@@ -148,7 +150,7 @@ Stop and return to Overseer if:
 - provider calls or live/private/destructive actions become necessary
 - the result becomes a full cleanup/export/pruning design instead of a contents contract preview
 
-## Required Verification
+## HS178 Verification Expectations
 
 Run syntax checks on every new or changed JavaScript file.
 
@@ -176,24 +178,73 @@ Do not run snapshot/trace-pack write verifiers unless changed code requires it. 
 
 ## Evidence
 
-Dev should update this section in the handoff with:
+Dev updated 2026-06-02:
 
-- files changed
-- command/readout added
-- artifact classes covered
-- sample output summary
-- proof of allowed/forbidden/redacted content categories
-- proof that trace packs forbid raw ESI payload dumps
-- proof that snapshots are high-sensitivity corpus-adjacent support but not new Evidence/EVEidence
-- verification commands and results
-- warning-only protected-term output, if any
+- Added `support.artifact_contents_contract.preview` as a read-only service command and renderer-eligible readout.
+- Added `src/main/services/supportArtifactContentsContractService.js` with a static contents contract preview. It does not read artifact files, create support artifacts, inspect live provider data, or mutate runtime/project state.
+- Added `scripts/verify-support-artifact-contents-contract.js` and `npm.cmd run verify:support-artifact-contents-contract`.
+- Updated service registry, enforcement dry-run coverage, command authority, service registry, and passive side-effect verification coverage for the new command.
+- Artifact classes covered:
+  - `runtime_snapshot_rolling`
+  - `runtime_snapshot_retained`
+  - `operator_debug_trace_pack`
+  - `light_operational_logs`
+  - `readiness_preflight_export`
+- Sample preview summary:
+  - class count: 5
+  - families: `corpus_adjacent_support` = 3, `operational_support` = 2
+  - high sensitivity classes: rolling runtime DB snapshot, retained/manual runtime DB snapshot, operator debug trace pack
+  - raw ESI payloads forbidden for: operator debug trace pack, light operational logs, readiness/preflight export
+  - DB-copy raw content allowance limited to runtime snapshot classes only
+  - all classes explicitly non-authoritative for Evidence/EVEidence, Observation, Assessment Memory, and deletion/pruning authority
+- Allowed/forbidden/redaction proof:
+  - each class reports allowed content categories, forbidden categories, redaction/omission rules, raw ESI posture, Discovery ref posture, Evidence/EVEidence row posture, Hydration label/candidate posture, Assessment Memory posture, Watch state posture, local path posture, runtime telemetry posture, basis/provenance disclosure, and privacy/sensitivity.
+  - trace packs forbid raw ESI dumps, full provider payload strings, full participant payload strings, secrets, unbounded dumps, and Evidence/EVEidence export packaging.
+  - logs and readiness/preflight exports forbid raw ESI payloads and secrets.
+  - snapshots are classified as high-sensitivity corpus-adjacent support that may contain an existing DB copy, but the snapshot itself is not new Evidence/EVEidence and is not pruning/deletion authority.
+- Focused verifier proves no support artifacts, snapshots, trace packs, logs, files, or directories are created, no provider calls occur, and no Evidence/EVEidence, Discovery, Hydration, Assessment, Watch, storage config, or schema writes occur.
+- Verification run:
+  - `node --check src\main\services\supportArtifactContentsContractService.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check scripts\verify-support-artifact-contents-contract.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `npm.cmd run verify:support-artifact-contents-contract` passed.
+  - `npm.cmd run verify:support-artifact-path-authority` passed.
+  - `npm.cmd run verify:support-artifact-creation-policy` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 225 warnings across 9 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main [ahead 1]` with HS178 working-tree changes.
 
 ## Dev Handoff
 
-Expected:
+Completed:
 
 ```txt
 workspace/DevHS178-support-artifact-contents-contract.md
 ```
 
-The handoff must state whether the contents contract preview is complete, incomplete, or blocked.
+Status: contents contract preview complete and accepted by Overseer.
+
+Overseer reviewed 2026-06-02:
+
+- Accepted HS178 in `workspace/OverseerHS179-hs178-support-artifact-contents-contract-review.md`.
+- Verified the new command, registry/authority/passive-side-effect coverage, dry-run coverage, protected-term advisory output, and diff hygiene.
+- Accepted `support.artifact_contents_contract.preview` as read-only content posture for support artifact classes.
+- Runtime artifact creation, snapshot creation, trace-pack creation, support export writing, deletion/pruning behavior, and runtime enforcement activation remain unopened.
+
+## Resting Next Options
+
+Recommended next shaping candidates:
+
+1. Security/specialist review of support artifact content classes and redaction posture before touching artifact writers.
+2. Read-only conformance gap map between existing snapshot/trace-pack code and the accepted contents contract.
+3. Continue a different storage/runtime seam if support artifacts should rest.
+
+Do not open Dev implementation until one of these is selected and bounded.
