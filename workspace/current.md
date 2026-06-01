@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS144 Hydration backlog preview accepted; project resting before next hardening seam
-Last updated: 2026-05-31
+Status: Active Dev runway for HS146 Support artifact path authority inventory
+Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Hydration backlog preview accepted as read-only local data understanding; no active Dev runway is open.
+Current focus: prove a read-only support-artifact path authority inventory without creating support artifacts, moving storage, deleting files, calling providers, or enforcing runtime blocking.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Human / Overseer shaping
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none
+workspace/DevHS146-support-artifact-path-authority.md
 ```
 
 ## Current State
 
-HS142 and HS144 are accepted. The project is resting before the next bounded hardening seam.
+HS142 and HS144 are accepted. HS146 is open as the next bounded hardening seam.
 
 Accepted Human decisions:
 
@@ -43,6 +43,7 @@ Accepted Human decisions:
 - Acknowledged app-local/current-file fallback counts as accepted storage for action posture, but remains visibly distinct as fallback mode.
 - Budget is mandatory before real provider-backed acquisition or EVEidence writes.
 - HS137 was an enforcement dry-run map, not runtime enforcement.
+- Support artifacts need explicit path/budget/trust posture before cleanup, snapshot, trace-pack, or enforcement execution.
 
 Atlas has accepted storage/runtime hardening proofs:
 
@@ -84,6 +85,8 @@ Recent accepted state:
 - `workspace/OverseerHS142-external-io-held-state-runway.md`
 - `workspace/OverseerHS143-hs142-external-io-held-state-review.md`
 - `workspace/OverseerHS144-hydration-backlog-preview-runway.md`
+- `workspace/OverseerHS145-hs144-hydration-backlog-preview-review.md`
+- `workspace/OverseerHS146-support-artifact-path-authority-runway.md`
 
 ## Accepted Boundaries
 
@@ -99,15 +102,28 @@ Recent accepted state:
 
 ## Active Runway
 
-No active Dev runway.
+Dev should implement a bounded read-only support-artifact path authority inventory.
 
-Next suitable seams, when Human chooses:
+Source of intent:
 
-1. Real enforcement design discussion using composed gate state.
-2. Support-artifact path authority review.
-3. Hydration execution policy shaping from the accepted backlog preview.
+- Human direction: support artifacts should be explicit before cleanup, snapshot, trace-pack, or enforcement execution.
+- Human shaping note: `F:\Obsidian\Projects_Aura\AURA-Atlas\Atlas_Human notes\Atlas Support Artifact Path Authority Human Notes.md`
+- `docs/current-state/current-storage-runtime-hardening.md`
+- `workspace/OverseerHS145-hs144-hydration-backlog-preview-review.md`
+- `workspace/OverseerHS146-support-artifact-path-authority-runway.md`
 
-Do not open Dev work until the next seam is deliberately selected.
+Ordered steps:
+
+1. Inspect existing snapshot, trace pack, storage preflight, storage setup gate, enforcement dry-run, service registry, support/debug, temp/cache/SDE path handling, and passive side-effect verifier code.
+2. Identify existing support artifact classes and current path sources.
+3. Add a read-only support-artifact path authority preview/readout command.
+4. Classify artifact classes as operational support or corpus-adjacent support.
+5. Report path basis, storage authority requirement, pre-storage allowance, budget inclusion, External I/O relevance, renderer/trusted-context posture, cleanup stage, and privacy/sensitivity posture.
+6. Distinguish cache by origin where possible rather than treating all cache as one policy bucket.
+7. Distinguish rolling snapshot posture from retained snapshot posture where relevant.
+8. Prove the preview creates no files/directories and mutates no DB tables.
+9. Add focused offline verification plus command/service/enforcement/passive-side-effect coverage as needed.
+10. Update Evidence / Dev Handoff and create the expected DevHS file.
 
 ## Last Runway Accepted
 
@@ -153,8 +169,17 @@ Ordered steps:
 - No renderer redesign.
 - No UI presentation/copy finalization.
 - No persisted External I/O setting in this packet.
+- No support artifact creation.
+- No snapshot creation.
+- No trace-pack creation.
+- No cleanup/delete/prune/restore/move/copy/migration.
+- No storage config write.
+- No filesystem probing from renderer-provided arbitrary paths.
 - Do not collapse Watch arming into External I/O.
 - Do not treat External I/O off as failure.
+- Do not treat support artifacts as Evidence/EVEidence.
+- Do not treat trace packs as evidence export.
+- Do not make snapshots invisible hidden storage.
 - Do not treat app-local/current-file fallback as selected storage.
 - Do not treat app-local/current-file fallback as accepted storage without explicit acknowledgement state.
 - Do not allow renderer payloads to choose arbitrary paths, forge acknowledgement, forge budget, or probe the filesystem.
@@ -176,6 +201,10 @@ Before opening the next runway, stop and return to Overseer/Human if:
 - the proof requires treating fallback acknowledgement as selected storage
 - the proof requires treating `workspace/to-be-sorted/` as current task input
 - the proof requires UI wording or renderer design
+- the proof requires support artifact creation, snapshot creation, trace-pack creation, cleanup, delete, prune, restore, move, copy, migration, or upload
+- the proof requires filesystem probing from renderer-provided arbitrary paths
+- support artifacts blur into Evidence/EVEidence, Discovery, Observation, or Assessment Memory
+- cache cannot be classified without inventing runtime policy
 - local-only work becomes unavailable solely because External I/O is off
 - re-enable behavior implies catch-up flooding
 - missing labels are treated as report failure
@@ -185,6 +214,9 @@ Before opening the next runway, stop and return to Overseer/Human if:
 Run:
 
 ```powershell
+npm.cmd run verify:support-artifact-path-authority
+npm.cmd run verify:storage-authority-preflight
+npm.cmd run verify:storage-setup-gate
 npm.cmd run verify:hydration
 npm.cmd run verify:metadata-status
 npm.cmd run verify:metadata-lookup
@@ -203,6 +235,20 @@ git status --short --branch
 Run `node --check` on any new or changed JavaScript files.
 
 ## Evidence
+
+HS146 opened from Human support-artifact path authority shaping and accepted storage/runtime hardening boundaries.
+
+Dev should replace this section with concise proof evidence after implementation.
+
+## Dev Handoff
+
+Pending Dev handoff.
+
+Expected:
+
+- `workspace/DevHS146-support-artifact-path-authority.md`
+
+Prior evidence:
 
 HS144 Dev implementation accepted.
 
@@ -241,8 +287,6 @@ All listed commands passed. `verify:protected-terms` completed with warning-only
 Overseer review:
 
 - `workspace/OverseerHS145-hs144-hydration-backlog-preview-review.md`
-
-## Dev Handoff
 
 Completed handoff:
 
