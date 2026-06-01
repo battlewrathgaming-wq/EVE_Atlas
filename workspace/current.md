@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS160 Support artifact creation policy preview runway open
+Status: Resting after HS160 Support artifact creation policy preview accepted
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: define the read-only creation policy for snapshots and trace packs before Atlas allows broader support-artifact creation.
+Current focus: hold at an Overseer/Human selection point after accepting support artifact creation policy preview.
 
 Current heading:
 
@@ -18,12 +18,12 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Human / Overseer shaping
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS160-support-artifact-creation-policy-preview.md
+None. No active Dev runway is open.
 ```
 
 ## Source Of Intent
@@ -55,7 +55,7 @@ Accepted interpretation:
 
 ## Current State
 
-HS142, HS144, HS146, HS148, HS150, HS152, HS154, HS156, and HS158 are accepted.
+HS142, HS144, HS146, HS148, HS150, HS152, HS154, HS156, HS158, and HS160 are accepted. No active Dev runway is open.
 
 Accepted proof surfaces include:
 
@@ -78,41 +78,20 @@ Accepted proof surfaces include:
 - `storage.authority_config.readback`
 - `storage.authority_config.write`
 - `metadata.hydration_write_fixture_proof`
+- `support.artifact_creation_policy.preview`
 
 ## Active Runway
 
-Create a read-only support artifact creation policy preview for snapshot and trace-pack creation posture.
+No active Dev runway is open.
 
-Recommended command name:
+Likely next selectable seams:
 
-```txt
-support.artifact_creation_policy.preview
-```
+1. First runtime enforcement design/implementation packet, now that storage, External I/O, support artifact path authority, composed policy, and support artifact creation policy have read-only proof.
+2. Actual support artifact creation hardening, if Human wants to continue the snapshot/trace-pack lane.
+3. Provider-backed Hydration gate or real Hydration writer design, if Human wants to return to data/readability movement.
+4. Storage setup UI/renderer posture later, not now, because the current heading remains system hardening.
 
-If an existing surface is cleaner, Dev may choose a closely scoped alternative, but the handoff must explain why.
-
-Ordered steps:
-
-1. Inspect existing runtime snapshot and operator debug trace-pack scripts/services/verifiers, plus `support.artifact_path_authority.preview`, storage setup/readback, composed gate policy, enforcement dry-run, passive side-effect checks, service registry, and renderer eligibility metadata.
-2. Add a read-only policy preview that reports how representative support artifact creation requests would be classified before creation.
-3. Cover at minimum:
-   - rolling runtime DB snapshot
-   - retained/manual runtime DB snapshot
-   - operator debug trace pack
-   - readiness/preflight export only if an existing write-capable surface makes it relevant
-4. For each class, report creation posture such as `would_allow`, `would_block`, `conditional`, `confirmation_required`, `storage_setup_required`, `budget_blocked`, `path_untrusted`, `trusted_context_required`, `local_only_available`, or a clearer equivalent.
-5. Compose policy from existing Atlas facts where possible:
-   - storage authority config/readback
-   - storage setup gate state
-   - support artifact path authority
-   - storage budget posture
-   - External I/O posture
-   - command metadata / renderer eligibility
-   - composed gate and enforcement dry-run posture
-6. Prove renderer payloads cannot choose output paths, forge storage authority, forge fallback acknowledgement, forge budget, forge trusted context, or turn this preview into a filesystem probe.
-7. Prove External I/O off does not block local support policy/readout, and that support artifact creation policy does not call zKill, ESI, SDE download, or any provider.
-8. Add focused verification and update service registry, command authority, passive side-effect, enforcement dry-run, and composed-policy coverage if a new command is added.
-9. Update Evidence / Dev Handoff and create the expected DevHS file.
+Do not open the next packet until the Human selects the next seam or explicitly asks Overseer to choose.
 
 ## Guardrails
 
@@ -146,7 +125,7 @@ Ordered steps:
 
 ## Stop Conditions
 
-Stop and return to Overseer/Human if:
+For the next runway, stop and return to Overseer/Human if:
 
 - the proof requires actual snapshot, trace-pack, log, export, cache, or support artifact creation
 - the proof requires writing files or directories
@@ -162,6 +141,12 @@ Stop and return to Overseer/Human if:
 - implementation requires broad UI work
 
 ## Required Verification
+
+No active Dev verification is required while resting.
+
+HS160 review verification was completed by Overseer and recorded in `workspace/OverseerHS161-hs160-support-artifact-creation-policy-review.md`.
+
+Prior HS160 verification:
 
 Run syntax checks on every new or changed JavaScript file.
 
@@ -189,21 +174,74 @@ Only run `npm.cmd run verify:runtime-snapshot` or `npm.cmd run verify:operator-d
 
 ## Evidence
 
-HS160 is open. Evidence to be filled by Dev.
+HS160 Dev implementation complete.
 
-Expected evidence:
+Evidence:
 
-- command/readout added or intentionally reused
-- sample output showing snapshot and trace-pack creation classes
-- renderer-forgery/path-authority proof
-- External I/O local-only proof
-- confirmation/storage/budget/path posture proof
-- verification commands and results
-- explicit confirmation that no support artifacts, snapshots, trace packs, files, directories, provider calls, Evidence/EVEidence writes, Discovery mutations, Hydration writes, storage config writes, runtime enforcement, schema migrations, or UI changes were performed
+- Added `support.artifact_creation_policy.preview` as a renderer-eligible read-only service command.
+- Added `src/main/services/supportArtifactCreationPolicyService.js`.
+- Added focused verifier `scripts/verify-support-artifact-creation-policy.js` and npm script `verify:support-artifact-creation-policy`.
+- Updated service registry, command authority, passive side-effect, enforcement dry-run, and composed gate policy coverage for the new command.
+- Representative creation classes covered:
+  - `runtime_snapshot_rolling`
+  - `runtime_snapshot_retained`
+  - `operator_debug_trace_pack`
+  - `readiness_preflight_export`
+- Sample focused verifier output:
+  - renderer-forged payload summary: 4 classes; three snapshot/trace classes reported `path_untrusted` under untrusted renderer/current missing storage posture; readiness/preflight export reported `conditional` because no current write-capable export surface exists.
+  - ready fixture: rolling snapshot `would_allow`, retained snapshot `would_allow`, trace pack `would_allow`, readiness export `conditional`.
+  - budget hard-lock fixture: rolling snapshot `budget_blocked`, retained snapshot `budget_blocked`, trace pack `budget_blocked`, readiness export `conditional`.
+- Renderer anti-forgery proof:
+  - renderer payload ignored: true
+  - renderer path claims accepted: false
+  - renderer storage authority claims accepted: false
+  - renderer fallback acknowledgement claims accepted: false
+  - renderer budget claims accepted: false
+  - renderer trusted context claims accepted: false
+  - filesystem probe performed: false
+- External I/O local-only proof:
+  - External I/O off does not block local support policy/readout.
+  - External I/O off does not block support artifact creation policy preview.
+  - External I/O on is not authorization for creation.
+  - re-enable catch-up flood remains false.
+  - policy preview provider calls are 0.
+- Confirmation/storage/budget/path posture proof:
+  - snapshot and trace-pack classes require confirmation and trusted context before future creation.
+  - destination path authority is backend/settings derived and not renderer-authoritative.
+  - support artifact classes remain storage-budget scoped.
+  - `would_allow` is explicitly not runtime authorization.
+- Verification completed:
+  - `node --check src\main\services\supportArtifactCreationPolicyService.js`
+  - `node --check src\main\services\serviceRegistry.js`
+  - `node --check src\main\services\enforcementDryRunService.js`
+  - `node --check src\main\services\composedGatePolicyService.js`
+  - `node --check scripts\verify-support-artifact-creation-policy.js`
+  - `node --check scripts\verify-service-registry.js`
+  - `node --check scripts\verify-command-authority.js`
+  - `node --check scripts\verify-passive-side-effects.js`
+  - `node --check scripts\verify-enforcement-dry-run.js`
+  - `node --check scripts\verify-composed-gate-policy.js`
+  - `npm.cmd run verify:support-artifact-creation-policy`
+  - `npm.cmd run verify:support-artifact-path-authority`
+  - `npm.cmd run verify:storage-authority-preflight`
+  - `npm.cmd run verify:storage-setup-gate`
+  - `npm.cmd run verify:storage-authority-config-write`
+  - `npm.cmd run verify:composed-gate-policy`
+  - `npm.cmd run verify:enforcement-dry-run`
+  - `npm.cmd run verify:gate-stack-readout`
+  - `npm.cmd run verify:service-registry`
+  - `npm.cmd run verify:command-authority`
+  - `npm.cmd run verify:passive-side-effects`
+  - `npm.cmd run verify:protected-terms` passed with warning-only protected-term advisory output, exit 0.
+- Final checks:
+  - `git diff --check` passed with line-ending warnings only.
+  - `git status --short --branch` reported `main...origin/main [ahead 37]` with HS160 modified/untracked files.
+- Explicit confirmation:
+  - no support artifacts, snapshots, trace packs, operator exports, files, directories, provider calls, zKill calls, ESI calls, SDE downloads, Evidence/EVEidence writes, Discovery mutations, Hydration writes, storage config writes, runtime enforcement, command blocking, schema migrations, or UI changes were added by the new preview behavior.
 
 ## Dev Handoff
 
-Expected Dev handoff:
+Dev handoff:
 
 - `workspace/DevHS160-support-artifact-creation-policy-preview.md`
 
@@ -213,4 +251,4 @@ Prior completed Dev handoff:
 
 Latest Overseer review:
 
-- `workspace/OverseerHS159-hs158-storage-authority-real-config-review.md`
+- `workspace/OverseerHS161-hs160-support-artifact-creation-policy-review.md`

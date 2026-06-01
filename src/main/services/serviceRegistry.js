@@ -45,6 +45,7 @@ const {
   buildExternalIoStatePersistenceProof
 } = require('./externalIoStateService');
 const { buildSupportArtifactPathAuthorityPreview } = require('./supportArtifactPathAuthorityService');
+const { buildSupportArtifactCreationPolicyPreview } = require('./supportArtifactCreationPolicyService');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
 const {
   buildStorageAuthorityConfigReadback,
@@ -454,6 +455,16 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview support artifact path, budget, cleanup, sensitivity, and trust posture without writing files',
     handler: ({ payload, ...context }) => buildSupportArtifactPathAuthorityPreview(payload, {
+      ...context,
+      commandMetadata: listServiceCommands()
+    })
+  },
+  'support.artifact_creation_policy.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview snapshot and trace-pack creation policy posture without creating support artifacts',
+    handler: ({ payload, ...context }) => buildSupportArtifactCreationPolicyPreview(payload, {
       ...context,
       commandMetadata: listServiceCommands()
     })

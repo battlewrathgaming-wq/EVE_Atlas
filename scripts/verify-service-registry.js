@@ -63,6 +63,7 @@ async function main() {
     const composedGatePolicyCommand = commands.find((entry) => entry.command === 'storage.composed_gate_policy.preview');
     const gateStackReadoutCommand = commands.find((entry) => entry.command === 'support.gate_stack_readout');
     const supportArtifactPathAuthorityCommand = commands.find((entry) => entry.command === 'support.artifact_path_authority.preview');
+    const supportArtifactCreationPolicyCommand = commands.find((entry) => entry.command === 'support.artifact_creation_policy.preview');
     const snapshotSettingsGetCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.get');
     const snapshotSettingsUpdateCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.update');
     assert(readinessCommand, 'app.readiness should be listed');
@@ -143,6 +144,8 @@ async function main() {
     assert(gateStackReadoutCommand?.classification === 'read-only', 'gate stack readout should be read-only');
     assert(supportArtifactPathAuthorityCommand?.classification === 'read-only', 'support artifact path authority should be read-only');
     assert(supportArtifactPathAuthorityCommand?.renderer_allowed === true, 'support artifact path authority should be renderer eligible');
+    assert(supportArtifactCreationPolicyCommand?.classification === 'read-only', 'support artifact creation policy should be read-only');
+    assert(supportArtifactCreationPolicyCommand?.renderer_allowed === true, 'support artifact creation policy should be renderer eligible');
     assert(snapshotSettingsGetCommand?.classification === 'read-only', 'runtime snapshot settings get should be read-only');
     assert(snapshotSettingsUpdateCommand?.classification === 'metadata-only', 'runtime snapshot settings update should be metadata-only');
 
@@ -242,6 +245,21 @@ async function main() {
     assert(supportArtifactPathAuthority.read_only === true, 'support artifact path authority should declare read-only behavior');
     assert(supportArtifactPathAuthority.renderer_payload_ignored === true, 'support artifact path authority should ignore renderer path claims');
     assert(supportArtifactPathAuthority.provider_calls === 0, 'support artifact path authority should not call providers');
+
+    const supportArtifactCreationPolicy = await invokeServiceCommand('support.artifact_creation_policy.preview', {
+      outputDir: 'C:\\renderer-forged-support-output',
+      storageAuthority: { mode: 'selected_storage' },
+      storageBudgetBytes: 1,
+      trustedContext: true
+    }, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite'),
+      source: 'renderer'
+    });
+    assert(supportArtifactCreationPolicy.read_only === true, 'support artifact creation policy should declare read-only behavior');
+    assert(supportArtifactCreationPolicy.renderer_payload_ignored === true, 'support artifact creation policy should ignore renderer forged claims');
+    assert(supportArtifactCreationPolicy.creates_support_artifacts === false, 'support artifact creation policy should not create artifacts');
+    assert(supportArtifactCreationPolicy.provider_calls === 0, 'support artifact creation policy should not call providers');
 
     const liveGate = await invokeServiceCommand('live.gate', {
       action: 'manual.expansion',

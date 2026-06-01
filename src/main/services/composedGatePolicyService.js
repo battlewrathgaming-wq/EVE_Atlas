@@ -2,6 +2,7 @@ const { buildCommandCoverageReport } = require('./enforcementDryRunService');
 const { buildEnforcementDryRunCommandEffectMap } = require('./enforcementDryRunService');
 const { buildGateStackReadout } = require('./gateStackReadoutService');
 const { buildStorageSetupGateReadout } = require('./storageSetupGateReadoutService');
+const { buildSupportArtifactCreationPolicyPreview } = require('./supportArtifactCreationPolicyService');
 const { buildSupportArtifactPathAuthorityPreview } = require('./supportArtifactPathAuthorityService');
 
 const REPRESENTATIVE_ROWS = Object.freeze([
@@ -15,6 +16,7 @@ const REPRESENTATIVE_ROWS = Object.freeze([
   rowSpec('sde_download_build', 'sde.build-lookups', 'SDE download/build', 'sde.build-lookups'),
   rowSpec('runtime_snapshot_creation', 'runtime.db_snapshot.create', 'Runtime snapshot creation'),
   rowSpec('trace_pack_creation', 'support.debug_trace_pack', 'Trace-pack creation'),
+  rowSpec('support_artifact_creation_policy_readout', 'support.artifact_creation_policy.preview', 'Support artifact creation policy readout'),
   rowSpec('pruning_deletion_preflight', 'retention.preflight', 'Pruning/deletion preflight'),
   rowSpec('pruning_deletion_execution', 'retention.actions', 'Pruning/deletion execution'),
   rowSpec('runtime_control_task_cancel', 'task.cancel', 'Runtime control / task cancellation'),
@@ -50,6 +52,13 @@ function buildComposedGatePolicyPreview(db, input = {}, context = {}) {
     source: context.source,
     commandMetadata
   });
+  const supportArtifactCreationPolicy = buildSupportArtifactCreationPolicyPreview({}, {
+    ...context,
+    source: context.source,
+    commandMetadata,
+    supportArtifactPathAuthority: supportArtifactAuthority,
+    storageSetupGate: storageSetup
+  });
   const commandIndex = new Map(commandMetadata.map((entry) => [entry.command, entry]));
   const dryRunIndex = new Map((enforcementDryRun.commands || []).map((entry) => [entry.command, entry]));
   const gateStackIndex = new Map((gateStack.gate_stacks || []).map((entry) => [entry.command, entry]));
@@ -61,7 +70,8 @@ function buildComposedGatePolicyPreview(db, input = {}, context = {}) {
     coverageIndex,
     storageSetup,
     gateStack,
-    supportArtifactAuthority
+    supportArtifactAuthority,
+    supportArtifactCreationPolicy
   }));
 
   return {
@@ -89,6 +99,7 @@ function buildComposedGatePolicyPreview(db, input = {}, context = {}) {
       storage_setup_gate_action: storageSetup.action,
       gate_stack_action: gateStack.action,
       support_artifact_path_authority_action: supportArtifactAuthority.action,
+      support_artifact_creation_policy_action: supportArtifactCreationPolicy.action,
       external_io_state: gateStack.external_io.requested_readout_state,
       external_io_enforced: gateStack.external_io.enforced === true
     },
