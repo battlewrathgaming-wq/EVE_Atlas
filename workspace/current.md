@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after HS167 accepted HS166 dry runtime enforcement adapter
+Status: HS168 Runtime enforcement activation readiness advisory open
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: preserve the accepted runtime-enforcement proof spine before opening another seam.
+Current focus: determine whether Atlas is ready to move from inactive runtime-enforcement proof surfaces toward a first active hook, without authorizing implementation yet.
 
 Current heading:
 
@@ -18,35 +18,48 @@ Current heading:
 
 ## Executor
 
-Current executor: Human / Overseer shaping
+Current executor: Engineering / Security advisory
 
 Expected handoff filename:
 
 ```txt
-none
+workspace/EngineeringSafetyAuditHS168-runtime-enforcement-activation-readiness.md
 ```
 
-No active Dev runway is open.
+This is not a Dev runway.
 
 ## Source Of Intent
 
-Human selected runtime enforcement as the latest seam:
+Recent accepted runtime-enforcement spine:
 
-- "I'd hold off the writer design (if) we need to know what fills it. We still have a bit of ambiguity there to review."
-- "1 sounds good. I have more confidence in our structural members."
+- HS148 proved composed gate policy preview.
+- HS162 proved the runtime enforcement boundary preview.
+- HS164 extracted the inactive pure runtime enforcement evaluator.
+- HS166 proved dry service-boundary fact assembly for that evaluator.
+- HS167 accepted HS166 after correcting trusted/internal confirmation-bypass semantics.
+
+Human direction:
+
+- continue system hardening before UI/body work
+- do cheap proof and assurance before expensive implementation
+- one seam at a time
+- do not drift into broad architecture or hidden active behavior
 
 Accepted interpretation:
 
-- Hydration writer design remains parked until Atlas has more confidence in what fills it.
-- Runtime enforcement should advance from proof surfaces toward implementation only one seam at a time.
-- HS162 proved the runtime enforcement boundary as preview evidence.
-- HS164 extracted a small evaluator before Atlas activates runtime command blocking.
-- HS166 proved dry adapter fact assembly before any active enforcement exists.
+- Atlas has enough runtime-enforcement proof material to ask whether activation is ready.
+- Atlas does not yet have authority to activate runtime command blocking.
+- The next useful action is an advisory readiness audit, not a Dev implementation packet.
 
 Accepted source material:
 
+- `workspace/OverseerHS149-hs148-composed-gate-policy-review.md`
+- `workspace/OverseerHS163-hs162-runtime-enforcement-boundary-review.md`
 - `workspace/OverseerHS165-hs164-runtime-enforcement-evaluator-review.md`
 - `workspace/OverseerHS167-hs166-dry-runtime-enforcement-adapter-review.md`
+- `workspace/DevHS148-composed-gate-policy.md`
+- `workspace/DevHS162-runtime-enforcement-boundary-preview.md`
+- `workspace/DevHS164-runtime-enforcement-evaluator.md`
 - `workspace/DevHS166-dry-runtime-enforcement-adapter.md`
 - `docs/current-state/current-storage-runtime-hardening.md`
 - `src/main/services/serviceRegistry.js`
@@ -85,15 +98,7 @@ Known insertion point:
 - current order: validate envelope, resolve command, require DB, renderer eligibility, confirmation authority, optional task wrapping, then handler dispatch
 - accepted preview order: validate envelope, resolve command, require DB, renderer eligibility, confirmation authority, runtime enforcement boundary, optional task wrapping, then handler dispatch
 
-HS164 made the future decision shape reusable and testable without making that decision active.
-
-HS166 proved how service-boundary facts can be assembled for that evaluator without changing command execution.
-
-## Resting State
-
-No implementation packet is open.
-
-Accepted HS166 facts:
+HS166 accepted facts:
 
 - The dry adapter is preview-only and inactive.
 - The dry adapter is not inserted into `invokeServiceCommand`.
@@ -102,59 +107,74 @@ Accepted HS166 facts:
 - Dry-run `would_allow` remains non-authorizing.
 - External I/O on remains non-authorizing.
 - Unknown/unclassified fail-closed remains inactive policy intent only.
-- Trusted/internal confirmation bypass is now recorded distinctly from satisfied operator confirmation as `confirmation_not_enforced_at_front_door`.
+- Trusted/internal confirmation bypass is distinct from satisfied operator confirmation.
 
-Likely next shaping candidates:
+## Advisory Runway
 
-1. First inactive service-boundary integration hook or active-enforcement policy review before any real blocking.
-2. Actual support artifact creation hardening if continuing the snapshot/trace-pack lane.
-3. Real Hydration writer design or provider-backed Hydration gate only after data-shape ambiguity is resolved.
-4. Storage setup UI/renderer posture later, not now.
+Run a runtime enforcement activation readiness audit.
+
+Ordered steps:
+
+1. Read the accepted source material listed above.
+2. Trace the current service command path from `invokeServiceCommand` through renderer eligibility, confirmation authority, optional task wrapping, and handler dispatch.
+3. Trace how composed gate policy, dry-run command/effect coverage, runtime boundary preview, runtime evaluator, and dry adapter currently relate.
+4. Identify what facts would be required at the live service boundary before active enforcement could make a decision.
+5. Identify which facts are currently available without side effects and which would require readout builders, config reads, DB reads, provider checks, task state, or new plumbing.
+6. Test the risky cases conceptually and against existing verifiers where possible:
+   - renderer-forged payloads
+   - trusted/internal config writes
+   - confirmation-required commands
+   - provider-backed Discovery
+   - ESI Evidence/EVEidence expansion
+   - Hydration write
+   - Watch execution
+   - support artifact creation
+   - unknown or unclassified commands
+7. Decide whether Atlas is ready for a first active hook.
+8. If ready, recommend the smallest safe implementation shape.
+9. If not ready, name the smallest missing proof or data seam.
+10. List exact verification commands a future Dev packet would need.
 
 ## Guardrails
 
-- No active runtime enforcement without a new accepted runway.
-- No command interception.
-- No actual command blocking.
-- No behavior change to `invokeServiceCommand`.
-- No provider calls.
-- No zKill calls.
-- No ESI calls.
-- No SDE download calls.
-- No Evidence/EVEidence writes.
-- No Discovery ref mutation.
-- No Hydration writes.
-- No storage config writes.
-- No support artifact creation.
-- No runtime snapshot creation.
-- No trace-pack creation.
-- No cleanup, delete, prune, restore, move, copy, migration, upload, or packaging.
-- No schema migration.
-- No renderer redesign or UI wording work.
-- Do not promote `would_allow` into authorization.
+- Advisory only.
+- Do not edit files.
+- Do not create a Dev runway inside the advisory artifact.
+- Do not activate runtime enforcement.
+- Do not insert the dry adapter into `invokeServiceCommand`.
+- Do not change command dispatch.
+- Do not introduce command blocking.
+- Do not call providers.
+- Do not call zKill, ESI, or SDE download.
+- Do not write Evidence/EVEidence.
+- Do not mutate Discovery refs.
+- Do not write Hydration output.
+- Do not write storage config.
+- Do not create support artifacts.
+- Do not run cleanup, deletion, pruning, restore, move, copy, migration, upload, or packaging.
+- Do not change schema.
+- Do not do renderer/UI work.
+- Do not treat dry-run `would_allow` as authorization.
 - Do not treat External I/O on as authorization.
-- Do not make unknown/unclassified fail-closed active runtime behavior.
+- Do not treat trusted/internal confirmation bypass as confirmation satisfaction.
+- Do not recommend broad global blocking unless the audit proves no smaller safe seam exists.
 
 ## Stop Conditions
 
-Before opening the next Dev packet, stop for Human/Overseer shaping if:
+Stop and return to Overseer/Human if:
 
-- the next step would activate runtime command blocking
-- the next step would change `invokeServiceCommand` behavior
-- the next step would create support artifacts, snapshots, or trace packs
-- the next step would call providers
-- the next step would write or mutate Evidence/EVEidence, Discovery refs, Hydration output, storage config, or schema
-- the next step cannot distinguish missing facts from pass/block decisions
-- the next step would treat dry-run output as authorization
+- the auditor cannot determine what facts active enforcement would need
+- the auditor finds current proof surfaces disagree
+- the auditor finds active enforcement would require broad architecture before a first hook
+- the auditor finds provider/live/destructive/private actions are needed to assess readiness
+- the auditor finds unknown/unclassified command policy would create unacceptable false blocking
+- the auditor finds service-boundary insertion would risk changing trusted/internal behavior without a separate Human decision
 
 ## Required Verification
 
-Latest accepted HS166 verification:
+This advisory should run only local/offline checks if useful:
 
 ```powershell
-node --check src\main\services\runtimeEnforcementEvaluator.js
-node --check src\main\services\runtimeEnforcementDryAdapter.js
-node --check scripts\verify-runtime-enforcement-adapter.js
 npm.cmd run verify:runtime-enforcement-adapter
 npm.cmd run verify:runtime-enforcement-evaluator
 npm.cmd run verify:runtime-enforcement-boundary
@@ -164,33 +184,44 @@ npm.cmd run verify:service-registry
 npm.cmd run verify:command-authority
 npm.cmd run verify:passive-side-effects
 npm.cmd run verify:protected-terms
-git diff --check
 git status --short --branch
 ```
 
-`verify:protected-terms` completed exit code 0 with advisory warnings only; no protected-term JSON updates or renames were performed.
+No live/API/provider verification is authorized.
+
+## Expected Advisory Output
+
+The handoff should include:
+
+1. Files reviewed.
+2. Current runtime-enforcement proof chain.
+3. Activation readiness finding: ready / not ready / ready only for a narrower seam.
+4. Fact availability table:
+   - fact needed
+   - current source
+   - side-effect risk
+   - confidence
+   - gap
+5. Risk analysis for renderer, trusted/internal, provider-backed, support artifact, Hydration, Watch, and unknown commands.
+6. Recommended smallest next step.
+7. Non-goals and rejected broader approaches.
+8. Verification commands and expected evidence for a future Dev packet.
+9. Human / Overseer decisions needed.
 
 ## Evidence
 
-HS166 Dev implementation accepted after Overseer review.
+HS168 opened as advisory readiness audit.
 
-Evidence:
-
-- Added dry adapter helper `src/main/services/runtimeEnforcementDryAdapter.js`.
-- Added focused verifier `scripts/verify-runtime-enforcement-adapter.js` and package script `verify:runtime-enforcement-adapter`.
-- Adapter result includes command, source, renderer eligibility posture, confirmation posture, trusted/internal context posture, evaluator decision, `would_block_if_active`, `would_dispatch_if_active`, `active: false`, `preview_only: true`, missing fact classes, dry-run non-authority notes, and no-side-effect proof flags.
-- Representative coverage includes safe local read/report, renderer-ineligible trusted command, missing confirmation, satisfied confirmation, trusted/internal config write, provider-backed Discovery, ESI Evidence/EVEidence expansion, Hydration write, Watch execution, support artifact creation, and unknown command before boundary.
-- Missing-fact proof shows dry-run `would_allow` without composed/storage facts becomes `conditional`, reports `composed_gate_policy`, `storage_authority`, and `storage_budget`, and does not set `would_dispatch_if_active`.
-- `invokeServiceCommand` behavior remains unchanged; the verifier confirms the dry adapter is not inserted into `invokeServiceCommand`, and the existing renderer eligibility, confirmation authority, and handler dispatch order remain present.
-- Overseer corrected confirmation reason-code semantics so trusted/internal front-door bypass is not mislabeled as operator confirmation satisfaction.
-- Explicit confirmation: no runtime enforcement, command blocking, command interception, provider calls, zKill calls, ESI calls, SDE downloads, file writes, DB mutations, Evidence/EVEidence writes, Discovery mutations, Hydration writes, storage config writes, support artifact creation, schema migration, renderer/UI changes, or `invokeServiceCommand` behavior changes were performed.
+No implementation evidence yet.
 
 ## Dev Handoff
 
-Accepted Dev handoff:
+No Dev handoff expected.
 
-- `workspace/DevHS166-dry-runtime-enforcement-adapter.md`
+Expected advisory artifact:
 
-Latest Overseer review:
+- `workspace/EngineeringSafetyAuditHS168-runtime-enforcement-activation-readiness.md`
+
+Latest accepted Overseer review:
 
 - `workspace/OverseerHS167-hs166-dry-runtime-enforcement-adapter-review.md`
