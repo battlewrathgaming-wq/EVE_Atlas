@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after HS163 accepted HS162 runtime enforcement boundary preview
+Status: HS164 Runtime enforcement evaluator runway open
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: storage/runtime hardening is locally stable after the runtime enforcement boundary preview. No active Dev runway is open.
+Current focus: extract a small runtime enforcement evaluator before any active command blocking exists.
 
 Current heading:
 
@@ -18,12 +18,12 @@ Current heading:
 
 ## Executor
 
-Current executor: Human / Overseer shaping
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none
+workspace/DevHS164-runtime-enforcement-evaluator.md
 ```
 
 ## Source Of Intent
@@ -36,22 +36,19 @@ Human selected runtime enforcement as the latest seam:
 Accepted interpretation:
 
 - Hydration writer design remains parked until Atlas has more confidence in what fills it.
-- The runtime hardening step should use the structural members already proven by prior read-only/offline packets.
-- HS162 was the first enforcement-boundary proof. It is accepted as preview evidence only; it is not active runtime enforcement.
+- Runtime enforcement should advance from proof surfaces toward implementation only one seam at a time.
+- HS162 proved the runtime enforcement boundary as preview evidence.
+- HS164 should extract a small evaluator before Atlas activates runtime command blocking.
 
 Accepted source material:
 
-- `workspace/EngineeringSafetyAuditHS138-enforcement-dry-run-coverage-review.md`
-- `workspace/OverseerHS140-hs139-enforcement-classification-coverage-review.md`
-- `workspace/OverseerHS141-security-audit-hs140-review.md`
-- `workspace/OverseerHS149-hs148-composed-gate-policy-review.md`
-- `workspace/OverseerHS151-hs150-hydration-execution-policy-review.md`
-- `workspace/OverseerHS157-hs156-external-io-real-config-review.md`
-- `workspace/OverseerHS159-hs158-storage-authority-real-config-review.md`
-- `workspace/OverseerHS161-hs160-support-artifact-creation-policy-review.md`
 - `workspace/OverseerHS163-hs162-runtime-enforcement-boundary-review.md`
+- `workspace/OverseerHS164-runtime-enforcement-evaluator-runway.md`
 - `docs/current-state/current-storage-runtime-hardening.md`
 - `src/main/services/serviceRegistry.js`
+- `src/main/services/runtimeEnforcementBoundaryService.js`
+- `src/main/services/composedGatePolicyService.js`
+- `src/main/services/enforcementDryRunService.js`
 
 Accepted proof surfaces:
 
@@ -79,36 +76,66 @@ Known insertion point:
 - current order: validate envelope, resolve command, require DB, renderer eligibility, confirmation authority, optional task wrapping, then handler dispatch
 - accepted preview order: validate envelope, resolve command, require DB, renderer eligibility, confirmation authority, runtime enforcement boundary, optional task wrapping, then handler dispatch
 
-The first safe proof now shows where enforcement would run and what it would decide without calling target handlers or blocking commands.
+HS162 proved where enforcement would run and what it would decide without calling target handlers or blocking commands.
+
+HS164 should make the future decision shape reusable and testable without making that decision active.
 
 ## Active Runway
 
-No active Dev runway.
+Create a non-enforcing runtime enforcement evaluator.
 
-Next shaping candidates:
+Ordered steps:
 
-1. First active runtime enforcement slice, still narrow and explicitly scoped.
-2. Actual support artifact creation hardening, if continuing the snapshot/trace-pack lane.
-3. Hydration writer/provider design, only after data-shape ambiguity is settled.
-4. Storage setup renderer posture later, not now.
+1. Read HS163, `runtimeEnforcementBoundaryService`, `composedGatePolicyService`, `enforcementDryRunService`, `gateStackReadoutService`, storage setup/readback, External I/O readback, support artifact creation policy, and `serviceRegistry.invokeServiceCommand`.
+2. Add a pure evaluator module or helper for future runtime enforcement decisions.
+3. The evaluator must accept explicit input facts; it must not call target command handlers, task runners, providers, repositories, file writers, or config writers.
+4. The evaluator decision object should include at least:
+   - command
+   - known/classified status
+   - boundary reachability
+   - decision: `pass`, `block`, `conditional`, or `stop_before_boundary`
+   - active: false
+   - preview_only: true
+   - reason codes
+   - gate inputs used
+   - non-authorizing notes for `would_allow` and External I/O on
+5. Update `runtime.enforcement_boundary.preview` to use or expose the evaluator output where useful, without changing invocation behavior.
+6. Add focused verifier coverage for representative commands:
+   - safe local report/read
+   - storage authority readback
+   - storage authority trusted write
+   - provider-backed Discovery
+   - ESI Evidence/EVEidence expansion
+   - Hydration write
+   - Watch execution
+   - support artifact creation
+   - task cancellation
+   - fixture-only proof command
+   - unknown/unclassified future command
+7. Prove the evaluator produces stable reason codes for storage missing, budget hard-lock, External I/O held, confirmation missing/satisfied, trusted-context required, path authority conditional, fixture-only, and unknown/unclassified.
+8. Prove no runtime behavior changes by rerunning the boundary, registry, passive side-effect, composed policy, enforcement dry-run, gate stack, storage, support artifact, and protected-term checks.
+9. Update Evidence / Dev Handoff and create the expected DevHS file.
 
 ## Guardrails
 
-- No active runtime enforcement without a new accepted runway.
-- No command interception without a new accepted runway.
-- No actual command blocking without a new accepted runway.
-- No provider-backed movement without explicit scope.
+- No active runtime enforcement.
+- No command interception.
+- No actual command blocking.
+- No handler dispatch from evaluator tests.
+- No task wrapping or task execution from evaluator tests.
+- No provider calls.
 - No zKill calls.
 - No ESI calls.
 - No SDE download calls.
 - No Evidence/EVEidence writes.
 - No Discovery ref mutation.
 - No Hydration writes.
-- No storage config writes unless specifically opened.
-- No support artifact creation unless specifically opened.
-- No runtime snapshot creation unless specifically opened.
-- No trace-pack creation unless specifically opened.
+- No storage config writes.
+- No support artifact creation.
+- No runtime snapshot creation.
+- No trace-pack creation.
 - No cleanup, delete, prune, restore, move, copy, migration, upload, or packaging.
+- No schema migration.
 - No renderer redesign or UI wording work.
 - Do not promote `would_allow` into authorization.
 - Do not collapse External I/O, storage authority, confirmation, live/API gate, Watch arming, or path authority into one boolean.
@@ -117,35 +144,25 @@ Next shaping candidates:
 
 ## Stop Conditions
 
-Stop and return to Overseer/Human before opening the next runway if:
+Stop and return to Overseer/Human if:
 
-- the next proof requires active runtime command blocking
-- the next proof requires changing command execution behavior
-- the next proof requires live/provider/API calls
-- the next proof requires writing storage config, Evidence/EVEidence, Discovery refs, Hydration labels, support artifacts, snapshots, trace packs, files, or directories outside a scoped packet
-- the next proof requires UI/renderer redesign
-- the next proof cannot distinguish preview-only posture from active authorization
-- External I/O on would become authorization
-- `would_allow` would become authorization
-- unknown/unclassified command handling would become active runtime fail-closed behavior without explicit acceptance
+- evaluator extraction requires changing command execution behavior
+- evaluator extraction requires active command blocking
+- evaluator extraction requires live/provider/API calls
+- evaluator extraction requires writing storage config, Evidence/EVEidence, Discovery refs, Hydration labels, support artifacts, snapshots, trace packs, files, or directories
+- evaluator extraction requires schema or renderer work
+- the evaluator cannot keep `would_allow` as non-authorizing input
+- External I/O on becomes authorization
+- unknown/unclassified command handling would become active runtime behavior
+- the evaluator becomes a broad policy framework instead of a small command-boundary decision helper
 
 ## Required Verification
 
-No active verification required while resting.
+Run syntax checks on every new or changed JavaScript file.
 
-Most recent accepted proof set:
+Run:
 
 ```powershell
-node --check src\main\services\runtimeEnforcementBoundaryService.js
-node --check src\main\services\serviceRegistry.js
-node --check src\main\services\enforcementDryRunService.js
-node --check src\main\services\composedGatePolicyService.js
-node --check scripts\verify-runtime-enforcement-boundary.js
-node --check scripts\verify-service-registry.js
-node --check scripts\verify-command-authority.js
-node --check scripts\verify-passive-side-effects.js
-node --check scripts\verify-enforcement-dry-run.js
-node --check scripts\verify-composed-gate-policy.js
 npm.cmd run verify:runtime-enforcement-boundary
 npm.cmd run verify:enforcement-dry-run
 npm.cmd run verify:composed-gate-policy
@@ -157,39 +174,34 @@ npm.cmd run verify:service-registry
 npm.cmd run verify:command-authority
 npm.cmd run verify:passive-side-effects
 npm.cmd run verify:protected-terms
+git diff --check
+git status --short --branch
 ```
+
+If Dev adds `verify:runtime-enforcement-evaluator`, run it and list it in the handoff.
 
 ## Evidence
 
-HS162 accepted by Overseer in `workspace/OverseerHS163-hs162-runtime-enforcement-boundary-review.md`.
+HS164 is open. Evidence to be filled by Dev.
 
-Evidence:
+Expected evidence:
 
-- Added `runtime.enforcement_boundary.preview` as a renderer-eligible read-only service command.
-- Added `src/main/services/runtimeEnforcementBoundaryService.js`.
-- Added focused verifier `scripts/verify-runtime-enforcement-boundary.js` and npm script `verify:runtime-enforcement-boundary`.
-- Updated service registry, command authority, passive side-effect, enforcement dry-run, and composed gate policy coverage for the new command.
-- Proposed insertion point:
-  - function: `invokeServiceCommand(command, payload, context)`
-  - current order: validate envelope, resolve command definition, require `context.db`, renderer eligibility, confirmation authority, task wrapping, handler dispatch
-  - accepted preview order: validate envelope, resolve command definition, require `context.db`, renderer eligibility, confirmation authority, runtime enforcement decision boundary, task wrapping, handler dispatch
-  - runs after renderer eligibility: true
-  - runs after confirmation authority: true
-  - runs before task wrapping: true
-  - runs before handler dispatch: true
-  - active now: false
-- Runtime semantics proof:
-  - `would_allow` is not authorization
-  - External I/O on is not authorization
-  - unknown/unclassified fail-closed is inactive policy intent only
-  - command blocking active: false
-  - runtime enforcement active: false
-- Explicit confirmation:
-  - no runtime enforcement, command blocking, command interception, target handler dispatch, task execution, provider calls, zKill calls, ESI calls, SDE downloads, file writes, directory creation, DB mutations, Evidence/EVEidence writes, Discovery mutations, Hydration writes, storage config writes, support artifact creation, snapshot creation, trace-pack creation, schema migration, or UI changes were performed.
+- evaluator module/helper added or intentionally reused
+- decision object shape
+- representative command decisions
+- stable reason-code proof
+- proof that the evaluator is non-enforcing and preview-only
+- proof that target handlers, task runners, providers, repositories, file writers, and config writers are not called by evaluator tests
+- verification commands and results
+- explicit confirmation that no runtime enforcement, command blocking, provider calls, file writes, DB mutations, Evidence/EVEidence writes, Discovery mutations, Hydration writes, storage config writes, support artifact creation, schema migration, or UI changes were performed
 
 ## Dev Handoff
 
-Accepted Dev handoff:
+Expected Dev handoff:
+
+- `workspace/DevHS164-runtime-enforcement-evaluator.md`
+
+Prior accepted Dev handoff:
 
 - `workspace/DevHS162-runtime-enforcement-boundary-preview.md`
 
