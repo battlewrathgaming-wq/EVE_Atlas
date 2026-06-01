@@ -85,6 +85,7 @@
     "verify:runtime-enforcement-boundary": "node scripts/verify-runtime-enforcement-boundary.js",
     "verify:runtime-enforcement-evaluator": "node scripts/verify-runtime-enforcement-evaluator.js",
     "verify:runtime-enforcement-adapter": "node scripts/verify-runtime-enforcement-adapter.js",
+    "verify:runtime-enforcement-hook": "node scripts/verify-runtime-enforcement-hook.js",
     "verify:composed-gate-policy": "node scripts/verify-composed-gate-policy.js",
     "verify:corpus-health": "node scripts/verify-corpus-health-report.js",
     "verify:bulk-synthetic": "node scripts/verify-bulk-synthetic.js",

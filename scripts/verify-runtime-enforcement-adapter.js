@@ -68,7 +68,7 @@ function main() {
   ].map((entry) => verifyScenario(entry, commands));
 
   const missingFactProof = verifyMissingFactProof(commands);
-  verifyInvokeServiceCommandUnchanged();
+  verifyInvokeServiceCommandAdapterDirectness();
   verifyNoAdapterSideEffects(cases);
 
   console.log(JSON.stringify({
@@ -78,7 +78,8 @@ function main() {
     sample_cases: cases.slice(0, 5).map(compact),
     missing_fact_proof: compact(missingFactProof),
     invoke_service_command_behavior: {
-      adapter_inserted: false,
+      adapter_called_directly_from_invoke: false,
+      inactive_preview_hook_may_call_adapter: true,
       active_runtime_enforcement: false,
       command_blocking: false
     },
@@ -153,9 +154,9 @@ function verifyMissingFactProof(commands) {
   return { id: 'missing_fact_dry_run_would_allow_not_authority', decision };
 }
 
-function verifyInvokeServiceCommandUnchanged() {
+function verifyInvokeServiceCommandAdapterDirectness() {
   const source = invokeServiceCommand.toString();
-  assert(!source.includes('buildDryRuntimeEnforcementAdapterDecision'), 'invokeServiceCommand should not call the dry adapter');
+  assert(!source.includes('buildDryRuntimeEnforcementAdapterDecision'), 'invokeServiceCommand should not call the dry adapter directly');
   assert(source.includes('assertCommandEligible(command, definition, context);'), 'invokeServiceCommand should retain renderer eligibility check');
   assert(source.includes('assertCommandAuthority(command, definition, payload, context);'), 'invokeServiceCommand should retain confirmation authority check');
   assert(source.includes('return definition.handler({ ...context, payload });'), 'invokeServiceCommand should retain direct handler dispatch');

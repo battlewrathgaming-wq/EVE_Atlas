@@ -58,6 +58,7 @@ const { buildStorageSetupGateReadout } = require('./storageSetupGateReadoutServi
 const { writeOperatorDebugTracePack } = require('../support/operatorDebugTracePack');
 const { getScopeDefaults, validateScope } = require('./scopeService');
 const { defaultTaskRunner } = require('./taskRunner');
+const { buildDryRuntimeEnforcementAdapterDecision } = require('./runtimeEnforcementDryAdapter');
 
 const EFFECTS = Object.freeze({
   READ_ONLY: 'read-only',
@@ -618,6 +619,7 @@ async function invokeServiceCommand(command, payload = {}, context = {}) {
   }
   assertCommandEligible(command, definition, context);
   assertCommandAuthority(command, definition, payload, context);
+  emitInactiveRuntimeEnforcementPreview(command, definition, payload, context);
   if (context.asTask) {
     const taskDefinition = {
       type: command,
@@ -766,9 +768,48 @@ function assertCommandAuthority(command, definition, payload = {}, context = {})
   throw error;
 }
 
+function emitInactiveRuntimeEnforcementPreview(command, definition, payload = {}, context = {}) {
+  const preview = buildDryRuntimeEnforcementAdapterDecision({
+    command,
+    payload,
+    context,
+    definition: {
+      command,
+      classification: definition.classification,
+      effects: definition.effects,
+      renderer: definition.renderer,
+      authority: authorityMetadata(definition.authority),
+      description: definition.description
+    },
+    facts: runtimeEnforcementFactsFor(command, context)
+  });
+  const observer = context.runtimeEnforcementPreviewObserver || context.runtime_enforcement_preview_observer;
+  if (typeof observer !== 'function') {
+    return preview;
+  }
+  try {
+    observer(preview);
+  } catch {
+    // Preview observers are diagnostics only; observer failures must not affect command behavior.
+  }
+  return preview;
+}
+
+function runtimeEnforcementFactsFor(command, context = {}) {
+  const facts = context.runtimeEnforcementFacts || context.runtime_enforcement_facts || {};
+  if (!facts || typeof facts !== 'object' || Array.isArray(facts)) {
+    return {};
+  }
+  if (facts[command] && typeof facts[command] === 'object' && !Array.isArray(facts[command])) {
+    return facts[command];
+  }
+  return facts;
+}
+
 module.exports = {
   CONFIRMATION,
   EFFECTS,
+  emitInactiveRuntimeEnforcementPreview,
   listServiceCommands,
   invokeServiceCommand,
   registerIpcServiceHandlers,
