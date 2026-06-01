@@ -36,6 +36,7 @@ const { buildGateStackReadout } = require('./gateStackReadoutService');
 const { buildEnforcementDryRunCommandEffectMap } = require('./enforcementDryRunService');
 const { buildComposedGatePolicyPreview } = require('./composedGatePolicyService');
 const { buildHydrationBacklogPreview } = require('./hydrationBacklogPreviewService');
+const { buildHydrationExecutionPolicyPreview } = require('./hydrationExecutionPolicyPreviewService');
 const { buildSupportArtifactPathAuthorityPreview } = require('./supportArtifactPathAuthorityService');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
 const {
@@ -142,6 +143,16 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview local hydration readability backlog without provider calls, writes, queues, or schema changes',
     handler: ({ db, payload, ...context }) => buildHydrationBacklogPreview(db, payload, {
+      ...context,
+      commandMetadata: listServiceCommands()
+    })
+  },
+  'metadata.hydration_execution_policy.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview future Hydration execution policy without provider calls, writes, queues, or authorization',
+    handler: ({ db, payload, ...context }) => buildHydrationExecutionPolicyPreview(db, payload, {
       ...context,
       commandMetadata: listServiceCommands()
     })

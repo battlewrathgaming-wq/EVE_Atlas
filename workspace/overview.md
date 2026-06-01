@@ -36,9 +36,10 @@ Milestone: Atlas Storage And Runtime Hardening
 Current state:
 
 - HS148 accepted
-- active Dev runway opened for HS150
-- current executor is Dev
-- next work is Hydration execution policy preview, not Hydration execution
+- HS150 accepted
+- no active Dev runway
+- current executor is Human / Overseer shaping
+- next work should select one bounded hardening seam, not open Hydration writes or runtime enforcement by default
 
 Current heading:
 
@@ -49,9 +50,10 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Review HS150 Hydration execution policy preview when Dev returns.
-2. Snapshot/trace-pack creation enforcement policy if Human wants to stay on support artifacts.
-3. First runtime enforcement design packet only after explicit Human/Overseer selection.
+1. Hydration writer fixture proof, if the Human wants a tiny write-capable Hydration step next.
+2. External I/O persisted state, if the Human wants the provider trust switch to become durable before writes.
+3. Snapshot/trace-pack creation policy if returning to support artifacts.
+4. First runtime enforcement design packet only after explicit Human/Overseer selection.
 
 See `workspace/current.md` for current truth.
 
@@ -89,6 +91,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS148 opened a Composed gate enforcement policy preview runway: define how storage, External I/O, live/provider cadence, Watch arming, active task, confirmation, destination/path authority, command classification, and trusted context would compose before any runtime command blocking exists.
 - HS149 accepted HS148: `storage.composed_gate_policy.preview` now proves composed gate policy posture as a read-only preview, keeps `would_allow` as input only, marks unknown/unclassified future commands as inactive fail-closed policy intent, and leaves runtime enforcement unimplemented.
 - HS150 opened a Hydration execution policy preview runway: define which Hydration work would be eligible, held, blocked, local-only, provider-needed, or deferred before any provider-backed Hydration writes or runtime enforcement exist.
+- HS151 accepted HS150: `metadata.hydration_execution_policy.preview` now proves future Hydration execution posture as read-only policy, separates view/local-record, Watch/background, target/report-scoped, corpus hygiene, and local SDE lookup lanes, and keeps eligible states separate from authorization.
 
 ## Accepted Boundaries
 

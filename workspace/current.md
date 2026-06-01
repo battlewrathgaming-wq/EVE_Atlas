@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Active Dev runway for HS150 Hydration execution policy preview
+Status: HS150 accepted; project resting before next hardening seam
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: prove a read-only Hydration execution policy preview before provider-backed Hydration writes or runtime enforcement exist.
+Current focus: rest after accepting the read-only Hydration execution policy preview; select the next bounded hardening seam deliberately.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Human / Overseer shaping
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS150-hydration-execution-policy.md
+None. No active Dev handoff is expected.
 ```
 
 ## Current State
 
-HS142, HS144, HS146, and HS148 are accepted. HS150 is open as the next bounded hardening seam.
+HS142, HS144, HS146, HS148, and HS150 are accepted. No active Dev runway is open.
 
 Accepted Human decisions:
 
@@ -62,6 +62,7 @@ Atlas has accepted storage/runtime hardening proofs:
 - read-only External I/O held-state proof through `support.gate_stack_readout`
 - read-only support-artifact path authority proof through `support.artifact_path_authority.preview`
 - read-only composed gate policy proof through `storage.composed_gate_policy.preview`
+- read-only Hydration execution policy proof through `metadata.hydration_execution_policy.preview`
 
 Recent accepted state:
 
@@ -95,6 +96,8 @@ Recent accepted state:
 - `workspace/DevHS148-composed-gate-policy.md`
 - `workspace/OverseerHS149-hs148-composed-gate-policy-review.md`
 - `workspace/OverseerHS150-hydration-execution-policy-runway.md`
+- `workspace/DevHS150-hydration-execution-policy.md`
+- `workspace/OverseerHS151-hs150-hydration-execution-policy-review.md`
 
 ## Accepted Boundaries
 
@@ -110,36 +113,16 @@ Recent accepted state:
 
 ## Active Runway
 
-Dev should implement a bounded read-only Hydration execution policy preview.
+No active Dev runway.
 
-Source of intent:
+Resting choices for the next hardening seam:
 
-- Human decision: follow the Hydration line after HS148.
-- `workspace/OverseerHS145-hs144-hydration-backlog-preview-review.md`
-- `workspace/OverseerHS149-hs148-composed-gate-policy-review.md`
-- `workspace/OverseerHS150-hydration-execution-policy-runway.md`
-- `docs/contracts/metadata-hydration-contract.md`
-- `docs/features/acquisition-and-hydration-clocks.md`
-- `docs/current-state/current-storage-runtime-hardening.md`
+1. Hydration writer fixture proof, if the Human wants a tiny write-capable Hydration step next.
+2. External I/O persisted state, if the Human wants the provider trust switch to become durable before writes.
+3. Snapshot/trace-pack creation policy, if returning to support artifacts.
+4. First runtime enforcement design, only after explicit Human/Overseer selection.
 
-Expected command/readout:
-
-```text
-metadata.hydration_execution_policy.preview
-```
-
-Ordered steps:
-
-1. Inspect current metadata hydration, Hydration backlog preview, metadata status/lookup reports, service registry command metadata, gate-stack readout, composed gate policy preview, storage setup gate, and passive side-effect verifier.
-2. Add a read-only Hydration execution policy preview command/readout.
-3. Use existing local backlog/candidate data as input; do not create a persisted Hydration queue.
-4. Separate candidate lanes: view/local-record hydration, Watch/background hydration, target/report-scoped hydration, corpus hygiene/low-priority hydration, and local SDE/type/geography lookup gaps.
-5. For each lane or representative candidate group, report policy state such as `eligible_local`, `eligible_provider_if_gates_pass`, `held_by_external_io`, `blocked_by_storage`, `deferred_by_priority`, `local_lookup_gap`, or `not_applicable`.
-6. Compose policy from existing read-only gates where available: storage authority/budget, External I/O, live/provider gate and cadence posture, composed gate policy preview, local SDE availability, and command authority/renderer eligibility.
-7. Preserve the boundary: Hydration repairs names/labels/readability and never creates Evidence/EVEidence or replaces IDs as facts.
-8. Add focused verification proving the preview makes no provider calls, no metadata writes, no entity label patches, no activity-event label patches, no DB mutations, no queue persistence, no schema changes, and no UI work.
-9. Add service registry, command authority, enforcement dry-run/composed policy, and passive side-effect coverage as needed.
-10. Update Evidence / Dev Handoff and create the expected DevHS file.
+Do not open Dev work until the next seam is selected.
 
 ## Last Runway Accepted
 
@@ -295,9 +278,51 @@ Run `node --check` on any new or changed JavaScript files.
 
 ## Evidence
 
-HS150 opened from accepted Hydration backlog preview and composed gate policy preview.
+HS150 Dev implementation completed.
 
-Dev should replace this HS150 note with concise proof evidence after implementation.
+- Added read-only `metadata.hydration_execution_policy.preview`.
+- Preview composes existing local Hydration backlog candidates, storage setup gate posture, gate-stack readout, composed gate policy preview, command authority/service metadata, and local SDE readiness.
+- Preview separates lanes for `view_local_record`, `watch_background`, `target_report_scoped`, `corpus_hygiene_low_priority`, and `local_sde_lookup_gaps`.
+- Lane states include `eligible_local`, `eligible_provider_if_gates_pass`, `held_by_external_io`, `blocked_by_storage`, `deferred_by_priority`, `local_lookup_gap`, and `not_applicable`.
+- Evidence boundary is explicit: Hydration repairs names/labels/readability only; numeric IDs remain facts; missing labels are not report failure; provider-needed labels are not Evidence/EVEidence work.
+- Priority policy is explicit: view/local-record Hydration is not starved by background work, Watch/background waiting is not failure, corpus hygiene can defer, and External I/O re-enable does not imply catch-up flooding.
+- Focused verifier proves no provider calls, hydration writes, entity label writes, activity-event label patches, metadata run writes, DB mutations, queue persistence, schema changes, UI work, or filesystem temp-root creation.
+- Added service registry, command authority, enforcement dry-run, and passive side-effect coverage for the new read-only command.
+- Boundary preserved: no ESI/zKill/SDE provider calls, no provider movement, no Evidence/EVEidence writes, no Discovery ref mutation, no storage config writes, no runtime enforcement/interception/authorization/blocking, no schema change, and no UI work.
+
+HS150 verification:
+
+```powershell
+node --check src\main\services\hydrationExecutionPolicyPreviewService.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-hydration-execution-policy.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-passive-side-effects.js
+node --check scripts\verify-enforcement-dry-run.js
+npm.cmd run verify:support-artifact-path-authority
+npm.cmd run verify:composed-gate-policy
+npm.cmd run verify:hydration-execution-policy
+npm.cmd run verify:hydration-backlog-preview
+npm.cmd run verify:storage-authority-preflight
+npm.cmd run verify:storage-setup-gate
+npm.cmd run verify:hydration
+npm.cmd run verify:metadata-status
+npm.cmd run verify:metadata-lookup
+npm.cmd run verify:actor-metadata
+npm.cmd run verify:corporation-metadata
+npm.cmd run verify:gate-stack-readout
+npm.cmd run verify:enforcement-dry-run
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:protected-terms
+git diff --check
+git status --short --branch
+```
+
+All listed commands passed. `verify:protected-terms` completed with warning-only discovery output and exit code 0. `git diff --check` passed with line-ending warnings only. `git status --short --branch` showed `main...origin/main [ahead 27]` plus the HS150 working-tree changes.
 
 Prior evidence:
 
@@ -349,6 +374,10 @@ All listed commands passed. `verify:protected-terms` completed with warning-only
 ## Dev Handoff
 
 Completed Dev handoff:
+
+- `workspace/DevHS150-hydration-execution-policy.md`
+
+Prior completed Dev handoff:
 
 - `workspace/DevHS148-composed-gate-policy.md`
 

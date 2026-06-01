@@ -33,6 +33,7 @@ Accepted proof surfaces:
 - `metadata.hydration_backlog.preview`
 - `support.artifact_path_authority.preview`
 - `storage.composed_gate_policy.preview`
+- `metadata.hydration_execution_policy.preview`
 
 Accepted shape:
 
@@ -46,12 +47,13 @@ Accepted shape:
 - Hydration backlog preview is read-only local data understanding: it distinguishes provider-needed labels, known local labels, and local SDE gaps without writing hydration output or creating a persisted queue
 - Support artifact path authority preview is read-only local trust posture: it classifies snapshots, trace packs, logs, temp/cache, SDE/import material, and fixture proof artifacts without creating, deleting, moving, packaging, or uploading files
 - Composed gate policy preview is read-only enforcement policy understanding: it composes service command classification, storage authority, budget posture, External I/O, live/provider gate, cadence/rate safety, Watch arming, active task/duplicate prevention, confirmation UX, destination/path authority, and trusted-context posture without making runtime authorization active
+- Hydration execution policy preview is read-only readability-repair policy understanding: it separates view/local-record, Watch/background, target/report-scoped, corpus hygiene, and local SDE lookup lanes without provider calls, label writes, queue persistence, or runtime authorization
 
 Current resting state:
 
 - no active Dev runway is open
 - future runtime enforcement now has composed gate-state preview evidence, but still needs an explicit implementation/design runway before command blocking
-- future Hydration execution still needs a dedicated runway before provider calls or writes
+- future Hydration execution now has policy preview evidence, but still needs a dedicated write-capable or provider-capable runway before calls or writes
 - support artifact creation, snapshot creation, trace-pack creation, cleanup, and pruning/deletion remain separate future seams
 
 ## Accepted Runtime Boundaries

@@ -171,6 +171,8 @@ function verifyCoverageMetadata(map) {
   assert(command(map, 'manual.expansion').storage_action_class === 'esi_evidence_expansion', 'manual.expansion should map to ESI evidence expansion storage/action class');
   assert(command(map, 'metadata.hydration').storage_action_class === 'fast_view_metadata_hydration', 'metadata.hydration should map to fast hydration storage/action class');
   assert(command(map, 'sde.build-lookups').storage_action_class === 'background_hydration', 'sde.build-lookups should map to background hydration storage/action class');
+  assert(command(map, 'metadata.hydration_execution_policy.preview').runtime_context === 'hydration_execution_policy_readout', 'hydration execution policy should be classified as a readout');
+  assert(command(map, 'metadata.hydration_execution_policy.preview').external_io_dependency === 'none', 'hydration execution policy readout should not declare External I/O dependency');
 
   for (const commandName of ['storage.authority_config.write_proof', 'storage.authority_config.acknowledgement_persistence_proof']) {
     assert(command(map, commandName).enforcement_status === 'fixture_only_non_production', `${commandName} should be fixture-only/non-production`);
