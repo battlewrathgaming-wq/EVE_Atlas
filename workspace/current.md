@@ -1,227 +1,206 @@
 # AURA Atlas Current Work
 
-Status: Resting after accepting data-layer boundary support note
+Status: HS176 Hydration candidate preview runway open
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: preserve accepted runtime-enforcement proof surfaces and use the data-layer boundary note as the reference spine before the next storage/runtime seam.
+Current focus: prove the shape of deduped Hydration candidates from local records before any persisted queue, provider call, schema change, or Hydration write.
 
 Current heading:
 
 - system hardening next
 - operational usefulness over architectural finality
 - one hardening seam at a time
-- project root and Atlas-local context remain the anchor
+- data-layer boundaries guide the seam before machinery
 
 ## Executor
 
-Current executor: Human / Overseer shaping
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none
+workspace/DevHS176-hydration-candidate-preview.md
 ```
-
-No active Dev runway is open.
 
 ## Source Of Intent
 
-Recent accepted runtime-enforcement spine:
-
-- HS148 proved composed gate policy preview.
-- HS162 proved the runtime enforcement boundary preview.
-- HS164 extracted the inactive pure runtime enforcement evaluator.
-- HS166 proved dry service-boundary fact assembly for that evaluator.
-- HS167 accepted HS166 after correcting trusted/internal confirmation-bypass semantics.
-- HS168 audited activation readiness.
-- HS169 accepted HS168.
-- HS170 added the first inactive service-boundary hook.
-- HS171 accepted HS170 after proof-language correction.
-- HS172 sourced command classification coverage inside the inactive hook.
-- HS173 accepted HS172.
-- HS174 added read-only hook telemetry/readout.
-- HS175 accepted HS174.
-
 Human / Overseer direction:
 
-- continue system hardening before UI/body work
-- do cheap proof and assurance before expensive implementation
-- one seam at a time
-- do not drift into broad architecture or hidden active behavior
-- active runtime blocking remains out of scope
-
-Accepted interpretation:
-
-- Atlas is still not ready for active runtime blocking.
-- Atlas now has enough runtime-enforcement proof to rest this lane unless a fresh decision selects another fact class.
-- Remaining canonical fact classes are riskier because they involve storage, config, DB, provider/live, Watch/task, path, or runtime state.
-- Support artifact creation hardening is now the cleaner likely next lane if work continues.
+- choose Hydration candidate preview before patient provider packets because it is the more solvable seam
+- use the accepted data-layer boundary note as the spine
+- keep Dev work read-only and local
+- do not create schema-backed queues yet
+- do not let Hydration blur into ESI Evidence Expansion
+- do not let one ID become many provider obligations just because many reports need it
 
 Accepted source material:
 
+- `docs/features/data-layer-boundaries.md`
+- `docs/contracts/metadata-hydration-contract.md`
+- `docs/features/acquisition-and-hydration-clocks.md`
 - `workspace/DataAnalystHS151-data-intent-supporting-schemas.md`
 - `workspace/DataAnalystHS152-current-gaps-and-milestone-slices.md`
-- `docs/features/data-layer-boundaries.md`
-- `workspace/OverseerHS171-hs170-inactive-service-boundary-hook-review.md`
-- `workspace/OverseerHS173-hs172-runtime-hook-coverage-fact-review.md`
-- `workspace/OverseerHS175-hs174-runtime-hook-telemetry-readout-review.md`
-- `workspace/DevHS170-inactive-service-boundary-hook.md`
-- `workspace/DevHS172-runtime-hook-coverage-fact.md`
-- `workspace/DevHS174-runtime-hook-telemetry-readout.md`
 - `docs/current-state/current-storage-runtime-hardening.md`
-- `src/main/services/serviceRegistry.js`
-- `src/main/services/runtimeHookTelemetryReadoutService.js`
-- `src/main/services/runtimeEnforcementDryAdapter.js`
-- `src/main/services/runtimeEnforcementEvaluator.js`
-- `src/main/services/enforcementDryRunService.js`
+- `src/main/services/hydrationBacklogPreviewService.js`
+- `src/main/services/hydrationExecutionPolicyPreviewService.js`
+- `scripts/verify-hydration-backlog-preview.js`
+- `scripts/verify-hydration-execution-policy.js`
 
-## Current State
+Accepted data-layer boundaries:
 
-HS142, HS144, HS146, HS148, HS150, HS152, HS154, HS156, HS158, HS160, HS162, HS164, HS166, HS168, HS170, HS172, and HS174 are accepted.
-
-No active runtime enforcement exists yet.
-
-Accepted data-layer boundary support:
-
-- `docs/features/data-layer-boundaries.md`
 - Discovery Ref is a stored possible lead/provenance form, not Evidence/EVEidence.
 - ESI Evidence Expansion creates Evidence/EVEidence from a Discovery Ref and the ESI killmail endpoint.
-- Hydration is readability repair after local facts exist; it is not ESI Evidence Expansion.
+- Hydration repairs readability after local facts exist; it is not ESI Evidence Expansion.
+- IDs are facts; labels are readability.
 - Watch is operational acquisition intent.
-- Observation is the Atlas product layer that computes and collates local records into an operator-facing story; it is not a required UI pane.
-- Relationships group appearances/anchors to keep context, provenance, and basis coherent; computed grouping is not new Evidence/EVEidence.
+- Observation computes/collates local records into an operator-facing story.
+- Relationships group appearances, Evidence anchors, or Watch-derived context only when backed by disclosed basis.
 
-Accepted runtime-enforcement proof surfaces:
+Relevant existing proof surfaces:
 
-- `runtime.enforcement_boundary.preview`
-- `runtimeEnforcementEvaluator.evaluateRuntimeEnforcementDecision`
-- `runtime.enforcement_adapter.dry_preview`
-- inactive hook in `invokeServiceCommand`
-- command classification coverage fact in the inactive hook
-- `runtime.enforcement_hook_telemetry.readout`
+- `metadata.hydration_backlog.preview` already previews local Hydration backlog shape.
+- `metadata.hydration_execution_policy.preview` already previews future Hydration execution posture.
+- `metadata.hydration_write_fixture_proof` proves fixture-only local readability writes from existing entities.
 
-Accepted live service boundary:
+HS176 should add candidate-shape clarity, not provider movement.
 
-- `src/main/services/serviceRegistry.js`
-- `invokeServiceCommand(command, payload, context)`
-- order: validate envelope, resolve command, require DB, renderer eligibility, confirmation authority, inactive runtime enforcement preview hook, optional task wrapping, then handler dispatch
+## Ordered Runway
 
-Accepted HS174 facts:
+1. Inspect the existing Hydration backlog and execution policy preview services and their verifiers.
+2. Add a read-only Hydration candidate preview, preferably as a new service command named:
 
-- `runtimeHookTelemetryReadoutService` is pure and summarizes supplied preview objects.
-- `runtime.enforcement_hook_telemetry.readout` is a read-only renderer-eligible service command.
-- The readout accepts explicit preview object(s) via `preview` or `previews`.
-- The readout does not capture runtime telemetry by default.
-- The readout does not persist telemetry.
-- The readout does not create support artifacts, snapshots, trace packs, storage files, or logs.
-- The readout does not call providers, repositories, task runners, file writers, config writers, mutating services, DB readouts, config readbacks, or target handlers.
-- No new canonical fact class was sourced beyond accepted command classification coverage.
+```txt
+metadata.hydration_candidates.preview
+```
 
-## Resting State
+3. Build candidates only from local records, especially `activity_events`, `entities`, `metadata_runs`, and local SDE lookup tables.
+4. Deduplicate candidate demand by stable key, such as `entity_type:entity_id` for provider-backed entity labels and separate local-SDE lookup keys for local lookup gaps.
+5. Group candidates into lanes:
 
-No implementation packet is open.
+- `view_local_record`
+- `watch_background`
+- `target_report_scoped`
+- `corpus_hygiene_low_priority`
 
-Likely next shaping candidates:
+6. For each representative candidate, expose at least:
 
-1. Use the data-layer boundary note to audit the next storage/runtime seam before Dev work.
-2. Pause runtime enforcement and continue support artifact creation hardening only after confirming what the artifact must preserve.
-3. Consider Hydration candidate or patient packet preview only when that seam is deliberately opened.
-4. Keep runtime enforcement resting until a stronger need for active blocking appears.
+- `dedupe_key`
+- entity or lookup type and ID
+- label state such as `known_local_label`, `provider_needed`, `stale_local_label`, or `local_sde_gap`
+- source anchors / source basis, such as killmail IDs, report target, Watch-derived route, Marked/Assessment presence, or local lookup table
+- appearance / killmail counts where available
+- priority rationale
+- provider-needed boolean
+- Hydration boundary statement
+- Evidence/EVEidence boundary statement
 
-Do not jump directly to active runtime blocking.
+7. Add focused verification that proves:
 
-## Guardrails
+- one ID appears once per dedupe key even when many local rows or reports need it
+- selected/report-visible candidates are represented separately from Watch/background candidates
+- Watch/background candidates do not starve view/local-record candidates in the preview order
+- local SDE gaps are not treated as ESI provider-needed entity Hydration
+- labels remain readability and IDs remain facts
+- provider-needed Hydration candidates are not Evidence/EVEidence work
+- External I/O off is held posture, not failure
+- no queue, schema, provider call, Hydration write, metadata run, Evidence write, Discovery mutation, or support artifact is created
 
-- No active runtime enforcement.
-- No command blocking.
-- No command interception that changes behavior.
-- No command dispatch change.
-- No handler result change.
-- No task wrapping change.
+## Guardrails And Non-Goals
+
+- No schema migration.
+- No persisted `hydration_candidates` table.
 - No provider calls.
 - No zKill calls.
 - No ESI calls.
 - No SDE download calls.
+- No Hydration writes.
+- No `metadata_runs` writes.
+- No `entities` writes.
+- No `activity_events` label patches.
 - No Evidence/EVEidence writes.
 - No Discovery ref mutation.
-- No Hydration writes.
-- No storage config writes.
-- No support artifact creation unless explicitly opened as the next lane.
-- No runtime snapshot creation unless explicitly opened as the next lane.
-- No trace-pack creation unless explicitly opened as the next lane.
-- No cleanup, deletion, pruning, restore, move, copy, migration, upload, or packaging.
-- No schema migration.
+- No Watch mutation.
+- No runtime enforcement activation.
+- No command blocking.
+- No support artifact creation.
+- No snapshot or trace-pack creation.
 - No renderer redesign or UI wording work.
-- Do not source storage authority facts without a new runway.
-- Do not source storage budget facts without a new runway.
-- Do not source External I/O facts without a new runway.
-- Do not source provider/live gate facts without a new runway.
-- Do not source Watch/task runtime facts without a new runway.
-- Do not source destination/path authority facts without a new runway.
-- Do not source DB/config/runtime state facts without a new runway.
-- Do not persist telemetry.
-- Do not promote dry-run `would_allow` into authorization.
+- Do not treat candidate eligibility as authorization.
 - Do not treat External I/O on as authorization.
-- Do not treat trusted/internal confirmation bypass as confirmation satisfaction.
-- Do not activate unknown/unclassified fail-closed behavior.
+- Do not call ESI Evidence Expansion Hydration.
+- Do not rename existing commands, schemas, IPC names, payload fields, or Atlas-owned terms.
+
+## Stop Conditions
+
+Stop and return to Overseer if:
+
+- implementation requires schema changes
+- implementation wants to persist a Hydration queue
+- provider calls become necessary
+- a candidate cannot disclose local basis/source anchors
+- Hydration begins to imply Evidence/EVEidence creation
+- local SDE gaps are being treated as live ESI Hydration
+- Watch/background work would hide or starve view/local-record needs
+- existing Hydration backlog/execution policy surfaces need broad refactor
+- current command names or payload contracts would need renaming
 
 ## Required Verification
 
-Latest accepted HS174 verification:
+Run exact commands when known:
 
 ```powershell
 node --check src\main\services\serviceRegistry.js
-node --check src\main\services\runtimeHookTelemetryReadoutService.js
-node --check src\main\services\enforcementDryRunService.js
-node --check src\main\services\runtimeEnforcementDryAdapter.js
-node --check src\main\services\runtimeEnforcementEvaluator.js
-node --check scripts\verify-runtime-hook-telemetry.js
-node --check scripts\verify-command-authority.js
+node --check src\main\services\hydrationBacklogPreviewService.js
+node --check src\main\services\hydrationExecutionPolicyPreviewService.js
+node --check scripts\verify-hydration-backlog-preview.js
+node --check scripts\verify-hydration-execution-policy.js
 node --check scripts\verify-service-registry.js
 node --check scripts\verify-passive-side-effects.js
-node --check scripts\verify-runtime-enforcement-hook.js
-node --check scripts\verify-runtime-enforcement-adapter.js
-npm.cmd run verify:runtime-hook-telemetry
-npm.cmd run verify:runtime-enforcement-hook
-npm.cmd run verify:runtime-enforcement-adapter
-npm.cmd run verify:runtime-enforcement-evaluator
-npm.cmd run verify:runtime-enforcement-boundary
-npm.cmd run verify:enforcement-dry-run
-npm.cmd run verify:composed-gate-policy
+npm.cmd run verify:hydration-backlog-preview
+npm.cmd run verify:hydration-execution-policy
 npm.cmd run verify:service-registry
-npm.cmd run verify:command-authority
 npm.cmd run verify:passive-side-effects
 npm.cmd run verify:protected-terms
 git diff --check
 git status --short --branch
 ```
 
-`verify:protected-terms` completed exit code 0 with advisory warnings only; no protected-term JSON updates or renames were performed.
+If Dev adds a new script, also run:
+
+```powershell
+node --check scripts\verify-hydration-candidate-preview.js
+npm.cmd run verify:hydration-candidate-preview
+```
+
+If Dev adds a new service file, also run:
+
+```powershell
+node --check src\main\services\hydrationCandidatePreviewService.js
+```
 
 ## Evidence
 
-HS174 Dev implementation accepted after Overseer review.
+Dev should update this section in the handoff with:
 
-Data-layer advisory material accepted into durable support note:
-
-- `workspace/DataAnalystHS151-data-intent-supporting-schemas.md`
-- `workspace/DataAnalystHS152-current-gaps-and-milestone-slices.md`
-- `docs/features/data-layer-boundaries.md`
-
-Accepted Dev handoff:
-
-- `workspace/DevHS174-runtime-hook-telemetry-readout.md`
-
-Latest Overseer review:
-
-- `workspace/OverseerHS175-hs174-runtime-hook-telemetry-readout-review.md`
+- files changed
+- command added, if any
+- sample output summary
+- candidate lane counts
+- representative candidate examples
+- proof that no writes/provider calls/schema changes occurred
+- verification commands and results
+- any noisy protected-term warnings
 
 ## Dev Handoff
 
-No Dev handoff expected.
+Expected file:
 
-No active Dev runway is open.
+```txt
+workspace/DevHS176-hydration-candidate-preview.md
+```
+
+The handoff must state whether the candidate preview is complete, incomplete, or blocked.
