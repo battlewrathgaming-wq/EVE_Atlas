@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS169 accepted HS168 runtime enforcement activation readiness audit
+Status: HS170 Inactive service-boundary hook runway open
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Human / Overseer decision on whether to open the first inactive service-boundary integration hook.
+Current focus: prove the live service boundary can call an inactive runtime-enforcement preview hook without changing command behavior.
 
 Current heading:
 
@@ -18,15 +18,13 @@ Current heading:
 
 ## Executor
 
-Current executor: Human / Overseer decision
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none
+workspace/DevHS170-inactive-service-boundary-hook.md
 ```
-
-No active Dev runway is open.
 
 ## Source Of Intent
 
@@ -39,24 +37,32 @@ Recent accepted runtime-enforcement spine:
 - HS167 accepted HS166 after correcting trusted/internal confirmation-bypass semantics.
 - HS168 audited activation readiness.
 - HS169 accepted HS168.
+- HS170 accepts the first inactive service-boundary hook as a bounded Dev seam.
 
-Human direction:
+Human / Overseer direction:
 
 - continue system hardening before UI/body work
 - do cheap proof and assurance before expensive implementation
 - one seam at a time
 - do not drift into broad architecture or hidden active behavior
+- active runtime blocking remains out of scope
 
 Accepted interpretation:
 
 - Atlas is not ready for active runtime blocking.
-- Atlas is ready only for a narrower seam: a first inactive service-boundary integration hook.
-- The next implementation, if opened, must be behavior-preserving and non-blocking.
+- Atlas is ready for boundary plumbing proof only.
+- Dev may touch `src/main/services/serviceRegistry.js` for this packet.
+- The hook must be non-blocking and behavior-preserving.
+- The hook should run for every known command that reaches the accepted boundary.
+- Missing canonical fact classes are telemetry/readout only for this seam.
+- Trusted/internal confirmation bypass remains unchanged.
+- Unknown/unclassified fail-closed remains inactive policy intent only.
 
 Accepted source material:
 
 - `workspace/EngineeringSafetyAuditHS168-runtime-enforcement-activation-readiness.md`
 - `workspace/OverseerHS169-hs168-runtime-enforcement-readiness-review.md`
+- `workspace/OverseerHS170-inactive-service-boundary-hook-runway.md`
 - `workspace/OverseerHS149-hs148-composed-gate-policy-review.md`
 - `workspace/OverseerHS163-hs162-runtime-enforcement-boundary-review.md`
 - `workspace/OverseerHS165-hs164-runtime-enforcement-evaluator-review.md`
@@ -84,7 +90,7 @@ Known insertion point:
 - `src/main/services/serviceRegistry.js`
 - `invokeServiceCommand(command, payload, context)`
 - current order: validate envelope, resolve command, require DB, renderer eligibility, confirmation authority, optional task wrapping, then handler dispatch
-- accepted preview order: validate envelope, resolve command, require DB, renderer eligibility, confirmation authority, runtime enforcement boundary, optional task wrapping, then handler dispatch
+- accepted preview order: validate envelope, resolve command, require DB, renderer eligibility, confirmation authority, runtime enforcement boundary preview hook, optional task wrapping, then handler dispatch
 
 Accepted HS168 finding:
 
@@ -94,53 +100,87 @@ Accepted HS168 finding:
 - The live service boundary still lacks enough canonical fact assembly to justify active blocking.
 - The next safe implementation seam is a non-blocking preview hook only.
 
-## Decision Point
+## Active Runway
 
-Human / Overseer should decide whether to open HS170 as:
+Implement the first inactive service-boundary hook.
 
-```txt
-First inactive service-boundary integration hook
-```
+Ordered steps:
 
-Recommended bounds if accepted:
-
-- Dev may touch `src/main/services/serviceRegistry.js`.
-- The hook must run after existing renderer eligibility and confirmation authority checks.
-- The hook must run before task wrapping and handler dispatch.
-- The hook must be non-blocking and behavior-preserving.
-- The hook may compute evaluator decisions from command definition, payload, context, and canonical read-only facts.
-- The hook must not dispatch differently, call providers, write files, mutate DB state, create support artifacts, or change trusted/internal behavior.
-- Missing canonical fact classes should remain telemetry/readout only for this seam.
-- Unknown/unclassified fail-closed remains inactive policy intent only.
-
-Open decision questions:
-
-1. Is touching `invokeServiceCommand` acceptable if the hook is strictly non-blocking and behavior-preserving?
-2. Should the first hook cover all service commands, or a representative allowlist while plumbing is proven?
-3. Should trusted/internal confirmation bypass remain unchanged for this seam?
+1. Read the accepted source material and inspect `invokeServiceCommand`.
+2. Add a small hook at the accepted boundary after `assertCommandEligible` and `assertCommandAuthority`, before task wrapping and handler dispatch.
+3. The hook should build an inactive runtime-enforcement preview using the existing dry adapter/evaluator path.
+4. The hook may use:
+   - service command definition
+   - command
+   - payload
+   - context source
+   - explicitly supplied trusted context facts, if present
+5. The hook must not source broad canonical facts yet. It should not call config readbacks, DB readouts, providers, repositories, task runners, file writers, or mutating services.
+6. The hook may optionally call a trusted observer supplied in context, such as a test-only callback, to report the preview decision.
+7. If no observer is supplied, the hook should not add runtime side effects.
+8. The hook must never block, throw, alter payload, alter handler result, alter task wrapping, alter dispatch, or authorize dispatch.
+9. Add focused verification proving:
+   - the hook runs after existing renderer eligibility and confirmation checks
+   - the hook runs before task wrapping and handler dispatch
+   - command results are unchanged when the observer is absent
+   - command results are unchanged when the observer is present
+   - observer receives inactive preview data when supplied
+   - renderer-ineligible commands still stop before the hook
+   - missing renderer confirmation still stops before the hook
+   - trusted/internal confirmation bypass remains distinct from confirmation satisfaction
+   - no target handlers are called by the hook itself
+   - no task runners, providers, repositories, file writers, config writers, or mutating services are called by the hook
+   - dry-run `would_allow` remains non-authorizing
+   - External I/O on remains non-authorizing
+   - unknown/unclassified fail-closed remains inactive policy intent only
+10. Update Evidence / Dev Handoff and create the expected DevHS file.
 
 ## Guardrails
 
-- Do not open active runtime blocking without a new explicit accepted runway.
-- Do not introduce command blocking.
-- Do not change command dispatch.
-- Do not call providers.
-- Do not call zKill, ESI, or SDE download.
-- Do not write Evidence/EVEidence.
-- Do not mutate Discovery refs.
-- Do not write Hydration output.
-- Do not write storage config.
-- Do not create support artifacts.
-- Do not run cleanup, deletion, pruning, restore, move, copy, migration, upload, or packaging.
-- Do not change schema.
-- Do not do renderer/UI work.
-- Do not treat dry-run `would_allow` as authorization.
+- No active runtime enforcement.
+- No command blocking.
+- No command interception that changes behavior.
+- No command dispatch change.
+- No handler result change.
+- No task wrapping change.
+- No provider calls.
+- No zKill calls.
+- No ESI calls.
+- No SDE download calls.
+- No Evidence/EVEidence writes.
+- No Discovery ref mutation.
+- No Hydration writes.
+- No storage config writes.
+- No support artifact creation.
+- No runtime snapshot creation.
+- No trace-pack creation.
+- No cleanup, deletion, pruning, restore, move, copy, migration, upload, or packaging.
+- No schema migration.
+- No renderer redesign or UI wording work.
+- Do not promote dry-run `would_allow` into authorization.
 - Do not treat External I/O on as authorization.
 - Do not treat trusted/internal confirmation bypass as confirmation satisfaction.
+- Do not activate unknown/unclassified fail-closed behavior.
+- Do not source broad canonical facts in this packet; this is boundary plumbing proof, not full policy activation.
 
-## Required Verification If HS170 Opens
+## Stop Conditions
 
-Likely future verification:
+Stop and return to Overseer/Human if:
+
+- Dev cannot touch `invokeServiceCommand` without changing behavior
+- the hook needs real config/DB/provider/task facts to function
+- the hook needs to call readout builders from the live path
+- the hook would need to block, throw, or alter dispatch
+- the hook would change trusted/internal confirmation behavior
+- the hook would change renderer confirmation behavior
+- the hook would create runtime writes or provider movement
+- the implementation starts becoming a broad active enforcement framework
+
+## Required Verification
+
+Run syntax checks for every changed JavaScript file.
+
+Run:
 
 ```powershell
 node --check src\main\services\serviceRegistry.js
@@ -159,22 +199,22 @@ git diff --check
 git status --short --branch
 ```
 
-No live/API/provider verification is authorized unless a future packet explicitly says so.
+If Dev adds a focused verifier for the integration hook, run it and list it in the handoff.
+
+No live/API/provider verification is authorized.
 
 ## Evidence
 
-HS168 advisory accepted.
+HS170 opened as Dev runway.
 
-Accepted advisory artifact:
-
-- `workspace/EngineeringSafetyAuditHS168-runtime-enforcement-activation-readiness.md`
-
-Latest Overseer review:
-
-- `workspace/OverseerHS169-hs168-runtime-enforcement-readiness-review.md`
+No implementation evidence yet.
 
 ## Dev Handoff
 
-No Dev handoff expected.
+Expected Dev handoff:
 
-No active Dev runway is open.
+- `workspace/DevHS170-inactive-service-boundary-hook.md`
+
+Latest accepted Overseer review:
+
+- `workspace/OverseerHS169-hs168-runtime-enforcement-readiness-review.md`

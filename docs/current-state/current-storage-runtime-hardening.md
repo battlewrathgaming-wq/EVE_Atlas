@@ -73,9 +73,9 @@ Accepted shape:
 
 Current resting state:
 
-- no active Dev runway is open
+- HS170 inactive service-boundary hook Dev runway is open
 - future runtime enforcement now has composed gate-state, service-boundary, pure evaluator, dry adapter, and activation-readiness evidence, but still needs an explicit implementation/design runway before command blocking
-- touching `invokeServiceCommand` should require an explicit behavior-preserving non-blocking runway before any integration work begins
+- HS170 opens that explicit behavior-preserving non-blocking runway: Dev may touch `invokeServiceCommand` only to prove boundary plumbing without command blocking, dispatch changes, provider calls, broad fact sourcing, writes, or runtime authorization
 - future Hydration execution now has policy preview evidence, but still needs a dedicated write-capable or provider-capable runway before calls or writes
 - future real/operator Hydration writes now have fixture write proof evidence, but still need a dedicated runway before provider-backed or operator-real Hydration exists
 - real operator External I/O config is now supported as app-local operator posture, but runtime enforcement still needs a dedicated runway before command blocking or provider release behavior exists
