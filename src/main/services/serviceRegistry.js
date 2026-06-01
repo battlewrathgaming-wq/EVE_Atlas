@@ -35,6 +35,7 @@ const {
 const { buildGateStackReadout } = require('./gateStackReadoutService');
 const { buildEnforcementDryRunCommandEffectMap } = require('./enforcementDryRunService');
 const { buildHydrationBacklogPreview } = require('./hydrationBacklogPreviewService');
+const { buildSupportArtifactPathAuthorityPreview } = require('./supportArtifactPathAuthorityService');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
 const {
   buildStorageAuthorityConfigWriteProof,
@@ -373,6 +374,16 @@ const COMMANDS = {
     renderer: true,
     description: 'Read provider-backed work gate stack posture without enforcing external_io, storage, or provider movement',
     handler: ({ payload, ...context }) => buildGateStackReadout(context.db, payload, {
+      ...context,
+      commandMetadata: listServiceCommands()
+    })
+  },
+  'support.artifact_path_authority.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview support artifact path, budget, cleanup, sensitivity, and trust posture without writing files',
+    handler: ({ payload, ...context }) => buildSupportArtifactPathAuthorityPreview(payload, {
       ...context,
       commandMetadata: listServiceCommands()
     })

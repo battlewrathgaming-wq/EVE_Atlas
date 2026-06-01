@@ -31,6 +31,7 @@ Accepted proof surfaces:
 - `storage.enforcement_dry_run.command_effect_map`
 - `support.gate_stack_readout`
 - `metadata.hydration_backlog.preview`
+- `support.artifact_path_authority.preview`
 
 Accepted shape:
 
@@ -42,13 +43,14 @@ Accepted shape:
 - External I/O off holds provider-backed movement as `held_by_external_io`, while local-only read/report/preflight paths remain available
 - External I/O re-enable releases work only to normal cadence/provider/storage/confirmation gates and must not create catch-up flooding
 - Hydration backlog preview is read-only local data understanding: it distinguishes provider-needed labels, known local labels, and local SDE gaps without writing hydration output or creating a persisted queue
+- Support artifact path authority preview is read-only local trust posture: it classifies snapshots, trace packs, logs, temp/cache, SDE/import material, and fixture proof artifacts without creating, deleting, moving, packaging, or uploading files
 
 Current resting state:
 
 - no active Dev runway is open
 - future runtime enforcement still needs composed gate-state policy before command blocking
 - future Hydration execution still needs a dedicated runway before provider calls or writes
-- support artifacts, snapshots, trace packs, logs, and pruning/deletion remain separate future seams
+- support artifact creation, snapshot creation, trace-pack creation, cleanup, and pruning/deletion remain separate future seams
 
 ## Accepted Runtime Boundaries
 

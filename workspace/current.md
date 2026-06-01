@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Active Dev runway for HS146 Support artifact path authority inventory
+Status: HS146 Support artifact path authority inventory accepted; project resting before next hardening seam
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: prove a read-only support-artifact path authority inventory without creating support artifacts, moving storage, deleting files, calling providers, or enforcing runtime blocking.
+Current focus: Support artifact path authority inventory accepted as read-only local trust posture; no active Dev runway is open.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Human / Overseer shaping
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS146-support-artifact-path-authority.md
+none
 ```
 
 ## Current State
 
-HS142 and HS144 are accepted. HS146 is open as the next bounded hardening seam.
+HS142, HS144, and HS146 are accepted. The project is resting before the next bounded hardening seam.
 
 Accepted Human decisions:
 
@@ -59,6 +59,7 @@ Atlas has accepted storage/runtime hardening proofs:
 - `storage.enforcement_dry_run.command_effect_map`
 - complete enforcement classification coverage for all current service commands
 - read-only External I/O held-state proof through `support.gate_stack_readout`
+- read-only support-artifact path authority proof through `support.artifact_path_authority.preview`
 
 Recent accepted state:
 
@@ -87,6 +88,7 @@ Recent accepted state:
 - `workspace/OverseerHS144-hydration-backlog-preview-runway.md`
 - `workspace/OverseerHS145-hs144-hydration-backlog-preview-review.md`
 - `workspace/OverseerHS146-support-artifact-path-authority-runway.md`
+- `workspace/OverseerHS147-hs146-support-artifact-path-authority-review.md`
 
 ## Accepted Boundaries
 
@@ -102,7 +104,19 @@ Recent accepted state:
 
 ## Active Runway
 
-Dev should implement a bounded read-only support-artifact path authority inventory.
+No active Dev runway.
+
+Next suitable seams, when Human chooses:
+
+1. Composed gate enforcement design using storage, External I/O, command classification, active task, and confirmation posture.
+2. Snapshot/trace-pack creation enforcement policy if staying on support artifacts.
+3. Hydration execution policy shaping from the accepted backlog preview.
+
+Do not open Dev work until the next seam is deliberately selected.
+
+## Last Runway Accepted
+
+HS146 implemented a bounded read-only support-artifact path authority inventory.
 
 Source of intent:
 
@@ -125,7 +139,7 @@ Ordered steps:
 9. Add focused offline verification plus command/service/enforcement/passive-side-effect coverage as needed.
 10. Update Evidence / Dev Handoff and create the expected DevHS file.
 
-## Last Runway Accepted
+## Prior Accepted Runway
 
 HS144 implemented a bounded read-only Hydration backlog preview.
 
@@ -236,15 +250,57 @@ Run `node --check` on any new or changed JavaScript files.
 
 ## Evidence
 
-HS146 opened from Human support-artifact path authority shaping and accepted storage/runtime hardening boundaries.
+HS146 Dev implementation accepted.
 
-Dev should replace this section with concise proof evidence after implementation.
+- Added read-only `support.artifact_path_authority.preview`.
+- Preview reports 10 representative support artifact classes: rolling runtime snapshots, retained runtime snapshots, operator debug trace packs, light operational logs, readiness/preflight reports, operational runtime cache, provider/activity-derived cache, SDE source/import material, SDE derived DB lookup material, and fixture config/write-proof artifacts.
+- Classes are split between `operational_support` and `corpus_adjacent_support`.
+- Each class reports path basis, storage authority requirement, pre-storage allowance, budget inclusion, External I/O relevance, renderer/trusted-context posture, cleanup stage, privacy/sensitivity posture, and read-only/non-mutating status.
+- Cache is distinguished by origin: operational runtime cache, provider/activity-derived cache, SDE source/import cache, and SDE derived DB lookup material.
+- Snapshot posture is split between rolling/overwritten recovery copy and retained recovery copy.
+- Renderer path claims are ignored by the preview; the verifier proves forged renderer paths are not echoed as authority.
+- Focused verifier proves the preview creates no files/directories and mutates no DB table counts.
+- Added command/service/enforcement/passive-side-effect coverage for the new read-only command.
+- Boundary preserved: no support artifact creation, snapshot creation, trace-pack creation, cleanup/delete/prune/restore/move/copy/migration/upload, provider calls, storage config writes, enforcement, schema changes, or UI/renderer redesign.
+
+HS146 verification:
+
+```powershell
+node --check src\main\services\supportArtifactPathAuthorityService.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-support-artifact-path-authority.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-passive-side-effects.js
+node --check scripts\verify-enforcement-dry-run.js
+npm.cmd run verify:support-artifact-path-authority
+npm.cmd run verify:storage-authority-preflight
+npm.cmd run verify:storage-setup-gate
+npm.cmd run verify:hydration
+npm.cmd run verify:metadata-status
+npm.cmd run verify:metadata-lookup
+npm.cmd run verify:actor-metadata
+npm.cmd run verify:corporation-metadata
+npm.cmd run verify:gate-stack-readout
+npm.cmd run verify:enforcement-dry-run
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:protected-terms
+git diff --check
+git status --short --branch
+```
+
+All listed commands passed. `verify:protected-terms` completed with warning-only discovery output and exit code 0. `git diff --check` passed with line-ending warnings only. `git status --short --branch` showed `main...origin/main [ahead 23]` plus the HS146 working-tree changes.
+
+Overseer review:
+
+- `workspace/OverseerHS147-hs146-support-artifact-path-authority-review.md`
 
 ## Dev Handoff
 
-Pending Dev handoff.
-
-Expected:
+Completed handoff:
 
 - `workspace/DevHS146-support-artifact-path-authority.md`
 
