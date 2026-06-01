@@ -47,9 +47,10 @@ Current state:
 - HS166 accepted
 - HS168 accepted
 - HS170 accepted
-- current executor is Dev
-- active Dev runway is HS172 runtime hook coverage fact sourcing
-- current work is closing one safe runtime-enforcement missing fact class; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
+- HS172 accepted
+- current executor is Human/Overseer shaping
+- no active Dev runway is open
+- current work is at a resting point after closing the command coverage fact class; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
 
 Current heading:
 
@@ -60,9 +61,9 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Review HS172 runtime hook coverage fact sourcing after Dev completes it.
+1. Add a read-only hook telemetry/readout surface from captured previews, still no blocking.
 2. Actual support artifact creation hardening if continuing the snapshot/trace-pack lane.
-3. Add a read-only hook telemetry/readout surface from captured previews, still no blocking.
+3. Close one more runtime-enforcement fact class only if it can be sourced without DB/config/provider/runtime side effects.
 4. Storage setup UI/renderer posture later, not now.
 
 See `workspace/current.md` for current truth.
@@ -123,6 +124,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS170 opened the first inactive service-boundary hook runway: Dev may touch `invokeServiceCommand` only to add a non-blocking preview hook after eligibility/confirmation and before task wrapping/dispatch, with no behavior change.
 - HS171 accepted HS170 after Overseer proof-language correction: `invokeServiceCommand` now has a non-blocking inactive preview hook after eligibility/confirmation and before task wrapping/dispatch; active runtime blocking remains unopened.
 - HS172 opened the first missing-fact closure runway: source only command classification coverage inside the inactive hook, with no storage, budget, External I/O, provider/live, Watch/task, DB/config/runtime facts and no blocking.
+- HS173 accepted HS172: the inactive runtime hook now sources only command classification coverage from the existing in-memory coverage map while preserving supplied facts and keeping active enforcement unopened.
 
 ## Accepted Boundaries
 

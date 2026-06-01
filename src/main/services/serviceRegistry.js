@@ -34,7 +34,10 @@ const {
   saveRuntimeSnapshotSettings
 } = require('./runtimeSnapshotService');
 const { buildGateStackReadout } = require('./gateStackReadoutService');
-const { buildEnforcementDryRunCommandEffectMap } = require('./enforcementDryRunService');
+const {
+  COMMAND_ENFORCEMENT_COVERAGE,
+  buildEnforcementDryRunCommandEffectMap
+} = require('./enforcementDryRunService');
 const { buildComposedGatePolicyPreview } = require('./composedGatePolicyService');
 const { buildHydrationBacklogPreview } = require('./hydrationBacklogPreviewService');
 const { buildHydrationExecutionPolicyPreview } = require('./hydrationExecutionPolicyPreviewService');
@@ -797,19 +800,45 @@ function emitInactiveRuntimeEnforcementPreview(command, definition, payload = {}
 
 function runtimeEnforcementFactsFor(command, context = {}) {
   const facts = context.runtimeEnforcementFacts || context.runtime_enforcement_facts || {};
+  const coverage = coverageFactForCommand(command);
   if (!facts || typeof facts !== 'object' || Array.isArray(facts)) {
-    return {};
+    return coverage ? { coverage } : {};
   }
   if (facts[command] && typeof facts[command] === 'object' && !Array.isArray(facts[command])) {
-    return facts[command];
+    return mergeCoverageFact(command, facts[command]);
   }
-  return facts;
+  return mergeCoverageFact(command, facts);
+}
+
+function mergeCoverageFact(command, facts = {}) {
+  if (Object.prototype.hasOwnProperty.call(facts, 'coverage')) {
+    return facts;
+  }
+  const coverage = coverageFactForCommand(command);
+  if (!coverage) {
+    return facts;
+  }
+  return {
+    ...facts,
+    coverage
+  };
+}
+
+function coverageFactForCommand(command) {
+  const coverage = COMMAND_ENFORCEMENT_COVERAGE[command];
+  return coverage ? {
+    ...coverage,
+    command,
+    classified: true,
+    missing_classification: false
+  } : null;
 }
 
 module.exports = {
   CONFIRMATION,
   EFFECTS,
   emitInactiveRuntimeEnforcementPreview,
+  runtimeEnforcementFactsFor,
   listServiceCommands,
   invokeServiceCommand,
   registerIpcServiceHandlers,

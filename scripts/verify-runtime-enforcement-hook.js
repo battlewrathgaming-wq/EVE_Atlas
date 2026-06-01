@@ -2,7 +2,8 @@ const { openDatabase, migrate, closeDatabase } = require('../src/main/db/databas
 const { COMMAND_ENFORCEMENT_COVERAGE } = require('../src/main/services/enforcementDryRunService');
 const {
   CONFIRMATION,
-  invokeServiceCommand
+  invokeServiceCommand,
+  runtimeEnforcementFactsFor
 } = require('../src/main/services/serviceRegistry');
 
 async function main() {
@@ -11,6 +12,9 @@ async function main() {
   try {
     await verifyResultUnchangedWithoutObserver(db);
     await verifyResultUnchangedWithObserver(db);
+    await verifyCoverageSourcedWithoutContextFacts(db);
+    await verifyContextSuppliedFactsPreserved(db);
+    await verifySuppliedCoverageNotOverwritten(db);
     await verifyHookStopsAfterEligibilityAndConfirmation(db);
     await verifyHookBeforeTaskWrapping(db);
     await verifyTrustedInternalBypass(db);
@@ -23,6 +27,10 @@ async function main() {
         command_blocking: false,
         dispatch_changed: false,
         observer_optional: true,
+        command_coverage_sourced: true,
+        supplied_facts_preserved: true,
+        supplied_coverage_not_overwritten: true,
+        broad_fact_sourcing: false,
         renderer_ineligible_stops_before_hook: true,
         missing_confirmation_stops_before_hook: true,
         hook_runs_before_task_wrapping: true,
@@ -64,6 +72,68 @@ async function verifyResultUnchangedWithObserver(db) {
   assert(observed[0].evaluator_decision.active === false, 'evaluator decision should be inactive');
   assert(observed[0].authority_notes.dry_run_would_allow_is_authorization === false, 'dry-run would_allow should not authorize');
   assert(observed[0].authority_notes.external_io_on_is_authorization === false, 'External I/O on should not authorize');
+}
+
+async function verifyCoverageSourcedWithoutContextFacts(db) {
+  const observed = [];
+  const result = await invokeServiceCommand('scope.defaults', {}, {
+    db,
+    runtimeEnforcementPreviewObserver: (preview) => observed.push(preview)
+  });
+  assert(result.manualActorDiscovery.maxRefs === 20, 'coverage sourcing should not change command result');
+  assert(observed.length === 1, 'observer should receive preview without supplied facts');
+  const trustedContext = observed[0].evaluator_decision.gate_inputs_used.dry_run === null
+    ? observed[0].evaluator_decision.gate_inputs_used.trusted_context
+    : null;
+  assert(observed[0].missing_fact_classes.includes('composed_gate_policy'), 'missing composed fact should remain visible');
+  assert(observed[0].missing_fact_classes.includes('storage_authority'), 'storage authority should not be sourced');
+  assert(observed[0].missing_fact_classes.includes('storage_budget'), 'storage budget should not be sourced');
+  assert(!observed[0].missing_fact_classes.includes('classification_coverage'), 'known covered command should have coverage sourced');
+  assert(observed[0].evaluator_decision.gate_inputs_used.storage_authority === null, 'storage authority facts must not be sourced');
+  assert(observed[0].evaluator_decision.gate_inputs_used.budget === null, 'storage budget facts must not be sourced');
+  assert(observed[0].evaluator_decision.gate_inputs_used.external_io === null, 'External I/O facts must not be sourced');
+  assert(trustedContext?.renderer_allowed === true, 'trusted context posture should still reflect command metadata');
+}
+
+async function verifyContextSuppliedFactsPreserved(db) {
+  const observed = [];
+  const supplied = explicitFactsFor('scope.defaults', 'pass');
+  supplied.marker = 'trusted-context-fact';
+  await invokeServiceCommand('scope.defaults', {}, {
+    db,
+    runtimeEnforcementFacts: {
+      'scope.defaults': supplied
+    },
+    runtimeEnforcementPreviewObserver: (preview) => observed.push(preview)
+  });
+  assert(observed.length === 1, 'observer should receive preview for supplied command-scoped facts');
+  assert(!observed[0].missing_fact_classes.includes('classification_coverage'), 'supplied covered facts should remain covered');
+  assert(observed[0].evaluator_decision.gate_inputs_used.composed_policy.state === 'pass', 'supplied composed fact should be preserved');
+  assert(observed[0].evaluator_decision.gate_inputs_used.storage_authority.gate_state === 'configured_storage_ready', 'supplied storage fact should be preserved when supplied');
+}
+
+async function verifySuppliedCoverageNotOverwritten(db) {
+  const observed = [];
+  await invokeServiceCommand('scope.defaults', {}, {
+    db,
+    runtimeEnforcementFacts: {
+      coverage: null,
+      composed_policy: {
+        state: 'conditional',
+        reason_codes: ['supplied_null_coverage_not_overwritten']
+      }
+    },
+    runtimeEnforcementPreviewObserver: (preview) => observed.push(preview)
+  });
+  assert(observed.length === 1, 'observer should receive preview for supplied null coverage');
+  assert(observed[0].missing_fact_classes.includes('classification_coverage'), 'supplied null coverage should not be overwritten');
+  const facts = runtimeEnforcementFactsFor('scope.defaults', {
+    runtimeEnforcementFacts: {
+      coverage: null
+    }
+  });
+  assert(Object.prototype.hasOwnProperty.call(facts, 'coverage'), 'coverage key should remain supplied');
+  assert(facts.coverage === null, 'supplied coverage should remain null');
 }
 
 async function verifyHookStopsAfterEligibilityAndConfirmation(db) {
