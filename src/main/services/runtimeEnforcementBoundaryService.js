@@ -6,6 +6,7 @@ const { buildGateStackReadout } = require('./gateStackReadoutService');
 const { buildStorageAuthorityConfigReadback } = require('./storageAuthorityConfigWriteService');
 const { buildStorageSetupGateReadout } = require('./storageSetupGateReadoutService');
 const { buildSupportArtifactCreationPolicyPreview } = require('./supportArtifactCreationPolicyService');
+const { evaluateRuntimeEnforcementDecision } = require('./runtimeEnforcementEvaluator');
 
 const REPRESENTATIVE_ENVELOPES = Object.freeze([
   envelopeSpec('safe_local_read_report_preflight', 'report.actor', 'renderer', false),
@@ -97,6 +98,7 @@ function buildRuntimeEnforcementBoundaryPreview(db, input = {}, context = {}) {
     support_artifact_creations: 0,
     insertion_point: insertionPoint(),
     sources: {
+      runtime_enforcement_evaluator: 'runtimeEnforcementEvaluator.evaluateRuntimeEnforcementDecision',
       service_registry_commands: commandMetadata.length,
       enforcement_dry_run: enforcementDryRun.action,
       composed_gate_policy: composedGatePolicy.action,
@@ -108,6 +110,13 @@ function buildRuntimeEnforcementBoundaryPreview(db, input = {}, context = {}) {
     },
     summary: summarizeEnvelopes(envelopes),
     envelopes,
+    evaluator: {
+      module: 'runtimeEnforcementEvaluator',
+      function: 'evaluateRuntimeEnforcementDecision',
+      input_basis: 'explicit facts assembled by this read-only preview; evaluator does not call handlers, task runners, providers, repositories, file writers, or config writers',
+      active: false,
+      preview_only: true
+    },
     semantics: {
       would_allow_is_authorization: false,
       external_io_on_is_authorization: false,
@@ -146,6 +155,61 @@ function envelopeDecision(spec, context) {
   const confirmation = confirmationFor(spec, command);
   const reachesBoundary = known && commandEligibility.state !== 'blocked_by_renderer_eligibility' && confirmation.state !== 'required_missing';
   const composedState = composed?.composed_state || decisionFromDryRun(dryRun);
+  const storageAuthority = {
+    mode: context.storageSetup.storage_authority.mode,
+    selected: context.storageSetup.storage_authority.selected === true,
+    fallback_acknowledged: context.storageSetup.storage_authority.fallback_acknowledged === true,
+    acknowledgement_status: context.storageSetup.storage_authority.acknowledgement_status,
+    config_read_status: context.storageConfig.persisted_config.status,
+    gate_state: context.storageSetup.action_class_matrix.storage_state,
+    validation_status: context.storageSetup.storage_authority.validation_status || null,
+    dry_run_decision_input_only: dryRun?.decision || null
+  };
+  const budgetPosture = {
+    state: context.storageSetup.budget.state,
+    budget_bytes: context.storageSetup.budget.budget_bytes,
+    warning_level: context.storageSetup.budget.warning_level || null,
+    blocks_writes: context.storageSetup.budget.blocks_writes === true
+  };
+  const externalIoPosture = {
+    state: context.externalIo.state,
+    requested_state: context.externalIo.requested_readout_state || context.externalIo.state,
+    provider_backed_posture: context.externalIo.provider_backed_posture,
+    dependency: coverage?.external_io_dependency || 'none',
+    gate_state: gate?.gates?.external_io?.state || (coverage?.external_io_dependency === 'none' ? 'local_only_available' : null),
+    on_is_authorization: false,
+    catch_up_flood_on_reenable: false
+  };
+  const providerLiveGate = {
+    provider_capable: providerCapable(command, coverage),
+    state: gate?.gates?.external_api?.state || (providerCapable(command, coverage) ? 'not_evaluated_for_preview_row' : 'local_only_no_live_provider_gate'),
+    allowed: gate?.gates?.external_api?.allowed === true,
+    blockers: (gate?.gates?.external_api?.blockers || []).map((entry) => entry.code || entry.message)
+  };
+  const destinationPathAuthority = destinationFor(spec, composed, supportArtifactClass);
+  const trustedContextRequirement = trustedContextFor(spec, command, coverage, supportArtifactClass);
+  const evaluatorDecision = evaluateRuntimeEnforcementDecision({
+    command: spec.command,
+    source: spec.source,
+    known,
+    classified: Boolean(coverage) && coverage.missing_classification !== true,
+    command_eligibility: commandEligibility,
+    confirmation,
+    storage_authority: storageAuthority,
+    budget: budgetPosture,
+    external_io: externalIoPosture,
+    provider_live_gate: providerLiveGate,
+    destination_path_authority: destinationPathAuthority,
+    trusted_context: trustedContextRequirement,
+    composed_policy: {
+      state: composedState,
+      reason_codes: composed?.reason_codes || []
+    },
+    dry_run: {
+      decision: dryRun?.decision || null,
+      reason_codes: dryRun?.reason_codes || []
+    }
+  });
 
   return {
     id: spec.id,
@@ -164,37 +228,12 @@ function envelopeDecision(spec, context) {
     proposed_boundary_reached_in_this_envelope: reachesBoundary,
     command_eligibility: commandEligibility,
     confirmation_state: confirmation,
-    storage_authority: {
-      mode: context.storageSetup.storage_authority.mode,
-      selected: context.storageSetup.storage_authority.selected === true,
-      fallback_acknowledged: context.storageSetup.storage_authority.fallback_acknowledged === true,
-      acknowledgement_status: context.storageSetup.storage_authority.acknowledgement_status,
-      config_read_status: context.storageConfig.persisted_config.status,
-      gate_state: context.storageSetup.action_class_matrix.storage_state,
-      dry_run_decision_input_only: dryRun?.decision || null
-    },
-    budget_posture: {
-      state: context.storageSetup.budget.state,
-      budget_bytes: context.storageSetup.budget.budget_bytes,
-      warning_level: context.storageSetup.budget.warning_level || null,
-      blocks_writes: context.storageSetup.budget.blocks_writes === true
-    },
-    external_io_posture: {
-      state: context.externalIo.state,
-      provider_backed_posture: context.externalIo.provider_backed_posture,
-      dependency: coverage?.external_io_dependency || 'none',
-      gate_state: gate?.gates?.external_io?.state || (coverage?.external_io_dependency === 'none' ? 'local_only_available' : null),
-      on_is_authorization: false,
-      catch_up_flood_on_reenable: false
-    },
-    provider_live_gate: {
-      provider_capable: providerCapable(command, coverage),
-      state: gate?.gates?.external_api?.state || (providerCapable(command, coverage) ? 'not_evaluated_for_preview_row' : 'local_only_no_live_provider_gate'),
-      allowed: gate?.gates?.external_api?.allowed === true,
-      blockers: (gate?.gates?.external_api?.blockers || []).map((entry) => entry.code || entry.message)
-    },
-    destination_path_authority: destinationFor(spec, composed, supportArtifactClass),
-    trusted_context_requirement: trustedContextFor(spec, command, coverage, supportArtifactClass),
+    storage_authority: storageAuthority,
+    budget_posture: budgetPosture,
+    external_io_posture: externalIoPosture,
+    provider_live_gate: providerLiveGate,
+    destination_path_authority: destinationPathAuthority,
+    trusted_context_requirement: trustedContextRequirement,
     composed_decision: {
       state: composedState,
       reason_codes: composed?.reason_codes || dryRun?.reason_codes || [],
@@ -202,6 +241,7 @@ function envelopeDecision(spec, context) {
       preview_only: true,
       would_allow_is_authorization: false
     },
+    evaluator_decision: evaluatorDecision,
     handler_dispatch: {
       called: false,
       task_wrapped: false,
@@ -324,6 +364,11 @@ function summarizeEnvelopes(envelopes) {
     total_envelopes: envelopes.length,
     by_composed_decision: envelopes.reduce((counts, entry) => {
       const state = entry.composed_decision.state;
+      counts[state] = (counts[state] || 0) + 1;
+      return counts;
+    }, {}),
+    by_evaluator_decision: envelopes.reduce((counts, entry) => {
+      const state = entry.evaluator_decision.decision;
       counts[state] = (counts[state] || 0) + 1;
       return counts;
     }, {}),

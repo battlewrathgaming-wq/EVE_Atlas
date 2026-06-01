@@ -43,9 +43,10 @@ Current state:
 - HS158 accepted
 - HS160 accepted
 - HS162 accepted
+- HS164 accepted
 - current executor is Human/Overseer shaping
 - no active Dev runway is open
-- current work is at a resting point after first enforcement-boundary proof; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
+- current work is at a resting point after non-enforcing runtime evaluator extraction; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
 
 Current heading:
 
@@ -56,7 +57,7 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. First active runtime enforcement slice only after explicit Human/Overseer acceptance.
+1. Dry active-enforcement adapter proof, still no broad command blocking.
 2. Actual support artifact creation hardening if continuing the snapshot/trace-pack lane.
 3. Real Hydration writer design or provider-backed Hydration gate, only after data-shape ambiguity is resolved.
 4. Storage setup UI/renderer posture later, not now.
@@ -110,6 +111,8 @@ Keep these as the near-memory breadcrumb trail:
 - HS161 accepted HS160: `support.artifact_creation_policy.preview` now proves read-only snapshot/trace-pack creation policy posture, renderer-forgery resistance, External I/O local-only behavior, and budget/path/confirmation/trusted-context classification before artifact creation exists.
 - HS162 opened a Runtime enforcement boundary preview runway: prove the service-command insertion point and representative composed decisions before any runtime command blocking or handler interception is activated.
 - HS163 accepted HS162: `runtime.enforcement_boundary.preview` now proves the future service-command enforcement insertion point after renderer eligibility and confirmation checks, before task wrapping/handler dispatch, while keeping `would_allow`, External I/O on, and unknown/unclassified fail-closed as non-authorizing preview/policy posture.
+- HS164 opened a Runtime enforcement evaluator runway: extract a small pure evaluator before any active command blocking exists.
+- HS165 accepted HS164: `runtimeEnforcementEvaluator.evaluateRuntimeEnforcementDecision` now provides a reusable inactive decision shape with stable reason codes, while keeping dry-run `would_allow` and External I/O on non-authorizing.
 
 ## Accepted Boundaries
 

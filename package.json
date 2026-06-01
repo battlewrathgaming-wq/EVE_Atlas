@@ -83,6 +83,7 @@
     "verify:support-artifact-path-authority": "node scripts/verify-support-artifact-path-authority.js",
     "verify:support-artifact-creation-policy": "node scripts/verify-support-artifact-creation-policy.js",
     "verify:runtime-enforcement-boundary": "node scripts/verify-runtime-enforcement-boundary.js",
+    "verify:runtime-enforcement-evaluator": "node scripts/verify-runtime-enforcement-evaluator.js",
     "verify:composed-gate-policy": "node scripts/verify-composed-gate-policy.js",
     "verify:corpus-health": "node scripts/verify-corpus-health-report.js",
     "verify:bulk-synthetic": "node scripts/verify-bulk-synthetic.js",

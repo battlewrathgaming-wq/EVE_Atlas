@@ -113,6 +113,9 @@ function verifyRepresentativeEnvelopes(preview) {
     'unknown_unclassified_future_command'
   ];
   assert(preview.summary.total_envelopes === expected.length, 'preview should include all representative envelopes');
+  assert(preview.summary.by_evaluator_decision, 'preview should summarize evaluator decisions');
+  assert(preview.evaluator?.active === false, 'evaluator should be inactive');
+  assert(preview.evaluator?.preview_only === true, 'evaluator should be preview-only');
   for (const id of expected) {
     envelope(preview, id);
   }
@@ -132,10 +135,16 @@ function verifyRepresentativeEnvelopes(preview) {
   assert(envelope(preview, 'fixture_only_proof_command').trusted_context_requirement.fixture_only_non_production === true, 'fixture proof should remain fixture-only');
   assert(envelope(preview, 'unknown_unclassified_future_command').command_eligibility.state === 'unknown_command', 'unknown command should be unknown');
   assert(envelope(preview, 'unknown_unclassified_future_command').composed_decision.state === 'block', 'unknown command should be fail-closed intent');
+  assert(envelope(preview, 'unknown_unclassified_future_command').evaluator_decision.decision === 'stop_before_boundary', 'unknown command should stop before boundary in evaluator');
 
   for (const entry of preview.envelopes) {
     assert(entry.composed_decision.active === false, `${entry.id} composed decision should be inactive`);
     assert(entry.composed_decision.preview_only === true, `${entry.id} composed decision should be preview-only`);
+    assert(entry.evaluator_decision.active === false, `${entry.id} evaluator decision should be inactive`);
+    assert(entry.evaluator_decision.preview_only === true, `${entry.id} evaluator decision should be preview-only`);
+    assert(['pass', 'block', 'conditional', 'stop_before_boundary'].includes(entry.evaluator_decision.decision), `${entry.id} evaluator decision should use accepted decision vocabulary`);
+    assert(entry.evaluator_decision.notes.would_allow_is_authorization === false, `${entry.id} evaluator should not authorize would_allow`);
+    assert(entry.evaluator_decision.notes.external_io_on_is_authorization === false, `${entry.id} evaluator should not authorize External I/O on`);
     assert(entry.handler_dispatch.called === false, `${entry.id} should not dispatch handler`);
     assert(entry.handler_dispatch.task_wrapped === false, `${entry.id} should not wrap task`);
   }
@@ -174,6 +183,7 @@ function compactEnvelope(entry) {
     destination: entry.destination_path_authority.state,
     trusted_context: entry.trusted_context_requirement.state,
     composed: entry.composed_decision.state,
+    evaluator: entry.evaluator_decision.decision,
     active: entry.composed_decision.active
   };
 }
