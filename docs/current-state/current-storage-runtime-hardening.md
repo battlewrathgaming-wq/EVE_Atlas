@@ -89,6 +89,7 @@ Current resting state:
 - real operator storage authority config is now supported as app-local operator posture, but runtime enforcement still needs a dedicated runway before command blocking or provider-backed storage gating exists
 - support artifact creation policy can now be inspected before creation, but actual support artifact creation, snapshot creation, trace-pack creation, cleanup, and pruning/deletion remain separate future seams
 - support artifact contents can now be inspected before creation/writer hardening; actual support artifact creation, snapshot creation, trace-pack creation, cleanup, and pruning/deletion remain separate future seams
+- HS180 security review found no blocking issue in the contents contract and recommends a read-only writer conformance gap map before changing snapshot, trace-pack, readiness/preflight, log, or export writers
 
 ## Accepted Runtime Boundaries
 

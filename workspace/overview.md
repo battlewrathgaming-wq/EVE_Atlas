@@ -36,6 +36,7 @@ Milestone: Atlas Storage And Runtime Hardening
 Current state:
 
 - HS178 accepted by HS179
+- HS180 security review accepted by HS181
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -66,10 +67,9 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Consider security/specialist review of support artifact content classes and redaction posture.
-2. Map existing snapshot/trace-pack behavior against the accepted contents contract before changing writers.
-3. Continue a different storage/runtime seam if support artifacts should rest.
-4. Runtime enforcement remains resting.
+1. Map existing snapshot/trace-pack/readiness support behavior against the accepted contents contract before changing writers.
+2. Continue a different storage/runtime seam if support artifacts should rest.
+3. Runtime enforcement remains resting.
 
 See `workspace/current.md` for current truth.
 
@@ -136,6 +136,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS176 opened a Hydration candidate preview runway: prove deduped local Hydration demand by lane and basis before persisted queues, provider calls, Hydration writes, schema changes, support artifacts, or renderer/UI work.
 - HS177 accepted HS176: `metadata.hydration_candidates.preview` now proves deduped local Hydration demand by lane, source anchors, priority rationale, and boundary statements without persisted queue, provider movement, writes, schema changes, or support artifact creation.
 - HS178/HS179 accepted support artifact contents contract preview: `support.artifact_contents_contract.preview` now defines allowed, forbidden, redacted, sensitivity, provenance, and non-authority posture for snapshots, trace packs, logs, and readiness/preflight exports before any new support artifact creation behavior.
+- HS180/HS181 accepted security review of the contents contract: no blocking issue found; next safe support-artifact seam is a read-only writer conformance gap map, with attention to trace-pack free-text length, local path sensitivity, sample-limit disclosure, readiness class aliases, and snapshot metadata/manifest disclosure.
 
 ## Accepted Boundaries
 

@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after HS179 accepted HS178
+Status: Resting after HS181 accepted HS180 security review
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: support artifact contents contract accepted; next seam should decide whether existing artifact-producing behavior needs conformance review before any creation hardening.
+Current focus: support artifact contents contract accepted and security-reviewed; next seam should be a read-only writer conformance gap map if support artifacts continue.
 
 Current heading:
 
@@ -243,8 +243,16 @@ Overseer reviewed 2026-06-02:
 
 Recommended next shaping candidates:
 
-1. Security/specialist review of support artifact content classes and redaction posture before touching artifact writers.
-2. Read-only conformance gap map between existing snapshot/trace-pack code and the accepted contents contract.
-3. Continue a different storage/runtime seam if support artifacts should rest.
+1. Read-only conformance gap map between existing snapshot/trace-pack/readiness support code and the accepted contents contract.
+2. Continue a different storage/runtime seam if support artifacts should rest.
 
 Do not open Dev implementation until one of these is selected and bounded.
+
+## Advisory Input Accepted
+
+Accepted 2026-06-02:
+
+- `workspace/SecurityReviewHS180-support-artifact-contents-contract.md`
+- `workspace/OverseerHS181-hs180-security-review-acceptance.md`
+
+HS180 found no blocking issue in the contract preview and recommended a read-only writer conformance gap map before any support artifact writer changes.
