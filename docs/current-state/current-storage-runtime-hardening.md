@@ -44,6 +44,8 @@ Accepted proof surfaces:
 - `support.artifact_creation_policy.preview`
 - `runtime.enforcement_boundary.preview`
 - `runtimeEnforcementEvaluator.evaluateRuntimeEnforcementDecision`
+- `runtime.enforcement_adapter.dry_preview`
+- `runtimeEnforcementDryAdapter.buildDryRuntimeEnforcementAdapterDecision`
 
 Accepted shape:
 
@@ -65,11 +67,13 @@ Accepted shape:
 - Support artifact creation policy preview is read-only creation posture: it classifies rolling snapshots, retained snapshots, operator debug trace packs, and future readiness/preflight export posture without creating artifacts, files, directories, providers, Evidence/EVEidence, Discovery mutations, Hydration writes, storage config writes, runtime enforcement, or UI work
 - Runtime enforcement boundary preview is read-only service-boundary posture: it proves a future insertion point in `invokeServiceCommand(command, payload, context)` after renderer eligibility and confirmation checks, before task wrapping and handler dispatch, while keeping `would_allow`, External I/O on, and unknown/unclassified fail-closed as non-authorizing preview/policy posture
 - Runtime enforcement evaluator is a pure inactive decision helper: it accepts explicit facts, returns `pass`, `block`, `conditional`, or `stop_before_boundary` with stable reason codes, and does not call handlers, task runners, providers, repositories, file writers, config writers, or DB APIs
+- Runtime enforcement dry adapter is inactive service-boundary fact assembly proof: it assembles evaluator facts from command metadata/definition, payload, context, and explicit supplied gate facts; reports missing fact classes; refuses to treat dry-run `would_allow` as authorization; and remains outside `invokeServiceCommand`
+- Trusted/internal confirmation bypass is distinct from confirmation satisfaction: it may preserve the current service-boundary behavior, but it must not be described as an operator or renderer satisfying confirmation
 
 Current resting state:
 
 - no active Dev runway is open
-- future runtime enforcement now has composed gate-state, service-boundary, and pure evaluator evidence, but still needs an explicit implementation/design runway before command blocking
+- future runtime enforcement now has composed gate-state, service-boundary, pure evaluator, and dry adapter evidence, but still needs an explicit implementation/design runway before command blocking
 - future Hydration execution now has policy preview evidence, but still needs a dedicated write-capable or provider-capable runway before calls or writes
 - future real/operator Hydration writes now have fixture write proof evidence, but still need a dedicated runway before provider-backed or operator-real Hydration exists
 - real operator External I/O config is now supported as app-local operator posture, but runtime enforcement still needs a dedicated runway before command blocking or provider release behavior exists

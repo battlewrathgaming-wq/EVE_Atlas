@@ -117,10 +117,12 @@ function reasonCodesFor(facts = {}) {
   if (facts.command_eligibility?.state === 'blocked_by_renderer_eligibility') {
     codes.push('renderer_eligibility_blocked');
   }
-  if (facts.confirmation?.required === true && facts.confirmation?.provided_for_preview !== true) {
+  if (facts.confirmation?.required === true && facts.confirmation?.would_stop_before_boundary === true) {
     codes.push('confirmation_missing');
   }
-  if (facts.confirmation?.required === true && facts.confirmation?.provided_for_preview === true) {
+  if (facts.confirmation?.required === true && facts.confirmation?.state === 'trusted_internal_bypasses_confirmation_front_door') {
+    codes.push('confirmation_not_enforced_at_front_door');
+  } else if (facts.confirmation?.required === true && facts.confirmation?.would_stop_before_boundary !== true) {
     codes.push('confirmation_satisfied');
   }
 
@@ -147,6 +149,7 @@ function reasonCodesFor(facts = {}) {
 }
 
 function addStorageCodes(codes, storage = {}) {
+  storage = storage || {};
   const state = storage.gate_state || storage.state || null;
   if (!state) {
     return;
@@ -164,6 +167,7 @@ function addStorageCodes(codes, storage = {}) {
 }
 
 function addBudgetCodes(codes, budget = {}) {
+  budget = budget || {};
   const state = budget.state || null;
   if (!state) {
     return;
@@ -175,6 +179,7 @@ function addBudgetCodes(codes, budget = {}) {
 }
 
 function addExternalIoCodes(codes, externalIo = {}) {
+  externalIo = externalIo || {};
   const state = externalIo.gate_state || externalIo.provider_backed_posture || externalIo.state || null;
   const dependency = externalIo.dependency || externalIo.external_io_dependency || 'none';
   if (dependency && dependency !== 'none') {
@@ -189,6 +194,7 @@ function addExternalIoCodes(codes, externalIo = {}) {
 }
 
 function addProviderCodes(codes, provider = {}) {
+  provider = provider || {};
   if (provider.provider_capable === true) {
     codes.push('provider_capable');
   }
@@ -198,6 +204,7 @@ function addProviderCodes(codes, provider = {}) {
 }
 
 function addDestinationCodes(codes, destination = {}) {
+  destination = destination || {};
   if (destination.applies !== true) {
     return;
   }
@@ -208,6 +215,7 @@ function addDestinationCodes(codes, destination = {}) {
 }
 
 function addTrustedContextCodes(codes, trustedContext = {}) {
+  trustedContext = trustedContext || {};
   if (trustedContext.required === true) {
     codes.push('trusted_context_required');
   }

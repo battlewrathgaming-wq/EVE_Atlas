@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS166 Dry runtime enforcement adapter runway open
+Status: Resting after HS167 accepted HS166 dry runtime enforcement adapter
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: prove how the inactive runtime evaluator would be fed at the service boundary, without changing command execution.
+Current focus: preserve the accepted runtime-enforcement proof spine before opening another seam.
 
 Current heading:
 
@@ -18,13 +18,15 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Human / Overseer shaping
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS166-dry-runtime-enforcement-adapter.md
+none
 ```
+
+No active Dev runway is open.
 
 ## Source Of Intent
 
@@ -39,16 +41,18 @@ Accepted interpretation:
 - Runtime enforcement should advance from proof surfaces toward implementation only one seam at a time.
 - HS162 proved the runtime enforcement boundary as preview evidence.
 - HS164 extracted a small evaluator before Atlas activates runtime command blocking.
-- HS166 should prove dry adapter fact assembly before any active enforcement exists.
+- HS166 proved dry adapter fact assembly before any active enforcement exists.
 
 Accepted source material:
 
 - `workspace/OverseerHS165-hs164-runtime-enforcement-evaluator-review.md`
-- `workspace/OverseerHS166-dry-runtime-enforcement-adapter-runway.md`
+- `workspace/OverseerHS167-hs166-dry-runtime-enforcement-adapter-review.md`
+- `workspace/DevHS166-dry-runtime-enforcement-adapter.md`
 - `docs/current-state/current-storage-runtime-hardening.md`
 - `src/main/services/serviceRegistry.js`
 - `src/main/services/runtimeEnforcementBoundaryService.js`
 - `src/main/services/runtimeEnforcementEvaluator.js`
+- `src/main/services/runtimeEnforcementDryAdapter.js`
 - `src/main/services/composedGatePolicyService.js`
 - `src/main/services/enforcementDryRunService.js`
 
@@ -65,10 +69,12 @@ Accepted proof surfaces:
 - `storage.setup_gate_readout`
 - `runtime.enforcement_boundary.preview`
 - `runtimeEnforcementEvaluator.evaluateRuntimeEnforcementDecision`
+- `runtime.enforcement_adapter.dry_preview`
+- `runtimeEnforcementDryAdapter.buildDryRuntimeEnforcementAdapterDecision`
 
 ## Current State
 
-HS142, HS144, HS146, HS148, HS150, HS152, HS154, HS156, HS158, HS160, HS162, and HS164 are accepted.
+HS142, HS144, HS146, HS148, HS150, HS152, HS154, HS156, HS158, HS160, HS162, HS164, and HS166 are accepted.
 
 No active runtime enforcement exists yet.
 
@@ -81,54 +87,36 @@ Known insertion point:
 
 HS164 made the future decision shape reusable and testable without making that decision active.
 
-HS166 should prove how service-boundary facts would be assembled for that evaluator without changing command execution.
+HS166 proved how service-boundary facts can be assembled for that evaluator without changing command execution.
 
-## Active Runway
+## Resting State
 
-Create a dry runtime enforcement adapter proof.
+No implementation packet is open.
 
-Ordered steps:
+Accepted HS166 facts:
 
-1. Read HS165, `serviceRegistry.invokeServiceCommand`, `runtimeEnforcementEvaluator`, `runtimeEnforcementBoundaryService`, command metadata, composed gate policy, and dry-run coverage.
-2. Add a dry adapter helper that assembles evaluator facts from service command definition, payload, and context without calling target handlers.
-3. The dry adapter may use already-available command metadata and explicit context facts only. It must not call providers, repositories, file writers, config writers, task runners, or mutating services.
-4. The dry adapter result should include:
-   - command
-   - source
-   - renderer eligibility posture
-   - confirmation posture
-   - trusted/internal context posture
-   - evaluator decision
-   - `would_block_if_active`
-   - `would_dispatch_if_active`
-   - `active: false`
-   - `preview_only: true`
-   - missing fact classes that would be needed before active enforcement
-5. Prove the adapter can represent:
-   - safe local read/report
-   - renderer-ineligible trusted command
-   - missing confirmation
-   - satisfied confirmation
-   - trusted/internal config write
-   - provider-backed Discovery
-   - ESI Evidence/EVEidence expansion
-   - Hydration write
-   - Watch execution
-   - support artifact creation
-   - unknown command before boundary
-6. Prove dry adapter output does not change `invokeServiceCommand` behavior.
-7. Keep unknown/unclassified fail-closed as inactive policy intent only.
-8. Keep dry-run `would_allow` non-authorizing. If the dry adapter lacks composed gate facts, it should say so rather than treating fallback pass as execution authority.
-9. Add focused verification and update Evidence / Dev Handoff.
+- The dry adapter is preview-only and inactive.
+- The dry adapter is not inserted into `invokeServiceCommand`.
+- The dry adapter assembles evaluator facts from command metadata/definition, payload, context, and explicit supplied gate facts only.
+- Missing composed/storage/External I/O/provider/path facts remain explicit missing fact classes.
+- Dry-run `would_allow` remains non-authorizing.
+- External I/O on remains non-authorizing.
+- Unknown/unclassified fail-closed remains inactive policy intent only.
+- Trusted/internal confirmation bypass is now recorded distinctly from satisfied operator confirmation as `confirmation_not_enforced_at_front_door`.
+
+Likely next shaping candidates:
+
+1. First inactive service-boundary integration hook or active-enforcement policy review before any real blocking.
+2. Actual support artifact creation hardening if continuing the snapshot/trace-pack lane.
+3. Real Hydration writer design or provider-backed Hydration gate only after data-shape ambiguity is resolved.
+4. Storage setup UI/renderer posture later, not now.
 
 ## Guardrails
 
-- No active runtime enforcement.
+- No active runtime enforcement without a new accepted runway.
 - No command interception.
 - No actual command blocking.
 - No behavior change to `invokeServiceCommand`.
-- No handler dispatch from dry adapter tests.
-- No task wrapping or task execution from dry adapter tests.
 - No provider calls.
 - No zKill calls.
 - No ESI calls.
@@ -146,28 +134,28 @@ Ordered steps:
 - Do not promote `would_allow` into authorization.
 - Do not treat External I/O on as authorization.
 - Do not make unknown/unclassified fail-closed active runtime behavior.
-- Do not import readout builders into the active command path unless the helper remains explicitly dry and tests prove no runtime behavior change.
 
 ## Stop Conditions
 
-Stop and return to Overseer/Human if:
+Before opening the next Dev packet, stop for Human/Overseer shaping if:
 
-- Dev needs to change active `invokeServiceCommand` behavior
-- Dev needs to block or intercept real commands
-- Dev needs to call readout builders from the live command path
-- Dev needs provider/API calls
-- Dev needs file/DB/config writes
-- Dev cannot distinguish missing facts from pass/block decisions
-- Dev cannot keep `would_allow` non-authorizing
-- the adapter becomes a broad enforcement framework instead of a dry proof of fact assembly
+- the next step would activate runtime command blocking
+- the next step would change `invokeServiceCommand` behavior
+- the next step would create support artifacts, snapshots, or trace packs
+- the next step would call providers
+- the next step would write or mutate Evidence/EVEidence, Discovery refs, Hydration output, storage config, or schema
+- the next step cannot distinguish missing facts from pass/block decisions
+- the next step would treat dry-run output as authorization
 
 ## Required Verification
 
-Run syntax checks on every new or changed JavaScript file.
-
-Run:
+Latest accepted HS166 verification:
 
 ```powershell
+node --check src\main\services\runtimeEnforcementEvaluator.js
+node --check src\main\services\runtimeEnforcementDryAdapter.js
+node --check scripts\verify-runtime-enforcement-adapter.js
+npm.cmd run verify:runtime-enforcement-adapter
 npm.cmd run verify:runtime-enforcement-evaluator
 npm.cmd run verify:runtime-enforcement-boundary
 npm.cmd run verify:enforcement-dry-run
@@ -180,34 +168,29 @@ git diff --check
 git status --short --branch
 ```
 
-If Dev adds `verify:runtime-enforcement-adapter`, run it and list it in the handoff.
+`verify:protected-terms` completed exit code 0 with advisory warnings only; no protected-term JSON updates or renames were performed.
 
 ## Evidence
 
-HS166 is open. Evidence to be filled by Dev.
+HS166 Dev implementation accepted after Overseer review.
 
-Expected evidence:
+Evidence:
 
-- dry adapter helper added or intentionally reused
-- adapter decision object shape
-- representative command decisions
-- missing-fact proof
-- proof that adapter output is inactive and preview-only
-- proof that `invokeServiceCommand` behavior is unchanged
-- proof that target handlers, task runners, providers, repositories, file writers, and config writers are not called by adapter tests
-- verification commands and results
-- explicit confirmation that no runtime enforcement, command blocking, provider calls, file writes, DB mutations, Evidence/EVEidence writes, Discovery mutations, Hydration writes, storage config writes, support artifact creation, schema migration, or UI changes were performed
+- Added dry adapter helper `src/main/services/runtimeEnforcementDryAdapter.js`.
+- Added focused verifier `scripts/verify-runtime-enforcement-adapter.js` and package script `verify:runtime-enforcement-adapter`.
+- Adapter result includes command, source, renderer eligibility posture, confirmation posture, trusted/internal context posture, evaluator decision, `would_block_if_active`, `would_dispatch_if_active`, `active: false`, `preview_only: true`, missing fact classes, dry-run non-authority notes, and no-side-effect proof flags.
+- Representative coverage includes safe local read/report, renderer-ineligible trusted command, missing confirmation, satisfied confirmation, trusted/internal config write, provider-backed Discovery, ESI Evidence/EVEidence expansion, Hydration write, Watch execution, support artifact creation, and unknown command before boundary.
+- Missing-fact proof shows dry-run `would_allow` without composed/storage facts becomes `conditional`, reports `composed_gate_policy`, `storage_authority`, and `storage_budget`, and does not set `would_dispatch_if_active`.
+- `invokeServiceCommand` behavior remains unchanged; the verifier confirms the dry adapter is not inserted into `invokeServiceCommand`, and the existing renderer eligibility, confirmation authority, and handler dispatch order remain present.
+- Overseer corrected confirmation reason-code semantics so trusted/internal front-door bypass is not mislabeled as operator confirmation satisfaction.
+- Explicit confirmation: no runtime enforcement, command blocking, command interception, provider calls, zKill calls, ESI calls, SDE downloads, file writes, DB mutations, Evidence/EVEidence writes, Discovery mutations, Hydration writes, storage config writes, support artifact creation, schema migration, renderer/UI changes, or `invokeServiceCommand` behavior changes were performed.
 
 ## Dev Handoff
 
-Expected Dev handoff:
+Accepted Dev handoff:
 
 - `workspace/DevHS166-dry-runtime-enforcement-adapter.md`
 
-Prior accepted Dev handoff:
-
-- `workspace/DevHS164-runtime-enforcement-evaluator.md`
-
 Latest Overseer review:
 
-- `workspace/OverseerHS165-hs164-runtime-enforcement-evaluator-review.md`
+- `workspace/OverseerHS167-hs166-dry-runtime-enforcement-adapter-review.md`

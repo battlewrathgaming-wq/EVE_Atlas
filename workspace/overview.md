@@ -44,9 +44,10 @@ Current state:
 - HS160 accepted
 - HS162 accepted
 - HS164 accepted
+- HS166 accepted
 - current executor is Human/Overseer shaping
 - no active Dev runway is open
-- current work is at a resting point after non-enforcing runtime evaluator extraction; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
+- current work is at a resting point after non-enforcing runtime evaluator extraction and dry adapter proof; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
 
 Current heading:
 
@@ -57,7 +58,7 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Dry active-enforcement adapter proof, still no broad command blocking.
+1. First inactive service-boundary integration hook or active-enforcement policy review, still no broad command blocking.
 2. Actual support artifact creation hardening if continuing the snapshot/trace-pack lane.
 3. Real Hydration writer design or provider-backed Hydration gate, only after data-shape ambiguity is resolved.
 4. Storage setup UI/renderer posture later, not now.
@@ -113,6 +114,8 @@ Keep these as the near-memory breadcrumb trail:
 - HS163 accepted HS162: `runtime.enforcement_boundary.preview` now proves the future service-command enforcement insertion point after renderer eligibility and confirmation checks, before task wrapping/handler dispatch, while keeping `would_allow`, External I/O on, and unknown/unclassified fail-closed as non-authorizing preview/policy posture.
 - HS164 opened a Runtime enforcement evaluator runway: extract a small pure evaluator before any active command blocking exists.
 - HS165 accepted HS164: `runtimeEnforcementEvaluator.evaluateRuntimeEnforcementDecision` now provides a reusable inactive decision shape with stable reason codes, while keeping dry-run `would_allow` and External I/O on non-authorizing.
+- HS166 opened a dry runtime enforcement adapter runway: prove service-boundary fact assembly for the inactive evaluator without inserting enforcement into `invokeServiceCommand`.
+- HS167 accepted HS166 after Overseer correction: `runtime.enforcement_adapter.dry_preview` now proves dry adapter fact assembly from command metadata/definition, payload, context, and explicit supplied gate facts; missing facts remain explicit; dry-run `would_allow` remains non-authorizing; and trusted/internal confirmation bypass is distinct from confirmation satisfaction.
 
 ## Accepted Boundaries
 
