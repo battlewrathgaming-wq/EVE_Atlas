@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after HS152 External I/O persisted state proof accepted
+Status: Active Dev runway for HS154 Hydration writer fixture proof
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: hold at an Overseer/Human selection point after accepting fixture/offline External I/O persisted state proof.
+Current focus: prove the smallest safe fixture/offline Hydration write path for readability metadata.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Human / Overseer shaping
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-None. No active Dev runway is open.
+workspace/DevHS154-hydration-writer-fixture-proof.md
 ```
 
 ## Current State
 
-HS142, HS144, HS146, HS148, HS150, and HS152 are accepted. No active Dev runway is open.
+HS142, HS144, HS146, HS148, HS150, and HS152 are accepted. HS154 is open as the next bounded hardening seam.
 
 Accepted Human decisions:
 
@@ -102,6 +102,7 @@ Recent accepted state:
 - `workspace/OverseerHS152-external-io-persisted-state-runway.md`
 - `workspace/DevHS152-external-io-persisted-state.md`
 - `workspace/OverseerHS153-hs152-external-io-persisted-state-review.md`
+- `workspace/OverseerHS154-hydration-writer-fixture-proof-runway.md`
 
 ## Accepted Boundaries
 
@@ -117,16 +118,38 @@ Recent accepted state:
 
 ## Active Runway
 
-No active Dev runway is open.
+Dev should implement a bounded fixture/offline Hydration writer proof.
 
-Likely next selectable seams:
+Source of intent:
 
-1. Hydration writer fixture proof: smallest write-capable Hydration step, still fixture/offline and provider-free.
-2. Real operator External I/O config: make the provider trust switch real only if Human wants the setting to move out of fixture proof.
-3. Snapshot/trace-pack creation policy: return to support-artifact creation once path authority is proven.
-4. First runtime enforcement design: only after explicit Human/Overseer selection, because command blocking changes runtime behavior.
+- Human selection: "Memory lane has been good to us."
+- `workspace/OverseerHS145-hs144-hydration-backlog-preview-review.md`
+- `workspace/OverseerHS151-hs150-hydration-execution-policy-review.md`
+- `workspace/OverseerHS153-hs152-external-io-persisted-state-review.md`
+- `workspace/OverseerHS154-hydration-writer-fixture-proof-runway.md`
+- `docs/contracts/metadata-hydration-contract.md`
+- `docs/features/acquisition-and-hydration-clocks.md`
+- `docs/current-state/current-storage-runtime-hardening.md`
 
-Do not open the next packet until the Human selects the next seam or explicitly asks Overseer to choose.
+Expected command/readout candidate:
+
+```text
+metadata.hydration_write_fixture_proof
+```
+
+Equivalent naming is acceptable if it follows existing service naming patterns and preserves Hydration meaning.
+
+Ordered steps:
+
+1. Inspect existing metadata hydration code, `metadata_runs`, `entities`, activity-event label patching, hydration backlog preview, hydration execution policy preview, service registry metadata, passive side-effect verifier, and fixture DB/test patterns.
+2. Add the smallest fixture/offline Hydration writer proof command or focused helper that writes representative label/readability output only in trusted fixture/test context.
+3. Use existing schema if possible. Stop if runtime schema changes or broad persistence redesign are needed.
+4. Prove the write is scoped to already-known IDs from fixture/local rows and does not create Evidence/EVEidence, Discovery refs, Watch state, queue state, or provider work.
+5. Prove labels/names remain metadata and numeric IDs remain factual basis.
+6. Prove renderer-origin payloads cannot forge arbitrary DB paths, target IDs, label authority, or provider results.
+7. Keep External I/O, live/API gate, storage authority, and runtime enforcement as separate posture. This proof must not bypass or activate them.
+8. Add focused verification plus service registry, command authority, enforcement dry-run, composed/gate policy, hydration policy, and passive side-effect coverage as needed.
+9. Update Evidence / Dev Handoff and create the expected DevHS file.
 
 ## Last Runway Accepted
 
@@ -189,11 +212,12 @@ Ordered steps:
 - No ESI calls.
 - No SDE download calls.
 - No Evidence/EVEidence writes.
-- No hydration writes.
+- No provider-backed hydration writes.
 - No hydration queue or persisted backlog.
-- No entity label writes.
-- No activity event label patching.
-- No metadata run writes.
+- No real operator hydration writes outside fixture/test control.
+- No entity label writes outside the trusted fixture proof.
+- No activity event label patching outside the trusted fixture proof.
+- No metadata run writes outside the trusted fixture proof.
 - No queue dispatch.
 - No Watch execution behavior changes.
 - No DB movement, copy, migration, relocation, restore, or deletion.
@@ -236,7 +260,7 @@ Before opening the next runway, stop and return to Overseer/Human if:
 - the proof requires real project-root External I/O config writes
 - the proof requires moving, copying, migrating, relocating, restoring, or deleting DB/storage
 - the proof requires live/provider/API calls
-- the proof requires writing entities, metadata runs, activity event labels, or hydration output
+- the proof requires writing entities, metadata runs, activity event labels, or hydration output outside trusted fixture/test control
 - the proof requires schema changes or persisted backlog state
 - the proof requires Watch executor behavior changes
 - the proof requires treating `external_io` as a provider queue
@@ -273,6 +297,7 @@ npm.cmd run verify:hydration-backlog-preview
 npm.cmd run verify:storage-authority-preflight
 npm.cmd run verify:storage-setup-gate
 npm.cmd run verify:hydration
+npm.cmd run verify:hydration-write-fixture
 npm.cmd run verify:metadata-status
 npm.cmd run verify:metadata-lookup
 npm.cmd run verify:actor-metadata
