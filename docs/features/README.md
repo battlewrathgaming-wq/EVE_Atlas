@@ -26,6 +26,7 @@ Current core feature areas:
 - evidence compaction preflight and assessment preservation
 - Acquisition and Hydration clocks
 - Observation lookup model
+- Data layer boundaries
 - R-Scanner and Sequencer presentation
 - UI triggers and scope mapping
 - presentation layer information index

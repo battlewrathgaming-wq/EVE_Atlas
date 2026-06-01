@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after HS175 accepted HS174 runtime hook telemetry readout
+Status: Resting after accepting data-layer boundary support note
 Last updated: 2026-06-01
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: preserve accepted runtime-enforcement proof surfaces and choose whether to pause this lane or continue another storage/runtime seam.
+Current focus: preserve accepted runtime-enforcement proof surfaces and use the data-layer boundary note as the reference spine before the next storage/runtime seam.
 
 Current heading:
 
@@ -63,6 +63,9 @@ Accepted interpretation:
 
 Accepted source material:
 
+- `workspace/DataAnalystHS151-data-intent-supporting-schemas.md`
+- `workspace/DataAnalystHS152-current-gaps-and-milestone-slices.md`
+- `docs/features/data-layer-boundaries.md`
 - `workspace/OverseerHS171-hs170-inactive-service-boundary-hook-review.md`
 - `workspace/OverseerHS173-hs172-runtime-hook-coverage-fact-review.md`
 - `workspace/OverseerHS175-hs174-runtime-hook-telemetry-readout-review.md`
@@ -81,6 +84,16 @@ Accepted source material:
 HS142, HS144, HS146, HS148, HS150, HS152, HS154, HS156, HS158, HS160, HS162, HS164, HS166, HS168, HS170, HS172, and HS174 are accepted.
 
 No active runtime enforcement exists yet.
+
+Accepted data-layer boundary support:
+
+- `docs/features/data-layer-boundaries.md`
+- Discovery Ref is a stored possible lead/provenance form, not Evidence/EVEidence.
+- ESI Evidence Expansion creates Evidence/EVEidence from a Discovery Ref and the ESI killmail endpoint.
+- Hydration is readability repair after local facts exist; it is not ESI Evidence Expansion.
+- Watch is operational acquisition intent.
+- Observation is the Atlas product layer that computes and collates local records into an operator-facing story; it is not a required UI pane.
+- Relationships group appearances/anchors to keep context, provenance, and basis coherent; computed grouping is not new Evidence/EVEidence.
 
 Accepted runtime-enforcement proof surfaces:
 
@@ -114,9 +127,10 @@ No implementation packet is open.
 
 Likely next shaping candidates:
 
-1. Pause runtime enforcement and continue support artifact creation hardening.
-2. Close one more runtime fact class only after a fresh advisory decision.
-3. Keep runtime enforcement resting until a stronger need for active blocking appears.
+1. Use the data-layer boundary note to audit the next storage/runtime seam before Dev work.
+2. Pause runtime enforcement and continue support artifact creation hardening only after confirming what the artifact must preserve.
+3. Consider Hydration candidate or patient packet preview only when that seam is deliberately opened.
+4. Keep runtime enforcement resting until a stronger need for active blocking appears.
 
 Do not jump directly to active runtime blocking.
 
@@ -191,6 +205,12 @@ git status --short --branch
 ## Evidence
 
 HS174 Dev implementation accepted after Overseer review.
+
+Data-layer advisory material accepted into durable support note:
+
+- `workspace/DataAnalystHS151-data-intent-supporting-schemas.md`
+- `workspace/DataAnalystHS152-current-gaps-and-milestone-slices.md`
+- `docs/features/data-layer-boundaries.md`
 
 Accepted Dev handoff:
 

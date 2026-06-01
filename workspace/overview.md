@@ -35,6 +35,7 @@ Milestone: Atlas Storage And Runtime Hardening
 
 Current state:
 
+- data-layer boundary support note accepted
 - HS148 accepted
 - HS150 accepted
 - HS152 accepted
@@ -52,6 +53,7 @@ Current state:
 - current executor is Human/Overseer shaping
 - no active Dev runway is open
 - current work is at a resting point after making inactive hook preview evidence inspectable; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
+- current work now has a durable data-layer spine for future storage/runtime seams
 
 Current heading:
 
@@ -62,9 +64,9 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Pause runtime enforcement and continue support artifact creation hardening.
-2. Actual support artifact creation hardening if continuing the snapshot/trace-pack lane.
-3. Close one more runtime-enforcement fact class only after a fresh advisory decision.
+1. Use `docs/features/data-layer-boundaries.md` to audit the next storage/runtime seam before Dev work.
+2. Pause runtime enforcement and continue support artifact creation hardening only after confirming what the artifact must preserve.
+3. Consider Hydration candidate or patient packet preview only when that seam is deliberately opened.
 4. Storage setup UI/renderer posture later, not now.
 
 See `workspace/current.md` for current truth.
@@ -128,6 +130,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS173 accepted HS172: the inactive runtime hook now sources only command classification coverage from the existing in-memory coverage map while preserving supplied facts and keeping active enforcement unopened.
 - HS174 opened a runtime hook telemetry/readout runway: make inactive preview evidence inspectable without persistence, support artifacts, new fact sourcing, provider calls, or blocking.
 - HS175 accepted HS174: `runtime.enforcement_hook_telemetry.readout` now summarizes supplied inactive hook previews without capture, persistence, support artifacts, new fact sourcing, provider calls, or blocking.
+- Data-layer boundary support note accepted: `docs/features/data-layer-boundaries.md` records Discovery Ref, ESI Evidence Expansion, Evidence/EVEidence, relationships/appearances, Hydration, Watch, Observation, Assessment Memory, Marked, and support-artifact boundaries before later schema or support-artifact work.
 
 ## Accepted Boundaries
 
@@ -157,6 +160,7 @@ Features / contracts / decisions:
 
 - `docs/features/`
 - `docs/features/acquisition-and-hydration-clocks.md`
+- `docs/features/data-layer-boundaries.md`
 - `docs/features/observation-lookup-model.md`
 - `docs/features/r-scanner-sequencer-presentation.md`
 - `docs/features/display-boundary-principles.md`
