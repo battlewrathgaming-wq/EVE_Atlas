@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS210 advisory readiness review opened
+Status: HS212 opened
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS210 runtime enforcement readiness review.
+Current focus: HS212 runtime hook Watch/task runtime fact preview.
 
 Current heading:
 
@@ -18,15 +18,80 @@ Current heading:
 
 ## Executor
 
-Current executor: Engineering / Security reviewer
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-workspace/EngineeringSafetyAuditHS210-runtime-enforcement-readiness-review.md
+workspace/DevHS212-runtime-hook-watch-task-runtime-fact-preview.md
 ```
 
-No active Dev runway is open. HS210 is advisory assurance only.
+Active Dev runway is open.
+
+## Active HS212 Runway
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS212-runtime-hook-watch-task-runtime-fact-preview-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS212-runtime-hook-watch-task-runtime-fact-preview.md
+```
+
+Task:
+
+Add compact, read-only `watch_runtime` fact sourcing to the inactive runtime enforcement hook preview.
+
+Preferred outcome:
+
+- `actor.watch`, `system.radius.watch`, `watch.executor.arm`, and `watch.executor.tick` receive explicit Watch/task runtime posture.
+- Non-Watch commands report not-applicable Watch posture.
+- Missing or malformed Watch/task state is reported as posture rather than guessed.
+- Supplied `runtimeEnforcementFacts.watch_runtime` remains preserved and is not overwritten.
+- The inactive dry adapter no longer reports `watch_runtime` missing for covered Watch/background commands when sourced posture is available.
+- Runtime hook telemetry can show `watch_runtime` as a sourced broad fact class when present.
+- Active runtime enforcement remains false.
+
+Preserve:
+
+- no active runtime enforcement
+- no command blocking
+- no handler dispatch from the hook
+- no task wrapping or task execution from the hook
+- no provider calls
+- no provider attempt recording
+- no service-memory cooldown/lockout mutation from the hook
+- no Watch arming/disarming/tick execution from the hook
+- no Watch mutation
+- no DB writes
+- no config writes
+- no support artifact creation
+- no snapshot or trace-pack creation
+- no storage movement or migration
+- no Hydration writes
+- no Evidence/EVEidence creation
+- no Discovery ref mutation
+- no Assessment Memory or Marked mutation
+- no schema changes
+- no renderer UI work
+- no pruning or deletion behavior
+- no terminology renames
+
+Stop if the proof requires active command blocking, runtime authorization, calling target handlers from the hook, task dispatch or task wrapping from the hook, provider calls, provider attempt recording, service-memory cooldown/lockout mutation, Watch mutation, DB writes, config writes, support artifact creation, schema changes, UI work, treating `watch_runtime` as may-run-now authorization, guessing missing Watch/task state, or changing Watch execution behavior.
+
+## HS212 Evidence
+
+Pending Dev handoff.
+
+## HS212 Dev Handoff
+
+Pending:
+
+```txt
+workspace/DevHS212-runtime-hook-watch-task-runtime-fact-preview.md
+```
 
 ## Active HS210 Advisory Request
 
@@ -74,15 +139,30 @@ Stop if the review requires implementation, runtime enforcement activation, comm
 
 ## HS210 Evidence
 
-Pending advisory handoff.
+Engineering/Security audit landed 2026-06-02:
+
+- `workspace/EngineeringSafetyAuditHS210-runtime-enforcement-readiness-review.md`
+
+Finding:
+
+- Atlas is ready for later active-enforcement design discussion.
+- Atlas is not ready for active command blocking implementation.
+- The next safe seam is narrower proof/fact closure.
+- The main missing fact before active enforcement is Watch/task runtime posture.
+- Active decision semantics remain unopened.
 
 ## HS210 Handoff
 
-Pending:
+Completed:
 
 ```txt
 workspace/EngineeringSafetyAuditHS210-runtime-enforcement-readiness-review.md
 ```
+
+Overseer reviewed 2026-06-02:
+
+- Accepted HS210 in `workspace/OverseerHS211-hs210-runtime-enforcement-readiness-review.md`.
+- Opened HS212 as inactive runtime hook Watch/task runtime fact preview.
 
 ## Resting HS208 State
 

@@ -63,6 +63,8 @@ Current state:
 - HS208 opened
 - HS208 accepted by HS209
 - HS210 advisory readiness review opened
+- HS210 accepted by HS211
+- HS212 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -79,9 +81,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Engineering / Security reviewer
-- no active Dev runway is open
-- current work is HS210 advisory readiness review before any active runtime enforcement packet; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, SDE import/download controls, and UI work remain unopened
+- current executor is Dev
+- active Dev runway is HS212 runtime hook Watch/task runtime fact preview
+- current work is inactive Watch/task runtime fact sourcing before any active runtime enforcement packet; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, SDE import/download controls, and UI work remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
 Current heading:
@@ -93,9 +95,9 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Complete HS210 engineering/security readiness review.
-2. If HS210 says ready only for a narrower proof, shape that proof before active enforcement.
-3. If HS210 says not ready, close missing facts/tests before Dev implementation.
+1. Complete HS212 runtime hook Watch/task runtime fact preview.
+2. Review whether the Watch/task fact closure satisfies HS210's main blocker.
+3. Keep active runtime enforcement and command blocking parked until active semantics are separately accepted.
 
 See `workspace/current.md` for current truth.
 
@@ -192,6 +194,8 @@ Keep these as the near-memory breadcrumb trail:
 - HS208 opened runtime hook destination path authority fact preview: source compact destination/path authority posture into inactive runtime hook previews for support-artifact commands while preserving no support artifact creation, no path authorization, no command blocking, and no runtime authorization.
 - HS208/HS209 accepted runtime hook destination path authority fact preview: inactive hook previews now source compact destination/path authority posture for mapped support-artifact commands, ignore renderer-forged path claims, and keep support artifact creation/runtime enforcement unopened.
 - HS210 opened runtime enforcement readiness review: engineering/security should decide whether inactive runtime hook fact sourcing is coherent enough for later active enforcement design, what is missing, whether Watch/task facts are needed first, and what must remain parked.
+- HS210/HS211 accepted engineering/security readiness review: Atlas is ready for later active-enforcement design discussion but not active blocking; Watch/task runtime posture is the main missing fact before active enforcement.
+- HS212 opened runtime hook Watch/task runtime fact preview: source compact read-only `watch_runtime` posture for Watch/background commands while preserving inactive, non-authorizing hook behavior.
 
 ## Accepted Boundaries
 
