@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS204 active Dev runway
+Status: HS204 accepted by HS205
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS204 runtime hook provider/live gate fact preview.
+Current focus: HS204 accepted; inactive runtime hook provider/live gate fact sourcing can rest as read-only proof.
 
 Current heading:
 
@@ -18,15 +18,19 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS204-runtime-hook-provider-live-gate-fact-preview.md
+none; no active Dev runway is open
 ```
 
-## Active HS204 Runway
+No active Dev runway is open.
+
+## Resting HS204 State
+
+## Accepted HS204 Runway
 
 Opened 2026-06-02:
 
@@ -73,6 +77,117 @@ Preserve:
 - no pruning or deletion behavior
 
 Stop if the proof requires active command blocking, composed runtime authorization, calling target handlers from the hook, task dispatch or task wrapping from the hook, `enterLiveProviderAttempt(...)`, provider calls, service-memory cooldown/lockout mutation from the hook, config writes, schema changes, support artifact creation, SDE import/download, storage movement/migration, UI work, treating External I/O on as authorization, treating provider/live gate `allowed` as authorization, hiding missing fact classes, or blurring live/provider gate with External I/O, storage authority, confirmation, or composed policy.
+
+## HS204 Evidence
+
+Dev updated 2026-06-02:
+
+- Added read-only `provider_live_gate` fact sourcing to the inactive runtime enforcement hook in `src/main/services/serviceRegistry.js`.
+- Used existing `liveApiGateService.actionGate(...)` only; did not call `enterLiveProviderAttempt(...)`.
+- Added accepted provider/live gate mappings:
+  - `manual.discovery` -> `manual.discovery`
+  - `manual.expansion` -> `manual.expansion`
+  - `metadata.hydration` -> `metadata.hydration`
+  - `sde.build-lookups` -> `sde.build-lookups` when no local source path is supplied
+- Local-only/unmapped non-provider commands now receive explicit local-only / not-applicable provider-live posture.
+- Unmapped provider-capable commands now receive explicit `sourced_unmapped_provider_capable` posture rather than guessed gate posture.
+- Supplied `runtimeEnforcementFacts.provider_live_gate` remains preserved and is not overwritten.
+- Provider/live gate `allowed` is carried as preview posture only with `allowed_is_authorization: false`.
+- Provider-capable proof verifies:
+  - `manual.discovery` with renderer confirmation reaches the inactive hook.
+  - sourced provider/live gate reports `LIVE_API_DISABLED` as read-only blocker posture.
+  - existing live/API gate behavior still owns the command stop after the hook.
+  - live radius rejection appears as `LIVE_RADIUS_REJECTED` provider/live gate posture without provider calls.
+- Runtime hook telemetry now reports `provider_live_gate` as sourced when present while still reporting other unsourced broad fact classes such as `destination_path_authority`.
+- Focused hook verifier sample:
+  - provider live gate sourced: true
+  - provider-capable External I/O sourced without authorizing: true
+  - live radius rejection sourced without provider call: true
+  - active runtime enforcement: false
+  - command blocking: false
+  - providers called by hook: false
+  - task runners called by hook: false
+- Runtime hook telemetry sample:
+  - sourced broad fact classes: `storage_authority`, `budget`, `external_io`, `provider_live_gate`
+  - provider live gate status: `sourced`
+  - provider live gate source status for local command: `sourced_local_only_not_applicable`
+  - destination path authority status: `not_sourced`
+- Verification run:
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\runtimeEnforcementDryAdapter.js` passed.
+  - `node --check src\main\services\runtimeHookTelemetryReadoutService.js` passed.
+  - `node --check src\main\services\liveApiGateService.js` passed.
+  - `node --check scripts\verify-runtime-enforcement-hook.js` passed.
+  - `node --check scripts\verify-runtime-hook-telemetry.js` passed.
+  - `node --check scripts\verify-live-api-gate.js` passed.
+  - `npm.cmd run verify:runtime-enforcement-hook` passed.
+  - `npm.cmd run verify:runtime-hook-telemetry` passed.
+  - `npm.cmd run verify:live-api-gate` passed.
+  - `npm.cmd run verify:gate-stack-readout` initially failed only when run in parallel with `verify:passive-side-effects`, because the passive-side-effect verifier removed `.tmp\passive-side-effects` while gate-stack was scanning byte usage; `npm.cmd run verify:gate-stack-readout` passed when rerun sequentially.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 104 warnings across 3 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main` with HS204 working-tree changes.
+- Boundaries preserved:
+  - no active runtime enforcement
+  - no command blocking
+  - no handler dispatch from the hook
+  - no task wrapping or task execution from the hook
+  - no provider calls
+  - no provider attempt recording
+  - no service-memory cooldown/lockout mutation from the hook
+  - no SDE download/import
+  - no Hydration writes
+  - no Evidence/EVEidence creation
+  - no Discovery ref mutation
+  - no Watch, Assessment Memory, or Marked mutation
+  - no schema changes
+  - no support artifact creation
+  - no config writes
+  - no storage movement or migration
+  - no renderer UI work
+  - no pruning or deletion behavior
+
+## HS204 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS204-runtime-hook-provider-live-gate-fact-preview.md
+```
+
+Status: runtime hook provider/live gate fact preview complete and accepted by Overseer.
+
+HS204 result:
+
+- The inactive runtime hook now previews provider/live gate posture from existing safe live gate logic.
+- Mapped provider-capable commands show live/API disabled, live radius rejection, duplicate/cooldown/lockout posture when available from `actionGate(...)`.
+- Local-only commands remain local-only / not-applicable.
+- Provider/live gate facts remain separate from External I/O, storage authority, storage budget, confirmation, composed policy, destination path authority, Watch arming, and runtime authorization.
+- Runtime enforcement remains inactive and non-authorizing.
+
+Overseer reviewed 2026-06-02:
+
+- Accepted HS204 in `workspace/OverseerHS205-hs204-runtime-hook-provider-live-gate-review.md`.
+- Verified inactive runtime hook previews can source provider/live gate posture from existing `actionGate(...)` logic.
+- Applied one Overseer correction so local-source `sde.build-lookups` reports provider-optional local-source posture rather than unmapped provider-capable posture.
+- Confirmed supplied `runtimeEnforcementFacts.provider_live_gate` remains preserved and not overwritten.
+- Confirmed provider/live gate `allowed` remains non-authorizing.
+- Confirmed External I/O, storage authority, storage budget, confirmation, composed policy, destination path authority, Watch arming, and runtime authorization remain separate.
+- Confirmed no active runtime enforcement, command blocking, provider calls, provider attempt recording, service-memory cooldown/lockout mutation, handler dispatch, task execution, config writes, schema changes, support artifacts, Evidence/EVEidence, Discovery, Watch, Assessment Memory, Marked, pruning/deletion, SDE import/download, storage movement, or UI work were added.
+
+## Resting Next Options
+
+Recommended next shaping candidates:
+
+1. Rest runtime hook fact sourcing and continue a different storage/runtime seam.
+2. Shape composed policy fact sourcing only if runtime hook proof continues.
+3. Request engineering/security readiness review before any active runtime enforcement packet.
+
+Do not open Dev implementation until one of these is selected and bounded.
 
 ## Resting HS202 State
 

@@ -915,6 +915,7 @@ function sourceReadOnlyRuntimeGateFacts({ command, coverage = null, context = {}
   const setupReadout = safeReadOnlyStorageSetupGateReadout(context);
   const storageReadback = safeReadOnlyStorageAuthorityConfigReadback(context);
   const externalIoReadback = safeReadOnlyExternalIoConfigReadback(context);
+  const providerLiveGate = safeReadOnlyProviderLiveGateFact({ command, coverage, context, payload });
 
   if (setupReadout) {
     sourced.storage_authority = storageAuthorityFactFor(setupReadout, storageReadback);
@@ -922,6 +923,9 @@ function sourceReadOnlyRuntimeGateFacts({ command, coverage = null, context = {}
   }
   if (externalIoReadback) {
     sourced.external_io = externalIoFactFor({ command, coverage, externalIoReadback });
+  }
+  if (providerLiveGate) {
+    sourced.provider_live_gate = providerLiveGate;
   }
   return sourced;
 }
@@ -991,6 +995,175 @@ function safeReadOnlyExternalIoConfigReadback(context = {}) {
       }
     };
   }
+}
+
+function safeReadOnlyProviderLiveGateFact({ command, coverage = null, context = {}, payload = {} }) {
+  const mappedAction = liveGateActionForCommand(command, payload);
+  const providerCapable = Boolean(coverage?.external_io_dependency && coverage.external_io_dependency !== 'none');
+  if (!mappedAction && providerOptionalLocalSourceForCommand(command, payload)) {
+    return {
+      fact_class: 'provider_live_gate',
+      fact_source: 'runtime_hook_read_only_live_api_gate_mapping',
+      source_status: 'sourced_provider_optional_local_source_not_applicable',
+      command,
+      mapped_live_gate_action: null,
+      provider_capable: false,
+      mode: 'local-only',
+      providers: [],
+      allowed: false,
+      allowed_is_authorization: false,
+      state: 'local_source_no_live_provider_gate',
+      blockers: [],
+      warnings: [],
+      estimated_api_calls: { zkill: 0, esi: 0, total: 0 },
+      request_control: null,
+      non_authorizing_preview: true
+    };
+  }
+  if (!mappedAction && providerCapable) {
+    return {
+      fact_class: 'provider_live_gate',
+      fact_source: 'runtime_hook_read_only_live_api_gate_mapping',
+      source_status: 'sourced_unmapped_provider_capable',
+      command,
+      mapped_live_gate_action: null,
+      provider_capable: true,
+      mode: 'unknown_unmapped_provider_capable',
+      providers: [],
+      allowed: false,
+      allowed_is_authorization: false,
+      state: 'provider_live_gate_unmapped',
+      blockers: [{
+        code: 'PROVIDER_LIVE_GATE_UNMAPPED',
+        message: 'Provider-capable service command has no accepted live/provider gate mapping for this preview.'
+      }],
+      warnings: [],
+      estimated_api_calls: null,
+      request_control: null,
+      non_authorizing_preview: true
+    };
+  }
+  if (!mappedAction) {
+    return {
+      fact_class: 'provider_live_gate',
+      fact_source: 'runtime_hook_read_only_live_api_gate_mapping',
+      source_status: 'sourced_local_only_not_applicable',
+      command,
+      mapped_live_gate_action: null,
+      provider_capable: false,
+      mode: 'local-only',
+      providers: [],
+      allowed: false,
+      allowed_is_authorization: false,
+      state: 'local_only_no_live_provider_gate',
+      blockers: [],
+      warnings: [],
+      estimated_api_calls: { zkill: 0, esi: 0, total: 0 },
+      request_control: null,
+      non_authorizing_preview: true
+    };
+  }
+  try {
+    const gate = actionGate(mappedAction, payload, {
+      taskRunner: context.runtimeHookLiveGateTaskRunner || context.taskRunner
+    });
+    return providerLiveGateFactFromGate({ command, mappedAction, gate });
+  } catch (error) {
+    return {
+      fact_class: 'provider_live_gate',
+      fact_source: 'runtime_hook_read_only_live_api_gate_action_gate',
+      source_status: 'sourced_unknown_live_gate_action',
+      command,
+      mapped_live_gate_action: mappedAction,
+      provider_capable: providerCapable,
+      mode: 'unknown_live_gate_action',
+      providers: [],
+      allowed: false,
+      allowed_is_authorization: false,
+      state: 'provider_live_gate_readout_unavailable',
+      blockers: [{
+        code: error.code || 'PROVIDER_LIVE_GATE_READOUT_UNAVAILABLE',
+        message: error.message
+      }],
+      warnings: [],
+      estimated_api_calls: null,
+      request_control: null,
+      non_authorizing_preview: true
+    };
+  }
+}
+
+function liveGateActionForCommand(command, payload = {}) {
+  if (command === 'manual.discovery') {
+    return 'manual.discovery';
+  }
+  if (command === 'manual.expansion') {
+    return 'manual.expansion';
+  }
+  if (command === 'metadata.hydration') {
+    return 'metadata.hydration';
+  }
+  if (command === 'sde.build-lookups') {
+    return payload.sourcePath || payload.source_path || payload.path ? null : 'sde.build-lookups';
+  }
+  return null;
+}
+
+function providerOptionalLocalSourceForCommand(command, payload = {}) {
+  if (command !== 'sde.build-lookups') {
+    return false;
+  }
+  return Boolean(payload.sourcePath || payload.source_path || payload.path);
+}
+
+function providerLiveGateFactFromGate({ command, mappedAction, gate = {} }) {
+  const providerCapable = gate.mode === 'live-required';
+  return {
+    fact_class: 'provider_live_gate',
+    fact_source: 'runtime_hook_read_only_live_api_gate_action_gate',
+    source_status: providerCapable ? 'sourced_provider_live_gate' : 'sourced_local_only_not_applicable',
+    command,
+    mapped_live_gate_action: mappedAction,
+    provider_capable: providerCapable,
+    mode: gate.mode || null,
+    providers: [...(gate.providers || [])],
+    allowed: gate.allowed === true,
+    allowed_is_authorization: false,
+    state: gate.state || null,
+    live_api_enabled: gate.live_api_enabled === true,
+    user_agent_configured: gate.user_agent_configured === true,
+    blockers: compactLiveGateMessages(gate.blockers),
+    warnings: compactLiveGateMessages(gate.warnings),
+    estimated_api_calls: gate.estimated_api_calls || null,
+    request_control: gate.request_control ? {
+      provider: gate.request_control.provider || null,
+      action: gate.request_control.action || null,
+      target_type: gate.request_control.target_type || null,
+      target_id: gate.request_control.target_id || null,
+      lookback_seconds: gate.request_control.lookback_seconds ?? null,
+      cap_summary: gate.request_control.cap_summary || null,
+      scope_fingerprint: gate.request_control.scope_fingerprint || null,
+      cooldown_active: gate.request_control.cooldown_active === true,
+      lockout_active: gate.request_control.lockout_active === true,
+      next_eligible_at: gate.request_control.next_eligible_at || null,
+      lockout_until: gate.request_control.lockout_until || null,
+      blocked_attempt_count: gate.request_control.blocked_attempt_count || 0,
+      last_blocked_reason: gate.request_control.last_blocked_reason || null,
+      persistence: gate.request_control.persistence || null
+    } : null,
+    non_authorizing_preview: true
+  };
+}
+
+function compactLiveGateMessages(messages = []) {
+  return (messages || []).map((entry = {}) => ({
+    code: entry.code || null,
+    message: entry.message || null,
+    next_eligible_at: entry.next_eligible_at || null,
+    remaining_seconds: entry.remaining_seconds ?? null,
+    scope_fingerprint: entry.scope_fingerprint || null,
+    active_task_id: entry.active_task_id || null
+  }));
 }
 
 function storageAuthorityFactFor(setupReadout = {}, storageReadback = {}) {

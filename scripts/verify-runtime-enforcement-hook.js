@@ -16,6 +16,8 @@ async function main() {
     await verifyContextSuppliedFactsPreserved(db);
     await verifySuppliedCoverageNotOverwritten(db);
     await verifyProviderCapableCommandUsesSourcedExternalIo(db);
+    await verifyLiveRadiusRejectionIsReadOnlyProviderGatePosture(db);
+    await verifyProviderOptionalLocalSourceAvoidsLiveGate(db);
     await verifyHookStopsAfterEligibilityAndConfirmation(db);
     await verifyHookBeforeTaskWrapping(db);
     await verifyTrustedInternalBypass(db);
@@ -35,7 +37,10 @@ async function main() {
         storage_authority_sourced: true,
         storage_budget_sourced: true,
         external_io_sourced: true,
+        provider_live_gate_sourced: true,
         provider_capable_external_io_sourced_without_authorizing: true,
+        live_radius_rejection_sourced_without_provider_call: true,
+        provider_optional_local_source_avoids_live_gate: true,
         renderer_ineligible_stops_before_hook: true,
         missing_confirmation_stops_before_hook: true,
         hook_runs_before_task_wrapping: true,
@@ -97,6 +102,7 @@ async function verifyCoverageSourcedWithoutContextFacts(db) {
   const storageAuthority = observed[0].evaluator_decision.gate_inputs_used.storage_authority;
   const budget = observed[0].evaluator_decision.gate_inputs_used.budget;
   const externalIo = observed[0].evaluator_decision.gate_inputs_used.external_io;
+  const providerLiveGate = observed[0].evaluator_decision.gate_inputs_used.provider_live_gate;
   assert(storageAuthority?.fact_source === 'runtime_hook_read_only_storage_authority_readback', 'storage authority facts should be sourced from readback');
   assert(['sourced_configured', 'sourced_absent_unconfigured', 'sourced_missing', 'sourced_unparseable', 'sourced_invalid_schema'].includes(storageAuthority.source_status), 'storage authority source status should distinguish configured/absent/problem posture');
   assert(budget?.fact_source === 'runtime_hook_read_only_storage_setup_gate_readout', 'storage budget facts should be sourced from setup gate readout');
@@ -104,6 +110,9 @@ async function verifyCoverageSourcedWithoutContextFacts(db) {
   assert(externalIo?.fact_source === 'runtime_hook_read_only_external_io_config_readback', 'External I/O facts should be sourced from readback');
   assert(externalIo.source_status.startsWith('sourced_'), 'External I/O source status should be explicit');
   assert(externalIo.on_is_authorization === false, 'External I/O sourced fact should remain non-authorizing');
+  assert(providerLiveGate?.state === 'local_only_no_live_provider_gate', 'local-only command should stay local-only for provider live gate');
+  assert(providerLiveGate.provider_capable === false, 'local-only command must not become provider-capable');
+  assert(providerLiveGate.allowed_is_authorization === false, 'provider live gate fact should be non-authorizing');
   assert(trustedContext?.renderer_allowed === true, 'trusted context posture should still reflect command metadata');
 }
 
@@ -124,6 +133,7 @@ async function verifyContextSuppliedFactsPreserved(db) {
   assert(observed[0].evaluator_decision.gate_inputs_used.storage_authority.gate_state === 'configured_storage_ready', 'supplied storage fact should be preserved when supplied');
   assert(observed[0].evaluator_decision.gate_inputs_used.budget.state === 'within_budget', 'supplied budget fact should be preserved when supplied');
   assert(observed[0].evaluator_decision.gate_inputs_used.external_io.gate_state === 'local_only_available', 'supplied External I/O fact should be preserved when supplied');
+  assert(observed[0].evaluator_decision.gate_inputs_used.provider_live_gate.state === 'local_only_no_live_provider_gate', 'supplied provider live gate fact should be preserved when supplied');
 }
 
 async function verifySuppliedCoverageNotOverwritten(db) {
@@ -169,11 +179,68 @@ async function verifyProviderCapableCommandUsesSourcedExternalIo(db) {
   );
   assert(observed.length === 1, 'confirmed provider-capable command should reach inactive hook');
   const externalIo = observed[0].evaluator_decision.gate_inputs_used.external_io;
+  const providerLiveGate = observed[0].evaluator_decision.gate_inputs_used.provider_live_gate;
   assert(externalIo?.external_io_dependency === 'zkill_provider_required', 'provider-capable command should carry External I/O dependency separately');
   assert(externalIo.gate_state === 'held_by_external_io', 'missing/off External I/O config should hold provider-backed posture');
   assert(externalIo.on_is_authorization === false, 'External I/O on/off posture should not authorize command execution');
-  assert(observed[0].missing_fact_classes.includes('provider_live_gate'), 'provider live gate should remain unsourced by runtime hook');
+  assert(providerLiveGate?.fact_source === 'runtime_hook_read_only_live_api_gate_action_gate', 'provider live gate should be sourced from actionGate');
+  assert(providerLiveGate.provider_capable === true, 'manual.discovery should be provider-capable in live gate fact');
+  assert(providerLiveGate.mapped_live_gate_action === 'manual.discovery', 'manual.discovery should map to the accepted live gate action');
+  assert(providerLiveGate.state === 'blocked', 'live API disabled should remain blocker posture');
+  assert(providerLiveGate.allowed === false, 'live API disabled should not be allowed');
+  assert(providerLiveGate.allowed_is_authorization === false, 'provider live gate allowed flag must not authorize runtime dispatch');
+  assert(providerLiveGate.blockers.some((entry) => entry.code === 'LIVE_API_DISABLED'), 'provider live gate should report live API disabled blocker');
+  assert(!observed[0].missing_fact_classes.includes('provider_live_gate'), 'provider live gate should be sourced for mapped provider-capable command');
   assert(observed[0].proof.providers_called === false, 'hook itself should not call providers for provider-capable commands');
+}
+
+async function verifyLiveRadiusRejectionIsReadOnlyProviderGatePosture(db) {
+  const observed = [];
+  await assertRejects(
+    () => invokeServiceCommand('manual.discovery', {
+      scope: 'radius',
+      centerSystemId: 30000142,
+      maxSystems: 3,
+      maxRefsPerSystem: 5,
+      confirmation: CONFIRMATION.MANUAL_DISCOVERY
+    }, {
+      db,
+      source: 'renderer',
+      runtimeEnforcementPreviewObserver: (preview) => observed.push(preview)
+    }),
+    'LIVE_RADIUS_REJECTED',
+    'live radius rejection should preserve existing live gate product boundary'
+  );
+  assert(observed.length === 1, 'confirmed live radius command should reach inactive hook');
+  const providerLiveGate = observed[0].evaluator_decision.gate_inputs_used.provider_live_gate;
+  assert(providerLiveGate?.blockers.some((entry) => entry.code === 'LIVE_RADIUS_REJECTED'), 'provider live gate should report live radius rejection');
+  assert(providerLiveGate.request_control?.scope_fingerprint?.includes('manual.discovery:zkill:radius:30000142'), 'radius scope fingerprint should be visible as read-only request control posture');
+  assert(providerLiveGate.allowed_is_authorization === false, 'live radius provider gate posture should not authorize dispatch');
+  assert(observed[0].proof.providers_called === false, 'hook should not call providers for live radius rejection proof');
+}
+
+async function verifyProviderOptionalLocalSourceAvoidsLiveGate(db) {
+  const observed = [];
+  try {
+    await invokeServiceCommand('sde.build-lookups', {
+      sourcePath: 'F:/fixture/local-sde.zip',
+      confirmation: CONFIRMATION.SDE_BUILD_LOOKUPS
+    }, {
+      db,
+      source: 'trusted',
+      runtimeEnforcementPreviewObserver: (preview) => observed.push(preview)
+    });
+  } catch {
+    // The local fixture path is intentionally absent; only the pre-handler hook preview is under test.
+  }
+  assert(observed.length === 1, 'local-source SDE build should reach inactive hook before handler path validation');
+  const providerLiveGate = observed[0].evaluator_decision.gate_inputs_used.provider_live_gate;
+  assert(providerLiveGate?.source_status === 'sourced_provider_optional_local_source_not_applicable', 'local-source SDE build should be provider-optional local-source posture');
+  assert(providerLiveGate.provider_capable === false, 'local-source SDE build should not require live provider gate posture');
+  assert(providerLiveGate.state === 'local_source_no_live_provider_gate', 'local-source SDE build should avoid unmapped provider live gate state');
+  assert(providerLiveGate.blockers.length === 0, 'local-source SDE build should not gain live provider blockers');
+  assert(providerLiveGate.allowed_is_authorization === false, 'local-source SDE provider gate posture should remain non-authorizing');
+  assert(observed[0].proof.providers_called === false, 'hook should not call providers for local-source SDE proof');
 }
 
 async function verifyHookStopsAfterEligibilityAndConfirmation(db) {
