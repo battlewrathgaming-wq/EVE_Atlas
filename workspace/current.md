@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after HS185 accepted HS184
+Status: HS186 Trace/log redaction policy proof runway open
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: runtime snapshot disclosure accepted; remaining support-artifact seam is trace/log redaction and free-text truncation policy if support artifacts continue.
+Current focus: read-only trace/log redaction and free-text truncation policy proof before changing support-artifact writers.
 
 Current heading:
 
@@ -18,15 +18,52 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none
+workspace/DevHS186-trace-log-redaction-policy-proof.md
 ```
 
-No Dev runway is currently open.
+Active Dev runway is open.
+
+## Active HS186 Runway
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS186-trace-log-redaction-policy-proof-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS186-trace-log-redaction-policy-proof.md
+```
+
+Task:
+
+Add a read-only trace/log redaction and free-text truncation policy proof, preferably:
+
+```txt
+support.trace_log_redaction_policy.preview
+```
+
+The proof should define policy posture for trace packs and light logs before any writer hardening. It should cover provider endpoints, query/parameter strings, provider/runtime error text, data-quality warning messages, queue latest-ref samples, local filesystem paths, sample limits, omitted-count disclosure, and excluded-material disclosure.
+
+Preserve:
+
+- no trace-pack writer behavior changes
+- no log writer/export behavior changes
+- no support artifact creation
+- no snapshot/trace-pack/log/export/file/directory creation except normal source/verifier edits
+- no real operator artifact inspection
+- no provider calls
+- no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or schema mutation
+- no runtime enforcement activation
+- no command blocking
+- no renderer UI work
+
+Stop if policy proof requires actual writer redesign, real artifact inspection, raw ESI payload inclusion, provider calls, live/private/destructive actions, or runtime enforcement.
 
 ## Accepted HS178 Context
 
