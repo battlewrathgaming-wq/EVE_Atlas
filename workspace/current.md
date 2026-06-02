@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after HS187 accepted HS186
+Status: HS188 Trace-pack writer redaction hardening runway open
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS186 trace/log redaction and free-text truncation policy proof accepted; actual writer hardening remains unopened.
+Current focus: first bounded trace-pack writer redaction/truncation hardening slice using accepted HS186 policy.
 
 Current heading:
 
@@ -18,15 +18,51 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none
+workspace/DevHS188-trace-pack-writer-redaction-hardening.md
 ```
 
-No Dev runway is currently open.
+Active Dev runway is open.
+
+## Active HS188 Runway
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS188-trace-pack-writer-redaction-hardening-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS188-trace-pack-writer-redaction-hardening.md
+```
+
+Task:
+
+Apply the accepted HS186 trace/log redaction policy to the existing operator debug trace-pack writer only:
+
+```txt
+support.debug_trace_pack
+```
+
+Hardening should target bounded summaries, endpoint/query redaction, free-text truncation, local-path sensitivity disclosure, sample/exclusion disclosure, and support/debug non-authority posture.
+
+Preserve:
+
+- no light-log hardening
+- no new support artifact classes
+- no new support artifact commands
+- no snapshot/readiness export changes
+- no provider calls
+- no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or schema mutation
+- no runtime enforcement activation
+- no command blocking
+- no renderer UI work
+
+Stop if the slice requires schema/provider changes, real operator artifact inspection, a broad support-artifact framework, raw ESI payload inclusion, provider calls, live/private/destructive actions, runtime enforcement, command blocking, or UI work.
 
 ## Accepted HS186 Runway
 
