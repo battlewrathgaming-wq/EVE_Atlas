@@ -54,6 +54,7 @@ Current state:
 - HS198 opened
 - HS198 accepted by HS199
 - HS200 accepted by HS201
+- HS202 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -70,9 +71,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer
-- no active Dev runway is open
-- current work is resting HS200 after local SDE readiness gap lens acceptance; active command blocking, broad artifact creation, provider-backed Hydration, runtime enforcement activation, pruning/deletion, SDE import/download controls, and UI work remain unopened
+- current executor is Dev
+- active Dev runway is HS202 runtime hook real gate fact preview
+- current work is proving the inactive runtime hook can see real read-only storage and External I/O gate facts without activating command blocking; broad artifact creation, provider-backed Hydration, runtime enforcement activation, pruning/deletion, SDE import/download controls, and UI work remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
 Current heading:
@@ -84,9 +85,9 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Rest Hydration/SDE previews and continue a different storage/runtime seam.
-2. Shape SDE import/download controls only after deciding operator action and storage authority expectations.
-3. Runtime enforcement remains resting.
+1. Complete HS202 runtime hook real gate fact preview.
+2. Review whether missing composed/provider/task facts should remain explicit or get a later read-only preview.
+3. Runtime enforcement activation remains resting.
 
 See `workspace/current.md` for current truth.
 
@@ -174,6 +175,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS198/HS199 accepted Hydration attention lens: `metadata.hydration_attention_lens.preview` now proves selected readability landmarks and deferred unresolved IDs from local Hydration candidates without provider calls, writes, queues, schema changes, pruning/deletion, runtime enforcement, command blocking, or UI work.
 - HS200 opened local SDE readiness gap lens: prove static type/system lookup gaps as local readiness/import posture rather than ESI Hydration work, without SDE download/import, provider calls, writes, schema changes, runtime enforcement, command blocking, or UI work.
 - HS200/HS201 accepted local SDE readiness gap lens: `metadata.local_sde_readiness.preview` now proves static type/system lookup gaps as local readiness/import posture rather than ESI Hydration work, without SDE download/import, provider calls, writes, schema changes, runtime enforcement, command blocking, or UI work.
+- HS202 opened runtime hook real gate fact preview: source storage authority, storage budget, and External I/O facts into inactive runtime hook previews from existing read-only local posture, without activating runtime enforcement, command blocking, provider calls, config writes, schema changes, support artifacts, or UI work.
 
 ## Accepted Boundaries
 

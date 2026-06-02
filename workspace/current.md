@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS200 accepted by HS201
+Status: HS202 runtime hook real gate fact preview runway open
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS200 accepted; local SDE readiness gap lens can rest as read-only proof.
+Current focus: inactive runtime hook can see real read-only storage and External I/O gate facts without activating command blocking.
 
 Current heading:
 
@@ -18,15 +18,60 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none; no active Dev runway is open
+workspace/DevHS202-runtime-hook-real-gate-fact-preview.md
 ```
 
-No active Dev runway is open.
+Active Dev runway is HS202.
+
+## Active HS202 Runway
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS202-runtime-hook-real-gate-fact-preview-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS202-runtime-hook-real-gate-fact-preview.md
+```
+
+Task:
+
+Add a read-only, non-enforcing fact-sourcing preview for the inactive runtime enforcement hook so it can report storage authority, storage budget, and External I/O posture from existing real readback/config posture.
+
+Preferred outcome:
+
+- inactive runtime hook previews can include storage authority facts
+- inactive runtime hook previews can include storage budget posture
+- inactive runtime hook previews can include External I/O posture
+- supplied runtime facts are preserved and not overwritten
+- missing config/budget state remains explicit posture, not failure
+- runtime hook telemetry shows sourced broad fact classes when present
+- active runtime enforcement remains false
+
+Preserve:
+
+- no active runtime enforcement
+- no command blocking
+- no provider calls
+- no SDE download/import
+- no Hydration writes
+- no Evidence/EVEidence creation
+- no Discovery ref mutation
+- no Watch, Assessment Memory, or Marked mutation
+- no schema changes
+- no support artifact creation
+- no config writes
+- no storage movement or migration
+- no renderer UI work
+- no pruning or deletion behavior
+
+Stop if the proof requires active command blocking, composed runtime authorization, calling target handlers from the hook, config writes, provider calls, schema changes, support artifact creation, SDE import/download, storage movement/migration, UI work, treating External I/O on as authorization, treating sourced facts as Dev/run authorization, or hiding missing fact classes.
 
 ## Resting HS200 State
 
