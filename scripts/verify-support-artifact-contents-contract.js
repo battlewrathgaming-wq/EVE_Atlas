@@ -113,6 +113,9 @@ function verifyClassContract(preview) {
   assert(logs.forbidden_content_categories.includes('secrets or auth tokens'), 'logs should forbid secrets');
   assert(readiness.raw_esi_payloads === 'forbidden', 'readiness/preflight exports should forbid raw ESI payloads');
   assert(readiness.evidence_rows === 'counts_and_posture_only', 'readiness/preflight should be counts/posture only');
+  assert(readiness.canonical_artifact_class === 'readiness_preflight_export', 'readiness/preflight export should remain canonical');
+  assert(readiness.aliases.includes('readiness_preflight_reports'), 'readiness/preflight reports should be disclosed as an alias');
+  assert(readiness.alias_disclosure.includes('path-authority alias'), 'readiness/preflight alias disclosure should name path authority');
 
   assert(preview.global_rules.support_artifacts_are_evidence === false, 'support artifacts must not be Evidence/EVEidence');
   assert(preview.global_rules.support_artifacts_are_observation === false, 'support artifacts must not be Observation');

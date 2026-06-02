@@ -180,6 +180,10 @@ function buildArtifactClasses({ root, preflight = {}, setupGate = {} }) {
     }),
     artifactClass({
       id: 'readiness_preflight_reports',
+      canonical_artifact_class: 'readiness_preflight_export',
+      aliases: ['readiness_preflight_reports'],
+      alias_role: 'path_authority_alias_for_current_in_memory_readout',
+      alias_disclosure: 'readiness_preflight_export is the canonical contents/creation class id; readiness_preflight_reports names the current path-authority in-memory/readout surface and does not create an export writer.',
       name: 'Readiness and preflight reports',
       family: 'operational_support',
       path_basis: 'in-memory service/report output unless an explicit future export is added',

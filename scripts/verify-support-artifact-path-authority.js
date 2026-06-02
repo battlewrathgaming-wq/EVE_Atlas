@@ -114,6 +114,9 @@ function verifyClassInventory(preview) {
   assert(logs.requires_storage_authority === false, 'light operational logs should not require storage authority');
   assert(readiness.allowed_before_storage_setup === true, 'readiness/preflight readouts should be allowed before storage setup');
   assert(readiness.counts_against_storage_budget === false, 'in-memory readiness/preflight readouts should not count against storage budget');
+  assert(readiness.canonical_artifact_class === 'readiness_preflight_export', 'readiness/preflight path alias should point to canonical export class');
+  assert(readiness.alias_role === 'path_authority_alias_for_current_in_memory_readout', 'readiness/preflight path alias role should be explicit');
+  assert(readiness.alias_disclosure.includes('does not create an export writer'), 'readiness/preflight alias disclosure should not imply writer creation');
 
   assert(runtimeCache.cache_origin === 'operational_runtime', 'runtime cache origin should be operational');
   assert(providerCache.cache_origin === 'provider_activity_derived', 'provider cache origin should be provider/activity derived');

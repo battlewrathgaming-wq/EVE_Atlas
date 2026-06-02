@@ -49,6 +49,8 @@ Current state:
 - HS192 accepted by HS193
 - HS194 opened
 - HS194 accepted by HS195
+- HS196 opened
+- HS196 accepted by HS197
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -67,7 +69,7 @@ Current state:
 - HS174 accepted
 - current executor is Overseer
 - no active Dev runway is open
-- HS194 accepted read-only light operational log conformance refresh after HS192; no dedicated light-log export writer exists, and active command blocking, broad artifact creation, provider-backed Hydration, runtime enforcement activation, and UI work remain unopened
+- current work is resting HS196 after readiness/preflight alias normalization; active command blocking, broad artifact creation, provider-backed Hydration, runtime enforcement activation, and UI work remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
 Current heading:
@@ -79,8 +81,8 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Readiness/preflight class-id alias normalization remains a small tidy-up candidate.
-2. Rest support artifacts and continue a different storage/runtime seam.
+1. Rest support artifacts and continue a different storage/runtime seam.
+2. Inspect readiness/preflight local path sensitivity only if support artifact work continues.
 3. Runtime enforcement remains resting.
 
 See `workspace/current.md` for current truth.
@@ -163,6 +165,8 @@ Keep these as the near-memory breadcrumb trail:
 - HS192/HS193 accepted API request log persistence sanitization: `EvidenceRepository.insertApiRequestLog` now sanitizes persisted endpoint/error fields for tested patterns and `support.api_request_log_redaction_readiness.preview` reports the new insert posture.
 - HS194 opened light operational log conformance refresh: update the read-only writer conformance map so `light_operational_logs` reflects HS192 persisted-row hardening while still reporting no dedicated light-log export writer.
 - HS194/HS195 accepted light operational log conformance refresh: `support.artifact_writer_conformance_gap_map.preview` now has no unknown classes, while `readiness_preflight_export` remains the only conformance-map gap.
+- HS196 opened readiness/preflight alias normalization: link `readiness_preflight_export` as canonical contents/creation class with `readiness_preflight_reports` as current path-authority/readout alias, without creating an export writer.
+- HS196/HS197 accepted readiness/preflight alias normalization: contents contract, path authority, creation policy, and writer conformance map now disclose the canonical/alias relation; no conformance-map gaps or unknown classes remain, and no readiness/preflight export writer was created.
 
 ## Accepted Boundaries
 

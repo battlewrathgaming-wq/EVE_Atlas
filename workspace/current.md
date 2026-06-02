@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS194 accepted by HS195; Atlas is at a resting decision point
+Status: HS196 accepted by HS197
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: decide the next storage/runtime hardening seam after accepting light operational log conformance refresh.
+Current focus: HS196 accepted; support artifact alias normalization can rest.
 
 Current heading:
 
@@ -23,10 +23,72 @@ Current executor: Overseer
 Expected handoff filename:
 
 ```txt
-none
+none; no active Dev runway is open
 ```
 
 No active Dev runway is open.
+
+## Resting HS196 State
+
+## Accepted HS196 Runway
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS196-readiness-preflight-alias-normalization-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS196-readiness-preflight-alias-normalization.md
+```
+
+Overseer reviewed 2026-06-02:
+
+- Accepted HS196 in `workspace/OverseerHS197-hs196-readiness-preflight-alias-review.md`.
+- Verified readiness/preflight canonical/alias disclosure across contents contract, path authority, creation policy, and writer conformance map.
+- Accepted `readiness_preflight_export` as canonical contents/creation class and `readiness_preflight_reports` as current path-authority/readout alias.
+- Confirmed no readiness/preflight export writer, support artifact creation, provider calls, schema/report changes, runtime enforcement activation, command blocking, or UI work were added.
+- No conformance-map gaps or unknown classes remain.
+
+## Historical HS196 Runway Details
+
+Task:
+
+Normalize readiness/preflight artifact class naming across read-only support artifact previews.
+
+Preferred outcome:
+
+- `readiness_preflight_export` remains the canonical contents/creation class id
+- `readiness_preflight_reports` remains an accepted path-authority alias for the current in-memory/readout posture
+- the conformance map reports alias normalization as conforming or no longer a gap
+- the path authority and/or conformance map explicitly discloses the canonical/alias relationship
+
+Preserve:
+
+- no readiness/preflight export writer creation
+- no support artifact, snapshot, trace-pack, log, file, export, package, or directory creation
+- no `app.readiness` behavior change except metadata/readout class/alias disclosure if needed
+- no runtime snapshot, trace-pack writer, or API request log persistence behavior changes
+- no provider calls
+- no schema changes
+- no report changes
+- no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or runtime enforcement mutation
+- no command blocking
+- no renderer UI work
+
+Stop if closing the gap requires a write-capable readiness/preflight export, runtime behavior changes, schema changes, provider calls, runtime enforcement, command blocking, destructive/private/live action, UI work, or making path authority override contents/creation authority.
+
+## Resting Next Options
+
+Recommended next shaping candidates:
+
+1. Rest support artifacts and continue a different storage/runtime seam.
+2. Inspect readiness/preflight local path sensitivity only if support artifact work continues.
+3. Runtime enforcement activation remains resting.
+
+Do not open Dev implementation until one of these is selected and bounded.
+
+## Resting HS194 State
 
 ## Accepted HS194 Runway
 
@@ -464,6 +526,73 @@ Do not run snapshot/trace-pack write verifiers unless changed code requires it. 
 
 ## Evidence
 
+Dev updated 2026-06-02 for HS196:
+
+- Normalized readiness/preflight support artifact class naming across read-only support artifact previews.
+- Canonical/alias model:
+  - `readiness_preflight_export` remains the canonical contents/creation class id
+  - `readiness_preflight_reports` remains the accepted path-authority alias for current in-memory/readout posture
+  - `app.readiness` remains the current read-only service command
+  - no dedicated readiness/preflight export writer exists
+- Updated `support.artifact_contents_contract.preview` so `readiness_preflight_export` exposes:
+  - `canonical_artifact_class: readiness_preflight_export`
+  - `aliases: [readiness_preflight_reports]`
+  - alias disclosure naming `readiness_preflight_reports` as the path-authority alias for in-memory/readout posture
+- Updated `support.artifact_path_authority.preview` so `readiness_preflight_reports` exposes:
+  - `canonical_artifact_class: readiness_preflight_export`
+  - `alias_role: path_authority_alias_for_current_in_memory_readout`
+  - alias disclosure stating that the alias does not create an export writer
+- Updated `support.artifact_creation_policy.preview` so `readiness_preflight_export` exposes:
+  - `path_authority.accepted_alias: readiness_preflight_reports`
+  - `alias_relationship.export_writer_exists: false`
+  - future/no current write-capable surface posture remains unchanged
+- Updated `support.artifact_writer_conformance_gap_map.preview` so:
+  - `readiness_preflight_export.alias_relationship` links canonical and alias ids
+  - `class_id_alias_normalization` moved from `gap` to `conforms`
+  - `writer_surface_exists` remains `partial`
+  - `local_path_sensitivity` remains `partial`
+- Focused conformance map sample:
+  - class count: 5
+  - check count: 25
+  - status counts: `conforms` = 22, `partial` = 3
+  - classes with gaps: none
+  - classes with unknowns: none
+- Remaining partials:
+  - readiness/preflight export writer surface is still absent/partial
+  - readiness/preflight local path sensitivity remains partial
+  - light operational log writer surface remains absent/partial
+- Verification run:
+  - `node --check src\main\services\supportArtifactContentsContractService.js` passed.
+  - `node --check src\main\services\supportArtifactPathAuthorityService.js` passed.
+  - `node --check src\main\services\supportArtifactCreationPolicyService.js` passed.
+  - `node --check src\main\services\supportArtifactWriterConformanceGapMapService.js` passed.
+  - `node --check scripts\verify-support-artifact-contents-contract.js` passed.
+  - `node --check scripts\verify-support-artifact-path-authority.js` passed.
+  - `node --check scripts\verify-support-artifact-creation-policy.js` passed.
+  - `node --check scripts\verify-support-artifact-writer-conformance-gap-map.js` passed.
+  - `npm.cmd run verify:support-artifact-writer-conformance-gap-map` passed.
+  - `npm.cmd run verify:support-artifact-path-authority` passed.
+  - `npm.cmd run verify:support-artifact-creation-policy` passed.
+  - `npm.cmd run verify:support-artifact-contents-contract` passed.
+  - `npm.cmd run verify:app-readiness` passed.
+  - `npm.cmd run verify:service-registry` passed after a rerun; the first parallel run hit a transient `.tmp\passive-side-effects\seeded-passive.sqlite-journal` `ENOENT` while `verify:passive-side-effects` was running concurrently.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:api-request-log-redaction-readiness` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output after workspace documentation updates: 225 warnings across 12 changed working-set files; no renames or protected-word JSON updates performed.
+- Boundaries preserved:
+  - no readiness/preflight export writer creation
+  - no support artifact, snapshot, trace-pack, log, file, export, package, or directory creation
+  - no `app.readiness` runtime behavior change beyond read-only metadata/alias disclosure
+  - no runtime snapshot, trace-pack writer, or API request log persistence behavior changes
+  - no provider calls
+  - no schema changes
+  - no report changes
+  - no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or runtime enforcement mutation
+  - no command blocking
+  - no renderer UI work
+
 Dev updated 2026-06-02 for HS194:
 
 - Refreshed `support.artifact_writer_conformance_gap_map.preview` for the `light_operational_logs` class after accepted HS192.
@@ -846,6 +975,21 @@ Dev updated 2026-06-02:
   - `git status --short --branch` showed branch `main...origin/main [ahead 1]` with HS178 working-tree changes.
 
 ## Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS196-readiness-preflight-alias-normalization.md
+```
+
+Status: readiness/preflight alias normalization complete; pending Overseer review.
+
+HS196 result:
+
+- `readiness_preflight_export` remains canonical across contents and creation policy.
+- `readiness_preflight_reports` is explicitly disclosed as the path-authority alias for current in-memory/readout posture.
+- The conformance map no longer reports readiness/preflight alias normalization as a gap.
+- No readiness/preflight export writer, support artifact creation, runtime behavior change, provider behavior, schema, reports, runtime enforcement, command blocking, or UI work was added.
 
 Completed:
 

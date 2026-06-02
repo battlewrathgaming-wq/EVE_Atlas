@@ -175,12 +175,22 @@ function classifyCreationRequest(spec, context) {
     budget_state: budgetState,
     path_authority: {
       path_class_id: spec.pathClassId,
+      canonical_artifact_class: spec.id,
+      accepted_alias: spec.pathClassId === spec.id ? null : spec.pathClassId,
+      alias_scope: spec.pathClassId === spec.id ? null : 'path_authority_current_in_memory_readout',
       destination_source: pathClass?.status?.source || null,
       destination_status: pathClass?.status?.status || null,
       destination_exists: pathClass?.status?.exists === true,
       counts_against_storage_budget: pathClass?.counts_against_storage_budget === true,
       current_or_candidate_path: pathClass?.current_or_candidate_path || null,
       renderer_authoritative: false
+    },
+    alias_relationship: spec.pathClassId === spec.id ? null : {
+      canonical_artifact_class: spec.id,
+      accepted_aliases: [spec.pathClassId],
+      canonical_authority: 'support artifact contents contract and creation policy',
+      alias_authority: 'support artifact path authority',
+      export_writer_exists: spec.command !== null
     },
     command_metadata: command ? {
       classification: command.classification,

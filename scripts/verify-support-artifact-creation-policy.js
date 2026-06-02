@@ -179,6 +179,9 @@ function verifyCreationClasses(preview) {
   assert(tracePack.command === 'support.debug_trace_pack', 'trace pack should map to trace-pack command');
   assert(readiness.command === null, 'readiness export should remain future/no current write surface');
   assert(readiness.reason_codes.includes('no_existing_write_capable_surface'), 'readiness export should disclose no current write-capable surface');
+  assert(readiness.path_authority.canonical_artifact_class === 'readiness_preflight_export', 'readiness creation policy should keep canonical class id');
+  assert(readiness.path_authority.accepted_alias === 'readiness_preflight_reports', 'readiness creation policy should disclose path-authority alias');
+  assert(readiness.alias_relationship.export_writer_exists === false, 'readiness alias relationship should not imply export writer exists');
   for (const entry of [rolling, retained, tracePack]) {
     assert(entry.requirements.confirmation_required === true, `${entry.id} should require confirmation`);
     assert(entry.requirements.trusted_context_required === true, `${entry.id} should require trusted context`);

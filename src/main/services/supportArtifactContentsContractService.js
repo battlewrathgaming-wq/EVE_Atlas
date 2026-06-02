@@ -160,6 +160,8 @@ const CONTRACT_CLASSES = Object.freeze([
   contentsClass({
     id: 'readiness_preflight_export',
     label: 'Readiness/preflight export',
+    aliases: ['readiness_preflight_reports'],
+    aliasDisclosure: 'Canonical contents/creation class id; readiness_preflight_reports is the current path-authority alias for in-memory/readout posture.',
     family: 'operational_support',
     allowed: [
       'readiness checks',
@@ -262,6 +264,8 @@ function buildSupportArtifactContentsContractPreview() {
 function contentsClass({
   id,
   label,
+  aliases = [],
+  aliasDisclosure = null,
   family,
   allowed,
   forbidden,
@@ -282,6 +286,9 @@ function contentsClass({
   return {
     id,
     artifact_class: id,
+    canonical_artifact_class: id,
+    aliases,
+    alias_disclosure: aliasDisclosure,
     label,
     family,
     allowed_content_categories: allowed,
