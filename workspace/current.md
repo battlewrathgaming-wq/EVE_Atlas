@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS214 advisory semantics design opened
+Status: HS216 opened
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS214 active runtime enforcement semantics design.
+Current focus: HS216 runtime enforcement active semantics fixture matrix.
 
 Current heading:
 
@@ -18,15 +18,84 @@ Current heading:
 
 ## Executor
 
-Current executor: Engineering / Security reviewer
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-workspace/EngineeringSafetyAuditHS214-runtime-enforcement-semantics-design.md
+workspace/DevHS216-runtime-enforcement-active-semantics-fixture-matrix.md
 ```
 
-No active Dev runway is open. HS214 is advisory assurance/design only.
+Active Dev runway is open.
+
+## Active HS216 Runway
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS216-runtime-enforcement-active-semantics-fixture-matrix-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS216-runtime-enforcement-active-semantics-fixture-matrix.md
+```
+
+Task:
+
+Add a pure active runtime enforcement semantics fixture matrix, preferably as a new read-only/pure service module plus verifier.
+
+Preferred outcome:
+
+- define active decision meanings for `pass`, `block`, `hold`, `conditional`, `unknown`, `stop_before_boundary`, missing facts, malformed facts, stale facts, and spoofed facts
+- define mandatory fact families by command family
+- define first-active excluded command families
+- prove `conditional` and `hold` do not dispatch
+- prove `hold` is non-failure and non-mutating
+- prove missing/malformed/spoofed mandatory facts cannot silently pass
+- prove renderer-origin authority facts are ignored/rejected
+- prove trusted supplied facts are allowed only under explicit trusted/test posture
+- prove External I/O on, dry-run `would_allow`, provider `allowed`, Watch arming, and destination/path authority are each non-authorizing alone
+- prove fixture/proof and destructive execution commands cannot active-pass in production semantics
+
+Preserve:
+
+- no active runtime enforcement
+- no command blocking
+- no insertion into `invokeServiceCommand`
+- no handler dispatch from the semantics proof
+- no task wrapping or task execution
+- no provider calls
+- no provider attempt recording
+- no service-memory cooldown/lockout mutation
+- no Watch arming/disarming/tick execution
+- no Watch mutation
+- no DB writes
+- no config writes
+- no support artifact creation
+- no snapshot or trace-pack creation
+- no storage movement or migration
+- no Hydration writes
+- no Evidence/EVEidence creation
+- no Discovery ref mutation
+- no Assessment Memory or Marked mutation
+- no schema changes
+- no renderer UI work
+- no pruning or deletion behavior
+- no terminology renames
+
+Stop if the proof requires active command blocking, runtime authorization, insertion into `invokeServiceCommand`, calling target handlers, task dispatch or task wrapping, provider calls, provider attempt recording, service-memory cooldown/lockout mutation, Watch mutation, DB writes, config writes, support artifact creation, schema changes, UI work, treating any single preview fact as authorization, or broad global enforcement semantics.
+
+## HS216 Evidence
+
+Pending Dev handoff.
+
+## HS216 Dev Handoff
+
+Pending:
+
+```txt
+workspace/DevHS216-runtime-enforcement-active-semantics-fixture-matrix.md
+```
 
 ## Active HS214 Advisory Request
 
@@ -75,15 +144,30 @@ Stop if the review requires implementation, runtime enforcement activation, comm
 
 ## HS214 Evidence
 
-Pending advisory handoff.
+Engineering/Security audit landed 2026-06-02:
+
+- `workspace/EngineeringSafetyAuditHS214-runtime-enforcement-semantics-design.md`
+
+Finding:
+
+- Do not open active command blocking yet.
+- Atlas should stage active semantics by command family.
+- `conditional` and `hold` should not dispatch in first active semantics.
+- Preview facts, dry-run `would_allow`, External I/O on, Watch arming, provider `allowed`, and destination/path authority are not authorization alone.
+- The smallest next seam is a pure active semantics fixture matrix.
 
 ## HS214 Handoff
 
-Pending:
+Completed:
 
 ```txt
 workspace/EngineeringSafetyAuditHS214-runtime-enforcement-semantics-design.md
 ```
+
+Overseer reviewed 2026-06-02:
+
+- Accepted HS214 in `workspace/OverseerHS215-hs214-runtime-enforcement-semantics-review.md`.
+- Opened HS216 as pure active semantics fixture matrix.
 
 ## Active HS212 Runway
 

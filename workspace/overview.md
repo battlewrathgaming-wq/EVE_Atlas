@@ -67,6 +67,8 @@ Current state:
 - HS212 opened
 - HS212 accepted by HS213
 - HS214 advisory semantics design opened
+- HS214 accepted by HS215
+- HS216 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -83,9 +85,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Engineering / Security reviewer
-- no active Dev runway is open
-- current work is HS214 advisory active runtime enforcement semantics design; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, SDE import/download controls, and UI work remain unopened
+- current executor is Dev
+- active Dev runway is HS216 runtime enforcement active semantics fixture matrix
+- current work is pure active-semantics proof before any active runtime enforcement packet; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, SDE import/download controls, and UI work remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
 Current heading:
@@ -97,8 +99,8 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Complete HS214 advisory active runtime enforcement semantics design.
-2. If HS214 recommends a narrower proof, shape that before active command blocking.
+1. Complete HS216 runtime enforcement active semantics fixture matrix.
+2. Review whether the pure semantics matrix is enough to support a later non-blocking active-semantics preview.
 3. Keep runtime enforcement activation and command blocking parked until active semantics, mandatory facts, and trusted fact authority are explicitly accepted.
 
 See `workspace/current.md` for current truth.
@@ -200,6 +202,8 @@ Keep these as the near-memory breadcrumb trail:
 - HS212 opened runtime hook Watch/task runtime fact preview: source compact read-only `watch_runtime` posture for Watch/background commands while preserving inactive, non-authorizing hook behavior.
 - HS212/HS213 accepted runtime hook Watch/task runtime fact preview: inactive hook previews now source Watch/task runtime posture for direct Watch and Watch executor commands, preserve supplied facts, ignore renderer runtime claims, avoid Watch status mutation, and keep active enforcement unopened.
 - HS214 opened runtime enforcement semantics design: define active decision meanings, mandatory facts, command-family staging, trusted fact supply, and parked items before any command blocking implementation.
+- HS214/HS215 accepted runtime enforcement semantics design: do not open active command blocking; stage by command family; prove active semantics in a pure fixture matrix first.
+- HS216 opened runtime enforcement active semantics fixture matrix: define and verify active decision meanings, mandatory facts, excluded command families, trusted fact supply treatment, and non-authorizing inputs without inserting active enforcement.
 
 ## Accepted Boundaries
 
