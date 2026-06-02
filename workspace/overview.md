@@ -66,6 +66,7 @@ Current state:
 - HS210 accepted by HS211
 - HS212 opened
 - HS212 accepted by HS213
+- HS214 advisory semantics design opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -82,9 +83,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer
+- current executor is Engineering / Security reviewer
 - no active Dev runway is open
-- current work is resting HS212 after inactive Watch/task runtime fact sourcing acceptance; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, SDE import/download controls, and UI work remain unopened
+- current work is HS214 advisory active runtime enforcement semantics design; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, SDE import/download controls, and UI work remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
 Current heading:
@@ -96,9 +97,9 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Rest runtime hook fact sourcing and continue a different storage/runtime seam.
-2. Request/adopt advisory active enforcement semantics design before any active command blocking packet.
-3. Shape trusted supplied-fact doctrine only if active enforcement design continues.
+1. Complete HS214 advisory active runtime enforcement semantics design.
+2. If HS214 recommends a narrower proof, shape that before active command blocking.
+3. Keep runtime enforcement activation and command blocking parked until active semantics, mandatory facts, and trusted fact authority are explicitly accepted.
 
 See `workspace/current.md` for current truth.
 
@@ -198,6 +199,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS210/HS211 accepted engineering/security readiness review: Atlas is ready for later active-enforcement design discussion but not active blocking; Watch/task runtime posture is the main missing fact before active enforcement.
 - HS212 opened runtime hook Watch/task runtime fact preview: source compact read-only `watch_runtime` posture for Watch/background commands while preserving inactive, non-authorizing hook behavior.
 - HS212/HS213 accepted runtime hook Watch/task runtime fact preview: inactive hook previews now source Watch/task runtime posture for direct Watch and Watch executor commands, preserve supplied facts, ignore renderer runtime claims, avoid Watch status mutation, and keep active enforcement unopened.
+- HS214 opened runtime enforcement semantics design: define active decision meanings, mandatory facts, command-family staging, trusted fact supply, and parked items before any command blocking implementation.
 
 ## Accepted Boundaries
 

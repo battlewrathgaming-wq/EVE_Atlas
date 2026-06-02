@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS212 accepted by HS213
+Status: HS214 advisory semantics design opened
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS212 accepted; inactive runtime hook Watch/task runtime fact sourcing can rest as read-only proof.
+Current focus: HS214 active runtime enforcement semantics design.
 
 Current heading:
 
@@ -18,15 +18,72 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Engineering / Security reviewer
 
 Expected handoff filename:
 
 ```txt
-none; no active Dev runway is open
+workspace/EngineeringSafetyAuditHS214-runtime-enforcement-semantics-design.md
 ```
 
-No active Dev runway is open.
+No active Dev runway is open. HS214 is advisory assurance/design only.
+
+## Active HS214 Advisory Request
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS214-runtime-enforcement-semantics-design-request.md`
+
+Expected advisory handoff:
+
+```txt
+workspace/EngineeringSafetyAuditHS214-runtime-enforcement-semantics-design.md
+```
+
+Task:
+
+Define the active runtime enforcement semantics Atlas would need before any command blocking implementation is opened.
+
+This is design/assurance only. Do not implement code.
+
+Review focus:
+
+- what `pass`, `block`, `conditional`, `hold`, `stop_before_boundary`, `unknown`, and missing-fact states would mean if active enforcement existed
+- which fact classes must be mandatory for active enforcement by command family
+- which commands should be excluded from first active enforcement
+- whether `conditional` and `hold` block, defer, return structured held posture, or pass to existing handler gates
+- how active enforcement should handle missing, malformed, stale, spoofed, renderer-origin, or explicitly supplied facts
+- who may supply authority-bearing facts in future active mode
+- what remains outside runtime hook responsibility
+- the smallest possible next packet, if any
+
+Preserve:
+
+- no code changes
+- no runtime enforcement activation
+- no command blocking
+- no provider calls
+- no provider attempt recording
+- no config writes
+- no schema changes
+- no support artifact creation
+- no storage movement
+- no renderer UI work
+- no terminology renames
+
+Stop if the review requires implementation, runtime enforcement activation, command blocking, provider calls, provider attempt recording, config writes, schema changes, support artifact creation, storage movement, UI work, or terminology renames.
+
+## HS214 Evidence
+
+Pending advisory handoff.
+
+## HS214 Handoff
+
+Pending:
+
+```txt
+workspace/EngineeringSafetyAuditHS214-runtime-enforcement-semantics-design.md
+```
 
 ## Active HS212 Runway
 
