@@ -30,6 +30,8 @@ async function main() {
         missing_fact_classes: capturedReadout.entries[0].missing_fact_classes,
         coverage_status: capturedReadout.entries[0].coverage_status,
         broad_fact_classes_absent: capturedReadout.entries[0].broad_fact_classes_absent,
+        sourced_broad_fact_classes: capturedReadout.entries[0].sourced_broad_fact_classes,
+        broad_fact_class_statuses: capturedReadout.entries[0].broad_fact_class_statuses,
         active_runtime_enforcement: capturedReadout.entries[0].active_runtime_enforcement,
         active_enforcement_false: capturedReadout.entries[0].active_enforcement_false,
         preview_only: capturedReadout.entries[0].preview_only,
@@ -47,7 +49,8 @@ async function main() {
         empty_preview_input_supported: true,
         missing_fact_classes_are_reported_not_failures: true,
         coverage_present_and_missing_reported: true,
-        broad_fact_classes_sourced: false,
+        broad_fact_classes_sourced: true,
+        unsourced_broad_fact_classes_reported: true,
         telemetry_persisted: false,
         support_artifacts_created: false,
         active_runtime_enforcement: false,
@@ -96,11 +99,20 @@ async function verifyCapturedPreviewReadout(db) {
   assert(entry.command === 'scope.defaults', 'captured readout should include command');
   assert(entry.evaluator_decision === 'conditional', 'captured readout should include evaluator decision');
   assert(entry.missing_fact_classes.includes('composed_gate_policy'), 'missing composed fact should be reported');
-  assert(entry.missing_fact_classes.includes('storage_authority'), 'missing storage authority should be reported');
-  assert(entry.missing_fact_classes.includes('storage_budget'), 'missing storage budget should be reported');
+  assert(!entry.missing_fact_classes.includes('storage_authority'), 'sourced storage authority should no longer be reported missing');
+  assert(!entry.missing_fact_classes.includes('storage_budget'), 'sourced storage budget should no longer be reported missing');
   assert(entry.coverage_present === true, 'coverage should be present for covered command');
   assert(entry.coverage_status === 'present_from_hook_or_supplied_fact', 'coverage status should report present coverage');
-  assert(entry.broad_fact_classes_absent === true, 'broad fact classes should remain absent');
+  assert(entry.broad_fact_classes_absent === false, 'broad fact classes should be visible when sourced');
+  assert(entry.sourced_broad_fact_classes.includes('storage_authority'), 'storage authority should be listed as sourced');
+  assert(entry.sourced_broad_fact_classes.includes('budget'), 'storage budget should be listed as sourced');
+  assert(entry.sourced_broad_fact_classes.includes('external_io'), 'External I/O should be listed as sourced');
+  assert(entry.broad_fact_class_statuses.storage_authority.status === 'sourced', 'storage authority status should be sourced');
+  assert(entry.broad_fact_class_statuses.budget.status === 'sourced', 'budget status should be sourced');
+  assert(entry.broad_fact_class_statuses.external_io.status === 'sourced', 'External I/O status should be sourced');
+  assert(entry.broad_fact_class_statuses.provider_live_gate.status === 'not_sourced', 'provider live gate should remain explicitly unsourced');
+  assert(readout.sourced_broad_fact_classes.includes('storage_authority'), 'readout should summarize sourced storage authority');
+  assert(readout.unsourced_broad_fact_classes.includes('provider_live_gate'), 'readout should report still-unsourced provider live gate');
   assert(entry.active_runtime_enforcement === false, 'preview should report runtime enforcement inactive');
   assert(entry.active_enforcement_false === true, 'preview should prove active enforcement flags are false');
   assert(entry.preview_only === true, 'preview should remain preview-only');

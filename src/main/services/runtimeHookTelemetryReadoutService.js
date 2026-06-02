@@ -10,6 +10,8 @@ function buildRuntimeHookTelemetryReadout(input = {}) {
   const previews = normalizePreviews(input);
   const entries = previews.map((preview, index) => summarizePreview(preview, index));
   const missingFactClasses = [...new Set(entries.flatMap((entry) => entry.missing_fact_classes))];
+  const sourcedBroadFactClasses = [...new Set(entries.flatMap((entry) => entry.sourced_broad_fact_classes))];
+  const unsourcedBroadFactClasses = BROAD_FACT_CLASSES.filter((key) => !sourcedBroadFactClasses.includes(key));
 
   return {
     action: 'runtime.enforcement_hook_telemetry.readout',
@@ -30,6 +32,8 @@ function buildRuntimeHookTelemetryReadout(input = {}) {
     missing_fact_classes: missingFactClasses,
     coverage: coverageSummary(entries),
     broad_fact_classes_absent: entries.every((entry) => entry.broad_fact_classes_absent === true),
+    sourced_broad_fact_classes: sourcedBroadFactClasses,
+    unsourced_broad_fact_classes: unsourcedBroadFactClasses,
     entries,
     authority_notes: {
       dry_run_would_allow_is_authorization: false,
@@ -75,6 +79,8 @@ function summarizePreview(preview, index) {
     coverage_present: !coverageMissing,
     coverage_status: coverageMissing ? 'missing_or_null' : 'present_from_hook_or_supplied_fact',
     broad_fact_classes_absent: broadFactClassesAbsent(gateInputs),
+    sourced_broad_fact_classes: sourcedBroadFactClasses(gateInputs),
+    broad_fact_class_statuses: broadFactClassStatuses(gateInputs),
     broad_fact_class_inputs: broadFactClassInputs(gateInputs),
     active_runtime_enforcement: false,
     active_enforcement_false: preview.active === false && evaluatorDecision.active === false,
@@ -104,6 +110,29 @@ function broadFactClassesAbsent(gateInputs = {}) {
 
 function broadFactClassInputs(gateInputs = {}) {
   return Object.fromEntries(BROAD_FACT_CLASSES.map((key) => [key, gateInputs[key] || null]));
+}
+
+function sourcedBroadFactClasses(gateInputs = {}) {
+  return BROAD_FACT_CLASSES.filter((key) => gateInputs[key] != null);
+}
+
+function broadFactClassStatuses(gateInputs = {}) {
+  return Object.fromEntries(BROAD_FACT_CLASSES.map((key) => {
+    const input = gateInputs[key] || null;
+    if (!input) {
+      return [key, {
+        status: 'not_sourced',
+        source_status: 'not_sourced',
+        fact_source: null
+      }];
+    }
+    return [key, {
+      status: 'sourced',
+      source_status: input.source_status || 'sourced_status_unspecified',
+      fact_source: input.fact_source || 'supplied_runtime_fact',
+      non_authorizing_preview: input.non_authorizing_preview !== false
+    }];
+  }));
 }
 
 function isObject(value) {

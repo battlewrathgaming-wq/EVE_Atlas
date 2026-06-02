@@ -15,6 +15,7 @@ async function main() {
     await verifyCoverageSourcedWithoutContextFacts(db);
     await verifyContextSuppliedFactsPreserved(db);
     await verifySuppliedCoverageNotOverwritten(db);
+    await verifyProviderCapableCommandUsesSourcedExternalIo(db);
     await verifyHookStopsAfterEligibilityAndConfirmation(db);
     await verifyHookBeforeTaskWrapping(db);
     await verifyTrustedInternalBypass(db);
@@ -30,7 +31,11 @@ async function main() {
         command_coverage_sourced: true,
         supplied_facts_preserved: true,
         supplied_coverage_not_overwritten: true,
-        broad_fact_sourcing: false,
+        broad_fact_sourcing: true,
+        storage_authority_sourced: true,
+        storage_budget_sourced: true,
+        external_io_sourced: true,
+        provider_capable_external_io_sourced_without_authorizing: true,
         renderer_ineligible_stops_before_hook: true,
         missing_confirmation_stops_before_hook: true,
         hook_runs_before_task_wrapping: true,
@@ -86,12 +91,19 @@ async function verifyCoverageSourcedWithoutContextFacts(db) {
     ? observed[0].evaluator_decision.gate_inputs_used.trusted_context
     : null;
   assert(observed[0].missing_fact_classes.includes('composed_gate_policy'), 'missing composed fact should remain visible');
-  assert(observed[0].missing_fact_classes.includes('storage_authority'), 'storage authority should not be sourced');
-  assert(observed[0].missing_fact_classes.includes('storage_budget'), 'storage budget should not be sourced');
+  assert(!observed[0].missing_fact_classes.includes('storage_authority'), 'storage authority should be sourced');
+  assert(!observed[0].missing_fact_classes.includes('storage_budget'), 'storage budget should be sourced');
   assert(!observed[0].missing_fact_classes.includes('classification_coverage'), 'known covered command should have coverage sourced');
-  assert(observed[0].evaluator_decision.gate_inputs_used.storage_authority === null, 'storage authority facts must not be sourced');
-  assert(observed[0].evaluator_decision.gate_inputs_used.budget === null, 'storage budget facts must not be sourced');
-  assert(observed[0].evaluator_decision.gate_inputs_used.external_io === null, 'External I/O facts must not be sourced');
+  const storageAuthority = observed[0].evaluator_decision.gate_inputs_used.storage_authority;
+  const budget = observed[0].evaluator_decision.gate_inputs_used.budget;
+  const externalIo = observed[0].evaluator_decision.gate_inputs_used.external_io;
+  assert(storageAuthority?.fact_source === 'runtime_hook_read_only_storage_authority_readback', 'storage authority facts should be sourced from readback');
+  assert(['sourced_configured', 'sourced_absent_unconfigured', 'sourced_missing', 'sourced_unparseable', 'sourced_invalid_schema'].includes(storageAuthority.source_status), 'storage authority source status should distinguish configured/absent/problem posture');
+  assert(budget?.fact_source === 'runtime_hook_read_only_storage_setup_gate_readout', 'storage budget facts should be sourced from setup gate readout');
+  assert(budget.source_status === 'sourced_configured' || budget.source_status === 'sourced_absent_unconfigured', 'budget source status should distinguish configured from absent');
+  assert(externalIo?.fact_source === 'runtime_hook_read_only_external_io_config_readback', 'External I/O facts should be sourced from readback');
+  assert(externalIo.source_status.startsWith('sourced_'), 'External I/O source status should be explicit');
+  assert(externalIo.on_is_authorization === false, 'External I/O sourced fact should remain non-authorizing');
   assert(trustedContext?.renderer_allowed === true, 'trusted context posture should still reflect command metadata');
 }
 
@@ -110,6 +122,8 @@ async function verifyContextSuppliedFactsPreserved(db) {
   assert(!observed[0].missing_fact_classes.includes('classification_coverage'), 'supplied covered facts should remain covered');
   assert(observed[0].evaluator_decision.gate_inputs_used.composed_policy.state === 'pass', 'supplied composed fact should be preserved');
   assert(observed[0].evaluator_decision.gate_inputs_used.storage_authority.gate_state === 'configured_storage_ready', 'supplied storage fact should be preserved when supplied');
+  assert(observed[0].evaluator_decision.gate_inputs_used.budget.state === 'within_budget', 'supplied budget fact should be preserved when supplied');
+  assert(observed[0].evaluator_decision.gate_inputs_used.external_io.gate_state === 'local_only_available', 'supplied External I/O fact should be preserved when supplied');
 }
 
 async function verifySuppliedCoverageNotOverwritten(db) {
@@ -134,6 +148,32 @@ async function verifySuppliedCoverageNotOverwritten(db) {
   });
   assert(Object.prototype.hasOwnProperty.call(facts, 'coverage'), 'coverage key should remain supplied');
   assert(facts.coverage === null, 'supplied coverage should remain null');
+  assert(facts.storage_authority?.fact_source === 'runtime_hook_read_only_storage_authority_readback', 'broad facts should still be sourced when coverage is intentionally null');
+}
+
+async function verifyProviderCapableCommandUsesSourcedExternalIo(db) {
+  const observed = [];
+  await assertRejects(
+    () => invokeServiceCommand('manual.discovery', {
+      scope: 'actor',
+      entityType: 'character',
+      entityId: 90000002,
+      confirmation: CONFIRMATION.MANUAL_DISCOVERY
+    }, {
+      db,
+      source: 'renderer',
+      runtimeEnforcementPreviewObserver: (preview) => observed.push(preview)
+    }),
+    'LIVE_API_DISABLED',
+    'confirmed renderer provider-capable command should preserve existing live/API gate behavior after hook'
+  );
+  assert(observed.length === 1, 'confirmed provider-capable command should reach inactive hook');
+  const externalIo = observed[0].evaluator_decision.gate_inputs_used.external_io;
+  assert(externalIo?.external_io_dependency === 'zkill_provider_required', 'provider-capable command should carry External I/O dependency separately');
+  assert(externalIo.gate_state === 'held_by_external_io', 'missing/off External I/O config should hold provider-backed posture');
+  assert(externalIo.on_is_authorization === false, 'External I/O on/off posture should not authorize command execution');
+  assert(observed[0].missing_fact_classes.includes('provider_live_gate'), 'provider live gate should remain unsourced by runtime hook');
+  assert(observed[0].proof.providers_called === false, 'hook itself should not call providers for provider-capable commands');
 }
 
 async function verifyHookStopsAfterEligibilityAndConfirmation(db) {

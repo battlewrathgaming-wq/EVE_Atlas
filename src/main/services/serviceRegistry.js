@@ -848,7 +848,7 @@ function emitInactiveRuntimeEnforcementPreview(command, definition, payload = {}
       authority: authorityMetadata(definition.authority),
       description: definition.description
     },
-    facts: runtimeEnforcementFactsFor(command, context)
+    facts: runtimeEnforcementFactsFor(command, context, payload)
   });
   const observer = context.runtimeEnforcementPreviewObserver || context.runtime_enforcement_preview_observer;
   if (typeof observer !== 'function') {
@@ -862,16 +862,15 @@ function emitInactiveRuntimeEnforcementPreview(command, definition, payload = {}
   return preview;
 }
 
-function runtimeEnforcementFactsFor(command, context = {}) {
+function runtimeEnforcementFactsFor(command, context = {}, payload = {}) {
   const facts = context.runtimeEnforcementFacts || context.runtime_enforcement_facts || {};
-  const coverage = coverageFactForCommand(command);
   if (!facts || typeof facts !== 'object' || Array.isArray(facts)) {
-    return coverage ? { coverage } : {};
+    return mergeSourcedRuntimeGateFacts(command, mergeCoverageFact(command, {}), context, payload);
   }
   if (facts[command] && typeof facts[command] === 'object' && !Array.isArray(facts[command])) {
-    return mergeCoverageFact(command, facts[command]);
+    return mergeSourcedRuntimeGateFacts(command, mergeCoverageFact(command, facts[command]), context, payload);
   }
-  return mergeCoverageFact(command, facts);
+  return mergeSourcedRuntimeGateFacts(command, mergeCoverageFact(command, facts), context, payload);
 }
 
 function mergeCoverageFact(command, facts = {}) {
@@ -896,6 +895,186 @@ function coverageFactForCommand(command) {
     classified: true,
     missing_classification: false
   } : null;
+}
+
+function mergeSourcedRuntimeGateFacts(command, facts = {}, context = {}, payload = {}) {
+  const safeFacts = facts && typeof facts === 'object' && !Array.isArray(facts) ? facts : {};
+  const coverage = safeFacts.coverage || coverageFactForCommand(command);
+  const sourced = sourceReadOnlyRuntimeGateFacts({ command, coverage, context, payload });
+  const merged = { ...safeFacts };
+  for (const [key, value] of Object.entries(sourced)) {
+    if (!Object.prototype.hasOwnProperty.call(merged, key)) {
+      merged[key] = value;
+    }
+  }
+  return merged;
+}
+
+function sourceReadOnlyRuntimeGateFacts({ command, coverage = null, context = {}, payload = {} }) {
+  const sourced = {};
+  const setupReadout = safeReadOnlyStorageSetupGateReadout(context);
+  const storageReadback = safeReadOnlyStorageAuthorityConfigReadback(context);
+  const externalIoReadback = safeReadOnlyExternalIoConfigReadback(context);
+
+  if (setupReadout) {
+    sourced.storage_authority = storageAuthorityFactFor(setupReadout, storageReadback);
+    sourced.budget = storageBudgetFactFor(setupReadout);
+  }
+  if (externalIoReadback) {
+    sourced.external_io = externalIoFactFor({ command, coverage, externalIoReadback });
+  }
+  return sourced;
+}
+
+function safeReadOnlyStorageSetupGateReadout(context = {}) {
+  try {
+    return buildStorageSetupGateReadout({}, context);
+  } catch (error) {
+    return {
+      storage_authority: {
+        mode: 'not_sourced',
+        validation_status: 'readout_unavailable',
+        read_allowed: false,
+        write_allowed_if_enforced_later: false,
+        provider_movement_allowed_if_enforced_later: false
+      },
+      storage: {
+        state: 'storage_fact_readout_unavailable',
+        setup_gate: 'readout_unavailable'
+      },
+      budget: {
+        state: 'budget_fact_readout_unavailable',
+        budget_bytes: null,
+        usage_bytes: null,
+        blocks_writes: false
+      },
+      action_class_matrix: {
+        storage_state: 'storage_fact_readout_unavailable'
+      },
+      runtime_fact_read_error: error.message
+    };
+  }
+}
+
+function safeReadOnlyStorageAuthorityConfigReadback(context = {}) {
+  try {
+    return buildStorageAuthorityConfigReadback({}, context);
+  } catch (error) {
+    return {
+      persisted_config: {
+        status: 'readout_unavailable',
+        source: 'runtime_hook_read_error',
+        read_error: error.message
+      },
+      readback_posture: null
+    };
+  }
+}
+
+function safeReadOnlyExternalIoConfigReadback(context = {}) {
+  try {
+    return buildExternalIoStateConfigReadback({}, context);
+  } catch (error) {
+    return {
+      state: 'off',
+      state_source: 'runtime_hook_read_error_default_safe_off',
+      persisted_state: {
+        status: 'readout_unavailable',
+        read_error: error.message
+      },
+      provider_backed_posture: 'held_by_external_io',
+      held_is_failure: false,
+      on_is_authorization: false,
+      reenable_catch_up_policy: {
+        catch_up_flood: false,
+        immediate_dispatch: false
+      }
+    };
+  }
+}
+
+function storageAuthorityFactFor(setupReadout = {}, storageReadback = {}) {
+  const authority = setupReadout.storage_authority || {};
+  const storage = setupReadout.storage || {};
+  const persistedStatus = storageReadback.persisted_config?.status || authority.config_read_status || 'not_sourced';
+  const sourceStatus = persistedStatus === 'read'
+    ? 'sourced_configured'
+    : persistedStatus === 'missing'
+      ? 'sourced_absent_unconfigured'
+      : `sourced_${persistedStatus}`;
+  return {
+    fact_class: 'storage_authority',
+    fact_source: 'runtime_hook_read_only_storage_authority_readback',
+    source_status: sourceStatus,
+    config_read_status: persistedStatus,
+    config_source: authority.config_source || storageReadback.persisted_config?.source || null,
+    mode: authority.mode || null,
+    selected: authority.selected === true,
+    fallback_available: authority.fallback_available === true,
+    fallback_acknowledged: authority.fallback_acknowledged === true,
+    acknowledgement_status: authority.acknowledgement_status || null,
+    acknowledgement_basis: authority.acknowledgement_basis || null,
+    acknowledgement_invalid_reason: authority.acknowledgement_invalid_reason || null,
+    validation_status: authority.validation_status || null,
+    gate_state: setupReadout.action_class_matrix?.storage_state || storage.state || null,
+    storage_state: storage.state || null,
+    setup_gate: storage.setup_gate || null,
+    read_allowed: authority.read_allowed === true,
+    write_allowed_if_enforced_later: authority.write_allowed_if_enforced_later === true,
+    provider_movement_allowed_if_enforced_later: authority.provider_movement_allowed_if_enforced_later === true,
+    non_authorizing_preview: true
+  };
+}
+
+function storageBudgetFactFor(setupReadout = {}) {
+  const budget = setupReadout.budget || {};
+  const configured = Number.isFinite(Number(budget.budget_bytes)) && Number(budget.budget_bytes) > 0;
+  return {
+    fact_class: 'storage_budget',
+    fact_source: 'runtime_hook_read_only_storage_setup_gate_readout',
+    source_status: configured ? 'sourced_configured' : 'sourced_absent_unconfigured',
+    state: budget.state || null,
+    budget_bytes: configured ? Number(budget.budget_bytes) : null,
+    usage_bytes: Number.isFinite(Number(budget.usage_bytes)) ? Number(budget.usage_bytes) : null,
+    usage_ratio: Number.isFinite(Number(budget.usage_ratio)) ? Number(budget.usage_ratio) : null,
+    warning_level: budget.warning_level || null,
+    blocks_writes: budget.blocks_writes === true,
+    suggested_default_budget_bytes: budget.suggested_default_budget_bytes || null,
+    suggested_default_is_acceptance: budget.suggested_default_is_acceptance === true,
+    non_authorizing_preview: true
+  };
+}
+
+function externalIoFactFor({ command, coverage = null, externalIoReadback = {} }) {
+  const dependency = coverage?.external_io_dependency || 'none';
+  const providerCapable = dependency && dependency !== 'none';
+  const persistedStatus = externalIoReadback.persisted_state?.status || 'not_sourced';
+  const state = externalIoReadback.state || 'off';
+  return {
+    fact_class: 'external_io',
+    fact_source: 'runtime_hook_read_only_external_io_config_readback',
+    source_status: persistedStatus === 'read' ? 'sourced_configured' : `sourced_${persistedStatus}`,
+    command,
+    dependency,
+    external_io_dependency: dependency,
+    state,
+    requested_state: externalIoReadback.requested_readout_state || state,
+    state_source: externalIoReadback.state_source || null,
+    persisted_status: persistedStatus,
+    gate_state: providerCapable ? externalIoReadback.provider_backed_posture : 'local_only_available',
+    provider_backed_posture: providerCapable
+      ? externalIoReadback.provider_backed_posture
+      : 'local_only_available',
+    held_is_failure: externalIoReadback.held_is_failure === true,
+    on_is_authorization: externalIoReadback.on_is_authorization === true,
+    reenable_catch_up_policy: {
+      catch_up_flood: externalIoReadback.reenable_catch_up_policy?.catch_up_flood === true,
+      immediate_dispatch: externalIoReadback.reenable_catch_up_policy?.immediate_dispatch === true,
+      missed_slots_create_request_debt: externalIoReadback.reenable_catch_up_policy?.missed_slots_create_request_debt === true,
+      next_step: externalIoReadback.reenable_catch_up_policy?.next_step || 're_enter_normal_gates'
+    },
+    non_authorizing_preview: true
+  };
 }
 
 module.exports = {

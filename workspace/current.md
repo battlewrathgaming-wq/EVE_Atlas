@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS202 runtime hook real gate fact preview runway open
+Status: HS202 accepted by HS203
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: inactive runtime hook can see real read-only storage and External I/O gate facts without activating command blocking.
+Current focus: HS202 accepted; inactive runtime hook fact sourcing can rest as read-only proof.
 
 Current heading:
 
@@ -18,17 +18,19 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS202-runtime-hook-real-gate-fact-preview.md
+none; no active Dev runway is open
 ```
 
-Active Dev runway is HS202.
+No active Dev runway is open.
 
-## Active HS202 Runway
+## Resting HS202 State
+
+## Accepted HS202 Runway
 
 Opened 2026-06-02:
 
@@ -72,6 +74,112 @@ Preserve:
 - no pruning or deletion behavior
 
 Stop if the proof requires active command blocking, composed runtime authorization, calling target handlers from the hook, config writes, provider calls, schema changes, support artifact creation, SDE import/download, storage movement/migration, UI work, treating External I/O on as authorization, treating sourced facts as Dev/run authorization, or hiding missing fact classes.
+
+Overseer reviewed 2026-06-02:
+
+- Accepted HS202 in `workspace/OverseerHS203-hs202-runtime-hook-gate-fact-review.md`.
+- Verified inactive runtime hook previews can source storage authority, storage budget, and External I/O posture from existing read-only local posture.
+- Confirmed supplied runtime facts are preserved and not overwritten.
+- Confirmed composed policy, provider live gate, destination path authority, and Watch/task runtime facts remain unsourced unless supplied.
+- Confirmed no active runtime enforcement, command blocking, provider calls, config writes, schema changes, support artifacts, Evidence/EVEidence, Discovery, Watch, Assessment Memory, Marked, pruning/deletion, SDE import/download, storage movement, or UI work were added.
+
+## HS202 Evidence
+
+Dev updated 2026-06-02:
+
+- Added read-only broad gate fact sourcing to the inactive runtime enforcement hook in `src/main/services/serviceRegistry.js`.
+- The hook now sources absent runtime facts from existing accepted local readback surfaces:
+  - `storage_authority` from storage authority config/setup readback posture
+  - `budget` from `storage.setup_gate_readout`
+  - `external_io` from External I/O config readback posture
+- Explicit supplied `runtimeEnforcementFacts` remain preserved and are not overwritten when a fact key is present.
+- Missing config/budget posture remains explicit and non-failing:
+  - storage authority sample source status: `sourced_absent_unconfigured`
+  - budget sample source status: `sourced_absent_unconfigured`
+  - External I/O sample source status: `sourced_missing`
+- Runtime hook telemetry now reports:
+  - `sourced_broad_fact_classes`
+  - `unsourced_broad_fact_classes`
+  - per-class `broad_fact_class_statuses`
+- Still-unsourced classes remain visible, including `provider_live_gate`, `destination_path_authority`, and `composed_gate_policy`.
+- Provider-capable proof verifies `manual.discovery` receives sourced External I/O held posture while existing live/API gate behavior still owns the actual stop.
+- Focused hook verifier sample:
+  - broad fact sourcing: true
+  - storage authority sourced: true
+  - storage budget sourced: true
+  - External I/O sourced: true
+  - provider-capable External I/O sourced without authorizing: true
+  - active runtime enforcement: false
+  - command blocking: false
+  - providers called by hook: false
+  - config writers called by hook: false
+- Runtime hook telemetry sample:
+  - missing fact classes: `composed_gate_policy`
+  - sourced broad fact classes: `storage_authority`, `budget`, `external_io`
+  - unsourced broad fact classes include `provider_live_gate` and `destination_path_authority`
+- Verification run:
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\runtimeEnforcementDryAdapter.js` passed.
+  - `node --check src\main\services\runtimeHookTelemetryReadoutService.js` passed.
+  - `node --check scripts\verify-runtime-enforcement-hook.js` passed.
+  - `node --check scripts\verify-runtime-hook-telemetry.js` passed.
+  - `npm.cmd run verify:runtime-enforcement-hook` passed.
+  - `npm.cmd run verify:runtime-hook-telemetry` passed.
+  - `npm.cmd run verify:storage-authority-config-write` passed.
+  - `npm.cmd run verify:external-io-state` passed.
+  - `npm.cmd run verify:gate-stack-readout` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 245 warnings across 6 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main` with HS202 working-tree changes.
+- Boundaries preserved:
+  - no active runtime enforcement
+  - no command blocking
+  - no handler dispatch from the hook
+  - no provider calls
+  - no SDE download/import
+  - no Hydration writes
+  - no Evidence/EVEidence creation
+  - no Discovery ref mutation
+  - no Watch, Assessment Memory, or Marked mutation
+  - no schema changes
+  - no support artifact creation
+  - no config writes
+  - no storage movement or migration
+  - no renderer UI work
+  - no pruning or deletion behavior
+
+## HS202 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS202-runtime-hook-real-gate-fact-preview.md
+```
+
+Status: runtime hook real gate fact preview complete and accepted by Overseer.
+
+HS202 result:
+
+- The inactive runtime hook now previews real read-only storage authority, storage budget, and External I/O posture when those facts are not explicitly supplied.
+- Supplied runtime facts remain authoritative diagnostic input and are not overwritten.
+- Missing config/budget state remains explicit posture, not command failure.
+- Telemetry shows sourced broad fact classes and still-unsourced fact classes clearly.
+- Runtime enforcement remains inactive and non-authorizing.
+
+## Resting Next Options
+
+Recommended next shaping candidates:
+
+1. Rest runtime hook fact sourcing and continue a different storage/runtime seam.
+2. Shape a read-only provider/live gate fact preview if runtime hook proof continues.
+3. Shape a read-only composed policy fact preview if runtime hook proof continues.
+4. Request a security/engineering readiness audit before any active runtime enforcement packet.
+
+Do not open Dev implementation until one of these is selected and bounded.
 
 ## Resting HS200 State
 
