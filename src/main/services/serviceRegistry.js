@@ -55,6 +55,7 @@ const { buildSupportArtifactCreationPolicyPreview } = require('./supportArtifact
 const { buildSupportArtifactContentsContractPreview } = require('./supportArtifactContentsContractService');
 const { buildSupportArtifactWriterConformanceGapMapPreview } = require('./supportArtifactWriterConformanceGapMapService');
 const { buildTraceLogRedactionPolicyPreview } = require('./traceLogRedactionPolicyService');
+const { buildApiRequestLogRedactionReadinessPreview } = require('./apiRequestLogRedactionReadinessService');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
 const {
   buildStorageAuthorityConfigReadback,
@@ -506,6 +507,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview trace/log redaction and free-text truncation policy without changing writers or creating artifacts',
     handler: () => buildTraceLogRedactionPolicyPreview()
+  },
+  'support.api_request_log_redaction_readiness.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview persisted API request log endpoint/error redaction readiness without changing log writes',
+    handler: () => buildApiRequestLogRedactionReadinessPreview()
   },
   'runtime.enforcement_boundary.preview': {
     classification: 'read-only',

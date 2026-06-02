@@ -65,6 +65,8 @@ async function main() {
     assert(commands.get('support.artifact_writer_conformance_gap_map.preview')?.effects.includes('read-only'), 'support artifact writer gap map should declare read-only effect');
     assert(commands.get('support.trace_log_redaction_policy.preview')?.classification === 'read-only', 'trace/log redaction policy should be read-only');
     assert(commands.get('support.trace_log_redaction_policy.preview')?.effects.includes('read-only'), 'trace/log redaction policy should declare read-only effect');
+    assert(commands.get('support.api_request_log_redaction_readiness.preview')?.classification === 'read-only', 'API request log redaction readiness should be read-only');
+    assert(commands.get('support.api_request_log_redaction_readiness.preview')?.effects.includes('read-only'), 'API request log redaction readiness should declare read-only effect');
     assert(commands.get('runtime.enforcement_boundary.preview')?.classification === 'read-only', 'runtime enforcement boundary preview should be read-only');
     assert(commands.get('runtime.enforcement_boundary.preview')?.effects.includes('read-only'), 'runtime enforcement boundary preview should declare read-only effect');
     assert(commands.get('runtime.enforcement_hook_telemetry.readout')?.classification === 'read-only', 'runtime hook telemetry readout should be read-only');
@@ -99,6 +101,7 @@ async function main() {
     assert(rendererNames.has('support.artifact_contents_contract.preview'), 'support artifact contents contract should be renderer eligible as read-only');
     assert(rendererNames.has('support.artifact_writer_conformance_gap_map.preview'), 'support artifact writer gap map should be renderer eligible as read-only');
     assert(rendererNames.has('support.trace_log_redaction_policy.preview'), 'trace/log redaction policy should be renderer eligible as read-only');
+    assert(rendererNames.has('support.api_request_log_redaction_readiness.preview'), 'API request log redaction readiness should be renderer eligible as read-only');
     assert(rendererNames.has('runtime.enforcement_boundary.preview'), 'runtime enforcement boundary preview should be renderer eligible as read-only');
     assert(rendererNames.has('runtime.enforcement_hook_telemetry.readout'), 'runtime hook telemetry readout should be renderer eligible as read-only');
     assert(rendererNames.has('runtime.db_snapshot.create'), 'snapshot create should be renderer eligible');

@@ -86,6 +86,7 @@
     "verify:support-artifact-contents-contract": "node scripts/verify-support-artifact-contents-contract.js",
     "verify:support-artifact-writer-conformance-gap-map": "node scripts/verify-support-artifact-writer-conformance-gap-map.js",
     "verify:support-trace-log-redaction-policy": "node scripts/verify-support-trace-log-redaction-policy.js",
+    "verify:api-request-log-redaction-readiness": "node scripts/verify-api-request-log-redaction-readiness.js",
     "verify:runtime-enforcement-boundary": "node scripts/verify-runtime-enforcement-boundary.js",
     "verify:runtime-enforcement-evaluator": "node scripts/verify-runtime-enforcement-evaluator.js",
     "verify:runtime-enforcement-adapter": "node scripts/verify-runtime-enforcement-adapter.js",

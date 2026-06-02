@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS190 API request log redaction readiness runway open
+Status: HS190 accepted by HS191; Atlas is at a resting decision point
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: read-only proof of persisted API request log endpoint/error redaction posture before any log writer or persistence hardening.
+Current focus: decide the next storage/runtime hardening seam after accepting the API request log redaction readiness proof.
 
 Current heading:
 
@@ -18,17 +18,47 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
 Expected handoff filename:
+
+```txt
+none
+```
+
+No active Dev runway is open.
+
+## Accepted HS190 Runway
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS190-api-request-log-redaction-readiness-runway.md`
+
+Expected Dev handoff:
 
 ```txt
 workspace/DevHS190-api-request-log-redaction-readiness.md
 ```
 
-Active Dev runway is open.
+Overseer reviewed 2026-06-02:
 
-## Active HS190 Runway
+- Accepted HS190 in `workspace/OverseerHS191-hs190-api-request-log-redaction-readiness-review.md`.
+- Verified the new command, registry/authority/passive-side-effect coverage, dry-run coverage, support artifact policy compatibility, queue/API/Evidence write boundary, HTTP boundary, Hydration boundary, protected-term advisory output, and diff hygiene.
+- Accepted `support.api_request_log_redaction_readiness.preview` as read-only proof of persisted API request log redaction posture.
+- Persisted `api_request_logs` endpoint/error sanitization, light-log writer/export work, readiness alias normalization, runtime enforcement activation, command blocking, provider work, and UI work remain unopened.
+
+## Resting Next Options
+
+Recommended next shaping candidates:
+
+1. Persisted `api_request_logs` endpoint/error sanitization before insert.
+2. Light-log redaction / writer proof, if support artifact hardening continues.
+3. Readiness/preflight class-id alias normalization, if naming consistency should be tidied.
+4. Rest support artifacts and continue a different storage/runtime seam.
+
+Do not open Dev implementation until one of these is selected and bounded.
+
+## Historical HS190 Runway Details
 
 Opened 2026-06-02:
 
@@ -301,6 +331,90 @@ Do not run snapshot/trace-pack write verifiers unless changed code requires it. 
 
 ## Evidence
 
+Dev updated 2026-06-02 for HS190:
+
+- Added `support.api_request_log_redaction_readiness.preview` as a read-only service command and renderer-eligible readiness readout.
+- Added `src/main/services/apiRequestLogRedactionReadinessService.js` with a static persisted API request log redaction posture map. It does not inspect real operator data, call providers, write logs, mutate state, or create exports.
+- Added `scripts/verify-api-request-log-redaction-readiness.js` and `npm.cmd run verify:api-request-log-redaction-readiness`.
+- Updated service registry, enforcement dry-run coverage, command authority, service registry, and passive side-effect verification coverage for the new command.
+- Mapped log write sources:
+  - `src/main/api/httpClient.js` / `HttpClient.log(entry)`
+  - `src/main/db/evidenceRepository.js` / `EvidenceRepository.insertApiRequestLog(log)`
+  - `src/main/workers/manualDiscoveryWorker.js`
+  - `src/main/workers/manualExpansionWorker.js`
+  - `src/main/workers/actorWatchCollector.js`
+  - `src/main/workers/systemRadiusCollector.js`
+  - `src/main/metadata/reportHydrator.js`
+  - verification fixtures that call `insertApiRequestLog`
+- Mapped persisted `api_request_logs` fields:
+  - `request_id`
+  - `run_id`
+  - `run_type`
+  - `provider`
+  - `endpoint`
+  - `method`
+  - `status_code`
+  - `duration_ms`
+  - `cache_status`
+  - `retry_count`
+  - `rate_limited`
+  - `error_message`
+  - `requested_at`
+- Current persisted log redaction posture:
+  - endpoint string redaction before persistence: `unproven`
+  - query value stripping before persistence: `absent`
+  - secret/token/auth/cookie-like redaction before persistence: `unproven`
+  - error message free-text redaction before persistence: `unproven`
+  - free-text length bounds before persistence: `absent`
+  - provider/status/timing/cache/retry fields: `proven_present`
+  - raw provider response bodies: `excluded_by_schema`
+  - raw ESI payloads: `excluded_by_schema`
+- The preview explicitly states:
+  - persisted `api_request_logs` are provider provenance / operational diagnostics, not Evidence/EVEidence
+  - trace-pack assembly redaction from HS188 is separate from persisted log redaction
+  - reports, Hydration, Evidence/EVEidence, Discovery, and provider execution are not changed by this readout
+  - no light-log writer/export is created
+- Recommended smallest later hardening insertion point:
+  - centralize sanitization immediately before `EvidenceRepository.insertApiRequestLog` persists `endpoint` and `error_message`
+  - likely files for a future hardening packet: `src/main/db/evidenceRepository.js` and `src/main/api/httpClient.js`
+- Conformance map state after HS190:
+  - trace-pack checks remain conforming after HS188
+  - light operational log secret redaction remains `unknown`
+  - readiness/preflight alias normalization remains `gap`
+  - no conformance status was changed by HS190 because this packet is proof/readiness only, not log persistence hardening
+- Verification run:
+  - `node --check src\main\services\apiRequestLogRedactionReadinessService.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check scripts\verify-api-request-log-redaction-readiness.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `npm.cmd run verify:api-request-log-redaction-readiness` passed.
+  - `npm.cmd run verify:support-artifact-writer-conformance-gap-map` passed.
+  - `npm.cmd run verify:support-trace-log-redaction-policy` passed.
+  - `npm.cmd run verify:queue-api-evidence-write` passed.
+  - `npm.cmd run verify:http-boundaries` passed.
+  - `npm.cmd run verify:hydration` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 268 warnings across 9 changed working-set files after workspace documentation updates; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main` with HS190 working-tree changes.
+- Boundaries preserved:
+  - no `api_request_logs` write behavior changes
+  - no `httpClient` behavior changes
+  - no provider worker behavior changes
+  - no trace-pack writer behavior changes
+  - no light-log writer/export creation
+  - no provider calls
+  - no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or schema mutation
+  - no runtime enforcement activation
+  - no command blocking
+  - no renderer UI work
+
 Dev updated 2026-06-02 for HS188:
 
 - Hardened the existing operator debug trace-pack writer for `support.debug_trace_pack`.
@@ -497,6 +611,21 @@ Dev updated 2026-06-02:
   - `git status --short --branch` showed branch `main...origin/main [ahead 1]` with HS178 working-tree changes.
 
 ## Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS190-api-request-log-redaction-readiness.md
+```
+
+Status: API request log redaction readiness proof complete; pending Overseer review.
+
+HS190 result:
+
+- `support.api_request_log_redaction_readiness.preview` proves current persisted API log posture without changing log writes.
+- Persisted endpoint/query/error redaction remains unopened implementation work.
+- Trace-pack assembly redaction remains separate and accepted from HS188.
+- Light-log writer/export creation, provider calls, runtime enforcement activation, command blocking, schema changes, and UI work remain unopened.
 
 Completed:
 
