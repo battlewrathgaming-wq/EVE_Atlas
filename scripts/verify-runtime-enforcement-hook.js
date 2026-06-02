@@ -19,6 +19,8 @@ async function main() {
     await verifyProviderCapableCommandUsesSourcedExternalIo(db);
     await verifyLiveRadiusRejectionIsReadOnlyProviderGatePosture(db);
     await verifyProviderOptionalLocalSourceAvoidsLiveGate(db);
+    await verifyRuntimeSnapshotDestinationPathAuthorityFact(db);
+    await verifyTracePackDestinationPathAuthorityFact(db);
     await verifyHookStopsAfterEligibilityAndConfirmation(db);
     await verifyHookBeforeTaskWrapping(db);
     await verifyTrustedInternalBypass(db);
@@ -40,7 +42,10 @@ async function main() {
         external_io_sourced: true,
         provider_live_gate_sourced: true,
         composed_policy_sourced: true,
+        destination_path_authority_sourced: true,
         mapped_local_composed_policy_sourced: true,
+        snapshot_destination_path_authority_sourced: true,
+        trace_pack_destination_path_authority_sourced: true,
         provider_capable_external_io_sourced_without_authorizing: true,
         live_radius_rejection_sourced_without_provider_call: true,
         provider_optional_local_source_avoids_live_gate: true,
@@ -107,6 +112,7 @@ async function verifyCoverageSourcedWithoutContextFacts(db) {
   const externalIo = observed[0].evaluator_decision.gate_inputs_used.external_io;
   const providerLiveGate = observed[0].evaluator_decision.gate_inputs_used.provider_live_gate;
   const composedPolicy = observed[0].evaluator_decision.gate_inputs_used.composed_policy;
+  const destinationPathAuthority = observed[0].evaluator_decision.gate_inputs_used.destination_path_authority;
   assert(storageAuthority?.fact_source === 'runtime_hook_read_only_storage_authority_readback', 'storage authority facts should be sourced from readback');
   assert(['sourced_configured', 'sourced_absent_unconfigured', 'sourced_missing', 'sourced_unparseable', 'sourced_invalid_schema'].includes(storageAuthority.source_status), 'storage authority source status should distinguish configured/absent/problem posture');
   assert(budget?.fact_source === 'runtime_hook_read_only_storage_setup_gate_readout', 'storage budget facts should be sourced from setup gate readout');
@@ -121,6 +127,9 @@ async function verifyCoverageSourcedWithoutContextFacts(db) {
   assert(composedPolicy.state === 'unknown', 'unmapped composed policy posture should not guess authorization');
   assert(composedPolicy.runtime_authorization_active === false, 'unmapped composed policy should not authorize runtime dispatch');
   assert(composedPolicy.would_allow_is_authorization === false, 'unmapped composed policy should keep would_allow non-authorizing');
+  assert(destinationPathAuthority?.applies === false, 'local-only command should not require destination path authority');
+  assert(destinationPathAuthority.state === 'not_applicable', 'local-only command should report destination authority not applicable');
+  assert(destinationPathAuthority.renderer_authoritative === false, 'destination authority should never be renderer authoritative');
   assert(trustedContext?.renderer_allowed === true, 'trusted context posture should still reflect command metadata');
 }
 
@@ -277,6 +286,70 @@ async function verifyProviderOptionalLocalSourceAvoidsLiveGate(db) {
   assert(observed[0].proof.providers_called === false, 'hook should not call providers for local-source SDE proof');
 }
 
+async function verifyRuntimeSnapshotDestinationPathAuthorityFact(db) {
+  const observed = [];
+  await assertRejectsAny(
+    () => invokeServiceCommand('runtime.db_snapshot.create', {
+      confirmation: CONFIRMATION.RUNTIME_DB_SNAPSHOT_CREATE,
+      snapshotDestinationDir: 'F:/renderer-forged-snapshot-dir',
+      destinationPath: 'F:/renderer-forged-snapshot.sqlite'
+    }, {
+      db,
+      source: 'renderer',
+      databasePath: 'F:/Projects/AURA-Atlas/.tmp/hs208-missing-runtime.sqlite',
+      runtimeEnforcementPreviewObserver: (preview) => observed.push(preview)
+    }),
+    'snapshot create should fail before writing because the runtime DB path is missing'
+  );
+  assert(observed.length === 1, 'confirmed snapshot create should reach inactive hook');
+  const destination = observed[0].evaluator_decision.gate_inputs_used.destination_path_authority;
+  assert(destination?.fact_source === 'runtime_hook_read_only_support_artifact_path_authority_preview', 'snapshot should source destination path authority');
+  assert(destination.applies === true, 'snapshot destination authority should apply');
+  assert(destination.mapped_artifact_class_ids.includes('runtime_snapshot_rolling'), 'snapshot fact should include rolling class');
+  assert(destination.mapped_artifact_class_ids.includes('runtime_snapshot_retained'), 'snapshot fact should include retained class');
+  assert(destination.requires_storage_authority === true, 'snapshot destination should require storage authority');
+  assert(destination.counts_against_storage_budget === true, 'snapshot destination should count against storage budget');
+  assert(destination.renderer_authoritative === false, 'renderer path claims should not be authoritative');
+  assert(destination.renderer_path_claims_ignored === true, 'renderer path claims should be marked ignored');
+  assert(destination.non_authorizing_preview === true, 'snapshot destination fact should be non-authorizing');
+  assert(!Object.prototype.hasOwnProperty.call(destination, 'classes'), 'snapshot destination fact should not dump full path inventory');
+  const serialized = JSON.stringify(destination);
+  assert(!serialized.includes('renderer-forged-snapshot'), 'snapshot destination fact should not echo renderer-forged paths');
+  assert(observed[0].proof.file_writers_called === false, 'hook itself should not write files for snapshot proof');
+}
+
+async function verifyTracePackDestinationPathAuthorityFact(db) {
+  const observed = [];
+  const forgedPath = 'F:/renderer-forged-trace-pack-dir';
+  await assertRejectsAny(
+    () => invokeServiceCommand('support.debug_trace_pack', {
+      confirmation: CONFIRMATION.SUPPORT_DEBUG_TRACE_PACK,
+      outputDir: 'bad:trace-pack-output',
+      tracePackOutputDir: forgedPath
+    }, {
+      db,
+      source: 'renderer',
+      databasePath: 'F:/Projects/AURA-Atlas/.tmp/hs208-trace.sqlite',
+      runtimeEnforcementPreviewObserver: (preview) => observed.push(preview)
+    }),
+    'trace pack should fail before writing with invalid renderer output path'
+  );
+  assert(observed.length === 1, 'confirmed trace-pack command should reach inactive hook');
+  const destination = observed[0].evaluator_decision.gate_inputs_used.destination_path_authority;
+  assert(destination?.fact_source === 'runtime_hook_read_only_support_artifact_path_authority_preview', 'trace pack should source destination path authority');
+  assert(destination.applies === true, 'trace-pack destination authority should apply');
+  assert(destination.mapped_artifact_class_ids.includes('operator_debug_trace_pack'), 'trace-pack fact should include operator debug trace class');
+  assert(destination.requires_storage_authority === true, 'trace pack destination should require storage authority');
+  assert(destination.counts_against_storage_budget === true, 'trace pack destination should count against storage budget');
+  assert(destination.renderer_authoritative === false, 'trace pack renderer path claims should not be authoritative');
+  assert(destination.renderer_path_claims_ignored === true, 'trace pack renderer path claims should be marked ignored');
+  assert(destination.non_authorizing_preview === true, 'trace pack destination fact should be non-authorizing');
+  const serialized = JSON.stringify(destination);
+  assert(!serialized.includes(forgedPath), 'trace pack destination fact should not echo renderer-forged paths');
+  assert(!serialized.includes('bad:trace-pack-output'), 'trace pack destination fact should not echo invalid output path');
+  assert(observed[0].proof.file_writers_called === false, 'hook itself should not write files for trace-pack proof');
+}
+
 async function verifyHookStopsAfterEligibilityAndConfirmation(db) {
   const ineligibleObserved = [];
   await assertRejects(
@@ -404,6 +477,15 @@ async function assertRejects(fn, expectedCode, message) {
       return error;
     }
     throw new Error(`${message}; expected ${expectedCode}, got ${error.code || error.message}`);
+  }
+  throw new Error(message);
+}
+
+async function assertRejectsAny(fn, message) {
+  try {
+    await fn();
+  } catch (error) {
+    return error;
   }
   throw new Error(message);
 }

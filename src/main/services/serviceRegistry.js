@@ -917,6 +917,7 @@ function sourceReadOnlyRuntimeGateFacts({ command, coverage = null, context = {}
   const externalIoReadback = safeReadOnlyExternalIoConfigReadback(context);
   const providerLiveGate = safeReadOnlyProviderLiveGateFact({ command, coverage, context, payload });
   const composedPolicy = safeReadOnlyComposedPolicyFact({ command, context, payload });
+  const destinationPathAuthority = safeReadOnlyDestinationPathAuthorityFact({ command, context, payload });
 
   if (setupReadout) {
     sourced.storage_authority = storageAuthorityFactFor(setupReadout, storageReadback);
@@ -930,6 +931,9 @@ function sourceReadOnlyRuntimeGateFacts({ command, coverage = null, context = {}
   }
   if (composedPolicy) {
     sourced.composed_policy = composedPolicy;
+  }
+  if (destinationPathAuthority) {
+    sourced.destination_path_authority = destinationPathAuthority;
   }
   return sourced;
 }
@@ -1120,6 +1124,172 @@ function safeReadOnlyComposedPolicyFact({ command, context = {}, payload = {} })
       read_error: error.message
     };
   }
+}
+
+function safeReadOnlyDestinationPathAuthorityFact({ command, context = {}, payload = {} }) {
+  const mappedClassIds = destinationArtifactClassIdsForCommand(command);
+  const rendererPathClaimsIgnored = context.source === 'renderer' && runtimeHookPayloadHasPathClaims(payload);
+  if (!mappedClassIds.length && supportArtifactDestinationRequiredForCommand(command)) {
+    return {
+      fact_class: 'destination_path_authority',
+      fact_source: 'runtime_hook_read_only_support_artifact_path_authority_preview',
+      source_status: 'sourced_unmapped_support_artifact_command',
+      command,
+      applies: true,
+      mapped_artifact_class_ids: [],
+      state: 'support_artifact_destination_unmapped',
+      renderer_authoritative: false,
+      renderer_path_claims_ignored: rendererPathClaimsIgnored,
+      requires_storage_authority: true,
+      counts_against_storage_budget: true,
+      cleanup_stages: [],
+      privacy_sensitivity: [],
+      provider_posture: [],
+      external_io_relevance: [],
+      non_authorizing_preview: true
+    };
+  }
+  if (!mappedClassIds.length) {
+    return {
+      fact_class: 'destination_path_authority',
+      fact_source: 'runtime_hook_read_only_support_artifact_path_authority_preview',
+      source_status: 'sourced_not_applicable',
+      command,
+      applies: false,
+      mapped_artifact_class_ids: [],
+      state: 'not_applicable',
+      renderer_authoritative: false,
+      renderer_path_claims_ignored: rendererPathClaimsIgnored,
+      requires_storage_authority: false,
+      counts_against_storage_budget: false,
+      cleanup_stages: [],
+      privacy_sensitivity: [],
+      provider_posture: [],
+      external_io_relevance: [],
+      non_authorizing_preview: true
+    };
+  }
+  try {
+    const preview = buildSupportArtifactPathAuthorityPreview({}, {
+      ...context,
+      source: context.source,
+      commandMetadata: listServiceCommands()
+    });
+    const classes = mappedClassIds
+      .map((id) => (preview.classes || []).find((entry) => entry.id === id))
+      .filter(Boolean);
+    if (classes.length !== mappedClassIds.length) {
+      return {
+        ...destinationPathFactBase({ command, rendererPathClaimsIgnored, mappedClassIds }),
+        source_status: 'sourced_mapped_class_missing',
+        state: 'mapped_artifact_class_missing',
+        class_summaries: compactDestinationClassSummaries(classes)
+      };
+    }
+    return {
+      ...destinationPathFactBase({ command, rendererPathClaimsIgnored, mappedClassIds }),
+      source_status: 'sourced_mapped_artifact_classes',
+      state: destinationStateForClasses(classes),
+      requires_storage_authority: classes.some((entry) => entry.requires_storage_authority === true),
+      counts_against_storage_budget: classes.some((entry) => entry.counts_against_storage_budget === true),
+      cleanup_stages: [...new Set(classes.map((entry) => entry.cleanup_stage).filter(Boolean))],
+      privacy_sensitivity: [...new Set(classes.map((entry) => entry.privacy_sensitivity).filter(Boolean))],
+      provider_posture: [...new Set(classes.map((entry) => entry.provider_posture).filter(Boolean))],
+      external_io_relevance: [...new Set(classes.map((entry) => entry.external_io_relevance).filter(Boolean))],
+      class_summaries: compactDestinationClassSummaries(classes)
+    };
+  } catch (error) {
+    return {
+      ...destinationPathFactBase({ command, rendererPathClaimsIgnored, mappedClassIds }),
+      source_status: 'sourced_readout_unavailable',
+      state: 'destination_path_authority_readout_unavailable',
+      read_error: error.message
+    };
+  }
+}
+
+function destinationPathFactBase({ command, rendererPathClaimsIgnored, mappedClassIds }) {
+  return {
+    fact_class: 'destination_path_authority',
+    fact_source: 'runtime_hook_read_only_support_artifact_path_authority_preview',
+    command,
+    applies: true,
+    mapped_artifact_class_ids: mappedClassIds,
+    renderer_authoritative: false,
+    renderer_path_claims_ignored: rendererPathClaimsIgnored,
+    basis_action: 'support.artifact_path_authority.preview',
+    non_authorizing_preview: true
+  };
+}
+
+function destinationArtifactClassIdsForCommand(command) {
+  if (command === 'runtime.db_snapshot.create') {
+    return ['runtime_snapshot_rolling', 'runtime_snapshot_retained'];
+  }
+  if (command === 'support.debug_trace_pack') {
+    return ['operator_debug_trace_pack'];
+  }
+  return [];
+}
+
+function supportArtifactDestinationRequiredForCommand(command) {
+  return ['runtime.db_snapshot.create', 'support.debug_trace_pack'].includes(command);
+}
+
+function destinationStateForClasses(classes = []) {
+  if (!classes.length) {
+    return 'not_mapped';
+  }
+  if (classes.some((entry) => entry.requires_storage_authority === true)) {
+    return 'destination_authority_required';
+  }
+  return 'destination_authority_not_required';
+}
+
+function compactDestinationClassSummaries(classes = []) {
+  return classes.map((entry = {}) => ({
+    id: entry.id || null,
+    family: entry.family || null,
+    status_source: entry.status?.source || null,
+    status_exists: entry.status?.exists === true,
+    usage_bytes: Number.isFinite(Number(entry.status?.usage_bytes)) ? Number(entry.status.usage_bytes) : null,
+    requires_storage_authority: entry.requires_storage_authority === true,
+    counts_against_storage_budget: entry.counts_against_storage_budget === true,
+    cleanup_stage: entry.cleanup_stage || null,
+    privacy_sensitivity: entry.privacy_sensitivity || null,
+    provider_posture: entry.provider_posture || null,
+    external_io_relevance: entry.external_io_relevance || null,
+    creates_files: false,
+    creates_directories: false
+  }));
+}
+
+function runtimeHookPayloadHasPathClaims(payload = {}) {
+  return [
+    'path',
+    'paths',
+    'outputDir',
+    'output_dir',
+    'destinationPath',
+    'destination_path',
+    'snapshotDestination',
+    'snapshot_destination',
+    'snapshotDestinationDir',
+    'snapshot_destination_dir',
+    'tracePackOutputDir',
+    'trace_pack_output_dir',
+    'cacheDir',
+    'cache_dir',
+    'sdeCacheDir',
+    'sde_cache_dir',
+    'storageRoot',
+    'storage_root',
+    'databasePath',
+    'database_path',
+    'settingsPath',
+    'runtimeSnapshotSettingsPath',
+    'windowSettingsPath'
+  ].some((key) => Object.prototype.hasOwnProperty.call(payload, key));
 }
 
 function unmappedComposedPolicyFact(command, reason) {

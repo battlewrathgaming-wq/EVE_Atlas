@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS208 active Dev runway
+Status: HS208 accepted by HS209
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS208 runtime hook destination path authority fact preview.
+Current focus: HS208 accepted; inactive runtime hook destination path authority fact sourcing can rest as read-only proof.
 
 Current heading:
 
@@ -18,15 +18,19 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS208-runtime-hook-destination-path-authority-fact-preview.md
+none; no active Dev runway is open
 ```
 
-## Active HS208 Runway
+No active Dev runway is open.
+
+## Resting HS208 State
+
+## Accepted HS208 Runway
 
 Opened 2026-06-02:
 
@@ -77,6 +81,115 @@ Preserve:
 - no pruning or deletion behavior
 
 Stop if the proof requires active command blocking, runtime authorization, treating destination/path authority as a may-run-now answer, calling target handlers from the hook, task dispatch or task wrapping from the hook, provider calls, support artifact creation, snapshot or trace-pack creation, file or directory creation, filesystem deletion/move/copy, config writes, schema changes, SDE import/download, storage movement/migration, UI work, hiding missing fact classes, accepting renderer path claims as authority, or dumping unbounded path authority inventories into every hook preview.
+
+## HS208 Evidence
+
+Dev updated 2026-06-02:
+
+- Added read-only `destination_path_authority` fact sourcing to the inactive runtime enforcement hook in `src/main/services/serviceRegistry.js`.
+- Reused existing `support.artifact_path_authority.preview` posture via `buildSupportArtifactPathAuthorityPreview(...)`.
+- Mapped support-artifact destination classes:
+  - `runtime.db_snapshot.create` -> `runtime_snapshot_rolling`, `runtime_snapshot_retained`
+  - `support.debug_trace_pack` -> `operator_debug_trace_pack`
+- Commands without support-artifact destination needs now receive explicit `sourced_not_applicable` posture with `applies: false` / `state: not_applicable`.
+- Renderer path claims are detected as ignored but are not accepted as authority and are not echoed in the hook fact.
+- Compact class summaries include only bounded posture fields; full path authority inventories and raw paths are not dumped into hook previews.
+- Supplied `runtimeEnforcementFacts.destination_path_authority` remains preserved and is not overwritten.
+- Runtime hook telemetry now reports `destination_path_authority` as a sourced broad fact class.
+- Focused hook verifier sample:
+  - destination path authority sourced: true
+  - runtime snapshot destination path authority sourced: true
+  - trace-pack destination path authority sourced: true
+  - active runtime enforcement: false
+  - command blocking: false
+  - file writers called by hook: false
+  - providers called by hook: false
+- Runtime hook telemetry sample:
+  - sourced broad fact classes: `storage_authority`, `budget`, `external_io`, `provider_live_gate`, `composed_policy`, `destination_path_authority`
+  - destination path authority source status for local command: `sourced_not_applicable`
+  - destination path authority applies for local command: false
+- Verification run:
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check scripts\verify-runtime-enforcement-hook.js` passed.
+  - `node --check scripts\verify-runtime-hook-telemetry.js` passed.
+  - `node --check src\main\services\runtimeEnforcementDryAdapter.js` passed.
+  - `node --check src\main\services\runtimeHookTelemetryReadoutService.js` passed.
+  - `node --check src\main\services\supportArtifactPathAuthorityService.js` passed.
+  - `node --check scripts\verify-support-artifact-path-authority.js` passed.
+  - `npm.cmd run verify:runtime-enforcement-hook` passed.
+  - `npm.cmd run verify:runtime-hook-telemetry` passed.
+  - `npm.cmd run verify:support-artifact-path-authority` passed.
+  - `npm.cmd run verify:support-artifact-creation-policy` passed.
+  - `npm.cmd run verify:runtime-snapshot` passed.
+  - `npm.cmd run verify:operator-debug-trace` passed.
+  - `npm.cmd run verify:support-trace-log-redaction-policy` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 123 warnings across 3 changed working-set files; no renames or protected-word JSON updates performed.
+  - `npm.cmd run verify:trace-pack-redaction` was attempted and failed because `package.json` does not define that script; the available trace-pack/redaction verifiers `verify:operator-debug-trace` and `verify:support-trace-log-redaction-policy` were run instead.
+- Boundaries preserved:
+  - no active runtime enforcement
+  - no command blocking
+  - no handler dispatch from the hook
+  - no task wrapping or task execution from the hook
+  - no provider calls
+  - no provider attempt recording
+  - no service-memory cooldown/lockout mutation from the hook
+  - no support artifact creation from the hook
+  - no snapshot creation from the hook
+  - no trace-pack creation from the hook
+  - no file or directory creation from the hook
+  - no filesystem deletion/move/copy
+  - no SDE download/import
+  - no Hydration writes
+  - no Evidence/EVEidence creation
+  - no Discovery ref mutation
+  - no Watch, Assessment Memory, or Marked mutation
+  - no schema changes
+  - no config writes
+  - no storage movement or migration
+  - no renderer UI work
+  - no pruning or deletion behavior
+
+## HS208 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS208-runtime-hook-destination-path-authority-fact-preview.md
+```
+
+Status: runtime hook destination path authority fact preview complete and accepted by Overseer.
+
+HS208 result:
+
+- The inactive runtime hook now previews compact current-command destination/path authority posture for mapped support-artifact commands.
+- Renderer-forged path claims remain ignored and are not echoed in hook facts.
+- Commands without support-artifact destination needs remain not-applicable.
+- Destination/path authority remains preview-only and non-authorizing.
+- Runtime enforcement remains inactive.
+
+Overseer reviewed 2026-06-02:
+
+- Accepted HS208 in `workspace/OverseerHS209-hs208-runtime-hook-destination-path-authority-review.md`.
+- Verified inactive runtime hook previews can source compact destination/path authority posture for mapped support-artifact commands.
+- Confirmed renderer-forged path claims remain ignored and are not echoed in hook facts.
+- Confirmed commands without support-artifact destination needs remain not-applicable.
+- Confirmed supplied `runtimeEnforcementFacts.destination_path_authority` remains preserved and not overwritten.
+- Confirmed destination/path authority remains preview-only and non-authorizing.
+- Confirmed no active runtime enforcement, command blocking, provider calls, provider attempt recording, service-memory cooldown/lockout mutation, handler dispatch, task execution, support artifact creation, snapshot creation, trace-pack creation, file/directory creation, filesystem deletion/move/copy, config writes, schema changes, Evidence/EVEidence, Discovery, Watch, Assessment Memory, Marked, pruning/deletion, SDE import/download, storage movement, or UI work were added.
+
+## Resting Next Options
+
+Recommended next shaping candidates:
+
+1. Rest runtime hook fact sourcing and continue a different storage/runtime seam.
+2. Request engineering/security readiness review before any active runtime enforcement packet.
+3. Shape Watch/task runtime fact sourcing only if the runtime hook proof line continues and Human/Overseer agree it is needed before readiness review.
+
+Do not open Dev implementation until one of these is selected and bounded.
 
 ## Resting HS206 State
 
