@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS202 accepted by HS203
+Status: HS204 active Dev runway
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS202 accepted; inactive runtime hook fact sourcing can rest as read-only proof.
+Current focus: HS204 runtime hook provider/live gate fact preview.
 
 Current heading:
 
@@ -18,15 +18,61 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none; no active Dev runway is open
+workspace/DevHS204-runtime-hook-provider-live-gate-fact-preview.md
 ```
 
-No active Dev runway is open.
+## Active HS204 Runway
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS204-runtime-hook-provider-live-gate-fact-preview-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS204-runtime-hook-provider-live-gate-fact-preview.md
+```
+
+Task:
+
+Add read-only, non-enforcing `provider_live_gate` fact sourcing to the inactive runtime enforcement hook preview, using existing safe live/provider gate posture only.
+
+Preferred outcome:
+
+- provider-capable commands with clear mappings can include sourced `provider_live_gate` facts
+- local-only commands remain local-only / not-applicable
+- live API disabled, missing User-Agent, cooldown, lockout, duplicate running work, and live radius rejection remain read-only blocker posture
+- supplied `runtimeEnforcementFacts.provider_live_gate` remains preserved and not overwritten
+- External I/O, storage authority, storage budget, confirmation, composed policy, destination path authority, Watch arming, and runtime authorization remain separate
+- active runtime enforcement remains false
+
+Preserve:
+
+- no active runtime enforcement
+- no command blocking
+- no handler dispatch from the hook
+- no task wrapping or task execution from the hook
+- no provider calls
+- no provider attempt recording
+- no service-memory cooldown/lockout mutation from the hook
+- no SDE download/import
+- no Hydration writes
+- no Evidence/EVEidence creation
+- no Discovery ref mutation
+- no Watch, Assessment Memory, or Marked mutation
+- no schema changes
+- no support artifact creation
+- no config writes
+- no storage movement or migration
+- no renderer UI work
+- no pruning or deletion behavior
+
+Stop if the proof requires active command blocking, composed runtime authorization, calling target handlers from the hook, task dispatch or task wrapping from the hook, `enterLiveProviderAttempt(...)`, provider calls, service-memory cooldown/lockout mutation from the hook, config writes, schema changes, support artifact creation, SDE import/download, storage movement/migration, UI work, treating External I/O on as authorization, treating provider/live gate `allowed` as authorization, hiding missing fact classes, or blurring live/provider gate with External I/O, storage authority, confirmation, or composed policy.
 
 ## Resting HS202 State
 
