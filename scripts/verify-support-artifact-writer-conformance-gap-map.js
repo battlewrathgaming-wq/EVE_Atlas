@@ -109,8 +109,8 @@ function verifyMappedClasses(preview) {
 
   assert(preview.summary.total_classes === 5, 'gap map should cover five classes');
   assert(preview.summary.by_status.gap >= 1, 'gap map should expose remaining known gaps');
-  assert(preview.summary.by_status.partial >= 6, 'gap map should expose partial conformance');
-  assert(preview.summary.by_status.unknown >= 2, 'gap map should expose unknowns');
+  assert(preview.summary.by_status.partial >= 2, 'gap map should expose remaining partial conformance');
+  assert(preview.summary.by_status.unknown >= 1, 'gap map should expose remaining unknowns');
 }
 
 function verifyKnownConcerns(preview) {
@@ -125,13 +125,13 @@ function verifyKnownConcerns(preview) {
   assert(checkById(retained, 'class_id_split').conformance_status === 'conforms', 'retained snapshot class split should conform after HS184');
   assert(checkById(retained, 'non_authority_disclosure').conformance_status === 'conforms', 'retained snapshot non-authority should conform after HS184');
   assert(checkById(tracePack, 'raw_esi_payload_dumps_forbidden').conformance_status === 'conforms', 'trace pack raw ESI dumps should conform');
-  assert(checkById(tracePack, 'free_text_length_policy').conformance_status === 'partial', 'trace pack free text length policy should be partial');
-  assert(checkById(tracePack, 'provider_endpoint_secret_leakage').conformance_status === 'unknown', 'trace pack provider endpoint secret posture should be unknown');
-  assert(checkById(tracePack, 'queue_latest_refs_bounded_summary').conformance_status === 'partial', 'queue latest refs should be partial bounded summary');
+  assert(checkById(tracePack, 'free_text_length_policy').conformance_status === 'conforms', 'trace pack free text length policy should conform after HS188');
+  assert(checkById(tracePack, 'provider_endpoint_secret_leakage').conformance_status === 'conforms', 'trace pack provider endpoint secret posture should conform after HS188');
+  assert(checkById(tracePack, 'queue_latest_refs_bounded_summary').conformance_status === 'conforms', 'queue latest refs should conform as bounded support summaries after HS188');
   assert(checkById(readiness, 'class_id_alias_normalization').conformance_status === 'gap', 'readiness alias normalization should be a gap');
   assert(checkById(logs, 'secret_redaction_policy').conformance_status === 'unknown', 'log secret redaction should be unknown');
 
-  assert(preview.hs180_focus_areas.trace_pack_free_text_max_length.conformance_status === 'partial', 'HS180 free-text focus should be mapped');
+  assert(preview.hs180_focus_areas.trace_pack_free_text_max_length.conformance_status === 'conforms', 'HS180 free-text focus should be mapped as conforming after HS188');
   assert(preview.hs180_focus_areas.readiness_class_id_alias_normalization.conformance_status === 'gap', 'HS180 readiness alias focus should be mapped');
   assert(preview.hs180_focus_areas.provider_endpoint_error_secret_leakage.some((entry) => entry.conformance_status === 'unknown'), 'HS180 provider/secret focus should include unknown');
 }

@@ -42,6 +42,7 @@ Current state:
 - HS186 opened
 - HS186 accepted by HS187
 - HS188 opened
+- HS188 accepted by HS189
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -58,9 +59,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is HS188 trace-pack writer redaction hardening
-- current work is the first bounded trace-pack writer hardening slice using accepted HS186 policy; active command blocking, broad artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
+- current executor is Overseer
+- no active Dev runway is open
+- current work is resting after accepting the bounded trace-pack writer hardening slice; active command blocking, broad artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
 Current heading:
@@ -72,8 +73,8 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Complete HS188 trace-pack writer redaction hardening.
-2. Review whether trace/log writer conformance gaps moved from partial/unknown to conforming or still need a second slice.
+1. Rest support artifacts and continue a different storage/runtime seam if preferred.
+2. Open light-log redaction policy/writer proof if support artifact hardening continues.
 3. Runtime enforcement remains resting.
 
 See `workspace/current.md` for current truth.
@@ -149,6 +150,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS186 opened a trace/log redaction and free-text truncation policy proof runway: define read-only policy posture for trace packs and light logs before changing support-artifact writers.
 - HS186/HS187 accepted trace/log redaction policy proof: `support.trace_log_redaction_policy.preview` now defines policy-only redaction/truncation posture for trace packs, light logs, provider diagnostics, warning text, queue latest refs, local paths, sample limits, and runtime provenance without changing writers.
 - HS188 opened the first trace-pack writer redaction hardening runway: apply HS186 policy to `support.debug_trace_pack` only, leaving light logs and broad support-artifact writer redesign parked.
+- HS188/HS189 accepted trace-pack writer hardening: `support.debug_trace_pack` now applies bounded redaction/truncation, local path sensitivity summaries, sample/exclusion disclosure, and queue latest-ref support provenance posture while leaving light logs and readiness alias gaps parked.
 
 ## Accepted Boundaries
 

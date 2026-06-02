@@ -36,6 +36,12 @@ async function main() {
     assert(pack.boundaries.includes('It does not call zKill or ESI.'), 'trace pack should state no-live boundary');
     assert(pack.boundaries.includes('Raw expanded ESI payloads are excluded by default.'), 'trace pack should exclude raw payloads');
     assert(pack.exclusions.includes('raw_esi_payload'), 'raw ESI payload exclusion should be explicit');
+    assert(pack.trace_pack_disclosure.policy_source === 'support.trace_log_redaction_policy.preview', 'trace pack should name HS186 policy source');
+    assert(pack.trace_pack_disclosure.sample_limit === 12, 'trace pack should disclose sample limit');
+    assert(pack.trace_pack_disclosure.non_authority.evidence === false, 'trace pack should disclose non-Evidence posture');
+    assert(pack.trace_pack_disclosure.omitted_excluded_material.endpoint_query_values === 'excluded', 'trace pack should disclose endpoint query exclusion');
+    assert(pack.runtime.database_path.sensitivity === 'sensitive_support_metadata', 'database path should be sensitivity-labelled');
+    assert(pack.runtime.temp_root.sensitivity === 'sensitive_support_metadata', 'temp root should be sensitivity-labelled');
     assert(pack.runtime_boundary.classification.includes('support readout'), 'trace pack should classify runtime boundary as support readout');
     assert(pack.runtime_boundary.durable_state_basis.includes('fetch_runs'), 'runtime boundary should name durable fetch run basis');
     assert(pack.runtime_boundary.volatile_state_basis.includes('current in-memory task history'), 'runtime boundary should name volatile task basis');
@@ -46,12 +52,16 @@ async function main() {
     assert(pack.runtime_boundary.boundaries.some((entry) => entry.includes('Retention preflight is read-only')), 'runtime boundary should separate retention preflight from deletion');
     assert(pack.fetch_runs.length === 1, 'trace pack should include latest fetch runs');
     assert(pack.api_request_logs.length === 1, 'trace pack should include latest API request logs');
-    assert(pack.task_history.length === 1, 'trace pack should include task history summaries');
+    assert(pack.task_history.length === 2, 'trace pack should include task history summaries');
     assert(pack.data_quality_warnings.grouped.some((row) => row.warning_type === 'FIXTURE_WARNING'), 'trace pack should group data quality warnings');
     assert(pack.queue_status.by_status.some((row) => row.status === 'pending' && row.count === 1), 'trace pack should summarize pending queue refs');
     assert(pack.corpus_health.counts.some((row) => row.area === 'killmails' && row.rows === 1), 'trace pack should include corpus health summary');
     assert(pack.readiness.checks.db_initialized === true, 'trace pack should include readiness summary');
     assert(pack.smoke_artifacts.artifacts.length === 1, 'trace pack should include relevant smoke artifact paths');
+    assert(pack.smoke_artifacts.root.sensitivity === 'sensitive_support_metadata', 'smoke artifact root should be sensitivity-labelled');
+    assert(pack.smoke_artifacts.artifacts[0].path.sensitivity === 'sensitive_support_metadata', 'smoke artifact file path should be sensitivity-labelled');
+    assert(pack.smoke_artifacts.omitted_count === 0, 'smoke artifact omitted count should be disclosed');
+    verifyRedaction(pack);
     assert(!JSON.stringify(pack).includes('damage_taken'), 'trace pack should not include raw ESI payload contents');
     assert(!JSON.stringify(pack).includes('attackers'), 'trace pack should not export raw participant arrays');
 
@@ -104,6 +114,15 @@ async function seedTask(taskRunner) {
         api_calls_esi: 0
       }
     };
+  });
+  await taskRunner.runTask({
+    type: 'fixture.failed_task',
+    classification: TASK_CLASSIFICATIONS.READ_ONLY,
+    scopeKey: 'fixture?token=fixture-secret-token'
+  }, async () => {
+    const error = new Error(`${'Fixture task error '.repeat(20)}authorization=fixture-secret-token`);
+    error.code = 'FIXTURE_TASK_FAILED';
+    throw error;
   });
 }
 
@@ -167,28 +186,41 @@ function seedDatabase(db) {
   repository.insertApiRequestLog({
     run_id: run.run_id,
     provider: 'zkill',
-    endpoint: '/systemID/30000001/pastSeconds/3600/',
+    endpoint: '/systemID/30000001/pastSeconds/3600/?token=fixture-secret-token&authorization=Bearer%20fixture',
     method: 'GET',
     status_code: 200,
     duration_ms: 3,
     cache_status: 'fixture',
+    error_message: `${'Fixture provider warning '.repeat(20)}authorization=fixture-secret-token cookie: session=fixture-cookie`,
     requested_at: '2026-05-01T20:00:00Z'
   });
   repository.insertWarning(run.run_id, {
     killmail_id: 8801,
     warning_type: 'FIXTURE_WARNING',
-    message: 'Fixture warning for trace pack grouping.',
+    message: `${'Fixture warning for trace pack grouping. '.repeat(12)}access_token=fixture-secret-token`,
     created_at: '2026-05-01T20:01:00Z'
   });
   repository.upsertDiscoveredKillmailRefs([{
     killmail_id: 8802,
     hash: 'fixture_hash_8802',
     discovered_at: '2026-05-01T20:02:00Z'
+  }, {
+    killmail_id: 8803,
+    hash: 'fixture_hash_8803',
+    discovered_at: '2026-05-01T20:01:30Z'
   }], {
     runId: run.run_id,
     discoveredByType: 'manual_system',
     discoveredById: '30000001',
     sourceSystemId: 30000001
+  });
+  repository.markDiscoveryRefsFailed([{
+    killmail_id: 8802,
+    hash: 'fixture_hash_8802',
+    message: `${'Fixture queue failure '.repeat(14)}token=fixture-secret-token`
+  }], '2026-05-01T20:03:00Z', {
+    discoveredByType: 'manual_system',
+    discoveredById: '30000001'
   });
   repository.finalizeFetchRun(run.run_id, {
     discovered_refs: 1,
@@ -196,7 +228,7 @@ function seedDatabase(db) {
     activity_events_written: result.eventsWritten,
     api_calls_zkill: 1,
     api_calls_esi: 0
-  }, 'success');
+  }, 'success', `${'Fixture fetch run diagnostic '.repeat(14)}access_token=fixture-secret-token`);
 }
 
 function seedSmokeArtifact(outputDir) {
@@ -223,6 +255,39 @@ function sideEffectCounts(db) {
 
 function count(db, tableName) {
   return db.prepare(`SELECT COUNT(*) AS count FROM ${tableName}`).get().count;
+}
+
+function verifyRedaction(pack) {
+  const text = JSON.stringify(pack);
+  for (const forbidden of [
+    'fixture-secret-token',
+    'fixture-cookie',
+    'Bearer%20fixture',
+    'access_token=',
+    'authorization=',
+    'cookie: session='
+  ]) {
+    assert(!text.includes(forbidden), `trace pack should redact ${forbidden}`);
+  }
+
+  const apiLog = pack.api_request_logs[0];
+  assert(apiLog.endpoint.includes('[redacted_query_values;query_key_count=2]'), 'endpoint query values should be stripped');
+  assert(apiLog.endpoint.length <= 160, 'endpoint should be bounded');
+  assert(apiLog.error_message.length <= 240, 'API error message should be bounded');
+  assert(apiLog.error_message.includes('[truncated]'), 'API error message should show truncation');
+  assert(pack.fetch_runs[0].error_summary.length <= 240, 'fetch error summary should be bounded');
+  assert(pack.fetch_runs[0].error_summary.includes('[truncated]'), 'fetch error summary should show truncation');
+  const failedTask = pack.task_history.find((task) => task.type === 'fixture.failed_task');
+  assert(failedTask, 'failed task should be present in trace pack');
+  assert(failedTask.scope_key.includes('[redacted]'), 'task scope key should be redacted');
+  assert(failedTask.error.message.length <= 240, 'task error message should be bounded');
+  assert(failedTask.error.message.includes('[truncated]'), 'task error message should show truncation');
+  assert(pack.data_quality_warnings.latest[0].message.length <= 220, 'warning message should be bounded');
+  assert(pack.data_quality_warnings.latest[0].message.includes('[truncated]'), 'warning message should show truncation');
+  const failedRef = pack.queue_status.latest_refs.find((ref) => ref.last_error);
+  assert(failedRef.last_error.length <= 160, 'queue latest ref last_error should be bounded');
+  assert(failedRef.last_error.includes('[truncated]'), 'queue latest ref last_error should show truncation');
+  assert(failedRef.sample_posture === 'bounded_support_provenance_only_not_evidence', 'queue latest refs should disclose sample posture');
 }
 
 function assertSame(actual, expected, message) {

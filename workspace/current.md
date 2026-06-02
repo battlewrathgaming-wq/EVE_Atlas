@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS188 Trace-pack writer redaction hardening runway open
+Status: Resting after HS189 accepted HS188
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: first bounded trace-pack writer redaction/truncation hardening slice using accepted HS186 policy.
+Current focus: HS188 trace-pack writer redaction/truncation hardening accepted; support artifacts may rest or continue with light-log/readiness seams.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS188-trace-pack-writer-redaction-hardening.md
+none
 ```
 
-Active Dev runway is open.
+No Dev runway is currently open.
 
-## Active HS188 Runway
+## Accepted HS188 Runway
 
 Opened 2026-06-02:
 
@@ -63,6 +63,13 @@ Preserve:
 - no renderer UI work
 
 Stop if the slice requires schema/provider changes, real operator artifact inspection, a broad support-artifact framework, raw ESI payload inclusion, provider calls, live/private/destructive actions, runtime enforcement, command blocking, or UI work.
+
+Overseer reviewed 2026-06-02:
+
+- Accepted HS188 in `workspace/OverseerHS189-hs188-trace-pack-writer-hardening-review.md`.
+- Verified trace-pack redaction/truncation, local path sensitivity summaries, sample/exclusion disclosure, writer conformance map movement, protected-term advisory output, and diff hygiene.
+- Accepted `support.debug_trace_pack` writer hardening for the bounded trace-pack seam.
+- Light-log redaction, readiness/preflight alias normalization, support artifact framework work, runtime enforcement activation, command blocking, and UI work remain unopened.
 
 ## Accepted HS186 Runway
 
@@ -258,6 +265,90 @@ Do not run snapshot/trace-pack write verifiers unless changed code requires it. 
 
 ## Evidence
 
+Dev updated 2026-06-02 for HS188:
+
+- Hardened the existing operator debug trace-pack writer for `support.debug_trace_pack`.
+- Updated `src/main/support/operatorDebugTracePack.js` with local redaction/truncation helpers and trace-pack disclosure metadata.
+- Updated `scripts/verify-operator-debug-trace-pack.js` with unsafe fixture strings proving redaction/truncation against the actual trace-pack writer and written fixture artifact.
+- Updated `support.artifact_writer_conformance_gap_map.preview` trace-pack checks to reflect the now-hardened writer posture.
+- Updated `scripts/verify-support-artifact-writer-conformance-gap-map.js` expectations for HS188.
+- Writer fields hardened:
+  - `fetch_runs.error_summary`
+  - `api_request_logs.endpoint`
+  - `api_request_logs.error_message`
+  - task `scope_key`
+  - task `error.message`
+  - data-quality warning `message`
+  - queue latest refs `last_error`
+  - runtime `database_path`
+  - runtime `temp_root`
+  - smoke artifact `root`
+  - smoke artifact file paths
+- Trace-pack redaction/truncation behavior:
+  - endpoint query values are stripped and replaced with a redacted query marker plus query-key count
+  - secret/token/authorization/cookie-like strings are redacted from diagnostic text
+  - diagnostic free text is bounded at 240 characters
+  - endpoint strings are bounded at 160 characters
+  - queue `last_error` is bounded at 160 characters
+  - data-quality warning message is bounded at 220 characters
+  - task `scope_key` is bounded at 128 characters
+  - local path strings are bounded at 260 characters
+- Trace-pack disclosure added:
+  - `policy_source: support.trace_log_redaction_policy.preview`
+  - redaction/truncation posture
+  - local path sensitivity posture
+  - sample limit
+  - omitted/excluded material posture
+  - support/debug non-authority posture
+- Local path posture:
+  - runtime DB path, temp root, smoke artifact root, and smoke artifact file paths are emitted as local path summary objects with role, basename, truncated value, `sensitive_support_metadata`, and `local_path_not_authority`.
+- Queue latest-ref posture:
+  - latest refs remain bounded samples and now include `sample_posture: bounded_support_provenance_only_not_evidence`.
+- Conformance map change:
+  - trace-pack `free_text_length_policy` now `conforms`
+  - trace-pack `sample_limit_disclosure` now `conforms`
+  - trace-pack `local_path_sensitivity` now `conforms`
+  - trace-pack `provider_endpoint_secret_leakage` now `conforms` for trace-pack assembly
+  - trace-pack `queue_latest_refs_bounded_summary` now `conforms`
+  - light operational log secret redaction remains `unknown`
+  - readiness/preflight alias normalization remains `gap`
+- Focused conformance summary:
+  - `conforms` = 17
+  - `partial` = 3
+  - `gap` = 1
+  - `unknown` = 2
+  - classes with gaps: `readiness_preflight_export`
+  - classes with unknowns: `light_operational_logs`
+- Verification run:
+  - `node --check src\main\support\operatorDebugTracePack.js` passed.
+  - `node --check scripts\verify-operator-debug-trace-pack.js` passed.
+  - `node --check src\main\services\supportArtifactWriterConformanceGapMapService.js` passed.
+  - `node --check scripts\verify-support-artifact-writer-conformance-gap-map.js` passed.
+  - `npm.cmd run verify:operator-debug-trace` initially failed while developing the fixture because the only queue ref had been moved to `failed`, removing the existing pending queue indicator; after adding a second pending fixture ref, rerun passed.
+  - `npm.cmd run verify:support-artifact-writer-conformance-gap-map` passed.
+  - `npm.cmd run verify:support-trace-log-redaction-policy` passed.
+  - `npm.cmd run verify:support-artifact-contents-contract` passed.
+  - `npm.cmd run verify:support-artifact-creation-policy` passed.
+  - `npm.cmd run verify:support-artifact-path-authority` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 23 warnings across 4 changed working-set files before workspace documentation updates; no renames or protected-word JSON updates performed.
+  - Final post-documentation `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 99 warnings across 6 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main` with HS188 working-tree changes.
+- `npm.cmd run verify:operator-debug-trace` creates fixture/test-controlled trace-pack artifacts under `.tmp`, as allowed by HS188 because the packet changes the trace-pack writer. These are not real operator artifacts.
+- Boundaries preserved:
+  - no light-log hardening
+  - no new support artifact classes or commands
+  - no snapshot writer or readiness/preflight export behavior changes
+  - no provider calls
+  - no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or schema mutation
+  - no runtime enforcement activation
+  - no command blocking
+  - no renderer UI work
+
 Dev updated 2026-06-02 for HS186:
 
 - Added `support.trace_log_redaction_policy.preview` as a read-only service command and renderer-eligible policy readout.
@@ -370,6 +461,30 @@ Dev updated 2026-06-02:
   - `git status --short --branch` showed branch `main...origin/main [ahead 1]` with HS178 working-tree changes.
 
 ## Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS188-trace-pack-writer-redaction-hardening.md
+```
+
+Status: trace-pack writer redaction hardening complete and accepted by Overseer.
+
+HS188 result:
+
+- `support.debug_trace_pack` now applies the accepted HS186 redaction/truncation policy to trace-pack assembly.
+- Actual light-log hardening remains unopened.
+- Runtime artifact class expansion, provider calls, storage movement, deletion/pruning behavior, runtime enforcement activation, command blocking, and UI work remain unopened.
+
+## Resting Next Options
+
+Recommended next shaping candidates:
+
+1. Rest support artifacts and continue a different storage/runtime seam.
+2. Light-log redaction policy/writer proof, if support artifact hardening continues.
+3. Readiness/preflight class-id alias normalization, if naming consistency should be tidied.
+
+Do not open Dev implementation until one of these is selected and bounded.
 
 Completed:
 

@@ -6,6 +6,17 @@ const { defaultTaskRunner } = require('../services/taskRunner');
 const { buildRuntimeBoundaryStatus } = require('./runtimeBoundaryStatus');
 const { auraTempRoot } = require('../util/tempPaths');
 
+const TRACE_POLICY_SOURCE = 'support.trace_log_redaction_policy.preview';
+const MAX_TEXT_LENGTH = 240;
+const MAX_ENDPOINT_LENGTH = 160;
+const MAX_QUEUE_ERROR_LENGTH = 160;
+const MAX_PATH_LENGTH = 260;
+const SECRET_PATTERNS = [
+  /\b(Bearer|Basic)\s+[A-Za-z0-9._~+/-]+=*/gi,
+  /\b(authorization|access_token|refresh_token|token|secret|password|cookie|sessionid|session_id)=([^&\s]+)/gi,
+  /\b(cookie|set-cookie):\s*[^\n\r;]+/gi
+];
+
 function buildOperatorDebugTracePack(db, options = {}) {
   const generatedAt = new Date().toISOString();
   const limit = positiveInteger(options.limit || 12, 'limit');
@@ -28,11 +39,15 @@ function buildOperatorDebugTracePack(db, options = {}) {
       'raw_esi_payload',
       'full killmail participant payloads',
       'full API response bodies',
-      'SDE zip contents'
+      'SDE zip contents',
+      'endpoint query values',
+      'secrets/tokens/authorization/cookie-like strings',
+      'unbounded diagnostic free text'
     ],
+    trace_pack_disclosure: tracePackDisclosure(limit),
     runtime: {
-      database_path: databasePath,
-      temp_root: auraTempRoot()
+      database_path: summarizeLocalPath(databasePath, 'runtime_database_path'),
+      temp_root: summarizeLocalPath(auraTempRoot(), 'runtime_temp_root')
     },
     runtime_boundary: buildRuntimeBoundaryStatus(db, { taskRunner, limit }),
     readiness: summarizeReadiness(buildAppReadiness(db, { databasePath, mode: 'operator-debug-trace-pack' })),
@@ -100,7 +115,10 @@ function latestFetchRuns(db, limit) {
     FROM fetch_runs
     ORDER BY started_at DESC
     LIMIT ?
-  `).all(limit);
+  `).all(limit).map((row) => ({
+    ...row,
+    error_summary: redactFreeText(row.error_summary, MAX_TEXT_LENGTH)
+  }));
 }
 
 function latestApiRequestLogs(db, limit) {
@@ -111,7 +129,11 @@ function latestApiRequestLogs(db, limit) {
     FROM api_request_logs
     ORDER BY requested_at DESC
     LIMIT ?
-  `).all(limit);
+  `).all(limit).map((row) => ({
+    ...row,
+    endpoint: redactEndpoint(row.endpoint),
+    error_message: redactFreeText(row.error_message, MAX_TEXT_LENGTH)
+  }));
 }
 
 function summarizeTasks(tasks = []) {
@@ -119,7 +141,7 @@ function summarizeTasks(tasks = []) {
     task_id: task.task_id,
     type: task.type,
     classification: task.classification,
-    scope_key: task.scope_key,
+    scope_key: redactFreeText(task.scope_key, 128),
     status: task.status,
     queued_at: task.queued_at,
     started_at: task.started_at,
@@ -130,7 +152,7 @@ function summarizeTasks(tasks = []) {
     error: task.error ? {
       code: task.error.code,
       severity: task.error.severity,
-      message: task.error.message
+      message: redactFreeText(task.error.message, MAX_TEXT_LENGTH)
     } : null,
     result_summary: summarizeTaskResult(task.result)
   }));
@@ -175,7 +197,10 @@ function latestWarnings(db, limit) {
   `).all();
   return {
     grouped,
-    latest
+    latest: latest.map((row) => ({
+      ...row,
+      message: redactFreeText(row.message, 220)
+    }))
   };
 }
 
@@ -202,36 +227,128 @@ function queueStatus(db, limit) {
       FROM discovered_killmail_refs
       ORDER BY discovered_at DESC
       LIMIT ?
-    `).all(limit)
+    `).all(limit).map((row) => ({
+      ...row,
+      last_error: redactFreeText(row.last_error, MAX_QUEUE_ERROR_LENGTH),
+      sample_posture: 'bounded_support_provenance_only_not_evidence'
+    }))
   };
 }
 
 function listSmokeArtifacts(smokeRoot, limit) {
   if (!fs.existsSync(smokeRoot)) {
     return {
-      root: smokeRoot,
+      root: summarizeLocalPath(smokeRoot, 'smoke_artifact_root'),
       found: false,
+      sample_limit: limit,
+      omitted_count: 0,
       artifacts: []
     };
   }
-  const artifacts = fs.readdirSync(smokeRoot, { withFileTypes: true })
+  const files = fs.readdirSync(smokeRoot, { withFileTypes: true })
     .filter((entry) => entry.isFile())
     .map((entry) => {
       const fullPath = path.join(smokeRoot, entry.name);
       const stat = fs.statSync(fullPath);
       return {
-        path: fullPath,
+        path: summarizeLocalPath(fullPath, 'smoke_artifact_file'),
         name: entry.name,
         size_bytes: stat.size,
         modified_at: stat.mtime.toISOString()
       };
     })
-    .sort((a, b) => b.modified_at.localeCompare(a.modified_at))
-    .slice(0, limit);
+    .sort((a, b) => b.modified_at.localeCompare(a.modified_at));
+  const artifacts = files.slice(0, limit);
   return {
-    root: smokeRoot,
+    root: summarizeLocalPath(smokeRoot, 'smoke_artifact_root'),
     found: true,
+    sample_limit: limit,
+    omitted_count: Math.max(0, files.length - artifacts.length),
     artifacts
+  };
+}
+
+function tracePackDisclosure(limit) {
+  return {
+    policy_source: TRACE_POLICY_SOURCE,
+    redaction_truncation_posture: {
+      endpoint_query_values: 'stripped',
+      secrets_tokens_authorization_cookie_like_strings: 'redacted',
+      diagnostic_free_text: `truncated_to_${MAX_TEXT_LENGTH}_chars`,
+      queue_last_error: `truncated_to_${MAX_QUEUE_ERROR_LENGTH}_chars`,
+      endpoint_strings: `truncated_to_${MAX_ENDPOINT_LENGTH}_chars`
+    },
+    local_path_sensitivity: 'local paths are emitted as sensitive support metadata with role, basename, and truncated value only',
+    sample_limit: limit,
+    omitted_excluded_material: {
+      raw_esi_payloads: 'excluded',
+      full_provider_response_bodies: 'excluded',
+      full_participant_payload_strings: 'excluded',
+      endpoint_query_values: 'excluded',
+      smoke_artifact_file_contents: 'excluded',
+      unbounded_table_dumps: 'excluded',
+      omitted_counts: 'reported where available'
+    },
+    non_authority: {
+      evidence: false,
+      discovery: false,
+      observation: false,
+      assessment_memory: false,
+      product_truth: false,
+      deletion_or_pruning_authority: false
+    }
+  };
+}
+
+function redactEndpoint(value) {
+  if (!value) {
+    return value || null;
+  }
+  let endpoint = String(value);
+  const queryIndex = endpoint.indexOf('?');
+  if (queryIndex !== -1) {
+    const query = endpoint.slice(queryIndex + 1);
+    const keyCount = query.split('&').filter(Boolean).length;
+    endpoint = `${endpoint.slice(0, queryIndex)}?[redacted_query_values;query_key_count=${keyCount}]`;
+  }
+  return truncate(redactSecrets(endpoint), MAX_ENDPOINT_LENGTH);
+}
+
+function redactFreeText(value, maxLength = MAX_TEXT_LENGTH) {
+  if (value === null || value === undefined || value === '') {
+    return value || null;
+  }
+  return truncate(redactSecrets(String(value)), maxLength);
+}
+
+function redactSecrets(value) {
+  return SECRET_PATTERNS.reduce((text, pattern) => text.replace(pattern, (match, key) => {
+    if (key && String(key).includes(':')) {
+      return '[redacted:secret]';
+    }
+    return `${key || 'secret'}=[redacted]`;
+  }), value);
+}
+
+function truncate(value, maxLength) {
+  if (!Number.isFinite(maxLength) || value.length <= maxLength) {
+    return value;
+  }
+  const marker = '...[truncated]';
+  return `${value.slice(0, Math.max(0, maxLength - marker.length))}${marker}`;
+}
+
+function summarizeLocalPath(value, role) {
+  if (!value) {
+    return null;
+  }
+  const stringValue = truncate(redactSecrets(String(value)), MAX_PATH_LENGTH);
+  return {
+    role,
+    basename: path.basename(stringValue),
+    value: stringValue,
+    sensitivity: 'sensitive_support_metadata',
+    posture: 'local_path_not_authority'
   };
 }
 
