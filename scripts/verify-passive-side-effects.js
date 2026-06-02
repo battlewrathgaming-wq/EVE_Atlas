@@ -106,6 +106,7 @@ async function verifySeededDb(root) {
       ['metadata.hydration_execution_policy.preview', () => invokeServiceCommand('metadata.hydration_execution_policy.preview', {}, context)],
       ['metadata.hydration_candidates.preview', () => invokeServiceCommand('metadata.hydration_candidates.preview', {}, context)],
       ['metadata.hydration_attention_lens.preview', () => invokeServiceCommand('metadata.hydration_attention_lens.preview', {}, context)],
+      ['metadata.local_sde_readiness.preview', () => invokeServiceCommand('metadata.local_sde_readiness.preview', {}, context)],
       ['runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],
       ['storage.authority_preflight', () => invokeServiceCommand('storage.authority_preflight', {}, context)],
       ['storage.authority_config.readback', () => invokeServiceCommand('storage.authority_config.readback', {
@@ -175,6 +176,7 @@ async function verifyEmptyDb(root) {
       ['empty metadata.hydration_execution_policy.preview', () => invokeServiceCommand('metadata.hydration_execution_policy.preview', {}, context)],
       ['empty metadata.hydration_candidates.preview', () => invokeServiceCommand('metadata.hydration_candidates.preview', {}, context)],
       ['empty metadata.hydration_attention_lens.preview', () => invokeServiceCommand('metadata.hydration_attention_lens.preview', {}, context)],
+      ['empty metadata.local_sde_readiness.preview', () => invokeServiceCommand('metadata.local_sde_readiness.preview', {}, context)],
       ['empty runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],
       ['empty storage.authority_preflight', () => invokeServiceCommand('storage.authority_preflight', {}, context)],
       ['empty storage.authority_config.readback', () => invokeServiceCommand('storage.authority_config.readback', {

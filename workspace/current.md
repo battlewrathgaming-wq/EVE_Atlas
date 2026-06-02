@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS198 accepted by HS199
+Status: HS200 accepted by HS201
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS198 accepted; Hydration attention lens can rest as read-only proof.
+Current focus: HS200 accepted; local SDE readiness gap lens can rest as read-only proof.
 
 Current heading:
 
@@ -27,6 +27,190 @@ none; no active Dev runway is open
 ```
 
 No active Dev runway is open.
+
+## Resting HS200 State
+
+## Accepted HS200 Runway
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS200-local-sde-readiness-gap-lens-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS200-local-sde-readiness-gap-lens.md
+```
+
+Task:
+
+Add a read-only preview surface for local SDE lookup readiness gaps, preferably:
+
+```txt
+metadata.local_sde_readiness.preview
+```
+
+Preferred outcome:
+
+- Atlas can show whether local topology and inventory/type lookup tables appear ready.
+- Atlas can show representative static lookup gaps from local Evidence/EVEidence-derived rows.
+- Inventory/type gaps, topology/geography gaps, and import provenance gaps remain distinct.
+- Local SDE gaps remain local readiness/import gaps, not ESI provider-needed Hydration.
+- Missing static labels degrade display/readiness but do not imply missing Evidence/EVEidence.
+
+Preserve:
+
+- no SDE download or import
+- no provider calls
+- no lookup writes
+- no Hydration writes
+- no `metadata_runs`, `entities`, or `activity_events` label writes
+- no Evidence/EVEidence creation
+- no Discovery ref mutation
+- no Watch, Assessment Memory, or Marked mutation
+- no schema changes
+- no support artifact creation
+- no runtime enforcement activation
+- no command blocking
+- no renderer UI work
+- no pruning or deletion behavior
+
+Stop if the proof requires SDE import/download, provider calls, persisted state, lookup writes, schema changes, UI work, runtime enforcement, command blocking, destructive/private/live action, real operator data inspection, or blurs local SDE readiness with ESI Hydration execution.
+
+Overseer reviewed 2026-06-02:
+
+- Accepted HS200 in `workspace/OverseerHS201-hs200-local-sde-readiness-review.md`.
+- Verified `metadata.local_sde_readiness.preview` as read-only local SDE readiness gap posture.
+- Accepted inventory/type lookup gaps, topology/geography lookup gaps, and import provenance gaps as distinct local readiness groups.
+- Confirmed local SDE gaps are not ESI provider-needed Hydration and do not create or invalidate Evidence/EVEidence.
+- Confirmed no SDE download/import, provider calls, lookup writes, Hydration writes, schema changes, runtime enforcement, command blocking, support artifact creation, Evidence/EVEidence, Discovery, Watch, Assessment Memory, Marked, pruning/deletion, or UI work were added.
+
+## HS200 Evidence
+
+Dev updated 2026-06-02:
+
+- Added `metadata.local_sde_readiness.preview` as a read-only local SDE lookup readiness gap lens.
+- Added `src/main/services/localSdeReadinessPreviewService.js`.
+- Registered the command as renderer-eligible read-only service metadata.
+- Added enforcement dry-run coverage metadata for the new command:
+  - storage/action class: `local_db_inspection`
+  - External I/O dependency: `none`
+  - runtime context: `local_sde_readiness_readout`
+  - enforcement status: `covered_read_only`
+- Added focused offline verifier:
+  - `scripts/verify-local-sde-readiness-preview.js`
+  - `npm.cmd run verify:local-sde-readiness`
+- Updated service registry, command authority, passive side-effect, and enforcement dry-run verifiers for the new command.
+- Table/count readiness posture covers:
+  - `type_metadata`
+  - `solar_systems`
+  - `regions`
+  - `constellations`
+  - `system_adjacency`
+  - `sde_imports`
+  - `sde_inventory_imports`
+- Sample focused verifier output:
+  - `type_metadata`: 1
+  - `solar_systems`: 1
+  - `regions`: 0
+  - `constellations`: 0
+  - `system_adjacency`: 0
+  - `sde_imports`: 0
+  - `sde_inventory_imports`: 0
+  - topology lookup ready: false
+  - inventory/type lookup ready: true
+  - import provenance ready: false
+  - overall ready: false
+- Gap groups:
+  - `inventory_type_lookup_gap`
+  - `topology_lookup_gap`
+  - `import_provenance_gap`
+- Representative inventory/type gap:
+  - lookup type: `inventory_type`
+  - lookup id: `999999`
+  - source basis: `ship_type_id`, `weapon_type_id`
+  - local Evidence/EVEidence-derived anchors: killmail IDs `8301`, `8302`
+  - provider-needed: false
+- Representative topology/geography gap:
+  - lookup type: `solar_system`
+  - lookup id: `30099999`
+  - source basis: `activity_events.solar_system_id`, `killmails.solar_system_id`
+  - local Evidence/EVEidence-derived anchor: killmail ID `8302`
+  - provider-needed: false
+- Representative import provenance gaps:
+  - missing `sde_imports`
+  - missing `sde_inventory_imports`
+- Boundary statements explicitly preserve:
+  - local SDE gaps are local lookup/import gaps, not ESI provider-needed Hydration
+  - local SDE gaps do not create or invalidate Evidence/EVEidence
+  - missing static labels degrade display/readiness, not trigger live ESI label work
+  - no SDE download/import is performed by this preview
+  - SDE lookup readiness repairs static local labels and geometry; ESI Hydration repairs entity readability labels
+- Verification run:
+  - `node --check src\main\services\localSdeReadinessPreviewService.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check scripts\verify-local-sde-readiness-preview.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `node --check scripts\verify-enforcement-dry-run.js` passed.
+  - `npm.cmd run verify:local-sde-readiness` passed.
+  - `npm.cmd run verify:metadata-lookup` passed.
+  - `npm.cmd run verify:sde-build-lookups` passed.
+  - `npm.cmd run verify:hydration-candidate-preview` passed.
+  - `npm.cmd run verify:hydration-attention-lens` passed.
+  - `npm.cmd run verify:app-readiness` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 436 warnings across 12 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main` with HS200 working-tree changes.
+- Boundaries preserved:
+  - no SDE download/import
+  - no provider calls
+  - no lookup writes
+  - no Hydration writes
+  - no persisted queue
+  - no `metadata_runs`, `entities`, or `activity_events` label writes
+  - no Evidence/EVEidence creation
+  - no Discovery ref mutation
+  - no Watch, Assessment Memory, or Marked mutation
+  - no schema changes
+  - no support artifact creation
+  - no runtime enforcement activation
+  - no command blocking
+  - no renderer UI work
+  - no pruning or deletion behavior
+
+## HS200 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS200-local-sde-readiness-gap-lens.md
+```
+
+Status: local SDE readiness gap lens complete and accepted by Overseer.
+
+HS200 result:
+
+- `metadata.local_sde_readiness.preview` now proves local SDE table/count posture, import provenance posture, and representative static lookup gaps from local Evidence/EVEidence-derived rows.
+- Inventory/type gaps, topology/geography gaps, and import provenance gaps remain distinct.
+- Local SDE gaps are explicitly not ESI provider-needed Hydration and not Evidence/EVEidence gaps.
+- The readout is local, deterministic, read-only, non-authorizing, and import/download-free.
+
+## Resting Next Options
+
+Recommended next shaping candidates:
+
+1. Rest Hydration/SDE previews and continue a different storage/runtime seam.
+2. Shape SDE import/download controls only after deciding operator action and storage authority expectations.
+3. Return to storage/runtime enforcement readiness without activating command blocking.
+
+Do not open Dev implementation until one of these is selected and bounded.
 
 ## Resting HS198 State
 

@@ -44,6 +44,7 @@ const { buildHydrationCandidatePreview } = require('./hydrationCandidatePreviewS
 const { buildHydrationAttentionLensPreview } = require('./hydrationAttentionLensService');
 const { buildHydrationExecutionPolicyPreview } = require('./hydrationExecutionPolicyPreviewService');
 const { buildHydrationWriteFixtureProof } = require('./hydrationWriteFixtureProofService');
+const { buildLocalSdeReadinessPreview } = require('./localSdeReadinessPreviewService');
 const { buildRuntimeHookTelemetryReadout } = require('./runtimeHookTelemetryReadoutService');
 const {
   buildExternalIoStateConfigReadback,
@@ -220,6 +221,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview selected Hydration readability landmarks from local candidates without provider calls, queues, writes, or schema changes',
     handler: ({ db, payload }) => buildHydrationAttentionLensPreview(db, payload)
+  },
+  'metadata.local_sde_readiness.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview local SDE lookup readiness gaps without download, import, provider calls, writes, or schema changes',
+    handler: ({ db, payload }) => buildLocalSdeReadinessPreview(db, payload)
   },
   'metadata.hydration_write_fixture_proof': {
     classification: 'metadata-only',
