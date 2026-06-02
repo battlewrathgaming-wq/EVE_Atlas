@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS206 accepted by HS207
+Status: HS208 active Dev runway
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS206 accepted; inactive runtime hook composed policy fact sourcing can rest as read-only proof.
+Current focus: HS208 runtime hook destination path authority fact preview.
 
 Current heading:
 
@@ -18,15 +18,65 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none; no active Dev runway is open
+workspace/DevHS208-runtime-hook-destination-path-authority-fact-preview.md
 ```
 
-No active Dev runway is open.
+## Active HS208 Runway
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS208-runtime-hook-destination-path-authority-fact-preview-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS208-runtime-hook-destination-path-authority-fact-preview.md
+```
+
+Task:
+
+Add read-only, non-enforcing `destination_path_authority` fact sourcing to the inactive runtime enforcement hook preview.
+
+Preferred outcome:
+
+- support-artifact commands can include compact destination/path authority posture
+- renderer-forged path claims remain ignored and are not echoed in hook facts
+- supplied `runtimeEnforcementFacts.destination_path_authority` remains preserved and not overwritten
+- commands without support-artifact destination needs remain not-applicable
+- destination/path authority remains separate from storage authority, budget, composed policy, support artifact creation policy, and runtime authorization
+- active runtime enforcement remains false
+
+Preserve:
+
+- no active runtime enforcement
+- no command blocking
+- no handler dispatch from the hook
+- no task wrapping or task execution from the hook
+- no provider calls
+- no provider attempt recording
+- no service-memory cooldown/lockout mutation from the hook
+- no support artifact creation
+- no snapshot creation
+- no trace-pack creation
+- no file or directory creation
+- no filesystem deletion/move/copy
+- no SDE download/import
+- no Hydration writes
+- no Evidence/EVEidence creation
+- no Discovery ref mutation
+- no Watch, Assessment Memory, or Marked mutation
+- no schema changes
+- no config writes
+- no storage movement or migration
+- no renderer UI work
+- no pruning or deletion behavior
+
+Stop if the proof requires active command blocking, runtime authorization, treating destination/path authority as a may-run-now answer, calling target handlers from the hook, task dispatch or task wrapping from the hook, provider calls, support artifact creation, snapshot or trace-pack creation, file or directory creation, filesystem deletion/move/copy, config writes, schema changes, SDE import/download, storage movement/migration, UI work, hiding missing fact classes, accepting renderer path claims as authority, or dumping unbounded path authority inventories into every hook preview.
 
 ## Resting HS206 State
 
