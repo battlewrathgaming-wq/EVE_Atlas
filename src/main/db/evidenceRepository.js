@@ -1,5 +1,14 @@
 const crypto = require('node:crypto');
 
+const ENDPOINT_MAX_LENGTH = 160;
+const ERROR_MESSAGE_MAX_LENGTH = 240;
+const REDACTED_VALUE = '[redacted]';
+const TRUNCATED_MARKER = ' [truncated]';
+const SECRET_KEY_PATTERN = /(?:token|access_token|refresh_token|auth|authorization|cookie|session|secret|password|key|apikey|api_key|signature|sig)/i;
+const SECRET_ASSIGNMENT_PATTERN = /\b(token|access_token|refresh_token|auth|authorization|cookie|session|secret|password|apikey|api_key|signature|sig)\b\s*[:=]\s*(".*?"|'.*?'|[^\s;,)&]+)/gi;
+const BEARER_PATTERN = /\b(Bearer|Basic)\s+[A-Za-z0-9._~+/=-]+/gi;
+const PROVIDER_PAYLOAD_FRAGMENT_PATTERN = /\{[^{}]*(?:killmail_id|attackers|victim|raw_esi_payload|access_token|refresh_token)[\s\S]*?\}/gi;
+
 function nowIso() {
   return new Date().toISOString();
 }
@@ -350,20 +359,21 @@ class EvidenceRepository {
   }
 
   insertApiRequestLog(log) {
+    const sanitized = sanitizeApiRequestLogPersistence(log);
     this.statements.insertApiLog.run(
-      log.request_id || createRunId('request'),
-      log.run_id || null,
-      log.run_type || (log.run_id ? 'collection' : 'unscoped'),
-      log.provider,
-      log.endpoint,
-      log.method,
-      log.status_code || null,
-      log.duration_ms || null,
-      log.cache_status || null,
-      log.retry_count || 0,
-      log.rate_limited ? 1 : 0,
-      log.error_message || null,
-      log.requested_at || nowIso()
+      sanitized.request_id || createRunId('request'),
+      sanitized.run_id || null,
+      sanitized.run_type || (sanitized.run_id ? 'collection' : 'unscoped'),
+      sanitized.provider,
+      sanitized.endpoint,
+      sanitized.method,
+      sanitized.status_code || null,
+      sanitized.duration_ms || null,
+      sanitized.cache_status || null,
+      sanitized.retry_count || 0,
+      sanitized.rate_limited ? 1 : 0,
+      sanitized.error_message || null,
+      sanitized.requested_at || nowIso()
     );
   }
 
@@ -531,8 +541,119 @@ function queueScopeIdentity(ref, scope = {}) {
   };
 }
 
+function sanitizeApiRequestLogPersistence(log = {}) {
+  return {
+    ...log,
+    endpoint: sanitizeApiLogEndpoint(log.endpoint),
+    error_message: sanitizeApiLogErrorMessage(log.error_message)
+  };
+}
+
+function sanitizeApiLogEndpoint(endpoint) {
+  const text = String(endpoint || '');
+  if (!text) {
+    return truncateForApiLog('unknown', ENDPOINT_MAX_LENGTH);
+  }
+
+  return truncateForApiLog(redactSecretAssignments(redactUrlLikeEndpoint(text)), ENDPOINT_MAX_LENGTH);
+}
+
+function sanitizeApiLogErrorMessage(message) {
+  if (message === undefined || message === null || message === '') {
+    return null;
+  }
+  const withRedactedUrls = String(message).replace(/\b(?:https?|fixture):\/\/[^\s"'<>)]*/gi, (match) => sanitizeApiLogEndpoint(match));
+  return truncateForApiLog(redactProviderPayloadFragments(redactSecretAssignments(withRedactedUrls)), ERROR_MESSAGE_MAX_LENGTH);
+}
+
+function redactUrlLikeEndpoint(text) {
+  const parsed = parseEndpointUrl(text);
+  if (!parsed) {
+    const [beforeQuery, query = ''] = text.split('?', 2);
+    const path = redactSecretPathSegments(beforeQuery);
+    if (!query) {
+      return path;
+    }
+    return `${path}?${redactedQuery(query)}`;
+  }
+
+  const prefix = parsed.hasProtocol ? `${parsed.url.protocol}//${parsed.url.host}` : '';
+  const path = redactSecretPathSegments(parsed.url.pathname || '/');
+  const query = redactedQuery(parsed.url.searchParams);
+  return query ? `${prefix}${path}?${query}` : `${prefix}${path}`;
+}
+
+function parseEndpointUrl(text) {
+  try {
+    if (/^[a-z][a-z0-9+.-]*:\/\//i.test(text)) {
+      return { url: new URL(text), hasProtocol: true };
+    }
+    if (text.startsWith('/')) {
+      return { url: new URL(text, 'https://atlas.local'), hasProtocol: false };
+    }
+  } catch (_error) {
+    return null;
+  }
+  return null;
+}
+
+function redactedQuery(query) {
+  const params = query instanceof URLSearchParams ? [...query.keys()] : queryKeys(String(query || ''));
+  return params.map((key) => `${encodeURIComponent(key)}=${REDACTED_VALUE}`).join('&');
+}
+
+function queryKeys(query) {
+  return String(query || '')
+    .replace(/^\?/, '')
+    .split('&')
+    .map((pair) => pair.split('=')[0])
+    .filter(Boolean);
+}
+
+function redactSecretPathSegments(pathname) {
+  const segments = String(pathname || '').split('/');
+  return segments.map((segment, index) => {
+    const previous = segments[index - 1] || '';
+    if (SECRET_KEY_PATTERN.test(segment)) {
+      return segment;
+    }
+    if (SECRET_KEY_PATTERN.test(previous)) {
+      return REDACTED_VALUE;
+    }
+    if (/^(bearer|basic)$/i.test(previous)) {
+      return REDACTED_VALUE;
+    }
+    return segment;
+  }).join('/');
+}
+
+function redactSecretAssignments(text) {
+  return String(text || '')
+    .replace(BEARER_PATTERN, (_match, scheme) => `${scheme} ${REDACTED_VALUE}`)
+    .replace(SECRET_ASSIGNMENT_PATTERN, (_match, key) => `${key}=${REDACTED_VALUE}`);
+}
+
+function redactProviderPayloadFragments(text) {
+  return String(text || '').replace(PROVIDER_PAYLOAD_FRAGMENT_PATTERN, '[redacted: provider payload]');
+}
+
+function truncateForApiLog(text, maxLength) {
+  const value = String(text || '');
+  if (value.length <= maxLength) {
+    return value;
+  }
+  return `${value.slice(0, Math.max(0, maxLength - TRUNCATED_MARKER.length))}${TRUNCATED_MARKER}`;
+}
+
 module.exports = {
   EvidenceRepository,
   createRunId,
-  nowIso
+  nowIso,
+  sanitizeApiRequestLogPersistence,
+  sanitizeApiLogEndpoint,
+  sanitizeApiLogErrorMessage,
+  API_REQUEST_LOG_SANITIZATION_LIMITS: Object.freeze({
+    endpoint: ENDPOINT_MAX_LENGTH,
+    error_message: ERROR_MESSAGE_MAX_LENGTH
+  })
 };

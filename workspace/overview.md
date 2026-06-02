@@ -45,6 +45,8 @@ Current state:
 - HS188 accepted by HS189
 - HS190 opened
 - HS190 accepted by HS191
+- HS192 opened
+- HS192 accepted by HS193
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -63,7 +65,7 @@ Current state:
 - HS174 accepted
 - current executor is Overseer
 - no active Dev runway is open
-- HS190 proved persisted `api_request_logs` endpoint/error redaction posture before any log persistence or export hardening; persisted endpoint/error sanitization is now a clear candidate seam, while active command blocking, broad artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
+- HS192 accepted bounded persistence sanitization for `api_request_logs.endpoint` and `api_request_logs.error_message`; active command blocking, broad artifact creation, provider-backed Hydration, runtime enforcement activation, light-log export creation, and UI work remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
 Current heading:
@@ -75,9 +77,9 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Persisted `api_request_logs` endpoint/error sanitization before insert.
-2. Light-log redaction / writer proof, if support artifact hardening continues.
-3. Readiness/preflight class-id alias normalization, if naming consistency should be tidied.
+1. Decide whether light-log redaction / writer proof should follow.
+2. Readiness/preflight class-id alias normalization remains a small tidy-up candidate.
+3. Rest support artifacts and continue a different storage/runtime seam.
 4. Runtime enforcement remains resting.
 
 See `workspace/current.md` for current truth.
@@ -156,6 +158,8 @@ Keep these as the near-memory breadcrumb trail:
 - HS188/HS189 accepted trace-pack writer hardening: `support.debug_trace_pack` now applies bounded redaction/truncation, local path sensitivity summaries, sample/exclusion disclosure, and queue latest-ref support provenance posture while leaving light logs and readiness alias gaps parked.
 - HS190 opened API request log redaction readiness runway: map persisted `api_request_logs` endpoint/error posture and smallest hardening insertion point before changing log persistence or creating light-log export behavior.
 - HS190/HS191 accepted API request log redaction readiness: `support.api_request_log_redaction_readiness.preview` proves persisted endpoint/query/error redaction is not yet hardened while raw provider bodies and raw ESI payloads are excluded by schema; no log write behavior changed.
+- HS192 opened API request log persistence sanitization runway: sanitize persisted endpoint/error values before insert while preserving provider execution, schema, trace-pack behavior, light-log export absence, runtime enforcement resting state, and Atlas data-layer boundaries.
+- HS192/HS193 accepted API request log persistence sanitization: `EvidenceRepository.insertApiRequestLog` now sanitizes persisted endpoint/error fields for tested patterns and `support.api_request_log_redaction_readiness.preview` reports the new insert posture.
 
 ## Accepted Boundaries
 

@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS190 accepted by HS191; Atlas is at a resting decision point
+Status: HS192 accepted by HS193; Atlas is at a resting decision point
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: decide the next storage/runtime hardening seam after accepting the API request log redaction readiness proof.
+Current focus: decide the next storage/runtime hardening seam after accepting API request log persistence sanitization.
 
 Current heading:
 
@@ -27,6 +27,74 @@ none
 ```
 
 No active Dev runway is open.
+
+## Accepted HS192 Runway
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS192-api-request-log-persistence-sanitization-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS192-api-request-log-persistence-sanitization.md
+```
+
+Overseer reviewed 2026-06-02:
+
+- Accepted HS192 in `workspace/OverseerHS193-hs192-api-log-sanitization-review.md`.
+- Verified endpoint/error persistence sanitization at `EvidenceRepository.insertApiRequestLog(log)`, API log readiness posture movement, queue/API/Evidence boundary, HTTP boundary, Hydration boundary, registry/authority/passive-side-effect coverage, dry-run coverage, protected-term advisory output, and diff hygiene.
+- Accepted persisted `api_request_logs.endpoint` and `api_request_logs.error_message` sanitization for tested patterns.
+- Provider request behavior, schema, reports, trace-pack writer behavior, light-log export behavior, runtime enforcement activation, command blocking, provider work, support artifact creation, and UI work remain unopened.
+
+## Historical HS192 Runway Details
+
+Task:
+
+Apply the HS190 readiness finding to the smallest useful implementation seam: sanitize persisted `api_request_logs.endpoint` and `api_request_logs.error_message` before insert.
+
+Preferred insertion point:
+
+```txt
+EvidenceRepository.insertApiRequestLog(log)
+```
+
+Required behavior:
+
+- preserve useful endpoint route shape for diagnostics/report parsing
+- strip or redact query values before persistence
+- redact secret/token/auth/cookie-like values in endpoint and error text
+- bound persisted endpoint and error-message length
+- preserve provider/status/timing/cache/retry provenance fields
+- keep raw provider bodies and raw ESI payloads out of `api_request_logs`
+- update `support.api_request_log_redaction_readiness.preview` to report the new persistence posture truthfully
+
+Preserve:
+
+- no provider request URL changes before network calls
+- no `HttpClient.json` fetch/retry/provider execution behavior changes
+- no provider worker behavior changes
+- no schema changes
+- no trace-pack writer behavior changes
+- no light-log writer/export creation
+- no provider calls
+- no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or runtime enforcement mutation
+- no command blocking
+- no renderer UI work
+
+Stop if hardening requires schema changes, broad logging framework/export work, provider behavior changes, route-shape breakage, provider calls, runtime enforcement, command blocking, destructive/private/live action, or UI work.
+
+## Resting Next Options
+
+Recommended next shaping candidates:
+
+1. Light-log redaction / writer proof, if support artifact hardening continues.
+2. Readiness/preflight class-id alias normalization, if naming consistency should be tidied.
+3. Rest support artifacts and continue a different storage/runtime seam.
+
+Do not open Dev implementation until one of these is selected and bounded.
+
+## Resting HS190 State
 
 ## Accepted HS190 Runway
 
@@ -331,6 +399,63 @@ Do not run snapshot/trace-pack write verifiers unless changed code requires it. 
 
 ## Evidence
 
+Dev updated 2026-06-02 for HS192:
+
+- Added bounded persistence sanitization for `api_request_logs.endpoint` and `api_request_logs.error_message` at `EvidenceRepository.insertApiRequestLog(log)`.
+- Sanitization helpers live in `src/main/db/evidenceRepository.js`:
+  - `sanitizeApiRequestLogPersistence(log)`
+  - `sanitizeApiLogEndpoint(endpoint)`
+  - `sanitizeApiLogErrorMessage(message)`
+  - `API_REQUEST_LOG_SANITIZATION_LIMITS`
+- Persistence rules now:
+  - preserve useful endpoint route shape for diagnostics/report parsing
+  - preserve query key names while replacing query values with `[redacted]`
+  - redact secret/token/auth/cookie/session/password/key-like query/path/assignment material
+  - redact bearer/basic authorization values in error text
+  - redact provider/ESI-payload-like JSON fragments in error text with `[redacted: provider payload]`
+  - bound persisted endpoints to 160 characters and error text to 240 characters
+  - preserve provider, method, status, timing, cache, retry, rate-limit, run, and timestamp provenance fields
+- `HttpClient.json` provider fetch behavior is unchanged; focused verification proves the original provider URL reaches `fetchImpl` unchanged before only the persisted log row is sanitized.
+- Updated `support.api_request_log_redaction_readiness.preview` to report the new posture:
+  - endpoint string persistence: `proven_at_insert`
+  - query values: `proven_at_insert`
+  - secret/token/auth/cookie-like redaction: `proven_for_tested_patterns`
+  - error message free text: `proven_at_insert`
+  - free-text length bounds: `proven_at_insert`
+  - raw provider response bodies: `excluded_by_schema`
+  - raw ESI payloads: `excluded_by_schema`
+- Updated `scripts/verify-api-request-log-redaction-readiness.js` to prove direct repository sanitization, `HttpClient` fetch URL preservation, route-shape preservation, bounded strings, provenance preservation, query/secret redaction, and provider-payload-fragment omission.
+- Sample persisted endpoint:
+  - input: `https://esi.evetech.net/latest/killmails/123456/abcDEF/?token=secret-token&scope=esi-killmails.read.v1&cookie=private-cookie`
+  - stored: `https://esi.evetech.net/latest/killmails/123456/abcDEF/?token=[redacted]&scope=[redacted]&cookie=[redacted]`
+- Verification run:
+  - `node --check src\main\db\evidenceRepository.js` passed.
+  - `node --check src\main\services\apiRequestLogRedactionReadinessService.js` passed.
+  - `node --check scripts\verify-api-request-log-redaction-readiness.js` passed.
+  - `npm.cmd run verify:api-request-log-redaction-readiness` passed.
+  - `npm.cmd run verify:support-artifact-writer-conformance-gap-map` passed.
+  - `npm.cmd run verify:support-trace-log-redaction-policy` passed.
+  - `npm.cmd run verify:queue-api-evidence-write` passed.
+  - `npm.cmd run verify:http-boundaries` passed.
+  - `npm.cmd run verify:hydration` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output after workspace documentation updates: 127 warnings across 7 changed working-set files; no renames or protected-word JSON updates performed.
+- Boundaries preserved:
+  - no provider request URL changes before network calls
+  - no `HttpClient.json` fetch/retry/provider execution behavior changes
+  - no provider worker behavior changes
+  - no schema changes
+  - no report behavior changes
+  - no trace-pack writer behavior changes
+  - no light-log writer/export creation
+  - no provider calls
+  - no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or runtime enforcement mutation
+  - no command blocking
+  - no renderer UI work
+
 Dev updated 2026-06-02 for HS190:
 
 - Added `support.api_request_log_redaction_readiness.preview` as a read-only service command and renderer-eligible readiness readout.
@@ -611,6 +736,21 @@ Dev updated 2026-06-02:
   - `git status --short --branch` showed branch `main...origin/main [ahead 1]` with HS178 working-tree changes.
 
 ## Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS192-api-request-log-persistence-sanitization.md
+```
+
+Status: API request log persistence sanitization complete; pending Overseer review.
+
+HS192 result:
+
+- `api_request_logs.endpoint` and `api_request_logs.error_message` are sanitized and bounded at `EvidenceRepository.insertApiRequestLog` before persistence.
+- `support.api_request_log_redaction_readiness.preview` now reports the insert-time hardening posture truthfully.
+- Provider request URLs, fetch/retry/provider execution behavior, provider workers, schema, reports, trace-pack writer behavior, light-log exports, runtime enforcement activation, command blocking, support artifact creation, and UI work remain unchanged.
+- Historical already-persisted API log rows are not backfilled or migrated.
 
 Completed:
 

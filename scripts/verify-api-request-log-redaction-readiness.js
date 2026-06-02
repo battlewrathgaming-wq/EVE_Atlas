@@ -1,4 +1,11 @@
 const { openDatabase, migrate, closeDatabase } = require('../src/main/db/database');
+const {
+  API_REQUEST_LOG_SANITIZATION_LIMITS,
+  EvidenceRepository,
+  sanitizeApiLogEndpoint,
+  sanitizeApiLogErrorMessage
+} = require('../src/main/db/evidenceRepository');
+const { HttpClient } = require('../src/main/api/httpClient');
 const { invokeServiceCommand, listServiceCommands } = require('../src/main/services/serviceRegistry');
 const { buildApiRequestLogRedactionReadinessPreview } = require('../src/main/services/apiRequestLogRedactionReadinessService');
 
@@ -22,6 +29,7 @@ async function main() {
     assertSame(after, before, 'API request log readiness preview should not mutate DB tables');
     verifyCoverage(preview);
     verifyCurrentPosture(preview);
+    await verifyPersistenceSanitization(db);
     verifyDirectBuilder();
     verifyCommandRegistration();
 
@@ -107,16 +115,97 @@ function verifyCoverage(preview) {
 }
 
 function verifyCurrentPosture(preview) {
-  assert(preview.current_posture.endpoint_string.status === 'unproven', 'endpoint persistence redaction should be unproven');
-  assert(preview.current_posture.query_values.status === 'absent', 'query value stripping should be absent before persistence');
-  assert(preview.current_posture.secret_token_auth_cookie_redaction.status === 'unproven', 'secret redaction should be unproven');
-  assert(preview.current_posture.error_message_free_text.status === 'unproven', 'error message redaction should be unproven');
-  assert(preview.current_posture.free_text_length_bounds.status === 'absent', 'free-text length bounds should be absent before persistence');
+  assert(preview.persistence_sanitization_active === true, 'persistence sanitization should be active');
+  assert(preview.persistence_sanitization_scope.includes('EvidenceRepository.insertApiRequestLog'), 'persistence sanitization should name repository helper');
+  assert(preview.current_posture.endpoint_string.status === 'proven_at_insert', 'endpoint persistence redaction should be proven at insert');
+  assert(preview.current_posture.query_values.status === 'proven_at_insert', 'query value stripping should be proven before persistence');
+  assert(preview.current_posture.secret_token_auth_cookie_redaction.status === 'proven_for_tested_patterns', 'secret redaction should be proven for tested patterns');
+  assert(preview.current_posture.error_message_free_text.status === 'proven_at_insert', 'error message redaction should be proven at insert');
+  assert(preview.current_posture.free_text_length_bounds.status === 'proven_at_insert', 'free-text length bounds should be proven before persistence');
   assert(preview.current_posture.raw_provider_response_bodies.status === 'excluded_by_schema', 'raw provider bodies should be excluded by schema');
   assert(preview.current_posture.raw_esi_payloads.status === 'excluded_by_schema', 'raw ESI payloads should be excluded by schema');
   assert(preview.affected_surfaces.trace_pack_assembly_redaction === 'separate_already_hardened_by_HS188', 'trace-pack redaction should stay separate');
   assert(preview.affected_surfaces.light_log_export === 'not created', 'light-log export should not be created');
   assert(preview.recommended_later_hardening.smallest_insertion_point.includes('EvidenceRepository.insertApiRequestLog'), 'smallest insertion point should name repository helper');
+}
+
+async function verifyPersistenceSanitization(db) {
+  const repository = new EvidenceRepository(db);
+  const endpoint = 'https://esi.evetech.net/latest/killmails/123456/abcDEF/?token=secret-token&scope=esi-killmails.read.v1&cookie=private-cookie';
+  const errorMessage = [
+    `HTTP 500 for ${endpoint}`,
+    'Authorization: Bearer very-secret-provider-token',
+    'raw body {"killmail_id":123456,"victim":{"character_id":42},"attackers":[{"character_id":43}]}',
+    'x'.repeat(API_REQUEST_LOG_SANITIZATION_LIMITS.error_message + 80)
+  ].join(' ');
+
+  repository.insertApiRequestLog({
+    request_id: 'request_sanitization_direct',
+    run_type: 'unscoped',
+    provider: 'esi',
+    endpoint,
+    method: 'GET',
+    status_code: 500,
+    duration_ms: 42,
+    cache_status: 'miss',
+    retry_count: 2,
+    rate_limited: true,
+    error_message: errorMessage,
+    requested_at: '2026-06-02T00:00:00.000Z'
+  });
+
+  const direct = db.prepare('SELECT * FROM api_request_logs WHERE request_id = ?').get('request_sanitization_direct');
+  verifySanitizedEndpoint(direct.endpoint);
+  verifySanitizedError(direct.error_message);
+  assert(direct.provider === 'esi', 'provider provenance should be preserved');
+  assert(direct.method === 'GET', 'method provenance should be preserved');
+  assert(direct.status_code === 500, 'status provenance should be preserved');
+  assert(direct.duration_ms === 42, 'timing provenance should be preserved');
+  assert(direct.cache_status === 'miss', 'cache posture should be preserved');
+  assert(direct.retry_count === 2, 'retry count should be preserved');
+  assert(direct.rate_limited === 1, 'rate-limit posture should be preserved');
+
+  const fetchedEndpoints = [];
+  const client = new HttpClient({
+    repository,
+    fetchImpl: async (fetchEndpoint) => {
+      fetchedEndpoints.push(fetchEndpoint);
+      return {
+        ok: true,
+        status: 200,
+        text: async () => '{"ok":true}'
+      };
+    }
+  });
+  await client.json('esi', endpoint);
+  assertSame(fetchedEndpoints, [endpoint], 'provider fetch endpoint should be unchanged before network call');
+  const httpLog = db.prepare('SELECT endpoint FROM api_request_logs WHERE request_id != ? ORDER BY rowid DESC LIMIT 1').get('request_sanitization_direct');
+  verifySanitizedEndpoint(httpLog.endpoint);
+
+  assert(sanitizeApiLogEndpoint(endpoint).includes('/latest/killmails/123456/abcDEF/'), 'direct endpoint helper should preserve route shape');
+  assert(sanitizeApiLogErrorMessage(errorMessage).length <= API_REQUEST_LOG_SANITIZATION_LIMITS.error_message, 'direct error helper should bound text');
+}
+
+function verifySanitizedEndpoint(endpoint) {
+  assert(endpoint.includes('/latest/killmails/123456/abcDEF/'), 'sanitized endpoint should preserve route path shape');
+  assert(endpoint.includes('token=[redacted]'), 'sanitized endpoint should preserve token key with redacted value');
+  assert(endpoint.includes('scope=[redacted]'), 'sanitized endpoint should preserve non-secret query key with redacted value');
+  assert(endpoint.includes('cookie=[redacted]'), 'sanitized endpoint should preserve cookie key with redacted value');
+  assert(!endpoint.includes('secret-token'), 'sanitized endpoint should not persist token value');
+  assert(!endpoint.includes('esi-killmails.read.v1'), 'sanitized endpoint should not persist query value');
+  assert(!endpoint.includes('private-cookie'), 'sanitized endpoint should not persist cookie value');
+  assert(endpoint.length <= API_REQUEST_LOG_SANITIZATION_LIMITS.endpoint, 'sanitized endpoint should be bounded');
+}
+
+function verifySanitizedError(errorMessage) {
+  assert(errorMessage.includes('/latest/killmails/123456/abcDEF/'), 'sanitized error should preserve route context');
+  assert(errorMessage.includes('token=[redacted]'), 'sanitized error should redact URL query values');
+  assert(errorMessage.includes('Authorization=[redacted]') || errorMessage.includes('Bearer [redacted]'), 'sanitized error should redact authorization material');
+  assert(errorMessage.includes('[redacted: provider payload]'), 'sanitized error should redact provider payload fragments');
+  assert(!errorMessage.includes('secret-token'), 'sanitized error should not persist URL token value');
+  assert(!errorMessage.includes('very-secret-provider-token'), 'sanitized error should not persist bearer token value');
+  assert(!errorMessage.includes('"victim"'), 'sanitized error should not persist raw ESI payload fragment');
+  assert(errorMessage.length <= API_REQUEST_LOG_SANITIZATION_LIMITS.error_message, 'sanitized error should be bounded');
 }
 
 function verifyDirectBuilder() {

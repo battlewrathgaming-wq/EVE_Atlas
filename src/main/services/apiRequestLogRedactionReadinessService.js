@@ -4,8 +4,8 @@ const WRITE_SOURCES = Object.freeze([
     function_or_path: 'HttpClient.log(entry)',
     posture: 'primary runtime provider logging path',
     writes_through: 'EvidenceRepository.insertApiRequestLog',
-    current_endpoint_posture: 'endpoint is persisted as supplied to HttpClient.json',
-    current_error_text_posture: 'errorMessage is persisted as supplied by HttpClient error handling',
+    current_endpoint_posture: 'provider request endpoint is passed unchanged to fetch, then sanitized at repository insert before persistence',
+    current_error_text_posture: 'errorMessage is passed by HttpClient error handling, then sanitized at repository insert before persistence',
     provider_execution_affected_by_this_preview: false
   },
   {
@@ -13,8 +13,8 @@ const WRITE_SOURCES = Object.freeze([
     function_or_path: 'EvidenceRepository.insertApiRequestLog(log)',
     posture: 'single repository insert helper for api_request_logs rows',
     writes_through: 'prepared INSERT INTO api_request_logs',
-    current_endpoint_posture: 'endpoint is stored without redaction/truncation in this helper',
-    current_error_text_posture: 'error_message is stored without redaction/truncation in this helper',
+    current_endpoint_posture: 'endpoint is query-value redacted, secret-like segment/assignment redacted, and length-bounded before INSERT',
+    current_error_text_posture: 'error_message has URL query values, secret-like assignments, bearer/basic values, and length bounded before INSERT',
     provider_execution_affected_by_this_preview: false
   },
   {
@@ -78,14 +78,14 @@ const PERSISTED_FIELDS = Object.freeze([
   field('run_id', 'run provenance link', 'stored as supplied', 'support provenance only'),
   field('run_type', 'collection/metadata/unscoped lane', 'stored as supplied/defaulted', 'classification/provenance'),
   field('provider', 'provider label', 'stored as supplied', 'provider provenance'),
-  field('endpoint', 'provider endpoint string', 'stored as supplied today', 'query values and secret-like values are not proven redacted before persistence'),
+  field('endpoint', 'provider endpoint string', 'sanitized at EvidenceRepository.insertApiRequestLog before INSERT', 'query values and secret-like values are redacted before persistence while route shape is preserved'),
   field('method', 'HTTP method', 'stored as supplied', 'low sensitivity'),
   field('status_code', 'HTTP status', 'stored as supplied', 'low sensitivity'),
   field('duration_ms', 'timing', 'stored as supplied', 'low sensitivity'),
   field('cache_status', 'cache/retry posture', 'stored as supplied/defaulted', 'low sensitivity'),
   field('retry_count', 'retry count', 'stored as supplied/defaulted', 'low sensitivity'),
   field('rate_limited', 'provider wait signal', 'stored as supplied/defaulted', 'low sensitivity'),
-  field('error_message', 'diagnostic free text', 'stored as supplied today', 'secret redaction and length bounds are not proven before persistence'),
+  field('error_message', 'diagnostic free text', 'sanitized at EvidenceRepository.insertApiRequestLog before INSERT', 'secret redaction, URL query redaction, and length bounds are applied before persistence'),
   field('requested_at', 'timestamp', 'stored as supplied/defaulted', 'low sensitivity')
 ]);
 
@@ -117,6 +117,8 @@ function buildApiRequestLogRedactionReadinessPreview() {
     runtime_enforcement_active: false,
     command_blocking_active: false,
     log_write_behavior_changed: false,
+    persistence_sanitization_active: true,
+    persistence_sanitization_scope: 'api_request_logs.endpoint and api_request_logs.error_message at EvidenceRepository.insertApiRequestLog',
     trace_pack_writer_changed: false,
     light_log_writer_created: false,
     policy_source: 'support.trace_log_redaction_policy.preview',
@@ -133,11 +135,11 @@ function buildApiRequestLogRedactionReadinessPreview() {
     },
     write_sources: WRITE_SOURCES,
     current_posture: {
-      endpoint_string: posture('unproven', 'Persisted endpoint is passed through from caller/HttpClient without centralized redaction or max-length enforcement.'),
-      query_values: posture('absent', 'No persistence-layer query value stripping is currently applied to api_request_logs.endpoint.'),
-      secret_token_auth_cookie_redaction: posture('unproven', 'No centralized pre-persistence redaction proof exists for endpoint or error_message.'),
-      error_message_free_text: posture('unproven', 'error_message is persisted as supplied by HttpClient or direct repository callers.'),
-      free_text_length_bounds: posture('absent', 'No max-length policy is enforced before api_request_logs persistence.'),
+      endpoint_string: posture('proven_at_insert', 'EvidenceRepository.insertApiRequestLog sanitizes endpoint before INSERT while preserving route shape for diagnostics/report parsing.'),
+      query_values: posture('proven_at_insert', 'Endpoint query keys are preserved with redacted values before persistence; URL query values inside error_message are redacted before persistence.'),
+      secret_token_auth_cookie_redaction: posture('proven_for_tested_patterns', 'Secret/token/auth/cookie-like query/path/assignment and bearer/basic patterns are redacted before persistence for tested endpoint/error patterns.'),
+      error_message_free_text: posture('proven_at_insert', 'error_message is sanitized for URL query values and secret-like text before INSERT.'),
+      free_text_length_bounds: posture('proven_at_insert', 'endpoint and error_message are bounded before api_request_logs persistence.'),
       provider_status_timing_cache_retry: posture('proven_present', 'provider, method, status_code, duration_ms, cache_status, retry_count, rate_limited, and requested_at are persisted as support provenance fields.'),
       raw_provider_response_bodies: posture('excluded_by_schema', 'api_request_logs has no response-body column and HttpClient.log does not pass response body text.'),
       raw_esi_payloads: posture('excluded_by_schema', 'api_request_logs has no raw ESI payload column; raw ESI evidence lives in killmails, not log rows.')
@@ -152,26 +154,24 @@ function buildApiRequestLogRedactionReadinessPreview() {
       light_log_export: 'not created'
     },
     recommended_later_hardening: {
-      smallest_insertion_point: 'centralize sanitization immediately before EvidenceRepository.insertApiRequestLog persists endpoint and error_message',
+      smallest_insertion_point: 'completed for api_request_logs.endpoint and api_request_logs.error_message at EvidenceRepository.insertApiRequestLog',
       preferred_files: [
-        'src/main/db/evidenceRepository.js',
-        'src/main/api/httpClient.js'
+        'src/main/db/evidenceRepository.js'
       ],
       rationale: [
         'EvidenceRepository.insertApiRequestLog is the single repository helper for persisted api_request_logs rows.',
-        'HttpClient.log is the primary runtime provider path and already has provider/method/status/timing context.',
-        'A later change can sanitize endpoint/error values before persistence without changing provider execution or report parsing semantics if route shape is preserved.'
+        'Sanitizing at repository insert covers HttpClient.log and direct fixture/repository callers without changing provider execution.',
+        'Route path segments remain intact so report parsing can continue to derive provider/system/actor/window context.'
       ],
       defer_until_accepted: [
-        'query value stripping before persistence',
-        'secret/token/auth/cookie redaction before persistence',
-        'error_message max length before persistence',
-        'report parsing compatibility review for endpoint route shape'
+        'any broader log framework/export work',
+        'any light operational log writer/export',
+        'any historical backfill of already-persisted api_request_logs rows'
       ]
     },
     boundary: [
-      'Read-only API request log redaction readiness preview only; it does not change api_request_logs write behavior.',
-      'It does not change HttpClient, provider workers, trace-pack writer behavior, reports, Hydration, Evidence/EVEidence, Discovery refs, Watch, storage config, External I/O config, or schema.',
+      'API request log persistence sanitization is active only for api_request_logs.endpoint and api_request_logs.error_message at repository insert.',
+      'It does not change provider request URLs, HttpClient fetch/retry/provider execution behavior, provider workers, trace-pack writer behavior, reports, Hydration, Evidence/EVEidence, Discovery refs, Watch, storage config, External I/O config, or schema.',
       'It does not call providers, create support artifacts, create light-log exports, activate runtime enforcement, or block commands.',
       'Persisted api_request_logs are provider provenance and operational diagnostics, not Evidence/EVEidence.',
       'Trace-pack assembly redaction from HS188 is separate from persisted api_request_logs redaction.'
