@@ -44,6 +44,7 @@ async function main() {
     const hydrationBacklogPreviewCommand = commands.find((entry) => entry.command === 'metadata.hydration_backlog.preview');
     const hydrationExecutionPolicyCommand = commands.find((entry) => entry.command === 'metadata.hydration_execution_policy.preview');
     const hydrationCandidatePreviewCommand = commands.find((entry) => entry.command === 'metadata.hydration_candidates.preview');
+    const hydrationAttentionLensCommand = commands.find((entry) => entry.command === 'metadata.hydration_attention_lens.preview');
     const hydrationWriteFixtureCommand = commands.find((entry) => entry.command === 'metadata.hydration_write_fixture_proof');
     const sdeBuildLookupsCommand = commands.find((entry) => entry.command === 'sde.build-lookups');
     const watchCreateCommand = commands.find((entry) => entry.command === 'watch.create');
@@ -125,6 +126,9 @@ async function main() {
     assert(hydrationCandidatePreviewCommand?.classification === 'read-only', 'metadata.hydration_candidates.preview should be read-only');
     assert(hydrationCandidatePreviewCommand?.effects.includes('read-only'), 'metadata.hydration_candidates.preview should declare read-only effect');
     assert(hydrationCandidatePreviewCommand?.renderer_allowed === true, 'metadata.hydration_candidates.preview should be renderer eligible');
+    assert(hydrationAttentionLensCommand?.classification === 'read-only', 'metadata.hydration_attention_lens.preview should be read-only');
+    assert(hydrationAttentionLensCommand?.effects.includes('read-only'), 'metadata.hydration_attention_lens.preview should declare read-only effect');
+    assert(hydrationAttentionLensCommand?.renderer_allowed === true, 'metadata.hydration_attention_lens.preview should be renderer eligible');
     assert(hydrationWriteFixtureCommand?.classification === 'metadata-only', 'metadata.hydration_write_fixture_proof should be metadata-only');
     assert(hydrationWriteFixtureCommand?.effects.includes('metadata-readability'), 'metadata.hydration_write_fixture_proof should declare metadata readability');
     assert(hydrationWriteFixtureCommand?.renderer_allowed === false, 'metadata.hydration_write_fixture_proof should not be renderer eligible');
@@ -256,6 +260,15 @@ async function main() {
     assert(hydrationCandidatePreview.read_only === true, 'hydration candidate preview should be read-only');
     assert(hydrationCandidatePreview.provider_calls === 0, 'hydration candidate preview should not call providers');
     assert(hydrationCandidatePreview.persisted_queue === false, 'hydration candidate preview should not persist a queue');
+
+    const hydrationAttentionLens = await invokeServiceCommand('metadata.hydration_attention_lens.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(hydrationAttentionLens.read_only === true, 'hydration attention lens should be read-only');
+    assert(hydrationAttentionLens.provider_calls === 0, 'hydration attention lens should not call providers');
+    assert(hydrationAttentionLens.persisted_queue === false, 'hydration attention lens should not persist a queue');
+    assert(hydrationAttentionLens.command_blocking_active === false, 'hydration attention lens should not activate command blocking');
 
     const gateStack = await invokeServiceCommand('support.gate_stack_readout', {}, {
       db,

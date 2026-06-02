@@ -41,6 +41,7 @@ const {
 const { buildComposedGatePolicyPreview } = require('./composedGatePolicyService');
 const { buildHydrationBacklogPreview } = require('./hydrationBacklogPreviewService');
 const { buildHydrationCandidatePreview } = require('./hydrationCandidatePreviewService');
+const { buildHydrationAttentionLensPreview } = require('./hydrationAttentionLensService');
 const { buildHydrationExecutionPolicyPreview } = require('./hydrationExecutionPolicyPreviewService');
 const { buildHydrationWriteFixtureProof } = require('./hydrationWriteFixtureProofService');
 const { buildRuntimeHookTelemetryReadout } = require('./runtimeHookTelemetryReadoutService');
@@ -212,6 +213,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview deduped local Hydration candidate demand without provider calls, queues, writes, or schema changes',
     handler: ({ db, payload }) => buildHydrationCandidatePreview(db, payload)
+  },
+  'metadata.hydration_attention_lens.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview selected Hydration readability landmarks from local candidates without provider calls, queues, writes, or schema changes',
+    handler: ({ db, payload }) => buildHydrationAttentionLensPreview(db, payload)
   },
   'metadata.hydration_write_fixture_proof': {
     classification: 'metadata-only',

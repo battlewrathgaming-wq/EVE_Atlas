@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS196 accepted by HS197
+Status: HS198 accepted by HS199
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS196 accepted; support artifact alias normalization can rest.
+Current focus: HS198 accepted; Hydration attention lens can rest as read-only proof.
 
 Current heading:
 
@@ -27,6 +27,167 @@ none; no active Dev runway is open
 ```
 
 No active Dev runway is open.
+
+## Resting HS198 State
+
+## Accepted HS198 Runway
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS198-hydration-attention-lens-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS198-hydration-attention-lens.md
+```
+
+Task:
+
+Add or refine a read-only preview surface for Hydration attention selection, preferably:
+
+```txt
+metadata.hydration_attention_lens.preview
+```
+
+Acceptable alternative:
+
+- extend `metadata.hydration_candidates.preview` with a clearly separated `attention_lens` section if that better fits the existing service shape.
+
+Preferred outcome:
+
+- Atlas can show which local IDs become selected readability landmarks for a current operator lens.
+- Atlas can show which candidate IDs remain deferred/background/unresolved.
+- Provider-needed, known-local, and local-SDE-gap candidates remain distinct.
+- Unhydrated IDs are not treated as failure, missing Evidence/EVEidence, or proof gaps.
+- Watch/background candidates do not starve view/local-record candidates.
+
+Preserve:
+
+- no persisted Hydration queue
+- no provider calls
+- no Hydration writes
+- no `metadata_runs`, `entities`, or `activity_events` label writes
+- no Evidence/EVEidence creation
+- no Discovery ref mutation
+- no Watch, Assessment Memory, or Marked mutation
+- no schema changes
+- no support artifact creation
+- no runtime enforcement activation
+- no command blocking
+- no renderer UI work
+- no pruning, deletion, label removal, or de-emphasis behavior
+
+Stop if the proof requires provider calls, persisted state, schema changes, UI work, runtime enforcement, command blocking, destructive/private/live action, real operator data inspection, or blurs Hydration with ESI Evidence Expansion.
+
+Overseer reviewed 2026-06-02:
+
+- Accepted HS198 in `workspace/OverseerHS199-hs198-hydration-attention-lens-review.md`.
+- Verified `metadata.hydration_attention_lens.preview` as read-only local Hydration attention selection.
+- Accepted selected readability landmarks and deferred unresolved IDs as preview posture only.
+- Confirmed provider-needed, known-local, and local-SDE-gap groups remain distinct.
+- Confirmed no provider calls, Hydration writes, persisted queue, schema changes, pruning/deletion, runtime enforcement, command blocking, support artifact creation, Evidence/EVEidence, Discovery, Watch, Assessment Memory, Marked, or UI work were added.
+
+## HS198 Evidence
+
+Dev updated 2026-06-02:
+
+- Added `metadata.hydration_attention_lens.preview` as a read-only Hydration attention selection surface.
+- Added `src/main/services/hydrationAttentionLensService.js`.
+- Reused existing `metadata.hydration_candidates.preview` derivation as source material instead of creating another data path.
+- Registered the command as renderer-eligible read-only service metadata.
+- Added enforcement dry-run coverage metadata for the new command:
+  - storage/action class: `local_db_inspection`
+  - External I/O dependency: `none`
+  - runtime context: `hydration_attention_lens_readout`
+  - enforcement status: `covered_read_only`
+- Added focused offline verifier:
+  - `scripts/verify-hydration-attention-lens.js`
+  - `npm.cmd run verify:hydration-attention-lens`
+- Updated service registry, command authority, and passive side-effect verifiers for the new read-only command.
+- Sample attention lens output:
+  - source candidate count: 4
+  - selected candidate count: 3
+  - deferred/background candidate count: 1
+  - provider-needed selected count: 2
+  - known-local selected count: 1
+  - local-SDE-gap selected count: 1
+  - selected groups: provider-needed = 1, known-local = 1, local-SDE-gap = 1
+  - deferred groups: provider-needed = 1, known-local = 0, local-SDE-gap = 0
+- Selected candidates are represented with stable `dedupe_key`, candidate kind, entity/lookup ids, label state, provider-needed flag, group, attention role, attention basis, lanes, source anchors, source basis, killmail count, appearance count, and Hydration/Evidence boundary text.
+- Deferred candidates are represented with stable `dedupe_key`, candidate kind, entity/lookup ids, label state, provider-needed flag, group, deferred reason, lanes, source anchors, killmail count, and appearance count.
+- Provider-needed, known-local, and local-SDE-gap candidates remain distinct:
+  - provider-needed means entity label readability may need future provider-backed Hydration under gates
+  - known-local means a readable local label already exists or is stale local metadata
+  - local-SDE-gap means static type/geography label gap belongs to local SDE lookup readiness, not ESI Hydration
+- Boundary statements explicitly preserve:
+  - IDs remain facts and labels are readability landmarks over local records
+  - unhydrated IDs are not failure, missing Evidence/EVEidence, or proof gaps
+  - the lens is not a persisted Hydration queue and not authorization to call providers
+  - Watch/background readability demand is patient and must not starve view/local-record readability
+- Verification run:
+  - `node --check src\main\services\hydrationAttentionLensService.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check scripts\verify-hydration-attention-lens.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `npm.cmd run verify:hydration-attention-lens` passed.
+  - `npm.cmd run verify:hydration-candidate-preview` passed.
+  - `npm.cmd run verify:hydration-backlog-preview` passed.
+  - `npm.cmd run verify:hydration-execution-policy` passed.
+  - `npm.cmd run verify:hydration` passed.
+  - `npm.cmd run verify:metadata-status` passed.
+  - `npm.cmd run verify:metadata-lookup` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 345 warnings across 10 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main` with HS198 working-tree changes.
+- Boundaries preserved:
+  - no provider calls
+  - no Hydration writes
+  - no persisted Hydration queue
+  - no `metadata_runs`, `entities`, or `activity_events` label writes
+  - no Evidence/EVEidence creation
+  - no Discovery ref mutation
+  - no Watch, Assessment Memory, or Marked mutation
+  - no schema changes
+  - no support artifact creation
+  - no runtime enforcement activation
+  - no command blocking
+  - no renderer UI work
+  - no pruning, deletion, label removal, or de-emphasis behavior
+
+## HS198 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS198-hydration-attention-lens.md
+```
+
+Status: Hydration attention lens preview complete and accepted by Overseer.
+
+HS198 result:
+
+- `metadata.hydration_attention_lens.preview` now proves selected Hydration readability landmarks from local candidate demand.
+- Selected/deferred candidates remain inspectable with stable IDs, basis/source anchors, lane posture, and explicit boundary text.
+- Provider-needed, known-local, and local-SDE-gap candidates remain separate, and Watch/background candidates remain patient behind view/local-record attention.
+- The readout is local, deterministic, read-only, non-authorizing, and queue-free.
+
+## Resting Next Options
+
+Recommended next shaping candidates:
+
+1. Rest Hydration previews and continue a different storage/runtime seam.
+2. Shape a later provider/write-capable Hydration runway only after deciding execution policy.
+3. Explore local SDE readiness gaps separately from ESI Hydration.
+
+Do not open Dev implementation until one of these is selected and bounded.
 
 ## Resting HS196 State
 

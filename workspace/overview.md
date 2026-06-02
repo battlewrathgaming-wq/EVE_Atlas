@@ -51,6 +51,8 @@ Current state:
 - HS194 accepted by HS195
 - HS196 opened
 - HS196 accepted by HS197
+- HS198 opened
+- HS198 accepted by HS199
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -69,7 +71,7 @@ Current state:
 - HS174 accepted
 - current executor is Overseer
 - no active Dev runway is open
-- current work is resting HS196 after readiness/preflight alias normalization; active command blocking, broad artifact creation, provider-backed Hydration, runtime enforcement activation, and UI work remain unopened
+- current work is resting HS198 after Hydration attention lens acceptance; active command blocking, broad artifact creation, provider-backed Hydration, runtime enforcement activation, pruning/deletion, and UI work remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
 Current heading:
@@ -81,8 +83,8 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Rest support artifacts and continue a different storage/runtime seam.
-2. Inspect readiness/preflight local path sensitivity only if support artifact work continues.
+1. Rest Hydration previews and continue a different storage/runtime seam.
+2. Shape a later provider/write-capable Hydration runway only after deciding execution policy.
 3. Runtime enforcement remains resting.
 
 See `workspace/current.md` for current truth.
@@ -167,6 +169,8 @@ Keep these as the near-memory breadcrumb trail:
 - HS194/HS195 accepted light operational log conformance refresh: `support.artifact_writer_conformance_gap_map.preview` now has no unknown classes, while `readiness_preflight_export` remains the only conformance-map gap.
 - HS196 opened readiness/preflight alias normalization: link `readiness_preflight_export` as canonical contents/creation class with `readiness_preflight_reports` as current path-authority/readout alias, without creating an export writer.
 - HS196/HS197 accepted readiness/preflight alias normalization: contents contract, path authority, creation policy, and writer conformance map now disclose the canonical/alias relation; no conformance-map gaps or unknown classes remain, and no readiness/preflight export writer was created.
+- HS198 opened Hydration attention lens: prove selective readability attention from local records so selected IDs can become landmarks while unresolved IDs remain visible, without provider calls, writes, queues, schema changes, pruning/deletion, runtime enforcement, or UI work.
+- HS198/HS199 accepted Hydration attention lens: `metadata.hydration_attention_lens.preview` now proves selected readability landmarks and deferred unresolved IDs from local Hydration candidates without provider calls, writes, queues, schema changes, pruning/deletion, runtime enforcement, command blocking, or UI work.
 
 ## Accepted Boundaries
 
