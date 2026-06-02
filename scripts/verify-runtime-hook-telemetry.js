@@ -53,6 +53,7 @@ async function main() {
         provider_live_gate_sourced: true,
         composed_policy_sourced: true,
         destination_path_authority_sourced: true,
+        watch_runtime_sourced: true,
         unsourced_broad_fact_classes_reported: true,
         telemetry_persisted: false,
         support_artifacts_created: false,
@@ -113,19 +114,23 @@ async function verifyCapturedPreviewReadout(db) {
   assert(entry.sourced_broad_fact_classes.includes('provider_live_gate'), 'provider live gate should be listed as sourced');
   assert(entry.sourced_broad_fact_classes.includes('composed_policy'), 'composed policy should be listed as sourced');
   assert(entry.sourced_broad_fact_classes.includes('destination_path_authority'), 'destination path authority should be listed as sourced');
+  assert(entry.sourced_broad_fact_classes.includes('watch_runtime'), 'Watch runtime should be listed as sourced');
   assert(entry.broad_fact_class_statuses.storage_authority.status === 'sourced', 'storage authority status should be sourced');
   assert(entry.broad_fact_class_statuses.budget.status === 'sourced', 'budget status should be sourced');
   assert(entry.broad_fact_class_statuses.external_io.status === 'sourced', 'External I/O status should be sourced');
   assert(entry.broad_fact_class_statuses.provider_live_gate.status === 'sourced', 'provider live gate should be sourced');
   assert(entry.broad_fact_class_statuses.composed_policy.status === 'sourced', 'composed policy should be sourced');
   assert(entry.broad_fact_class_statuses.destination_path_authority.status === 'sourced', 'destination path authority should be sourced');
+  assert(entry.broad_fact_class_statuses.watch_runtime.status === 'sourced', 'Watch runtime should be sourced');
   assert(entry.broad_fact_class_inputs.composed_policy.source_status === 'sourced_unmapped', 'unmapped local command should report explicit composed policy unmapped posture');
   assert(entry.broad_fact_class_inputs.destination_path_authority.applies === false, 'local command should report destination path authority not applicable');
+  assert(entry.broad_fact_class_inputs.watch_runtime.applies === false, 'local command should report Watch runtime not applicable');
   assert(entry.broad_fact_class_inputs.provider_live_gate.provider_capable === false, 'local command should remain local-only in provider live gate input');
   assert(readout.sourced_broad_fact_classes.includes('storage_authority'), 'readout should summarize sourced storage authority');
   assert(readout.sourced_broad_fact_classes.includes('provider_live_gate'), 'readout should summarize sourced provider live gate');
   assert(readout.sourced_broad_fact_classes.includes('composed_policy'), 'readout should summarize sourced composed policy');
   assert(readout.sourced_broad_fact_classes.includes('destination_path_authority'), 'readout should summarize sourced destination path authority');
+  assert(readout.sourced_broad_fact_classes.includes('watch_runtime'), 'readout should summarize sourced Watch runtime');
   assert(entry.active_runtime_enforcement === false, 'preview should report runtime enforcement inactive');
   assert(entry.active_enforcement_false === true, 'preview should prove active enforcement flags are false');
   assert(entry.preview_only === true, 'preview should remain preview-only');

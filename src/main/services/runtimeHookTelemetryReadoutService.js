@@ -4,7 +4,8 @@ const BROAD_FACT_CLASSES = Object.freeze([
   'external_io',
   'provider_live_gate',
   'composed_policy',
-  'destination_path_authority'
+  'destination_path_authority',
+  'watch_runtime'
 ]);
 
 function buildRuntimeHookTelemetryReadout(input = {}) {

@@ -69,6 +69,7 @@ const { buildStorageSetupGateReadout } = require('./storageSetupGateReadoutServi
 const { writeOperatorDebugTracePack } = require('../support/operatorDebugTracePack');
 const { getScopeDefaults, validateScope } = require('./scopeService');
 const { defaultTaskRunner } = require('./taskRunner');
+const { defaultWatchSessionExecutor } = require('../watchlist/watchExecutor');
 const { buildDryRuntimeEnforcementAdapterDecision } = require('./runtimeEnforcementDryAdapter');
 
 const EFFECTS = Object.freeze({
@@ -918,6 +919,7 @@ function sourceReadOnlyRuntimeGateFacts({ command, coverage = null, context = {}
   const providerLiveGate = safeReadOnlyProviderLiveGateFact({ command, coverage, context, payload });
   const composedPolicy = safeReadOnlyComposedPolicyFact({ command, context, payload });
   const destinationPathAuthority = safeReadOnlyDestinationPathAuthorityFact({ command, context, payload });
+  const watchRuntime = safeReadOnlyWatchRuntimeFact({ command, context, payload });
 
   if (setupReadout) {
     sourced.storage_authority = storageAuthorityFactFor(setupReadout, storageReadback);
@@ -934,6 +936,9 @@ function sourceReadOnlyRuntimeGateFacts({ command, coverage = null, context = {}
   }
   if (destinationPathAuthority) {
     sourced.destination_path_authority = destinationPathAuthority;
+  }
+  if (watchRuntime) {
+    sourced.watch_runtime = watchRuntime;
   }
   return sourced;
 }
@@ -1206,6 +1211,195 @@ function safeReadOnlyDestinationPathAuthorityFact({ command, context = {}, paylo
       read_error: error.message
     };
   }
+}
+
+function safeReadOnlyWatchRuntimeFact({ command, context = {}, payload = {} }) {
+  const commandKind = watchRuntimeCommandKind(command);
+  const rendererRuntimeClaimsIgnored = context.source === 'renderer' && runtimeHookPayloadHasWatchRuntimeClaims(payload);
+  if (!commandKind) {
+    return {
+      fact_class: 'watch_runtime',
+      fact_source: 'runtime_hook_read_only_watch_task_runtime_snapshot',
+      source_status: 'sourced_not_applicable',
+      command,
+      applies: false,
+      state: 'not_applicable',
+      watch_command_kind: null,
+      renderer_authoritative: false,
+      renderer_runtime_claims_ignored: rendererRuntimeClaimsIgnored,
+      non_authorizing_preview: true
+    };
+  }
+
+  try {
+    const executor = context.runtimeHookWatchExecutor || context.watchExecutor || defaultWatchSessionExecutor;
+    const taskRunner = context.runtimeHookTaskRunner || executor?.taskRunner || defaultTaskRunner;
+    const executorState = compactWatchExecutorState(executor);
+    const taskState = compactWatchTaskState(taskRunner, executorState.active_task_id);
+    const malformed = executorState.state_status !== 'valid' || taskState.state_status !== 'valid';
+    return {
+      fact_class: 'watch_runtime',
+      fact_source: 'runtime_hook_read_only_watch_task_runtime_snapshot',
+      source_status: malformed ? 'sourced_malformed_watch_task_state' : 'sourced_watch_task_runtime_snapshot',
+      command,
+      applies: true,
+      state: malformed ? 'watch_runtime_state_malformed' : watchRuntimeStateFor(commandKind, executorState, taskState),
+      watch_command_kind: commandKind,
+      provider_backed_watch_command: true,
+      pre_handler_snapshot: true,
+      session_arm_is_provider_permission: false,
+      may_run_now_authorization: false,
+      renderer_authoritative: false,
+      renderer_runtime_claims_ignored: rendererRuntimeClaimsIgnored,
+      executor_state: executorState,
+      task_state: taskState,
+      limitations: [
+        'watch_runtime_snapshot_is_volatile_memory_only',
+        'active_task_state_is_not_durable_recovery_state',
+        'preview_does_not_arm_tick_dispatch_or_mutate_watch'
+      ],
+      non_authorizing_preview: true
+    };
+  } catch (error) {
+    return {
+      fact_class: 'watch_runtime',
+      fact_source: 'runtime_hook_read_only_watch_task_runtime_snapshot',
+      source_status: 'sourced_readout_unavailable',
+      command,
+      applies: true,
+      state: 'watch_runtime_readout_unavailable',
+      watch_command_kind: commandKind,
+      provider_backed_watch_command: true,
+      pre_handler_snapshot: true,
+      session_arm_is_provider_permission: false,
+      may_run_now_authorization: false,
+      renderer_authoritative: false,
+      renderer_runtime_claims_ignored: rendererRuntimeClaimsIgnored,
+      read_error: error.message,
+      non_authorizing_preview: true
+    };
+  }
+}
+
+function watchRuntimeCommandKind(command) {
+  if (command === 'actor.watch') {
+    return 'direct_actor_watch_collection';
+  }
+  if (command === 'system.radius.watch') {
+    return 'direct_system_radius_watch_collection';
+  }
+  if (command === 'watch.executor.arm') {
+    return 'watch_executor_arm';
+  }
+  if (command === 'watch.executor.tick') {
+    return 'watch_executor_tick';
+  }
+  return null;
+}
+
+function compactWatchExecutorState(executor = null) {
+  if (!executor || typeof executor !== 'object' || typeof executor.sessionArmed !== 'boolean') {
+    return {
+      state_status: 'malformed',
+      session_armed: null,
+      active_task_id: null,
+      active_task_id_present: false,
+      interval_active: null,
+      poll_interval_ms: null,
+      last_tick: null,
+      last_dispatch: null,
+      last_blocked_reason: null
+    };
+  }
+  return {
+    state_status: 'valid',
+    session_armed: executor.sessionArmed === true,
+    active_task_id: executor.activeTaskId || null,
+    active_task_id_present: Boolean(executor.activeTaskId),
+    interval_active: Boolean(executor.interval),
+    poll_interval_ms: Number.isFinite(Number(executor.pollIntervalMs)) ? Number(executor.pollIntervalMs) : null,
+    last_tick: executor.lastTick || null,
+    last_dispatch: compactWatchDispatch(executor.lastDispatch),
+    last_blocked_reason: executor.lastBlockedReason || null
+  };
+}
+
+function compactWatchDispatch(dispatch = null) {
+  if (!dispatch || typeof dispatch !== 'object') {
+    return null;
+  }
+  return {
+    at: dispatch.at || null,
+    watch_type: dispatch.watch_type || null,
+    watch_id: dispatch.watch_id ?? null,
+    scope_key: dispatch.scope_key || null,
+    task_id: dispatch.task_id || null
+  };
+}
+
+function compactWatchTaskState(taskRunner = null, activeTaskId = null) {
+  if (!taskRunner || typeof taskRunner.listTasks !== 'function') {
+    return {
+      state_status: 'malformed',
+      source: 'task_runner_unavailable',
+      active_task_present: Boolean(activeTaskId),
+      active_task_id: activeTaskId || null,
+      active_task_status: null,
+      queued_or_running_watch_task_count: null,
+      recent_watch_task_count: null
+    };
+  }
+  const tasks = taskRunner.listTasks({ limit: 100 });
+  const watchTasks = tasks.filter((task) => String(task.type || '').startsWith('watch.executor.'));
+  const activeTask = activeTaskId ? tasks.find((task) => task.task_id === activeTaskId) || null : null;
+  const queuedOrRunning = watchTasks.filter((task) => ['queued', 'running'].includes(task.status));
+  return {
+    state_status: 'valid',
+    source: 'task_runner_list_read_only',
+    active_task_present: Boolean(activeTask && ['queued', 'running'].includes(activeTask.status)),
+    active_task_id: activeTaskId || null,
+    active_task_status: activeTask?.status || (activeTaskId ? 'not_found_in_task_memory' : null),
+    active_task_type: activeTask?.type || null,
+    queued_or_running_watch_task_count: queuedOrRunning.length,
+    recent_watch_task_count: watchTasks.length
+  };
+}
+
+function watchRuntimeStateFor(commandKind, executorState, taskState) {
+  if (taskState.active_task_present === true || taskState.queued_or_running_watch_task_count > 0) {
+    return 'watch_task_active_or_queued';
+  }
+  if (commandKind === 'watch_executor_tick' && executorState.session_armed !== true) {
+    return 'watch_executor_not_armed';
+  }
+  if (commandKind === 'watch_executor_arm') {
+    return 'watch_executor_arm_pre_handler_intent';
+  }
+  if (executorState.active_task_id_present && taskState.active_task_status === 'not_found_in_task_memory') {
+    return 'watch_active_task_id_stale_or_unknown';
+  }
+  return 'watch_runtime_idle_or_direct_collection';
+}
+
+function runtimeHookPayloadHasWatchRuntimeClaims(payload = {}) {
+  return [
+    'watch_runtime',
+    'watchRuntime',
+    'session_armed',
+    'sessionArmed',
+    'active_task_id',
+    'activeTaskId',
+    'active_task_present',
+    'activeTaskPresent',
+    'executor_state',
+    'executorState',
+    'task_state',
+    'taskState',
+    'last_tick',
+    'lastTick',
+    'last_dispatch',
+    'lastDispatch'
+  ].some((key) => Object.prototype.hasOwnProperty.call(payload, key));
 }
 
 function destinationPathFactBase({ command, rendererPathClaimsIgnored, mappedClassIds }) {

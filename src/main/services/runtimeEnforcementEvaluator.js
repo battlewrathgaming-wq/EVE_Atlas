@@ -43,6 +43,7 @@ function gateInputsUsed(facts = {}) {
     external_io: facts.external_io || null,
     provider_live_gate: facts.provider_live_gate || null,
     destination_path_authority: facts.destination_path_authority || null,
+    watch_runtime: facts.watch_runtime || null,
     trusted_context: facts.trusted_context || null,
     composed_policy: facts.composed_policy || null,
     dry_run: facts.dry_run || null
@@ -131,6 +132,7 @@ function reasonCodesFor(facts = {}) {
   addExternalIoCodes(codes, facts.external_io);
   addProviderCodes(codes, facts.provider_live_gate);
   addDestinationCodes(codes, facts.destination_path_authority);
+  addWatchRuntimeCodes(codes, facts.watch_runtime);
   addTrustedContextCodes(codes, facts.trusted_context);
 
   for (const code of facts.composed_policy?.reason_codes || []) {
@@ -211,6 +213,23 @@ function addDestinationCodes(codes, destination = {}) {
   codes.push('path_authority_required');
   if (['conditional', 'storage_setup_required', 'path_untrusted', 'budget_blocked', 'confirmation_required'].includes(destination.state)) {
     codes.push('path_authority_conditional');
+  }
+}
+
+function addWatchRuntimeCodes(codes, watchRuntime = {}) {
+  watchRuntime = watchRuntime || {};
+  if (watchRuntime.applies !== true) {
+    return;
+  }
+  codes.push('watch_runtime_required');
+  if (watchRuntime.state) {
+    codes.push(`watch_runtime_state:${watchRuntime.state}`);
+  }
+  if (watchRuntime.task_state?.active_task_present === true) {
+    codes.push('watch_task_active');
+  }
+  if (watchRuntime.session_arm_is_provider_permission === false) {
+    codes.push('watch_arm_not_provider_permission');
   }
 }
 

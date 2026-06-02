@@ -2,7 +2,9 @@ const { openDatabase, migrate, closeDatabase } = require('../src/main/db/databas
 const { COMMAND_ENFORCEMENT_COVERAGE } = require('../src/main/services/enforcementDryRunService');
 const {
   CONFIRMATION,
+  emitInactiveRuntimeEnforcementPreview,
   invokeServiceCommand,
+  listServiceCommands,
   runtimeEnforcementFactsFor
 } = require('../src/main/services/serviceRegistry');
 
@@ -21,6 +23,7 @@ async function main() {
     await verifyProviderOptionalLocalSourceAvoidsLiveGate(db);
     await verifyRuntimeSnapshotDestinationPathAuthorityFact(db);
     await verifyTracePackDestinationPathAuthorityFact(db);
+    await verifyWatchRuntimeFactSourcing(db);
     await verifyHookStopsAfterEligibilityAndConfirmation(db);
     await verifyHookBeforeTaskWrapping(db);
     await verifyTrustedInternalBypass(db);
@@ -43,9 +46,14 @@ async function main() {
         provider_live_gate_sourced: true,
         composed_policy_sourced: true,
         destination_path_authority_sourced: true,
+        watch_runtime_sourced: true,
         mapped_local_composed_policy_sourced: true,
         snapshot_destination_path_authority_sourced: true,
         trace_pack_destination_path_authority_sourced: true,
+        actor_watch_runtime_sourced: true,
+        system_radius_watch_runtime_sourced: true,
+        watch_executor_runtime_sourced: true,
+        malformed_watch_runtime_reported_as_posture: true,
         provider_capable_external_io_sourced_without_authorizing: true,
         live_radius_rejection_sourced_without_provider_call: true,
         provider_optional_local_source_avoids_live_gate: true,
@@ -113,6 +121,7 @@ async function verifyCoverageSourcedWithoutContextFacts(db) {
   const providerLiveGate = observed[0].evaluator_decision.gate_inputs_used.provider_live_gate;
   const composedPolicy = observed[0].evaluator_decision.gate_inputs_used.composed_policy;
   const destinationPathAuthority = observed[0].evaluator_decision.gate_inputs_used.destination_path_authority;
+  const watchRuntime = observed[0].evaluator_decision.gate_inputs_used.watch_runtime;
   assert(storageAuthority?.fact_source === 'runtime_hook_read_only_storage_authority_readback', 'storage authority facts should be sourced from readback');
   assert(['sourced_configured', 'sourced_absent_unconfigured', 'sourced_missing', 'sourced_unparseable', 'sourced_invalid_schema'].includes(storageAuthority.source_status), 'storage authority source status should distinguish configured/absent/problem posture');
   assert(budget?.fact_source === 'runtime_hook_read_only_storage_setup_gate_readout', 'storage budget facts should be sourced from setup gate readout');
@@ -130,6 +139,9 @@ async function verifyCoverageSourcedWithoutContextFacts(db) {
   assert(destinationPathAuthority?.applies === false, 'local-only command should not require destination path authority');
   assert(destinationPathAuthority.state === 'not_applicable', 'local-only command should report destination authority not applicable');
   assert(destinationPathAuthority.renderer_authoritative === false, 'destination authority should never be renderer authoritative');
+  assert(watchRuntime?.applies === false, 'local-only command should not require Watch runtime posture');
+  assert(watchRuntime.state === 'not_applicable', 'local-only command should report Watch runtime not applicable');
+  assert(watchRuntime.renderer_authoritative === false, 'Watch runtime should never be renderer authoritative');
   assert(trustedContext?.renderer_allowed === true, 'trusted context posture should still reflect command metadata');
 }
 
@@ -350,6 +362,99 @@ async function verifyTracePackDestinationPathAuthorityFact(db) {
   assert(observed[0].proof.file_writers_called === false, 'hook itself should not write files for trace-pack proof');
 }
 
+async function verifyWatchRuntimeFactSourcing(db) {
+  const actorPreview = emitPreviewOnly('actor.watch', {
+    entityType: 'character',
+    entityId: 90000001
+  }, {
+    db,
+    source: 'trusted',
+    runtimeHookWatchExecutor: fakeExecutorState({
+      sessionArmed: false,
+      activeTaskId: 'task_missing_from_memory',
+      lastBlockedReason: 'fixture_blocked'
+    }),
+    runtimeHookTaskRunner: fakeTaskRunner([])
+  });
+  assert(!actorPreview.missing_fact_classes.includes('watch_runtime'), 'actor.watch should source Watch runtime facts');
+  const actorRuntime = actorPreview.evaluator_decision.gate_inputs_used.watch_runtime;
+  assert(actorRuntime?.fact_source === 'runtime_hook_read_only_watch_task_runtime_snapshot', 'actor.watch should source Watch runtime snapshot');
+  assert(actorRuntime.applies === true, 'actor.watch Watch runtime should apply');
+  assert(actorRuntime.watch_command_kind === 'direct_actor_watch_collection', 'actor.watch should report direct actor Watch kind');
+  assert(actorRuntime.state === 'watch_active_task_id_stale_or_unknown', 'stale active task id should be posture, not guessed active state');
+  assert(actorRuntime.executor_state.session_armed === false, 'actor.watch should expose executor session posture');
+  assert(actorRuntime.task_state.active_task_status === 'not_found_in_task_memory', 'actor.watch should expose missing active task memory');
+  assert(actorRuntime.may_run_now_authorization === false, 'Watch runtime fact should not authorize runtime execution');
+  assert(actorRuntime.non_authorizing_preview === true, 'Watch runtime fact should remain non-authorizing');
+  assert(actorPreview.proof.task_runners_called === false, 'hook should not run tasks for actor Watch runtime proof');
+
+  const systemPreview = emitPreviewOnly('system.radius.watch', {
+    centerSystemId: 30000142,
+    radiusJumps: 1
+  }, {
+    db,
+    source: 'trusted',
+    runtimeHookWatchExecutor: fakeExecutorState({ sessionArmed: true }),
+    runtimeHookTaskRunner: fakeTaskRunner([])
+  });
+  const systemRuntime = systemPreview.evaluator_decision.gate_inputs_used.watch_runtime;
+  assert(!systemPreview.missing_fact_classes.includes('watch_runtime'), 'system.radius.watch should source Watch runtime facts');
+  assert(systemRuntime.watch_command_kind === 'direct_system_radius_watch_collection', 'system.radius.watch should report direct system/radius kind');
+  assert(systemRuntime.state === 'watch_runtime_idle_or_direct_collection', 'system.radius.watch should report idle/direct posture when no active task exists');
+
+  const armPreview = emitPreviewOnly('watch.executor.arm', {
+    confirmation: CONFIRMATION.WATCH_EXECUTOR_ARM,
+    watch_runtime: { session_armed: true },
+    activeTaskId: 'renderer_forged_task'
+  }, {
+    db,
+    source: 'renderer',
+    runtimeHookWatchExecutor: fakeExecutorState({ sessionArmed: false }),
+    runtimeHookTaskRunner: fakeTaskRunner([])
+  });
+  const armRuntime = armPreview.evaluator_decision.gate_inputs_used.watch_runtime;
+  assert(!armPreview.missing_fact_classes.includes('watch_runtime'), 'watch.executor.arm should source Watch runtime facts');
+  assert(armRuntime.watch_command_kind === 'watch_executor_arm', 'watch.executor.arm should report executor arm kind');
+  assert(armRuntime.state === 'watch_executor_arm_pre_handler_intent', 'watch.executor.arm should report pre-handler arm intent');
+  assert(armRuntime.renderer_runtime_claims_ignored === true, 'renderer Watch runtime claims should be ignored');
+  assert(armRuntime.session_arm_is_provider_permission === false, 'watch.executor.arm should stay separate from provider movement permission');
+  assert(JSON.stringify(armRuntime).includes('renderer_forged_task') === false, 'Watch runtime fact should not echo renderer-forged task claims');
+  assert(armPreview.proof.target_handlers_called === false, 'preview-only arm proof should not call target handler');
+
+  const tickPreview = emitPreviewOnly('watch.executor.tick', {
+    confirmation: CONFIRMATION.WATCH_EXECUTOR_TICK
+  }, {
+    db,
+    source: 'trusted',
+    runtimeHookWatchExecutor: fakeExecutorState({
+      sessionArmed: true,
+      activeTaskId: 'task_watch_active'
+    }),
+    runtimeHookTaskRunner: fakeTaskRunner([{
+      task_id: 'task_watch_active',
+      type: 'watch.executor.actor.watch',
+      status: 'running'
+    }])
+  });
+  const tickRuntime = tickPreview.evaluator_decision.gate_inputs_used.watch_runtime;
+  assert(!tickPreview.missing_fact_classes.includes('watch_runtime'), 'watch.executor.tick should source Watch runtime facts');
+  assert(tickRuntime.watch_command_kind === 'watch_executor_tick', 'watch.executor.tick should report executor tick kind');
+  assert(tickRuntime.state === 'watch_task_active_or_queued', 'watch.executor.tick should report active task posture');
+  assert(tickRuntime.task_state.active_task_present === true, 'watch.executor.tick should expose active task presence without running tasks');
+
+  const malformedPreview = emitPreviewOnly('watch.executor.tick', {
+    confirmation: CONFIRMATION.WATCH_EXECUTOR_TICK
+  }, {
+    db,
+    source: 'trusted',
+    runtimeHookWatchExecutor: { sessionArmed: 'malformed' },
+    runtimeHookTaskRunner: fakeTaskRunner([])
+  });
+  const malformedRuntime = malformedPreview.evaluator_decision.gate_inputs_used.watch_runtime;
+  assert(malformedRuntime.source_status === 'sourced_malformed_watch_task_state', 'malformed Watch state should be explicit source posture');
+  assert(malformedRuntime.state === 'watch_runtime_state_malformed', 'malformed Watch state should not be guessed');
+}
+
 async function verifyHookStopsAfterEligibilityAndConfirmation(db) {
   const ineligibleObserved = [];
   await assertRejects(
@@ -458,6 +563,10 @@ function explicitFactsFor(command, composedState) {
       applies: false,
       state: 'not_applicable'
     },
+    watch_runtime: {
+      applies: false,
+      state: 'not_applicable'
+    },
     composed_policy: {
       state: composedState,
       reason_codes: [`hook_fixture:${composedState}`]
@@ -465,6 +574,41 @@ function explicitFactsFor(command, composedState) {
     dry_run: {
       decision: 'would_allow',
       reason_codes: ['hook_fixture_dry_run_would_allow_non_authorizing']
+    }
+  };
+}
+
+function emitPreviewOnly(command, payload = {}, context = {}) {
+  const entry = listServiceCommands().find((candidate) => candidate.command === command);
+  if (!entry) {
+    throw new Error(`Missing command metadata for ${command}`);
+  }
+  return emitInactiveRuntimeEnforcementPreview(command, {
+    classification: entry.classification,
+    effects: entry.effects,
+    renderer: entry.renderer_allowed,
+    authority: entry.authority,
+    description: entry.description
+  }, payload, context);
+}
+
+function fakeExecutorState(overrides = {}) {
+  return {
+    sessionArmed: false,
+    activeTaskId: null,
+    interval: null,
+    pollIntervalMs: 60000,
+    lastTick: null,
+    lastDispatch: null,
+    lastBlockedReason: null,
+    ...overrides
+  };
+}
+
+function fakeTaskRunner(tasks = []) {
+  return {
+    listTasks() {
+      return tasks.map((task) => ({ ...task }));
     }
   };
 }

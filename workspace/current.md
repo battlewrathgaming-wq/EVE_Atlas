@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS212 opened
+Status: HS212 accepted by HS213
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS212 runtime hook Watch/task runtime fact preview.
+Current focus: HS212 accepted; inactive runtime hook Watch/task runtime fact sourcing can rest as read-only proof.
 
 Current heading:
 
@@ -18,15 +18,15 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS212-runtime-hook-watch-task-runtime-fact-preview.md
+none; no active Dev runway is open
 ```
 
-Active Dev runway is open.
+No active Dev runway is open.
 
 ## Active HS212 Runway
 
@@ -83,15 +83,119 @@ Stop if the proof requires active command blocking, runtime authorization, calli
 
 ## HS212 Evidence
 
-Pending Dev handoff.
+Dev updated 2026-06-02:
+
+- Added compact read-only `watch_runtime` fact sourcing to the inactive runtime enforcement hook in `src/main/services/serviceRegistry.js`.
+- Covered Watch/background commands:
+  - `actor.watch` -> `direct_actor_watch_collection`
+  - `system.radius.watch` -> `direct_system_radius_watch_collection`
+  - `watch.executor.arm` -> `watch_executor_arm`
+  - `watch.executor.tick` -> `watch_executor_tick`
+- Non-Watch commands now receive explicit `sourced_not_applicable` posture with `applies: false` / `state: not_applicable`.
+- The hook reads passive volatile executor fields and task-runner list posture only.
+- The hook does not call `watch.executor.status`, because that status helper can clear stale active task IDs.
+- Missing/stale/malformed Watch/task state is reported as posture instead of guessed.
+- Renderer Watch/runtime claims such as `watch_runtime`, `sessionArmed`, and `activeTaskId` are detected as ignored and are not echoed into hook facts.
+- `watch.executor.arm` explicitly reports `session_arm_is_provider_permission: false`.
+- `watch_runtime` is passed through the dry adapter/evaluator gate inputs and runtime hook telemetry broad fact readout.
+- Supplied `runtimeEnforcementFacts.watch_runtime` remains preserved and is not overwritten.
+- Focused hook verifier sample:
+  - Watch runtime sourced: true
+  - actor Watch runtime sourced: true
+  - system/radius Watch runtime sourced: true
+  - Watch executor runtime sourced: true
+  - malformed Watch runtime reported as posture: true
+  - active runtime enforcement: false
+  - command blocking: false
+  - target handlers called by hook: false
+  - task runners called by hook: false
+  - providers called by hook: false
+- Runtime hook telemetry sample:
+  - sourced broad fact classes: `storage_authority`, `budget`, `external_io`, `provider_live_gate`, `composed_policy`, `destination_path_authority`, `watch_runtime`
+  - `watch_runtime` status for local command: `sourced`
+  - `watch_runtime` source status for local command: `sourced_not_applicable`
+- Verification run:
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\runtimeEnforcementDryAdapter.js` passed.
+  - `node --check src\main\services\runtimeEnforcementEvaluator.js` passed.
+  - `node --check src\main\services\runtimeHookTelemetryReadoutService.js` passed.
+  - `node --check scripts\verify-runtime-enforcement-hook.js` passed.
+  - `node --check scripts\verify-runtime-hook-telemetry.js` passed.
+  - `npm.cmd run verify:runtime-enforcement-hook` passed.
+  - `npm.cmd run verify:runtime-hook-telemetry` passed.
+  - `npm.cmd run verify:runtime-enforcement-adapter` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:gate-stack-readout` passed.
+  - `npm.cmd run verify:watch-executor` passed.
+  - `npm.cmd run verify:watch-offline-readout` passed.
+  - `npm.cmd run verify:task-runner` passed.
+  - `npm.cmd run verify:task-concurrency` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 152 warnings across 6 changed working-set files; no renames or protected-word JSON updates performed.
+- Boundaries preserved:
+  - no active runtime enforcement
+  - no command blocking
+  - no handler dispatch from the hook
+  - no task wrapping or task execution from the hook
+  - no provider calls
+  - no provider attempt recording
+  - no service-memory cooldown/lockout mutation from the hook
+  - no Watch arming/disarming/tick execution from the hook
+  - no Watch mutation from the hook
+  - no DB writes from the hook
+  - no config writes
+  - no support artifact creation
+  - no snapshot or trace-pack creation
+  - no storage movement or migration
+  - no Hydration writes
+  - no Evidence/EVEidence creation
+  - no Discovery ref mutation
+  - no Assessment Memory or Marked mutation
+  - no schema changes
+  - no renderer UI work
+  - no pruning or deletion behavior
+  - no terminology renames
 
 ## HS212 Dev Handoff
 
-Pending:
+Completed:
 
 ```txt
 workspace/DevHS212-runtime-hook-watch-task-runtime-fact-preview.md
 ```
+
+Status: runtime hook Watch/task runtime fact preview complete and accepted by Overseer.
+
+HS212 result:
+
+- The inactive runtime hook now previews compact current-command Watch/task runtime posture for direct Watch and Watch executor commands.
+- Non-Watch commands report Watch runtime as not applicable.
+- Missing/stale/malformed Watch/task runtime state is visible as posture rather than guessed.
+- Watch runtime remains preview-only and non-authorizing.
+- Runtime enforcement remains inactive.
+
+Overseer reviewed 2026-06-02:
+
+- Accepted HS212 in `workspace/OverseerHS213-hs212-runtime-hook-watch-task-runtime-review.md`.
+- Verified Watch/task runtime facts are sourced for direct Watch and Watch executor commands.
+- Confirmed non-Watch commands report Watch runtime not applicable.
+- Confirmed supplied `runtimeEnforcementFacts.watch_runtime` remains preserved and not overwritten.
+- Confirmed missing/stale/malformed Watch/task state is reported as posture rather than guessed.
+- Confirmed renderer Watch/runtime claims are ignored and not echoed into hook facts.
+- Confirmed the hook avoids `watch.executor.status` and does not clear stale active task IDs.
+- Confirmed no active runtime enforcement, command blocking, handler dispatch, task execution, provider calls, Watch mutation, DB writes, config writes, support artifacts, storage movement, Evidence/EVEidence, Discovery, Assessment Memory, Marked, schema changes, UI work, pruning/deletion, or terminology renames were added.
+
+## Resting Next Options
+
+Recommended next shaping candidates:
+
+1. Rest runtime hook fact sourcing and continue a different storage/runtime seam.
+2. Request/adopt an advisory active enforcement semantics design before any active command blocking packet.
+3. Shape trusted supplied-fact doctrine only if active enforcement design continues.
+
+Do not open active runtime enforcement or command blocking until active semantics, mandatory facts, and trusted fact authority are explicitly accepted.
 
 ## Active HS210 Advisory Request
 

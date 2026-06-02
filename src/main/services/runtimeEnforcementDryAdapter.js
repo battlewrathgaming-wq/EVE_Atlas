@@ -114,6 +114,7 @@ function evaluatorFactsFor({
     external_io: facts.external_io || null,
     provider_live_gate: facts.provider_live_gate || null,
     destination_path_authority: facts.destination_path_authority || null,
+    watch_runtime: facts.watch_runtime || null,
     trusted_context: trustedContext,
     composed_policy: composedPolicy,
     dry_run: dryRun,
