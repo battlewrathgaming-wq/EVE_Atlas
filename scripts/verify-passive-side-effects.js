@@ -131,6 +131,7 @@ async function verifySeededDb(root) {
       ['support.trace_log_redaction_policy.preview', () => invokeServiceCommand('support.trace_log_redaction_policy.preview', {}, context)],
       ['support.api_request_log_redaction_readiness.preview', () => invokeServiceCommand('support.api_request_log_redaction_readiness.preview', {}, context)],
       ['runtime.enforcement_boundary.preview', () => invokeServiceCommand('runtime.enforcement_boundary.preview', {}, context)],
+      ['runtime.enforcement_active_semantics.preview', () => invokeServiceCommand('runtime.enforcement_active_semantics.preview', {}, context)],
       ['runtime.enforcement_hook_telemetry.readout', () => invokeServiceCommand('runtime.enforcement_hook_telemetry.readout', {}, context)],
       ['task.list', () => invokeServiceCommand('task.list', { limit: 10 }, context)],
       ['assessment.list', () => invokeServiceCommand('assessment.list', {
@@ -196,6 +197,7 @@ async function verifyEmptyDb(root) {
       ['empty support.trace_log_redaction_policy.preview', () => invokeServiceCommand('support.trace_log_redaction_policy.preview', {}, context)],
       ['empty support.api_request_log_redaction_readiness.preview', () => invokeServiceCommand('support.api_request_log_redaction_readiness.preview', {}, context)],
       ['empty runtime.enforcement_boundary.preview', () => invokeServiceCommand('runtime.enforcement_boundary.preview', {}, context)],
+      ['empty runtime.enforcement_active_semantics.preview', () => invokeServiceCommand('runtime.enforcement_active_semantics.preview', {}, context)],
       ['empty runtime.enforcement_hook_telemetry.readout', () => invokeServiceCommand('runtime.enforcement_hook_telemetry.readout', {}, context)],
       ['empty assessment.list', () => invokeServiceCommand('assessment.list', {}, context)]
     ];

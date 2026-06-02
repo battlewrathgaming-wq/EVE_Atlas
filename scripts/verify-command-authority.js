@@ -73,6 +73,8 @@ async function main() {
     assert(commands.get('support.api_request_log_redaction_readiness.preview')?.effects.includes('read-only'), 'API request log redaction readiness should declare read-only effect');
     assert(commands.get('runtime.enforcement_boundary.preview')?.classification === 'read-only', 'runtime enforcement boundary preview should be read-only');
     assert(commands.get('runtime.enforcement_boundary.preview')?.effects.includes('read-only'), 'runtime enforcement boundary preview should declare read-only effect');
+    assert(commands.get('runtime.enforcement_active_semantics.preview')?.classification === 'read-only', 'runtime active semantics preview should be read-only');
+    assert(commands.get('runtime.enforcement_active_semantics.preview')?.effects.includes('read-only'), 'runtime active semantics preview should declare read-only effect');
     assert(commands.get('runtime.enforcement_hook_telemetry.readout')?.classification === 'read-only', 'runtime hook telemetry readout should be read-only');
     assert(commands.get('runtime.enforcement_hook_telemetry.readout')?.effects.includes('read-only'), 'runtime hook telemetry readout should declare read-only effect');
     assert(commands.get('task.cancel')?.classification === 'runtime-control', 'task.cancel should be runtime-control');
@@ -109,6 +111,7 @@ async function main() {
     assert(rendererNames.has('support.trace_log_redaction_policy.preview'), 'trace/log redaction policy should be renderer eligible as read-only');
     assert(rendererNames.has('support.api_request_log_redaction_readiness.preview'), 'API request log redaction readiness should be renderer eligible as read-only');
     assert(rendererNames.has('runtime.enforcement_boundary.preview'), 'runtime enforcement boundary preview should be renderer eligible as read-only');
+    assert(rendererNames.has('runtime.enforcement_active_semantics.preview'), 'runtime active semantics preview should be renderer eligible as read-only');
     assert(rendererNames.has('runtime.enforcement_hook_telemetry.readout'), 'runtime hook telemetry readout should be renderer eligible as read-only');
     assert(rendererNames.has('runtime.db_snapshot.create'), 'snapshot create should be renderer eligible');
     assert(!rendererNames.has('sde.import.topology'), 'SDE import should not be renderer eligible');

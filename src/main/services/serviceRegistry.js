@@ -26,6 +26,7 @@ const { buildQueueExpansionSelection } = require('./queueSelectionService');
 const { buildReportResponse } = require('./reportResponseService');
 const { buildRetentionPreflight, listRetentionActions } = require('./retentionActionService');
 const { buildRuntimeEnforcementBoundaryPreview } = require('./runtimeEnforcementBoundaryService');
+const { buildRuntimeEnforcementActiveSemanticsPreview } = require('./runtimeEnforcementActiveSemanticsService');
 const { buildSdeLookupTables } = require('../sde/sdeLookupBuilder');
 const {
   buildRuntimeDbSnapshotPreflight,
@@ -539,6 +540,15 @@ const COMMANDS = {
     description: 'Preview the service invocation enforcement boundary before task wrapping or handler dispatch',
     handler: ({ db, payload, ...context }) => buildRuntimeEnforcementBoundaryPreview(db, payload, {
       ...context,
+      commandMetadata: listServiceCommands()
+    })
+  },
+  'runtime.enforcement_active_semantics.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview pure active runtime enforcement semantics fixture matrix without activating blocking',
+    handler: ({ payload }) => buildRuntimeEnforcementActiveSemanticsPreview(payload, {
       commandMetadata: listServiceCommands()
     })
   },

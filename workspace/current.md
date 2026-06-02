@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS216 opened
+Status: HS216 accepted by HS217
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS216 runtime enforcement active semantics fixture matrix.
+Current focus: HS216 accepted; pure active runtime enforcement semantics fixture matrix can rest.
 
 Current heading:
 
@@ -18,15 +18,15 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS216-runtime-enforcement-active-semantics-fixture-matrix.md
+none; no active Dev runway is open
 ```
 
-Active Dev runway is open.
+No active Dev runway is open.
 
 ## Active HS216 Runway
 
@@ -87,15 +87,156 @@ Stop if the proof requires active command blocking, runtime authorization, inser
 
 ## HS216 Evidence
 
-Pending Dev handoff.
+Dev updated 2026-06-02:
+
+- Added `src/main/services/runtimeEnforcementActiveSemanticsService.js` as a pure active runtime enforcement semantics fixture matrix.
+- Added read-only renderer-eligible command:
+  - `runtime.enforcement_active_semantics.preview`
+- Added `npm.cmd run verify:runtime-enforcement-active-semantics`.
+- Added command classification coverage in `src/main/services/enforcementDryRunService.js`.
+- Added command authority and passive side-effect verifier coverage.
+- Semantics states defined:
+  - `pass`
+  - `block`
+  - `hold`
+  - `conditional`
+  - `unknown`
+  - `stop_before_boundary`
+  - `missing_mandatory_fact`
+  - `malformed_authority_fact`
+  - `stale_authority_fact`
+  - `spoofed_renderer_fact`
+- Only `pass` is marked as hypothetical `may_dispatch`; `conditional`, `hold`, `unknown`, and `stop_before_boundary` are no-dispatch.
+- `hold` is explicitly non-failure and non-mutating.
+- Mandatory fact families are declared by command family.
+- First-active candidate family:
+  - `local_readout_preflight`
+- First-active excluded families:
+  - `local_setup_config_write`
+  - `local_metadata_write`
+  - `provider_backed_manual`
+  - `watch_background_provider`
+  - `support_artifact_write`
+  - `sde_import_lookup`
+  - `runtime_task_control`
+  - `fixture_proof`
+  - `destructive_execution`
+- Trusted fact supply treatment:
+  - renderer payload authority facts are ignored/rejected
+  - renderer facts may not override sourced facts
+  - trusted supplied facts are allowed only with explicit trusted/test posture
+  - arbitrary `runtimeEnforcementFacts` are not production active authority
+- Focused verifier proves:
+  - `conditional` does not dispatch
+  - `hold` does not dispatch, is not failure, and is non-mutating
+  - missing mandatory facts cannot silently pass
+  - malformed facts cannot silently pass
+  - stale durable authority facts cannot silently pass
+  - stale volatile Watch runtime posture holds rather than dispatches
+  - renderer-origin authority facts are rejected
+  - trusted test supplied facts can pass only under explicit trusted/test posture
+  - trusted supplied facts without explicit test posture block
+  - External I/O on alone is not authorization
+  - dry-run `would_allow` alone is not authorization
+  - provider `allowed` alone is not authorization
+  - Watch arming alone is not provider movement permission
+  - destination/path authority alone is not support artifact creation permission
+  - fixture/proof commands cannot active-pass in production semantics
+  - destructive execution cannot active-pass in first active semantics
+- Focused verifier sample:
+  - decision states: 10
+  - command families: 10
+  - fixture cases: 20
+  - first-active candidate families: `local_readout_preflight`
+  - active runtime enforcement: false
+  - command blocking: false
+  - `invokeServiceCommand` insertion: false
+  - target handlers called: false
+  - task runners called: false
+  - providers called: false
+  - DB writes: false
+  - config writes: false
+  - support artifacts created: false
+- Verification run:
+  - `node --check src\main\services\runtimeEnforcementActiveSemanticsService.js` passed.
+  - `node --check scripts\verify-runtime-enforcement-active-semantics.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `npm.cmd run verify:runtime-enforcement-active-semantics` passed.
+  - `npm.cmd run verify:runtime-enforcement-adapter` passed.
+  - `npm.cmd run verify:runtime-enforcement-hook` passed.
+  - `npm.cmd run verify:runtime-hook-telemetry` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:gate-stack-readout` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 182 warnings across 6 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+- Boundaries preserved:
+  - no active runtime enforcement
+  - no command blocking
+  - no insertion into `invokeServiceCommand`
+  - no handler dispatch from the semantics proof
+  - no task wrapping or task execution
+  - no provider calls
+  - no provider attempt recording
+  - no service-memory cooldown/lockout mutation
+  - no Watch arming/disarming/tick execution
+  - no Watch mutation
+  - no DB writes
+  - no config writes
+  - no support artifact creation
+  - no snapshot or trace-pack creation
+  - no storage movement or migration
+  - no Hydration writes
+  - no Evidence/EVEidence creation
+  - no Discovery ref mutation
+  - no Assessment Memory or Marked mutation
+  - no schema changes
+  - no renderer UI work
+  - no pruning or deletion behavior
+  - no terminology renames
 
 ## HS216 Dev Handoff
 
-Pending:
+Completed:
 
 ```txt
 workspace/DevHS216-runtime-enforcement-active-semantics-fixture-matrix.md
 ```
+
+Status: runtime enforcement active semantics fixture matrix complete and accepted by Overseer.
+
+HS216 result:
+
+- Atlas now has a pure fixture matrix defining first active semantics before any command blocking.
+- The matrix is staged by command family rather than global enforcement.
+- First active candidate is local readout/preflight only.
+- Provider-backed, Watch/background, support-artifact write, config write, fixture/proof, destructive, task-control, and local metadata-write families are excluded from first active enforcement.
+- Preview facts and one-off gate states remain non-authorizing alone.
+- Active runtime enforcement and command blocking remain inactive and parked.
+
+Overseer reviewed 2026-06-02:
+
+- Accepted HS216 in `workspace/OverseerHS217-hs216-runtime-enforcement-active-semantics-review.md`.
+- Confirmed the new semantics matrix is pure/static and not inserted into `invokeServiceCommand`.
+- Confirmed `runtime.enforcement_active_semantics.preview` is read-only and renderer-eligible.
+- Confirmed first-active candidate is local readout/preflight only.
+- Confirmed provider-backed, Watch/background, support-artifact write, config write, local metadata write, SDE/import, task-control, fixture/proof, and destructive families remain excluded from first active enforcement.
+- Confirmed no active runtime enforcement, command blocking, provider calls, task dispatch, DB writes, config writes, support artifacts, storage movement, UI work, or terminology renames were added.
+
+## Resting Next Options
+
+Recommended next shaping candidates:
+
+1. Rest runtime enforcement work and continue a different storage/runtime seam.
+2. Request/adopt advisory review of whether local readout/preflight is worth a non-blocking active-semantics preview.
+3. Keep command blocking and active enforcement parked until Human/Overseer explicitly decides to continue this line.
+
+Do not open active runtime enforcement, command blocking, or `invokeServiceCommand` behavior changes without a fresh Human/Overseer decision.
 
 ## Active HS214 Advisory Request
 

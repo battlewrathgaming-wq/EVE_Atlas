@@ -69,6 +69,7 @@ Current state:
 - HS214 advisory semantics design opened
 - HS214 accepted by HS215
 - HS216 opened
+- HS216 accepted by HS217
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -85,9 +86,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is HS216 runtime enforcement active semantics fixture matrix
-- current work is pure active-semantics proof before any active runtime enforcement packet; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, SDE import/download controls, and UI work remain unopened
+- current executor is Overseer
+- no active Dev runway is open
+- current work is resting HS216 after pure active-semantics fixture matrix acceptance; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, SDE import/download controls, and UI work remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
 Current heading:
@@ -99,9 +100,9 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Complete HS216 runtime enforcement active semantics fixture matrix.
-2. Review whether the pure semantics matrix is enough to support a later non-blocking active-semantics preview.
-3. Keep runtime enforcement activation and command blocking parked until active semantics, mandatory facts, and trusted fact authority are explicitly accepted.
+1. Rest runtime enforcement work and continue a different storage/runtime seam.
+2. Request/adopt advisory review of whether local readout/preflight is worth a non-blocking active-semantics preview.
+3. Keep command blocking and active enforcement parked until Human/Overseer explicitly decides to continue this line.
 
 See `workspace/current.md` for current truth.
 
@@ -204,6 +205,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS214 opened runtime enforcement semantics design: define active decision meanings, mandatory facts, command-family staging, trusted fact supply, and parked items before any command blocking implementation.
 - HS214/HS215 accepted runtime enforcement semantics design: do not open active command blocking; stage by command family; prove active semantics in a pure fixture matrix first.
 - HS216 opened runtime enforcement active semantics fixture matrix: define and verify active decision meanings, mandatory facts, excluded command families, trusted fact supply treatment, and non-authorizing inputs without inserting active enforcement.
+- HS216/HS217 accepted runtime enforcement active semantics fixture matrix: Atlas now has pure active semantics proof, with local readout/preflight as the only first-active candidate and active enforcement/command blocking still parked.
 
 ## Accepted Boundaries
 
