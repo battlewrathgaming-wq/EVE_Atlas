@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS218 accepted by HS219
+Status: HS220 active Dev runway
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS218 accepted; Hydration attention runtime posture can rest.
+Current focus: Local SDE source/import posture proof.
 
 Current heading:
 
@@ -16,20 +16,81 @@ Current heading:
 - one hardening seam at a time
 - data-layer boundaries guide the seam before machinery
 - raw IDs remain truthful facts; readable labels are applied attention
+- local SDE lookup readiness is local readability/geometry support, not provider-backed Hydration
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none; no active Dev runway is open
+workspace/DevHS220-local-sde-source-import-posture.md
 ```
 
-No active Dev runway is open.
+## Active HS220 Runway
+
+Opened 2026-06-03:
+
+- `workspace/OverseerHS220-local-sde-source-import-posture-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS220-local-sde-source-import-posture.md
+```
+
+Task:
+
+Add or refine a read-only preview that explains SDE source/import posture without executing it.
+
+Preferred command:
+
+```txt
+metadata.local_sde_source_posture.preview
+```
+
+Acceptable alternative:
+
+Extend `metadata.local_sde_readiness.preview` with a clearly separated `source_import_posture` section if that avoids duplicate command shape.
+
+Preferred outcome:
+
+- show whether local SDE lookup readiness is complete, partial, or missing
+- show whether missing material is inventory/type lookup, topology/geography lookup, import provenance, or mixed
+- distinguish future local source import/rewrite from provider-backed SDE download/build
+- disclose which posture requires External I/O and which does not
+- disclose whether storage authority/budget would block future lookup-table rewrite without blocking this readout
+- disclose whether a supplied/observed source path is local, absent, unsupported, or not inspected
+- disclose that SDE source/cache material is support/corpus-adjacent and should stay under storage authority
+- prove SDE readiness does not authorize provider calls, imports, downloads, or lookup rewrites
+
+Preserve:
+
+- no SDE download
+- no SDE import
+- no lookup-table rewrite
+- no arbitrary user-file inspection
+- no storage movement
+- no config writes
+- no support artifact creation
+- no provider calls
+- no Hydration writes
+- no `metadata_runs` writes
+- no Evidence/EVEidence creation
+- no Discovery ref mutation
+- no Watch mutation
+- no Assessment Memory or Marked mutation
+- no schema changes
+- no runtime enforcement activation
+- no command blocking
+- no renderer UI work
+- no pruning/deletion behavior
+
+Stop if the proof requires downloading/importing SDE, lookup-table writes, arbitrary path inspection outside existing safe preview posture, blurring local SDE lookup readiness with provider-backed Hydration, treating readiness as authorization, treating External I/O on as authorization, runtime enforcement, command blocking, UI work, schema changes, destructive/private/live action, or real operator data inspection.
 
 ## Resting HS218 Runway
+
 
 Opened 2026-06-02:
 
