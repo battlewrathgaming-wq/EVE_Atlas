@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS208 accepted by HS209
+Status: HS210 advisory readiness review opened
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS208 accepted; inactive runtime hook destination path authority fact sourcing can rest as read-only proof.
+Current focus: HS210 runtime enforcement readiness review.
 
 Current heading:
 
@@ -18,15 +18,71 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Engineering / Security reviewer
 
 Expected handoff filename:
 
 ```txt
-none; no active Dev runway is open
+workspace/EngineeringSafetyAuditHS210-runtime-enforcement-readiness-review.md
 ```
 
-No active Dev runway is open.
+No active Dev runway is open. HS210 is advisory assurance only.
+
+## Active HS210 Advisory Request
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS210-runtime-enforcement-readiness-review-request.md`
+
+Expected advisory handoff:
+
+```txt
+workspace/EngineeringSafetyAuditHS210-runtime-enforcement-readiness-review.md
+```
+
+Task:
+
+Review whether Atlas is ready to move from inactive runtime enforcement hook proofing toward any active runtime enforcement design.
+
+This is assurance only. Do not implement code.
+
+Review focus:
+
+- whether the inactive runtime hook fact sourcing is coherent enough to support a later active enforcement design discussion
+- what facts, tests, or posture evidence are still missing before active command blocking should be scoped
+- whether hook placement preserves renderer eligibility, confirmation, task wrapping, and handler dispatch boundaries
+- whether any sourced facts are too broad, stale, mutable, spoofable, or misleading for future enforcement use
+- whether Atlas boundaries are preserved between Evidence/EVEidence, Discovery, Hydration, Watch, Assessment Memory, support artifacts, storage authority, External I/O, and runtime authorization
+- whether Watch/task runtime fact sourcing is needed before active enforcement or can stay parked
+- what should be rejected or deferred to avoid overbuilding
+
+Preserve:
+
+- no code changes
+- no runtime enforcement activation
+- no command blocking
+- no provider calls
+- no provider attempt recording
+- no config writes
+- no schema changes
+- no support artifact creation
+- no storage movement
+- no renderer UI work
+- no terminology renames
+
+Stop if the review requires implementation, runtime enforcement activation, command blocking, provider calls, provider attempt recording, config writes, schema changes, support artifact creation, storage movement, UI work, or terminology renames.
+
+## HS210 Evidence
+
+Pending advisory handoff.
+
+## HS210 Handoff
+
+Pending:
+
+```txt
+workspace/EngineeringSafetyAuditHS210-runtime-enforcement-readiness-review.md
+```
 
 ## Resting HS208 State
 
