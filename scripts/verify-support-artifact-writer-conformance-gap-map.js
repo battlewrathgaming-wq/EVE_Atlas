@@ -108,7 +108,7 @@ function verifyMappedClasses(preview) {
   }
 
   assert(preview.summary.total_classes === 5, 'gap map should cover five classes');
-  assert(preview.summary.by_status.gap >= 3, 'gap map should expose known gaps');
+  assert(preview.summary.by_status.gap >= 1, 'gap map should expose remaining known gaps');
   assert(preview.summary.by_status.partial >= 6, 'gap map should expose partial conformance');
   assert(preview.summary.by_status.unknown >= 2, 'gap map should expose unknowns');
 }
@@ -120,9 +120,10 @@ function verifyKnownConcerns(preview) {
   const readiness = classById(preview, 'readiness_preflight_export');
   const logs = classById(preview, 'light_operational_logs');
 
-  assert(checkById(rolling, 'sensitivity_manifest_disclosure').conformance_status === 'gap', 'snapshot sensitivity manifest should be a gap');
-  assert(checkById(rolling, 'raw_esi_payload_posture').conformance_status === 'partial', 'snapshot raw ESI posture should be partial');
-  assert(checkById(retained, 'class_id_split').conformance_status === 'gap', 'retained snapshot class split should be a gap');
+  assert(checkById(rolling, 'sensitivity_manifest_disclosure').conformance_status === 'conforms', 'snapshot sensitivity manifest should conform after HS184');
+  assert(checkById(rolling, 'raw_esi_payload_posture').conformance_status === 'conforms', 'snapshot raw ESI posture should conform after HS184');
+  assert(checkById(retained, 'class_id_split').conformance_status === 'conforms', 'retained snapshot class split should conform after HS184');
+  assert(checkById(retained, 'non_authority_disclosure').conformance_status === 'conforms', 'retained snapshot non-authority should conform after HS184');
   assert(checkById(tracePack, 'raw_esi_payload_dumps_forbidden').conformance_status === 'conforms', 'trace pack raw ESI dumps should conform');
   assert(checkById(tracePack, 'free_text_length_policy').conformance_status === 'partial', 'trace pack free text length policy should be partial');
   assert(checkById(tracePack, 'provider_endpoint_secret_leakage').conformance_status === 'unknown', 'trace pack provider endpoint secret posture should be unknown');

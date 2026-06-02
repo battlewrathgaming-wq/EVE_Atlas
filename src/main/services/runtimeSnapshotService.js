@@ -21,6 +21,7 @@ function buildRuntimeDbSnapshotPreflight(db, input = {}, context = {}) {
   const journals = journalState(databasePath);
   const projectedSnapshotBytes = estimateSnapshotBytes(stats, journals);
   const storage = snapshotStorageStatus(destination.directory, projectedSnapshotBytes, settingsState);
+  const generatedAt = new Date().toISOString();
   const blockers = [];
   if (storage.over_budget) {
     blockers.push({
@@ -50,6 +51,14 @@ function buildRuntimeDbSnapshotPreflight(db, input = {}, context = {}) {
     journal_files: journals,
     projected_snapshot_bytes: projectedSnapshotBytes,
     storage,
+    support_artifact_disclosure: snapshotArtifactDisclosure({
+      stage: 'preflight',
+      generatedAt,
+      databasePath,
+      snapshotPath: destinationPath,
+      destination,
+      storage
+    }),
     settings: settingsState,
     table_counts: tableCounts(db),
     latest_fetch_run: latestFetchRun(db),
@@ -85,20 +94,96 @@ function createRuntimeDbSnapshot(db, input = {}, context = {}) {
   db.exec(`VACUUM INTO ${sqlString(preflight.destination_path)};`);
 
   const snapshotStats = fileStats(preflight.destination_path);
+  const createdAt = new Date().toISOString();
+  const storage = snapshotStorageStatus(preflight.destination.directory, snapshotStats.size_bytes, preflight.settings);
   return {
     action: preflight.action,
     status: 'created',
-    created_at: new Date().toISOString(),
+    created_at: createdAt,
     database_path: preflight.database_path,
     snapshot_path: preflight.destination_path,
     snapshot: snapshotStats,
-    storage: snapshotStorageStatus(preflight.destination.directory, snapshotStats.size_bytes, preflight.settings),
+    storage,
+    support_artifact_disclosure: snapshotArtifactDisclosure({
+      stage: 'created',
+      generatedAt: createdAt,
+      databasePath: preflight.database_path,
+      snapshotPath: preflight.destination_path,
+      destination: preflight.destination,
+      storage
+    }),
     table_counts: preflight.table_counts,
     latest_fetch_run: preflight.latest_fetch_run,
     latest_evidence_timestamp: preflight.latest_evidence_timestamp,
     assessment_artifacts: preflight.assessment_artifacts,
     boundary: 'Snapshot creation copied the local SQLite runtime DB only. It did not prune, compact, or delete evidence.'
   };
+}
+
+function snapshotArtifactDisclosure({ stage, generatedAt, databasePath, snapshotPath, destination, storage }) {
+  const artifactClass = snapshotArtifactClass(destination);
+  return {
+    disclosure_version: 1,
+    stage,
+    artifact_class: artifactClass,
+    artifact_class_posture: artifactClass === 'runtime_snapshot_retained'
+      ? 'retained_manual_or_configured_runtime_db_snapshot'
+      : 'rolling_fallback_generated_runtime_db_snapshot',
+    artifact_family: 'corpus_adjacent_support',
+    privacy_sensitivity: 'high',
+    material_posture: 'support_recovery_debug_only',
+    contains_existing_db_copy: true,
+    db_copy_content_posture: {
+      raw_esi_payloads: 'included_as_existing_db_copy_only',
+      discovery_refs: 'included_as_existing_db_copy_only',
+      evidence_rows: 'included_as_existing_db_copy_only',
+      hydration_labels_or_candidates: 'included_as_existing_db_copy_only',
+      watch_state: 'included_as_existing_db_copy_only',
+      assessment_memory: 'included_as_existing_db_copy_only'
+    },
+    non_authority: {
+      snapshot_artifact_itself_is_new_evidence: false,
+      evidence_or_eveidence: false,
+      discovery: false,
+      observation: false,
+      assessment_memory: false,
+      product_truth: false,
+      deletion_or_pruning_authority: false,
+      cleanup_authority: false
+    },
+    retained_snapshot_posture: {
+      may_outlive_active_records: artifactClass === 'runtime_snapshot_retained',
+      cleanup_deletion_review_required: true,
+      automatic_cleanup: storage.automatic_cleanup === true
+    },
+    local_path_sensitivity: {
+      database_path: 'sensitive_support_metadata',
+      snapshot_path: 'sensitive_support_metadata',
+      destination_directory: 'sensitive_support_metadata'
+    },
+    basis_provenance: {
+      source_db_path: databasePath,
+      snapshot_path: snapshotPath,
+      destination_directory: destination.directory,
+      destination_source: destination.source,
+      generated_at: generatedAt,
+      storage_budget_context: {
+        classification: storage.classification,
+        budget_configured: storage.budget_configured,
+        budget_bytes: storage.budget_bytes,
+        projected_usage_bytes: storage.projected_usage_bytes,
+        remaining_after_projected_bytes: storage.remaining_after_projected_bytes,
+        over_budget: storage.over_budget
+      }
+    }
+  };
+}
+
+function snapshotArtifactClass(destination = {}) {
+  if (['configured', 'explicit_request'].includes(destination.source)) {
+    return 'runtime_snapshot_retained';
+  }
+  return 'runtime_snapshot_rolling';
 }
 
 function assertNoRendererDestinationPath(input, context) {

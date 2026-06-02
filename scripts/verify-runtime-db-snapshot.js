@@ -43,6 +43,14 @@ async function main() {
     assert(preflight.projected_snapshot_bytes >= preflight.database.size_bytes, 'snapshot preflight should estimate snapshot size from DB and journals');
     assert(preflight.storage.budget_configured === false, 'snapshot preflight should report missing budget as unconfigured');
     assert(preflight.storage.automatic_cleanup === false, 'snapshot budget must not imply automatic cleanup');
+    verifySnapshotDisclosure(preflight.support_artifact_disclosure, {
+      stage: 'preflight',
+      artifactClass: 'runtime_snapshot_retained',
+      databasePath: dbPath,
+      snapshotPath,
+      budgetConfigured: false,
+      retainedMayOutlive: true
+    });
     assert(preflight.table_counts.killmails === beforeCounts.killmails, 'snapshot preflight should report killmail count');
     assert(preflight.latest_fetch_run.run_id, 'snapshot preflight should report latest fetch run');
     assert(preflight.latest_evidence_timestamp === '2026-05-01T20:01:00Z', 'snapshot preflight should report latest evidence timestamp');
@@ -69,6 +77,14 @@ async function main() {
     assert(snapshot.snapshot_path === snapshotPath, 'snapshot create should report snapshot path');
     assert(fs.existsSync(snapshotPath), 'snapshot create should write destination file');
     assert(snapshot.snapshot.size_bytes > 0, 'snapshot file should have bytes');
+    verifySnapshotDisclosure(snapshot.support_artifact_disclosure, {
+      stage: 'created',
+      artifactClass: 'runtime_snapshot_retained',
+      databasePath: dbPath,
+      snapshotPath,
+      budgetConfigured: false,
+      retainedMayOutlive: true
+    });
     assert(snapshot.table_counts.killmails === beforeCounts.killmails, 'snapshot create should report source counts');
 
     const snapshotDb = openDatabase(snapshotPath);
@@ -114,6 +130,14 @@ async function main() {
     assert(configuredPreflight.storage.budget_configured === true, 'preflight should report configured budget');
     assert(configuredPreflight.storage.budget_bytes === snapshot.snapshot.size_bytes * 4, 'preflight should report configured budget bytes');
     assert(configuredPreflight.allowed === true, 'configured preflight should allow when projected usage is inside budget');
+    verifySnapshotDisclosure(configuredPreflight.support_artifact_disclosure, {
+      stage: 'preflight',
+      artifactClass: 'runtime_snapshot_retained',
+      databasePath: dbPath,
+      snapshotPath: configuredPreflight.destination_path,
+      budgetConfigured: true,
+      retainedMayOutlive: true
+    });
     assert(!fs.existsSync(configuredPreflight.destination_path), 'configured preflight must not write generated snapshot file');
 
     await assertRejects(() => invokeServiceCommand('runtime.db_snapshot.settings.update', {
@@ -136,6 +160,14 @@ async function main() {
     });
     assert(fallbackPreflight.destination.source === 'fallback', 'invalid destination should fall back to project temp snapshot directory');
     assert(fallbackPreflight.settings.status === 'degraded', 'preflight should expose degraded persisted destination state');
+    verifySnapshotDisclosure(fallbackPreflight.support_artifact_disclosure, {
+      stage: 'preflight',
+      artifactClass: 'runtime_snapshot_rolling',
+      databasePath: dbPath,
+      snapshotPath: fallbackPreflight.destination_path,
+      budgetConfigured: true,
+      retainedMayOutlive: false
+    });
 
     fs.writeFileSync(settingsPath, JSON.stringify({
       version: 1,
@@ -283,6 +315,38 @@ function tableCounts(db) {
     fetch_runs: count(db, 'fetch_runs'),
     assessment_artifacts: count(db, 'assessment_artifacts')
   };
+}
+
+function verifySnapshotDisclosure(disclosure, expected) {
+  assert(disclosure, 'snapshot result should include support artifact disclosure');
+  assert(disclosure.disclosure_version === 1, 'snapshot disclosure should expose version');
+  assert(disclosure.stage === expected.stage, 'snapshot disclosure should expose stage');
+  assert(disclosure.artifact_class === expected.artifactClass, 'snapshot disclosure should expose artifact class');
+  assert(disclosure.artifact_family === 'corpus_adjacent_support', 'snapshot disclosure should expose corpus-adjacent family');
+  assert(disclosure.privacy_sensitivity === 'high', 'snapshot disclosure should expose high sensitivity');
+  assert(disclosure.material_posture === 'support_recovery_debug_only', 'snapshot disclosure should stay support/recovery only');
+  assert(disclosure.contains_existing_db_copy === true, 'snapshot disclosure should state DB-copy posture');
+  assert(disclosure.db_copy_content_posture.raw_esi_payloads === 'included_as_existing_db_copy_only', 'snapshot raw ESI posture should be DB-copy only');
+  assert(disclosure.db_copy_content_posture.discovery_refs === 'included_as_existing_db_copy_only', 'snapshot Discovery posture should be DB-copy only');
+  assert(disclosure.db_copy_content_posture.evidence_rows === 'included_as_existing_db_copy_only', 'snapshot Evidence posture should be DB-copy only');
+  assert(disclosure.db_copy_content_posture.hydration_labels_or_candidates === 'included_as_existing_db_copy_only', 'snapshot Hydration posture should be DB-copy only');
+  assert(disclosure.db_copy_content_posture.watch_state === 'included_as_existing_db_copy_only', 'snapshot Watch posture should be DB-copy only');
+  assert(disclosure.db_copy_content_posture.assessment_memory === 'included_as_existing_db_copy_only', 'snapshot Assessment posture should be DB-copy only');
+  assert(disclosure.non_authority.snapshot_artifact_itself_is_new_evidence === false, 'snapshot artifact itself should not be new Evidence');
+  assert(disclosure.non_authority.evidence_or_eveidence === false, 'snapshot disclosure should reject Evidence/EVEidence authority');
+  assert(disclosure.non_authority.discovery === false, 'snapshot disclosure should reject Discovery authority');
+  assert(disclosure.non_authority.observation === false, 'snapshot disclosure should reject Observation authority');
+  assert(disclosure.non_authority.assessment_memory === false, 'snapshot disclosure should reject Assessment Memory authority');
+  assert(disclosure.non_authority.product_truth === false, 'snapshot disclosure should reject product truth authority');
+  assert(disclosure.non_authority.deletion_or_pruning_authority === false, 'snapshot disclosure should reject deletion/pruning authority');
+  assert(disclosure.non_authority.cleanup_authority === false, 'snapshot disclosure should reject cleanup authority');
+  assert(disclosure.retained_snapshot_posture.may_outlive_active_records === expected.retainedMayOutlive, 'snapshot disclosure should expose retained/rolling outlive posture');
+  assert(disclosure.retained_snapshot_posture.cleanup_deletion_review_required === true, 'snapshot disclosure should require cleanup/deletion review');
+  assert(disclosure.local_path_sensitivity.database_path === 'sensitive_support_metadata', 'source DB path should be sensitive support metadata');
+  assert(disclosure.local_path_sensitivity.snapshot_path === 'sensitive_support_metadata', 'snapshot path should be sensitive support metadata');
+  assert(disclosure.basis_provenance.source_db_path === expected.databasePath, 'snapshot disclosure should include source DB path basis');
+  assert(disclosure.basis_provenance.snapshot_path === expected.snapshotPath, 'snapshot disclosure should include snapshot path basis');
+  assert(disclosure.basis_provenance.storage_budget_context.budget_configured === expected.budgetConfigured, 'snapshot disclosure should include storage budget posture');
 }
 
 function count(db, tableName) {

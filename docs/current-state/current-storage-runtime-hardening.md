@@ -93,6 +93,7 @@ Current resting state:
 - support artifact contents can now be inspected before creation/writer hardening; actual support artifact creation, snapshot creation, trace-pack creation, cleanup, and pruning/deletion remain separate future seams
 - HS180 security review found no blocking issue in the contents contract and recommends a read-only writer conformance gap map before changing snapshot, trace-pack, readiness/preflight, log, or export writers
 - HS182 writer conformance gap map accepted snapshot manifest/sensitivity gaps, readiness alias gap, trace/log redaction unknowns, trace free-text/sample-limit partials, and local path sensitivity partials as future hardening guidance only
+- HS184 runtime snapshot disclosure accepted `support_artifact_disclosure` on snapshot preflight/create results, closing snapshot manifest/sensitivity/non-authority/local-path disclosure gaps without sidecar files or broad writer redesign
 
 ## Accepted Runtime Boundaries
 

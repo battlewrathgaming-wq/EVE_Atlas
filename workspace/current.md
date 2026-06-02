@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS184 Runtime snapshot manifest disclosure runway open
+Status: Resting after HS185 accepted HS184
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: add runtime snapshot disclosure metadata for sensitivity, non-authority, DB-copy posture, and cleanup/deletion review meaning.
+Current focus: runtime snapshot disclosure accepted; remaining support-artifact seam is trace/log redaction and free-text truncation policy if support artifacts continue.
 
 Current heading:
 
@@ -18,15 +18,15 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS184-runtime-snapshot-manifest-disclosure.md
+none
 ```
 
-Dev runway is open.
+No Dev runway is currently open.
 
 ## Accepted HS178 Context
 
@@ -271,6 +271,75 @@ Preserve:
 - no trace-pack/log/export changes
 - no provider calls
 - no schema/runtime enforcement/UI work
+
+## HS184 Evidence
+
+Dev updated 2026-06-02:
+
+- Added `support_artifact_disclosure` to runtime snapshot preflight and create results.
+- Added internal `snapshotArtifactDisclosure(...)` and `snapshotArtifactClass(...)` helpers in `src/main/services/runtimeSnapshotService.js`.
+- Disclosure covers:
+  - `artifact_class`
+  - `artifact_class_posture`
+  - `artifact_family: corpus_adjacent_support`
+  - `privacy_sensitivity: high`
+  - support/recovery/debug-only material posture
+  - existing DB-copy content posture
+  - raw ESI, Discovery refs, Evidence/EVEidence rows, Hydration labels/candidates, Watch state, and Assessment Memory included only as existing DB-copy content
+  - non-authority for Evidence/EVEidence, Discovery, Observation, Assessment Memory, product truth, deletion/pruning authority, and cleanup authority
+  - retained/manual snapshot outlive posture and cleanup/deletion review responsibility
+  - local path sensitivity for source DB path, snapshot path, and destination directory
+  - basis/provenance for source DB path, snapshot path, destination, generated time, and storage/budget context
+- Updated `support.artifact_writer_conformance_gap_map.preview` snapshot rows so snapshot manifest disclosure, raw ESI DB-copy posture, local path sensitivity, retained class split, cleanup/deletion disclosure, and non-authority now conform.
+- Remaining conformance gaps after HS184:
+  - `readiness_preflight_export` class-id alias normalization remains `gap`
+  - trace-pack free-text/sample/path/queue summary items remain `partial`
+  - trace/log provider endpoint/error-message secret leakage remains `unknown`
+- Verification run:
+  - `node --check src\main\services\runtimeSnapshotService.js` passed.
+  - `node --check src\main\services\supportArtifactWriterConformanceGapMapService.js` passed.
+  - `node --check scripts\verify-runtime-db-snapshot.js` passed.
+  - `node --check scripts\verify-support-artifact-writer-conformance-gap-map.js` passed.
+  - `npm.cmd run verify:runtime-snapshot` passed; this creates fixture runtime snapshot files under test-controlled `.tmp` paths as permitted by HS184.
+  - `npm.cmd run verify:support-artifact-writer-conformance-gap-map` passed.
+  - `npm.cmd run verify:support-artifact-contents-contract` passed.
+  - `npm.cmd run verify:support-artifact-creation-policy` passed.
+  - `npm.cmd run verify:support-artifact-path-authority` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 188 warnings across 6 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main` with HS184 working-tree changes.
+
+## HS184 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS184-runtime-snapshot-manifest-disclosure.md
+```
+
+Status: runtime snapshot manifest disclosure complete and accepted by Overseer.
+
+Overseer reviewed 2026-06-02:
+
+- Accepted HS184 in `workspace/OverseerHS185-hs184-runtime-snapshot-disclosure-review.md`.
+- Verified snapshot disclosure, conformance map updates, support artifact contract/path/creation dependencies, registry/authority/passive-side-effect coverage, dry-run coverage, protected-term advisory output, and diff hygiene.
+- Accepted `support_artifact_disclosure` on runtime snapshot preflight and create results.
+- Snapshot manifest disclosure gaps are now closed in the conformance map.
+- Trace/log redaction, readiness alias normalization, support artifact creation behavior, deletion/pruning behavior, runtime enforcement activation, and UI work remain unopened.
+
+## Resting Next Options
+
+Recommended next shaping candidates:
+
+1. Trace/log redaction and free-text truncation policy proof.
+2. Readiness/preflight class-id alias normalization, if support artifact naming consistency should be tidied before trace/log work.
+3. Rest support artifacts and continue a different storage/runtime seam.
+
+Do not open Dev implementation until one of these is selected and bounded.
 
 ## Advisory Input Accepted
 

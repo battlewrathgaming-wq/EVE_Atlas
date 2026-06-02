@@ -24,21 +24,21 @@ const WRITER_SHAPES = Object.freeze([
       check('db_copy_support_only', 'snapshots may include copied DB contents only as support/recovery material', 'conforms', 'low',
         'Writer copies the file-backed SQLite runtime DB and does not issue provider calls.',
         'Keep this as DB-copy support; future manifest should continue to label the copy as support/recovery, not new Evidence/EVEidence.'),
-      check('sensitivity_manifest_disclosure', 'snapshot metadata should disclose high sensitivity and corpus-adjacent support posture', 'gap', 'medium',
-        'Returned metadata reports paths, counts, storage, and boundary text, but no explicit privacy_sensitivity or artifact family/classification field.',
-        'Add a future snapshot manifest/status field for privacy_sensitivity=high and family=corpus_adjacent_support.'),
-      check('non_authority_disclosure', 'snapshot metadata should state the artifact is not Evidence/EVEidence, Observation, Assessment Memory, or pruning/deletion authority', 'partial', 'medium',
-        'Boundary says support/recovery artifact and not active-state truth, Evidence, Observation, Assessment Memory, pruning, or deletion; created result only says it did not prune, compact, or delete evidence.',
-        'Mirror the full non-authority disclosure on the created result, not only preflight.'),
-      check('cleanup_deletion_review_disclosure', 'snapshot metadata should disclose cleanup/deletion review responsibilities', 'partial', 'medium',
-        'Storage status reports automatic_cleanup=false and budget posture; retained/cleanup responsibility is not fully expressed on the created result.',
-        'Add cleanup/deletion review wording to snapshot result/manifest before broader support artifact hardening.'),
-      check('raw_esi_payload_posture', 'raw ESI payloads may appear only as existing DB-copy content', 'partial', 'high',
-        'DB copy can contain existing raw payload rows by design; current result does not explicitly say raw ESI content is DB-copy only.',
-        'Add explicit raw_esi_payloads=included_as_existing_db_copy_only disclosure in future manifest.'),
-      check('local_path_sensitivity', 'local paths may be included with sensitivity disclosure', 'partial', 'medium',
-        'database_path and snapshot_path are emitted; sensitivity of those local paths is not explicitly labeled.',
-        'Annotate local path fields as sensitive support metadata in future manifest.')
+      check('sensitivity_manifest_disclosure', 'snapshot metadata should disclose high sensitivity and corpus-adjacent support posture', 'conforms', 'low',
+        'Returned metadata now includes support_artifact_disclosure with privacy_sensitivity=high and artifact_family=corpus_adjacent_support.',
+        'Keep support_artifact_disclosure in both preflight and create results.'),
+      check('non_authority_disclosure', 'snapshot metadata should state the artifact is not Evidence/EVEidence, Observation, Assessment Memory, or pruning/deletion authority', 'conforms', 'low',
+        'support_artifact_disclosure.non_authority explicitly marks snapshot artifacts as not Evidence/EVEidence, Discovery, Observation, Assessment Memory, product truth, deletion/pruning authority, or cleanup authority.',
+        'Keep the non-authority block aligned with the support artifact contents contract.'),
+      check('cleanup_deletion_review_disclosure', 'snapshot metadata should disclose cleanup/deletion review responsibilities', 'conforms', 'low',
+        'support_artifact_disclosure.retained_snapshot_posture discloses cleanup_deletion_review_required and automatic_cleanup posture.',
+        'Future cleanup tooling should consume this as disclosure only, not authority.'),
+      check('raw_esi_payload_posture', 'raw ESI payloads may appear only as existing DB-copy content', 'conforms', 'low',
+        'support_artifact_disclosure.db_copy_content_posture.raw_esi_payloads is included_as_existing_db_copy_only.',
+        'Keep snapshot disclosure explicit that DB-copy payloads are existing content only.'),
+      check('local_path_sensitivity', 'local paths may be included with sensitivity disclosure', 'conforms', 'low',
+        'support_artifact_disclosure.local_path_sensitivity labels database_path, snapshot_path, and destination_directory as sensitive support metadata.',
+        'Keep local path sensitivity labels when adding any future manifest/export surface.')
     ]
   },
   {
@@ -57,15 +57,15 @@ const WRITER_SHAPES = Object.freeze([
       'boundary'
     ],
     checks: [
-      check('class_id_split', 'retained/manual snapshot should be distinguishable from rolling snapshot when retention posture matters', 'gap', 'medium',
-        'Current writer result uses action=runtime.db_snapshot and does not emit runtime_snapshot_retained versus runtime_snapshot_rolling.',
-        'Add future manifest class normalization for rolling versus retained/manual snapshots.'),
-      check('retained_cleanup_disclosure', 'retained path must be disclosed for future cleanup/deletion review', 'partial', 'medium',
-        'snapshot_path is emitted, but retained cleanup responsibility is not explicitly stated.',
-        'Add retained/manual cleanup responsibility wording when destination/settings indicate retained support material.'),
-      check('non_authority_disclosure', 'retained snapshots must not override deletion/pruning policy', 'partial', 'high',
-        'Created result says it did not prune, compact, or delete evidence, but does not say retained copies cannot override future deletion/pruning policy.',
-        'Add explicit deletion/pruning non-authority to retained snapshot manifest.')
+      check('class_id_split', 'retained/manual snapshot should be distinguishable from rolling snapshot when retention posture matters', 'conforms', 'low',
+        'support_artifact_disclosure.artifact_class distinguishes configured/explicit retained snapshots from fallback generated rolling snapshots.',
+        'Keep class inference limited to backend-known destination source.'),
+      check('retained_cleanup_disclosure', 'retained path must be disclosed for future cleanup/deletion review', 'conforms', 'low',
+        'support_artifact_disclosure.retained_snapshot_posture discloses may_outlive_active_records and cleanup_deletion_review_required.',
+        'Future deletion review should treat this as disclosure, not cleanup authority.'),
+      check('non_authority_disclosure', 'retained snapshots must not override deletion/pruning policy', 'conforms', 'low',
+        'support_artifact_disclosure.non_authority.deletion_or_pruning_authority is false for retained snapshots.',
+        'Keep retained snapshot copies subordinate to future deletion/pruning policy.')
     ]
   },
   {

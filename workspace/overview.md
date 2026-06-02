@@ -38,6 +38,7 @@ Current state:
 - HS178 accepted by HS179
 - HS180 security review accepted by HS181
 - HS182 accepted by HS183
+- HS184 accepted by HS185
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -54,8 +55,8 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is HS184 Runtime snapshot manifest disclosure
+- current executor is Overseer
+- no active Dev runway is open
 - current work is at a resting point after making inactive hook preview evidence inspectable; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
@@ -68,8 +69,8 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Complete HS184 runtime snapshot manifest disclosure.
-2. Review whether snapshot disclosure closes the cleanest support-artifact writer gap.
+1. Decide whether to continue support artifacts with trace/log redaction policy proof.
+2. Rest support artifacts and continue a different storage/runtime seam if preferred.
 3. Runtime enforcement remains resting.
 
 See `workspace/current.md` for current truth.
@@ -141,6 +142,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS182 opened a read-only support artifact writer conformance gap map runway: compare existing snapshot, trace-pack, readiness/preflight, and light-log writer/output posture against the accepted contents contract before changing artifact writers.
 - HS182/HS183 accepted writer conformance gap map: `support.artifact_writer_conformance_gap_map.preview` now records snapshot manifest gaps, readiness alias gap, trace/log redaction unknowns, trace free-text/sample-limit partials, and local path sensitivity partials without changing writers.
 - HS184 opened runtime snapshot manifest disclosure runway: add explicit sensitivity, corpus-adjacent support, DB-copy, raw ESI DB-copy, non-authority, local path sensitivity, and cleanup/deletion review disclosure to snapshot preflight/create metadata without sidecar files or broad writer redesign.
+- HS184/HS185 accepted runtime snapshot disclosure: `support_artifact_disclosure` now appears on runtime snapshot preflight/create results and closes snapshot manifest/sensitivity/non-authority/local-path disclosure gaps in the support artifact writer conformance map.
 
 ## Accepted Boundaries
 
