@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after HS189 accepted HS188
+Status: HS190 API request log redaction readiness runway open
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS188 trace-pack writer redaction/truncation hardening accepted; support artifacts may rest or continue with light-log/readiness seams.
+Current focus: read-only proof of persisted API request log endpoint/error redaction posture before any log writer or persistence hardening.
 
 Current heading:
 
@@ -18,15 +18,51 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none
+workspace/DevHS190-api-request-log-redaction-readiness.md
 ```
 
-No Dev runway is currently open.
+Active Dev runway is open.
+
+## Active HS190 Runway
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS190-api-request-log-redaction-readiness-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS190-api-request-log-redaction-readiness.md
+```
+
+Task:
+
+Add a read-only proof/readout for persisted `api_request_logs` endpoint and error text redaction posture, preferably:
+
+```txt
+support.api_request_log_redaction_readiness.preview
+```
+
+This should map current log write sources, persisted fields, endpoint/query/error posture, raw payload exclusion, and the smallest later hardening insertion point before Atlas changes log persistence or creates a light-log export writer.
+
+Preserve:
+
+- no `api_request_logs` write behavior changes
+- no `httpClient` or provider worker behavior changes
+- no trace-pack writer changes
+- no light-log writer/export creation
+- no provider calls
+- no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or schema mutation
+- no runtime enforcement activation
+- no command blocking
+- no renderer UI work
+
+Stop if proof requires live provider calls, real operator data inspection, logging behavior changes, schema changes, broad log framework/export work, runtime enforcement, command blocking, destructive actions, or UI work.
 
 ## Accepted HS188 Runway
 
