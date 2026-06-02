@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS218 active Dev runway
-Last updated: 2026-06-02
+Status: HS218 accepted by HS219
+Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Hydration attention runtime posture proof.
+Current focus: HS218 accepted; Hydration attention runtime posture can rest.
 
 Current heading:
 
@@ -19,15 +19,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS218-hydration-attention-runtime-posture.md
+none; no active Dev runway is open
 ```
 
-## Active HS218 Runway
+No active Dev runway is open.
+
+## Resting HS218 Runway
 
 Opened 2026-06-02:
 
@@ -86,6 +88,163 @@ Preserve:
 - no label removal, label hiding, or attention de-emphasis behavior
 
 Stop if the proof requires provider calls, persisted queue/state, schema changes, treating missing labels as Evidence gaps, blurring Hydration with ESI Evidence Expansion, blurring local SDE lookup gaps with provider-backed Hydration, reprioritizing Watch/background readability over view/local-record readability without Human/Overseer decision, UI work, runtime enforcement, command blocking, destructive/private/live action, or real operator data inspection.
+
+## HS218 Acceptance
+
+Accepted 2026-06-03:
+
+- `workspace/OverseerHS219-hs218-hydration-attention-runtime-posture-review.md`
+
+Decision:
+
+- HS218 accepted.
+- No blocking issues found.
+- `metadata.hydration_attention_runtime.preview` is accepted as read-only posture proof.
+
+Accepted outcome:
+
+- raw IDs remain truthful local facts
+- known-local labels are readability landmarks
+- provider-needed labels are future Hydration/readability work, not Evidence/EVEidence work
+- local SDE gaps are local lookup/readiness gaps, not provider-backed Hydration
+- deferred candidates remain visible/patient
+- External I/O off holds provider-needed labels without making them failure
+- storage/setup posture can block future Hydration writes without blocking local readout
+- selected attention, eligibility, and local readability need do not authorize provider calls
+
+Verification re-run by Overseer:
+
+- `npm.cmd run verify:hydration-attention-runtime` passed.
+- `npm.cmd run verify:hydration-attention-lens` passed.
+- `npm.cmd run verify:hydration-candidate-preview` passed.
+- `npm.cmd run verify:hydration-execution-policy` passed.
+- `npm.cmd run verify:hydration-backlog-preview` passed.
+- `npm.cmd run verify:service-registry` passed.
+- `npm.cmd run verify:command-authority` passed.
+- `npm.cmd run verify:passive-side-effects` passed.
+- `npm.cmd run verify:enforcement-dry-run` passed.
+- `npm.cmd run verify:hydration` passed.
+- `npm.cmd run verify:metadata-status` passed.
+- `npm.cmd run verify:metadata-lookup` passed.
+- `npm.cmd run verify:protected-terms` passed warning-only with 470 warnings across 10 changed working-set files; no renames or protected-word JSON updates performed.
+- `git diff --check` passed with CRLF normalization warnings only.
+
+Likely next options:
+
+1. Rest Hydration attention posture and move to another storage/runtime seam.
+2. Review whether Hydration posture needs one more local-readout proof before execution planning.
+3. Keep provider-backed Hydration execution, persisted Hydration queues, and active runtime enforcement parked until Human/Overseer explicitly decides to continue those lines.
+
+## HS218 Evidence
+
+Dev updated 2026-06-02:
+
+- Added `src/main/services/hydrationAttentionRuntimePostureService.js` as a read-only runtime-facing Hydration attention posture preview.
+- Added renderer-eligible command:
+  - `metadata.hydration_attention_runtime.preview`
+- Added `npm.cmd run verify:hydration-attention-runtime`.
+- Added command classification coverage in `src/main/services/enforcementDryRunService.js`.
+- Added service registry, command authority, passive side-effect, and enforcement dry-run verifier coverage.
+- The new readout reuses `metadata.hydration_attention_lens.preview` and exposes:
+  - input/lens summary
+  - runtime posture summary
+  - posture scope
+  - External I/O posture
+  - storage/setup posture
+  - representative posture groups
+  - explicit boundary statements
+- Fixture sample:
+  - source candidates: 4
+  - selected candidates: 3
+  - deferred candidates: 1
+  - `raw_visible_for_now`: 1
+  - `known_local_labels`: 1
+  - `provider_needed_labels`: 1
+  - `local_sde_lookup_gaps`: 1
+  - `deferred_candidates`: 1
+  - External I/O off posture: `held_by_external_io`
+  - storage/setup posture: future Hydration writes blocked, local readout available
+- Representative items:
+  - `entity:character:90000003` as provider-needed target/report-scoped label held by External I/O off
+  - `entity:corporation:98000002` as known-local/stale readability label
+  - `local_sde:inventory_type:999999` as local SDE lookup gap, not provider-backed Hydration
+  - `entity:character:90000004` as Watch/background raw-visible/deferred candidate
+- The preview proves:
+  - raw IDs remain truthful local facts
+  - labels are readability
+  - provider-needed labels are future Hydration/readability work, not Evidence/EVEidence work
+  - local SDE gaps are local lookup/readiness gaps, not provider-backed Hydration
+  - selected attention, eligibility, and local readability need do not authorize provider calls
+  - External I/O off holds provider-needed labels without making them failure
+  - storage/setup posture can block future Hydration writes without blocking local readout
+  - Watch/background and corpus-hygiene candidates remain patient/deferred behind view/local-record attention
+- Focused verifier sample:
+  - `metadata.hydration_attention_runtime.preview`
+  - `provider_calls: 0`
+  - `hydration_writes: 0`
+  - `persisted_queue: false`
+  - `runtime_enforcement_active: false`
+  - `command_blocking_active: false`
+  - `ui_work: false`
+- Verification run:
+  - `node --check src\main\services\hydrationAttentionRuntimePostureService.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check scripts\verify-hydration-attention-runtime-posture.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `node --check scripts\verify-enforcement-dry-run.js` passed.
+  - `npm.cmd run verify:hydration-attention-runtime` passed.
+  - `npm.cmd run verify:hydration-attention-lens` passed.
+  - `npm.cmd run verify:hydration-candidate-preview` passed.
+  - `npm.cmd run verify:hydration-backlog-preview` passed.
+  - `npm.cmd run verify:hydration-execution-policy` passed.
+  - `npm.cmd run verify:hydration` passed.
+  - `npm.cmd run verify:metadata-status` passed.
+  - `npm.cmd run verify:metadata-lookup` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 470 warnings across 10 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS218 working-tree changes.
+- Boundaries preserved:
+  - no persisted Hydration queue
+  - no provider calls
+  - no Hydration writes
+  - no `metadata_runs` writes
+  - no `entities` writes
+  - no `activity_events` patches
+  - no Evidence/EVEidence creation
+  - no Discovery ref mutation
+  - no Watch mutation
+  - no Assessment Memory or Marked mutation
+  - no schema changes
+  - no support artifact creation
+  - no runtime enforcement activation
+  - no command blocking
+  - no renderer UI work
+  - no pruning/deletion behavior
+  - no label removal, label hiding, or attention de-emphasis behavior
+
+## HS218 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS218-hydration-attention-runtime-posture.md
+```
+
+Status: Hydration attention runtime posture proof complete; pending Overseer review.
+
+HS218 result:
+
+- Atlas can now explain runtime-facing Hydration attention posture from local candidate/lens data before provider-backed Hydration execution exists.
+- Raw IDs, known-local labels, provider-needed labels, local SDE gaps, and deferred candidates are distinct.
+- External I/O off and storage/setup write blocks are exposed as posture without blocking local readout or becoming execution authority.
+- Provider-backed Hydration execution, persisted queues, Hydration writes, active runtime enforcement, and UI work remain unopened.
 
 ## Resting HS216 Runway
 

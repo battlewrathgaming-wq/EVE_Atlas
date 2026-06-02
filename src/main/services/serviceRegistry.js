@@ -43,6 +43,7 @@ const { buildComposedGatePolicyPreview } = require('./composedGatePolicyService'
 const { buildHydrationBacklogPreview } = require('./hydrationBacklogPreviewService');
 const { buildHydrationCandidatePreview } = require('./hydrationCandidatePreviewService');
 const { buildHydrationAttentionLensPreview } = require('./hydrationAttentionLensService');
+const { buildHydrationAttentionRuntimePosturePreview } = require('./hydrationAttentionRuntimePostureService');
 const { buildHydrationExecutionPolicyPreview } = require('./hydrationExecutionPolicyPreviewService');
 const { buildHydrationWriteFixtureProof } = require('./hydrationWriteFixtureProofService');
 const { buildLocalSdeReadinessPreview } = require('./localSdeReadinessPreviewService');
@@ -223,6 +224,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview selected Hydration readability landmarks from local candidates without provider calls, queues, writes, or schema changes',
     handler: ({ db, payload }) => buildHydrationAttentionLensPreview(db, payload)
+  },
+  'metadata.hydration_attention_runtime.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview runtime-facing Hydration attention posture without provider calls, queues, writes, enforcement, or UI work',
+    handler: ({ db, payload, ...context }) => buildHydrationAttentionRuntimePosturePreview(db, payload, context)
   },
   'metadata.local_sde_readiness.preview': {
     classification: 'read-only',

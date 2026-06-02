@@ -35,6 +35,8 @@ async function main() {
     assert(commands.get('metadata.hydration_candidates.preview')?.effects.includes('read-only'), 'metadata.hydration_candidates.preview should declare read-only effect');
     assert(commands.get('metadata.hydration_attention_lens.preview')?.classification === 'read-only', 'metadata.hydration_attention_lens.preview should be read-only');
     assert(commands.get('metadata.hydration_attention_lens.preview')?.effects.includes('read-only'), 'metadata.hydration_attention_lens.preview should declare read-only effect');
+    assert(commands.get('metadata.hydration_attention_runtime.preview')?.classification === 'read-only', 'metadata.hydration_attention_runtime.preview should be read-only');
+    assert(commands.get('metadata.hydration_attention_runtime.preview')?.effects.includes('read-only'), 'metadata.hydration_attention_runtime.preview should declare read-only effect');
     assert(commands.get('metadata.local_sde_readiness.preview')?.classification === 'read-only', 'metadata.local_sde_readiness.preview should be read-only');
     assert(commands.get('metadata.local_sde_readiness.preview')?.effects.includes('read-only'), 'metadata.local_sde_readiness.preview should declare read-only effect');
     assert(commands.get('metadata.hydration_write_fixture_proof')?.classification === 'metadata-only', 'metadata.hydration_write_fixture_proof should be metadata-only');
@@ -93,6 +95,7 @@ async function main() {
     assert(rendererNames.has('metadata.hydration_execution_policy.preview'), 'metadata.hydration_execution_policy.preview should be renderer eligible');
     assert(rendererNames.has('metadata.hydration_candidates.preview'), 'metadata.hydration_candidates.preview should be renderer eligible');
     assert(rendererNames.has('metadata.hydration_attention_lens.preview'), 'metadata.hydration_attention_lens.preview should be renderer eligible');
+    assert(rendererNames.has('metadata.hydration_attention_runtime.preview'), 'metadata.hydration_attention_runtime.preview should be renderer eligible');
     assert(rendererNames.has('metadata.local_sde_readiness.preview'), 'metadata.local_sde_readiness.preview should be renderer eligible');
     assert(!rendererNames.has('metadata.hydration_write_fixture_proof'), 'metadata.hydration_write_fixture_proof should not be renderer eligible');
     assert(rendererNames.has('storage.authority_preflight'), 'storage authority preflight should be renderer eligible');

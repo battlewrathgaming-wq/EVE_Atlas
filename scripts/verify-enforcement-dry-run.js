@@ -173,6 +173,8 @@ function verifyCoverageMetadata(map) {
   assert(command(map, 'sde.build-lookups').storage_action_class === 'background_hydration', 'sde.build-lookups should map to background hydration storage/action class');
   assert(command(map, 'metadata.hydration_execution_policy.preview').runtime_context === 'hydration_execution_policy_readout', 'hydration execution policy should be classified as a readout');
   assert(command(map, 'metadata.hydration_execution_policy.preview').external_io_dependency === 'none', 'hydration execution policy readout should not declare External I/O dependency');
+  assert(command(map, 'metadata.hydration_attention_runtime.preview').runtime_context === 'hydration_attention_runtime_posture_readout', 'hydration attention runtime posture should be classified as a readout');
+  assert(command(map, 'metadata.hydration_attention_runtime.preview').external_io_dependency === 'none', 'hydration attention runtime posture readout should not declare External I/O dependency');
   assert(command(map, 'metadata.local_sde_readiness.preview').runtime_context === 'local_sde_readiness_readout', 'local SDE readiness preview should be classified as a readout');
   assert(command(map, 'metadata.local_sde_readiness.preview').external_io_dependency === 'none', 'local SDE readiness preview should not declare External I/O dependency');
   assert(command(map, 'metadata.local_sde_readiness.preview').enforcement_status === 'covered_read_only', 'local SDE readiness preview should be covered read-only');
