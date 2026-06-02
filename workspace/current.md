@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS216 accepted by HS217
+Status: HS218 active Dev runway
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS216 accepted; pure active runtime enforcement semantics fixture matrix can rest.
+Current focus: Hydration attention runtime posture proof.
 
 Current heading:
 
@@ -15,20 +15,79 @@ Current heading:
 - operational usefulness over architectural finality
 - one hardening seam at a time
 - data-layer boundaries guide the seam before machinery
+- raw IDs remain truthful facts; readable labels are applied attention
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none; no active Dev runway is open
+workspace/DevHS218-hydration-attention-runtime-posture.md
 ```
 
-No active Dev runway is open.
+## Active HS218 Runway
 
-## Active HS216 Runway
+Opened 2026-06-02:
+
+- `workspace/OverseerHS218-hydration-attention-runtime-posture-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS218-hydration-attention-runtime-posture.md
+```
+
+Task:
+
+Add or refine a read-only preview that turns existing Hydration candidate and attention-lens data into runtime-facing posture.
+
+Preferred command:
+
+```txt
+metadata.hydration_attention_runtime.preview
+```
+
+Acceptable alternative:
+
+Extend `metadata.hydration_attention_lens.preview` with a clearly separated `runtime_posture` section if that is cleaner and avoids duplicate command shape.
+
+Preferred outcome:
+
+- show which visible/local IDs should remain raw for now
+- show which IDs already have known local labels
+- show which IDs are provider-needed labels for future Hydration
+- show which gaps are local SDE/type/geography lookup gaps, not provider-backed Hydration
+- show which candidates are deferred because they are Watch/background or corpus-hygiene work
+- disclose whether the posture is view/local-record, target/report-scoped, explicit-ID, Watch/background, or corpus hygiene
+- prove External I/O off holds provider-needed labels without making them failure
+- prove storage/setup posture can block future Hydration writes without blocking local readout
+- prove selected attention, eligibility, and local readability need do not authorize provider calls
+
+Preserve:
+
+- no persisted Hydration queue
+- no provider calls
+- no Hydration writes
+- no `metadata_runs` writes
+- no `entities` writes
+- no `activity_events` patches
+- no Evidence/EVEidence creation
+- no Discovery ref mutation
+- no Watch mutation
+- no Assessment Memory or Marked mutation
+- no schema changes
+- no support artifact creation
+- no runtime enforcement activation
+- no command blocking
+- no renderer UI work
+- no pruning/deletion behavior
+- no label removal, label hiding, or attention de-emphasis behavior
+
+Stop if the proof requires provider calls, persisted queue/state, schema changes, treating missing labels as Evidence gaps, blurring Hydration with ESI Evidence Expansion, blurring local SDE lookup gaps with provider-backed Hydration, reprioritizing Watch/background readability over view/local-record readability without Human/Overseer decision, UI work, runtime enforcement, command blocking, destructive/private/live action, or real operator data inspection.
+
+## Resting HS216 Runway
 
 Opened 2026-06-02:
 

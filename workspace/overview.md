@@ -70,6 +70,7 @@ Current state:
 - HS214 accepted by HS215
 - HS216 opened
 - HS216 accepted by HS217
+- HS218 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -86,9 +87,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer
-- no active Dev runway is open
-- current work is resting HS216 after pure active-semantics fixture matrix acceptance; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, SDE import/download controls, and UI work remain unopened
+- current executor is Dev
+- active Dev runway is HS218 Hydration attention runtime posture
+- current work is proving raw-ID/readability attention posture before provider-backed Hydration execution; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, SDE import/download controls, and UI work remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
 Current heading:
@@ -100,9 +101,9 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Rest runtime enforcement work and continue a different storage/runtime seam.
-2. Request/adopt advisory review of whether local readout/preflight is worth a non-blocking active-semantics preview.
-3. Keep command blocking and active enforcement parked until Human/Overseer explicitly decides to continue this line.
+1. Review DevHS218 and decide whether Hydration attention runtime posture is accepted.
+2. If accepted, consider whether Hydration/local-readability readout needs a further pure proof or can rest.
+3. Keep provider-backed Hydration execution, persisted Hydration queues, and active runtime enforcement parked until Human/Overseer explicitly decides to continue those lines.
 
 See `workspace/current.md` for current truth.
 
@@ -206,6 +207,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS214/HS215 accepted runtime enforcement semantics design: do not open active command blocking; stage by command family; prove active semantics in a pure fixture matrix first.
 - HS216 opened runtime enforcement active semantics fixture matrix: define and verify active decision meanings, mandatory facts, excluded command families, trusted fact supply treatment, and non-authorizing inputs without inserting active enforcement.
 - HS216/HS217 accepted runtime enforcement active semantics fixture matrix: Atlas now has pure active semantics proof, with local readout/preflight as the only first-active candidate and active enforcement/command blocking still parked.
+- HS218 opened Hydration attention runtime posture: prove how Atlas classifies raw IDs, known-local labels, provider-needed labels, local SDE gaps, and deferred candidates before provider-backed Hydration execution or persisted queues exist.
 
 ## Accepted Boundaries
 
