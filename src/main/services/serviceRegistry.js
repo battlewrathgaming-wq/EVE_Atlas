@@ -54,6 +54,7 @@ const { buildSupportArtifactPathAuthorityPreview } = require('./supportArtifactP
 const { buildSupportArtifactCreationPolicyPreview } = require('./supportArtifactCreationPolicyService');
 const { buildSupportArtifactContentsContractPreview } = require('./supportArtifactContentsContractService');
 const { buildSupportArtifactWriterConformanceGapMapPreview } = require('./supportArtifactWriterConformanceGapMapService');
+const { buildTraceLogRedactionPolicyPreview } = require('./traceLogRedactionPolicyService');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
 const {
   buildStorageAuthorityConfigReadback,
@@ -498,6 +499,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview support artifact writer conformance gaps without creating artifacts or changing writer behavior',
     handler: () => buildSupportArtifactWriterConformanceGapMapPreview()
+  },
+  'support.trace_log_redaction_policy.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview trace/log redaction and free-text truncation policy without changing writers or creating artifacts',
+    handler: () => buildTraceLogRedactionPolicyPreview()
   },
   'runtime.enforcement_boundary.preview': {
     classification: 'read-only',

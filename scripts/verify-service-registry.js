@@ -67,6 +67,7 @@ async function main() {
     const supportArtifactCreationPolicyCommand = commands.find((entry) => entry.command === 'support.artifact_creation_policy.preview');
     const supportArtifactContentsContractCommand = commands.find((entry) => entry.command === 'support.artifact_contents_contract.preview');
     const supportArtifactWriterGapMapCommand = commands.find((entry) => entry.command === 'support.artifact_writer_conformance_gap_map.preview');
+    const traceLogRedactionPolicyCommand = commands.find((entry) => entry.command === 'support.trace_log_redaction_policy.preview');
     const runtimeEnforcementBoundaryCommand = commands.find((entry) => entry.command === 'runtime.enforcement_boundary.preview');
     const runtimeHookTelemetryCommand = commands.find((entry) => entry.command === 'runtime.enforcement_hook_telemetry.readout');
     const snapshotSettingsGetCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.get');
@@ -158,6 +159,8 @@ async function main() {
     assert(supportArtifactContentsContractCommand?.renderer_allowed === true, 'support artifact contents contract should be renderer eligible');
     assert(supportArtifactWriterGapMapCommand?.classification === 'read-only', 'support artifact writer gap map should be read-only');
     assert(supportArtifactWriterGapMapCommand?.renderer_allowed === true, 'support artifact writer gap map should be renderer eligible');
+    assert(traceLogRedactionPolicyCommand?.classification === 'read-only', 'trace/log redaction policy should be read-only');
+    assert(traceLogRedactionPolicyCommand?.renderer_allowed === true, 'trace/log redaction policy should be renderer eligible');
     assert(runtimeEnforcementBoundaryCommand?.classification === 'read-only', 'runtime enforcement boundary preview should be read-only');
     assert(runtimeEnforcementBoundaryCommand?.renderer_allowed === true, 'runtime enforcement boundary preview should be renderer eligible');
     assert(runtimeHookTelemetryCommand?.classification === 'read-only', 'runtime hook telemetry readout should be read-only');
@@ -303,6 +306,16 @@ async function main() {
     assert(supportArtifactWriterGapMap.creates_support_artifacts === false, 'support artifact writer gap map should not create artifacts');
     assert(supportArtifactWriterGapMap.writer_behavior_changed === false, 'support artifact writer gap map should not change writer behavior');
     assert(supportArtifactWriterGapMap.provider_calls === 0, 'support artifact writer gap map should not call providers');
+
+    const traceLogRedactionPolicy = await invokeServiceCommand('support.trace_log_redaction_policy.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite'),
+      source: 'renderer'
+    });
+    assert(traceLogRedactionPolicy.read_only === true, 'trace/log redaction policy should declare read-only behavior');
+    assert(traceLogRedactionPolicy.creates_support_artifacts === false, 'trace/log redaction policy should not create artifacts');
+    assert(traceLogRedactionPolicy.writer_behavior_changed === false, 'trace/log redaction policy should not change writer behavior');
+    assert(traceLogRedactionPolicy.provider_calls === 0, 'trace/log redaction policy should not call providers');
 
     const runtimeEnforcementBoundary = await invokeServiceCommand('runtime.enforcement_boundary.preview', {}, {
       db,

@@ -126,6 +126,7 @@ async function verifySeededDb(root) {
       ['support.artifact_creation_policy.preview', () => invokeServiceCommand('support.artifact_creation_policy.preview', {}, context)],
       ['support.artifact_contents_contract.preview', () => invokeServiceCommand('support.artifact_contents_contract.preview', {}, context)],
       ['support.artifact_writer_conformance_gap_map.preview', () => invokeServiceCommand('support.artifact_writer_conformance_gap_map.preview', {}, context)],
+      ['support.trace_log_redaction_policy.preview', () => invokeServiceCommand('support.trace_log_redaction_policy.preview', {}, context)],
       ['runtime.enforcement_boundary.preview', () => invokeServiceCommand('runtime.enforcement_boundary.preview', {}, context)],
       ['runtime.enforcement_hook_telemetry.readout', () => invokeServiceCommand('runtime.enforcement_hook_telemetry.readout', {}, context)],
       ['task.list', () => invokeServiceCommand('task.list', { limit: 10 }, context)],
@@ -187,6 +188,7 @@ async function verifyEmptyDb(root) {
       ['empty support.artifact_creation_policy.preview', () => invokeServiceCommand('support.artifact_creation_policy.preview', {}, context)],
       ['empty support.artifact_contents_contract.preview', () => invokeServiceCommand('support.artifact_contents_contract.preview', {}, context)],
       ['empty support.artifact_writer_conformance_gap_map.preview', () => invokeServiceCommand('support.artifact_writer_conformance_gap_map.preview', {}, context)],
+      ['empty support.trace_log_redaction_policy.preview', () => invokeServiceCommand('support.trace_log_redaction_policy.preview', {}, context)],
       ['empty runtime.enforcement_boundary.preview', () => invokeServiceCommand('runtime.enforcement_boundary.preview', {}, context)],
       ['empty runtime.enforcement_hook_telemetry.readout', () => invokeServiceCommand('runtime.enforcement_hook_telemetry.readout', {}, context)],
       ['empty assessment.list', () => invokeServiceCommand('assessment.list', {}, context)]

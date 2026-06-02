@@ -40,6 +40,7 @@ Current state:
 - HS182 accepted by HS183
 - HS184 accepted by HS185
 - HS186 opened
+- HS186 accepted by HS187
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -56,9 +57,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is HS186 trace/log redaction policy proof
-- current work is proving trace/log redaction and free-text truncation policy before changing support-artifact writers; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
+- current executor is Overseer
+- no active Dev runway is open
+- current work is resting after accepting trace/log redaction and free-text truncation policy proof; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
 Current heading:
@@ -70,8 +71,8 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Complete HS186 trace/log redaction policy proof.
-2. Review whether trace/log writer hardening is ready after policy proof.
+1. Decide whether to open a small trace-pack writer hardening slice using the accepted policy as basis.
+2. Rest support artifacts and continue a different storage/runtime seam if preferred.
 3. Runtime enforcement remains resting.
 
 See `workspace/current.md` for current truth.
@@ -145,6 +146,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS184 opened runtime snapshot manifest disclosure runway: add explicit sensitivity, corpus-adjacent support, DB-copy, raw ESI DB-copy, non-authority, local path sensitivity, and cleanup/deletion review disclosure to snapshot preflight/create metadata without sidecar files or broad writer redesign.
 - HS184/HS185 accepted runtime snapshot disclosure: `support_artifact_disclosure` now appears on runtime snapshot preflight/create results and closes snapshot manifest/sensitivity/non-authority/local-path disclosure gaps in the support artifact writer conformance map.
 - HS186 opened a trace/log redaction and free-text truncation policy proof runway: define read-only policy posture for trace packs and light logs before changing support-artifact writers.
+- HS186/HS187 accepted trace/log redaction policy proof: `support.trace_log_redaction_policy.preview` now defines policy-only redaction/truncation posture for trace packs, light logs, provider diagnostics, warning text, queue latest refs, local paths, sample limits, and runtime provenance without changing writers.
 
 ## Accepted Boundaries
 

@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS186 Trace/log redaction policy proof runway open
+Status: Resting after HS187 accepted HS186
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: read-only trace/log redaction and free-text truncation policy proof before changing support-artifact writers.
+Current focus: HS186 trace/log redaction and free-text truncation policy proof accepted; actual writer hardening remains unopened.
 
 Current heading:
 
@@ -18,17 +18,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS186-trace-log-redaction-policy-proof.md
+none
 ```
 
-Active Dev runway is open.
+No Dev runway is currently open.
 
-## Active HS186 Runway
+## Accepted HS186 Runway
 
 Opened 2026-06-02:
 
@@ -64,6 +64,13 @@ Preserve:
 - no renderer UI work
 
 Stop if policy proof requires actual writer redesign, real artifact inspection, raw ESI payload inclusion, provider calls, live/private/destructive actions, or runtime enforcement.
+
+Overseer reviewed 2026-06-02:
+
+- Accepted HS186 in `workspace/OverseerHS187-hs186-trace-log-redaction-policy-review.md`.
+- Verified the new command, policy-only posture, registry/authority/passive-side-effect coverage, writer conformance gap map compatibility, dry-run coverage, protected-term advisory output, and diff hygiene.
+- Accepted `support.trace_log_redaction_policy.preview` as read-only support-hardening policy evidence.
+- Trace-pack/log writer redaction, provider endpoint/error leakage proof against writer output, readiness alias normalization, support artifact creation behavior, deletion/pruning behavior, runtime enforcement activation, command blocking, and UI work remain unopened.
 
 ## Accepted HS178 Context
 
@@ -215,6 +222,73 @@ Do not run snapshot/trace-pack write verifiers unless changed code requires it. 
 
 ## Evidence
 
+Dev updated 2026-06-02 for HS186:
+
+- Added `support.trace_log_redaction_policy.preview` as a read-only service command and renderer-eligible policy readout.
+- Added `src/main/services/traceLogRedactionPolicyService.js` with a static trace/log redaction and free-text truncation policy preview. It does not inspect real operator artifacts, create support artifacts, call providers, or mutate runtime/project state.
+- Added `scripts/verify-support-trace-log-redaction-policy.js` and `npm.cmd run verify:support-trace-log-redaction-policy`.
+- Updated service registry, enforcement dry-run coverage, command authority, service registry, and passive side-effect verification coverage for the new command.
+- Policy families covered:
+  - `operator_debug_trace_pack`
+  - `light_operational_logs`
+  - `provider_endpoint_and_query_strings`
+  - `provider_and_runtime_error_text`
+  - `data_quality_warning_messages`
+  - `queue_latest_ref_samples`
+  - `local_filesystem_paths`
+  - `sample_limits_omissions_and_exclusions`
+  - `task_run_ids_and_provider_provenance`
+- Sample preview summary:
+  - policy count: 9
+  - families: `trace_pack_support_artifact` = 1, `operational_support_log` = 1, `provider_diagnostics` = 1, `free_text_diagnostics` = 2, `discovery_queue_support_summary` = 1, `local_runtime_context` = 1, `support_artifact_disclosure` = 1, `runtime_provenance` = 1
+  - sensitivity: `high` = 4, `medium` = 5
+  - enforcement status: `policy_only` = 9
+  - max-length examples: trace pack 240, light operational logs 180, provider endpoint path 160, provider/runtime error text 240, data-quality warning message 220, queue `last_error` 160, local path strings 260, task/run/provider IDs 128
+- Policy proof covers:
+  - allowed summary content
+  - forbidden content
+  - redaction rules
+  - truncation / maximum-length rules
+  - replacement markers or disclosure phrases
+  - basis/provenance requirements
+  - raw ESI payload posture
+  - Discovery ref / killmail hash posture
+  - Evidence/EVEidence row posture
+  - Assessment Memory posture
+  - local path posture
+  - enforcement status
+- Core boundaries proved:
+  - all policies are `policy_only` and do not claim writer enforcement
+  - renderer payload is ignored
+  - no support artifacts, snapshots, trace packs, logs, exports, files, or directories are created
+  - no real operator support artifacts are inspected
+  - no provider, zKill, ESI, or SDE download calls occur
+  - no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or schema mutations occur
+  - no runtime enforcement activation or command blocking occurs
+- `support.artifact_writer_conformance_gap_map.preview` remains intentionally unchanged in posture for trace/log writer items: trace-pack free-text/sample/path/queue summary checks remain `partial`, and trace/log provider endpoint/error leakage remains `unknown`, because HS186 proves policy only and does not harden writer behavior.
+- Verification run:
+  - `node --check src\main\services\traceLogRedactionPolicyService.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check scripts\verify-support-trace-log-redaction-policy.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `node --check scripts\verify-support-artifact-writer-conformance-gap-map.js` passed.
+  - `npm.cmd run verify:support-trace-log-redaction-policy` passed.
+  - `npm.cmd run verify:support-artifact-writer-conformance-gap-map` passed.
+  - `npm.cmd run verify:support-artifact-contents-contract` passed.
+  - `npm.cmd run verify:support-artifact-creation-policy` passed.
+  - `npm.cmd run verify:support-artifact-path-authority` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 184 warnings across 7 changed working-set files before workspace documentation updates; no renames or protected-word JSON updates performed.
+  - Final post-documentation `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 255 warnings across 9 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main` with HS186 working-tree changes.
+
 Dev updated 2026-06-02:
 
 - Added `support.artifact_contents_contract.preview` as a read-only service command and renderer-eligible readout.
@@ -260,6 +334,30 @@ Dev updated 2026-06-02:
   - `git status --short --branch` showed branch `main...origin/main [ahead 1]` with HS178 working-tree changes.
 
 ## Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS186-trace-log-redaction-policy-proof.md
+```
+
+Status: trace/log redaction policy proof complete and accepted by Overseer.
+
+HS186 result:
+
+- `support.trace_log_redaction_policy.preview` proves the support-hardening policy posture for trace/log redaction and free-text truncation without changing writer behavior.
+- Actual trace-pack/log writer hardening remains unopened.
+- Runtime artifact creation, real artifact inspection, provider calls, storage movement, deletion/pruning behavior, runtime enforcement activation, command blocking, and UI work remain unopened.
+
+## Resting Next Options
+
+Recommended next shaping candidates:
+
+1. Small trace-pack writer hardening slice using `support.trace_log_redaction_policy.preview` as basis.
+2. Readiness/preflight class-id alias normalization, if support artifact naming consistency should be tidied first.
+3. Rest support artifacts and continue a different storage/runtime seam.
+
+Do not open Dev implementation until one of these is selected and bounded.
 
 Completed:
 
