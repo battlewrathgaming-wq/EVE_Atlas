@@ -165,17 +165,23 @@ const WRITER_SHAPES = Object.freeze([
     ],
     checks: [
       check('writer_surface_exists', 'light operational logs should be mapped without creating a new export surface', 'partial', 'low',
-        'Atlas has operational/API log rows but no dedicated light-log support artifact writer.',
+        'Atlas has persisted operational/API request log rows, but no dedicated light operational log support artifact writer or export surface exists.',
         'Keep future log export separate from provider movement and support-artifact authority.'),
       check('raw_payload_forbidden', 'logs must not contain raw provider or raw ESI payloads', 'conforms', 'low',
         'API request log schema stores endpoint/status/timing/error posture, not response bodies or raw ESI payload columns.',
         'Maintain response-body exclusion if log export is introduced.'),
-      check('secret_redaction_policy', 'logs must avoid secrets or auth tokens', 'unknown', 'high',
-        'Current map does not prove every endpoint/error_message is secret-redacted before persistence.',
-        'Add centralized endpoint/error redaction proof before treating logs as support artifact output.'),
-      check('free_text_length_policy', 'log free text should be truncated or bounded', 'unknown', 'medium',
-        'error_message persistence/export length policy is not expressed in the support artifact contract surface.',
-        'Add max-length/truncation policy for exported log messages.')
+      check('persisted_endpoint_error_sanitization', 'persisted API request log rows should sanitize endpoint and error text before insert', 'conforms', 'low',
+        'HS192 applies bounded persistence sanitization for api_request_logs.endpoint and api_request_logs.error_message at EvidenceRepository.insertApiRequestLog for tested patterns.',
+        'Keep API request log row sanitization distinct from any future light operational log export writer.'),
+      check('endpoint_query_value_redaction', 'endpoint query values should be redacted before persistence', 'conforms', 'low',
+        'api_request_logs.endpoint preserves route shape and query key names while replacing query values with [redacted] before persistence.',
+        'If future log export appears, consume already-sanitized persisted rows or reapply equivalent export-time protection.'),
+      check('secret_redaction_policy', 'logs must avoid secrets or auth tokens', 'conforms', 'low',
+        'HS192 proves token/auth/cookie/session/password/key-like endpoint/error patterns plus bearer/basic values are redacted before persistence for tested patterns.',
+        'Pattern-based redaction is accepted for persisted rows; expand patterns later if provider-specific secret formats appear.'),
+      check('free_text_length_policy', 'log free text should be truncated or bounded', 'conforms', 'low',
+        'api_request_logs.endpoint is bounded to 160 characters and api_request_logs.error_message is bounded to 240 characters before persistence.',
+        'Keep persisted row bounds distinct from any future export-specific display limit.')
     ]
   }
 ]);

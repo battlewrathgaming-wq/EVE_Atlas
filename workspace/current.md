@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS192 accepted by HS193; Atlas is at a resting decision point
+Status: HS194 accepted by HS195; Atlas is at a resting decision point
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: decide the next storage/runtime hardening seam after accepting API request log persistence sanitization.
+Current focus: decide the next storage/runtime hardening seam after accepting light operational log conformance refresh.
 
 Current heading:
 
@@ -27,6 +27,71 @@ none
 ```
 
 No active Dev runway is open.
+
+## Accepted HS194 Runway
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS194-light-operational-log-conformance-refresh-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS194-light-operational-log-conformance-refresh.md
+```
+
+Overseer reviewed 2026-06-02:
+
+- Accepted HS194 in `workspace/OverseerHS195-hs194-light-log-conformance-review.md`.
+- Verified the read-only conformance map refresh, API log readiness alignment, support trace/log policy compatibility, queue/API/Evidence boundary, HTTP boundary, Hydration boundary, registry/authority/passive-side-effect coverage, dry-run coverage, protected-term advisory output, and diff hygiene.
+- Accepted `light_operational_logs` conformance movement for persisted `api_request_logs` row posture after HS192.
+- No dedicated light operational log writer/export exists.
+- Support artifact creation, log export creation, provider behavior, schema changes, reports, trace-pack writer behavior, runtime enforcement activation, command blocking, provider work, and UI work remain unopened.
+
+## Historical HS194 Runway Details
+
+Task:
+
+Refresh `support.artifact_writer_conformance_gap_map.preview` so `light_operational_logs` distinguishes persisted `api_request_logs` row posture after HS192 from the still-absent light operational log export writer.
+
+Required behavior:
+
+- report persisted endpoint/error sanitization as proven for tested patterns at repository insert
+- report endpoint query value redaction before persistence
+- report secret/token/auth/cookie-like redaction for tested endpoint/error patterns before persistence
+- report error-message free text bounds before persistence
+- keep raw provider response bodies and raw ESI payloads excluded by schema
+- keep dedicated light operational log export writer posture as absent/partial
+- update focused verifier expectations
+
+Preserve:
+
+- no light operational log writer/export creation
+- no support artifact, snapshot, trace-pack, log, file, export, package, or directory creation
+- no API request log persistence behavior changes
+- no `EvidenceRepository.insertApiRequestLog` changes
+- no `HttpClient` or provider worker behavior changes
+- no provider calls
+- no schema changes
+- no report changes
+- no trace-pack writer behavior changes
+- no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or runtime enforcement mutation
+- no command blocking
+- no renderer UI work
+
+Stop if the map cannot distinguish persisted API logs from future light-log exports, or if the change requires writer/export behavior, schema changes, provider calls, runtime enforcement, command blocking, destructive/private/live action, or UI work.
+
+## Resting Next Options
+
+Recommended next shaping candidates:
+
+1. Readiness/preflight class-id alias normalization, if support artifact naming consistency should be tidied.
+2. Rest support artifacts and continue a different storage/runtime seam.
+3. Runtime enforcement remains resting.
+
+Do not open Dev implementation until one of these is selected and bounded.
+
+## Resting HS192 State
 
 ## Accepted HS192 Runway
 
@@ -399,6 +464,51 @@ Do not run snapshot/trace-pack write verifiers unless changed code requires it. 
 
 ## Evidence
 
+Dev updated 2026-06-02 for HS194:
+
+- Refreshed `support.artifact_writer_conformance_gap_map.preview` for the `light_operational_logs` class after accepted HS192.
+- Preserved the distinction between persisted `api_request_logs` rows and a future/dedicated light operational log export writer.
+- `light_operational_logs.writer_surface_exists` remains `partial` because no dedicated light operational log support artifact writer or export surface exists.
+- `light_operational_logs.raw_payload_forbidden` remains `conforms` because `api_request_logs` has no raw provider response body column and no raw ESI payload column.
+- Added `light_operational_logs.persisted_endpoint_error_sanitization` as `conforms`, based on HS192 insert-time sanitization at `EvidenceRepository.insertApiRequestLog`.
+- Added `light_operational_logs.endpoint_query_value_redaction` as `conforms`, preserving route shape and query key names while redacting query values before persistence.
+- Changed `light_operational_logs.secret_redaction_policy` from `unknown` to `conforms` for HS192-tested token/auth/cookie/session/password/key-like endpoint/error patterns plus bearer/basic values.
+- Changed `light_operational_logs.free_text_length_policy` from `unknown` to `conforms`, reflecting persisted endpoint and error-message bounds of 160 and 240 characters.
+- Focused verifier sample:
+  - class count: 5
+  - check count: 25
+  - status counts: `conforms` = 21, `partial` = 3, `gap` = 1
+  - classes with gaps: `readiness_preflight_export`
+  - classes with unknowns: none
+  - HS180 provider endpoint/error secret leakage focus now reports `conforms` for trace pack and light operational logs
+- Verification run:
+  - `node --check src\main\services\supportArtifactWriterConformanceGapMapService.js` passed.
+  - `node --check scripts\verify-support-artifact-writer-conformance-gap-map.js` passed.
+  - `npm.cmd run verify:support-artifact-writer-conformance-gap-map` passed.
+  - `npm.cmd run verify:api-request-log-redaction-readiness` passed.
+  - `npm.cmd run verify:support-trace-log-redaction-policy` passed.
+  - `npm.cmd run verify:queue-api-evidence-write` passed.
+  - `npm.cmd run verify:http-boundaries` passed.
+  - `npm.cmd run verify:hydration` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output after workspace documentation updates: 150 warnings across 6 changed working-set files; no renames or protected-word JSON updates performed.
+- Boundaries preserved:
+  - no light operational log writer/export creation
+  - no support artifact, snapshot, trace-pack, log, file, export, package, or directory creation
+  - no API request log persistence behavior changes
+  - no `EvidenceRepository.insertApiRequestLog` changes
+  - no `HttpClient` or provider worker behavior changes
+  - no provider calls
+  - no schema changes
+  - no report changes
+  - no trace-pack writer behavior changes
+  - no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or runtime enforcement mutation
+  - no command blocking
+  - no renderer UI work
+
 Dev updated 2026-06-02 for HS192:
 
 - Added bounded persistence sanitization for `api_request_logs.endpoint` and `api_request_logs.error_message` at `EvidenceRepository.insertApiRequestLog(log)`.
@@ -736,6 +846,21 @@ Dev updated 2026-06-02:
   - `git status --short --branch` showed branch `main...origin/main [ahead 1]` with HS178 working-tree changes.
 
 ## Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS194-light-operational-log-conformance-refresh.md
+```
+
+Status: light operational log conformance refresh complete; pending Overseer review.
+
+HS194 result:
+
+- `support.artifact_writer_conformance_gap_map.preview` now reports HS192-proven persisted API request log row sanitization for `light_operational_logs`.
+- `light_operational_logs` no longer leaves endpoint/error secret redaction or free-text bounds as `unknown`.
+- The map still reports no dedicated light operational log export writer via `writer_surface_exists: partial`.
+- No writer/export behavior, persistence behavior, provider behavior, schema, runtime enforcement, command blocking, support artifact creation, or UI work changed.
 
 Completed:
 

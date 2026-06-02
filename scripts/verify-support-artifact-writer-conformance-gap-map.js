@@ -110,7 +110,7 @@ function verifyMappedClasses(preview) {
   assert(preview.summary.total_classes === 5, 'gap map should cover five classes');
   assert(preview.summary.by_status.gap >= 1, 'gap map should expose remaining known gaps');
   assert(preview.summary.by_status.partial >= 2, 'gap map should expose remaining partial conformance');
-  assert(preview.summary.by_status.unknown >= 1, 'gap map should expose remaining unknowns');
+  assert(!preview.summary.by_status.unknown, 'gap map should not leave HS192-proven persisted API log posture unknown');
 }
 
 function verifyKnownConcerns(preview) {
@@ -129,11 +129,15 @@ function verifyKnownConcerns(preview) {
   assert(checkById(tracePack, 'provider_endpoint_secret_leakage').conformance_status === 'conforms', 'trace pack provider endpoint secret posture should conform after HS188');
   assert(checkById(tracePack, 'queue_latest_refs_bounded_summary').conformance_status === 'conforms', 'queue latest refs should conform as bounded support summaries after HS188');
   assert(checkById(readiness, 'class_id_alias_normalization').conformance_status === 'gap', 'readiness alias normalization should be a gap');
-  assert(checkById(logs, 'secret_redaction_policy').conformance_status === 'unknown', 'log secret redaction should be unknown');
+  assert(checkById(logs, 'writer_surface_exists').conformance_status === 'partial', 'light operational log export writer should remain absent/partial');
+  assert(checkById(logs, 'persisted_endpoint_error_sanitization').conformance_status === 'conforms', 'persisted API log row sanitization should conform after HS192');
+  assert(checkById(logs, 'endpoint_query_value_redaction').conformance_status === 'conforms', 'persisted API log query value redaction should conform after HS192');
+  assert(checkById(logs, 'secret_redaction_policy').conformance_status === 'conforms', 'persisted API log secret redaction should conform for tested patterns after HS192');
+  assert(checkById(logs, 'free_text_length_policy').conformance_status === 'conforms', 'persisted API log free text bounds should conform after HS192');
 
   assert(preview.hs180_focus_areas.trace_pack_free_text_max_length.conformance_status === 'conforms', 'HS180 free-text focus should be mapped as conforming after HS188');
   assert(preview.hs180_focus_areas.readiness_class_id_alias_normalization.conformance_status === 'gap', 'HS180 readiness alias focus should be mapped');
-  assert(preview.hs180_focus_areas.provider_endpoint_error_secret_leakage.some((entry) => entry.conformance_status === 'unknown'), 'HS180 provider/secret focus should include unknown');
+  assert(preview.hs180_focus_areas.provider_endpoint_error_secret_leakage.every((entry) => entry.conformance_status === 'conforms'), 'HS180 provider/secret focus should reflect HS188 and HS192 conforming posture');
 }
 
 function verifyDirectBuilder() {
