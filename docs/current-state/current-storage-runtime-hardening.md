@@ -44,6 +44,7 @@ Accepted proof surfaces:
 - `metadata.hydration_write_fixture_proof`
 - `support.artifact_creation_policy.preview`
 - `support.artifact_contents_contract.preview`
+- `support.artifact_writer_conformance_gap_map.preview`
 - `runtime.enforcement_boundary.preview`
 - `runtimeEnforcementEvaluator.evaluateRuntimeEnforcementDecision`
 - `runtime.enforcement_adapter.dry_preview`
@@ -69,6 +70,7 @@ Accepted shape:
 - Hydration writer fixture proof is fixture/offline readability write posture: it patches activity-event label columns from existing local `entities`, records one `metadata_runs` proof row, keeps numeric IDs as facts, and leaves Evidence/EVEidence, Discovery refs, Watch state, queues, providers, schema, storage config, and renderer UI untouched
 - Support artifact creation policy preview is read-only creation posture: it classifies rolling snapshots, retained snapshots, operator debug trace packs, and future readiness/preflight export posture without creating artifacts, files, directories, providers, Evidence/EVEidence, Discovery mutations, Hydration writes, storage config writes, runtime enforcement, or UI work
 - Support artifact contents contract preview is read-only content posture: it classifies rolling snapshots, retained snapshots, operator debug trace packs, light operational logs, and readiness/preflight exports by allowed content, forbidden content, redaction/omission rules, raw ESI posture, Discovery/Evidence/Hydration/Assessment/Watch posture, basis/provenance disclosure, sensitivity, and non-authority posture
+- Support artifact writer conformance gap map is read-only writer-shape posture: it compares existing snapshot, trace-pack, readiness/preflight, and light-log writer/output posture against the contents contract without changing writers or creating artifacts
 - Runtime enforcement boundary preview is read-only service-boundary posture: it proves a future insertion point in `invokeServiceCommand(command, payload, context)` after renderer eligibility and confirmation checks, before task wrapping and handler dispatch, while keeping `would_allow`, External I/O on, and unknown/unclassified fail-closed as non-authorizing preview/policy posture
 - Runtime enforcement evaluator is a pure inactive decision helper: it accepts explicit facts, returns `pass`, `block`, `conditional`, or `stop_before_boundary` with stable reason codes, and does not call handlers, task runners, providers, repositories, file writers, config writers, or DB APIs
 - Runtime enforcement dry adapter is inactive service-boundary fact assembly proof: it assembles evaluator facts from command metadata/definition, payload, context, and explicit supplied gate facts; reports missing fact classes; refuses to treat dry-run `would_allow` as authorization; and remains outside `invokeServiceCommand`
@@ -90,6 +92,7 @@ Current resting state:
 - support artifact creation policy can now be inspected before creation, but actual support artifact creation, snapshot creation, trace-pack creation, cleanup, and pruning/deletion remain separate future seams
 - support artifact contents can now be inspected before creation/writer hardening; actual support artifact creation, snapshot creation, trace-pack creation, cleanup, and pruning/deletion remain separate future seams
 - HS180 security review found no blocking issue in the contents contract and recommends a read-only writer conformance gap map before changing snapshot, trace-pack, readiness/preflight, log, or export writers
+- HS182 writer conformance gap map accepted snapshot manifest/sensitivity gaps, readiness alias gap, trace/log redaction unknowns, trace free-text/sample-limit partials, and local path sensitivity partials as future hardening guidance only
 
 ## Accepted Runtime Boundaries
 

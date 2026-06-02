@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS182 Support artifact writer conformance gap map runway open
+Status: Resting after HS183 accepted HS182
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: read-only writer conformance gap map between existing support artifact writer shapes and the accepted contents contract.
+Current focus: support artifact writer conformance gap map accepted; next support-artifact seam should be deliberately selected.
 
 Current heading:
 
@@ -18,15 +18,15 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS182-support-artifact-writer-conformance-gap-map.md
+none
 ```
 
-Dev runway is open.
+No Dev runway is currently open.
 
 ## Accepted HS178 Context
 
@@ -286,3 +286,80 @@ Preserve:
 - no snapshot/trace-pack/log/export/file/directory creation
 - no provider calls
 - no Evidence/EVEidence, Discovery, Hydration, Assessment, Watch, storage config, schema, runtime enforcement, command blocking, or UI work
+
+## HS182 Evidence
+
+Dev updated 2026-06-02:
+
+- Added `support.artifact_writer_conformance_gap_map.preview` as a read-only service command and renderer-eligible readout.
+- Added `src/main/services/supportArtifactWriterConformanceGapMapService.js` with a static writer conformance map that compares current writer/output postures to `support.artifact_contents_contract.preview`.
+- Added `scripts/verify-support-artifact-writer-conformance-gap-map.js` and `npm.cmd run verify:support-artifact-writer-conformance-gap-map`.
+- Updated service registry, enforcement dry-run coverage, command authority, service registry, and passive side-effect coverage for the new command.
+- Mapped artifact classes:
+  - `runtime_snapshot_rolling`
+  - `runtime_snapshot_retained`
+  - `operator_debug_trace_pack`
+  - `readiness_preflight_export`
+  - `light_operational_logs`
+- Focused verifier sample:
+  - class count: 5
+  - check count: 23
+  - status counts: `conforms` = 4, `gap` = 3, `partial` = 13, `unknown` = 3
+  - risk counts: `low` = 8, `medium` = 12, `high` = 3
+  - classes with gaps: runtime snapshot rolling, runtime snapshot retained, readiness/preflight export
+  - classes with unknowns: operator debug trace pack, light operational logs
+- HS180 concerns are carried forward:
+  - trace-pack free-text max length/truncation: `partial`
+  - local path sensitivity disclosure: `partial`
+  - sample limit/exclusions disclosure: `partial`
+  - readiness class-id alias normalization: `gap`
+  - snapshot manifest sensitivity/non-authority/cleanup disclosure: `gap` / `partial`
+  - provider endpoint/error-message secret leakage: `unknown`
+  - queue latest refs bounded summary: `partial`
+- Focused verifier proves no support artifacts, snapshots, trace packs, logs, exports, files, or directories are created, no provider calls occur, no DB table counts change, and no writer behavior changes.
+- Verification run:
+  - `node --check src\main\services\supportArtifactWriterConformanceGapMapService.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check scripts\verify-support-artifact-writer-conformance-gap-map.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `npm.cmd run verify:support-artifact-writer-conformance-gap-map` passed.
+  - `npm.cmd run verify:support-artifact-contents-contract` passed.
+  - `npm.cmd run verify:support-artifact-path-authority` passed.
+  - `npm.cmd run verify:support-artifact-creation-policy` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 241 warnings across 9 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main` with HS182 working-tree changes.
+
+## HS182 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS182-support-artifact-writer-conformance-gap-map.md
+```
+
+Status: writer conformance gap map preview complete and accepted by Overseer.
+
+Overseer reviewed 2026-06-02:
+
+- Accepted HS182 in `workspace/OverseerHS183-hs182-support-artifact-writer-conformance-review.md`.
+- Verified the new command, support artifact contract/path/creation dependencies, registry/authority/passive-side-effect coverage, dry-run coverage, protected-term advisory output, and diff hygiene.
+- Accepted `support.artifact_writer_conformance_gap_map.preview` as read-only gap evidence for later support artifact hardening.
+- Actual writer behavior changes, support artifact creation, snapshot creation, trace-pack creation, log/export creation, deletion/pruning behavior, and runtime enforcement activation remain unopened.
+
+## Resting Next Options
+
+Recommended next shaping candidates:
+
+1. Snapshot manifest / metadata disclosure hardening.
+2. Trace/log redaction and free-text truncation policy proof.
+3. Rest support artifacts and continue a different storage/runtime seam.
+
+Do not open Dev implementation until one of these is selected and bounded.

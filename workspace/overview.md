@@ -37,6 +37,7 @@ Current state:
 
 - HS178 accepted by HS179
 - HS180 security review accepted by HS181
+- HS182 accepted by HS183
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -53,8 +54,8 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is HS182 Support artifact writer conformance gap map
+- current executor is Overseer
+- no active Dev runway is open
 - current work is at a resting point after making inactive hook preview evidence inspectable; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
@@ -67,8 +68,8 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Complete HS182 support artifact writer conformance gap map.
-2. Review whether writer conformance gaps justify a later writer-hardening packet.
+1. Decide whether the next support-artifact seam is snapshot manifest disclosure or trace/log redaction policy.
+2. Rest support artifacts and continue a different storage/runtime seam if preferred.
 3. Runtime enforcement remains resting.
 
 See `workspace/current.md` for current truth.
@@ -138,6 +139,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS178/HS179 accepted support artifact contents contract preview: `support.artifact_contents_contract.preview` now defines allowed, forbidden, redacted, sensitivity, provenance, and non-authority posture for snapshots, trace packs, logs, and readiness/preflight exports before any new support artifact creation behavior.
 - HS180/HS181 accepted security review of the contents contract: no blocking issue found; next safe support-artifact seam is a read-only writer conformance gap map, with attention to trace-pack free-text length, local path sensitivity, sample-limit disclosure, readiness class aliases, and snapshot metadata/manifest disclosure.
 - HS182 opened a read-only support artifact writer conformance gap map runway: compare existing snapshot, trace-pack, readiness/preflight, and light-log writer/output posture against the accepted contents contract before changing artifact writers.
+- HS182/HS183 accepted writer conformance gap map: `support.artifact_writer_conformance_gap_map.preview` now records snapshot manifest gaps, readiness alias gap, trace/log redaction unknowns, trace free-text/sample-limit partials, and local path sensitivity partials without changing writers.
 
 ## Accepted Boundaries
 

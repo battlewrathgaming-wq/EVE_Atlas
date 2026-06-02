@@ -53,6 +53,7 @@ const {
 const { buildSupportArtifactPathAuthorityPreview } = require('./supportArtifactPathAuthorityService');
 const { buildSupportArtifactCreationPolicyPreview } = require('./supportArtifactCreationPolicyService');
 const { buildSupportArtifactContentsContractPreview } = require('./supportArtifactContentsContractService');
+const { buildSupportArtifactWriterConformanceGapMapPreview } = require('./supportArtifactWriterConformanceGapMapService');
 const { buildStorageAuthorityPreflight } = require('./storageAuthorityPreflightService');
 const {
   buildStorageAuthorityConfigReadback,
@@ -490,6 +491,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview support artifact content rules without creating artifacts, reading artifact files, or changing runtime behavior',
     handler: () => buildSupportArtifactContentsContractPreview()
+  },
+  'support.artifact_writer_conformance_gap_map.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview support artifact writer conformance gaps without creating artifacts or changing writer behavior',
+    handler: () => buildSupportArtifactWriterConformanceGapMapPreview()
   },
   'runtime.enforcement_boundary.preview': {
     classification: 'read-only',
