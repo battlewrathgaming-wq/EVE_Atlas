@@ -54,8 +54,8 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer
-- no active Dev runway is open
+- current executor is Dev
+- active Dev runway is HS184 Runtime snapshot manifest disclosure
 - current work is at a resting point after making inactive hook preview evidence inspectable; active command blocking, artifact creation, provider-backed Hydration, and runtime enforcement activation remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
@@ -68,8 +68,8 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Decide whether the next support-artifact seam is snapshot manifest disclosure or trace/log redaction policy.
-2. Rest support artifacts and continue a different storage/runtime seam if preferred.
+1. Complete HS184 runtime snapshot manifest disclosure.
+2. Review whether snapshot disclosure closes the cleanest support-artifact writer gap.
 3. Runtime enforcement remains resting.
 
 See `workspace/current.md` for current truth.
@@ -140,6 +140,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS180/HS181 accepted security review of the contents contract: no blocking issue found; next safe support-artifact seam is a read-only writer conformance gap map, with attention to trace-pack free-text length, local path sensitivity, sample-limit disclosure, readiness class aliases, and snapshot metadata/manifest disclosure.
 - HS182 opened a read-only support artifact writer conformance gap map runway: compare existing snapshot, trace-pack, readiness/preflight, and light-log writer/output posture against the accepted contents contract before changing artifact writers.
 - HS182/HS183 accepted writer conformance gap map: `support.artifact_writer_conformance_gap_map.preview` now records snapshot manifest gaps, readiness alias gap, trace/log redaction unknowns, trace free-text/sample-limit partials, and local path sensitivity partials without changing writers.
+- HS184 opened runtime snapshot manifest disclosure runway: add explicit sensitivity, corpus-adjacent support, DB-copy, raw ESI DB-copy, non-authority, local path sensitivity, and cleanup/deletion review disclosure to snapshot preflight/create metadata without sidecar files or broad writer redesign.
 
 ## Accepted Boundaries
 

@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: Resting after HS183 accepted HS182
+Status: HS184 Runtime snapshot manifest disclosure runway open
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: support artifact writer conformance gap map accepted; next support-artifact seam should be deliberately selected.
+Current focus: add runtime snapshot disclosure metadata for sensitivity, non-authority, DB-copy posture, and cleanup/deletion review meaning.
 
 Current heading:
 
@@ -18,15 +18,15 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none
+workspace/DevHS184-runtime-snapshot-manifest-disclosure.md
 ```
 
-No Dev runway is currently open.
+Dev runway is open.
 
 ## Accepted HS178 Context
 
@@ -247,6 +247,30 @@ Recommended next shaping candidates:
 2. Continue a different storage/runtime seam if support artifacts should rest.
 
 Do not open Dev implementation until one of these is selected and bounded.
+
+## Active HS184 Runway
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS184-runtime-snapshot-manifest-disclosure-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS184-runtime-snapshot-manifest-disclosure.md
+```
+
+Task:
+
+Add metadata/manifest-style disclosure to runtime snapshot preflight and create results. This should make high sensitivity, corpus-adjacent support posture, copied DB content posture, raw ESI DB-copy posture, non-authority, local path sensitivity, and cleanup/deletion review responsibility explicit.
+
+Preserve:
+
+- no sidecar/manifest file creation
+- no new artifact files beyond the existing runtime snapshot command behavior
+- no trace-pack/log/export changes
+- no provider calls
+- no schema/runtime enforcement/UI work
 
 ## Advisory Input Accepted
 
