@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS204 accepted by HS205
+Status: HS206 active Dev runway
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS204 accepted; inactive runtime hook provider/live gate fact sourcing can rest as read-only proof.
+Current focus: HS206 runtime hook composed policy fact preview.
 
 Current heading:
 
@@ -18,15 +18,61 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none; no active Dev runway is open
+workspace/DevHS206-runtime-hook-composed-policy-fact-preview.md
 ```
 
-No active Dev runway is open.
+## Active HS206 Runway
+
+Opened 2026-06-02:
+
+- `workspace/OverseerHS206-runtime-hook-composed-policy-fact-preview-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS206-runtime-hook-composed-policy-fact-preview.md
+```
+
+Task:
+
+Add read-only, non-enforcing `composed_policy` fact sourcing to the inactive runtime enforcement hook preview.
+
+Preferred outcome:
+
+- the inactive hook can include compact current-command composed policy posture
+- supplied `runtimeEnforcementFacts.composed_policy` remains preserved and not overwritten
+- composed policy state remains preview posture only, not runtime authorization
+- mapped local/read-only and provider-capable commands can show composed policy basis
+- unmapped commands report explicit unmapped posture rather than guessed authorization
+- active runtime enforcement remains false
+
+Preserve:
+
+- no active runtime enforcement
+- no command blocking
+- no handler dispatch from the hook
+- no task wrapping or task execution from the hook
+- no provider calls
+- no provider attempt recording
+- no service-memory cooldown/lockout mutation from the hook
+- no SDE download/import
+- no Hydration writes
+- no Evidence/EVEidence creation
+- no Discovery ref mutation
+- no Watch, Assessment Memory, or Marked mutation
+- no schema changes
+- no support artifact creation
+- no config writes
+- no storage movement or migration
+- no renderer UI work
+- no pruning or deletion behavior
+
+Stop if the proof requires active command blocking, runtime authorization, treating composed policy as a may-run-now answer, calling target handlers from the hook, task dispatch or task wrapping from the hook, `enterLiveProviderAttempt(...)`, provider calls, service-memory cooldown/lockout mutation from the hook, config writes, schema changes, support artifact creation, SDE import/download, storage movement/migration, UI work, hiding missing fact classes, blurring composed policy with runtime authorization, or dumping unbounded composed policy rows into every hook preview.
 
 ## Resting HS204 State
 

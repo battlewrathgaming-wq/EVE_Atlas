@@ -58,6 +58,7 @@ Current state:
 - HS202 accepted by HS203
 - HS204 opened
 - HS204 accepted by HS205
+- HS206 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -74,9 +75,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer
-- no active Dev runway is open
-- current work is resting HS204 after inactive runtime hook provider/live gate fact preview acceptance; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, SDE import/download controls, and UI work remain unopened
+- current executor is Dev
+- active Dev runway is HS206 runtime hook composed policy fact preview
+- current work continues inactive runtime hook fact preview by adding compact composed policy posture only; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, SDE import/download controls, and UI work remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
 Current heading:
@@ -86,10 +87,10 @@ Current heading:
 - one hardening seam at a time
 - Atlas project root remains the anchor
 
-Likely next shaping candidates:
+Likely next shaping candidates after HS206:
 
-1. Rest runtime hook fact sourcing and continue a different storage/runtime seam.
-2. Shape composed policy fact sourcing only if runtime hook proof continues cleanly.
+1. Review and accept/redirect HS206.
+2. Rest runtime hook fact sourcing and continue a different storage/runtime seam.
 3. Runtime enforcement activation remains resting and should get security/engineering readiness review before any active packet.
 
 See `workspace/current.md` for current truth.
@@ -182,6 +183,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS202/HS203 accepted runtime hook real gate fact preview: inactive hook previews now include sourced storage authority, storage budget, and External I/O posture while composed policy, provider live gate, destination path authority, and Watch/task facts remain unsourced unless supplied; active enforcement and command blocking remain unopened.
 - HS204 opened runtime hook provider/live gate fact preview: source provider/live gate posture into inactive runtime hook previews from existing read-only `actionGate(...)` logic while preserving no enforcement, no provider calls, no provider attempt recording, no command blocking, and no service-memory cooldown/lockout mutation from the hook.
 - HS204/HS205 accepted runtime hook provider/live gate fact preview: inactive hook previews now source provider/live gate posture for mapped provider-capable commands, keep local-only and provider-optional local-source work not-applicable, preserve supplied facts, and keep active enforcement/command blocking unopened.
+- HS206 opened runtime hook composed policy fact preview: source compact current-command composed policy posture into inactive runtime hook previews from existing read-only `storage.composed_gate_policy.preview` logic while preserving no enforcement, no command blocking, and no runtime authorization.
 
 ## Accepted Boundaries
 
