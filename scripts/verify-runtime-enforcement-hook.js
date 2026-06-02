@@ -13,6 +13,7 @@ async function main() {
     await verifyResultUnchangedWithoutObserver(db);
     await verifyResultUnchangedWithObserver(db);
     await verifyCoverageSourcedWithoutContextFacts(db);
+    await verifyMappedLocalCommandUsesSourcedComposedPolicy(db);
     await verifyContextSuppliedFactsPreserved(db);
     await verifySuppliedCoverageNotOverwritten(db);
     await verifyProviderCapableCommandUsesSourcedExternalIo(db);
@@ -38,6 +39,8 @@ async function main() {
         storage_budget_sourced: true,
         external_io_sourced: true,
         provider_live_gate_sourced: true,
+        composed_policy_sourced: true,
+        mapped_local_composed_policy_sourced: true,
         provider_capable_external_io_sourced_without_authorizing: true,
         live_radius_rejection_sourced_without_provider_call: true,
         provider_optional_local_source_avoids_live_gate: true,
@@ -95,7 +98,7 @@ async function verifyCoverageSourcedWithoutContextFacts(db) {
   const trustedContext = observed[0].evaluator_decision.gate_inputs_used.dry_run === null
     ? observed[0].evaluator_decision.gate_inputs_used.trusted_context
     : null;
-  assert(observed[0].missing_fact_classes.includes('composed_gate_policy'), 'missing composed fact should remain visible');
+  assert(!observed[0].missing_fact_classes.includes('composed_gate_policy'), 'composed policy should be sourced as explicit unmapped posture');
   assert(!observed[0].missing_fact_classes.includes('storage_authority'), 'storage authority should be sourced');
   assert(!observed[0].missing_fact_classes.includes('storage_budget'), 'storage budget should be sourced');
   assert(!observed[0].missing_fact_classes.includes('classification_coverage'), 'known covered command should have coverage sourced');
@@ -103,6 +106,7 @@ async function verifyCoverageSourcedWithoutContextFacts(db) {
   const budget = observed[0].evaluator_decision.gate_inputs_used.budget;
   const externalIo = observed[0].evaluator_decision.gate_inputs_used.external_io;
   const providerLiveGate = observed[0].evaluator_decision.gate_inputs_used.provider_live_gate;
+  const composedPolicy = observed[0].evaluator_decision.gate_inputs_used.composed_policy;
   assert(storageAuthority?.fact_source === 'runtime_hook_read_only_storage_authority_readback', 'storage authority facts should be sourced from readback');
   assert(['sourced_configured', 'sourced_absent_unconfigured', 'sourced_missing', 'sourced_unparseable', 'sourced_invalid_schema'].includes(storageAuthority.source_status), 'storage authority source status should distinguish configured/absent/problem posture');
   assert(budget?.fact_source === 'runtime_hook_read_only_storage_setup_gate_readout', 'storage budget facts should be sourced from setup gate readout');
@@ -113,7 +117,32 @@ async function verifyCoverageSourcedWithoutContextFacts(db) {
   assert(providerLiveGate?.state === 'local_only_no_live_provider_gate', 'local-only command should stay local-only for provider live gate');
   assert(providerLiveGate.provider_capable === false, 'local-only command must not become provider-capable');
   assert(providerLiveGate.allowed_is_authorization === false, 'provider live gate fact should be non-authorizing');
+  assert(composedPolicy?.source_status === 'sourced_unmapped', 'unmapped command should get explicit composed policy unmapped posture');
+  assert(composedPolicy.state === 'unknown', 'unmapped composed policy posture should not guess authorization');
+  assert(composedPolicy.runtime_authorization_active === false, 'unmapped composed policy should not authorize runtime dispatch');
+  assert(composedPolicy.would_allow_is_authorization === false, 'unmapped composed policy should keep would_allow non-authorizing');
   assert(trustedContext?.renderer_allowed === true, 'trusted context posture should still reflect command metadata');
+}
+
+async function verifyMappedLocalCommandUsesSourcedComposedPolicy(db) {
+  const observed = [];
+  await invokeServiceCommand('runtime.enforcement_boundary.preview', {}, {
+    db,
+    source: 'renderer',
+    runtimeEnforcementPreviewObserver: (preview) => observed.push(preview)
+  });
+  assert(observed.length === 1, 'mapped local/read-only command should reach inactive hook');
+  const composedPolicy = observed[0].evaluator_decision.gate_inputs_used.composed_policy;
+  assert(composedPolicy?.fact_source === 'runtime_hook_read_only_composed_gate_policy_preview', 'mapped local command should source composed policy fact');
+  assert(composedPolicy.source_status === 'sourced_mapped_row', 'mapped local command should report mapped composed row');
+  assert(composedPolicy.matched_row_id === 'runtime_enforcement_boundary_readout', 'runtime enforcement boundary should map to representative composed row');
+  assert(composedPolicy.state, 'mapped composed policy should include compact composed state');
+  assert(Array.isArray(composedPolicy.reason_codes), 'mapped composed policy should include reason codes');
+  assert(Object.keys(composedPolicy.gate_summary || {}).length > 0, 'mapped composed policy should include compact gate summary');
+  assert(!Object.prototype.hasOwnProperty.call(composedPolicy, 'rows'), 'composed policy fact should not dump full preview rows');
+  assert(composedPolicy.runtime_authorization_active === false, 'mapped composed policy should not authorize runtime dispatch');
+  assert(composedPolicy.would_allow_is_authorization === false, 'mapped composed policy should keep would_allow non-authorizing');
+  assert(observed[0].proof.handlers_called === undefined || observed[0].proof.target_handlers_called === false, 'hook itself should not call handlers');
 }
 
 async function verifyContextSuppliedFactsPreserved(db) {
@@ -180,6 +209,7 @@ async function verifyProviderCapableCommandUsesSourcedExternalIo(db) {
   assert(observed.length === 1, 'confirmed provider-capable command should reach inactive hook');
   const externalIo = observed[0].evaluator_decision.gate_inputs_used.external_io;
   const providerLiveGate = observed[0].evaluator_decision.gate_inputs_used.provider_live_gate;
+  const composedPolicy = observed[0].evaluator_decision.gate_inputs_used.composed_policy;
   assert(externalIo?.external_io_dependency === 'zkill_provider_required', 'provider-capable command should carry External I/O dependency separately');
   assert(externalIo.gate_state === 'held_by_external_io', 'missing/off External I/O config should hold provider-backed posture');
   assert(externalIo.on_is_authorization === false, 'External I/O on/off posture should not authorize command execution');
@@ -191,6 +221,10 @@ async function verifyProviderCapableCommandUsesSourcedExternalIo(db) {
   assert(providerLiveGate.allowed_is_authorization === false, 'provider live gate allowed flag must not authorize runtime dispatch');
   assert(providerLiveGate.blockers.some((entry) => entry.code === 'LIVE_API_DISABLED'), 'provider live gate should report live API disabled blocker');
   assert(!observed[0].missing_fact_classes.includes('provider_live_gate'), 'provider live gate should be sourced for mapped provider-capable command');
+  assert(composedPolicy?.source_status === 'sourced_mapped_row', 'provider-capable command should source mapped composed policy row');
+  assert(composedPolicy.matched_row_id === 'zkill_discovery', 'manual.discovery should map to zKill discovery composed policy row');
+  assert(composedPolicy.runtime_authorization_active === false, 'provider composed policy should not authorize runtime dispatch');
+  assert(composedPolicy.would_allow_is_authorization === false, 'provider composed policy would_allow should remain non-authorizing');
   assert(observed[0].proof.providers_called === false, 'hook itself should not call providers for provider-capable commands');
 }
 

@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS206 active Dev runway
+Status: HS206 accepted by HS207
 Last updated: 2026-06-02
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS206 runtime hook composed policy fact preview.
+Current focus: HS206 accepted; inactive runtime hook composed policy fact sourcing can rest as read-only proof.
 
 Current heading:
 
@@ -18,15 +18,19 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS206-runtime-hook-composed-policy-fact-preview.md
+none; no active Dev runway is open
 ```
 
-## Active HS206 Runway
+No active Dev runway is open.
+
+## Resting HS206 State
+
+## Accepted HS206 Runway
 
 Opened 2026-06-02:
 
@@ -73,6 +77,124 @@ Preserve:
 - no pruning or deletion behavior
 
 Stop if the proof requires active command blocking, runtime authorization, treating composed policy as a may-run-now answer, calling target handlers from the hook, task dispatch or task wrapping from the hook, `enterLiveProviderAttempt(...)`, provider calls, service-memory cooldown/lockout mutation from the hook, config writes, schema changes, support artifact creation, SDE import/download, storage movement/migration, UI work, hiding missing fact classes, blurring composed policy with runtime authorization, or dumping unbounded composed policy rows into every hook preview.
+
+## HS206 Evidence
+
+Dev updated 2026-06-02:
+
+- Added read-only `composed_policy` fact sourcing to the inactive runtime enforcement hook in `src/main/services/serviceRegistry.js`.
+- Used existing `buildComposedGatePolicyPreview(...)` / `storage.composed_gate_policy.preview` posture only.
+- Sourced only compact current-command facts:
+  - fact class/source/source status
+  - command
+  - matched composed policy row id when mapped
+  - composed state
+  - reason codes
+  - compact gate summary by gate name
+  - inactive enforcement/runtime authorization flags
+  - `would_allow_is_authorization: false`
+  - `answers_may_run_now: false`
+- Unmapped commands now receive explicit `sourced_unmapped` posture rather than guessed authorization.
+- Supplied `runtimeEnforcementFacts.composed_policy` remains preserved and is not overwritten.
+- Runtime hook telemetry now includes `composed_policy` as a sourced broad fact class while still reporting separate unsourced broad facts such as `destination_path_authority`.
+- Mapped local/read-only proof verifies:
+  - `runtime.enforcement_boundary.preview` maps to `runtime_enforcement_boundary_readout`
+  - compact composed policy fact contains no full `rows` dump
+  - runtime authorization remains inactive
+- Mapped provider-capable proof verifies:
+  - `manual.discovery` maps to `zkill_discovery` after renderer confirmation is satisfied
+  - provider/live gate, External I/O, storage, budget, confirmation, and composed policy remain distinct facts
+  - existing live/API gate behavior still owns the command stop
+- Focused hook verifier sample:
+  - composed policy sourced: true
+  - mapped local composed policy sourced: true
+  - provider-capable External I/O sourced without authorizing: true
+  - active runtime enforcement: false
+  - command blocking: false
+  - providers called by hook: false
+  - task runners called by hook: false
+- Runtime hook telemetry sample:
+  - missing fact classes: none for the covered `scope.defaults` sample
+  - sourced broad fact classes: `storage_authority`, `budget`, `external_io`, `provider_live_gate`, `composed_policy`
+  - composed policy source status for unmapped command: `sourced_unmapped`
+  - destination path authority status: `not_sourced`
+- Verification run:
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\runtimeEnforcementDryAdapter.js` passed.
+  - `node --check src\main\services\runtimeHookTelemetryReadoutService.js` passed.
+  - `node --check src\main\services\composedGatePolicyService.js` passed.
+  - `node --check scripts\verify-runtime-enforcement-hook.js` passed.
+  - `node --check scripts\verify-runtime-hook-telemetry.js` passed.
+  - `node --check scripts\verify-composed-gate-policy.js` passed.
+  - `npm.cmd run verify:runtime-enforcement-hook` passed.
+  - `npm.cmd run verify:runtime-hook-telemetry` passed.
+  - `npm.cmd run verify:composed-gate-policy` passed.
+  - `npm.cmd run verify:gate-stack-readout` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 113 warnings across 4 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main` with HS206 working-tree changes.
+- Boundaries preserved:
+  - no active runtime enforcement
+  - no command blocking
+  - no handler dispatch from the hook
+  - no task wrapping or task execution from the hook
+  - no provider calls
+  - no provider attempt recording
+  - no service-memory cooldown/lockout mutation from the hook
+  - no SDE download/import
+  - no Hydration writes
+  - no Evidence/EVEidence creation
+  - no Discovery ref mutation
+  - no Watch, Assessment Memory, or Marked mutation
+  - no schema changes
+  - no support artifact creation
+  - no config writes
+  - no storage movement or migration
+  - no renderer UI work
+  - no pruning or deletion behavior
+
+## HS206 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS206-runtime-hook-composed-policy-fact-preview.md
+```
+
+Status: runtime hook composed policy fact preview complete and accepted by Overseer.
+
+HS206 result:
+
+- The inactive runtime hook now previews compact current-command composed policy posture.
+- Mapped local/read-only and provider-capable commands show matched composed policy row basis.
+- Unmapped commands show explicit unmapped posture instead of guessed authorization.
+- Composed policy remains preview-only and non-authorizing.
+- Runtime enforcement remains inactive.
+
+Overseer reviewed 2026-06-02:
+
+- Accepted HS206 in `workspace/OverseerHS207-hs206-runtime-hook-composed-policy-review.md`.
+- Verified inactive runtime hook previews can source compact current-command composed policy posture.
+- Confirmed mapped commands include row basis, composed state, reason codes, and compact gate summaries.
+- Confirmed unmapped commands report explicit `sourced_unmapped` posture rather than guessed authorization.
+- Confirmed full composed policy rows are not dumped into every hook preview.
+- Confirmed supplied `runtimeEnforcementFacts.composed_policy` remains preserved and not overwritten.
+- Confirmed composed policy remains preview-only and non-authorizing.
+- Confirmed no active runtime enforcement, command blocking, provider calls, provider attempt recording, service-memory cooldown/lockout mutation, handler dispatch, task execution, config writes, schema changes, support artifacts, Evidence/EVEidence, Discovery, Watch, Assessment Memory, Marked, pruning/deletion, SDE import/download, storage movement, or UI work were added.
+
+## Resting Next Options
+
+Recommended next shaping candidates:
+
+1. Rest runtime hook fact sourcing and continue a different storage/runtime seam.
+2. Shape destination path authority fact sourcing only if runtime hook proof continues.
+3. Request engineering/security readiness review before any active runtime enforcement packet.
+
+Do not open Dev implementation until one of these is selected and bounded.
 
 ## Resting HS204 State
 

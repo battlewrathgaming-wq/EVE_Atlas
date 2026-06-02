@@ -916,6 +916,7 @@ function sourceReadOnlyRuntimeGateFacts({ command, coverage = null, context = {}
   const storageReadback = safeReadOnlyStorageAuthorityConfigReadback(context);
   const externalIoReadback = safeReadOnlyExternalIoConfigReadback(context);
   const providerLiveGate = safeReadOnlyProviderLiveGateFact({ command, coverage, context, payload });
+  const composedPolicy = safeReadOnlyComposedPolicyFact({ command, context, payload });
 
   if (setupReadout) {
     sourced.storage_authority = storageAuthorityFactFor(setupReadout, storageReadback);
@@ -926,6 +927,9 @@ function sourceReadOnlyRuntimeGateFacts({ command, coverage = null, context = {}
   }
   if (providerLiveGate) {
     sourced.provider_live_gate = providerLiveGate;
+  }
+  if (composedPolicy) {
+    sourced.composed_policy = composedPolicy;
   }
   return sourced;
 }
@@ -1091,6 +1095,81 @@ function safeReadOnlyProviderLiveGateFact({ command, coverage = null, context = 
       non_authorizing_preview: true
     };
   }
+}
+
+function safeReadOnlyComposedPolicyFact({ command, context = {}, payload = {} }) {
+  if (!context.db) {
+    return unmappedComposedPolicyFact(command, 'db_context_missing_for_composed_policy_preview');
+  }
+  try {
+    const preview = buildComposedGatePolicyPreview(context.db, {
+      externalIoState: payload.externalIoState || payload.external_io_state || context.runtimeHookExternalIoState || 'off'
+    }, {
+      ...context,
+      commandMetadata: listServiceCommands()
+    });
+    const row = (preview.rows || []).find((candidate) => candidate.command === command);
+    if (!row) {
+      return unmappedComposedPolicyFact(command, 'representative_composed_policy_row_not_mapped');
+    }
+    return composedPolicyFactFromRow(command, row, preview);
+  } catch (error) {
+    return {
+      ...unmappedComposedPolicyFact(command, 'composed_policy_readout_unavailable'),
+      source_status: 'sourced_readout_unavailable',
+      read_error: error.message
+    };
+  }
+}
+
+function unmappedComposedPolicyFact(command, reason) {
+  return {
+    fact_class: 'composed_gate_policy',
+    fact_source: 'runtime_hook_read_only_composed_gate_policy_preview',
+    source_status: 'sourced_unmapped',
+    command,
+    matched_row_id: null,
+    state: 'unknown',
+    reason_codes: [`composed_policy:${reason}`],
+    active: false,
+    enforcement_active: false,
+    runtime_authorization_active: false,
+    would_allow_is_authorization: false,
+    answers_may_run_now: false,
+    gate_summary: {},
+    basis_action: 'storage.composed_gate_policy.preview',
+    non_authorizing_preview: true
+  };
+}
+
+function composedPolicyFactFromRow(command, row = {}, preview = {}) {
+  return {
+    fact_class: 'composed_gate_policy',
+    fact_source: 'runtime_hook_read_only_composed_gate_policy_preview',
+    source_status: 'sourced_mapped_row',
+    command,
+    matched_row_id: row.id || null,
+    state: row.composed_state || 'unknown',
+    reason_codes: [...(row.reason_codes || [])],
+    active: false,
+    enforcement_active: false,
+    runtime_authorization_active: false,
+    would_allow_is_authorization: false,
+    answers_may_run_now: false,
+    gate_summary: compactComposedGateSummary(row.gates || {}),
+    basis_action: preview.action || 'storage.composed_gate_policy.preview',
+    non_authorizing_preview: true
+  };
+}
+
+function compactComposedGateSummary(gates = {}) {
+  return Object.fromEntries(Object.entries(gates).map(([name, gateValue = {}]) => [
+    name,
+    {
+      state: gateValue.state || null,
+      reason: gateValue.reason || null
+    }
+  ]));
 }
 
 function liveGateActionForCommand(command, payload = {}) {
