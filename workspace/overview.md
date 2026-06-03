@@ -100,6 +100,7 @@ Current state:
 - HS244 accepted by HS245
 - HS246 opened
 - HS246 accepted by HS247
+- HS248 advisory opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -116,12 +117,14 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer
+- current executor is Data Engineering / Engineering Review
 - no active Dev runway is open
+- active advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
+- expected advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest accepted Dev runway is `workspace/OverseerHS246-patient-packet-identity-conformance-preview-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS246-patient-packet-identity-conformance-preview.md`
 - latest Overseer review is `workspace/OverseerHS247-hs246-patient-packet-identity-review.md`
-- current work is resting after patient packet identity conformance preview acceptance
+- current work is advisory review of HS246 real-data gap risk
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -135,12 +138,12 @@ Current heading:
 - one hardening seam at a time
 - Atlas project root remains the anchor
 
-Resting next candidates:
+Active advisory packet:
 
-1. Review the new patient-packet identity preview output for any real-data gaps or uncomputable facts.
-2. Continue a nearby storage/runtime seam after choosing the next proof surface.
-3. Seek Data Engineering input if the next seam touches durable packet/checkpoint state, Hydration freshness policy, provider-backed execution, or multi-worker coordination.
-4. Keep active dispatch, provider movement, schema-backed queues, runtime enforcement activation, command blocking, pruning/deletion execution, support artifacts for packet state, and UI parked.
+1. `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
+2. Review whether HS246's derived identity rows remain sufficient when local data is sparse, missing, malformed, or mixed-lane.
+3. Decide whether any gap truly needs durable checkpoint/policy state, or whether patient packet identity can stay derived/read-only for now.
+4. No Dev runway is open.
 
 See `workspace/current.md` for current truth.
 
@@ -269,6 +272,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS244/HS245 accepted patient packet identity advisory: no broad provider work queue yet; keep most posture derived/read-only; future durable movement identity should stay lane-specific across Watch/scope zKill Discovery, Discovery-ref ESI Evidence Expansion, and Hydration candidate key/lane/basis policy.
 - HS246 opened patient packet identity conformance preview: prove whether current derived posture can emit the accepted lane-specific future identity shapes without packet persistence, provider movement, schema, enforcement, or UI.
 - HS246/HS247 accepted patient packet identity conformance preview: `runtime.patient_packet_identity.preview` now proves the four lane-specific identity shapes are derivable now, all `derived_for_now`, all non-authoritative, with no packet persistence recommended.
+- HS248 opened patient packet identity real-data gap advisory review: Data Engineering should assess sparse/imperfect local-data cases before any durable packet/checkpoint, provider-backed execution, schema, enforcement, or UI work is considered.
 
 ## Accepted Boundaries
 

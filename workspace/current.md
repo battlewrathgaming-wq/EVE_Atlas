@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS246 accepted by HS247; no active Dev runway
+Status: HS248 patient packet identity real-data gap advisory request open
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after patient packet identity conformance preview acceptance.
+Current focus: advisory review of HS246 real-data gap risk.
 
 Current heading:
 
@@ -20,57 +20,51 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Data Engineering / Engineering Review
 
-Latest accepted Dev runway:
-
-```txt
-workspace/OverseerHS246-patient-packet-identity-conformance-preview-runway.md
-```
-
-Latest accepted Dev handoff:
+Active advisory request:
 
 ```txt
-workspace/DevHS246-patient-packet-identity-conformance-preview.md
+workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md
 ```
 
-Accepted task:
-
-Add a read-only patient packet identity conformance preview, preferably:
+Expected advisory artifact:
 
 ```txt
-runtime.patient_packet_identity.preview
+workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md
 ```
 
-The preview should map current derived posture into the lane-specific future identity shapes accepted in HS244/HS245. It must not create packet tables, persisted queues, dispatcher behavior, provider calls, writes, runtime enforcement, support artifacts, or UI.
+Advisory task:
 
-The proof question is:
+Review the accepted HS246 patient packet identity preview for real-data gap risk.
+
+This is advisory only. Do not implement code. Do not create a Dev runway. Do not run live/provider calls.
+
+Core question:
 
 ```txt
-If Atlas needed a future durable unit, what identity would each current candidate have, and can it be derived now?
+Can Atlas keep patient packet identity derived/read-only for now, or did HS246 expose a real need for durable checkpoint/policy state?
 ```
 
-Required identity rows:
+Review these HS246 identity rows against sparse/imperfect local data:
 
 - zKill Discovery movement intent
-- ESI Evidence Expansion candidate identity
-- view/local-record Hydration candidate identity
-- Watch/background Hydration candidate identity
+- ESI Evidence Expansion candidate
+- view/local-record Hydration candidate
+- Watch/background Hydration candidate
 
-Each identity row should include:
+Pay special attention to:
 
-- clock
-- lane
-- candidate kind
-- derived identity key or proposed future key
-- source basis
-- source anchors
-- duplicate-prevention basis
-- gate posture summary
-- no-catch-up posture
-- persistence recommendation: `derived_for_now` unless a gap proves otherwise
-- unknown/uncomputable facts, if any
-- boundary statement that the row is not execution authority
+- no Watch rows
+- only system/radius Watches
+- malformed included/excluded system scope
+- no pending Discovery refs
+- failed Discovery refs
+- missing killmail hash
+- already-cached Evidence/EVEidence
+- no Hydration candidates
+- Hydration candidate with missing source anchors
+- local SDE gaps versus provider-needed labels
 
 Preserve:
 
@@ -102,7 +96,19 @@ workspace/OverseerHS247-hs246-patient-packet-identity-review.md
 
 Status: accepted.
 
-No active Dev runway is open.
+Latest accepted Dev runway:
+
+```txt
+workspace/OverseerHS246-patient-packet-identity-conformance-preview-runway.md
+```
+
+Latest accepted Dev handoff:
+
+```txt
+workspace/DevHS246-patient-packet-identity-conformance-preview.md
+```
+
+No active Dev runway is open. HS248 is advisory review only.
 
 ## HS246 Evidence
 
