@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS238 accepted by HS239; no active Dev runway
+Status: HS240 open; Dev runway active
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after pruning/deletion execution prerequisites acceptance.
+Current focus: fixture-only Evidence prune execution contract proof.
 
 Current heading:
 
@@ -20,7 +20,46 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Dev
+
+Active Dev runway:
+
+```txt
+workspace/OverseerHS240-fixture-only-evidence-prune-execution-contract-runway.md
+```
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS240-fixture-only-evidence-prune-execution-contract.md
+```
+
+Task:
+
+Prove the smallest deletion execution contract in fixture/disposable data only. This is not real operator deletion and must not expose a product deletion command.
+
+Preserve:
+
+- no real operator deletion
+- no renderer command
+- no product deletion command
+- no schema changes
+- no support artifact creation/deletion/cleanup
+- no provider calls
+- no Hydration writes
+- no Discovery ref mutation
+- no Assessment Memory mutation or stale marking
+- no Watch/Marked mutation
+- no provenance/log mutation except fixture-local assertions if needed for proof setup
+- no runtime enforcement activation
+- no command blocking
+- no UI work
+- no storage movement
+- no retained deletion footprint
+
+Stop if this requires touching real operator data, exposing product deletion execution, renderer eligibility, schema migration, deleting warning rows by `run_id` instead of selected `killmail_id`, support artifact cleanup, Assessment Memory stale marking, Discovery ref pruning, provenance/log redaction or recompute, runtime enforcement, command blocking, or policy decisions not already accepted by HS238/HS239.
+
+## Resting Prior Acceptance
 
 Latest accepted advisory request:
 
