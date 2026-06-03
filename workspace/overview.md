@@ -91,6 +91,7 @@ Current state:
 - HS236 opened
 - HS236 accepted by HS237
 - HS238 advisory opened
+- HS238 accepted by HS239
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -107,9 +108,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Engineering / Security / Data advisory
+- current executor is Overseer
 - no active Dev runway is open
-- current work is HS238 pruning/deletion execution prerequisites advisory
+- current work is resting after HS238 pruning/deletion execution prerequisites acceptance
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -123,17 +124,14 @@ Current heading:
 - one hardening seam at a time
 - Atlas project root remains the anchor
 
-Active advisory candidate:
-
-1. HS238 advisory: define prerequisites before any future destructive pruning/deletion execution packet.
-
-Resting candidates:
+Likely next shaping candidates:
 
 1. Rest pruning and return to another storage/runtime seam.
-2. If pruning continues after HS238, open Discovery ref pruning policy design.
-3. If pruning continues after HS238, open no-interest/Marked pruning policy design.
-4. If SDE returns, open only a narrow source-disappears-after-authority proof.
-5. Keep provider-backed Hydration execution, persisted Hydration queues, active runtime enforcement, deletion execution, and UI work parked until Human/Overseer explicitly decides to continue those lines.
+2. If pruning continues, open fixture-only deletion execution contract proof.
+3. If pruning continues later, open Discovery ref pruning policy design.
+4. If pruning continues later, open no-interest/Marked pruning policy design.
+5. If SDE returns, open only a narrow source-disappears-after-authority proof.
+6. Keep provider-backed Hydration execution, persisted Hydration queues, active runtime enforcement, real deletion execution, and UI work parked until Human/Overseer explicitly decides to continue those lines.
 
 See `workspace/current.md` for current truth.
 
@@ -253,6 +251,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS236 opened read-only pruning intelligence preview: harden `retention.preflight` relationship/context output so Atlas can see what future pruning would affect before any deletion execution exists.
 - HS236/HS237 accepted pruning intelligence preview: `retention.preflight` for `evidence.prune_scope` now reports relationship/context groups across Evidence/EVEidence, activity, audits/warnings, Discovery refs, Assessment Memory, Watch/Marked-adjacent context, provenance/logs, support-artifact disclosure, and no-footprint posture while deletion execution remains blocked.
 - HS238 opened pruning/deletion execution prerequisites advisory: define minimum prerequisites, dependency handling, delete ordering, transaction model, preview-to-execution consistency, Assessment Memory/Discovery/provenance/support-artifact policies, and fixture-only proof needs before any destructive work can be considered.
+- HS238/HS239 accepted deletion prerequisites advisory: real operator deletion remains blocked; if pruning continues, the next safe packet is a fixture-only deletion execution contract proof. Future proof must delete only killmail-linked `data_quality_warnings`, not all warning rows sharing a mixed `run_id`.
 
 ## Accepted Boundaries
 

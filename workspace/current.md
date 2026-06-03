@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS238 advisory opened; no Dev runway
+Status: HS238 accepted by HS239; no active Dev runway
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: pruning/deletion execution prerequisites advisory.
+Current focus: resting after pruning/deletion execution prerequisites acceptance.
 
 Current heading:
 
@@ -20,25 +20,45 @@ Current heading:
 
 ## Executor
 
-Current executor: Engineering / Security / Data advisory
+Current executor: Overseer
 
-Latest advisory request:
+Latest accepted advisory request:
 
 ```txt
 workspace/OverseerHS238-pruning-deletion-execution-prerequisites-advisory-request.md
 ```
 
-Expected advisory artifact:
+Latest accepted advisory artifact:
 
 ```txt
 workspace/EngineeringSecurityDataHS238-pruning-deletion-execution-prerequisites.md
 ```
 
-Purpose:
+Latest Overseer review:
 
-Define what must be true before Atlas can safely consider any destructive pruning/deletion execution packet.
+```txt
+workspace/OverseerHS239-hs238-pruning-deletion-prerequisites-review.md
+```
 
-This is advisory only. It does not authorize implementation, schema changes, deletion execution, support artifact cleanup, runtime enforcement, provider calls, or UI work.
+Accepted result:
+
+- Atlas is not ready for real destructive Evidence/EVEidence pruning execution.
+- If pruning continues, the next safe step is a fixture-only deletion execution contract proof.
+- Real operator deletion remains blocked.
+- Future proof must delete only killmail-linked `data_quality_warnings`, not all warnings sharing a mixed `run_id`.
+- Discovery refs, Assessment Memory, provenance/log rows, Watch/Marked rows, support artifacts, storage config, schema, runtime enforcement, provider movement, and UI remain untouched.
+
+No active Dev runway is open.
+
+Resting next candidates:
+
+1. Rest pruning and return to another storage/runtime seam.
+2. If pruning continues, open fixture-only deletion execution contract proof.
+3. If pruning continues later, open Discovery ref pruning policy design.
+4. If pruning continues later, open no-interest/Marked pruning policy design.
+5. If SDE returns, open only a narrow source-disappears-after-authority proof.
+
+Do not open real destructive pruning/deletion execution, schema changes, support artifact cleanup, runtime enforcement, provider calls, or UI work unless Human/Overseer explicitly chooses and bounds that seam.
 
 ## Resting Prior Acceptance
 
@@ -81,18 +101,6 @@ Latest Overseer review:
 ```txt
 workspace/OverseerHS237-hs236-pruning-intelligence-preview-review.md
 ```
-
-No active Dev runway is open.
-
-Resting next candidates:
-
-1. Rest pruning and return to another storage/runtime seam.
-2. If pruning continues, open advisory deletion-execution prerequisites review.
-3. If pruning continues, open Discovery ref pruning policy design.
-4. If pruning continues, open no-interest/Marked pruning policy design.
-5. If pruning continues, open support artifact cleanup/snapshot deletion policy design.
-
-Do not open destructive pruning/deletion execution, schema changes, support artifact cleanup, runtime enforcement, provider calls, or UI work unless Human/Overseer explicitly chooses and bounds that seam.
 
 ## HS236 Evidence
 
