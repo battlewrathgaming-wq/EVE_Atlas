@@ -98,6 +98,7 @@ Current state:
 - HS242 accepted by HS243
 - HS244 advisory opened
 - HS244 accepted by HS245
+- HS246 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -114,9 +115,10 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer
-- no active Dev runway is open
-- current work is resting after patient packet identity advisory acceptance
+- current executor is Dev
+- active Dev runway is `workspace/OverseerHS246-patient-packet-identity-conformance-preview-runway.md`
+- expected Dev handoff is `workspace/DevHS246-patient-packet-identity-conformance-preview.md`
+- current work is read-only patient packet identity conformance preview
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -130,12 +132,11 @@ Current heading:
 - one hardening seam at a time
 - Atlas project root remains the anchor
 
-Likely next shaping candidates:
+Active packet:
 
-1. Optional read-only patient packet identity conformance preview.
-2. Keep patient packet identity as accepted design context and continue another runtime/storage seam.
-3. Rest system hardening briefly and review the queue/clock posture output for gaps.
-4. Keep active dispatcher, schema-backed provider queues, persisted sequencer state, provider-backed Hydration execution, active runtime enforcement, real deletion execution, and UI work parked until Human/Overseer explicitly chooses and bounds those lines.
+1. `workspace/OverseerHS246-patient-packet-identity-conformance-preview-runway.md`
+2. Add `runtime.patient_packet_identity.preview` or equivalent read-only identity conformance surface.
+3. Map current derived posture into lane-specific identity shapes without persistence, dispatch, provider calls, writes, enforcement, support artifacts, pruning/deletion, or UI.
 
 See `workspace/current.md` for current truth.
 
@@ -262,6 +263,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS242/HS243 accepted queue/clock runtime posture preview: `runtime.queue_clock_posture.preview` now composes local queue, Watch/restart, Hydration, External I/O, storage/setup, and cadence posture without dispatching, writing, provider calls, runtime enforcement, command blocking, or catch-up flooding.
 - HS244 opened data-engineering advisory for patient packet identity: decide what can stay derived/read-only, what might need durable persistence later, and how Acquisition/Hydration packet identities should be separated before any implementation.
 - HS244/HS245 accepted patient packet identity advisory: no broad provider work queue yet; keep most posture derived/read-only; future durable movement identity should stay lane-specific across Watch/scope zKill Discovery, Discovery-ref ESI Evidence Expansion, and Hydration candidate key/lane/basis policy.
+- HS246 opened patient packet identity conformance preview: prove whether current derived posture can emit the accepted lane-specific future identity shapes without packet persistence, provider movement, schema, enforcement, or UI.
 
 ## Accepted Boundaries
 

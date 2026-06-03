@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS244 accepted by HS245; no active Dev runway
+Status: HS246 patient packet identity conformance preview runway open
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after patient packet identity advisory acceptance.
+Current focus: read-only patient packet identity conformance preview.
 
 Current heading:
 
@@ -20,21 +20,85 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Dev
 
-Latest accepted Dev runway:
-
-```txt
-workspace/OverseerHS242-queue-clock-runtime-posture-preview-runway.md
-```
-
-Latest accepted Dev handoff:
+Active Dev runway:
 
 ```txt
-workspace/DevHS242-queue-clock-runtime-posture-preview.md
+workspace/OverseerHS246-patient-packet-identity-conformance-preview-runway.md
 ```
 
-Accepted task:
+Expected Dev handoff:
+
+```txt
+workspace/DevHS246-patient-packet-identity-conformance-preview.md
+```
+
+Active task:
+
+Add a read-only patient packet identity conformance preview, preferably:
+
+```txt
+runtime.patient_packet_identity.preview
+```
+
+The preview should map current derived posture into the lane-specific future identity shapes accepted in HS244/HS245. It must not create packet tables, persisted queues, dispatcher behavior, provider calls, writes, runtime enforcement, support artifacts, or UI.
+
+The proof question is:
+
+```txt
+If Atlas needed a future durable unit, what identity would each current candidate have, and can it be derived now?
+```
+
+Required identity rows:
+
+- zKill Discovery movement intent
+- ESI Evidence Expansion candidate identity
+- view/local-record Hydration candidate identity
+- Watch/background Hydration candidate identity
+
+Each identity row should include:
+
+- clock
+- lane
+- candidate kind
+- derived identity key or proposed future key
+- source basis
+- source anchors
+- duplicate-prevention basis
+- gate posture summary
+- no-catch-up posture
+- persistence recommendation: `derived_for_now` unless a gap proves otherwise
+- unknown/uncomputable facts, if any
+- boundary statement that the row is not execution authority
+
+Preserve:
+
+- no packet table
+- no persisted queue
+- no active dispatcher
+- no provider calls
+- no zKill Discovery execution
+- no ESI Evidence Expansion execution
+- no Hydration execution
+- no Hydration writes
+- no Evidence/EVEidence writes
+- no Discovery ref mutation
+- no Watch mutation or arming
+- no Assessment Memory or Marked mutation
+- no storage config write or movement
+- no support artifact creation
+- no schema changes
+- no runtime enforcement activation
+- no command blocking
+- no pruning/deletion behavior
+- no renderer UI work
+
+Stop if this requires packet persistence, generic provider packet tables, mutating Discovery/Watch/Hydration state, provider calls, dispatch, runtime enforcement, command blocking, or UI work.
+
+## HS242 Accepted Background
+
+Latest accepted queue/clock Dev runway:
 
 Add a read-only queue / clock runtime posture preview, preferably:
 
