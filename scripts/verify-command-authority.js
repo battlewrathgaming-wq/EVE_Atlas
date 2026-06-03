@@ -45,6 +45,8 @@ async function main() {
     assert(commands.get('metadata.hydration_write_fixture_proof')?.effects.includes('metadata-readability'), 'metadata.hydration_write_fixture_proof should declare readability metadata effect');
     assert(commands.get('sde.topology_import_rewrite_authority.proof')?.classification === 'metadata-only', 'sde topology authority proof should be metadata-only');
     assert(commands.get('sde.topology_import_rewrite_authority.proof')?.effects.includes('local-data-mutation'), 'sde topology authority proof should declare fixture local mutation effect');
+    assert(commands.get('sde.inventory_import_rewrite_authority.proof')?.classification === 'metadata-only', 'sde inventory authority proof should be metadata-only');
+    assert(commands.get('sde.inventory_import_rewrite_authority.proof')?.effects.includes('local-data-mutation'), 'sde inventory authority proof should declare fixture local mutation effect');
     assert(commands.get('runtime.db_snapshot.create')?.effects.includes('support-artifact'), 'snapshot create should declare support artifact effect');
     assert(commands.get('support.debug_trace_pack')?.effects.includes('support-artifact'), 'trace pack should declare support artifact effect');
     assert(commands.get('storage.authority_preflight')?.classification === 'read-only', 'storage authority preflight should be read-only');
@@ -104,6 +106,7 @@ async function main() {
     assert(rendererNames.has('metadata.local_sde_source_posture.preview'), 'metadata.local_sde_source_posture.preview should be renderer eligible');
     assert(!rendererNames.has('metadata.hydration_write_fixture_proof'), 'metadata.hydration_write_fixture_proof should not be renderer eligible');
     assert(!rendererNames.has('sde.topology_import_rewrite_authority.proof'), 'sde topology authority proof should not be renderer eligible');
+    assert(!rendererNames.has('sde.inventory_import_rewrite_authority.proof'), 'sde inventory authority proof should not be renderer eligible');
     assert(rendererNames.has('storage.authority_preflight'), 'storage authority preflight should be renderer eligible');
     assert(rendererNames.has('storage.setup_gate_readout'), 'storage setup gate readout should be renderer eligible');
     assert(!rendererNames.has('storage.authority_config.write_proof'), 'storage config write proof should not be renderer eligible');
@@ -177,6 +180,11 @@ async function main() {
       () => invoke(null, { command: 'sde.topology_import_rewrite_authority.proof', payload: { sourcePath: 'fixture.zip' } }),
       'SERVICE_COMMAND_NOT_RENDERER_ELIGIBLE',
       'renderer IPC should reject SDE topology authority proof'
+    );
+    await assertRejects(
+      () => invoke(null, { command: 'sde.inventory_import_rewrite_authority.proof', payload: { sourcePath: 'fixture.zip' } }),
+      'SERVICE_COMMAND_NOT_RENDERER_ELIGIBLE',
+      'renderer IPC should reject SDE inventory authority proof'
     );
     await assertRejects(
       () => invoke(null, { command: 'manual.discovery', payload: { scope: 'actor', entityType: 'character', entityId: 90000002 } }),

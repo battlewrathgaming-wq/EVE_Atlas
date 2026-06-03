@@ -184,6 +184,9 @@ function verifyCoverageMetadata(map) {
   assert(command(map, 'sde.topology_import_rewrite_authority.proof').runtime_context === 'fixture_sde_topology_import_rewrite_authority_proof', 'SDE topology authority proof should be classified as fixture proof');
   assert(command(map, 'sde.topology_import_rewrite_authority.proof').external_io_dependency === 'none', 'SDE topology authority proof should not declare External I/O dependency');
   assert(command(map, 'sde.topology_import_rewrite_authority.proof').enforcement_status === 'fixture_only_non_production', 'SDE topology authority proof should be fixture-only');
+  assert(command(map, 'sde.inventory_import_rewrite_authority.proof').runtime_context === 'fixture_sde_inventory_import_rewrite_authority_proof', 'SDE inventory authority proof should be classified as fixture proof');
+  assert(command(map, 'sde.inventory_import_rewrite_authority.proof').external_io_dependency === 'none', 'SDE inventory authority proof should not declare External I/O dependency');
+  assert(command(map, 'sde.inventory_import_rewrite_authority.proof').enforcement_status === 'fixture_only_non_production', 'SDE inventory authority proof should be fixture-only');
   assert(command(map, 'metadata.hydration_write_fixture_proof').runtime_context === 'fixture_hydration_write_proof', 'Hydration write fixture proof should be classified as fixture proof');
   assert(command(map, 'metadata.hydration_write_fixture_proof').external_io_dependency === 'none', 'Hydration write fixture proof should not declare provider dependency');
   assert(command(map, 'external_io.state_readout').runtime_context === 'external_io_state_readout', 'External I/O state readout should be classified as a readout');
