@@ -32,6 +32,7 @@ const { defaultWatchSessionExecutor } = require('../watchlist/watchExecutor');
 const { buildWatchOfflineReadout } = require('../watchlist/watchOfflineReadout');
 
 let sdeTopologyImportInProgress = false;
+let sdeInventoryImportInProgress = false;
 
 async function runManualDiscoveryService(db, payload = {}, dependencies = {}) {
   const input = await normalizeManualDiscoveryInput(db, payload, dependencies);
@@ -157,12 +158,56 @@ async function runSdeTopologyImportService(db, payload = {}, dependencies = {}) 
   }
 }
 
-async function runSdeInventoryImportService(db, payload = {}) {
-  const inputPath = payload.path || payload.inputPath;
-  if (!inputPath) {
-    throw new Error('sde.import.inventory requires a local SDE JSONL path');
+async function runSdeInventoryImportService(db, payload = {}, dependencies = {}) {
+  if (sdeInventoryImportInProgress) {
+    const error = new Error('sde.import.inventory already has an active inventory import');
+    error.code = 'SDE_INVENTORY_IMPORT_CONCURRENTLY_EXCLUDED';
+    error.details = {
+      retry_rerun_posture: 'explicit_operator_or_test_rerun_required',
+      automatic_retry: false
+    };
+    throw error;
   }
-  return new SdeInventoryImporter(db).importFromPath(inputPath, payload.options || {});
+
+  const authority = buildSdeInventoryImportAuthority(payload, dependencies);
+  if (!authority.allowed) {
+    const error = new Error(`sde.import.inventory blocked: ${authority.blocked_reasons.join(', ')}`);
+    error.code = 'SDE_INVENTORY_IMPORT_AUTHORITY_BLOCKED';
+    error.details = authority;
+    throw error;
+  }
+
+  sdeInventoryImportInProgress = true;
+  try {
+    const result = await new SdeInventoryImporter(db).importFromPath(authority.source_authority.path, {
+      ...(payload.options || {}),
+      ...(dependencies.sdeInventoryImportOptions || {}),
+      sourceUrl: authority.source_authority.safe_display,
+      tempRoot: dependencies.sdeInventoryTempRoot || payload.options?.tempRoot
+    });
+    return {
+      ...result,
+      source_authority: authority.source_authority,
+      storage_budget_authority: authority.storage_budget_authority,
+      projected_growth: authority.projected_growth,
+      recovery_model: {
+        staged_before_promotion: true,
+        staged_completeness_validated: true,
+        promotion_transactional: true,
+        provenance_written_after_complete_promotion_only: true,
+        failed_import_preserves_previous_visible_inventory: true,
+        retry_rerun_posture: 'explicit_operator_or_test_rerun_required',
+        automatic_retry: false,
+        concurrent_inventory_imports_excluded: true
+      },
+      provider_calls: 0,
+      sde_downloads: 0,
+      provider_backed_builds: 0,
+      renderer_source_path_used: false
+    };
+  } finally {
+    sdeInventoryImportInProgress = false;
+  }
 }
 
 async function runWatchCreateService(db, payload = {}, dependencies = {}) {
@@ -359,6 +404,41 @@ function buildSdeTopologyImportAuthority(payload = {}, dependencies = {}) {
   };
 }
 
+function buildSdeInventoryImportAuthority(payload = {}, dependencies = {}) {
+  const sourceAuthority = sdeInventorySourceAuthorityFor(payload, dependencies);
+  const projectedGrowth = projectedSdeInventoryGrowthFor(payload, dependencies);
+  const setupReadout = buildStorageSetupGateReadout({
+    storagePreflight: dependencies.storagePreflight,
+    storageAuthority: dependencies.storageAuthority,
+    storageBudgetBytes: dependencies.storageBudgetBytes
+  }, {
+    allowStorageSetupGateFixtureInput: dependencies.allowStorageSetupGateFixtureInput === true,
+    storageAuthorityConfigReadPath: dependencies.storageAuthorityConfigReadPath,
+    storageAuthorityConfigAllowedRoot: dependencies.storageAuthorityConfigAllowedRoot
+  });
+  const storageBudgetAuthority = sdeInventoryStorageBudgetAuthorityFor(setupReadout, projectedGrowth);
+  const blockedReasons = [
+    sourceAuthority.decision === 'accepted' ? null : sourceAuthority.reason,
+    ...storageBudgetAuthority.issues
+  ].filter(Boolean);
+  return {
+    allowed: blockedReasons.length === 0,
+    blocked_reasons: blockedReasons,
+    source_authority: sourceAuthority,
+    storage_budget_authority: storageBudgetAuthority,
+    projected_growth: projectedGrowth,
+    renderer_payload_ignored: sdeInventoryRendererSourceClaim(payload) !== null,
+    selected_storage_required: true,
+    explicit_budget_required: true,
+    app_local_fallback_acknowledgement_sufficient: false,
+    provider_calls: 0,
+    sde_downloads: 0,
+    provider_backed_builds: 0,
+    runtime_enforcement_active: false,
+    command_blocking_active: false
+  };
+}
+
 function sdeTopologySourceAuthorityFor(payload = {}, dependencies = {}) {
   const rendererClaim = sdeTopologyRendererSourceClaim(payload);
   const trusted = dependencies.sdeTopologySourceAuthority || {};
@@ -392,6 +472,48 @@ function sdeTopologySourceAuthorityFor(payload = {}, dependencies = {}) {
     });
   }
   return sdeTopologyAuthorityDecision('accepted', 'trusted_local_source_authority', {
+    path: trustedPath,
+    renderer_payload_ignored: Boolean(rendererClaim),
+    supplied_by: 'trusted_context',
+    safe_display: redactSourceForDisplay(trustedPath),
+    basis,
+    path_inspected_before_authority: false
+  });
+}
+
+function sdeInventorySourceAuthorityFor(payload = {}, dependencies = {}) {
+  const rendererClaim = sdeInventoryRendererSourceClaim(payload);
+  const trusted = dependencies.sdeInventorySourceAuthority || {};
+  const trustedPath = trusted.path || trusted.sourcePath || dependencies.trustedSdeInventorySourcePath || null;
+  const basis = trusted.basis || dependencies.trustedSdeInventorySourceBasis || null;
+  if (rendererClaim && !trustedPath) {
+    return sdeImportAuthorityDecision('blocked', 'renderer_source_path_non_authoritative', {
+      renderer_payload_ignored: true,
+      supplied_by: 'renderer_payload'
+    });
+  }
+  if (!trustedPath) {
+    return sdeImportAuthorityDecision('blocked', 'trusted_local_inventory_source_authority_required', {
+      renderer_payload_ignored: Boolean(rendererClaim),
+      supplied_by: 'none'
+    });
+  }
+  if (isRemoteReference(trustedPath)) {
+    return sdeImportAuthorityDecision('blocked', 'remote_source_rejected_for_local_inventory_import', {
+      renderer_payload_ignored: Boolean(rendererClaim),
+      supplied_by: 'trusted_context',
+      safe_display: redactSourceForDisplay(trustedPath)
+    });
+  }
+  if (!['trusted_local_operator_source', 'trusted_fixture_context', 'trusted_cli_source'].includes(basis)) {
+    return sdeImportAuthorityDecision('blocked', 'trusted_local_inventory_source_authority_required', {
+      renderer_payload_ignored: Boolean(rendererClaim),
+      supplied_by: 'trusted_context',
+      safe_display: redactSourceForDisplay(trustedPath),
+      basis
+    });
+  }
+  return sdeImportAuthorityDecision('accepted', 'trusted_local_inventory_source_authority', {
     path: trustedPath,
     renderer_payload_ignored: Boolean(rendererClaim),
     supplied_by: 'trusted_context',
@@ -445,6 +567,50 @@ function sdeTopologyStorageBudgetAuthorityFor(setupReadout = {}, projectedGrowth
   };
 }
 
+function sdeInventoryStorageBudgetAuthorityFor(setupReadout = {}, projectedGrowth = {}) {
+  const issues = [];
+  const storageAuthority = setupReadout.storage_authority || {};
+  const storage = setupReadout.storage || {};
+  const budget = setupReadout.budget || {};
+  const selectedStorageValid = storageAuthority.mode === 'selected_storage' &&
+    storageAuthority.selected === true &&
+    storageAuthority.validation_status === 'valid' &&
+    storage.state === 'configured_ready';
+  if (!selectedStorageValid) {
+    issues.push(storage.state === 'missing_unavailable_blocked'
+      ? 'storage_missing_unavailable_blocks_inventory_import'
+      : storage.state === 'invalid_degraded_setup_required'
+        ? 'storage_invalid_degraded_blocks_inventory_import'
+        : 'selected_storage_required_for_inventory_import');
+  }
+  if (!Number.isFinite(Number(budget.budget_bytes)) || Number(budget.budget_bytes) <= 0) {
+    issues.push('budget_unconfigured_blocks_inventory_import');
+  }
+  if (budget.state === 'budget_hard_lock') {
+    issues.push('budget_hard_lock_blocks_inventory_import');
+  }
+  if (
+    Number.isFinite(Number(budget.budget_bytes)) &&
+    Number.isFinite(Number(budget.usage_bytes)) &&
+    Number(budget.usage_bytes) + Number(projectedGrowth.total_projected_bytes || 0) >= Number(budget.budget_bytes)
+  ) {
+    issues.push('projected_growth_exceeds_available_inventory_budget');
+  }
+  return {
+    decision: issues.length ? 'block_real_local_inventory_import' : 'allow_real_local_inventory_import',
+    issues: [...new Set(issues)],
+    setup_gate_state: storage.state || null,
+    matrix_state: setupReadout.action_class_matrix?.storage_state || null,
+    budget_state: budget.state || null,
+    budget_bytes: budget.budget_bytes ?? null,
+    usage_bytes: budget.usage_bytes ?? null,
+    projected_growth_bytes: projectedGrowth.total_projected_bytes,
+    selected_storage_required: true,
+    explicit_budget_required: true,
+    storage_setup_enforced_now: false
+  };
+}
+
 function projectedSdeTopologyGrowthFor(payload = {}, dependencies = {}) {
   const supplied = dependencies.projectedSdeTopologyGrowthBytes || payload.projectedGrowthBytes || {};
   const values = {
@@ -462,11 +628,36 @@ function projectedSdeTopologyGrowthFor(payload = {}, dependencies = {}) {
   };
 }
 
+function projectedSdeInventoryGrowthFor(payload = {}, dependencies = {}) {
+  const supplied = dependencies.projectedSdeInventoryGrowthBytes || payload.projectedGrowthBytes || {};
+  const values = {
+    source_bytes: positiveNumber(supplied.source_bytes ?? supplied.sourceBytes, 192 * 1024),
+    temp_extract_bytes: positiveNumber(supplied.temp_extract_bytes ?? supplied.tempExtractBytes, 384 * 1024),
+    staged_table_bytes: positiveNumber(supplied.staged_table_bytes ?? supplied.stagedTableBytes, 96 * 1024),
+    db_growth_bytes: positiveNumber(supplied.db_growth_bytes ?? supplied.dbGrowthBytes, 96 * 1024),
+    wal_shm_headroom_bytes: positiveNumber(supplied.wal_shm_headroom_bytes ?? supplied.walShmHeadroomBytes, 128 * 1024)
+  };
+  return {
+    ...values,
+    total_projected_bytes: Object.values(values).reduce((sum, value) => sum + value, 0),
+    includes_temp_cache_db_growth: true,
+    projection_is_authorization: false
+  };
+}
+
 function sdeTopologyRendererSourceClaim(payload = {}) {
   return payload.path || payload.inputPath || payload.sourcePath || payload.source_path || null;
 }
 
+function sdeInventoryRendererSourceClaim(payload = {}) {
+  return payload.path || payload.inputPath || payload.sourcePath || payload.source_path || null;
+}
+
 function sdeTopologyAuthorityDecision(decision, reason, extra = {}) {
+  return sdeImportAuthorityDecision(decision, reason, extra);
+}
+
+function sdeImportAuthorityDecision(decision, reason, extra = {}) {
   return {
     decision,
     reason,
@@ -508,6 +699,7 @@ module.exports = {
   runSdeTopologyImportService,
   buildSdeTopologyImportAuthority,
   runSdeInventoryImportService,
+  buildSdeInventoryImportAuthority,
   runWatchCreateService,
   runWatchUpdateService,
   runWatchListService,

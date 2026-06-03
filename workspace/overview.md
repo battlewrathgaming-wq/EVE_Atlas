@@ -85,6 +85,7 @@ Current state:
 - HS230 opened
 - HS230 accepted by HS231
 - HS232 opened
+- HS232 accepted by HS233
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -101,10 +102,12 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is HS232 real-local SDE inventory/type import/rewrite conformance
-- current work is hardening the real inventory/type import path to match accepted HS226 authority/recovery semantics under fixture verification
-- topology real-local import already matches accepted HS224 authority/recovery semantics under fixture verification; combined SDE behavior, provider-backed download/build, support artifacts, runtime enforcement, pruning/deletion, and UI work remain unopened
+- current executor is Overseer
+- no active Dev runway is open
+- current work is resting after HS232 real-local SDE inventory/type import/rewrite conformance was accepted by HS233
+- topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
+- inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
+- combined SDE behavior, provider-backed download/build, support artifacts, runtime enforcement, pruning/deletion, and UI work remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
 Current heading:
@@ -116,8 +119,8 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Review DevHS232 and decide whether real-local inventory conformance is accepted.
-2. If accepted, decide whether local SDE import mechanics can rest or whether another advisory pass is needed before any combined/importer UX/download/support-artifact seam.
+1. Decide whether to run a short advisory/safety consolidation before any combined local SDE import, operator source picker, provider-backed download/build, or support artifact writer work.
+2. Rest SDE movement and return to another storage/runtime seam if preferred.
 3. Keep provider-backed Hydration execution, persisted Hydration queues, active runtime enforcement, and UI work parked until Human/Overseer explicitly decides to continue those lines.
 
 See `workspace/current.md` for current truth.

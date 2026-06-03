@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS232 active Dev runway
+Status: HS232 accepted by HS233; no active Dev runway
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: real-local SDE inventory/type import/rewrite conformance.
+Current focus: resting after real-local SDE topology and inventory/type import/rewrite conformance.
 
 Current heading:
 
@@ -20,7 +20,7 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
 Latest accepted handoff:
 
@@ -40,11 +40,19 @@ Active Dev runway:
 workspace/OverseerHS232-real-local-sde-inventory-import-conformance-runway.md
 ```
 
-Expected handoff:
+Latest accepted handoff:
 
 ```txt
 workspace/DevHS232-real-local-sde-inventory-import-conformance.md
 ```
+
+Latest Overseer review:
+
+```txt
+workspace/OverseerHS233-hs232-real-local-sde-inventory-conformance-review.md
+```
+
+No active Dev runway is open.
 
 ## Resting State
 
@@ -64,9 +72,21 @@ Accepted 2026-06-03:
 
 Likely next shaping candidates:
 
-1. Review DevHS232 and decide whether real-local inventory conformance is accepted.
-2. If accepted, decide whether local SDE import mechanics can rest or whether another advisory pass is needed before any combined/importer UX/download/support-artifact seam.
+1. Decide whether to run a short advisory/safety consolidation before any combined local SDE import, operator source picker, provider-backed download/build, or support artifact writer work.
+2. Rest SDE movement and return to another storage/runtime seam if preferred.
 3. Keep combined SDE behavior, provider-backed `sde.build-lookups`, support artifacts, runtime enforcement, pruning/deletion, and UI work parked.
+
+## HS233 Acceptance
+
+Accepted 2026-06-03:
+
+- HS232 real-local SDE inventory/type import/rewrite conformance accepted by HS233.
+- The existing `sde.import.inventory` path now conforms to HS226 authority/recovery expectations under fixture verification.
+- Atlas has proven both halves of local SDE import/rewrite mechanics:
+  - topology: HS230 accepted by HS231
+  - inventory/type: HS232 accepted by HS233
+- Combined local SDE import orchestration, provider-backed `sde.build-lookups`, real operator source picker/UI, support artifacts, runtime enforcement, and command blocking remain unopened.
+- Non-blocking note: source-disappears-after-authority failure proof should be considered before operator-facing source selection or broader operator import orchestration.
 
 ## Active HS232 Runway
 
@@ -130,6 +150,110 @@ Preserve:
 - no schema changes unless returned to Overseer first
 
 Stop if this requires schema changes, topology import behavior changes, combined topology + inventory behavior, provider-backed SDE download/build, real operator source path inspection, real operator lookup-table mutation in verification, UI/source picker work, support artifact creation, runtime enforcement, command blocking, storage movement, destructive/private/live action, or policy decisions not already accepted.
+
+## HS232 Evidence
+
+Dev updated 2026-06-03:
+
+- Hardened the existing real-local inventory/type import path:
+  - `sde.import.inventory`
+  - `src/main/sde/sdeInventoryImporter.js`
+  - `src/main/services/mutatingActionService.js`
+- Added `npm.cmd run verify:sde-inventory-real-local-conformance`.
+- Added `scripts/verify-sde-inventory-real-local-conformance.js`.
+- `sde.import.inventory` remains:
+  - non-renderer
+  - `classification: exclusive`
+  - effects: `metadata-readability`, `local-data-mutation`
+- Source authority behavior:
+  - renderer/payload source paths are ignored as mutation authority
+  - renderer-only source claims block with `renderer_source_path_non_authoritative`
+  - trusted local inventory source authority is required before mutation
+  - remote source references block with `remote_source_rejected_for_local_inventory_import`
+  - accepted trusted source basis is explicit
+  - no provider-backed SDE download path is opened
+- Storage/budget behavior:
+  - selected storage is required for real inventory/type rewrite
+  - app-local fallback acknowledgement is not sufficient for this packet
+  - missing/unavailable storage blocks
+  - invalid/degraded storage blocks
+  - unconfigured budget blocks
+  - hard-lock budget blocks
+  - projected source/temp/cache/staged/DB/WAL-SHM growth is represented before mutation
+  - projected growth exceeding available budget blocks
+- Staging/promotion/recovery behavior:
+  - inventory/type rows are staged into temp tables before promotion
+  - type/group/category readability labels are resolved from staged category/group rows
+  - staged inventory/type completeness is validated before promotion
+  - visible inventory/type tables are deleted/replaced only inside a transaction
+  - `sde_inventory_imports` provenance is inserted only after complete promotion
+  - failed import after stage but before promotion preserves previous visible inventory/type rows and provenance
+  - failed import after promotion but before provenance rolls back visible inventory/type rows and provenance
+  - failed import does not write success provenance
+  - staged temp material cleanup is represented and verified
+  - retry/rerun is explicit and not automatic
+  - concurrent service inventory imports are excluded by the service path
+- Focused verifier proves:
+  - source authority blocks renderer-only, remote, and missing-trusted-source cases
+  - selected storage and explicit budget are required
+  - hard-lock budget blocks
+  - successful service import stages and promotes complete fixture inventory/type data
+  - failure paths preserve prior visible inventory/provenance and clean staged material
+  - Evidence/EVEidence and Assessment table counts are unchanged
+  - no provider calls, SDE downloads, or provider-backed builds occur
+- Verification run:
+  - `node --check src\main\sde\sdeInventoryImporter.js` passed.
+  - `node --check src\main\services\mutatingActionService.js` passed.
+  - `node --check scripts\verify-sde-inventory-real-local-conformance.js` passed.
+  - `npm.cmd run verify:sde-inventory-real-local-conformance` passed.
+  - `npm.cmd run verify:sde-inventory-import-rewrite-authority` passed.
+  - `npm.cmd run verify:local-sde-source-posture` passed when run alone.
+  - `npm.cmd run verify:local-sde-readiness` passed.
+  - `npm.cmd run verify:sde-inventory` passed with fixture-safe local JSONL source override: `$env:AURA_ATLAS_LIVE_SDE_JSONL_PATH='F:\Projects\AURA-Atlas\.tmp\hs232-inventory-jsonl'; npm.cmd run verify:sde-inventory`.
+  - `npm.cmd run verify:sde-topology-real-local-conformance` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 294 warnings across 6 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS232 working-tree changes.
+- Boundaries preserved:
+  - no topology import behavior changes
+  - no combined topology + inventory orchestration
+  - no provider-backed `sde.build-lookups`
+  - no SDE download
+  - no real operator source path inspection in verification
+  - no real operator lookup-table mutation in verification
+  - no storage movement
+  - no real operator config write
+  - no support artifact creation
+  - no provider calls
+  - no Hydration writes
+  - no Evidence/EVEidence writes
+  - no Discovery ref mutation
+  - no Watch mutation
+  - no Assessment Memory or Marked mutation
+  - no renderer UI/source picker work
+  - no pruning/deletion behavior
+  - no runtime enforcement activation
+  - no command blocking
+  - no schema changes
+
+## HS232 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS232-real-local-sde-inventory-import-conformance.md
+```
+
+Status: real-local SDE inventory/type import/rewrite conformance complete; accepted by HS233.
+
+HS232 result:
+
+- Atlas now has a real-local inventory/type import service path that conforms to HS226 source authority, storage/budget, staged promotion, provenance, cleanup, recovery, and concurrency-exclusion semantics under fixture verification.
+- Combined topology + inventory import, provider-backed SDE download/build, support artifact creation, active enforcement, command blocking, and UI/source picker work remain unopened.
 
 ## Active HS230 Runway
 

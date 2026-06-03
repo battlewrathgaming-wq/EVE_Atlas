@@ -285,7 +285,7 @@ const COMMANDS = {
     effects: [EFFECTS.METADATA_READABILITY, EFFECTS.LOCAL_DATA_MUTATION],
     renderer: false,
     description: 'Import local SDE inventory/type metadata into SQLite lookup tables',
-    handler: ({ db, payload }) => runSdeInventoryImportService(db, payload)
+    handler: ({ db, payload, ...context }) => runSdeInventoryImportService(db, payload, context)
   },
   'sde.build-lookups': {
     classification: 'exclusive',
