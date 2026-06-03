@@ -74,6 +74,7 @@ Current state:
 - HS218 accepted by HS219
 - HS220 opened
 - HS220 accepted by HS221
+- HS222 advisory readiness review opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -90,9 +91,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer
+- current executor is Engineering / Security specialist
 - no active Dev runway is open
-- current work is resting HS220 after local SDE source/import posture acceptance; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, SDE import/download controls, and UI work remain unopened
+- current work is HS222 advisory readiness review before any real SDE import/download or lookup-table rewrite packet; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, SDE import/download controls, and UI work remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
 Current heading:
@@ -104,8 +105,8 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Rest SDE source/import posture and continue a different storage/runtime seam.
-2. Ask for advisory readiness review before any real SDE import/download or lookup-table rewrite packet.
+1. Review `workspace/EngineeringSecurityHS222-sde-import-download-readiness-advisory.md`.
+2. Decide whether local SDE import/rewrite is ready for a bounded Dev packet or needs another proof.
 3. Keep provider-backed Hydration execution, persisted Hydration queues, active runtime enforcement, and UI work parked until Human/Overseer explicitly decides to continue those lines.
 
 See `workspace/current.md` for current truth.
@@ -214,6 +215,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS218/HS219 accepted Hydration attention runtime posture: `metadata.hydration_attention_runtime.preview` now proves runtime-facing raw/readable/provider-needed/local-SDE/deferred posture from local data without provider calls, writes, queues, enforcement, UI, or Evidence/EVEidence mutation.
 - HS220 opened local SDE source/import posture: prove local SDE readiness, local import/rewrite, provider-backed download/build, External I/O relevance, and storage/budget posture before SDE movement or lookup-table rewrite exists.
 - HS220/HS221 accepted local SDE source/import posture: `metadata.local_sde_source_posture.preview` now proves readiness/source/import posture, renderer path non-authority, local import versus provider-backed download/build, External I/O relevance, and storage/budget posture without SDE movement or lookup-table rewrite.
+- HS222 opened SDE import/download readiness advisory review: decide whether local import/rewrite or provider-backed download/build is ready for Dev, or whether another proof is needed first.
 
 ## Accepted Boundaries
 

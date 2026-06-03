@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS220 accepted by HS221
+Status: HS222 active advisory runway
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS220 accepted; local SDE source/import posture can rest.
+Current focus: SDE import/download readiness advisory review.
 
 Current heading:
 
@@ -20,15 +20,61 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Engineering / Security specialist
 
 Expected handoff filename:
 
 ```txt
-none; no active Dev runway is open
+workspace/EngineeringSecurityHS222-sde-import-download-readiness-advisory.md
 ```
 
-No active Dev runway is open.
+No active Dev runway is open. This is advisory review only.
+
+## Active HS222 Advisory Runway
+
+Opened 2026-06-03:
+
+- `workspace/OverseerHS222-sde-import-download-readiness-advisory-request.md`
+
+Expected advisory artifact:
+
+```txt
+workspace/EngineeringSecurityHS222-sde-import-download-readiness-advisory.md
+```
+
+Task:
+
+Review whether Atlas is ready to open a real SDE import/download or lookup-table rewrite Dev packet, or whether another dry proof is needed first.
+
+Answer:
+
+- whether local SDE import/rewrite is ready
+- whether provider-backed SDE download/build is ready
+- smallest next Dev packet if ready
+- smallest missing proof if not ready
+- source path authority needed before import
+- storage/budget authority needed before lookup-table rewrite
+- External I/O posture needed before provider-backed download/build
+- partial failure/recovery requirements
+- verification commands expected
+- parked items and Human/Overseer decisions needed
+
+Preserve:
+
+- no code implementation
+- no Dev runway
+- no SDE download
+- no SDE import
+- no lookup-table rewrite
+- no arbitrary user-file inspection
+- no storage movement
+- no config writes
+- no support artifact creation
+- no provider calls
+- no schema changes
+- no term renames
+
+Stop if the review requires live/private/destructive action, real operator source path inspection, SDE download/import, lookup-table rewrite, storage movement, schema changes, or Dev implementation.
 
 ## Resting HS220 Runway
 
