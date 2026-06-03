@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS250 patient packet identity sparse gap matrix runway open
+Status: HS250 accepted by HS251; no active Dev runway
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: read-only patient packet identity sparse gap matrix proof.
+Current focus: resting after patient packet identity sparse gap matrix acceptance.
 
 Current heading:
 
@@ -20,21 +20,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
-Active Dev runway:
+Latest accepted Dev runway:
 
 ```txt
 workspace/OverseerHS250-patient-packet-identity-sparse-gap-matrix-runway.md
 ```
 
-Expected Dev handoff:
+Latest accepted Dev handoff:
 
 ```txt
 workspace/DevHS250-patient-packet-identity-sparse-gap-matrix.md
 ```
 
-Active task:
+Accepted task:
 
 Extend proof coverage for `runtime.patient_packet_identity.preview` across sparse and imperfect local states.
 
@@ -80,6 +80,123 @@ Preserve:
 - no command blocking
 - no pruning/deletion behavior
 - no renderer UI work
+
+Latest Overseer review:
+
+```txt
+workspace/OverseerHS251-hs250-sparse-gap-matrix-review.md
+```
+
+Status: accepted.
+
+No active Dev runway is open.
+
+## HS250 Evidence
+
+Dev updated 2026-06-03:
+
+- Extended `runtime.patient_packet_identity.preview` with sparse-confidence disclosure:
+  - row-level `identity_confidence`
+  - summary `rows_with_identity_gaps`
+  - summary `uncomputable_rows`
+  - top-level `confidence_guard`
+- Added explicit system/radius Watch scope anchors to zKill Discovery identity rows:
+  - `included_system_scope_status`
+  - `included_system_ids`
+  - `excluded_system_scope_status`
+  - `excluded_system_ids`
+- Added missing/malformed included/excluded system scope unknowns without guessing exact radius membership.
+- Added local cache-skip posture disclosure for ESI Evidence Expansion candidate rows when a matching `killmails` Evidence/EVEidence row already exists.
+- Added trusted fixture-only Hydration preview input support for sparse verifier coverage; renderer payloads cannot activate it without trusted context.
+- Added `scripts/verify-patient-packet-identity-sparse.js`.
+- Added `npm.cmd run verify:patient-packet-identity-sparse`.
+- Sparse matrix verifier covered 11 required cases:
+  - empty DB / no Watch / no Discovery refs / no Hydration candidates
+  - system/radius Watch with valid scope
+  - system/radius Watch with missing stored included/excluded scope
+  - system/radius Watch with malformed included or excluded scope
+  - pending Discovery ref without `killmail_hash`
+  - failed Discovery ref with valid hash
+  - already-cached Evidence/EVEidence matching a Discovery ref
+  - no Hydration candidates
+  - Hydration candidate missing source anchors
+  - local SDE gap candidate versus provider-needed entity label
+  - mixed view/local-record and Watch/background Hydration lanes
+- Sparse matrix sample output:
+  - status: `patient packet identity sparse matrix verified`
+  - required cases covered: 11
+  - read-only: true
+  - provider calls: 0
+  - writes: 0
+  - packet tables created: 0
+  - persisted queue created: false
+  - dispatcher added: false
+  - enforcement active: false
+  - UI work: false
+- Happy-path patient identity verifier still reports:
+  - identity rows: 4
+  - derivable now: 4
+  - unknown rows: 0
+  - rows with identity gaps: 0
+  - uncomputable rows: 0
+  - packet persistence recommended: false
+- Verification run:
+  - `node --check src\main\services\patientPacketIdentityService.js` passed.
+  - `node --check scripts\verify-patient-packet-identity-preview.js` passed.
+  - `node --check scripts\verify-patient-packet-identity-sparse.js` passed.
+  - `npm.cmd run verify:patient-packet-identity-sparse` passed.
+  - `npm.cmd run verify:patient-packet-identity` passed.
+  - `npm.cmd run verify:watch-offline-readout` passed.
+  - `npm.cmd run verify:hydration-candidate-preview` passed.
+  - `npm.cmd run verify:hydration-backlog-preview` passed.
+  - `npm.cmd run verify:queue-clock-posture` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 284 warnings across 4 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS250 working-tree changes.
+- Boundaries preserved:
+  - no packet table
+  - no persisted queue
+  - no active dispatcher
+  - no provider calls
+  - no zKill Discovery execution
+  - no ESI Evidence Expansion execution
+  - no Hydration execution
+  - no Hydration writes
+  - no Evidence/EVEidence writes
+  - no Discovery ref mutation outside fixture setup
+  - no Watch mutation or arming outside fixture setup
+  - no Assessment Memory or Marked mutation
+  - no storage config write or movement
+  - no support artifact creation
+  - no schema changes
+  - no runtime enforcement activation
+  - no command blocking
+  - no pruning/deletion behavior
+  - no renderer UI work
+
+## HS250 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS250-patient-packet-identity-sparse-gap-matrix.md
+```
+
+Status: patient packet identity sparse gap matrix complete; accepted by HS251.
+
+HS250 result:
+
+- Atlas now proves `runtime.patient_packet_identity.preview` handles sparse, malformed, failed, cached, local SDE, provider-needed, and mixed-lane local states as read-only identity posture without false confidence, packet persistence, provider movement, writes, enforcement, support artifacts, pruning/deletion, or UI.
+
+## Resting Next Candidates
+
+1. Rest patient packet identity and continue another storage/runtime seam.
+2. Review queue/clock posture output for the next mechanical gap.
+3. If provider-backed execution becomes the next focus, seek Data Engineering input before opening Dev.
+4. Keep active dispatch, provider movement, schema-backed queues, runtime enforcement activation, command blocking, pruning/deletion execution, support artifacts for packet state, and UI parked.
 
 Latest Overseer review:
 

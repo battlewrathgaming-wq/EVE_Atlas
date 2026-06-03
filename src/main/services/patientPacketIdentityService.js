@@ -13,7 +13,7 @@ function buildPatientPacketIdentityPreview(db, input = {}, context = {}) {
   const now = input.now || new Date().toISOString();
   const limit = boundedLimit(input.limit || input.previewLimit || input.preview_limit, 12, 50);
   const queueClock = buildQueueClockPosturePreview(db, { ...input, now, limit }, context);
-  const hydration = buildHydrationCandidatePreview(db, {
+  const hydration = trustedHydrationFixture(input, context) || buildHydrationCandidatePreview(db, {
     ...(input.hydration || {}),
     now,
     limit,
@@ -57,6 +57,7 @@ function buildPatientPacketIdentityPreview(db, input = {}, context = {}) {
     ui_work: false,
     proof_question: 'If Atlas needed a future durable unit, what identity would each current candidate have, and can it be derived now?',
     summary: summarizeRows(rows),
+    confidence_guard: confidenceGuard(rows),
     source_previews: {
       queue_clock: {
         action: queueClock.action,
@@ -110,6 +111,14 @@ function zkillDiscoveryIdentityRow(schedule, queueClock) {
   const caps = watch.watch_type === 'actor'
     ? `max_killmails:${source.max_killmails_per_run}`
     : `max_systems:${source.max_systems_per_run}:max_killmails:${source.max_killmails_per_run}`;
+  const scopeAnchors = watch.watch_type === 'system_radius'
+    ? [
+        anchor('included_system_scope_status', source.included_system_scope_status || 'unknown'),
+        anchor('included_system_ids', source.included_system_ids || []),
+        anchor('excluded_system_scope_status', source.excluded_system_scope_status || 'unknown'),
+        anchor('excluded_system_ids', source.excluded_system_ids || [])
+      ]
+    : [];
   return identityRow({
     clock: 'acquisition',
     lane: 'zkill_discovery',
@@ -140,7 +149,8 @@ function zkillDiscoveryIdentityRow(schedule, queueClock) {
       anchor('poll_interval_minutes', watch.poll_interval_minutes),
       anchor('caps', caps),
       anchor('next_poll_at', watch.next_poll_at || null),
-      anchor('blocked_reasons', watch.blocked_reasons || [])
+      anchor('blocked_reasons', watch.blocked_reasons || []),
+      ...scopeAnchors
     ],
     duplicatePreventionBasis: [
       'same Watch/scope/lookback/cadence/cap/provider-action identity can be recomputed after restart',
@@ -179,6 +189,7 @@ function esiEvidenceExpansionIdentityRow(db, queueClock) {
     });
   }
 
+  const cached = cachedKillmail(db, row.killmail_id);
   return identityRow({
     clock: 'acquisition',
     lane: 'esi_evidence_expansion',
@@ -193,7 +204,8 @@ function esiEvidenceExpansionIdentityRow(db, queueClock) {
     sourceBasis: [
       'discovered_killmail_refs local Discovery ref row',
       'Discovery-ref shaped identity: killmail_id + killmail_hash + discovery scope/provenance',
-      'ESI Evidence Expansion is the future evidence-creating step if executed later'
+      'ESI Evidence Expansion is the future evidence-creating step if executed later',
+      cached ? 'matching Evidence/EVEidence already exists locally; future movement should skip/cache rather than imply provider movement is required' : 'no matching local Evidence/EVEidence row found for this fixture candidate'
     ],
     sourceAnchors: [
       anchor('killmail_id', row.killmail_id),
@@ -205,11 +217,14 @@ function esiEvidenceExpansionIdentityRow(db, queueClock) {
       anchor('source_actor', row.source_actor_type && row.source_actor_id ? `${row.source_actor_type}:${row.source_actor_id}` : null),
       anchor('status', row.status),
       anchor('priority', row.priority),
-      anchor('selected_for_expansion_at', row.selected_for_expansion_at || null)
+      anchor('selected_for_expansion_at', row.selected_for_expansion_at || null),
+      anchor('cached_evidence_exists', Boolean(cached)),
+      anchor('cache_skip_posture', cached ? 'skip_or_treat_as_cached_before_provider_movement' : 'no_cached_evidence_row_found')
     ],
     duplicatePreventionBasis: [
       'dedupe by killmail_id + killmail_hash + discovery scope/provenance',
       'skip already-cached killmails before future ESI call',
+      cached ? 'matching local Evidence/EVEidence row means provider movement is not required for this killmail identity' : 'no cached Evidence/EVEidence row was found for this representative identity',
       'Discovery ref status remains staging/provenance and must not become sequencer state'
     ],
     gatePosture: gatePostureForLane(lane),
@@ -288,6 +303,7 @@ function identityRow({
   gatePosture,
   unknowns
 }) {
+  const identityConfidence = identityConfidenceFor(identityKey, unknowns || []);
   return {
     clock,
     lane,
@@ -295,6 +311,7 @@ function identityRow({
     derived_identity_key: identityKey,
     proposed_future_key: identityKey,
     identity_derivable_now: Boolean(identityKey),
+    identity_confidence: identityConfidence,
     source_basis: sourceBasis,
     source_anchors: sourceAnchors,
     duplicate_prevention_basis: duplicatePreventionBasis,
@@ -383,6 +400,15 @@ function unknownsForWatchIdentity(watch = {}) {
   if (watch.watch_type === 'system_radius' && watch.source?.included_system_scope_status === 'malformed') {
     unknowns.push({ fact: 'included_system_ids', reason: 'stored radius scope is malformed', guessed: false });
   }
+  if (watch.watch_type === 'system_radius' && watch.source?.excluded_system_scope_status === 'malformed') {
+    unknowns.push({ fact: 'excluded_system_ids', reason: 'stored radius excluded scope is malformed', guessed: false });
+  }
+  if (watch.watch_type === 'system_radius' && watch.source?.included_system_scope_status === 'not_stored') {
+    unknowns.push({ fact: 'included_system_ids', reason: 'no stored included-system scope; exact radius membership is not guessed', guessed: false });
+  }
+  if (watch.watch_type === 'system_radius' && watch.source?.excluded_system_scope_status === 'not_stored') {
+    unknowns.push({ fact: 'excluded_system_ids', reason: 'no stored excluded-system scope; exact exclusions are not guessed', guessed: false });
+  }
   return unknowns;
 }
 
@@ -405,12 +431,64 @@ function summarizeRows(rows) {
     identity_rows: rows.length,
     derivable_now: rows.filter((row) => row.identity_derivable_now).length,
     unknown_rows: rows.filter((row) => row.unknown_or_uncomputable.length > 0).length,
+    rows_with_identity_gaps: rows.filter((row) => row.identity_confidence === 'derived_with_gaps').length,
+    uncomputable_rows: rows.filter((row) => row.identity_confidence === 'uncomputable').length,
     clocks: [...new Set(rows.map((row) => row.clock))],
     lanes: rows.map((row) => row.lane),
     acquisition_and_hydration_separate: rows.some((row) => row.clock === 'acquisition') && rows.some((row) => row.clock === 'hydration_recovery'),
     all_derived_for_now: rows.every((row) => row.persistence_recommendation === 'derived_for_now'),
     all_not_execution_authority: rows.every((row) => row.not_execution_authority === true),
     packet_persistence_recommended: rows.some((row) => row.persistence_recommendation !== 'derived_for_now')
+  };
+}
+
+function confidenceGuard(rows) {
+  const rowsWithGaps = rows.filter((row) => row.identity_confidence === 'derived_with_gaps');
+  const uncomputableRows = rows.filter((row) => row.identity_confidence === 'uncomputable');
+  return {
+    false_confidence_prevented: rowsWithGaps.length > 0 || uncomputableRows.length > 0,
+    rows_with_identity_gaps: rowsWithGaps.map((row) => row.lane),
+    uncomputable_rows: uncomputableRows.map((row) => row.lane),
+    statement: rowsWithGaps.length || uncomputableRows.length
+      ? 'Unknown or weak identity facts are disclosed instead of guessed; derived rows with gaps are not execution authority.'
+      : 'No sparse identity gaps were visible in this preview; rows remain non-authoritative.'
+  };
+}
+
+function identityConfidenceFor(identityKey, unknowns) {
+  if (!identityKey) {
+    return 'uncomputable';
+  }
+  return unknowns.length > 0 ? 'derived_with_gaps' : 'derived';
+}
+
+function cachedKillmail(db, killmailId) {
+  const row = db.prepare(`
+    SELECT killmail_id
+    FROM killmails
+    WHERE killmail_id = ?
+    LIMIT 1
+  `).get(killmailId);
+  return row || null;
+}
+
+function trustedHydrationFixture(input = {}, context = {}) {
+  if (context.allowPatientPacketIdentityFixtureHydration !== true) {
+    return null;
+  }
+  const fixture = input.hydrationFixturePreview || input.hydration_fixture_preview || null;
+  if (!fixture || typeof fixture !== 'object') {
+    return null;
+  }
+  return {
+    action: fixture.action || 'metadata.hydration_candidates.preview',
+    read_only: true,
+    summary: fixture.summary || {
+      total_candidates: Array.isArray(fixture.candidates) ? fixture.candidates.length : 0
+    },
+    lanes: Array.isArray(fixture.lanes) ? fixture.lanes : [],
+    candidates: Array.isArray(fixture.candidates) ? fixture.candidates : [],
+    persisted_queue: false
   };
 }
 

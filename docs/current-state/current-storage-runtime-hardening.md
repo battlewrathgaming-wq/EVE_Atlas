@@ -53,6 +53,7 @@ Accepted proof surfaces:
 - `retention.evidence_prune_execution.fixture_proof` fixture-only deletion contract proof
 - `runtime.queue_clock_posture.preview` read-only queue / clock posture
 - `runtime.patient_packet_identity.preview` read-only patient packet identity conformance preview
+- `verify:patient-packet-identity-sparse` fixture-only sparse gap matrix coverage
 
 Accepted shape:
 
@@ -82,6 +83,7 @@ Accepted shape:
 - Fixture-only Evidence prune execution contract proof is disposable deletion-safety proof: it requires fixture-only context, recomputes candidates from server-side `retention.preflight`, requires exact preview digest confirmation, proves rollback on injected failure, deletes only selected fixture Evidence/EVEidence dependency rows and selected killmails, deletes warning rows only by selected `killmail_id`, preserves run-level/mixed-run warnings plus Discovery refs, Assessment Memory, provenance/logs, Watch/Marked rows, support artifacts, schema, runtime enforcement, provider movement, and UI, and does not expose real operator deletion
 - Queue / clock runtime posture preview is read-only internal truth posture: it composes local Discovery refs, Watch/offline restart posture, Hydration candidates/runtime/execution policy, External I/O, storage/setup, and cadence posture into separate Acquisition Clock and Hydration Recovery Clock lanes without dispatcher, provider queue, persisted sequencer, provider movement, schema change, runtime enforcement, command blocking, catch-up flood, pruning/deletion, support artifacts, or UI work
 - Patient packet identity conformance preview is read-only identity-shape posture: it proves zKill Discovery, ESI Evidence Expansion, view/local-record Hydration, and Watch/background Hydration identities can be derived now from existing local posture, remain lane-specific, remain non-authoritative, and do not require packet persistence, dispatcher behavior, provider movement, writes, runtime enforcement, support artifacts, pruning/deletion, or UI work
+- Patient packet identity sparse gap matrix is fixture-only/read-only coverage: it proves empty, malformed, missing-hash, failed-ref, cached, no-candidate, missing-anchor, local-SDE-gap, provider-needed, and mixed Hydration lane cases disclose identity confidence, gaps, uncomputable rows, scope limitations, and cache-skip posture without packet persistence, provider movement, writes, runtime enforcement, support artifacts, pruning/deletion, or UI work
 - Trusted/internal confirmation bypass is distinct from confirmation satisfaction: it may preserve the current service-boundary behavior, but it must not be described as an operator or renderer satisfying confirmation
 - Runtime enforcement activation readiness audit accepted the proof chain as coherent but found Atlas not ready for active runtime blocking; the next safe seam is a non-blocking service-boundary integration hook only
 
@@ -90,6 +92,8 @@ Current resting state:
 - no active Dev runway is open
 - HS244/HS245 accepted patient packet identity advisory: no broad provider work queue yet; most posture can stay derived/read-only for now; future durable movement identity should remain lane-specific unless a later proof shows shared persistence is necessary
 - HS246/HS247 accepted patient packet identity conformance preview: current local posture can derive lane-specific identity rows for zKill Discovery, ESI Evidence Expansion, view/local-record Hydration, and Watch/background Hydration; all rows are `derived_for_now`, non-persisted, non-executable, and not execution authority
+- HS248/HS249 accepted patient packet identity real-data gap review: patient packet identity can stay derived/read-only; the gap was verification coverage rather than architecture
+- HS250/HS251 accepted sparse gap matrix coverage: patient packet persistence, broad provider work queue, generic provider packet table, active dispatcher, provider calls, durable leases/claims, and provider cooldown persistence remain parked
 - HS242 queue / clock runtime posture preview has been accepted; future patient packet work should treat it as explanatory posture and design input, not execution authority
 - future runtime enforcement now has composed gate-state, service-boundary, pure evaluator, dry adapter, and activation-readiness evidence, but still needs an explicit implementation/design runway before command blocking
 - HS170 accepted the first inactive service-boundary hook: `invokeServiceCommand` now calls a behavior-preserving non-blocking preview hook after eligibility/confirmation and before task wrapping/dispatch, without command blocking, dispatch changes, provider calls, broad fact sourcing, writes, or runtime authorization
