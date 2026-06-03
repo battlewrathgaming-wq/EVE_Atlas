@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS242 accepted by HS243; no active Dev runway
+Status: HS244 data-engineering advisory request open
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after queue / clock runtime posture preview acceptance.
+Current focus: patient packet identity and durable unit-of-work advisory.
 
 Current heading:
 
@@ -20,7 +20,7 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Data Engineering / Data Analyst
 
 Latest accepted Dev runway:
 
@@ -100,10 +100,36 @@ workspace/OverseerHS243-hs242-queue-clock-posture-review.md
 
 No active Dev runway is open.
 
-Resting next candidates:
+Active advisory request:
 
-1. Data-engineering advisory for patient packet identity and durable unit-of-work boundaries.
-2. Continue runtime/storage internals with another read-only posture seam.
+```txt
+workspace/OverseerHS244-patient-packet-identity-data-engineering-request.md
+```
+
+Expected advisory artifact:
+
+```txt
+workspace/DataEngineeringHS244-patient-packet-identity-boundaries.md
+```
+
+Advisory purpose:
+
+- Review what HS242 implies for future patient provider packets.
+- Decide what can remain derived/read-only and what might later need durable persistence.
+- Recommend Acquisition and Hydration packet identity boundaries without implementing code, schema, dispatcher, provider calls, runtime enforcement, or UI.
+
+Key question:
+
+```txt
+What is the smallest practical durable unit of work, if any, for future patient packets?
+```
+
+Do not open Dev implementation until this advisory is reviewed and accepted by Human/Overseer.
+
+Resting next candidates after advisory:
+
+1. Accept advisory and open a bounded read-only Dev proof if one is recommended.
+2. Keep patient packet identity as design context and continue another runtime/storage seam.
 3. Rest system hardening briefly and review the new queue/clock posture output for gaps.
 4. Keep active dispatcher, schema-backed provider queues, persisted sequencer state, provider-backed Hydration execution, active runtime enforcement, real deletion execution, and UI work parked until Human/Overseer explicitly chooses and bounds those lines.
 

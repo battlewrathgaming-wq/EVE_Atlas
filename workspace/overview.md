@@ -96,6 +96,7 @@ Current state:
 - HS240 accepted by HS241
 - HS242 opened
 - HS242 accepted by HS243
+- HS244 advisory opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -112,9 +113,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer
+- current executor is Data Engineering / Data Analyst
 - no active Dev runway is open
-- current work is resting after HS242 queue / clock runtime posture preview acceptance
+- current work is patient packet identity and durable unit-of-work advisory
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -128,12 +129,11 @@ Current heading:
 - one hardening seam at a time
 - Atlas project root remains the anchor
 
-Likely next shaping candidates:
+Active advisory:
 
-1. Data-engineering advisory for patient packet identity and durable unit-of-work boundaries.
-2. Continue runtime/storage internals with another read-only posture seam.
-3. Rest system hardening briefly and review the new queue/clock posture output for gaps.
-4. Keep active dispatcher, schema-backed provider queues, persisted sequencer state, provider-backed Hydration execution, active runtime enforcement, real deletion execution, and UI work parked until Human/Overseer explicitly chooses and bounds those lines.
+1. `workspace/OverseerHS244-patient-packet-identity-data-engineering-request.md`
+2. Expected artifact: `workspace/DataEngineeringHS244-patient-packet-identity-boundaries.md`
+3. Purpose: decide future patient packet identity and durable unit-of-work boundaries before any dispatcher, schema-backed provider queue, persisted sequencer, provider-backed Hydration execution, runtime enforcement, or UI work.
 
 See `workspace/current.md` for current truth.
 
@@ -258,6 +258,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS240/HS241 accepted fixture-only Evidence prune execution contract proof: Atlas can prove the deletion contract in disposable data only; real operator deletion remains blocked and no product deletion command exists.
 - HS242 opened queue/clock runtime posture preview: compose existing local queue, Watch, Hydration, External I/O, storage, and clock posture into a read-only truth surface before any dispatcher, provider queue, persisted sequencer, runtime enforcement, command blocking, provider movement, schema change, or UI work.
 - HS242/HS243 accepted queue/clock runtime posture preview: `runtime.queue_clock_posture.preview` now composes local queue, Watch/restart, Hydration, External I/O, storage/setup, and cadence posture without dispatching, writing, provider calls, runtime enforcement, command blocking, or catch-up flooding.
+- HS244 opened data-engineering advisory for patient packet identity: decide what can stay derived/read-only, what might need durable persistence later, and how Acquisition/Hydration packet identities should be separated before any implementation.
 
 ## Accepted Boundaries
 
