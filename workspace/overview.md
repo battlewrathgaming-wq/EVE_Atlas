@@ -73,6 +73,7 @@ Current state:
 - HS218 opened
 - HS218 accepted by HS219
 - HS220 opened
+- HS220 accepted by HS221
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -89,9 +90,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is HS220 Local SDE source/import posture
-- current work is proving local SDE source/import posture before download/import/lookup-table rewrite; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, SDE import/download controls, and UI work remain unopened
+- current executor is Overseer
+- no active Dev runway is open
+- current work is resting HS220 after local SDE source/import posture acceptance; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, SDE import/download controls, and UI work remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
 Current heading:
@@ -103,9 +104,9 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Review DevHS220 and decide whether local SDE source/import posture is accepted.
-2. If accepted, decide whether SDE import/download activation remains parked or needs advisory readiness review.
-3. Keep provider-backed Hydration execution, persisted Hydration queues, and active runtime enforcement parked until Human/Overseer explicitly decides to continue those lines.
+1. Rest SDE source/import posture and continue a different storage/runtime seam.
+2. Ask for advisory readiness review before any real SDE import/download or lookup-table rewrite packet.
+3. Keep provider-backed Hydration execution, persisted Hydration queues, active runtime enforcement, and UI work parked until Human/Overseer explicitly decides to continue those lines.
 
 See `workspace/current.md` for current truth.
 
@@ -212,6 +213,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS218 opened Hydration attention runtime posture: prove how Atlas classifies raw IDs, known-local labels, provider-needed labels, local SDE gaps, and deferred candidates before provider-backed Hydration execution or persisted queues exist.
 - HS218/HS219 accepted Hydration attention runtime posture: `metadata.hydration_attention_runtime.preview` now proves runtime-facing raw/readable/provider-needed/local-SDE/deferred posture from local data without provider calls, writes, queues, enforcement, UI, or Evidence/EVEidence mutation.
 - HS220 opened local SDE source/import posture: prove local SDE readiness, local import/rewrite, provider-backed download/build, External I/O relevance, and storage/budget posture before SDE movement or lookup-table rewrite exists.
+- HS220/HS221 accepted local SDE source/import posture: `metadata.local_sde_source_posture.preview` now proves readiness/source/import posture, renderer path non-authority, local import versus provider-backed download/build, External I/O relevance, and storage/budget posture without SDE movement or lookup-table rewrite.
 
 ## Accepted Boundaries
 

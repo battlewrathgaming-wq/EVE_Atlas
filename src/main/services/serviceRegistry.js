@@ -47,6 +47,7 @@ const { buildHydrationAttentionRuntimePosturePreview } = require('./hydrationAtt
 const { buildHydrationExecutionPolicyPreview } = require('./hydrationExecutionPolicyPreviewService');
 const { buildHydrationWriteFixtureProof } = require('./hydrationWriteFixtureProofService');
 const { buildLocalSdeReadinessPreview } = require('./localSdeReadinessPreviewService');
+const { buildLocalSdeSourcePosturePreview } = require('./localSdeSourcePostureService');
 const { buildRuntimeHookTelemetryReadout } = require('./runtimeHookTelemetryReadoutService');
 const {
   buildExternalIoStateConfigReadback,
@@ -238,6 +239,16 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview local SDE lookup readiness gaps without download, import, provider calls, writes, or schema changes',
     handler: ({ db, payload }) => buildLocalSdeReadinessPreview(db, payload)
+  },
+  'metadata.local_sde_source_posture.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview local SDE source/import posture without download, import, lookup rewrites, provider calls, or path inspection',
+    handler: ({ db, payload, ...context }) => buildLocalSdeSourcePosturePreview(db, payload, {
+      ...context,
+      commandMetadata: listServiceCommands()
+    })
   },
   'metadata.hydration_write_fixture_proof': {
     classification: 'metadata-only',

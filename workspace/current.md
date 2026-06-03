@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS220 active Dev runway
+Status: HS220 accepted by HS221
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Local SDE source/import posture proof.
+Current focus: HS220 accepted; local SDE source/import posture can rest.
 
 Current heading:
 
@@ -20,15 +20,17 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS220-local-sde-source-import-posture.md
+none; no active Dev runway is open
 ```
 
-## Active HS220 Runway
+No active Dev runway is open.
+
+## Resting HS220 Runway
 
 Opened 2026-06-03:
 
@@ -88,6 +90,148 @@ Preserve:
 - no pruning/deletion behavior
 
 Stop if the proof requires downloading/importing SDE, lookup-table writes, arbitrary path inspection outside existing safe preview posture, blurring local SDE lookup readiness with provider-backed Hydration, treating readiness as authorization, treating External I/O on as authorization, runtime enforcement, command blocking, UI work, schema changes, destructive/private/live action, or real operator data inspection.
+
+## HS220 Acceptance
+
+Accepted 2026-06-03:
+
+- `workspace/OverseerHS221-hs220-local-sde-source-import-posture-review.md`
+
+Decision:
+
+- HS220 accepted.
+- No blocking issues found.
+- `metadata.local_sde_source_posture.preview` is accepted as read-only local SDE source/import posture proof.
+
+Accepted outcome:
+
+- local SDE readiness is local readability/geometry support, not provider-backed Hydration
+- local source import/rewrite is distinct from provider-backed SDE download/build
+- renderer-supplied source paths are ignored and not inspected
+- trusted/local source shapes are classified without arbitrary filesystem inspection
+- External I/O off holds provider-backed SDE download/build without making it failure
+- storage/budget posture can block future lookup-table rewrites without blocking the readout
+- readiness does not authorize provider calls, imports, downloads, or lookup rewrites
+
+Verification re-run by Overseer:
+
+- `npm.cmd run verify:local-sde-source-posture` passed.
+- `npm.cmd run verify:local-sde-readiness` passed.
+- `npm.cmd run verify:hydration-attention-runtime` passed.
+- `npm.cmd run verify:hydration-execution-policy` passed.
+- `npm.cmd run verify:enforcement-dry-run` passed.
+- `npm.cmd run verify:gate-stack-readout` passed.
+- `npm.cmd run verify:service-registry` passed.
+- `npm.cmd run verify:command-authority` passed.
+- `npm.cmd run verify:passive-side-effects` passed.
+- `npm.cmd run verify:protected-terms` passed warning-only with 486 warnings across 10 changed working-set files; no renames or protected-word JSON updates performed.
+- `git diff --check` passed with CRLF normalization warnings only.
+
+Likely next options:
+
+1. Rest SDE source/import posture and continue a different storage/runtime seam.
+2. Ask for advisory readiness review before any real SDE import/download or lookup-table rewrite packet.
+3. Keep provider-backed Hydration execution, persisted Hydration queues, active runtime enforcement, and UI work parked until explicitly opened.
+
+## HS220 Evidence
+
+Dev updated 2026-06-03:
+
+- Added `src/main/services/localSdeSourcePostureService.js` as a read-only local SDE source/import posture preview.
+- Added renderer-eligible command:
+  - `metadata.local_sde_source_posture.preview`
+- Added `npm.cmd run verify:local-sde-source-posture`.
+- Added command classification coverage in `src/main/services/enforcementDryRunService.js`.
+- Added service registry, command authority, passive side-effect, and enforcement dry-run verifier coverage.
+- The new readout reuses existing local/support posture where practical:
+  - `metadata.local_sde_readiness.preview`
+  - `storage.setup_gate_readout`
+  - `support.gate_stack_readout`
+  - enforcement dry-run command coverage posture
+  - support artifact path authority posture
+- The preview exposes:
+  - source posture summary
+  - readiness summary
+  - source path authority
+  - command-family posture
+  - External I/O posture
+  - storage/budget posture for future lookup rewrites
+  - support/corpus posture
+  - representative missing groups
+  - explicit boundary statements
+- Focused verifier sample:
+  - `metadata.local_sde_source_posture.preview`
+  - readiness state: `partial`
+  - missing material: topology/geography lookup, import provenance, mixed
+  - renderer-supplied source path posture: `not_inspected_renderer_payload_ignored`
+  - `sde.import.topology`: `local_source_import_rewrite`, External I/O not required
+  - `sde.import.inventory`: `local_source_import_rewrite`, External I/O not required
+  - `sde.build-lookups`: `provider_backed_download_build`, held by External I/O off without a trusted local source
+  - storage posture: no storage selected / budget unconfigured; future lookup rewrite blocked while local readout remains available
+  - representative missing groups: `inventory_type_lookup_gap`, `topology_lookup_gap`, `import_provenance_gap`
+  - `provider_calls: 0`
+  - `sde_downloads: 0`
+  - `sde_imports_started: 0`
+  - `lookup_writes: 0`
+- The preview proves:
+  - local SDE readiness is local readability/geometry support, not provider-backed Hydration
+  - future local source import/rewrite is distinct from provider-backed SDE download/build
+  - External I/O off holds provider-backed download/build without making local source posture readout fail
+  - External I/O on is not authorization
+  - readiness does not authorize provider calls, imports, downloads, or lookup rewrites
+  - storage/setup posture may block future lookup-table rewrites without blocking this readout
+  - renderer-supplied source paths are not trusted and are not inspected
+- Verification run:
+  - `node --check src\main\services\localSdeSourcePostureService.js` passed.
+  - `npm.cmd run verify:local-sde-source-posture` passed.
+  - `npm.cmd run verify:local-sde-readiness` passed. Note: the HS220 runway named `verify:local-sde-readiness-preview`; the current package script is `verify:local-sde-readiness`, which runs `scripts/verify-local-sde-readiness-preview.js`.
+  - `npm.cmd run verify:hydration-attention-runtime` passed.
+  - `npm.cmd run verify:hydration-execution-policy` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:gate-stack-readout` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 486 warnings across 10 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS220 working-tree changes.
+- Boundaries preserved:
+  - no SDE download
+  - no SDE import
+  - no lookup-table rewrite
+  - no arbitrary user-file inspection
+  - no storage movement
+  - no config writes
+  - no support artifact creation
+  - no provider calls
+  - no Hydration writes
+  - no `metadata_runs` writes
+  - no Evidence/EVEidence creation
+  - no Discovery ref mutation
+  - no Watch mutation
+  - no Assessment Memory or Marked mutation
+  - no schema changes
+  - no runtime enforcement activation
+  - no command blocking
+  - no renderer UI work
+  - no pruning/deletion behavior
+
+## HS220 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS220-local-sde-source-import-posture.md
+```
+
+Status: local SDE source/import posture proof complete; pending Overseer review.
+
+HS220 result:
+
+- Atlas can now explain local SDE source/import posture before execution.
+- Local source import/rewrite, provider-backed SDE download/build, local readiness gaps, External I/O posture, and storage/budget write posture are distinct.
+- Renderer-supplied source paths are ignored for authority and are not inspected.
+- SDE download/import, lookup rewrites, provider calls, storage/config writes, support artifact creation, Hydration writes, Evidence/EVEidence writes, runtime enforcement, command blocking, and UI work remain unopened.
 
 ## Resting HS218 Runway
 
