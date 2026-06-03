@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS236 accepted by HS237; no active Dev runway
+Status: HS238 advisory opened; no Dev runway
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after pruning intelligence preview acceptance.
+Current focus: pruning/deletion execution prerequisites advisory.
 
 Current heading:
 
@@ -20,7 +20,27 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Engineering / Security / Data advisory
+
+Latest advisory request:
+
+```txt
+workspace/OverseerHS238-pruning-deletion-execution-prerequisites-advisory-request.md
+```
+
+Expected advisory artifact:
+
+```txt
+workspace/EngineeringSecurityDataHS238-pruning-deletion-execution-prerequisites.md
+```
+
+Purpose:
+
+Define what must be true before Atlas can safely consider any destructive pruning/deletion execution packet.
+
+This is advisory only. It does not authorize implementation, schema changes, deletion execution, support artifact cleanup, runtime enforcement, provider calls, or UI work.
+
+## Resting Prior Acceptance
 
 Latest accepted Dev runway:
 
