@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS234 active advisory request
+Status: HS234 accepted by HS235; no active Dev runway
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: SDE real-local consolidation advisory.
+Current focus: resting after SDE real-local consolidation advisory.
 
 Current heading:
 
@@ -20,7 +20,7 @@ Current heading:
 
 ## Executor
 
-Current executor: Engineering / Security advisory
+Current executor: Overseer
 
 Latest accepted handoff:
 
@@ -52,16 +52,22 @@ Latest Overseer review:
 workspace/OverseerHS233-hs232-real-local-sde-inventory-conformance-review.md
 ```
 
-Active advisory request:
+Latest advisory request:
 
 ```txt
 workspace/OverseerHS234-sde-real-local-consolidation-advisory-request.md
 ```
 
-Expected advisory artifact:
+Latest advisory artifact:
 
 ```txt
 workspace/EngineeringSecurityHS234-sde-real-local-consolidation-advisory.md
+```
+
+Latest Overseer review:
+
+```txt
+workspace/OverseerHS235-hs234-sde-real-local-consolidation-review.md
 ```
 
 No active Dev runway is open.
@@ -84,12 +90,24 @@ Accepted 2026-06-03:
 
 Likely next shaping candidates:
 
-1. Review EngineeringSecurityHS234 and decide whether local SDE import mechanics should rest.
-2. If HS234 recommends another small proof, decide whether to open it.
-3. Rest SDE movement and return to another storage/runtime seam if preferred.
+1. Rest SDE movement and return to another storage/runtime seam.
+2. If Human/Overseer wants to keep SDE active, open only a narrow source-disappears-after-authority proof.
+3. Decide whether old developer scripts and `sde.build-lookups` need explicit labeling/quarantine before any operator-facing SDE work.
 4. Keep combined SDE behavior, provider-backed `sde.build-lookups`, support artifacts, runtime enforcement, pruning/deletion, and UI work parked unless HS234 and Human/Overseer acceptance say otherwise.
 
-## Active HS234 Advisory Request
+## HS235 Acceptance
+
+Accepted 2026-06-03:
+
+- HS234 SDE real-local consolidation advisory accepted by HS235.
+- Local SDE import/rewrite mechanics can rest for now.
+- No new Dev runway is required for SDE local import mechanics unless Human/Overseer explicitly chooses to continue this exact line.
+- Combined local SDE import/orchestration remains deferred.
+- Operator source picker/UI is not ready yet and needs source authority design first.
+- Source-disappears-after-authority edge is non-blocking for resting mechanics, but blocking before operator-facing source selection or combined orchestration.
+- Provider-backed `sde.build-lookups`, support artifacts around SDE failures, runtime enforcement/command blocking, and script promotion remain parked.
+
+## HS234 Advisory Request
 
 Opened 2026-06-03:
 
