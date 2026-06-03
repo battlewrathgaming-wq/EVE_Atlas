@@ -49,6 +49,7 @@ async function main() {
     const localSdeReadinessCommand = commands.find((entry) => entry.command === 'metadata.local_sde_readiness.preview');
     const localSdeSourcePostureCommand = commands.find((entry) => entry.command === 'metadata.local_sde_source_posture.preview');
     const hydrationWriteFixtureCommand = commands.find((entry) => entry.command === 'metadata.hydration_write_fixture_proof');
+    const sdeTopologyAuthorityProofCommand = commands.find((entry) => entry.command === 'sde.topology_import_rewrite_authority.proof');
     const sdeBuildLookupsCommand = commands.find((entry) => entry.command === 'sde.build-lookups');
     const watchCreateCommand = commands.find((entry) => entry.command === 'watch.create');
     const watchListCommand = commands.find((entry) => entry.command === 'watch.list');
@@ -144,6 +145,9 @@ async function main() {
     assert(hydrationWriteFixtureCommand?.classification === 'metadata-only', 'metadata.hydration_write_fixture_proof should be metadata-only');
     assert(hydrationWriteFixtureCommand?.effects.includes('metadata-readability'), 'metadata.hydration_write_fixture_proof should declare metadata readability');
     assert(hydrationWriteFixtureCommand?.renderer_allowed === false, 'metadata.hydration_write_fixture_proof should not be renderer eligible');
+    assert(sdeTopologyAuthorityProofCommand?.classification === 'metadata-only', 'sde topology authority proof should be metadata-only');
+    assert(sdeTopologyAuthorityProofCommand?.effects.includes('local-data-mutation'), 'sde topology authority proof should declare fixture local mutation');
+    assert(sdeTopologyAuthorityProofCommand?.renderer_allowed === false, 'sde topology authority proof should not be renderer eligible');
     assert(sdeBuildLookupsCommand?.classification === 'exclusive', 'sde.build-lookups should be exclusive');
     assert(watchCreateCommand?.classification === 'metadata-only', 'watch.create should be metadata-only');
     assert(watchListCommand?.classification === 'read-only', 'watch.list should be read-only');

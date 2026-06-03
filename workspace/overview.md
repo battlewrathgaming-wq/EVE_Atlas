@@ -1,7 +1,7 @@
 # AURA Atlas Workspace Overview
 
 Status: Active breadcrumb map
-Last reviewed: 2026-06-02
+Last reviewed: 2026-06-03
 
 ## Vision Statement
 
@@ -77,6 +77,7 @@ Current state:
 - HS222 advisory readiness review opened
 - HS222 accepted by HS223
 - HS224 opened
+- HS224 accepted by HS225
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -93,9 +94,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is HS224 SDE topology import/rewrite authority fixture proof
-- current work is proving topology import/rewrite authority and failure recovery in fixture/offline scope before any real SDE import/download or lookup-table rewrite packet; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, real SDE import/download controls, and UI work remain unopened
+- current executor is Overseer
+- no active Dev runway is open
+- current work is resting after HS224 topology import/rewrite authority and failure-recovery proof acceptance; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, real SDE import/download controls, and UI work remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
 Current heading:
@@ -107,8 +108,8 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Review DevHS224 and decide whether topology import/rewrite authority proof is accepted.
-2. If accepted, decide whether inventory authority proof follows or whether another advisory review is needed.
+1. Decide whether inventory import/rewrite authority proof follows topology.
+2. Ask advisory whether topology proof is sufficient before broader SDE import planning, if needed.
 3. Keep provider-backed Hydration execution, persisted Hydration queues, active runtime enforcement, and UI work parked until Human/Overseer explicitly decides to continue those lines.
 
 See `workspace/current.md` for current truth.
@@ -220,6 +221,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS222 opened SDE import/download readiness advisory review: decide whether local import/rewrite or provider-backed download/build is ready for Dev, or whether another proof is needed first.
 - HS222/HS223 accepted Engineering/Security advisory: do not open real operator SDE import/rewrite or provider-backed download/build yet; next safe step is a fixture/offline import-rewrite authority proof, topology first.
 - HS224 opened SDE topology import/rewrite authority proof: prove source authority, storage/budget projection, staged/transactional recovery, provenance-after-promotion, and no partial visible ready state after failure without real SDE movement.
+- HS224/HS225 accepted SDE topology import/rewrite authority proof: `sde.topology_import_rewrite_authority.proof` now proves fixture/offline local source authority, storage/budget blocking, staged transactional topology promotion, provenance-after-complete-promotion, failed rewrite preservation, cleanup posture, and explicit retry/rerun without real SDE movement.
 
 ## Accepted Boundaries
 

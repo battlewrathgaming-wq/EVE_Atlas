@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS224 active Dev runway
+Status: HS224 accepted by HS225
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: SDE topology import/rewrite authority fixture proof.
+Current focus: HS224 accepted; SDE topology import/rewrite authority fixture proof can rest.
 
 Current heading:
 
@@ -20,15 +20,15 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
 Expected handoff filename:
 
 ```txt
-workspace/DevHS224-sde-topology-import-rewrite-authority-proof.md
+none; no active Dev runway is open
 ```
 
-## Active HS224 Runway
+## Resting HS224 Runway
 
 Opened 2026-06-03:
 
@@ -91,6 +91,162 @@ Preserve:
 - no schema changes unless returned to Overseer first
 
 Stop if proving recovery requires schema changes, mutating the real operator DB, inspecting real operator source paths, starting provider-backed SDE download/build, touching inventory import behavior beyond context reading, UI work, runtime enforcement, command blocking, support artifact creation, destructive/private/live action, or real operator data inspection.
+
+## HS224 Evidence
+
+Dev updated 2026-06-03:
+
+- Added `src/main/services/sdeTopologyImportRewriteAuthorityProofService.js` as a fixture/offline topology import/rewrite authority and recovery proof.
+- Added non-renderer command:
+  - `sde.topology_import_rewrite_authority.proof`
+- Added `npm.cmd run verify:sde-topology-import-rewrite-authority`.
+- Added command classification coverage in `src/main/services/enforcementDryRunService.js`.
+- Added service registry, command authority, and enforcement dry-run verifier coverage.
+- Command classification:
+  - `classification: metadata-only`
+  - effects: `local-data-mutation`, `metadata-readability`
+  - renderer eligible: false
+  - enforcement status: `fixture_only_non_production`
+  - External I/O dependency: `none`
+  - runtime context: `fixture_sde_topology_import_rewrite_authority_proof`
+- The proof exposes:
+  - renderer source path non-authority
+  - trusted fixture local source authority shape
+  - remote source rejection for local topology import
+  - no-source block
+  - storage/budget authority cases for topology rewrite
+  - projected source/temp/cache/staged/DB/WAL-SHM growth
+  - staged/transactional fixture promotion model
+  - provenance-after-complete-promotion rule
+  - failed staged rewrite preservation
+  - partial staged material cleanup posture
+  - explicit retry/rerun posture with no automatic retry
+- Focused verifier proves:
+  - renderer-only source path is blocked and ignored
+  - trusted fixture source can be accepted while renderer source claims remain ignored
+  - remote source references are rejected for local topology import
+  - missing source blocks rewrite
+  - missing/unavailable storage blocks rewrite
+  - invalid/degraded storage blocks rewrite
+  - unconfigured budget blocks rewrite
+  - budget hard lock blocks rewrite
+  - successful fixture rewrite promotes complete topology and writes provenance afterward
+  - failed staged rewrite preserves previous visible topology counts
+  - failed staged rewrite does not write failure provenance
+  - staged temp material cleanup is represented
+  - retry/rerun is explicit and not automatic
+- The proof did not alter existing real `sde.import.topology`, `sde.import.inventory`, or `sde.build-lookups` execution behavior.
+- Verification run:
+  - `node --check src\main\services\sdeTopologyImportRewriteAuthorityProofService.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check scripts\verify-sde-topology-import-rewrite-authority.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-enforcement-dry-run.js` passed.
+  - `npm.cmd run verify:sde-topology-import-rewrite-authority` passed.
+  - `npm.cmd run verify:local-sde-source-posture` passed after rerun. An initial parallel run overlapped with `verify:sde-fixture` and saw a temp SDE fixture directory removed during support-path scanning.
+  - `npm.cmd run verify:local-sde-readiness` passed.
+  - `npm.cmd run verify:sde-fixture` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 470 warnings across 9 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS224 working-tree changes.
+- Boundaries preserved:
+  - no real SDE download
+  - no provider-backed `sde.build-lookups`
+  - no real operator source path inspection
+  - no real operator lookup-table mutation
+  - no storage movement
+  - no real operator config write
+  - no support artifact creation
+  - no provider calls
+  - no Hydration writes
+  - no Evidence/EVEidence writes
+  - no Discovery ref mutation
+  - no Watch mutation
+  - no Assessment Memory or Marked mutation
+  - no renderer UI work
+  - no pruning/deletion behavior
+  - no inventory import behavior
+  - no combined topology + inventory behavior
+  - no runtime enforcement activation
+  - no command blocking
+  - no schema changes
+
+## HS224 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS224-sde-topology-import-rewrite-authority-proof.md
+```
+
+Status: SDE topology import/rewrite authority fixture proof complete and accepted by Overseer.
+
+HS224 result:
+
+- Atlas can now prove the future topology import/rewrite authority and recovery shape in fixture/offline mode.
+- Source authority, storage validity, budget posture, projected growth, staged promotion, provenance timing, cleanup, and retry posture are distinct.
+- Real operator SDE import/rewrite, provider-backed SDE download/build, inventory import, runtime enforcement, command blocking, and UI work remain unopened.
+
+## HS224 Acceptance
+
+Accepted 2026-06-03:
+
+- `workspace/DevHS224-sde-topology-import-rewrite-authority-proof.md`
+- `workspace/OverseerHS225-hs224-sde-topology-import-rewrite-authority-proof-review.md`
+
+Decision:
+
+- HS224 accepted.
+- No blocking issues found.
+- `sde.topology_import_rewrite_authority.proof` is accepted as a fixture/offline proof of future topology import/rewrite authority and recovery posture.
+
+Accepted outcome:
+
+- renderer source paths are ignored as authority
+- trusted fixture local source authority is explicit
+- remote source references are rejected for local topology import
+- missing source blocks rewrite
+- storage and budget posture blocks future topology rewrite in invalid/unconfigured/hard-lock cases
+- projected source/temp/cache/staged/DB/WAL-SHM growth is represented
+- staged fixture promotion is transactional
+- provenance is written only after complete promotion
+- failed staged rewrite preserves visible topology
+- failed staged rewrite does not write failure provenance
+- partial staged cleanup posture is represented
+- retry/rerun is explicit and not automatic
+
+Verification re-run by Overseer:
+
+- `npm.cmd run verify:sde-topology-import-rewrite-authority` passed.
+- `npm.cmd run verify:local-sde-source-posture` passed when run alone.
+- `npm.cmd run verify:local-sde-readiness` passed.
+- `npm.cmd run verify:sde-fixture` passed.
+- `npm.cmd run verify:enforcement-dry-run` passed.
+- `npm.cmd run verify:service-registry` passed.
+- `npm.cmd run verify:command-authority` passed.
+- `npm.cmd run verify:passive-side-effects` passed.
+- `npm.cmd run verify:protected-terms` passed warning-only with 471 warnings across 9 changed working-set files; no renames or protected-word JSON updates performed.
+- `node --check src\main\services\sdeTopologyImportRewriteAuthorityProofService.js` passed.
+- `node --check scripts\verify-sde-topology-import-rewrite-authority.js` passed.
+- `git diff --check` passed with CRLF normalization warnings only.
+
+Note:
+
+- A parallel verifier run reproduced the handoff-noted temp-directory race between `verify:local-sde-source-posture` and `verify:sde-fixture`; the isolated source-posture rerun passed. This is treated as test-fixture interference, not an HS224 blocking issue.
+
+Likely next options:
+
+1. Decide whether a matching inventory import/rewrite authority proof is needed.
+2. Ask advisory whether topology proof is sufficient before broader SDE import planning.
+3. Rest SDE movement and continue another storage/runtime seam.
+
+Do not open Dev implementation until one of these is selected and bounded.
 
 ## Resting HS222 Advisory Runway
 

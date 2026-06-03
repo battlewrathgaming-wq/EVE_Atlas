@@ -48,6 +48,7 @@ const { buildHydrationExecutionPolicyPreview } = require('./hydrationExecutionPo
 const { buildHydrationWriteFixtureProof } = require('./hydrationWriteFixtureProofService');
 const { buildLocalSdeReadinessPreview } = require('./localSdeReadinessPreviewService');
 const { buildLocalSdeSourcePosturePreview } = require('./localSdeSourcePostureService');
+const { buildSdeTopologyImportRewriteAuthorityProof } = require('./sdeTopologyImportRewriteAuthorityProofService');
 const { buildRuntimeHookTelemetryReadout } = require('./runtimeHookTelemetryReadoutService');
 const {
   buildExternalIoStateConfigReadback,
@@ -256,6 +257,13 @@ const COMMANDS = {
     renderer: false,
     description: 'Write fixture-only Hydration readability labels from local entities without providers, Evidence writes, queues, or enforcement',
     handler: ({ db, payload, ...context }) => buildHydrationWriteFixtureProof(db, payload, context)
+  },
+  'sde.topology_import_rewrite_authority.proof': {
+    classification: 'metadata-only',
+    effects: [EFFECTS.LOCAL_DATA_MUTATION, EFFECTS.METADATA_READABILITY],
+    renderer: false,
+    description: 'Fixture-only topology import/rewrite authority and recovery proof without real SDE import, provider calls, or operator lookup mutation',
+    handler: ({ db, payload, ...context }) => buildSdeTopologyImportRewriteAuthorityProof(db, payload, context)
   },
   'sde.import.topology': {
     classification: 'exclusive',
