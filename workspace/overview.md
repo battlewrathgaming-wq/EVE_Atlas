@@ -80,6 +80,7 @@ Current state:
 - HS224 accepted by HS225
 - HS226 opened
 - HS226 accepted by HS228
+- HS229 advisory readiness review opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -96,9 +97,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer
-- no active Dev runway is open
-- current work is resting after HS226 inventory/type import/rewrite authority proof acceptance; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, real SDE import/download controls, and UI work remain unopened
+- current executor is Engineering / Security
+- active advisory request is HS229 SDE post-proof readiness review
+- current work is assessing whether accepted topology and inventory fixture proofs are enough before any real operator SDE import/rewrite; broad artifact creation, provider-backed Hydration execution, runtime enforcement activation, pruning/deletion, real SDE import/download controls, and UI work remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 
 Current heading:
@@ -110,8 +111,8 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Ask Engineering/Security for a short post-proof readiness review before any real operator SDE mutation, if SDE movement continues.
-2. Rest SDE movement and continue another storage/runtime seam.
+1. Review EngineeringSecurityHS229 and decide whether real operator local SDE import/rewrite can be opened or needs another proof.
+2. If SDE movement is not ready, rest SDE movement and continue another storage/runtime seam.
 3. Keep provider-backed Hydration execution, persisted Hydration queues, active runtime enforcement, and UI work parked until Human/Overseer explicitly decides to continue those lines.
 
 See `workspace/current.md` for current truth.
@@ -226,6 +227,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS224/HS225 accepted SDE topology import/rewrite authority proof: `sde.topology_import_rewrite_authority.proof` now proves fixture/offline local source authority, storage/budget blocking, staged transactional topology promotion, provenance-after-complete-promotion, failed rewrite preservation, cleanup posture, and explicit retry/rerun without real SDE movement.
 - HS226 opened SDE inventory import/rewrite authority proof: mirror the accepted topology proof for inventory/type metadata before any real operator SDE import/rewrite, combined topology+inventory behavior, or provider-backed SDE download/build.
 - HS226/HS228 accepted SDE inventory import/rewrite authority proof: `sde.inventory_import_rewrite_authority.proof` now proves fixture/offline local inventory source authority, storage/budget blocking, staged transactional inventory/type promotion, provenance-after-complete-promotion, failed rewrite preservation, cleanup posture, and explicit retry/rerun without real SDE movement.
+- HS229 opened SDE post-proof readiness advisory: Engineering/Security should assess whether HS224 and HS226 are enough to consider real operator local SDE import/rewrite, or whether another proof/review is needed first.
 
 ## Accepted Boundaries
 

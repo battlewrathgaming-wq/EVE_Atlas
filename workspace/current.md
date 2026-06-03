@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS226 accepted by HS228
+Status: HS229 active advisory request
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS226 accepted; topology and inventory SDE import/rewrite authority proofs can rest.
+Current focus: post-proof readiness review before any real operator SDE import/rewrite.
 
 Current heading:
 
@@ -20,13 +20,62 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Engineering / Security
 
 Expected handoff filename:
 
 ```txt
-none; no active Dev runway is open
+workspace/EngineeringSecurityHS229-sde-post-proof-readiness-advisory.md
 ```
+
+## Active HS229 Advisory Request
+
+Opened 2026-06-03:
+
+- `workspace/OverseerHS229-sde-post-proof-readiness-advisory-request.md`
+
+Expected advisory artifact:
+
+```txt
+workspace/EngineeringSecurityHS229-sde-post-proof-readiness-advisory.md
+```
+
+Task:
+
+Review whether the accepted topology and inventory fixture/offline authority proofs are enough to consider a real operator SDE import/rewrite runway, or whether another proof/review is needed first.
+
+Answer:
+
+- whether real operator local SDE import/rewrite is ready
+- if not ready, smallest missing proof
+- if ready, smallest safe Dev runway
+- required source path authority
+- required storage/budget authority
+- required recovery model
+- whether topology and inventory should remain separate
+- provider-backed download/build disposition
+- support artifact disposition
+- runtime enforcement disposition
+- verification commands/evidence expected
+- parked items
+- Human/Overseer decisions needed
+
+Preserve:
+
+- no code implementation
+- no Dev runway
+- no real SDE import
+- no SDE download
+- no lookup-table rewrite
+- no real operator source path inspection
+- no storage movement
+- no config writes
+- no support artifact creation
+- no provider calls
+- no schema changes
+- no term renames
+
+Stop if the review requires live/private/destructive action, real operator source path inspection, SDE download/import, lookup-table rewrite, storage movement, schema changes, or Dev implementation.
 
 ## Resting HS226 Runway
 
