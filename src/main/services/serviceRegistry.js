@@ -278,7 +278,7 @@ const COMMANDS = {
     effects: [EFFECTS.METADATA_READABILITY, EFFECTS.LOCAL_DATA_MUTATION],
     renderer: false,
     description: 'Import local SDE topology/geography into SQLite lookup tables',
-    handler: ({ db, payload }) => runSdeTopologyImportService(db, payload)
+    handler: ({ db, payload, ...context }) => runSdeTopologyImportService(db, payload, context)
   },
   'sde.import.inventory': {
     classification: 'exclusive',

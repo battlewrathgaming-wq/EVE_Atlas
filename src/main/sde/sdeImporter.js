@@ -9,14 +9,14 @@ class SdeTopologyImporter {
   constructor(db) {
     this.db = db;
     ensureImportScratchTables(this.db);
-    this.prepareStatements();
+    this.statements = null;
   }
 
   prepareStatements() {
     this.statements = {
       upsertRegion: this.db.prepare(`
-        INSERT INTO regions (region_id, region_name, source_sde_build, imported_at)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO temp_sde_topology_regions (region_id, region_name)
+        VALUES (?, ?)
         ON CONFLICT(region_id) DO UPDATE SET region_name = excluded.region_name
       `),
       upsertScratchRegion: this.db.prepare(`
@@ -25,9 +25,9 @@ class SdeTopologyImporter {
         ON CONFLICT(region_id) DO UPDATE SET region_name = excluded.region_name
       `),
       upsertConstellation: this.db.prepare(`
-        INSERT INTO constellations (
-          constellation_id, constellation_name, region_id, region_name, source_sde_build, imported_at
-        ) VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO temp_sde_topology_constellations (
+          constellation_id, constellation_name, region_id, region_name
+        ) VALUES (?, ?, ?, ?)
         ON CONFLICT(constellation_id) DO UPDATE SET
           constellation_name = excluded.constellation_name,
           region_id = excluded.region_id,
@@ -41,7 +41,7 @@ class SdeTopologyImporter {
           region_id = excluded.region_id
       `),
       upsertSystem: this.db.prepare(`
-        INSERT INTO solar_systems (
+        INSERT INTO temp_sde_topology_solar_systems (
           solar_system_id, solar_system_name, constellation_id,
           constellation_name, region_id, region_name, security_status
         ) VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -54,7 +54,7 @@ class SdeTopologyImporter {
           security_status = excluded.security_status
       `),
       upsertAdjacency: this.db.prepare(`
-        INSERT OR IGNORE INTO system_adjacency (from_system_id, to_system_id, connection_type)
+        INSERT OR IGNORE INTO temp_sde_topology_system_adjacency (from_system_id, to_system_id, connection_type)
         VALUES (?, ?, ?)
       `),
       insertImport: this.db.prepare(`
@@ -69,8 +69,24 @@ class SdeTopologyImporter {
 
   async importFromPath(inputPath, options = {}) {
     clearImportScratchTables(this.db);
+    dropStagingTables(this.db);
+    createStagingTables(this.db);
+    this.prepareStatements();
+    const cleanup = {
+      temp_tables_created: [
+        'temp_sde_topology_regions',
+        'temp_sde_topology_constellations',
+        'temp_sde_topology_solar_systems',
+        'temp_sde_topology_system_adjacency'
+      ],
+      temp_tables_dropped: false,
+      extracted_source_removed: false,
+      partial_stage_left_visible: false
+    };
+    let pendingError = null;
 
     const source = await prepareInput(inputPath, options);
+    cleanup.extracted_source_path = source.cleanupPath || null;
     const checksum = checksumFileOrDirectory(inputPath);
     const files = listJsonlFiles(source.directory);
     const classified = classifyFiles(files);
@@ -98,8 +114,16 @@ class SdeTopologyImporter {
         counts.adjacency += await this.importStargates(filePath);
       }
 
-      this.backfillSystemNames();
-      this.insertManifest({
+      this.backfillStagedSystemNames();
+      const stagedCounts = this.stagedTopologyCounts();
+      validateStagedTopologyComplete(stagedCounts);
+      if (options.failAt === 'after_stage_before_promotion') {
+        const error = new Error('SDE topology import interrupted before promotion');
+        error.code = 'SDE_TOPOLOGY_IMPORT_INTERRUPTED_BEFORE_PROMOTION';
+        throw error;
+      }
+
+      this.promoteStagedTopology({
         buildNumber: options.buildNumber || null,
         variant: 'jsonl',
         sourceUrl: options.sourceUrl || inputPath,
@@ -108,24 +132,40 @@ class SdeTopologyImporter {
         fileChecksum: checksum,
         latestMetadataChecksum: options.latestMetadataChecksum || null,
         changesMetadataChecksum: options.changesMetadataChecksum || null,
-        counts
+        counts: stagedCounts,
+        failAt: options.failAt
       });
 
       return {
-        ...counts,
+        ...stagedCounts,
         file_checksum: checksum,
-        files: classified
+        files: classified,
+        staged: true,
+        promotion: {
+          transactional: true,
+          provenance_written_after_complete_promotion: true,
+          staged_completeness_validated: true
+        },
+        cleanup
       };
+    } catch (error) {
+      pendingError = error;
+      throw error;
     } finally {
       if (source.cleanupPath) {
         fs.rmSync(source.cleanupPath, { recursive: true, force: true });
+        cleanup.extracted_source_removed = true;
+      }
+      dropStagingTables(this.db);
+      cleanup.temp_tables_dropped = stagingTablesRemoved(this.db);
+      if (pendingError) {
+        pendingError.cleanup = cleanup;
       }
     }
   }
 
   async importRegions(filePath, options = {}) {
     let count = 0;
-    const importedAt = new Date().toISOString();
     await readJsonLines(filePath, ({ key, value }) => {
       const regionId = numberFrom(value, ['regionID', 'region_id', 'id']) ?? Number(key);
       const regionName = stringFrom(value, ['name', 'regionName', 'region_name']);
@@ -133,7 +173,7 @@ class SdeTopologyImporter {
         return;
       }
 
-      this.statements.upsertRegion.run(regionId, regionName, options.buildNumber || buildNumberFromFilename(options.sourceUrl || '') || null, importedAt);
+      this.statements.upsertRegion.run(regionId, regionName);
       this.statements.upsertScratchRegion.run(regionId, regionName);
       count += 1;
     });
@@ -142,7 +182,6 @@ class SdeTopologyImporter {
 
   async importConstellations(filePath, options = {}) {
     let count = 0;
-    const importedAt = new Date().toISOString();
     await readJsonLines(filePath, ({ key, value }) => {
       const constellationId = numberFrom(value, ['constellationID', 'constellation_id', 'id']) ?? Number(key);
       const constellationName = stringFrom(value, ['name', 'constellationName', 'constellation_name']);
@@ -152,15 +191,13 @@ class SdeTopologyImporter {
       }
 
       const region = regionId
-        ? this.db.prepare('SELECT region_name FROM regions WHERE region_id = ?').get(regionId)
+        ? this.db.prepare('SELECT region_name FROM sde_import_regions WHERE region_id = ?').get(regionId)
         : null;
       this.statements.upsertConstellation.run(
         constellationId,
         constellationName,
         regionId || null,
-        region?.region_name || null,
-        options.buildNumber || buildNumberFromFilename(options.sourceUrl || '') || null,
-        importedAt
+        region?.region_name || null
       );
       this.statements.upsertScratchConstellation.run(constellationId, constellationName, regionId || null);
       count += 1;
@@ -220,41 +257,94 @@ class SdeTopologyImporter {
         return;
       }
 
-      const before = this.db.prepare('SELECT COUNT(*) AS count FROM system_adjacency').get().count;
+      const before = this.db.prepare('SELECT COUNT(*) AS count FROM temp_sde_topology_system_adjacency').get().count;
       this.statements.upsertAdjacency.run(fromSystemId, toSystemId, 'stargate');
       this.statements.upsertAdjacency.run(toSystemId, fromSystemId, 'stargate');
-      const after = this.db.prepare('SELECT COUNT(*) AS count FROM system_adjacency').get().count;
+      const after = this.db.prepare('SELECT COUNT(*) AS count FROM temp_sde_topology_system_adjacency').get().count;
       count += after - before;
     });
     return count;
   }
 
-  backfillSystemNames() {
+  backfillStagedSystemNames() {
     this.db.exec(`
-      UPDATE solar_systems
+      UPDATE temp_sde_topology_solar_systems
       SET constellation_name = (
         SELECT constellation_name
         FROM sde_import_constellations
-        WHERE sde_import_constellations.constellation_id = solar_systems.constellation_id
+        WHERE sde_import_constellations.constellation_id = temp_sde_topology_solar_systems.constellation_id
       )
       WHERE constellation_name IS NULL;
 
-      UPDATE solar_systems
+      UPDATE temp_sde_topology_solar_systems
       SET region_id = (
         SELECT region_id
         FROM sde_import_constellations
-        WHERE sde_import_constellations.constellation_id = solar_systems.constellation_id
+        WHERE sde_import_constellations.constellation_id = temp_sde_topology_solar_systems.constellation_id
       )
       WHERE region_id IS NULL;
 
-      UPDATE solar_systems
+      UPDATE temp_sde_topology_solar_systems
       SET region_name = (
         SELECT region_name
         FROM sde_import_regions
-        WHERE sde_import_regions.region_id = solar_systems.region_id
+        WHERE sde_import_regions.region_id = temp_sde_topology_solar_systems.region_id
       )
       WHERE region_name IS NULL;
     `);
+  }
+
+  stagedTopologyCounts() {
+    return {
+      systems: count(this.db, 'temp_sde_topology_solar_systems'),
+      constellations: count(this.db, 'temp_sde_topology_constellations'),
+      regions: count(this.db, 'temp_sde_topology_regions'),
+      adjacency: count(this.db, 'temp_sde_topology_system_adjacency')
+    };
+  }
+
+  promoteStagedTopology(options) {
+    runTransaction(this.db, () => {
+      this.db.exec(`
+        DELETE FROM system_adjacency;
+        DELETE FROM solar_systems;
+        DELETE FROM constellations;
+        DELETE FROM regions;
+      `);
+      const importedAt = new Date().toISOString();
+      this.db.prepare(`
+        INSERT INTO regions (region_id, region_name, source_sde_build, imported_at)
+        SELECT region_id, region_name, ?, ? FROM temp_sde_topology_regions
+      `).run(options.buildNumber || null, importedAt);
+      this.db.prepare(`
+        INSERT INTO constellations (
+          constellation_id, constellation_name, region_id, region_name, source_sde_build, imported_at
+        )
+        SELECT constellation_id, constellation_name, region_id, region_name, ?, ?
+        FROM temp_sde_topology_constellations
+      `).run(options.buildNumber || null, importedAt);
+      this.db.exec(`
+        INSERT INTO solar_systems (
+          solar_system_id, solar_system_name, constellation_id,
+          constellation_name, region_id, region_name, security_status
+        )
+        SELECT solar_system_id, solar_system_name, constellation_id,
+          constellation_name, region_id, region_name, security_status
+        FROM temp_sde_topology_solar_systems;
+
+        INSERT INTO system_adjacency (from_system_id, to_system_id, connection_type)
+        SELECT from_system_id, to_system_id, connection_type
+        FROM temp_sde_topology_system_adjacency;
+      `);
+
+      if (options.failAt === 'after_promotion_before_provenance') {
+        const error = new Error('SDE topology import interrupted before provenance');
+        error.code = 'SDE_TOPOLOGY_IMPORT_INTERRUPTED_BEFORE_PROVENANCE';
+        throw error;
+      }
+
+      this.insertManifest(options);
+    });
   }
 
   insertManifest({ buildNumber, variant, sourceUrl, etag, lastModified, fileChecksum, latestMetadataChecksum, changesMetadataChecksum, counts }) {
@@ -293,6 +383,100 @@ function ensureImportScratchTables(db) {
 
 function clearImportScratchTables(db) {
   db.exec('DELETE FROM sde_import_regions; DELETE FROM sde_import_constellations;');
+}
+
+function createStagingTables(db) {
+  db.exec(`
+    CREATE TEMP TABLE temp_sde_topology_regions (
+      region_id INTEGER PRIMARY KEY,
+      region_name TEXT NOT NULL
+    );
+
+    CREATE TEMP TABLE temp_sde_topology_constellations (
+      constellation_id INTEGER PRIMARY KEY,
+      constellation_name TEXT NOT NULL,
+      region_id INTEGER,
+      region_name TEXT
+    );
+
+    CREATE TEMP TABLE temp_sde_topology_solar_systems (
+      solar_system_id INTEGER PRIMARY KEY,
+      solar_system_name TEXT NOT NULL,
+      constellation_id INTEGER,
+      constellation_name TEXT,
+      region_id INTEGER,
+      region_name TEXT,
+      security_status REAL
+    );
+
+    CREATE TEMP TABLE temp_sde_topology_system_adjacency (
+      from_system_id INTEGER NOT NULL,
+      to_system_id INTEGER NOT NULL,
+      connection_type TEXT NOT NULL DEFAULT 'stargate',
+      PRIMARY KEY (from_system_id, to_system_id, connection_type)
+    );
+  `);
+}
+
+function dropStagingTables(db) {
+  db.exec(`
+    DROP TABLE IF EXISTS temp_sde_topology_system_adjacency;
+    DROP TABLE IF EXISTS temp_sde_topology_solar_systems;
+    DROP TABLE IF EXISTS temp_sde_topology_constellations;
+    DROP TABLE IF EXISTS temp_sde_topology_regions;
+  `);
+}
+
+function stagingTablesRemoved(db) {
+  return [
+    'temp_sde_topology_regions',
+    'temp_sde_topology_constellations',
+    'temp_sde_topology_solar_systems',
+    'temp_sde_topology_system_adjacency'
+  ].every((tableName) => !tempTableExists(db, tableName));
+}
+
+function tempTableExists(db, tableName) {
+  return Boolean(db.prepare(`
+    SELECT name
+    FROM sqlite_temp_master
+    WHERE type = 'table' AND name = ?
+  `).get(tableName));
+}
+
+function validateStagedTopologyComplete(counts) {
+  const missing = [];
+  if (!counts || counts.regions <= 0) {
+    missing.push('regions');
+  }
+  if (!counts || counts.constellations <= 0) {
+    missing.push('constellations');
+  }
+  if (!counts || counts.systems <= 0) {
+    missing.push('solar_systems');
+  }
+  if (!counts || counts.adjacency <= 0) {
+    missing.push('system_adjacency');
+  }
+  if (!missing.length) {
+    return;
+  }
+  const error = new Error(`SDE topology staged import incomplete: ${missing.join(', ')}`);
+  error.code = 'SDE_TOPOLOGY_STAGE_INCOMPLETE';
+  error.missing = missing;
+  throw error;
+}
+
+function runTransaction(db, callback) {
+  db.exec('BEGIN');
+  try {
+    const result = callback();
+    db.exec('COMMIT');
+    return result;
+  } catch (error) {
+    db.exec('ROLLBACK');
+    throw error;
+  }
 }
 
 async function prepareInput(inputPath, options = {}) {
@@ -358,6 +542,10 @@ function checksumFileOrDirectory(inputPath) {
     }
   }
   return hash.digest('hex');
+}
+
+function count(db, tableName) {
+  return db.prepare(`SELECT COUNT(*) AS count FROM ${tableName}`).get().count;
 }
 
 function numberFrom(value, keys) {

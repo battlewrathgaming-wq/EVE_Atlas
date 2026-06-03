@@ -78,6 +78,7 @@
     "verify:metadata-status": "node scripts/verify-metadata-status.js",
     "verify:local-sde-readiness": "node scripts/verify-local-sde-readiness-preview.js",
     "verify:local-sde-source-posture": "node scripts/verify-local-sde-source-posture.js",
+    "verify:sde-topology-real-local-conformance": "node scripts/verify-sde-topology-real-local-conformance.js",
     "verify:sde-topology-import-rewrite-authority": "node scripts/verify-sde-topology-import-rewrite-authority.js",
     "verify:sde-inventory-import-rewrite-authority": "node scripts/verify-sde-inventory-import-rewrite-authority.js",
     "verify:hydration-backlog-preview": "node scripts/verify-hydration-backlog-preview.js",

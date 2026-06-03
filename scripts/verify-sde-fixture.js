@@ -34,7 +34,10 @@ async function main() {
   assert(first.constellations === 1, 'expected 1 constellation imported from fixture');
   assert(first.regions === 1, 'expected 1 region imported from fixture');
   assert(first.adjacency === 8, 'expected 8 directional adjacency rows from 4 stargates');
-  assert(second.adjacency === 0, 'repeated import should not add adjacency duplicates');
+  assert(second.adjacency === 8, 'repeated rewrite should stage the complete adjacency set');
+  assert(first.staged === true && second.staged === true, 'SDE topology imports should stage before promotion');
+  assert(first.promotion?.transactional === true, 'SDE topology import should promote transactionally');
+  assert(first.promotion?.provenance_written_after_complete_promotion === true, 'SDE topology import should write provenance after promotion');
   assert(count(db, 'solar_systems') === 4, 'solar_systems should remain idempotent');
   assert(count(db, 'regions') === 1, 'regions should remain idempotent');
   assert(count(db, 'constellations') === 1, 'constellations should remain idempotent');

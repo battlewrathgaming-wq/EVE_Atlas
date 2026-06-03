@@ -1,0 +1,113 @@
+# OverseerHS231 - HS230 Real-Local SDE Topology Conformance Review
+
+Status: accepted
+Date: 2026-06-03
+Role: Overseer
+Milestone: Atlas Storage And Runtime Hardening
+
+## Reviewed Handoff
+
+- `workspace/DevHS230-real-local-sde-topology-import-conformance.md`
+
+## Acceptance
+
+HS230 is accepted.
+
+Atlas now has a hardened real-local `sde.import.topology` path that conforms to the accepted HS224 topology authority and recovery model under Atlas-local fixture verification.
+
+Accepted behavior:
+
+- `sde.import.topology` remains non-renderer and exclusive.
+- Renderer/payload source paths are ignored as mutation authority.
+- Trusted local source authority is required before topology import mutation.
+- Remote source references are rejected for local topology import.
+- Selected storage and explicit budget are required for this packet.
+- App-local fallback acknowledgement is not sufficient for real topology rewrite in this packet.
+- Projected source/temp/cache/staged/DB/WAL-SHM growth is represented before mutation.
+- Topology rows are staged in temp tables before visible promotion.
+- Staged topology completeness is validated before promotion.
+- Visible topology replacement and provenance write occur inside a transaction.
+- `sde_imports` provenance is written only after complete promotion.
+- Failure before promotion or before provenance preserves previous visible topology and provenance.
+- Staged temp material cleanup is represented and verified.
+- Retry/rerun remains explicit, not automatic.
+- Concurrent service topology imports are excluded by the service path.
+
+## Boundary Review
+
+No blocking drift found.
+
+Preserved boundaries:
+
+- no inventory import behavior changes
+- no combined topology + inventory orchestration
+- no provider-backed `sde.build-lookups`
+- no SDE download
+- no real operator source path inspection in verification
+- no real operator lookup-table mutation in verification
+- no storage movement
+- no real operator config write
+- no support artifact creation
+- no provider calls
+- no Hydration writes
+- no Evidence/EVEidence writes
+- no Discovery ref mutation
+- no Watch mutation
+- no Assessment Memory or Marked mutation
+- no renderer UI/source picker work
+- no pruning/deletion behavior
+- no runtime enforcement activation
+- no command blocking
+- no schema changes
+
+## Verification
+
+Overseer reran:
+
+```txt
+node --check src\main\sde\sdeImporter.js
+node --check src\main\services\mutatingActionService.js
+node --check scripts\verify-sde-topology-real-local-conformance.js
+npm.cmd run verify:sde-topology-real-local-conformance
+npm.cmd run verify:sde-topology-import-rewrite-authority
+npm.cmd run verify:local-sde-source-posture
+npm.cmd run verify:local-sde-readiness
+npm.cmd run verify:sde-fixture
+npm.cmd run verify:enforcement-dry-run
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:protected-terms
+git diff --check
+git status --short --branch
+```
+
+Result:
+
+- All required verification passed.
+- `verify:protected-terms` passed warning-only with 292 working-set warnings and no rename/protected-word JSON changes.
+- `git diff --check` passed with CRLF normalization warnings only.
+
+## Parked
+
+Still parked:
+
+- inventory real-local conformance
+- combined topology + inventory orchestration
+- provider-backed `sde.build-lookups`
+- real operator source picker/UI
+- support artifact creation around SDE failures
+- active runtime enforcement or command blocking
+- strong-warning budget policy for real SDE rewrite
+
+## Next Direction
+
+No active Dev runway is opened by this review.
+
+Likely next seam, if Human/Overseer continues this lane:
+
+- inventory real-local conformance for `sde.import.inventory`, using the HS226 authority/recovery proof as the basis
+
+Alternative:
+
+- pause for advisory review before inventory conformance if the SDE local import model needs another safety pass.
