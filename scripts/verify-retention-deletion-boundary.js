@@ -252,19 +252,11 @@ function expandedKillmail(killmailId, hash) {
 }
 
 function deleteEvidenceForKillmail(db, killmailId) {
-  const runIds = db.prepare(`
-    SELECT DISTINCT run_id
-    FROM ingestion_audits
-    WHERE killmail_id = ?
-  `).all(killmailId).map((row) => row.run_id);
-
   db.exec('BEGIN IMMEDIATE;');
   try {
     db.prepare('DELETE FROM activity_events WHERE killmail_id = ?').run(killmailId);
     db.prepare('DELETE FROM ingestion_audits WHERE killmail_id = ?').run(killmailId);
-    if (runIds.length) {
-      db.prepare(`DELETE FROM data_quality_warnings WHERE run_id IN (${runIds.map(() => '?').join(', ')})`).run(...runIds);
-    }
+    db.prepare('DELETE FROM data_quality_warnings WHERE killmail_id = ?').run(killmailId);
     db.prepare('DELETE FROM killmails WHERE killmail_id = ?').run(killmailId);
     db.exec('COMMIT;');
   } catch (error) {

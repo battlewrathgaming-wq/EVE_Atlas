@@ -44,6 +44,7 @@
     "verify:message-taxonomy": "node scripts/verify-message-taxonomy.js",
     "verify:retention-preflight": "node scripts/verify-retention-preflight.js",
     "verify:retention-deletion-boundary": "node scripts/verify-retention-deletion-boundary.js",
+    "verify:retention-prune-fixture-proof": "node scripts/verify-retention-prune-fixture-proof.js",
     "verify:runtime-snapshot": "node scripts/verify-runtime-db-snapshot.js",
     "verify:storage-authority-preflight": "node scripts/verify-storage-authority-preflight.js",
     "verify:storage-authority-config-write": "node scripts/verify-storage-authority-config-write.js",

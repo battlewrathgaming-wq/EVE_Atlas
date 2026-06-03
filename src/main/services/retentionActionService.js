@@ -1,3 +1,4 @@
+const crypto = require('node:crypto');
 const { taxonomyMessage } = require('./messageTaxonomy');
 
 const RETENTION_ACTIONS = Object.freeze({
@@ -219,6 +220,77 @@ function assessmentArtifactInputFromCompactionPreview(preview = {}, overrides = 
   };
 }
 
+function buildEvidencePruneExecutionFixtureProof(db, input = {}) {
+  const action = 'retention.evidence_prune_execution.fixture_proof';
+  const scope = input.scope || {};
+  const suppliedCandidateIds = selectedEvidenceKillmailIds({
+    killmailIds: input.candidateKillmailIds || input.candidate_killmail_ids || []
+  });
+  if (input.fixtureOnly !== true && input.fixture_only !== true) {
+    return fixtureProofBlocked(action, 'fixture_only_context_required', scope, {
+      supplied_candidate_ids_ignored: suppliedCandidateIds.length > 0
+    });
+  }
+
+  const preflight = buildRetentionPreflight(db, {
+    action: 'evidence.prune_scope',
+    confirmation: 'evidence.prune_scope',
+    scope
+  });
+  const preview = fixturePreviewFromPreflight(preflight);
+  const digest = digestFixturePreview(preview);
+  const confirmation = normalizeFixtureProofConfirmation(input.confirmation);
+  const execute = input.execute === true;
+
+  if (!execute) {
+    return {
+      action,
+      fixture_only: true,
+      status: 'preview_ready',
+      execution_attempted: false,
+      deletion_executed: false,
+      renderer_eligible: false,
+      product_deletion_command: false,
+      source_of_candidate_ids: 'server_retention_preflight',
+      supplied_candidate_ids_ignored: suppliedCandidateIds.length > 0,
+      preview_digest: digest,
+      preview,
+      support_artifact_disclosure: supportArtifactDisclosure(),
+      no_footprint_policy: noFootprintPreviewPolicy(),
+      warnings: fixtureProofWarnings()
+    };
+  }
+
+  if (!preview.candidate_killmail_ids.length) {
+    return fixtureProofBlocked(action, 'empty_scope_no_candidates', scope, {
+      preview_digest: digest,
+      preview,
+      supplied_candidate_ids_ignored: suppliedCandidateIds.length > 0
+    });
+  }
+  if (confirmation.preview_digest !== digest) {
+    const mismatchReason = isSha256Digest(confirmation.preview_digest)
+      ? 'stale_or_changed_preview'
+      : 'preview_digest_mismatch';
+    return fixtureProofBlocked(action, 'preview_digest_mismatch', scope, {
+      reason: mismatchReason,
+      preview_digest: digest,
+      confirmed_preview_digest: confirmation.preview_digest,
+      preview,
+      supplied_candidate_ids_ignored: suppliedCandidateIds.length > 0
+    });
+  }
+
+  return executeFixtureEvidencePrune(db, {
+    action,
+    scope,
+    preview,
+    digest,
+    suppliedCandidateIds,
+    injectedFailureStage: input.injectedFailureStage || input.injected_failure_stage || null
+  });
+}
+
 function impactFor(db, action, scope) {
   if (action === 'diagnostics.prune_api_logs') {
     return {
@@ -245,6 +317,272 @@ function impactFor(db, action, scope) {
     return evidenceScopeImpact(db, scope);
   }
   return {};
+}
+
+function fixturePreviewFromPreflight(preflight) {
+  const relationshipContext = preflight.impact?.relationship_context || {};
+  const candidateIds = uniqueNumbers(relationshipContext.basis?.selected_killmail_ids || []);
+  const warningRows = relationshipContext.audit_warning_rows?.data_quality_warnings || {};
+  return {
+    action: preflight.action,
+    scope: normalizedObject(preflight.scope || {}),
+    candidate_killmail_ids: candidateIds,
+    counts: {
+      killmails: Number(preflight.impact?.killmails) || 0,
+      activity_events: Number(preflight.impact?.activity_events) || 0,
+      ingestion_audits: Number(preflight.impact?.ingestion_audits) || 0,
+      data_quality_warnings: Number(preflight.impact?.data_quality_warnings) || 0,
+      killmail_linked_data_quality_warnings: Number(warningRows.selected_killmail_rows) || 0,
+      run_level_data_quality_warnings: Number(warningRows.run_level_rows) || 0,
+      assessment_artifact_references: Number(preflight.impact?.assessment_artifact_references) || 0,
+      discovery_refs: Number(relationshipContext.discovery_refs?.count) || 0
+    },
+    relationship_context_basis: {
+      scope_kind: relationshipContext.basis?.scope_kind || null,
+      discovery_refs_are_evidence: relationshipContext.basis?.discovery_refs_are_evidence === true,
+      computed_relationships_are_durable_truth: relationshipContext.basis?.computed_relationships_are_durable_truth === true
+    }
+  };
+}
+
+function digestFixturePreview(preview) {
+  const digestBasis = {
+    action: 'retention.evidence_prune_execution.fixture_proof',
+    preflight_action: preview.action,
+    scope: preview.scope,
+    candidate_killmail_ids: preview.candidate_killmail_ids,
+    counts: preview.counts
+  };
+  return crypto.createHash('sha256').update(stableJson(digestBasis)).digest('hex');
+}
+
+function executeFixtureEvidencePrune(db, details) {
+  const {
+    action,
+    scope,
+    preview,
+    digest,
+    suppliedCandidateIds,
+    injectedFailureStage
+  } = details;
+  const candidateIds = preview.candidate_killmail_ids;
+  const beforeCounts = fixtureProofTableCounts(db);
+
+  db.exec('BEGIN IMMEDIATE;');
+  try {
+    const transactionPreflight = buildRetentionPreflight(db, {
+      action: 'evidence.prune_scope',
+      confirmation: 'evidence.prune_scope',
+      scope
+    });
+    const transactionPreview = fixturePreviewFromPreflight(transactionPreflight);
+    const transactionDigest = digestFixturePreview(transactionPreview);
+    if (transactionDigest !== digest) {
+      db.exec('ROLLBACK;');
+      return fixtureProofBlocked(action, 'stale_or_changed_preview', scope, {
+        preview_digest: transactionDigest,
+        confirmed_preview_digest: digest,
+        preview: transactionPreview,
+        supplied_candidate_ids_ignored: suppliedCandidateIds.length > 0
+      });
+    }
+
+    const deleted = deleteFixtureEvidenceRows(db, candidateIds, injectedFailureStage);
+    const orphanCheck = selectedOrphanCheck(db, candidateIds);
+    if (orphanCheck.activity_events || orphanCheck.ingestion_audits || orphanCheck.killmail_linked_warnings) {
+      throw new Error(`selected_orphan_rows_remaining:${stableJson(orphanCheck)}`);
+    }
+    const foreignKeyProblems = db.prepare('PRAGMA foreign_key_check').all();
+    if (foreignKeyProblems.length) {
+      throw new Error(`foreign_key_check_failed:${stableJson(foreignKeyProblems)}`);
+    }
+
+    db.exec('COMMIT;');
+    const afterCounts = fixtureProofTableCounts(db);
+    return {
+      action,
+      fixture_only: true,
+      status: 'fixture_delete_succeeded',
+      execution_attempted: true,
+      deletion_executed: true,
+      renderer_eligible: false,
+      product_deletion_command: false,
+      source_of_candidate_ids: 'server_retention_preflight',
+      supplied_candidate_ids_ignored: suppliedCandidateIds.length > 0,
+      preview_digest: digest,
+      candidate_killmail_ids: candidateIds,
+      deleted_counts: deleted,
+      retained_counts: {
+        discovered_killmail_refs: afterCounts.discovered_killmail_refs,
+        assessment_artifacts: afterCounts.assessment_artifacts,
+        fetch_runs: afterCounts.fetch_runs,
+        api_request_logs: afterCounts.api_request_logs,
+        run_level_data_quality_warnings: afterCounts.run_level_data_quality_warnings,
+        watchlist_entities: afterCounts.watchlist_entities,
+        system_watches: afterCounts.system_watches,
+        entities: afterCounts.entities,
+        metadata_runs: afterCounts.metadata_runs,
+        type_metadata: afterCounts.type_metadata,
+        solar_systems: afterCounts.solar_systems
+      },
+      before_counts: beforeCounts,
+      after_counts: afterCounts,
+      post_delete_integrity: {
+        selected_orphans: orphanCheck,
+        foreign_key_check: 'passed'
+      },
+      support_artifact_disclosure: supportArtifactDisclosure(),
+      no_footprint_policy: noFootprintPreviewPolicy(),
+      warnings: fixtureProofWarnings()
+    };
+  } catch (error) {
+    db.exec('ROLLBACK;');
+    return {
+      action,
+      fixture_only: true,
+      status: 'fixture_delete_rolled_back',
+      reason: String(error.message || error),
+      execution_attempted: true,
+      deletion_executed: false,
+      renderer_eligible: false,
+      product_deletion_command: false,
+      source_of_candidate_ids: 'server_retention_preflight',
+      supplied_candidate_ids_ignored: suppliedCandidateIds.length > 0,
+      preview_digest: digest,
+      candidate_killmail_ids: candidateIds,
+      before_counts: beforeCounts,
+      after_counts: fixtureProofTableCounts(db),
+      support_artifact_disclosure: supportArtifactDisclosure(),
+      no_footprint_policy: noFootprintPreviewPolicy(),
+      warnings: fixtureProofWarnings()
+    };
+  }
+}
+
+function deleteFixtureEvidenceRows(db, candidateIds, injectedFailureStage) {
+  const placeholders = candidateIds.map(() => '?').join(', ');
+  const deleted = {
+    activity_events: db.prepare(`DELETE FROM activity_events WHERE killmail_id IN (${placeholders})`).run(...candidateIds).changes,
+    ingestion_audits: 0,
+    data_quality_warnings: 0,
+    killmails: 0
+  };
+  maybeInjectFixtureFailure(injectedFailureStage, 'after_activity_events');
+  deleted.ingestion_audits = db.prepare(`DELETE FROM ingestion_audits WHERE killmail_id IN (${placeholders})`).run(...candidateIds).changes;
+  maybeInjectFixtureFailure(injectedFailureStage, 'after_ingestion_audits');
+  deleted.data_quality_warnings = db.prepare(`DELETE FROM data_quality_warnings WHERE killmail_id IN (${placeholders})`).run(...candidateIds).changes;
+  maybeInjectFixtureFailure(injectedFailureStage, 'after_data_quality_warnings');
+  deleted.killmails = db.prepare(`DELETE FROM killmails WHERE killmail_id IN (${placeholders})`).run(...candidateIds).changes;
+  maybeInjectFixtureFailure(injectedFailureStage, 'after_killmails');
+  return deleted;
+}
+
+function maybeInjectFixtureFailure(injectedFailureStage, stage) {
+  if (injectedFailureStage === stage) {
+    throw new Error(`injected_fixture_failure:${stage}`);
+  }
+}
+
+function selectedOrphanCheck(db, candidateIds) {
+  if (!candidateIds.length) {
+    return {
+      activity_events: 0,
+      ingestion_audits: 0,
+      killmail_linked_warnings: 0
+    };
+  }
+  const placeholders = candidateIds.map(() => '?').join(', ');
+  return {
+    activity_events: db.prepare(`SELECT COUNT(*) AS count FROM activity_events WHERE killmail_id IN (${placeholders})`).get(...candidateIds).count,
+    ingestion_audits: db.prepare(`SELECT COUNT(*) AS count FROM ingestion_audits WHERE killmail_id IN (${placeholders})`).get(...candidateIds).count,
+    killmail_linked_warnings: db.prepare(`SELECT COUNT(*) AS count FROM data_quality_warnings WHERE killmail_id IN (${placeholders})`).get(...candidateIds).count
+  };
+}
+
+function fixtureProofBlocked(action, reason, scope, extra = {}) {
+  return {
+    action,
+    fixture_only: true,
+    status: 'blocked',
+    reason,
+    scope,
+    execution_attempted: false,
+    deletion_executed: false,
+    renderer_eligible: false,
+    product_deletion_command: false,
+    support_artifact_disclosure: supportArtifactDisclosure(),
+    no_footprint_policy: noFootprintPreviewPolicy(),
+    warnings: fixtureProofWarnings(),
+    ...extra
+  };
+}
+
+function normalizeFixtureProofConfirmation(value) {
+  if (!value || typeof value !== 'object') {
+    return { preview_digest: null };
+  }
+  return {
+    preview_digest: textOrNull(value.previewDigest || value.preview_digest)
+  };
+}
+
+function isSha256Digest(value) {
+  return /^[a-f0-9]{64}$/i.test(String(value || ''));
+}
+
+function fixtureProofWarnings() {
+  return [
+    'fixture_disposable_data_only',
+    'not_real_operator_deletion',
+    'no_renderer_or_product_deletion_command',
+    'discovery_refs_assessment_memory_provenance_watch_marked_and_support_artifacts_are_not_mutated',
+    'no_retained_deletion_footprint'
+  ];
+}
+
+function fixtureProofTableCounts(db) {
+  return {
+    killmails: countTableRows(db, 'killmails'),
+    activity_events: countTableRows(db, 'activity_events'),
+    ingestion_audits: countTableRows(db, 'ingestion_audits'),
+    data_quality_warnings: countTableRows(db, 'data_quality_warnings'),
+    killmail_linked_data_quality_warnings: db.prepare('SELECT COUNT(*) AS count FROM data_quality_warnings WHERE killmail_id IS NOT NULL').get().count,
+    run_level_data_quality_warnings: db.prepare('SELECT COUNT(*) AS count FROM data_quality_warnings WHERE killmail_id IS NULL').get().count,
+    discovered_killmail_refs: countTableRows(db, 'discovered_killmail_refs'),
+    assessment_artifacts: countTableRows(db, 'assessment_artifacts'),
+    fetch_runs: countTableRows(db, 'fetch_runs'),
+    api_request_logs: countTableRows(db, 'api_request_logs'),
+    watchlist_entities: countTableRows(db, 'watchlist_entities'),
+    system_watches: countTableRows(db, 'system_watches'),
+    entity_dispositions: countTableRows(db, 'entity_dispositions'),
+    entities: countTableRows(db, 'entities'),
+    metadata_runs: countTableRows(db, 'metadata_runs'),
+    type_metadata: countTableRows(db, 'type_metadata'),
+    solar_systems: countTableRows(db, 'solar_systems'),
+    sde_imports: countTableRows(db, 'sde_imports'),
+    sde_inventory_imports: countTableRows(db, 'sde_inventory_imports')
+  };
+}
+
+function countTableRows(db, tableName) {
+  return db.prepare(`SELECT COUNT(*) AS count FROM ${tableName}`).get().count;
+}
+
+function normalizedObject(value) {
+  if (Array.isArray(value)) {
+    return value.map(normalizedObject);
+  }
+  if (value && typeof value === 'object') {
+    return Object.keys(value).sort().reduce((acc, key) => {
+      acc[key] = normalizedObject(value[key]);
+      return acc;
+    }, {});
+  }
+  return value;
+}
+
+function stableJson(value) {
+  return JSON.stringify(normalizedObject(value));
 }
 
 function evidenceScopeImpact(db, scope = {}) {
@@ -909,6 +1247,7 @@ function textOrNull(value) {
 module.exports = {
   listRetentionActions,
   buildRetentionPreflight,
+  buildEvidencePruneExecutionFixtureProof,
   buildAssessmentCompactionPreview,
   assessmentArtifactInputFromCompactionPreview
 };

@@ -50,6 +50,7 @@ Accepted proof surfaces:
 - `runtime.enforcement_adapter.dry_preview`
 - `runtimeEnforcementDryAdapter.buildDryRuntimeEnforcementAdapterDecision`
 - `retention.preflight` pruning intelligence relationship context
+- `retention.evidence_prune_execution.fixture_proof` fixture-only deletion contract proof
 
 Accepted shape:
 
@@ -76,6 +77,7 @@ Accepted shape:
 - Runtime enforcement evaluator is a pure inactive decision helper: it accepts explicit facts, returns `pass`, `block`, `conditional`, or `stop_before_boundary` with stable reason codes, and does not call handlers, task runners, providers, repositories, file writers, config writers, or DB APIs
 - Runtime enforcement dry adapter is inactive service-boundary fact assembly proof: it assembles evaluator facts from command metadata/definition, payload, context, and explicit supplied gate facts; reports missing fact classes; refuses to treat dry-run `would_allow` as authorization; and remains outside `invokeServiceCommand`
 - Retention preflight pruning intelligence preview is read-only deletion-safety understanding: `evidence.prune_scope` now reports affected Evidence/EVEidence, activity rows, ingestion audits, warnings, same-killmail Discovery refs, Assessment Memory references, Watch/Marked-adjacent context, provenance/log summaries, support-artifact disclosure, and no-retained-footprint posture while destructive deletion execution remains blocked
+- Fixture-only Evidence prune execution contract proof is disposable deletion-safety proof: it requires fixture-only context, recomputes candidates from server-side `retention.preflight`, requires exact preview digest confirmation, proves rollback on injected failure, deletes only selected fixture Evidence/EVEidence dependency rows and selected killmails, deletes warning rows only by selected `killmail_id`, preserves run-level/mixed-run warnings plus Discovery refs, Assessment Memory, provenance/logs, Watch/Marked rows, support artifacts, schema, runtime enforcement, provider movement, and UI, and does not expose real operator deletion
 - Trusted/internal confirmation bypass is distinct from confirmation satisfaction: it may preserve the current service-boundary behavior, but it must not be described as an operator or renderer satisfying confirmation
 - Runtime enforcement activation readiness audit accepted the proof chain as coherent but found Atlas not ready for active runtime blocking; the next safe seam is a non-blocking service-boundary integration hook only
 
@@ -93,6 +95,7 @@ Current resting state:
 - real operator storage authority config is now supported as app-local operator posture, but runtime enforcement still needs a dedicated runway before command blocking or provider-backed storage gating exists
 - support artifact creation policy can now be inspected before creation, but actual support artifact creation, snapshot creation, trace-pack creation, cleanup, and pruning/deletion remain separate future seams
 - support artifact contents can now be inspected before creation/writer hardening; actual support artifact creation, snapshot creation, trace-pack creation, cleanup, and pruning/deletion remain separate future seams
+- real destructive pruning/deletion remains blocked; the current deletion seam has stopped at read-only preview, prerequisites advisory, and fixture-only contract proof
 - HS180 security review found no blocking issue in the contents contract and recommends a read-only writer conformance gap map before changing snapshot, trace-pack, readiness/preflight, log, or export writers
 - HS182 writer conformance gap map accepted snapshot manifest/sensitivity gaps, readiness alias gap, trace/log redaction unknowns, trace free-text/sample-limit partials, and local path sensitivity partials as future hardening guidance only
 - HS184 runtime snapshot disclosure accepted `support_artifact_disclosure` on snapshot preflight/create results, closing snapshot manifest/sensitivity/non-authority/local-path disclosure gaps without sidecar files or broad writer redesign

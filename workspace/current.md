@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS240 open; Dev runway active
+Status: HS240 accepted by HS241; no active Dev runway
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: fixture-only Evidence prune execution contract proof.
+Current focus: resting after fixture-only Evidence prune execution contract acceptance.
 
 Current heading:
 
@@ -20,21 +20,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
-Active Dev runway:
+Latest accepted Dev runway:
 
 ```txt
 workspace/OverseerHS240-fixture-only-evidence-prune-execution-contract-runway.md
 ```
 
-Expected Dev handoff:
+Latest accepted Dev handoff:
 
 ```txt
 workspace/DevHS240-fixture-only-evidence-prune-execution-contract.md
 ```
 
-Task:
+Accepted task:
 
 Prove the smallest deletion execution contract in fixture/disposable data only. This is not real operator deletion and must not expose a product deletion command.
 
@@ -57,7 +57,104 @@ Preserve:
 - no storage movement
 - no retained deletion footprint
 
-Stop if this requires touching real operator data, exposing product deletion execution, renderer eligibility, schema migration, deleting warning rows by `run_id` instead of selected `killmail_id`, support artifact cleanup, Assessment Memory stale marking, Discovery ref pruning, provenance/log redaction or recompute, runtime enforcement, command blocking, or policy decisions not already accepted by HS238/HS239.
+Latest Overseer review:
+
+```txt
+workspace/OverseerHS241-hs240-fixture-prune-contract-review.md
+```
+
+No active Dev runway is open.
+
+Resting next candidates:
+
+1. Rest pruning and return to another storage/runtime seam.
+2. If pruning continues later, open Discovery ref pruning policy design.
+3. If pruning continues later, open no-interest/Marked pruning policy design.
+4. If SDE returns, open only a narrow source-disappears-after-authority proof.
+5. Keep provider-backed Hydration execution, persisted Hydration queues, active runtime enforcement, real deletion execution, and UI work parked until Human/Overseer explicitly decides to continue those lines.
+
+Do not open real destructive pruning/deletion execution, schema changes, support artifact cleanup, runtime enforcement, provider calls, or UI work unless Human/Overseer explicitly chooses and bounds that seam.
+
+## HS240 Evidence
+
+Dev updated 2026-06-03:
+
+- Added an internal fixture-only Evidence/EVEidence prune execution contract proof in `src/main/services/retentionActionService.js`.
+- The emitted proof action name is:
+
+```txt
+retention.evidence_prune_execution.fixture_proof
+```
+
+- The proof is not registered in `serviceRegistry`, is not renderer eligible, and is not a product deletion command.
+- Added `npm.cmd run verify:retention-prune-fixture-proof`.
+- Added `scripts/verify-retention-prune-fixture-proof.js`.
+- Updated the historical fixture sketch in `scripts/verify-retention-deletion-boundary.js` so warning rows are deleted by selected `killmail_id`, not shared `run_id`.
+- Contract behavior proven:
+  - fixture-only context required
+  - candidate killmail IDs computed from server-side `retention.preflight`
+  - renderer/payload-style candidate IDs ignored as authority
+  - exact preview digest confirmation required
+  - digest mismatch stops before deletion
+  - stale/changed preview digest stops before deletion
+  - empty scope stops cleanly
+  - deletion runs inside `BEGIN IMMEDIATE` transaction
+  - injected failure rolls back all fixture counts
+  - success deletes only selected `activity_events`, selected `ingestion_audits`, selected killmail-linked `data_quality_warnings`, and selected `killmails`
+  - success retains run-level warning rows where `killmail_id` is null
+  - success retains other mixed-run killmail warning rows
+  - success retains Discovery refs, Assessment Memory, fetch runs, API request logs, Watch/Marked-adjacent rows, entities, metadata rows, local SDE lookup rows, storage/config/runtime/support-artifact state
+  - post-delete integrity has no selected dependent rows and passes `PRAGMA foreign_key_check`
+  - returned result includes counts, support-artifact disclosure, and no-footprint posture only
+  - no retained deletion footprint, raw Evidence payload, full participant array, hidden copy, support artifact cleanup, or Assessment stale marking is created
+- Verification run:
+  - `node --check src\main\services\retentionActionService.js` passed.
+  - `node --check scripts\verify-retention-deletion-boundary.js` passed.
+  - `node --check scripts\verify-retention-prune-fixture-proof.js` passed.
+  - `npm.cmd run verify:retention-prune-fixture-proof` passed.
+  - `npm.cmd run verify:retention-preflight` passed.
+  - `npm.cmd run verify:retention-deletion-boundary` passed.
+  - `npm.cmd run verify:assessment-artifacts` passed.
+  - `npm.cmd run verify:queue-report` passed.
+  - `npm.cmd run verify:db-integrity` passed.
+  - `npm.cmd run verify:evidence-rules` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output; no protected-term JSON or terminology authority files were changed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS240 working-tree changes.
+- Boundaries preserved:
+  - no real operator deletion
+  - no renderer command
+  - no product deletion command
+  - no schema changes
+  - no support artifact creation/deletion/cleanup
+  - no provider calls
+  - no Hydration writes
+  - no Discovery ref mutation
+  - no Assessment Memory mutation or stale marking
+  - no Watch/Marked mutation
+  - no provenance/log mutation outside fixture setup/assertion data
+  - no runtime enforcement activation
+  - no command blocking
+  - no UI work
+  - no storage movement
+  - no retained deletion footprint
+
+## HS240 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS240-fixture-only-evidence-prune-execution-contract.md
+```
+
+Status: fixture-only Evidence prune execution contract proof complete; accepted by HS241.
+
+HS240 result:
+
+- Atlas now has a disposable fixture proof for the minimum future Evidence/EVEidence prune execution contract while real operator deletion remains blocked and no product deletion surface exists.
 
 ## Resting Prior Acceptance
 
