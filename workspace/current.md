@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS224 accepted by HS225
+Status: HS226 active Dev runway
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: HS224 accepted; SDE topology import/rewrite authority fixture proof can rest.
+Current focus: SDE inventory import/rewrite authority fixture proof.
 
 Current heading:
 
@@ -20,13 +20,80 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-none; no active Dev runway is open
+workspace/DevHS226-sde-inventory-import-rewrite-authority-proof.md
 ```
+
+## Active HS226 Runway
+
+Opened 2026-06-03:
+
+- `workspace/OverseerHS226-sde-inventory-import-rewrite-authority-proof-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS226-sde-inventory-import-rewrite-authority-proof.md
+```
+
+Task:
+
+Add a fixture/offline proof for inventory/type import/rewrite authority and recovery.
+
+Preferred command:
+
+```txt
+sde.inventory_import_rewrite_authority.proof
+```
+
+Acceptable alternative:
+
+Add a focused verifier/service helper without renderer command exposure if the existing service architecture makes a command inappropriate. If no command is added, the verifier must still prove the same authority and recovery shape.
+
+Preferred outcome:
+
+- renderer source paths are ignored
+- trusted local inventory source authority shape is explicit
+- remote source references are rejected for local inventory import
+- missing source blocks rewrite
+- missing/invalid/degraded storage blocks future inventory rewrite
+- unconfigured or hard-lock budget blocks future inventory rewrite
+- projected source/temp/cache/staged/DB/WAL-SHM growth is represented
+- inventory/type staged fixture writes can fail without corrupting visible ready inventory/type lookups
+- provenance is written only after complete promotion
+- failed staged rewrite preserves previous visible inventory/type lookup counts
+- failed staged rewrite does not write failure provenance
+- partial temp/staged material cleanup is represented
+- retry/rerun posture is explicit and not automatic
+
+Preserve:
+
+- no SDE download
+- no provider-backed `sde.build-lookups`
+- no real operator source path inspection
+- no real operator lookup-table mutation
+- no topology import behavior changes
+- no combined topology + inventory behavior
+- no storage movement
+- no real operator config write
+- no support artifact creation
+- no provider calls
+- no Hydration writes
+- no Evidence/EVEidence writes
+- no Discovery ref mutation
+- no Watch mutation
+- no Assessment Memory or Marked mutation
+- no renderer UI work
+- no pruning/deletion behavior
+- no runtime enforcement activation
+- no command blocking
+- no schema changes unless returned to Overseer first
+
+Stop if proving recovery requires schema changes, mutating the real operator DB, inspecting real operator source paths, starting provider-backed SDE download/build, changing topology import behavior, combining topology and inventory import behavior, UI work, runtime enforcement, command blocking, support artifact creation, destructive/private/live action, or real operator data inspection.
 
 ## Resting HS224 Runway
 
