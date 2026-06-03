@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS240 accepted by HS241; no active Dev runway
+Status: HS242 queue/clock runtime posture preview runway open
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after fixture-only Evidence prune execution contract acceptance.
+Current focus: read-only queue / clock runtime posture preview.
 
 Current heading:
 
@@ -20,60 +20,101 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Dev
 
-Latest accepted Dev runway:
-
-```txt
-workspace/OverseerHS240-fixture-only-evidence-prune-execution-contract-runway.md
-```
-
-Latest accepted Dev handoff:
+Active Dev runway:
 
 ```txt
-workspace/DevHS240-fixture-only-evidence-prune-execution-contract.md
+workspace/OverseerHS242-queue-clock-runtime-posture-preview-runway.md
 ```
 
-Accepted task:
+Expected Dev handoff:
 
-Prove the smallest deletion execution contract in fixture/disposable data only. This is not real operator deletion and must not expose a product deletion command.
+```txt
+workspace/DevHS242-queue-clock-runtime-posture-preview.md
+```
+
+Active task:
+
+Add a read-only queue / clock runtime posture preview, preferably:
+
+```txt
+runtime.queue_clock_posture.preview
+```
+
+The preview should show what local work exists, what is eligible now, what is held, what is waiting normally, and what would be safe after restart without implementing a dispatcher, provider queue, persisted sequencer, schema migration, runtime enforcement, or provider movement.
+
+Required posture coverage:
+
+- Acquisition Clock
+  - zKill Discovery lane
+  - ESI Evidence Expansion lane
+- Hydration Recovery Clock
+  - Watch/background hydration lane
+  - view/local-record hydration lane
+- existing Discovery ref queue posture
+- Watch/offline/restart posture where available
+- External I/O hold posture where provider-backed work would be held
+- storage/setup gate posture where it affects provider-backed or write-capable movement
+- waiting/held/deferred posture as non-failure
+- no-catch-up-flood posture after restart, storage unlock, or External I/O re-enable
+
+The preview should distinguish:
+
+- local-only available work
+- provider-backed work held by `external_io`
+- provider-backed work waiting on cadence/capacity
+- Watch/session arming required
+- storage/setup blocked or budget hard-stop posture
+- pending Discovery refs that are possible leads, not Evidence/EVEidence
+- ESI Evidence expansion candidates, if computable from existing local refs without mutation
+- Hydration candidates/readability demand, if computable from existing Hydration candidate/backlog previews
+- unknown or not-yet-computable state, disclosed plainly rather than guessed
 
 Preserve:
 
-- no real operator deletion
-- no renderer command
-- no product deletion command
+- no dispatcher
+- no broad provider work queue
+- no persisted sequencer state
 - no schema changes
-- no support artifact creation/deletion/cleanup
 - no provider calls
+- no zKill Discovery execution
+- no ESI Evidence expansion execution
 - no Hydration writes
+- no Evidence/EVEidence writes
 - no Discovery ref mutation
-- no Assessment Memory mutation or stale marking
-- no Watch/Marked mutation
-- no provenance/log mutation except fixture-local assertions if needed for proof setup
+- no Watch mutation or arming
+- no Assessment Memory or Marked mutation
+- no storage config write or movement
+- no support artifact creation
+- no pruning/deletion behavior
 - no runtime enforcement activation
 - no command blocking
 - no UI work
-- no storage movement
-- no retained deletion footprint
 
-Latest Overseer review:
+Stop if this requires active dispatch, schema-backed queues, provider calls, mutation, catch-up flooding, runtime enforcement, command blocking, or UI work.
+
+Verification expectation is local-only and should include the new verifier if one is added, plus queue, Watch, Hydration, External I/O, registry/authority/passive-side-effect, protected-term, and diff hygiene checks.
+
+## HS242 Runway
+
+Opened:
 
 ```txt
-workspace/OverseerHS241-hs240-fixture-prune-contract-review.md
+workspace/OverseerHS242-queue-clock-runtime-posture-preview-runway.md
 ```
 
-No active Dev runway is open.
+Expected handoff:
 
-Resting next candidates:
+```txt
+workspace/DevHS242-queue-clock-runtime-posture-preview.md
+```
 
-1. Rest pruning and return to another storage/runtime seam.
-2. If pruning continues later, open Discovery ref pruning policy design.
-3. If pruning continues later, open no-interest/Marked pruning policy design.
-4. If SDE returns, open only a narrow source-disappears-after-authority proof.
-5. Keep provider-backed Hydration execution, persisted Hydration queues, active runtime enforcement, real deletion execution, and UI work parked until Human/Overseer explicitly decides to continue those lines.
+Status: active Dev runway.
 
-Do not open real destructive pruning/deletion execution, schema changes, support artifact cleanup, runtime enforcement, provider calls, or UI work unless Human/Overseer explicitly chooses and bounds that seam.
+HS242 result target:
+
+- Atlas should have a read-only queue / clock posture preview that composes existing local posture into an inspectable internal truth surface while keeping Acquisition, ESI Evidence Expansion, Hydration Recovery, Discovery refs, Watch, External I/O, storage, and waiting states distinct.
 
 ## HS240 Evidence
 

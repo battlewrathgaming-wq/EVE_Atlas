@@ -51,6 +51,7 @@ Accepted proof surfaces:
 - `runtimeEnforcementDryAdapter.buildDryRuntimeEnforcementAdapterDecision`
 - `retention.preflight` pruning intelligence relationship context
 - `retention.evidence_prune_execution.fixture_proof` fixture-only deletion contract proof
+- planned HS242: `runtime.queue_clock_posture.preview` read-only queue / clock posture
 
 Accepted shape:
 
@@ -83,7 +84,8 @@ Accepted shape:
 
 Current resting state:
 
-- no active Dev runway is open
+- active Dev runway is HS242 queue / clock runtime posture preview
+- planned HS242 should make queue/clock posture inspectable without dispatcher, provider queue, persisted sequencer, provider movement, schema change, runtime enforcement, command blocking, pruning/deletion, support artifacts, or UI work
 - future runtime enforcement now has composed gate-state, service-boundary, pure evaluator, dry adapter, and activation-readiness evidence, but still needs an explicit implementation/design runway before command blocking
 - HS170 accepted the first inactive service-boundary hook: `invokeServiceCommand` now calls a behavior-preserving non-blocking preview hook after eligibility/confirmation and before task wrapping/dispatch, without command blocking, dispatch changes, provider calls, broad fact sourcing, writes, or runtime authorization
 - HS172 accepted the first canonical read-only fact class in that hook: command classification coverage from the existing in-memory coverage map, while preserving supplied facts and not sourcing storage, budget, External I/O, provider/live, Watch/task, DB/config/runtime, or path facts
