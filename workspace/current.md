@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS252 accepted by HS253; HS254 Dev runway open
+Status: HS254 accepted by HS255; no active Dev runway
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: queue/clock no-intent current-work semantics matrix.
+Current focus: resting after queue/clock no-intent current-work semantics acceptance.
 
 Current heading:
 
@@ -20,35 +20,37 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: None
 
-Active Dev runway:
+Latest accepted Dev runway:
 
 ```txt
 workspace/OverseerHS254-queue-clock-no-intent-semantics-matrix-runway.md
 ```
 
-Expected Dev handoff:
+Latest accepted Dev handoff:
 
 ```txt
 workspace/DevHS254-queue-clock-no-intent-semantics-matrix.md
 ```
 
-Dev task:
-
-Prove and, if needed, narrowly correct `runtime.queue_clock_posture.preview` so current work is distinct from provider capability.
-
-Core question:
+Latest Overseer review:
 
 ```txt
-Can the queue/clock preview prove no-intent cases where provider capability exists but no current provider-backed work exists?
+workspace/OverseerHS255-hs254-queue-clock-no-intent-review.md
 ```
 
-Why:
+Status: accepted.
 
-HS252 confirmed a semantic risk: `zkill_discovery.provider_backed_work` can read as current provider-backed work when the actual fact may only be provider capability with no pending Discovery refs, no explicit manual discovery scope, and no due/eligible Watch acquisition intent.
+No active Dev runway is open.
 
-Implement fixture-only/read-only proof first. If ambiguity is proven, make only the smallest readout/count correction needed.
+Accepted result:
+
+```txt
+provider capability exists != current provider-backed work exists
+```
+
+Next useful action: orient and choose the next storage/runtime hardening seam. Do not open Dev work until the next seam is explicit.
 
 Preserve:
 
@@ -72,19 +74,19 @@ Preserve:
 - no pruning/deletion behavior
 - no renderer UI work
 
-Latest accepted advisory request:
+Recent accepted advisory request:
 
 ```txt
 workspace/OverseerHS252-queue-clock-current-work-semantics-review-request.md
 ```
 
-Latest accepted advisory artifact:
+Recent accepted advisory artifact:
 
 ```txt
 workspace/DataEngineeringHS252-queue-clock-current-work-semantics-review.md
 ```
 
-Latest Overseer review:
+Recent advisory acceptance:
 
 ```txt
 workspace/OverseerHS253-hs252-queue-clock-semantics-acceptance.md
@@ -92,7 +94,7 @@ workspace/OverseerHS253-hs252-queue-clock-semantics-acceptance.md
 
 Status: accepted.
 
-HS254 is the active Dev runway.
+HS254 is accepted by HS255.
 
 ## HS254 Acceptance Target
 
@@ -129,6 +131,95 @@ If a new verifier is added:
 node --check scripts\verify-queue-clock-no-intent-semantics.js
 npm.cmd run verify:queue-clock-no-intent
 ```
+
+## HS254 Evidence
+
+Dev updated 2026-06-03:
+
+- Narrowly corrected `runtime.queue_clock_posture.preview` so zKill provider capability is distinct from current provider-backed work.
+- Kept existing `provider_backed_work` field, now coherently equal to current provider-backed work.
+- Added explicit readout fields on lanes:
+  - `current_provider_backed_work`
+  - `provider_capability_available`
+  - `requires_explicit_scope_or_watch_intent`
+  - `manual_discovery_intent`
+  - `watch_acquisition_intent`
+- Added summary fields:
+  - `current_provider_backed_work`
+  - `provider_capability_available_lanes`
+  - `capability_only_lanes`
+- Removed the implicit default manual discovery scope from queue-clock provider-gate input; manual discovery intent is present only when explicit discovery gate input is supplied.
+- Added `scripts/verify-queue-clock-no-intent-semantics.js`.
+- Added `npm.cmd run verify:queue-clock-no-intent`.
+- No-intent semantics matrix covered 8 cases:
+  - empty DB / no Watch / no manual discovery scope
+  - no pending refs and no explicit manual or Watch acquisition intent
+  - explicit manual discovery scope
+  - pending/failed Discovery refs
+  - due/eligible Watch acquisition intent with valid scope
+  - not-due, inactive, missing, or malformed Watch acquisition posture
+  - Watch/background Hydration demand without Watch acquisition intent
+  - summary current-work counts exclude capability-only posture
+- Matrix sample output:
+  - status: `queue clock no-intent semantics verified`
+  - required cases covered: 8
+  - `provider_backed_work_means`: `current_provider_backed_work`
+  - `provider_capability_available_is_counted_as_current_work`: false
+  - `manual_discovery_intent_requires_explicit_scope`: true
+  - `watch_acquisition_intent_distinct_from_hydration`: true
+- Populated queue-clock verifier still passes and reports:
+  - lanes: 4
+  - provider-backed work: 7
+  - current provider-backed work: 7
+  - provider capability available lanes: 4
+  - capability-only lanes: 1
+  - pending Discovery refs possible leads: 3
+  - ESI expansion candidates from local refs: 3
+  - Hydration candidates: 4
+  - preview authorizes execution: false
+- Verification run:
+  - `node --check src\main\services\queueClockPostureService.js` passed.
+  - `node --check scripts\verify-queue-clock-posture-preview.js` passed.
+  - `node --check scripts\verify-queue-clock-no-intent-semantics.js` passed.
+  - `npm.cmd run verify:queue-clock-no-intent` passed.
+  - `npm.cmd run verify:queue-clock-posture` passed.
+  - `npm.cmd run verify:patient-packet-identity-sparse` passed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS254 working-tree changes.
+- Boundaries preserved:
+  - no packet table
+  - no persisted queue
+  - no active dispatcher
+  - no provider calls
+  - no zKill Discovery execution
+  - no ESI Evidence Expansion execution
+  - no Hydration execution
+  - no Hydration writes
+  - no Evidence/EVEidence writes
+  - no Discovery ref mutation
+  - no Watch mutation or arming
+  - no Assessment Memory or Marked mutation
+  - no storage config write or movement
+  - no support artifact creation
+  - no schema changes
+  - no runtime enforcement activation
+  - no command blocking
+  - no pruning/deletion behavior
+  - no renderer UI work
+
+## HS254 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS254-queue-clock-no-intent-semantics-matrix.md
+```
+
+Status: queue/clock no-intent current-work semantics matrix complete; accepted by HS255.
+
+HS254 result:
+
+- Atlas now distinguishes provider capability from current provider-backed work in `runtime.queue_clock_posture.preview`. Empty/no-intent zKill posture shows capability only, explicit manual discovery scope and due valid Watch acquisition intent count as current work, pending Discovery refs remain preferred local work, and Watch/background Hydration demand remains separate from Watch acquisition intent.
 
 ## HS250 Evidence
 

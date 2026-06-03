@@ -107,6 +107,7 @@ Current state:
 - HS252 advisory opened
 - HS252 accepted by HS253
 - HS254 opened
+- HS254 accepted by HS255
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -123,16 +124,17 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS254-queue-clock-no-intent-semantics-matrix-runway.md`
-- expected Dev handoff is `workspace/DevHS254-queue-clock-no-intent-semantics-matrix.md`
+- current executor is none
+- no active Dev runway is open
+- latest accepted Dev runway is `workspace/OverseerHS254-queue-clock-no-intent-semantics-matrix-runway.md`
+- latest accepted Dev handoff is `workspace/DevHS254-queue-clock-no-intent-semantics-matrix.md`
 - latest accepted advisory request is `workspace/OverseerHS252-queue-clock-current-work-semantics-review-request.md`
 - latest accepted advisory artifact is `workspace/DataEngineeringHS252-queue-clock-current-work-semantics-review.md`
-- latest Overseer review is `workspace/OverseerHS253-hs252-queue-clock-semantics-acceptance.md`
+- latest Overseer review is `workspace/OverseerHS255-hs254-queue-clock-no-intent-review.md`
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is queue/clock no-intent current-work semantics matrix
+- current work is resting after queue/clock no-intent current-work semantics acceptance
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -146,12 +148,12 @@ Current heading:
 - one hardening seam at a time
 - Atlas project root remains the anchor
 
-Active Dev packet:
+Active state:
 
-1. `workspace/OverseerHS254-queue-clock-no-intent-semantics-matrix-runway.md`
-2. Prove no-intent queue/clock cases where provider capability exists but current provider-backed work does not.
-3. Keep the packet fixture-only/read-only; narrow service readout/count correction only if the verifier proves ambiguity.
-4. No provider calls, dispatch, schema, persistence, runtime enforcement, support artifact creation, pruning/deletion, or UI work.
+1. HS254 is accepted by `workspace/OverseerHS255-hs254-queue-clock-no-intent-review.md`.
+2. No active Dev runway is open.
+3. Queue/clock preview now distinguishes provider capability from current provider-backed work.
+4. Next useful action is orientation and selecting the next storage/runtime hardening seam.
 
 See `workspace/current.md` for current truth.
 
@@ -287,6 +289,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS252 opened queue/clock current-work semantics advisory: review whether zKill Discovery provider-backed work is clear as current work versus provider capability/intent before any further queue/clock implementation.
 - HS252/HS253 accepted the advisory: the preview is safe, but provider capability must not inflate current provider-backed work semantics.
 - HS254 opened queue/clock no-intent semantics matrix: prove capability-only, absent manual intent, Watch acquisition intent, and Hydration demand boundaries before future dispatcher/enforcement/UI work can inherit the readout.
+- HS254/HS255 accepted queue/clock no-intent semantics: `runtime.queue_clock_posture.preview` now keeps provider capability separate from current provider-backed work, distinguishes explicit manual discovery intent, Watch acquisition intent, and Watch/background Hydration demand, and preserves read-only/no-dispatch boundaries.
 
 ## Accepted Boundaries
 

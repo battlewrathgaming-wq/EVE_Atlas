@@ -192,6 +192,13 @@ function buildClockLanes({ discovery, watchOffline, hydrationCandidates, hydrati
   const providerNeededHydration = hydrationCandidates.summary?.provider_needed_candidates || 0;
   const localHydration = hydrationCandidates.summary?.known_or_stale_local_label_candidates || 0;
   const sdeLocal = hydrationCandidates.summary?.local_sde_gap_candidates || 0;
+  const manualDiscoveryIntent = manualDiscoveryIntentFor(input);
+  const watchAcquisitionIntent = watchAcquisitionIntentFor(watchOffline);
+  const zkillCurrentProviderWork = zkillDiscoveryCurrentProviderWork({
+    discovery,
+    manualDiscoveryIntent,
+    watchAcquisitionIntent
+  });
 
   return {
     zkill_discovery: providerLane({
@@ -201,11 +208,16 @@ function buildClockLanes({ discovery, watchOffline, hydrationCandidates, hydrati
       actionClass: 'zkill_discovery',
       providerAction: 'manual.discovery',
       localWorkCount: discovery.pending_or_failed_refs,
-      providerWorkCount: discovery.pending_or_failed_refs > 0 ? 0 : 1,
+      providerWorkCount: zkillCurrentProviderWork,
       preferredLocalAction: discovery.pending_or_failed_refs > 0 ? 'drain_pending_discovery_refs_first' : null,
       localOnlyWork: discovery.pending_or_failed_refs > 0
         ? 'existing Discovery refs available as possible leads before fresh zKill Discovery'
         : 'no pending Discovery refs found',
+      providerCapabilityAvailable: true,
+      requiresExplicitScopeOrWatchIntent: zkillCurrentProviderWork === 0 && discovery.pending_or_failed_refs === 0,
+      manualDiscoveryIntent,
+      watchAcquisitionIntent,
+      noCurrentWorkAction: 'wait_for_explicit_manual_scope_or_watch_intent',
       storage,
       externalIo,
       providerGate: zkillGate,
@@ -271,6 +283,11 @@ function providerLane({
   providerAction,
   localWorkCount,
   providerWorkCount,
+  providerCapabilityAvailable = false,
+  requiresExplicitScopeOrWatchIntent = false,
+  manualDiscoveryIntent = null,
+  watchAcquisitionIntent = null,
+  noCurrentWorkAction = null,
   preferredLocalAction,
   localOnlyWork,
   storage,
@@ -294,7 +311,8 @@ function providerLane({
     providerGate,
     providerWorkCount,
     watchOffline,
-    preferredLocalAction
+    preferredLocalAction,
+    noCurrentWorkAction
   });
 
   return {
@@ -305,6 +323,11 @@ function providerLane({
     storage_action_class: actionClass,
     local_only_available_work: Number(localWorkCount || 0),
     provider_backed_work: Number(providerWorkCount || 0),
+    current_provider_backed_work: Number(providerWorkCount || 0),
+    provider_capability_available: providerCapabilityAvailable === true || Number(providerWorkCount || 0) > 0,
+    requires_explicit_scope_or_watch_intent: requiresExplicitScopeOrWatchIntent === true,
+    manual_discovery_intent: manualDiscoveryIntent,
+    watch_acquisition_intent: watchAcquisitionIntent,
     posture: posture.state,
     next_safe_action: posture.nextSafeAction,
     reason_codes: posture.reasonCodes,
@@ -344,6 +367,9 @@ function providerLane({
     } : null,
     basis: [
       localOnlyWork,
+      providerCapabilityAvailable === true && Number(providerWorkCount || 0) === 0
+        ? 'provider capability is visible but is not counted as current provider-backed work without explicit manual scope or Watch acquisition intent'
+        : null,
       `storage/action posture comes from storage.setup_gate_readout action_class_matrix.${actionClass}`,
       `External I/O posture comes from external_io.state_config_readback (${externalIo.state || 'off'})`,
       'provider cadence is read-only live.gate posture; allowed/waiting is not runtime authorization',
@@ -353,7 +379,7 @@ function providerLane({
   };
 }
 
-function lanePosture({ storageDecision = {}, storageState, budgetState, externalIoPosture, providerGate = {}, providerWorkCount, watchOffline, preferredLocalAction }) {
+function lanePosture({ storageDecision = {}, storageState, budgetState, externalIoPosture, providerGate = {}, providerWorkCount, watchOffline, preferredLocalAction, noCurrentWorkAction }) {
   const reasonCodes = new Set([
     `storage_state:${storageState || 'unknown'}`,
     `budget_state:${budgetState || 'unknown'}`
@@ -399,7 +425,7 @@ function lanePosture({ storageDecision = {}, storageState, budgetState, external
     return posture('provider_backed_waiting_normal_gate', preferredLocalAction || 'wait_for_explicit_execution_path', reasonCodes);
   }
   reasonCodes.add('no_current_provider_work');
-  return posture('no_current_work', preferredLocalAction || 'nothing_to_dispatch', reasonCodes);
+  return posture('no_current_work', noCurrentWorkAction || preferredLocalAction || 'nothing_to_dispatch', reasonCodes);
 }
 
 function posture(state, nextSafeAction, reasonCodes) {
@@ -544,7 +570,7 @@ function safeProviderGate(action, input, context) {
 
 function providerInput(action, input) {
   if (action === 'manual.discovery') {
-    return input.discoveryGateInput || input.discovery_gate_input || { scope: 'actor', maxRefs: 1 };
+    return input.discoveryGateInput || input.discovery_gate_input || {};
   }
   return {};
 }
@@ -635,6 +661,9 @@ function summarizeLanes(lanes, discovery, watchOffline, hydrationCandidates) {
     lanes: values.length,
     local_only_available_work: values.reduce((sum, lane) => sum + lane.local_only_available_work, 0),
     provider_backed_work: values.reduce((sum, lane) => sum + lane.provider_backed_work, 0),
+    current_provider_backed_work: values.reduce((sum, lane) => sum + lane.current_provider_backed_work, 0),
+    provider_capability_available_lanes: values.filter((lane) => lane.provider_capability_available).length,
+    capability_only_lanes: values.filter((lane) => lane.provider_capability_available && lane.current_provider_backed_work === 0).length,
     held_by_external_io: values.filter((lane) => lane.posture === 'held_by_external_io').length,
     waiting_or_deferred: values.filter((lane) => lane.posture.includes('waiting') || lane.posture.includes('held')).length,
     storage_or_budget_blocked: values.filter((lane) => ['storage_setup_blocked', 'budget_hard_stop'].includes(lane.posture)).length,
@@ -645,6 +674,90 @@ function summarizeLanes(lanes, discovery, watchOffline, hydrationCandidates) {
     watch_configured: watchOffline.summary?.configured_watches || 0,
     preview_authorizes_execution: false
   };
+}
+
+function manualDiscoveryIntentFor(input = {}) {
+  const explicit = input.discoveryGateInput || input.discovery_gate_input || null;
+  if (!explicit || typeof explicit !== 'object') {
+    return {
+      state: 'absent',
+      current_provider_backed_work: 0,
+      explicit_scope_required: true,
+      source: 'no_explicit_manual_discovery_scope'
+    };
+  }
+  const scope = String(explicit.scope || '').trim().toLowerCase();
+  const hasTarget = Boolean(
+    explicit.entityId || explicit.entity_id || explicit.entityName || explicit.entity_name ||
+    explicit.centerSystemId || explicit.center_system_id || explicit.centerSystemName || explicit.center_system_name
+  );
+  const present = Boolean(scope && hasTarget);
+  return {
+    state: present ? 'present' : 'incomplete',
+    current_provider_backed_work: present ? 1 : 0,
+    explicit_scope_required: !present,
+    source: 'explicit_discovery_gate_input',
+    scope: scope || null
+  };
+}
+
+function watchAcquisitionIntentFor(watchOffline = {}) {
+  const watches = watchOffline.watches || [];
+  const candidates = watches.map(watchAcquisitionCandidate).filter(Boolean);
+  const current = candidates.filter((candidate) => candidate.current_provider_backed_work > 0);
+  const malformedOrMissing = candidates.filter((candidate) => ['missing_scope', 'malformed_scope'].includes(candidate.state));
+  const waiting = candidates.filter((candidate) => candidate.state === 'waiting');
+  return {
+    state: current.length ? 'present' : candidates.length ? 'not_current' : 'absent',
+    current_provider_backed_work: current.length,
+    provider_capability_available: watches.length > 0,
+    due_or_eligible_valid_scope: current.length,
+    waiting_count: waiting.length,
+    missing_or_malformed_scope_count: malformedOrMissing.length,
+    candidates: candidates.slice(0, 8),
+    source: 'watch_offline_readout'
+  };
+}
+
+function watchAcquisitionCandidate(watch = {}) {
+  if (!['actor', 'system_radius'].includes(watch.watch_type)) {
+    return null;
+  }
+  const scope = watch.recovery?.reconstructed_scope || null;
+  const scopeStatus = watch.watch_type === 'actor' ? 'valid' : scope?.scope_status || 'unknown';
+  if (scopeStatus === 'malformed') {
+    return watchAcquisitionCandidateRow(watch, 'malformed_scope', 0, scopeStatus);
+  }
+  if (scopeStatus === 'not_stored' || scopeStatus === 'unknown') {
+    return watchAcquisitionCandidateRow(watch, 'missing_scope', 0, scopeStatus);
+  }
+  const waiting = (watch.blocked_reasons || []).some((reason) => ['not_due', 'backoff', 'inactive'].includes(reason));
+  if (waiting || watch.time_eligible !== true) {
+    return watchAcquisitionCandidateRow(watch, 'waiting', 0, scopeStatus);
+  }
+  return watchAcquisitionCandidateRow(watch, 'current_intent', 1, scopeStatus);
+}
+
+function watchAcquisitionCandidateRow(watch, state, currentProviderBackedWork, scopeStatus) {
+  return {
+    watch_type: watch.watch_type,
+    watch_id: watch.watch_id,
+    state,
+    current_provider_backed_work: currentProviderBackedWork,
+    scope_status: scopeStatus,
+    time_eligible: watch.time_eligible === true,
+    eligible_if_armed: watch.eligible_if_armed === true,
+    blocked_reasons: watch.blocked_reasons || [],
+    next_safe_action: watch.next_safe_action || null
+  };
+}
+
+function zkillDiscoveryCurrentProviderWork({ discovery, manualDiscoveryIntent, watchAcquisitionIntent }) {
+  if (discovery.pending_or_failed_refs > 0) {
+    return 0;
+  }
+  return (manualDiscoveryIntent.current_provider_backed_work || 0) +
+    (watchAcquisitionIntent.current_provider_backed_work || 0);
 }
 
 function nextSafeActions(lanes) {
