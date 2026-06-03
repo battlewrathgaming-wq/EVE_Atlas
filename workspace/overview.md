@@ -104,6 +104,7 @@ Current state:
 - HS248 accepted by HS249
 - HS250 opened
 - HS250 accepted by HS251
+- HS252 advisory opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -120,15 +121,17 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer
+- current executor is Data Engineering / Engineering Review
 - no active Dev runway is open
+- active advisory request is `workspace/OverseerHS252-queue-clock-current-work-semantics-review-request.md`
+- expected advisory artifact is `workspace/DataEngineeringHS252-queue-clock-current-work-semantics-review.md`
 - latest accepted Dev runway is `workspace/OverseerHS250-patient-packet-identity-sparse-gap-matrix-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS250-patient-packet-identity-sparse-gap-matrix.md`
 - latest Overseer review is `workspace/OverseerHS251-hs250-sparse-gap-matrix-review.md`
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is resting after patient packet identity sparse gap matrix acceptance
+- current work is advisory review of queue/clock current-work semantics
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -142,12 +145,12 @@ Current heading:
 - one hardening seam at a time
 - Atlas project root remains the anchor
 
-Resting next candidates:
+Active advisory packet:
 
-1. Rest patient packet identity and continue another storage/runtime seam.
-2. Review queue/clock posture output for the next mechanical gap.
-3. If provider-backed execution becomes the next focus, seek Data Engineering input before opening Dev.
-4. Keep active dispatch, provider movement, schema-backed queues, runtime enforcement activation, command blocking, pruning/deletion execution, support artifacts for packet state, and UI parked.
+1. `workspace/OverseerHS252-queue-clock-current-work-semantics-review-request.md`
+2. Review whether `runtime.queue_clock_posture.preview` clearly separates current work from provider capability and explicit acquisition intent.
+3. Decide whether a sparse/no-intent queue-clock matrix or small wording/service correction is needed.
+4. No Dev runway is open.
 
 See `workspace/current.md` for current truth.
 
@@ -280,6 +283,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS248/HS249 accepted real-data gap review: patient packet identity can remain derived/read-only; the gap is verification coverage, not architecture.
 - HS250 opened sparse gap matrix runway: extend fixture-only/read-only verifier coverage for empty, malformed, missing-hash, failed-ref, cached, no-candidate, missing-anchor, local-SDE-gap, provider-needed, and mixed Hydration lane cases.
 - HS250/HS251 accepted sparse gap matrix: `runtime.patient_packet_identity.preview` now discloses row confidence, identity gaps, uncomputable rows, malformed/missing radius scope, cached Evidence skip posture, and sparse Hydration fixture coverage without persistence, dispatch, provider calls, writes, enforcement, support artifacts, pruning/deletion, or UI.
+- HS252 opened queue/clock current-work semantics advisory: review whether zKill Discovery provider-backed work is clear as current work versus provider capability/intent before any further queue/clock implementation.
 
 ## Accepted Boundaries
 

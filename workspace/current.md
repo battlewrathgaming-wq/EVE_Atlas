@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS250 accepted by HS251; no active Dev runway
+Status: HS252 queue/clock current-work semantics advisory request open
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after patient packet identity sparse gap matrix acceptance.
+Current focus: advisory review of queue/clock current-work semantics.
 
 Current heading:
 
@@ -20,44 +20,35 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Data Engineering / Engineering Review
 
-Latest accepted Dev runway:
-
-```txt
-workspace/OverseerHS250-patient-packet-identity-sparse-gap-matrix-runway.md
-```
-
-Latest accepted Dev handoff:
+Active advisory request:
 
 ```txt
-workspace/DevHS250-patient-packet-identity-sparse-gap-matrix.md
+workspace/OverseerHS252-queue-clock-current-work-semantics-review-request.md
 ```
 
-Accepted task:
+Expected advisory artifact:
 
-Extend proof coverage for `runtime.patient_packet_identity.preview` across sparse and imperfect local states.
+```txt
+workspace/DataEngineeringHS252-queue-clock-current-work-semantics-review.md
+```
 
-HS248/HS249 accepted that patient packet identity can remain derived/read-only for now. The missing piece is coverage, not architecture. This packet should add a fixture-only/read-only sparse gap matrix verifier and make the service disclose false confidence if the matrix exposes any gap.
+Advisory task:
 
-Preferred path:
+Review `runtime.queue_clock_posture.preview` for current-work semantics after HS250/HS251.
 
-- extend `scripts/verify-patient-packet-identity-preview.js`, or
-- add a focused companion verifier if that keeps the test readable.
+Core question:
 
-Required matrix cases:
+```txt
+Should queue/clock distinguish current local work, current provider-backed work with explicit scope/intent, provider capability available but no current work, Watch acquisition intent, and manual discovery intent?
+```
 
-- empty DB / no Watch / no Discovery refs / no Hydration candidates
-- system/radius Watch with valid scope
-- system/radius Watch with missing stored included/excluded scope
-- system/radius Watch with malformed included or excluded scope
-- pending Discovery ref without `killmail_hash`
-- failed Discovery ref with valid hash
-- already-cached Evidence/EVEidence matching a Discovery ref
-- no Hydration candidates
-- Hydration candidate missing source anchors
-- local SDE gap candidate versus provider-needed entity label
-- mixed view/local-record and Watch/background Hydration lanes
+Why:
+
+`runtime.queue_clock_posture.preview` currently can show zKill Discovery provider-backed work when there are no pending Discovery refs. That may be fine as provider capability, but may be misleading if it reads as current work without explicit manual scope or Watch acquisition intent.
+
+This is advisory only. Do not implement code. Do not create a Dev runway. Do not run live/API/provider calls.
 
 Preserve:
 
@@ -81,6 +72,18 @@ Preserve:
 - no pruning/deletion behavior
 - no renderer UI work
 
+Latest accepted Dev runway:
+
+```txt
+workspace/OverseerHS250-patient-packet-identity-sparse-gap-matrix-runway.md
+```
+
+Latest accepted Dev handoff:
+
+```txt
+workspace/DevHS250-patient-packet-identity-sparse-gap-matrix.md
+```
+
 Latest Overseer review:
 
 ```txt
@@ -89,7 +92,7 @@ workspace/OverseerHS251-hs250-sparse-gap-matrix-review.md
 
 Status: accepted.
 
-No active Dev runway is open.
+No active Dev runway is open. HS252 is advisory review only.
 
 ## HS250 Evidence
 
