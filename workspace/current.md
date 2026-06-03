@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS230 accepted by HS231; no active Dev runway
+Status: HS232 active Dev runway
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after real-local SDE topology import/rewrite conformance.
+Current focus: real-local SDE inventory/type import/rewrite conformance.
 
 Current heading:
 
@@ -20,7 +20,7 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Dev
 
 Latest accepted handoff:
 
@@ -34,7 +34,17 @@ Latest Overseer review:
 workspace/OverseerHS231-hs230-real-local-sde-topology-conformance-review.md
 ```
 
-No active Dev runway is open.
+Active Dev runway:
+
+```txt
+workspace/OverseerHS232-real-local-sde-inventory-import-conformance-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS232-real-local-sde-inventory-import-conformance.md
+```
 
 ## Resting State
 
@@ -54,9 +64,72 @@ Accepted 2026-06-03:
 
 Likely next shaping candidates:
 
-1. Open inventory real-local conformance for `sde.import.inventory`, using HS226 as the basis.
-2. Pause for an advisory/safety pass before inventory conformance if desired.
+1. Review DevHS232 and decide whether real-local inventory conformance is accepted.
+2. If accepted, decide whether local SDE import mechanics can rest or whether another advisory pass is needed before any combined/importer UX/download/support-artifact seam.
 3. Keep combined SDE behavior, provider-backed `sde.build-lookups`, support artifacts, runtime enforcement, pruning/deletion, and UI work parked.
+
+## Active HS232 Runway
+
+Opened 2026-06-03:
+
+- `workspace/OverseerHS232-real-local-sde-inventory-import-conformance-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS232-real-local-sde-inventory-import-conformance.md
+```
+
+Task:
+
+Harden the real-local SDE inventory/type import/rewrite path so it conforms to the accepted HS226 authority and recovery model.
+
+Preferred focus:
+
+- existing `sde.import.inventory` / real inventory importer path
+- `src/main/sde/sdeInventoryImporter.js`
+- `src/main/services/mutatingActionService.js`
+
+Required outcome:
+
+- renderer source paths are not authority for operator mutation
+- trusted local inventory source authority is required before mutation
+- remote source references are rejected for local inventory import
+- selected storage and explicit budget are checked before mutation
+- projected source/temp/cache/staged/DB/WAL-SHM growth is represented before mutation
+- inventory/type rows are staged before promotion
+- staged inventory/type completeness is validated before promotion
+- promotion is transactional
+- provenance is inserted only after complete promotion
+- failed import preserves previous visible inventory/type readiness
+- failed import does not write success provenance
+- staged/temp material cleanup is represented
+- retry/rerun is explicit and not automatic
+
+Preserve:
+
+- no topology import behavior changes
+- no combined topology + inventory orchestration
+- no provider-backed `sde.build-lookups`
+- no SDE download
+- no real operator source path inspection in verification
+- no real operator lookup-table mutation in verification
+- no storage movement
+- no real operator config write
+- no support artifact creation
+- no provider calls
+- no Hydration writes
+- no Evidence/EVEidence writes
+- no Discovery ref mutation
+- no Watch mutation
+- no Assessment Memory or Marked mutation
+- no renderer UI/source picker work
+- no pruning/deletion behavior
+- no runtime enforcement activation
+- no command blocking
+- no schema changes unless returned to Overseer first
+
+Stop if this requires schema changes, topology import behavior changes, combined topology + inventory behavior, provider-backed SDE download/build, real operator source path inspection, real operator lookup-table mutation in verification, UI/source picker work, support artifact creation, runtime enforcement, command blocking, storage movement, destructive/private/live action, or policy decisions not already accepted.
 
 ## Active HS230 Runway
 
