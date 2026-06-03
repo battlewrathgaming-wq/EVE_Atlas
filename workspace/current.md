@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS229 active advisory request
+Status: HS230 active Dev runway
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: post-proof readiness review before any real operator SDE import/rewrite.
+Current focus: real-local SDE topology import/rewrite conformance.
 
 Current heading:
 
@@ -20,15 +20,103 @@ Current heading:
 
 ## Executor
 
-Current executor: Engineering / Security
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-workspace/EngineeringSecurityHS229-sde-post-proof-readiness-advisory.md
+workspace/DevHS230-real-local-sde-topology-import-conformance.md
 ```
 
-## Active HS229 Advisory Request
+## Active HS230 Runway
+
+Opened 2026-06-03:
+
+- `workspace/OverseerHS230-real-local-sde-topology-import-conformance-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS230-real-local-sde-topology-import-conformance.md
+```
+
+Task:
+
+Harden the real-local SDE topology import/rewrite path so it conforms to the accepted HS224 authority and recovery model.
+
+Preferred focus:
+
+- existing `sde.import.topology` / real topology importer path
+- `src/main/sde/sdeImporter.js`
+- `src/main/services/mutatingActionService.js`
+
+Required outcome:
+
+- renderer source paths are not authority for operator mutation
+- trusted local source authority is required before mutation
+- remote source references are rejected for local topology import
+- selected storage and explicit budget are checked before mutation
+- projected source/temp/cache/staged/DB/WAL-SHM growth is represented before mutation
+- topology rows are staged before promotion
+- staged topology completeness is validated before promotion
+- promotion is transactional
+- provenance is inserted only after complete promotion
+- failed import preserves previous visible topology readiness
+- failed import does not write success provenance
+- staged/temp material cleanup is represented
+- retry/rerun is explicit and not automatic
+
+Preserve:
+
+- no inventory import behavior changes
+- no combined topology + inventory orchestration
+- no provider-backed `sde.build-lookups`
+- no SDE download
+- no real operator source path inspection in verification
+- no real operator lookup-table mutation in verification
+- no storage movement
+- no real operator config write
+- no support artifact creation
+- no provider calls
+- no Hydration writes
+- no Evidence/EVEidence writes
+- no Discovery ref mutation
+- no Watch mutation
+- no Assessment Memory or Marked mutation
+- no renderer UI/source picker work
+- no pruning/deletion behavior
+- no runtime enforcement activation
+- no command blocking
+- no schema changes unless returned to Overseer first
+
+Stop if this requires schema changes, inventory import behavior changes, combined topology + inventory behavior, provider-backed SDE download/build, real operator source path inspection, real operator lookup-table mutation in verification, UI/source picker work, support artifact creation, runtime enforcement, command blocking, storage movement, destructive/private/live action, or policy decisions not already accepted.
+
+## HS229 Advisory Acceptance
+
+Accepted 2026-06-03:
+
+- `workspace/EngineeringSecurityHS229-sde-post-proof-readiness-advisory.md`
+
+Decision:
+
+- Advisory accepted as shaping input for HS230.
+- Atlas is ready to open a topology-only real-local implementation conformance runway.
+- Atlas is not ready to execute real operator SDE import/rewrite as-is.
+- No additional fixture/offline authority proof is needed before topology-only conformance.
+- The next missing evidence is a real-path verifier proving the topology service/import path follows HS224 semantics against controlled fixture/test DB state.
+
+Accepted recommendations:
+
+- topology first
+- inventory remains parked until topology real-local behavior is accepted
+- combined topology + inventory behavior remains parked
+- provider-backed `sde.build-lookups` remains parked
+- support artifact creation around SDE failure remains parked
+- runtime enforcement and command blocking remain parked
+- selected storage should be required for the first real topology rewrite unless Human/Overseer explicitly accepts app-local fallback risk
+- staged/shadow-table promotion is preferred and treated as mandatory for the first conformance runway
+
+## Resting HS229 Advisory Request
 
 Opened 2026-06-03:
 
@@ -40,42 +128,7 @@ Expected advisory artifact:
 workspace/EngineeringSecurityHS229-sde-post-proof-readiness-advisory.md
 ```
 
-Task:
-
-Review whether the accepted topology and inventory fixture/offline authority proofs are enough to consider a real operator SDE import/rewrite runway, or whether another proof/review is needed first.
-
-Answer:
-
-- whether real operator local SDE import/rewrite is ready
-- if not ready, smallest missing proof
-- if ready, smallest safe Dev runway
-- required source path authority
-- required storage/budget authority
-- required recovery model
-- whether topology and inventory should remain separate
-- provider-backed download/build disposition
-- support artifact disposition
-- runtime enforcement disposition
-- verification commands/evidence expected
-- parked items
-- Human/Overseer decisions needed
-
-Preserve:
-
-- no code implementation
-- no Dev runway
-- no real SDE import
-- no SDE download
-- no lookup-table rewrite
-- no real operator source path inspection
-- no storage movement
-- no config writes
-- no support artifact creation
-- no provider calls
-- no schema changes
-- no term renames
-
-Stop if the review requires live/private/destructive action, real operator source path inspection, SDE download/import, lookup-table rewrite, storage movement, schema changes, or Dev implementation.
+Status: advisory complete and accepted into HS230.
 
 ## Resting HS226 Runway
 
