@@ -88,6 +88,7 @@ Current state:
 - HS232 accepted by HS233
 - HS234 advisory consolidation opened
 - HS234 accepted by HS235
+- HS236 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -104,9 +105,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer
-- no active Dev runway is open
-- current work is resting after HS234 SDE real-local consolidation advisory was accepted by HS235
+- current executor is Dev
+- active Dev runway is HS236 pruning intelligence preview
+- current work is read-only pruning/deletion preflight hardening after HS234 SDE real-local consolidation advisory was accepted by HS235
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -120,12 +121,15 @@ Current heading:
 - one hardening seam at a time
 - Atlas project root remains the anchor
 
-Likely next shaping candidates:
+Active shaping candidate:
 
-1. Rest SDE movement and return to another storage/runtime seam.
-2. If Human/Overseer wants to keep SDE active, open only a narrow source-disappears-after-authority proof.
-3. Decide whether old developer scripts and `sde.build-lookups` need explicit labeling/quarantine before any operator-facing SDE work.
-4. Keep provider-backed Hydration execution, persisted Hydration queues, active runtime enforcement, and UI work parked until Human/Overseer explicitly decides to continue those lines.
+1. HS236 read-only pruning intelligence preview: extend `retention.preflight` context groups for future pruning review without deletion execution, schema changes, support artifact cleanup, runtime enforcement, provider calls, or UI work.
+
+Resting candidates:
+
+1. If Human/Overseer wants to return to SDE, open only a narrow source-disappears-after-authority proof.
+2. Decide whether old developer scripts and `sde.build-lookups` need explicit labeling/quarantine before any operator-facing SDE work.
+3. Keep provider-backed Hydration execution, persisted Hydration queues, active runtime enforcement, deletion execution, and UI work parked until Human/Overseer explicitly decides to continue those lines.
 
 See `workspace/current.md` for current truth.
 
@@ -242,6 +246,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS229 opened SDE post-proof readiness advisory: Engineering/Security should assess whether HS224 and HS226 are enough to consider real operator local SDE import/rewrite, or whether another proof/review is needed first.
 - HS229 accepted into HS230: Engineering/Security recommended a topology-only real-local implementation conformance runway, not another abstract proof and not real import execution as-is.
 - HS230 opened real-local SDE topology import conformance: harden the topology service/import path to match HS224 staged authority/recovery semantics under fixture verification before any real operator SDE movement.
+- HS236 opened read-only pruning intelligence preview: harden `retention.preflight` relationship/context output so Atlas can see what future pruning would affect before any deletion execution exists.
 
 ## Accepted Boundaries
 

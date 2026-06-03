@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS234 accepted by HS235; no active Dev runway
+Status: HS236 open; Dev runway active
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after SDE real-local consolidation advisory.
+Current focus: read-only pruning intelligence preview.
 
 Current heading:
 
@@ -20,7 +20,43 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Dev
+
+Active Dev runway:
+
+```txt
+workspace/OverseerHS236-pruning-intelligence-preview-runway.md
+```
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS236-pruning-intelligence-preview.md
+```
+
+Task:
+
+Extend the existing read-only `retention.preflight` output for `evidence.prune_scope` so Atlas can preview what a future prune would affect across Evidence/EVEidence, derived activity rows, ingestion audits, warnings, Discovery refs/provenance, Assessment Memory references, provenance/log summaries, and support-artifact disclosure.
+
+Preserve:
+
+- no destructive pruning execution
+- no new delete/prune/expire command
+- no Evidence/EVEidence mutation
+- no Discovery ref mutation
+- no Assessment Memory creation/mutation/deletion
+- no Watch or Marked mutation
+- no provider calls
+- no Hydration writes
+- no support artifact creation/deletion/cleanup
+- no storage movement
+- no schema changes unless returned to Overseer first
+- no runtime enforcement activation
+- no command blocking
+- no renderer UI work
+- no retained deletion footprint
+
+Stop if this requires destructive deletion/pruning behavior, schema migration, first-class Marked/no-interest policy, support artifact cleanup, snapshot restore/delete behavior, provenance redaction/rewrite/recompute policy, live/private/provider calls, runtime command blocking, or UI/product decisions not already accepted.
 
 Latest accepted handoff:
 
