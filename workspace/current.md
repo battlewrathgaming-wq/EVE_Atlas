@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS244 data-engineering advisory request open
+Status: HS244 accepted by HS245; no active Dev runway
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: patient packet identity and durable unit-of-work advisory.
+Current focus: resting after patient packet identity advisory acceptance.
 
 Current heading:
 
@@ -20,7 +20,7 @@ Current heading:
 
 ## Executor
 
-Current executor: Data Engineering / Data Analyst
+Current executor: Overseer
 
 Latest accepted Dev runway:
 
@@ -100,36 +100,52 @@ workspace/OverseerHS243-hs242-queue-clock-posture-review.md
 
 No active Dev runway is open.
 
-Active advisory request:
+Latest accepted advisory request:
 
 ```txt
 workspace/OverseerHS244-patient-packet-identity-data-engineering-request.md
 ```
 
-Expected advisory artifact:
+Latest accepted advisory artifact:
 
 ```txt
 workspace/DataEngineeringHS244-patient-packet-identity-boundaries.md
 ```
 
-Advisory purpose:
-
-- Review what HS242 implies for future patient provider packets.
-- Decide what can remain derived/read-only and what might later need durable persistence.
-- Recommend Acquisition and Hydration packet identity boundaries without implementing code, schema, dispatcher, provider calls, runtime enforcement, or UI.
-
-Key question:
+Latest Overseer review:
 
 ```txt
-What is the smallest practical durable unit of work, if any, for future patient packets?
+workspace/OverseerHS245-hs244-patient-packet-identity-review.md
 ```
 
-Do not open Dev implementation until this advisory is reviewed and accepted by Human/Overseer.
+Accepted advisory result:
 
-Resting next candidates after advisory:
+- Do not create a broad provider work queue yet.
+- Do not turn `runtime.queue_clock_posture.preview` into architecture authority.
+- Keep most patient packet posture derived/read-only from existing local facts for now.
+- If durable movement state is later needed, use lane-specific identity:
+  - Watch/scope/cadence identity for zKill Discovery
+  - Discovery ref identity for ESI Evidence Expansion
+  - Hydration candidate key + lane + basis policy for Hydration
+- Do not collapse Acquisition and Hydration into one generic provider packet unless a later proof shows that shared persistence is necessary.
 
-1. Accept advisory and open a bounded read-only Dev proof if one is recommended.
-2. Keep patient packet identity as design context and continue another runtime/storage seam.
+No active Dev runway is open.
+
+Best next candidate if this line continues:
+
+```txt
+read-only patient packet identity conformance preview
+```
+
+Purpose:
+
+- Map current derived posture into proposed lane-specific identity shapes.
+- Do not create tables, queues, dispatcher behavior, provider calls, writes, runtime enforcement, support artifacts, or UI.
+
+Resting next candidates:
+
+1. Open the optional read-only patient packet identity conformance preview.
+2. Keep patient packet identity as accepted design context and continue another runtime/storage seam.
 3. Rest system hardening briefly and review the new queue/clock posture output for gaps.
 4. Keep active dispatcher, schema-backed provider queues, persisted sequencer state, provider-backed Hydration execution, active runtime enforcement, real deletion execution, and UI work parked until Human/Overseer explicitly chooses and bounds those lines.
 

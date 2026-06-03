@@ -86,7 +86,7 @@ Accepted shape:
 Current resting state:
 
 - no active Dev runway is open
-- HS244 advisory is open to review patient packet identity and durable unit-of-work boundaries before any dispatcher, schema-backed queue, persisted sequencer, provider-backed Hydration execution, or runtime enforcement work
+- HS244/HS245 accepted patient packet identity advisory: no broad provider work queue yet; most posture can stay derived/read-only for now; future durable movement identity should remain lane-specific unless a later proof shows shared persistence is necessary
 - HS242 queue / clock runtime posture preview has been accepted; future patient packet work should treat it as explanatory posture and design input, not execution authority
 - future runtime enforcement now has composed gate-state, service-boundary, pure evaluator, dry adapter, and activation-readiness evidence, but still needs an explicit implementation/design runway before command blocking
 - HS170 accepted the first inactive service-boundary hook: `invokeServiceCommand` now calls a behavior-preserving non-blocking preview hook after eligibility/confirmation and before task wrapping/dispatch, without command blocking, dispatch changes, provider calls, broad fact sourcing, writes, or runtime authorization
