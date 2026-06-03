@@ -1,6 +1,6 @@
 # Current State: Storage And Runtime Hardening
 
-Date: 2026-06-02
+Date: 2026-06-03
 Status: Current milestone summary
 
 ## Purpose
@@ -49,6 +49,7 @@ Accepted proof surfaces:
 - `runtimeEnforcementEvaluator.evaluateRuntimeEnforcementDecision`
 - `runtime.enforcement_adapter.dry_preview`
 - `runtimeEnforcementDryAdapter.buildDryRuntimeEnforcementAdapterDecision`
+- `retention.preflight` pruning intelligence relationship context
 
 Accepted shape:
 
@@ -74,6 +75,7 @@ Accepted shape:
 - Runtime enforcement boundary preview is read-only service-boundary posture: it proves a future insertion point in `invokeServiceCommand(command, payload, context)` after renderer eligibility and confirmation checks, before task wrapping and handler dispatch, while keeping `would_allow`, External I/O on, and unknown/unclassified fail-closed as non-authorizing preview/policy posture
 - Runtime enforcement evaluator is a pure inactive decision helper: it accepts explicit facts, returns `pass`, `block`, `conditional`, or `stop_before_boundary` with stable reason codes, and does not call handlers, task runners, providers, repositories, file writers, config writers, or DB APIs
 - Runtime enforcement dry adapter is inactive service-boundary fact assembly proof: it assembles evaluator facts from command metadata/definition, payload, context, and explicit supplied gate facts; reports missing fact classes; refuses to treat dry-run `would_allow` as authorization; and remains outside `invokeServiceCommand`
+- Retention preflight pruning intelligence preview is read-only deletion-safety understanding: `evidence.prune_scope` now reports affected Evidence/EVEidence, activity rows, ingestion audits, warnings, same-killmail Discovery refs, Assessment Memory references, Watch/Marked-adjacent context, provenance/log summaries, support-artifact disclosure, and no-retained-footprint posture while destructive deletion execution remains blocked
 - Trusted/internal confirmation bypass is distinct from confirmation satisfaction: it may preserve the current service-boundary behavior, but it must not be described as an operator or renderer satisfying confirmation
 - Runtime enforcement activation readiness audit accepted the proof chain as coherent but found Atlas not ready for active runtime blocking; the next safe seam is a non-blocking service-boundary integration hook only
 

@@ -288,18 +288,31 @@ function evidenceScopeImpact(db, scope = {}) {
       ingestion_audits: 0,
       data_quality_warnings: 0,
       assessment_artifact_references: 0,
-      affected_assessment_artifacts: []
+      affected_assessment_artifacts: [],
+      relationship_context: emptyPruningRelationshipContext(scope)
     };
   }
   const placeholders = killmailIds.map(() => '?').join(', ');
-  const affectedAssessmentArtifacts = assessmentArtifactsForKillmails(db, killmailIds);
+  const ingestionAudits = ingestionAuditRowsForKillmails(db, killmailIds);
+  const auditRunIds = uniqueText(ingestionAudits.map((row) => row.run_id));
+  const dataQualityWarnings = dataQualityWarningsForEvidence(db, killmailIds, auditRunIds);
+  const affectedAssessmentArtifacts = assessmentArtifactsForKillmails(db, killmailIds, auditRunIds);
+  const activityEventCount = db.prepare(`SELECT COUNT(*) AS count FROM activity_events WHERE killmail_id IN (${placeholders})`).get(...killmailIds).count;
   return {
     killmails: killmailIds.length,
-    activity_events: db.prepare(`SELECT COUNT(*) AS count FROM activity_events WHERE killmail_id IN (${placeholders})`).get(...killmailIds).count,
-    ingestion_audits: db.prepare(`SELECT COUNT(*) AS count FROM ingestion_audits WHERE killmail_id IN (${placeholders})`).get(...killmailIds).count,
-    data_quality_warnings: countWarningsForKillmails(db, killmailIds),
+    activity_events: activityEventCount,
+    ingestion_audits: ingestionAudits.length,
+    data_quality_warnings: dataQualityWarnings.count,
     assessment_artifact_references: affectedAssessmentArtifacts.length,
-    affected_assessment_artifacts: affectedAssessmentArtifacts
+    affected_assessment_artifacts: affectedAssessmentArtifacts,
+    relationship_context: buildPruningRelationshipContext(db, {
+      scope,
+      killmailIds,
+      activityEventCount,
+      ingestionAudits,
+      dataQualityWarnings,
+      affectedAssessmentArtifacts
+    })
   };
 }
 
@@ -309,15 +322,17 @@ function selectedEvidenceKillmailIds(scope = {}) {
   return uniqueNumbers(values);
 }
 
-function assessmentArtifactsForKillmails(db, killmailIds) {
+function assessmentArtifactsForKillmails(db, killmailIds, runIds = []) {
   if (!killmailIds.length) {
     return [];
   }
   const selected = new Set(killmailIds.map(Number));
+  const selectedRunIds = new Set(runIds.map(String));
   const rows = db.prepare(`
-    SELECT artifact_id, artifact_type, entity_type, entity_id, status, sample_killmail_ids_json, citation_status
+    SELECT artifact_id, artifact_type, entity_type, entity_id, status,
+           source_run_ids_json, sample_killmail_ids_json, citation_status
     FROM assessment_artifacts
-    WHERE sample_killmail_ids_json IS NOT NULL
+    WHERE sample_killmail_ids_json IS NOT NULL OR source_run_ids_json IS NOT NULL
     ORDER BY updated_at DESC, created_at DESC, artifact_id
   `).all();
   return rows
@@ -325,7 +340,10 @@ function assessmentArtifactsForKillmails(db, killmailIds) {
       const sampleIds = parseJsonArray(row.sample_killmail_ids_json)
         .map(Number)
         .filter((value) => Number.isInteger(value) && selected.has(value));
-      if (!sampleIds.length) {
+      const sourceRunIds = parseJsonArray(row.source_run_ids_json)
+        .map(String)
+        .filter((value) => selectedRunIds.has(value));
+      if (!sampleIds.length && !sourceRunIds.length) {
         return null;
       }
       return {
@@ -336,6 +354,9 @@ function assessmentArtifactsForKillmails(db, killmailIds) {
         status: row.status,
         citation_status: row.citation_status || 'not_applicable',
         referenced_killmail_ids: sampleIds,
+        referenced_run_ids: sourceRunIds,
+        stale_risk_after_future_evidence_prune: true,
+        deletion_blocker: false,
         interpretation: 'Assessment Memory is mutable, disposable, and stale after Evidence deletion; it is not Evidence and not a deletion blocker.'
       };
     })
@@ -368,19 +389,389 @@ function evidenceDeletionPolicy() {
 }
 
 function countWarningsForKillmails(db, killmailIds) {
-  const auditRunIds = db.prepare(`
-    SELECT DISTINCT run_id
-    FROM ingestion_audits
-    WHERE killmail_id IN (${killmailIds.map(() => '?').join(', ')})
-  `).all(...killmailIds).map((row) => row.run_id);
-  if (!auditRunIds.length) {
-    return 0;
+  const auditRunIds = sourceRunIdsForKillmails(db, killmailIds);
+  return dataQualityWarningsForEvidence(db, killmailIds, auditRunIds).count;
+}
+
+function emptyPruningRelationshipContext(scope = {}) {
+  return {
+    preview_only: true,
+    read_only: true,
+    basis: {
+      scope_kind: pruningScopeKind(scope),
+      selected_killmail_ids: [],
+      computed_relationships_are_durable_truth: false,
+      discovery_refs_are_evidence: false,
+      note: 'No local Evidence/EVEidence rows matched this pruning preview scope.'
+    },
+    evidence_rows: {
+      killmails: { count: 0, ids: [] },
+      activity_events: { count: 0, roles: [] }
+    },
+    audit_warning_rows: {
+      ingestion_audits: { count: 0, run_ids: [] },
+      data_quality_warnings: { count: 0, warning_types: [] }
+    },
+    discovery_refs: discoveryRefBoundary(0, [], []),
+    assessment_memory: assessmentMemoryBoundary([]),
+    watch_marked_context: watchMarkedBoundary([], [], []),
+    provenance_logs: provenanceLogBoundary([], [], []),
+    support_artifact_disclosure: supportArtifactDisclosure(),
+    no_footprint_policy: noFootprintPreviewPolicy(),
+    context_warnings: ['no_evidence_rows_in_scope']
+  };
+}
+
+function buildPruningRelationshipContext(db, details) {
+  const {
+    scope,
+    killmailIds,
+    activityEventCount,
+    ingestionAudits,
+    dataQualityWarnings,
+    affectedAssessmentArtifacts
+  } = details;
+  const auditRunIds = uniqueText(ingestionAudits.map((row) => row.run_id));
+  const discoveryRefs = discoveryRefsForKillmails(db, killmailIds);
+  const fetchRuns = fetchRunsForRunIds(db, auditRunIds);
+  const apiLogs = apiRequestLogsForRunIds(db, auditRunIds);
+  const activityRows = activityRowsForKillmails(db, killmailIds);
+  const watchContext = watchMarkedContextForKillmails(db, killmailIds);
+
+  return {
+    preview_only: true,
+    read_only: true,
+    basis: {
+      scope_kind: pruningScopeKind(scope),
+      selected_killmail_ids: killmailIds,
+      computed_relationships_are_durable_truth: false,
+      discovery_refs_are_evidence: false,
+      note: 'Relationship groups are computed from current local rows for operator review; they are not stored truth and do not authorize deletion.'
+    },
+    evidence_rows: {
+      killmails: {
+        count: killmailIds.length,
+        ids: killmailIds
+      },
+      activity_events: {
+        count: activityEventCount,
+        roles: countBy(activityRows, 'role'),
+        entity_types: countBy(activityRows, 'entity_type'),
+        systems: countBy(activityRows, 'solar_system_id')
+      }
+    },
+    audit_warning_rows: {
+      ingestion_audits: {
+        count: ingestionAudits.length,
+        run_ids: auditRunIds,
+        normalizer_versions: countBy(ingestionAudits, 'normalizer_version')
+      },
+      data_quality_warnings: {
+        count: dataQualityWarnings.count,
+        warning_types: dataQualityWarnings.warning_types,
+        run_ids: dataQualityWarnings.run_ids,
+        selected_killmail_rows: dataQualityWarnings.selected_killmail_rows,
+        run_level_rows: dataQualityWarnings.run_level_rows
+      }
+    },
+    discovery_refs: discoveryRefBoundary(discoveryRefs.length, discoveryRefs, killmailIds),
+    assessment_memory: assessmentMemoryBoundary(affectedAssessmentArtifacts),
+    watch_marked_context: watchMarkedBoundary(
+      watchContext.watchlistEntities,
+      watchContext.systemWatches,
+      watchContext.evidenceSystems
+    ),
+    provenance_logs: provenanceLogBoundary(fetchRuns, apiLogs, auditRunIds),
+    support_artifact_disclosure: supportArtifactDisclosure(),
+    no_footprint_policy: noFootprintPreviewPolicy(),
+    context_warnings: pruningContextWarnings({
+      discoveryRefs,
+      affectedAssessmentArtifacts,
+      fetchRuns,
+      apiLogs,
+      dataQualityWarnings
+    })
+  };
+}
+
+function pruningScopeKind(scope = {}) {
+  if (selectedEvidenceKillmailIds(scope).length) {
+    return 'selected_killmails';
+  }
+  const entityType = String(scope.entityType || scope.entity_type || scope.actorType || scope.actor_type || '').toLowerCase();
+  const entityId = Number(scope.entityId ?? scope.entity_id ?? scope.actorId ?? scope.actor_id);
+  if (['character', 'corporation', 'alliance'].includes(entityType) && Number.isInteger(entityId) && entityId > 0) {
+    return 'actor_entity_window';
+  }
+  if (scope.systemId || scope.system_id) {
+    return 'system_time_window';
+  }
+  if (scope.before || scope.after) {
+    return 'time_window';
+  }
+  return 'unscoped_preview';
+}
+
+function ingestionAuditRowsForKillmails(db, killmailIds) {
+  if (!killmailIds.length) {
+    return [];
   }
   return db.prepare(`
-    SELECT COUNT(*) AS count
+    SELECT run_id, killmail_id, normalized_event_count, attacker_count,
+           victim_present, warnings, normalizer_version, created_at
+    FROM ingestion_audits
+    WHERE killmail_id IN (${killmailIds.map(() => '?').join(', ')})
+    ORDER BY created_at DESC, run_id, killmail_id
+  `).all(...killmailIds);
+}
+
+function dataQualityWarningsForEvidence(db, killmailIds, runIds = []) {
+  const where = [];
+  const params = [];
+  if (killmailIds.length) {
+    where.push(`killmail_id IN (${killmailIds.map(() => '?').join(', ')})`);
+    params.push(...killmailIds);
+  }
+  if (runIds.length) {
+    where.push(`run_id IN (${runIds.map(() => '?').join(', ')})`);
+    params.push(...runIds);
+  }
+  if (!where.length) {
+    return {
+      count: 0,
+      warning_types: [],
+      run_ids: [],
+      selected_killmail_rows: 0,
+      run_level_rows: 0
+    };
+  }
+  const rows = db.prepare(`
+    SELECT run_id, killmail_id, warning_type, created_at
     FROM data_quality_warnings
-    WHERE run_id IN (${auditRunIds.map(() => '?').join(', ')})
-  `).get(...auditRunIds).count;
+    WHERE ${where.join(' OR ')}
+    ORDER BY created_at DESC, warning_type, run_id
+  `).all(...params);
+  const selected = new Set(killmailIds.map(Number));
+  return {
+    count: rows.length,
+    warning_types: countBy(rows, 'warning_type'),
+    run_ids: uniqueText(rows.map((row) => row.run_id)),
+    selected_killmail_rows: rows.filter((row) => selected.has(Number(row.killmail_id))).length,
+    run_level_rows: rows.filter((row) => !row.killmail_id).length
+  };
+}
+
+function discoveryRefsForKillmails(db, killmailIds) {
+  if (!killmailIds.length) {
+    return [];
+  }
+  return db.prepare(`
+    SELECT killmail_id, killmail_hash, discovered_by_type, discovered_by_id,
+           source_scope, source_system_id, source_actor_type, source_actor_id,
+           first_seen_run_id, last_seen_run_id, status, selected_for_expansion_at,
+           expanded_at, failed_at, failure_count, priority
+    FROM discovered_killmail_refs
+    WHERE killmail_id IN (${killmailIds.map(() => '?').join(', ')})
+    ORDER BY status, priority, killmail_id
+  `).all(...killmailIds);
+}
+
+function discoveryRefBoundary(count, rows, killmailIds) {
+  return {
+    count,
+    selected_killmail_ids: killmailIds,
+    statuses: countBy(rows, 'status'),
+    discovered_by_types: countBy(rows, 'discovered_by_type'),
+    source_actor_types: countBy(rows, 'source_actor_type'),
+    selected_for_expansion_count: rows.filter((row) => Boolean(row.selected_for_expansion_at)).length,
+    interpretation: 'Discovery refs are possible leads/provenance sharing killmail IDs; they are not Evidence/EVEidence and are not used as observations.',
+    deletion_policy_note: 'Discovery ref pruning is separate from active Evidence/EVEidence pruning and is not executed by this preview.'
+  };
+}
+
+function activityRowsForKillmails(db, killmailIds) {
+  if (!killmailIds.length) {
+    return [];
+  }
+  return db.prepare(`
+    SELECT killmail_id, role, entity_type, entity_id, entity_name, solar_system_id
+    FROM activity_events
+    WHERE killmail_id IN (${killmailIds.map(() => '?').join(', ')})
+    ORDER BY killmail_id, role, entity_type, entity_id
+  `).all(...killmailIds);
+}
+
+function watchMarkedContextForKillmails(db, killmailIds) {
+  if (!killmailIds.length) {
+    return {
+      watchlistEntities: [],
+      systemWatches: [],
+      evidenceSystems: []
+    };
+  }
+  const activityRows = activityRowsForKillmails(db, killmailIds);
+  const entityKeys = [...new Map(activityRows
+    .filter((row) => row.entity_type && row.entity_id)
+    .map((row) => [`${row.entity_type}:${row.entity_id}`, {
+      entity_type: row.entity_type,
+      entity_id: row.entity_id
+    }])).values()];
+  const watchlistEntities = entityKeys.flatMap((entity) => db.prepare(`
+    SELECT watch_id, entity_type, entity_id, entity_name, is_active, next_poll_at, last_success_at
+    FROM watchlist_entities
+    WHERE entity_type = ? AND entity_id = ?
+  `).all(entity.entity_type, entity.entity_id));
+  const evidenceSystems = uniqueNumbers(activityRows.map((row) => row.solar_system_id));
+  const systemWatches = evidenceSystems.length ? db.prepare(`
+    SELECT watch_id, center_system_id, center_system_name, is_active, radius_jumps, next_poll_at, last_success_at
+    FROM system_watches
+    WHERE center_system_id IN (${evidenceSystems.map(() => '?').join(', ')})
+    ORDER BY watch_id
+  `).all(...evidenceSystems) : [];
+  return {
+    watchlistEntities,
+    systemWatches,
+    evidenceSystems
+  };
+}
+
+function watchMarkedBoundary(watchlistEntities, systemWatches, evidenceSystems) {
+  return {
+    determinable: true,
+    meaning_limited: true,
+    watchlist_attention_rows: {
+      count: watchlistEntities.length,
+      active_count: watchlistEntities.filter((row) => row.is_active).length,
+      entity_types: countBy(watchlistEntities, 'entity_type')
+    },
+    direct_system_watch_rows: {
+      count: systemWatches.length,
+      active_count: systemWatches.filter((row) => row.is_active).length,
+      center_system_ids: uniqueNumbers(systemWatches.map((row) => row.center_system_id))
+    },
+    evidence_system_ids_considered: evidenceSystems,
+    interpretation: 'Watch/Marked-adjacent rows are attention or active-check context only; Marked is not Evidence, Watch is not Evidence, and Marked does not imply Watch.'
+  };
+}
+
+function fetchRunsForRunIds(db, runIds) {
+  if (!runIds.length) {
+    return [];
+  }
+  return db.prepare(`
+    SELECT run_id, trigger, watch_type, watch_id, started_at, finished_at, status,
+           discovered_refs, already_cached, expanded_new, failed_expansions,
+           activity_events_written, api_calls_zkill, api_calls_esi, error_summary
+    FROM fetch_runs
+    WHERE run_id IN (${runIds.map(() => '?').join(', ')})
+    ORDER BY started_at DESC, run_id
+  `).all(...runIds);
+}
+
+function apiRequestLogsForRunIds(db, runIds) {
+  if (!runIds.length) {
+    return [];
+  }
+  return db.prepare(`
+    SELECT request_id, run_id, run_type, provider, method, status_code,
+           cache_status, retry_count, rate_limited, requested_at
+    FROM api_request_logs
+    WHERE run_id IN (${runIds.map(() => '?').join(', ')})
+    ORDER BY requested_at DESC, request_id
+  `).all(...runIds);
+}
+
+function provenanceLogBoundary(fetchRuns, apiLogs, auditRunIds) {
+  return {
+    run_ids: auditRunIds,
+    fetch_runs: {
+      count: fetchRuns.length,
+      statuses: countBy(fetchRuns, 'status'),
+      triggers: countBy(fetchRuns, 'trigger'),
+      watch_types: countBy(fetchRuns, 'watch_type'),
+      total_api_calls_zkill: sumRows(fetchRuns, 'api_calls_zkill'),
+      total_api_calls_esi: sumRows(fetchRuns, 'api_calls_esi')
+    },
+    api_request_logs: {
+      count: apiLogs.length,
+      providers: countBy(apiLogs, 'provider'),
+      statuses: countBy(apiLogs, 'status_code'),
+      run_types: countBy(apiLogs, 'run_type')
+    },
+    interpretation: 'Fetch runs and API request logs are provenance/support history, not Evidence/EVEidence and not deletion execution authority.'
+  };
+}
+
+function assessmentMemoryBoundary(affectedAssessmentArtifacts) {
+  return {
+    count: affectedAssessmentArtifacts.length,
+    stale_risk_count: affectedAssessmentArtifacts.length,
+    deletion_blocker: false,
+    references: affectedAssessmentArtifacts,
+    interpretation: 'Assessment Memory can become stale if cited Evidence/EVEidence is pruned later; this preview does not mutate, mark stale, delete, or create Assessment Memory.'
+  };
+}
+
+function supportArtifactDisclosure() {
+  return {
+    support_artifacts_inspected: false,
+    active_record_prune_would_clean_support_artifacts: false,
+    snapshot_or_trace_cleanup_executed: false,
+    historical_recovery_material_may_retain_records: true,
+    classes_disclosed: [
+      'runtime_snapshots',
+      'operator_debug_trace_packs',
+      'support_logs',
+      'readiness_preflight_reports'
+    ],
+    interpretation: 'Snapshots, trace packs, logs, and preflight/readiness reports are separate support/recovery material; active-record pruning would not automatically clean or rewrite them.'
+  };
+}
+
+function noFootprintPreviewPolicy() {
+  return {
+    no_retained_deletion_footprint: true,
+    retained_footprint_created_by_preview: false,
+    raw_evidence_payload_retained_by_preview: false,
+    full_activity_events_retained_by_preview: false,
+    hidden_copy_retained_by_preview: false,
+    interpretation: 'The preview reports affected local rows and context only; it does not create a retained deletion footprint.'
+  };
+}
+
+function pruningContextWarnings(details) {
+  const warnings = [];
+  if (details.discoveryRefs.length) {
+    warnings.push('discovery_refs_are_possible_leads_not_evidence');
+  }
+  if (details.affectedAssessmentArtifacts.length) {
+    warnings.push('assessment_memory_may_become_stale_but_is_not_a_deletion_blocker');
+  }
+  if (details.fetchRuns.length || details.apiLogs.length) {
+    warnings.push('provenance_logs_may_outlive_future_active_record_prune');
+  }
+  if (details.dataQualityWarnings.count) {
+    warnings.push('warning_rows_are_context_counts_not_relationship_truth');
+  }
+  warnings.push('support_artifacts_are_separate_historical_recovery_material');
+  warnings.push('no_retained_deletion_footprint');
+  return warnings;
+}
+
+function countBy(rows, field) {
+  const counts = new Map();
+  rows.forEach((row) => {
+    const value = row[field];
+    const key = value === null || value === undefined || value === '' ? 'unknown' : String(value);
+    counts.set(key, (counts.get(key) || 0) + 1);
+  });
+  return [...counts.entries()]
+    .map(([value, count]) => ({ value, count }))
+    .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
+}
+
+function sumRows(rows, field) {
+  return rows.reduce((sum, row) => sum + (Number(row[field]) || 0), 0);
 }
 
 function queueRefCount(db, scope = {}) {

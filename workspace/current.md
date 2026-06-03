@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS236 open; Dev runway active
+Status: HS236 accepted by HS237; no active Dev runway
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: read-only pruning intelligence preview.
+Current focus: resting after pruning intelligence preview acceptance.
 
 Current heading:
 
@@ -20,21 +20,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
-Active Dev runway:
+Latest accepted Dev runway:
 
 ```txt
 workspace/OverseerHS236-pruning-intelligence-preview-runway.md
 ```
 
-Expected Dev handoff:
+Latest accepted Dev handoff:
 
 ```txt
 workspace/DevHS236-pruning-intelligence-preview.md
 ```
 
-Task:
+Accepted task:
 
 Extend the existing read-only `retention.preflight` output for `evidence.prune_scope` so Atlas can preview what a future prune would affect across Evidence/EVEidence, derived activity rows, ingestion audits, warnings, Discovery refs/provenance, Assessment Memory references, provenance/log summaries, and support-artifact disclosure.
 
@@ -56,7 +56,95 @@ Preserve:
 - no renderer UI work
 - no retained deletion footprint
 
-Stop if this requires destructive deletion/pruning behavior, schema migration, first-class Marked/no-interest policy, support artifact cleanup, snapshot restore/delete behavior, provenance redaction/rewrite/recompute policy, live/private/provider calls, runtime command blocking, or UI/product decisions not already accepted.
+Latest Overseer review:
+
+```txt
+workspace/OverseerHS237-hs236-pruning-intelligence-preview-review.md
+```
+
+No active Dev runway is open.
+
+Resting next candidates:
+
+1. Rest pruning and return to another storage/runtime seam.
+2. If pruning continues, open advisory deletion-execution prerequisites review.
+3. If pruning continues, open Discovery ref pruning policy design.
+4. If pruning continues, open no-interest/Marked pruning policy design.
+5. If pruning continues, open support artifact cleanup/snapshot deletion policy design.
+
+Do not open destructive pruning/deletion execution, schema changes, support artifact cleanup, runtime enforcement, provider calls, or UI work unless Human/Overseer explicitly chooses and bounds that seam.
+
+## HS236 Evidence
+
+Dev updated 2026-06-03:
+
+- Extended the existing read-only `retention.preflight` output for `evidence.prune_scope`.
+- Added `impact.relationship_context` while preserving existing top-level impact counts.
+- Relationship/context groups now include:
+  - selected Evidence/EVEidence row basis
+  - derived `activity_events` role/entity/system counts
+  - ingestion audit rows and data quality warning summaries
+  - same-killmail Discovery refs with status separation
+  - affected Assessment Memory references with stale-risk/non-blocker posture
+  - Watch/Marked-adjacent rows where determinable without inventing meaning
+  - fetch run and API request provenance/log summaries
+  - support artifact disclosure that active-record pruning would not clean snapshots, trace packs, logs, or readiness/preflight reports
+  - explicit no-retained-footprint preview posture
+- The relationship basis explicitly states:
+  - the preview is read-only
+  - computed relationships are not durable truth
+  - Discovery refs are possible leads/provenance, not Evidence/EVEidence
+  - relationship context does not authorize deletion
+- Extended focused fixture verification in `scripts/verify-retention-preflight.js` to prove:
+  - selected killmail preview reports Evidence/EVEidence, activity, audit, warning, Discovery, Assessment Memory, provenance/log, Watch/Marked-adjacent, support-artifact, and no-footprint groups
+  - actor/entity plus time-window preview reports distinct affected killmails
+  - Discovery refs are not used as observations
+  - support artifacts are disclosed as separate historical/recovery material
+  - preflight paths do not mutate Evidence, Discovery refs, provenance/logs, warnings, Watch-adjacent rows, or Assessment rows
+- Verification run:
+  - `node --check src\main\services\retentionActionService.js` passed.
+  - `node --check scripts\verify-retention-preflight.js` passed.
+  - `npm.cmd run verify:retention-preflight` passed.
+  - `npm.cmd run verify:retention-deletion-boundary` passed.
+  - `npm.cmd run verify:assessment-artifacts` passed.
+  - `npm.cmd run verify:queue-report` passed.
+  - `npm.cmd run verify:db-integrity` passed.
+  - `npm.cmd run verify:evidence-rules` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output; no protected-term JSON or authority files were changed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS236 working-tree changes.
+- Boundaries preserved:
+  - no destructive pruning execution
+  - no new delete/prune/expire command
+  - no Evidence/EVEidence mutation
+  - no Discovery ref mutation
+  - no Assessment Memory creation, mutation, deletion, or stale marking
+  - no Watch or Marked mutation
+  - no provider calls
+  - no Hydration writes
+  - no support artifact creation/deletion/cleanup or real artifact inspection
+  - no storage movement
+  - no schema changes
+  - no runtime enforcement activation
+  - no command blocking
+  - no renderer UI work
+  - no retained deletion footprint
+
+## HS236 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS236-pruning-intelligence-preview.md
+```
+
+Status: pruning intelligence preview complete; accepted by HS237.
+
+HS236 result:
+
+- Atlas can now preview future active-record pruning impact across Evidence/EVEidence, relationships/appearances, provenance, Discovery refs, Assessment Memory, Watch/Marked-adjacent context, and support-artifact disclosure while deletion execution remains blocked and no data is mutated.
 
 Latest accepted handoff:
 
