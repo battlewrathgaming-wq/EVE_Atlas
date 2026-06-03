@@ -95,6 +95,7 @@ Current state:
 - HS240 opened
 - HS240 accepted by HS241
 - HS242 opened
+- HS242 accepted by HS243
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -111,10 +112,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS242-queue-clock-runtime-posture-preview-runway.md`
-- expected Dev handoff is `workspace/DevHS242-queue-clock-runtime-posture-preview.md`
-- current work is read-only queue / clock runtime posture preview
+- current executor is Overseer
+- no active Dev runway is open
+- current work is resting after HS242 queue / clock runtime posture preview acceptance
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -128,11 +128,12 @@ Current heading:
 - one hardening seam at a time
 - Atlas project root remains the anchor
 
-Active packet:
+Likely next shaping candidates:
 
-1. HS242 should add `runtime.queue_clock_posture.preview` or equivalent read-only posture.
-2. The preview should keep Acquisition Clock, ESI Evidence Expansion, Hydration Recovery, Discovery refs, Watch/offline posture, External I/O, storage gates, and waiting states distinct.
-3. No dispatcher, provider queue, persisted sequencer, provider call, schema change, runtime enforcement, command blocking, pruning/deletion, support artifact, or UI work is authorized.
+1. Data-engineering advisory for patient packet identity and durable unit-of-work boundaries.
+2. Continue runtime/storage internals with another read-only posture seam.
+3. Rest system hardening briefly and review the new queue/clock posture output for gaps.
+4. Keep active dispatcher, schema-backed provider queues, persisted sequencer state, provider-backed Hydration execution, active runtime enforcement, real deletion execution, and UI work parked until Human/Overseer explicitly chooses and bounds those lines.
 
 See `workspace/current.md` for current truth.
 
@@ -256,6 +257,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS240 opened fixture-only Evidence prune execution contract proof: prove digest confirmation, transaction rollback, dependency delete ordering, killmail-linked warning deletion, no-footprint posture, and non-mutation of Discovery refs, Assessment Memory, provenance/logs, Watch/Marked rows, support artifacts, schema, runtime enforcement, provider movement, and UI in disposable data only.
 - HS240/HS241 accepted fixture-only Evidence prune execution contract proof: Atlas can prove the deletion contract in disposable data only; real operator deletion remains blocked and no product deletion command exists.
 - HS242 opened queue/clock runtime posture preview: compose existing local queue, Watch, Hydration, External I/O, storage, and clock posture into a read-only truth surface before any dispatcher, provider queue, persisted sequencer, runtime enforcement, command blocking, provider movement, schema change, or UI work.
+- HS242/HS243 accepted queue/clock runtime posture preview: `runtime.queue_clock_posture.preview` now composes local queue, Watch/restart, Hydration, External I/O, storage/setup, and cadence posture without dispatching, writing, provider calls, runtime enforcement, command blocking, or catch-up flooding.
 
 ## Accepted Boundaries
 

@@ -218,6 +218,9 @@ function verifyCoverageMetadata(map) {
   assert(command(map, 'runtime.enforcement_boundary.preview').runtime_context === 'runtime_enforcement_boundary_readout', 'runtime enforcement boundary should be classified as a readout');
   assert(command(map, 'runtime.enforcement_boundary.preview').enforcement_status === 'read_only_non_enforcing_proof', 'runtime enforcement boundary should identify itself as a non-enforcing proof');
   assert(command(map, 'runtime.enforcement_boundary.preview').external_io_dependency === 'none', 'runtime enforcement boundary should not declare External I/O dependency');
+  assert(command(map, 'runtime.queue_clock_posture.preview').runtime_context === 'queue_clock_posture_readout', 'queue/clock posture preview should be classified as a readout');
+  assert(command(map, 'runtime.queue_clock_posture.preview').enforcement_status === 'read_only_non_enforcing_proof', 'queue/clock posture preview should identify itself as a non-enforcing proof');
+  assert(command(map, 'runtime.queue_clock_posture.preview').external_io_dependency === 'none', 'queue/clock posture preview should not declare External I/O dependency');
 }
 
 function verifyCoverageGapFailureSignal() {

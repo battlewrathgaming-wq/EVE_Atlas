@@ -135,6 +135,7 @@ async function verifySeededDb(root) {
       ['runtime.enforcement_boundary.preview', () => invokeServiceCommand('runtime.enforcement_boundary.preview', {}, context)],
       ['runtime.enforcement_active_semantics.preview', () => invokeServiceCommand('runtime.enforcement_active_semantics.preview', {}, context)],
       ['runtime.enforcement_hook_telemetry.readout', () => invokeServiceCommand('runtime.enforcement_hook_telemetry.readout', {}, context)],
+      ['runtime.queue_clock_posture.preview', () => invokeServiceCommand('runtime.queue_clock_posture.preview', {}, context)],
       ['task.list', () => invokeServiceCommand('task.list', { limit: 10 }, context)],
       ['assessment.list', () => invokeServiceCommand('assessment.list', {
         entityType: 'character',
@@ -203,6 +204,7 @@ async function verifyEmptyDb(root) {
       ['empty runtime.enforcement_boundary.preview', () => invokeServiceCommand('runtime.enforcement_boundary.preview', {}, context)],
       ['empty runtime.enforcement_active_semantics.preview', () => invokeServiceCommand('runtime.enforcement_active_semantics.preview', {}, context)],
       ['empty runtime.enforcement_hook_telemetry.readout', () => invokeServiceCommand('runtime.enforcement_hook_telemetry.readout', {}, context)],
+      ['empty runtime.queue_clock_posture.preview', () => invokeServiceCommand('runtime.queue_clock_posture.preview', {}, context)],
       ['empty assessment.list', () => invokeServiceCommand('assessment.list', {}, context)]
     ];
 

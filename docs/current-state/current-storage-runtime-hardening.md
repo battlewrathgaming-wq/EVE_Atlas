@@ -51,7 +51,7 @@ Accepted proof surfaces:
 - `runtimeEnforcementDryAdapter.buildDryRuntimeEnforcementAdapterDecision`
 - `retention.preflight` pruning intelligence relationship context
 - `retention.evidence_prune_execution.fixture_proof` fixture-only deletion contract proof
-- planned HS242: `runtime.queue_clock_posture.preview` read-only queue / clock posture
+- `runtime.queue_clock_posture.preview` read-only queue / clock posture
 
 Accepted shape:
 
@@ -79,13 +79,14 @@ Accepted shape:
 - Runtime enforcement dry adapter is inactive service-boundary fact assembly proof: it assembles evaluator facts from command metadata/definition, payload, context, and explicit supplied gate facts; reports missing fact classes; refuses to treat dry-run `would_allow` as authorization; and remains outside `invokeServiceCommand`
 - Retention preflight pruning intelligence preview is read-only deletion-safety understanding: `evidence.prune_scope` now reports affected Evidence/EVEidence, activity rows, ingestion audits, warnings, same-killmail Discovery refs, Assessment Memory references, Watch/Marked-adjacent context, provenance/log summaries, support-artifact disclosure, and no-retained-footprint posture while destructive deletion execution remains blocked
 - Fixture-only Evidence prune execution contract proof is disposable deletion-safety proof: it requires fixture-only context, recomputes candidates from server-side `retention.preflight`, requires exact preview digest confirmation, proves rollback on injected failure, deletes only selected fixture Evidence/EVEidence dependency rows and selected killmails, deletes warning rows only by selected `killmail_id`, preserves run-level/mixed-run warnings plus Discovery refs, Assessment Memory, provenance/logs, Watch/Marked rows, support artifacts, schema, runtime enforcement, provider movement, and UI, and does not expose real operator deletion
+- Queue / clock runtime posture preview is read-only internal truth posture: it composes local Discovery refs, Watch/offline restart posture, Hydration candidates/runtime/execution policy, External I/O, storage/setup, and cadence posture into separate Acquisition Clock and Hydration Recovery Clock lanes without dispatcher, provider queue, persisted sequencer, provider movement, schema change, runtime enforcement, command blocking, catch-up flood, pruning/deletion, support artifacts, or UI work
 - Trusted/internal confirmation bypass is distinct from confirmation satisfaction: it may preserve the current service-boundary behavior, but it must not be described as an operator or renderer satisfying confirmation
 - Runtime enforcement activation readiness audit accepted the proof chain as coherent but found Atlas not ready for active runtime blocking; the next safe seam is a non-blocking service-boundary integration hook only
 
 Current resting state:
 
-- active Dev runway is HS242 queue / clock runtime posture preview
-- planned HS242 should make queue/clock posture inspectable without dispatcher, provider queue, persisted sequencer, provider movement, schema change, runtime enforcement, command blocking, pruning/deletion, support artifacts, or UI work
+- no active Dev runway is open
+- HS242 queue / clock runtime posture preview has been accepted; future patient packet work should treat it as explanatory posture and design input, not execution authority
 - future runtime enforcement now has composed gate-state, service-boundary, pure evaluator, dry adapter, and activation-readiness evidence, but still needs an explicit implementation/design runway before command blocking
 - HS170 accepted the first inactive service-boundary hook: `invokeServiceCommand` now calls a behavior-preserving non-blocking preview hook after eligibility/confirmation and before task wrapping/dispatch, without command blocking, dispatch changes, provider calls, broad fact sourcing, writes, or runtime authorization
 - HS172 accepted the first canonical read-only fact class in that hook: command classification coverage from the existing in-memory coverage map, while preserving supplied facts and not sourcing storage, budget, External I/O, provider/live, Watch/task, DB/config/runtime, or path facts

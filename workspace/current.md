@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS242 queue/clock runtime posture preview runway open
+Status: HS242 accepted by HS243; no active Dev runway
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: read-only queue / clock runtime posture preview.
+Current focus: resting after queue / clock runtime posture preview acceptance.
 
 Current heading:
 
@@ -20,21 +20,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
-Active Dev runway:
+Latest accepted Dev runway:
 
 ```txt
 workspace/OverseerHS242-queue-clock-runtime-posture-preview-runway.md
 ```
 
-Expected Dev handoff:
+Latest accepted Dev handoff:
 
 ```txt
 workspace/DevHS242-queue-clock-runtime-posture-preview.md
 ```
 
-Active task:
+Accepted task:
 
 Add a read-only queue / clock runtime posture preview, preferably:
 
@@ -92,9 +92,22 @@ Preserve:
 - no command blocking
 - no UI work
 
-Stop if this requires active dispatch, schema-backed queues, provider calls, mutation, catch-up flooding, runtime enforcement, command blocking, or UI work.
+Latest Overseer review:
 
-Verification expectation is local-only and should include the new verifier if one is added, plus queue, Watch, Hydration, External I/O, registry/authority/passive-side-effect, protected-term, and diff hygiene checks.
+```txt
+workspace/OverseerHS243-hs242-queue-clock-posture-review.md
+```
+
+No active Dev runway is open.
+
+Resting next candidates:
+
+1. Data-engineering advisory for patient packet identity and durable unit-of-work boundaries.
+2. Continue runtime/storage internals with another read-only posture seam.
+3. Rest system hardening briefly and review the new queue/clock posture output for gaps.
+4. Keep active dispatcher, schema-backed provider queues, persisted sequencer state, provider-backed Hydration execution, active runtime enforcement, real deletion execution, and UI work parked until Human/Overseer explicitly chooses and bounds those lines.
+
+Do not open active dispatch, schema-backed queues, provider calls, mutation, catch-up flooding, runtime enforcement, command blocking, or UI work unless Human/Overseer explicitly chooses and bounds that seam.
 
 ## HS242 Runway
 
@@ -110,11 +123,119 @@ Expected handoff:
 workspace/DevHS242-queue-clock-runtime-posture-preview.md
 ```
 
-Status: active Dev runway.
+Status: queue/clock runtime posture preview complete; accepted by HS243.
 
 HS242 result target:
 
 - Atlas should have a read-only queue / clock posture preview that composes existing local posture into an inspectable internal truth surface while keeping Acquisition, ESI Evidence Expansion, Hydration Recovery, Discovery refs, Watch, External I/O, storage, and waiting states distinct.
+
+Latest Overseer review:
+
+```txt
+workspace/OverseerHS243-hs242-queue-clock-posture-review.md
+```
+
+## HS242 Evidence
+
+Dev updated 2026-06-03:
+
+- Added `runtime.queue_clock_posture.preview` as a read-only service command.
+- Added `src/main/services/queueClockPostureService.js`.
+- Added `scripts/verify-queue-clock-posture-preview.js`.
+- Added `npm.cmd run verify:queue-clock-posture`.
+- Updated service registry, command authority, passive-side-effect sweep, and enforcement dry-run classification coverage for the new command.
+- The preview composes:
+  - local `discovered_killmail_refs` queue posture
+  - zKill Discovery lane posture
+  - ESI Evidence Expansion lane posture
+  - Watch/offline/restart posture from durable local Watch state
+  - Hydration candidate, attention-runtime, and execution-policy previews
+  - External I/O state/readback posture
+  - storage/setup gate action-class posture
+  - read-only live/provider cadence posture
+- Sample focused verifier output:
+  - action: `runtime.queue_clock_posture.preview`
+  - lanes: 4
+  - local-only available work: 10
+  - provider-backed work: 7
+  - held by External I/O: 2 lanes
+  - Watch/session arming required: 1 lane
+  - pending Discovery refs possible leads: 3
+  - ESI expansion candidates from local refs: 3
+  - Hydration candidates: 4
+  - Watch configured: 7
+  - preview authorizes execution: false
+  - mutation check unchanged for killmails, activity events, Discovery refs, fetch runs, API request logs, warnings, metadata runs, Assessment artifacts, Watch rows, and system Watch rows
+- Posture proven:
+  - pending Discovery refs are preferred before fresh zKill Discovery
+  - Discovery refs remain possible leads, not Evidence/EVEidence
+  - ESI expansion candidates are computed from local refs without mutation
+  - ESI Evidence Expansion remains the future evidence-creating lane if executed later
+  - Hydration remains readability demand, not Evidence/EVEidence or Discovery work
+  - local/readability work is visible separately from provider-backed work
+  - provider-backed work can be held by External I/O
+  - provider-backed work exposes read-only cadence/capacity posture without authorization
+  - Watch/session arming remains distinct from provider movement permission
+  - storage/setup and budget posture are represented through the existing setup gate matrix
+  - restart, storage unlock, and External I/O re-enable do not create catch-up flood or request debt
+  - unknown/uncomputable facts are reported rather than guessed
+- Verification run:
+  - `node --check src\main\services\queueClockPostureService.js` passed.
+  - `node --check scripts\verify-queue-clock-posture-preview.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `npm.cmd run verify:queue-clock-posture` passed.
+  - `npm.cmd run verify:queue-report` passed.
+  - `npm.cmd run verify:queue-preflight` passed.
+  - `npm.cmd run verify:queue-selection` passed.
+  - `npm.cmd run verify:queue-scope-isolation` passed.
+  - `npm.cmd run verify:watch-scheduler` passed.
+  - `npm.cmd run verify:watch-executor` passed.
+  - `npm.cmd run verify:watch-offline-readout` passed.
+  - `npm.cmd run verify:hydration-backlog-preview` passed.
+  - `npm.cmd run verify:hydration-candidate-preview` passed.
+  - `npm.cmd run verify:hydration-attention-runtime` passed.
+  - `npm.cmd run verify:hydration-execution-policy` passed.
+  - `npm.cmd run verify:external-io-state` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed as additional new-command coverage verification.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output; no protected-term JSON or terminology authority files were changed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS242 working-tree changes.
+- Boundaries preserved:
+  - no dispatcher
+  - no broad provider work queue
+  - no persisted sequencer state
+  - no schema changes
+  - no provider calls
+  - no zKill Discovery execution
+  - no ESI Evidence expansion execution
+  - no Hydration writes
+  - no Evidence/EVEidence writes
+  - no Discovery ref mutation
+  - no Watch mutation or arming
+  - no Assessment Memory or Marked mutation
+  - no storage config write or movement
+  - no support artifact creation
+  - no pruning/deletion behavior
+  - no runtime enforcement activation
+  - no command blocking
+  - no UI work
+
+## HS242 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS242-queue-clock-runtime-posture-preview.md
+```
+
+Status: queue/clock runtime posture preview complete; pending Overseer review.
+
+HS242 result:
+
+- Atlas now has a read-only `runtime.queue_clock_posture.preview` truth surface that composes local queue, Watch/restart, Hydration, External I/O, storage/setup, and cadence posture without dispatching, writing, calling providers, enforcing, or flooding catch-up work.
 
 ## HS240 Evidence
 

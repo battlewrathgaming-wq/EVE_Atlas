@@ -85,6 +85,8 @@ async function main() {
     assert(commands.get('runtime.enforcement_active_semantics.preview')?.effects.includes('read-only'), 'runtime active semantics preview should declare read-only effect');
     assert(commands.get('runtime.enforcement_hook_telemetry.readout')?.classification === 'read-only', 'runtime hook telemetry readout should be read-only');
     assert(commands.get('runtime.enforcement_hook_telemetry.readout')?.effects.includes('read-only'), 'runtime hook telemetry readout should declare read-only effect');
+    assert(commands.get('runtime.queue_clock_posture.preview')?.classification === 'read-only', 'queue/clock posture preview should be read-only');
+    assert(commands.get('runtime.queue_clock_posture.preview')?.effects.includes('read-only'), 'queue/clock posture preview should declare read-only effect');
     assert(commands.get('task.cancel')?.classification === 'runtime-control', 'task.cancel should be runtime-control');
     assert(commands.get('task.cancel')?.effects.includes('runtime-control'), 'task.cancel should declare runtime control effect');
 
@@ -125,6 +127,7 @@ async function main() {
     assert(rendererNames.has('runtime.enforcement_boundary.preview'), 'runtime enforcement boundary preview should be renderer eligible as read-only');
     assert(rendererNames.has('runtime.enforcement_active_semantics.preview'), 'runtime active semantics preview should be renderer eligible as read-only');
     assert(rendererNames.has('runtime.enforcement_hook_telemetry.readout'), 'runtime hook telemetry readout should be renderer eligible as read-only');
+    assert(rendererNames.has('runtime.queue_clock_posture.preview'), 'queue/clock posture preview should be renderer eligible as read-only');
     assert(rendererNames.has('runtime.db_snapshot.create'), 'snapshot create should be renderer eligible');
     assert(!rendererNames.has('sde.import.topology'), 'SDE import should not be renderer eligible');
     assert(!rendererNames.has('watch.executor.tick'), 'watch executor tick should not be renderer eligible');

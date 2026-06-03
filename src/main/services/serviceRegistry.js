@@ -51,6 +51,7 @@ const { buildLocalSdeSourcePosturePreview } = require('./localSdeSourcePostureSe
 const { buildSdeInventoryImportRewriteAuthorityProof } = require('./sdeInventoryImportRewriteAuthorityProofService');
 const { buildSdeTopologyImportRewriteAuthorityProof } = require('./sdeTopologyImportRewriteAuthorityProofService');
 const { buildRuntimeHookTelemetryReadout } = require('./runtimeHookTelemetryReadoutService');
+const { buildQueueClockPosturePreview } = require('./queueClockPostureService');
 const {
   buildExternalIoStateConfigReadback,
   buildExternalIoStateConfigWrite,
@@ -593,6 +594,16 @@ const COMMANDS = {
     renderer: true,
     description: 'Summarize supplied inactive runtime hook preview telemetry without capture, persistence, enforcement, or handler dispatch',
     handler: ({ payload }) => buildRuntimeHookTelemetryReadout(payload)
+  },
+  'runtime.queue_clock_posture.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview queue and clock runtime posture without dispatcher, provider queue, provider calls, writes, enforcement, or catch-up flood',
+    handler: ({ db, payload, ...context }) => buildQueueClockPosturePreview(db, payload, {
+      ...context,
+      commandMetadata: listServiceCommands()
+    })
   },
   'storage.enforcement_dry_run.command_effect_map': {
     classification: 'read-only',

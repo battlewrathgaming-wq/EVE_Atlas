@@ -77,6 +77,7 @@ async function main() {
     const apiRequestLogRedactionReadinessCommand = commands.find((entry) => entry.command === 'support.api_request_log_redaction_readiness.preview');
     const runtimeEnforcementBoundaryCommand = commands.find((entry) => entry.command === 'runtime.enforcement_boundary.preview');
     const runtimeHookTelemetryCommand = commands.find((entry) => entry.command === 'runtime.enforcement_hook_telemetry.readout');
+    const queueClockPostureCommand = commands.find((entry) => entry.command === 'runtime.queue_clock_posture.preview');
     const snapshotSettingsGetCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.get');
     const snapshotSettingsUpdateCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.update');
     assert(readinessCommand, 'app.readiness should be listed');
@@ -192,6 +193,8 @@ async function main() {
     assert(runtimeEnforcementBoundaryCommand?.renderer_allowed === true, 'runtime enforcement boundary preview should be renderer eligible');
     assert(runtimeHookTelemetryCommand?.classification === 'read-only', 'runtime hook telemetry readout should be read-only');
     assert(runtimeHookTelemetryCommand?.renderer_allowed === true, 'runtime hook telemetry readout should be renderer eligible');
+    assert(queueClockPostureCommand?.classification === 'read-only', 'queue/clock posture preview should be read-only');
+    assert(queueClockPostureCommand?.renderer_allowed === true, 'queue/clock posture preview should be renderer eligible');
     assert(snapshotSettingsGetCommand?.classification === 'read-only', 'runtime snapshot settings get should be read-only');
     assert(snapshotSettingsUpdateCommand?.classification === 'metadata-only', 'runtime snapshot settings update should be metadata-only');
 
@@ -408,6 +411,17 @@ async function main() {
     assert(runtimeHookTelemetry.telemetry_persisted === false, 'runtime hook telemetry readout should not persist telemetry');
     assert(runtimeHookTelemetry.command_blocking_active === false, 'runtime hook telemetry readout should not activate command blocking');
     assert(runtimeHookTelemetry.active_runtime_enforcement === false, 'runtime hook telemetry readout should not activate enforcement');
+
+    const queueClockPosture = await invokeServiceCommand('runtime.queue_clock_posture.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(queueClockPosture.read_only === true, 'queue/clock posture preview should declare read-only behavior');
+    assert(queueClockPosture.provider_calls === 0, 'queue/clock posture preview should not call providers');
+    assert(queueClockPosture.queue_dispatches === 0, 'queue/clock posture preview should not dispatch queues');
+    assert(queueClockPosture.evidence_writes === 0, 'queue/clock posture preview should not write evidence');
+    assert(queueClockPosture.hydration_writes === 0, 'queue/clock posture preview should not write hydration output');
+    assert(queueClockPosture.runtime_enforcement_active === false, 'queue/clock posture preview should not activate enforcement');
 
     const liveGate = await invokeServiceCommand('live.gate', {
       action: 'manual.expansion',
