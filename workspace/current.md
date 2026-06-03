@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS252 queue/clock current-work semantics advisory request open
+Status: HS252 accepted by HS253; HS254 Dev runway open
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: advisory review of queue/clock current-work semantics.
+Current focus: queue/clock no-intent current-work semantics matrix.
 
 Current heading:
 
@@ -20,35 +20,35 @@ Current heading:
 
 ## Executor
 
-Current executor: Data Engineering / Engineering Review
+Current executor: Dev
 
-Active advisory request:
-
-```txt
-workspace/OverseerHS252-queue-clock-current-work-semantics-review-request.md
-```
-
-Expected advisory artifact:
+Active Dev runway:
 
 ```txt
-workspace/DataEngineeringHS252-queue-clock-current-work-semantics-review.md
+workspace/OverseerHS254-queue-clock-no-intent-semantics-matrix-runway.md
 ```
 
-Advisory task:
+Expected Dev handoff:
 
-Review `runtime.queue_clock_posture.preview` for current-work semantics after HS250/HS251.
+```txt
+workspace/DevHS254-queue-clock-no-intent-semantics-matrix.md
+```
+
+Dev task:
+
+Prove and, if needed, narrowly correct `runtime.queue_clock_posture.preview` so current work is distinct from provider capability.
 
 Core question:
 
 ```txt
-Should queue/clock distinguish current local work, current provider-backed work with explicit scope/intent, provider capability available but no current work, Watch acquisition intent, and manual discovery intent?
+Can the queue/clock preview prove no-intent cases where provider capability exists but no current provider-backed work exists?
 ```
 
 Why:
 
-`runtime.queue_clock_posture.preview` currently can show zKill Discovery provider-backed work when there are no pending Discovery refs. That may be fine as provider capability, but may be misleading if it reads as current work without explicit manual scope or Watch acquisition intent.
+HS252 confirmed a semantic risk: `zkill_discovery.provider_backed_work` can read as current provider-backed work when the actual fact may only be provider capability with no pending Discovery refs, no explicit manual discovery scope, and no due/eligible Watch acquisition intent.
 
-This is advisory only. Do not implement code. Do not create a Dev runway. Do not run live/API/provider calls.
+Implement fixture-only/read-only proof first. If ambiguity is proven, make only the smallest readout/count correction needed.
 
 Preserve:
 
@@ -72,27 +72,63 @@ Preserve:
 - no pruning/deletion behavior
 - no renderer UI work
 
-Latest accepted Dev runway:
+Latest accepted advisory request:
 
 ```txt
-workspace/OverseerHS250-patient-packet-identity-sparse-gap-matrix-runway.md
+workspace/OverseerHS252-queue-clock-current-work-semantics-review-request.md
 ```
 
-Latest accepted Dev handoff:
+Latest accepted advisory artifact:
 
 ```txt
-workspace/DevHS250-patient-packet-identity-sparse-gap-matrix.md
+workspace/DataEngineeringHS252-queue-clock-current-work-semantics-review.md
 ```
 
 Latest Overseer review:
 
 ```txt
-workspace/OverseerHS251-hs250-sparse-gap-matrix-review.md
+workspace/OverseerHS253-hs252-queue-clock-semantics-acceptance.md
 ```
 
 Status: accepted.
 
-No active Dev runway is open. HS252 is advisory review only.
+HS254 is the active Dev runway.
+
+## HS254 Acceptance Target
+
+Dev should prove at least:
+
+- empty DB / no Watch / no manual discovery scope
+- no pending refs and no explicit manual or Watch acquisition intent
+- explicit manual discovery scope
+- pending/failed Discovery refs
+- due/eligible Watch acquisition intent with valid scope
+- not-due, inactive, held, missing, or malformed Watch acquisition posture
+- Watch/background Hydration demand without Watch acquisition intent
+- summary provider-backed current-work counts exclude capability-only posture
+
+Preferred outcome:
+
+```txt
+provider capability exists != current provider-backed work exists
+```
+
+Verification:
+
+```txt
+node --check src\main\services\queueClockPostureService.js
+node --check scripts\verify-queue-clock-posture-preview.js
+npm.cmd run verify:queue-clock-posture
+npm.cmd run verify:patient-packet-identity-sparse
+git status --short --branch
+```
+
+If a new verifier is added:
+
+```txt
+node --check scripts\verify-queue-clock-no-intent-semantics.js
+npm.cmd run verify:queue-clock-no-intent
+```
 
 ## HS250 Evidence
 
