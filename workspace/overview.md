@@ -101,6 +101,8 @@ Current state:
 - HS246 opened
 - HS246 accepted by HS247
 - HS248 advisory opened
+- HS248 accepted by HS249
+- HS250 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -117,14 +119,16 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Data Engineering / Engineering Review
-- no active Dev runway is open
-- active advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
-- expected advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
+- current executor is Dev
+- active Dev runway is `workspace/OverseerHS250-patient-packet-identity-sparse-gap-matrix-runway.md`
+- expected Dev handoff is `workspace/DevHS250-patient-packet-identity-sparse-gap-matrix.md`
+- latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
+- latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
+- latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
 - latest accepted Dev runway is `workspace/OverseerHS246-patient-packet-identity-conformance-preview-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS246-patient-packet-identity-conformance-preview.md`
 - latest Overseer review is `workspace/OverseerHS247-hs246-patient-packet-identity-review.md`
-- current work is advisory review of HS246 real-data gap risk
+- current work is read-only patient packet identity sparse gap matrix proof
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -138,12 +142,11 @@ Current heading:
 - one hardening seam at a time
 - Atlas project root remains the anchor
 
-Active advisory packet:
+Active packet:
 
-1. `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
-2. Review whether HS246's derived identity rows remain sufficient when local data is sparse, missing, malformed, or mixed-lane.
-3. Decide whether any gap truly needs durable checkpoint/policy state, or whether patient packet identity can stay derived/read-only for now.
-4. No Dev runway is open.
+1. `workspace/OverseerHS250-patient-packet-identity-sparse-gap-matrix-runway.md`
+2. Extend fixture-only/read-only coverage for sparse and imperfect `runtime.patient_packet_identity.preview` cases.
+3. Preserve no packet persistence, dispatch, provider calls, writes, enforcement, support artifacts, pruning/deletion, or UI.
 
 See `workspace/current.md` for current truth.
 
@@ -273,6 +276,8 @@ Keep these as the near-memory breadcrumb trail:
 - HS246 opened patient packet identity conformance preview: prove whether current derived posture can emit the accepted lane-specific future identity shapes without packet persistence, provider movement, schema, enforcement, or UI.
 - HS246/HS247 accepted patient packet identity conformance preview: `runtime.patient_packet_identity.preview` now proves the four lane-specific identity shapes are derivable now, all `derived_for_now`, all non-authoritative, with no packet persistence recommended.
 - HS248 opened patient packet identity real-data gap advisory review: Data Engineering should assess sparse/imperfect local-data cases before any durable packet/checkpoint, provider-backed execution, schema, enforcement, or UI work is considered.
+- HS248/HS249 accepted real-data gap review: patient packet identity can remain derived/read-only; the gap is verification coverage, not architecture.
+- HS250 opened sparse gap matrix runway: extend fixture-only/read-only verifier coverage for empty, malformed, missing-hash, failed-ref, cached, no-candidate, missing-anchor, local-SDE-gap, provider-needed, and mixed Hydration lane cases.
 
 ## Accepted Boundaries
 

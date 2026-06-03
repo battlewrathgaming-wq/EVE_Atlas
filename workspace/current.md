@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS248 patient packet identity real-data gap advisory request open
+Status: HS250 patient packet identity sparse gap matrix runway open
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: advisory review of HS246 real-data gap risk.
+Current focus: read-only patient packet identity sparse gap matrix proof.
 
 Current heading:
 
@@ -20,51 +20,44 @@ Current heading:
 
 ## Executor
 
-Current executor: Data Engineering / Engineering Review
+Current executor: Dev
 
-Active advisory request:
-
-```txt
-workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md
-```
-
-Expected advisory artifact:
+Active Dev runway:
 
 ```txt
-workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md
+workspace/OverseerHS250-patient-packet-identity-sparse-gap-matrix-runway.md
 ```
 
-Advisory task:
-
-Review the accepted HS246 patient packet identity preview for real-data gap risk.
-
-This is advisory only. Do not implement code. Do not create a Dev runway. Do not run live/provider calls.
-
-Core question:
+Expected Dev handoff:
 
 ```txt
-Can Atlas keep patient packet identity derived/read-only for now, or did HS246 expose a real need for durable checkpoint/policy state?
+workspace/DevHS250-patient-packet-identity-sparse-gap-matrix.md
 ```
 
-Review these HS246 identity rows against sparse/imperfect local data:
+Active task:
 
-- zKill Discovery movement intent
-- ESI Evidence Expansion candidate
-- view/local-record Hydration candidate
-- Watch/background Hydration candidate
+Extend proof coverage for `runtime.patient_packet_identity.preview` across sparse and imperfect local states.
 
-Pay special attention to:
+HS248/HS249 accepted that patient packet identity can remain derived/read-only for now. The missing piece is coverage, not architecture. This packet should add a fixture-only/read-only sparse gap matrix verifier and make the service disclose false confidence if the matrix exposes any gap.
 
-- no Watch rows
-- only system/radius Watches
-- malformed included/excluded system scope
-- no pending Discovery refs
-- failed Discovery refs
-- missing killmail hash
-- already-cached Evidence/EVEidence
+Preferred path:
+
+- extend `scripts/verify-patient-packet-identity-preview.js`, or
+- add a focused companion verifier if that keeps the test readable.
+
+Required matrix cases:
+
+- empty DB / no Watch / no Discovery refs / no Hydration candidates
+- system/radius Watch with valid scope
+- system/radius Watch with missing stored included/excluded scope
+- system/radius Watch with malformed included or excluded scope
+- pending Discovery ref without `killmail_hash`
+- failed Discovery ref with valid hash
+- already-cached Evidence/EVEidence matching a Discovery ref
 - no Hydration candidates
-- Hydration candidate with missing source anchors
-- local SDE gaps versus provider-needed labels
+- Hydration candidate missing source anchors
+- local SDE gap candidate versus provider-needed entity label
+- mixed view/local-record and Watch/background Hydration lanes
 
 Preserve:
 
@@ -96,6 +89,24 @@ workspace/OverseerHS247-hs246-patient-packet-identity-review.md
 
 Status: accepted.
 
+Latest accepted advisory request:
+
+```txt
+workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md
+```
+
+Latest accepted advisory artifact:
+
+```txt
+workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md
+```
+
+Latest advisory acceptance:
+
+```txt
+workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md
+```
+
 Latest accepted Dev runway:
 
 ```txt
@@ -108,7 +119,7 @@ Latest accepted Dev handoff:
 workspace/DevHS246-patient-packet-identity-conformance-preview.md
 ```
 
-No active Dev runway is open. HS248 is advisory review only.
+Status: HS246 accepted by HS247.
 
 ## HS246 Evidence
 
