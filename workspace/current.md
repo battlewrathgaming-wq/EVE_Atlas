@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS246 patient packet identity conformance preview runway open
+Status: HS246 accepted by HS247; no active Dev runway
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: read-only patient packet identity conformance preview.
+Current focus: resting after patient packet identity conformance preview acceptance.
 
 Current heading:
 
@@ -20,21 +20,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer
 
-Active Dev runway:
+Latest accepted Dev runway:
 
 ```txt
 workspace/OverseerHS246-patient-packet-identity-conformance-preview-runway.md
 ```
 
-Expected Dev handoff:
+Latest accepted Dev handoff:
 
 ```txt
 workspace/DevHS246-patient-packet-identity-conformance-preview.md
 ```
 
-Active task:
+Accepted task:
 
 Add a read-only patient packet identity conformance preview, preferably:
 
@@ -94,7 +94,112 @@ Preserve:
 - no pruning/deletion behavior
 - no renderer UI work
 
-Stop if this requires packet persistence, generic provider packet tables, mutating Discovery/Watch/Hydration state, provider calls, dispatch, runtime enforcement, command blocking, or UI work.
+Latest Overseer review:
+
+```txt
+workspace/OverseerHS247-hs246-patient-packet-identity-review.md
+```
+
+Status: accepted.
+
+No active Dev runway is open.
+
+## HS246 Evidence
+
+Dev updated 2026-06-03:
+
+- Added `runtime.patient_packet_identity.preview` as a read-only service command and renderer-eligible preview.
+- Added `src/main/services/patientPacketIdentityService.js`.
+- Added `scripts/verify-patient-packet-identity-preview.js`.
+- Added `npm.cmd run verify:patient-packet-identity`.
+- Updated service registry, command authority, passive side-effect, and enforcement dry-run coverage for the new command.
+- The preview derives lane-specific future identity shapes from existing local posture without creating packet persistence:
+  - zKill Discovery movement intent: Watch/scope/lookback/cadence/provider-action identity.
+  - ESI Evidence Expansion candidate: Discovery ref killmail/hash identity.
+  - view/local-record Hydration candidate: Hydration candidate key + lane identity.
+  - Watch/background Hydration candidate: Hydration candidate key + lane identity.
+- Sample focused verifier output:
+  - action: `runtime.patient_packet_identity.preview`
+  - identity rows: 4
+  - derivable now: 4
+  - unknown rows: 0
+  - clocks: `acquisition`, `hydration_recovery`
+  - lanes: `zkill_discovery`, `esi_evidence_expansion`, `view_local_record`, `watch_background`
+  - acquisition and Hydration separate: true
+  - all rows `derived_for_now`: true
+  - all rows not execution authority: true
+  - packet persistence recommended: false
+- Row posture proven:
+  - zKill Discovery movement intent uses local Watch schedule/scope/cadence anchors and does not run zKill.
+  - ESI Evidence Expansion identity is derived from local pending Discovery refs and does not call ESI or write Evidence/EVEidence.
+  - view/local-record Hydration identity is lane-specific readability demand and does not write metadata.
+  - Watch/background Hydration identity remains separate from Watch arming/provider movement permission.
+  - duplicate-prevention basis is disclosed per lane rather than collapsed into a generic provider packet.
+  - restart, storage unlock, and External I/O re-enable do not create catch-up flood or request debt.
+  - each row says it is not persisted, not executable, and not execution authority.
+- Focused verifier mutation check stayed unchanged for killmails, activity events, Discovery refs, fetch runs, API request logs, warnings, metadata runs, Assessment artifacts, Watch rows, and system Watch rows.
+- Verification run:
+  - `node --check src\main\services\patientPacketIdentityService.js` passed.
+  - `node --check scripts\verify-patient-packet-identity-preview.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\queueClockPostureService.js` passed.
+  - `npm.cmd run verify:patient-packet-identity` passed.
+  - `npm.cmd run verify:queue-clock-posture` passed.
+  - `npm.cmd run verify:queue-selection` passed.
+  - `npm.cmd run verify:queue-scope-isolation` passed.
+  - `npm.cmd run verify:watch-offline-readout` passed.
+  - `npm.cmd run verify:hydration-candidate-preview` passed.
+  - `npm.cmd run verify:hydration-backlog-preview` passed.
+  - `npm.cmd run verify:hydration-execution-policy` passed.
+  - `npm.cmd run verify:external-io-state` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed as additional new-command coverage verification.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 529 warnings across 10 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS246 working-tree changes.
+- Boundaries preserved:
+  - no packet table
+  - no persisted queue
+  - no active dispatcher
+  - no provider calls
+  - no zKill Discovery execution
+  - no ESI Evidence Expansion execution
+  - no Hydration execution
+  - no Hydration writes
+  - no Evidence/EVEidence writes
+  - no Discovery ref mutation
+  - no Watch mutation or arming
+  - no Assessment Memory or Marked mutation
+  - no storage config write or movement
+  - no support artifact creation
+  - no schema changes
+  - no runtime enforcement activation
+  - no command blocking
+  - no pruning/deletion behavior
+  - no renderer UI work
+
+## HS246 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS246-patient-packet-identity-conformance-preview.md
+```
+
+Status: patient packet identity conformance preview complete; accepted by HS247.
+
+HS246 result:
+
+- Atlas now has a read-only `runtime.patient_packet_identity.preview` surface that proves current lane-specific identity candidates can be derived now for zKill Discovery, ESI Evidence Expansion, view/local-record Hydration, and Watch/background Hydration without packet persistence, dispatcher behavior, provider calls, writes, enforcement, support artifacts, or UI.
+
+## Resting Next Candidates
+
+1. Review the new patient-packet identity preview output for any real-data gaps or uncomputable facts.
+2. Continue a nearby storage/runtime seam after choosing the next proof surface.
+3. Seek Data Engineering input if the next seam touches durable packet/checkpoint state, Hydration freshness policy, provider-backed execution, or multi-worker coordination.
+4. Keep active dispatch, provider movement, schema-backed queues, runtime enforcement activation, command blocking, pruning/deletion execution, support artifacts for packet state, and UI parked.
 
 ## HS242 Accepted Background
 

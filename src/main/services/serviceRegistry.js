@@ -52,6 +52,7 @@ const { buildSdeInventoryImportRewriteAuthorityProof } = require('./sdeInventory
 const { buildSdeTopologyImportRewriteAuthorityProof } = require('./sdeTopologyImportRewriteAuthorityProofService');
 const { buildRuntimeHookTelemetryReadout } = require('./runtimeHookTelemetryReadoutService');
 const { buildQueueClockPosturePreview } = require('./queueClockPostureService');
+const { buildPatientPacketIdentityPreview } = require('./patientPacketIdentityService');
 const {
   buildExternalIoStateConfigReadback,
   buildExternalIoStateConfigWrite,
@@ -601,6 +602,16 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview queue and clock runtime posture without dispatcher, provider queue, provider calls, writes, enforcement, or catch-up flood',
     handler: ({ db, payload, ...context }) => buildQueueClockPosturePreview(db, payload, {
+      ...context,
+      commandMetadata: listServiceCommands()
+    })
+  },
+  'runtime.patient_packet_identity.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview lane-specific future patient packet identity shapes without packet persistence, dispatch, providers, writes, enforcement, or UI',
+    handler: ({ db, payload, ...context }) => buildPatientPacketIdentityPreview(db, payload, {
       ...context,
       commandMetadata: listServiceCommands()
     })

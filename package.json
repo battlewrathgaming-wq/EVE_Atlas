@@ -40,6 +40,7 @@
     "verify:report-indexes": "node scripts/verify-report-indexes.js",
     "verify:queue-selection": "node scripts/verify-queue-selection.js",
     "verify:queue-clock-posture": "node scripts/verify-queue-clock-posture-preview.js",
+    "verify:patient-packet-identity": "node scripts/verify-patient-packet-identity-preview.js",
     "verify:queue-api-evidence-write": "node scripts/verify-queue-api-evidence-write.js",
     "verify:queue-scope-isolation": "node scripts/verify-queue-scope-isolation.js",
     "verify:message-taxonomy": "node scripts/verify-message-taxonomy.js",
