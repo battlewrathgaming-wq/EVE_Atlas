@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS222 active advisory runway
+Status: HS224 active Dev runway
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: SDE import/download readiness advisory review.
+Current focus: SDE topology import/rewrite authority fixture proof.
 
 Current heading:
 
@@ -20,17 +20,79 @@ Current heading:
 
 ## Executor
 
-Current executor: Engineering / Security specialist
+Current executor: Dev
 
 Expected handoff filename:
 
 ```txt
-workspace/EngineeringSecurityHS222-sde-import-download-readiness-advisory.md
+workspace/DevHS224-sde-topology-import-rewrite-authority-proof.md
 ```
 
-No active Dev runway is open. This is advisory review only.
+## Active HS224 Runway
 
-## Active HS222 Advisory Runway
+Opened 2026-06-03:
+
+- `workspace/OverseerHS224-sde-topology-import-rewrite-authority-proof-runway.md`
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS224-sde-topology-import-rewrite-authority-proof.md
+```
+
+Task:
+
+Add a fixture/offline proof for topology import/rewrite authority and recovery.
+
+Preferred command:
+
+```txt
+sde.topology_import_rewrite_authority.proof
+```
+
+Acceptable alternative:
+
+Add a focused verifier/service helper without renderer command exposure if the existing service architecture makes a command inappropriate. If no command is added, the verifier must still prove the same authority and recovery shape.
+
+Preferred outcome:
+
+- renderer source paths are ignored
+- trusted local source authority shape is explicit
+- remote source references are rejected for local topology import
+- missing/invalid/degraded storage blocks future topology rewrite
+- unconfigured or hard-lock budget blocks future topology rewrite
+- projected temp/cache/DB growth is represented
+- topology staged/fixture writes can fail without corrupting visible ready topology lookups
+- provenance is written only after complete promotion
+- partial temp/staged material cleanup is represented
+- retry/rerun posture is explicit and not automatic
+
+Preserve:
+
+- no SDE download
+- no provider-backed `sde.build-lookups`
+- no real operator source path inspection
+- no real operator lookup-table mutation
+- no storage movement
+- no real operator config write
+- no support artifact creation
+- no provider calls
+- no Hydration writes
+- no Evidence/EVEidence writes
+- no Discovery ref mutation
+- no Watch mutation
+- no Assessment Memory or Marked mutation
+- no renderer UI work
+- no pruning/deletion behavior
+- no inventory import behavior
+- no combined topology+inventory behavior
+- no runtime enforcement activation
+- no command blocking
+- no schema changes unless returned to Overseer first
+
+Stop if proving recovery requires schema changes, mutating the real operator DB, inspecting real operator source paths, starting provider-backed SDE download/build, touching inventory import behavior beyond context reading, UI work, runtime enforcement, command blocking, support artifact creation, destructive/private/live action, or real operator data inspection.
+
+## Resting HS222 Advisory Runway
 
 Opened 2026-06-03:
 
@@ -75,6 +137,32 @@ Preserve:
 - no term renames
 
 Stop if the review requires live/private/destructive action, real operator source path inspection, SDE download/import, lookup-table rewrite, storage movement, schema changes, or Dev implementation.
+
+## HS222 Acceptance
+
+Accepted 2026-06-03:
+
+- `workspace/EngineeringSecurityHS222-sde-import-download-readiness-advisory.md`
+- `workspace/OverseerHS223-hs222-sde-import-download-readiness-review.md`
+
+Decision:
+
+- Do not open real operator SDE import/rewrite yet.
+- Do not open provider-backed SDE download/build yet.
+- Open a fixture/offline topology import-rewrite authority proof first.
+
+Accepted parked items:
+
+- provider-backed SDE download/build
+- real operator lookup-table rewrite
+- renderer-supplied SDE source paths
+- remote URL local import
+- broad combined topology + inventory + download packet
+- environment-variable-only source authority as product posture
+- active runtime enforcement for SDE commands
+- UI/source picker
+- support artifact creation around SDE failures
+- pruning/deletion interactions with SDE source/cache material
 
 ## Resting HS220 Runway
 
