@@ -86,6 +86,7 @@ Current state:
 - HS230 accepted by HS231
 - HS232 opened
 - HS232 accepted by HS233
+- HS234 advisory consolidation opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -102,9 +103,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer
+- current executor is Engineering / Security advisory
 - no active Dev runway is open
-- current work is resting after HS232 real-local SDE inventory/type import/rewrite conformance was accepted by HS233
+- current work is HS234 SDE real-local consolidation advisory after HS232/HS233 acceptance
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - combined SDE behavior, provider-backed download/build, support artifacts, runtime enforcement, pruning/deletion, and UI work remain unopened
@@ -119,9 +120,10 @@ Current heading:
 
 Likely next shaping candidates:
 
-1. Decide whether to run a short advisory/safety consolidation before any combined local SDE import, operator source picker, provider-backed download/build, or support artifact writer work.
-2. Rest SDE movement and return to another storage/runtime seam if preferred.
-3. Keep provider-backed Hydration execution, persisted Hydration queues, active runtime enforcement, and UI work parked until Human/Overseer explicitly decides to continue those lines.
+1. Review EngineeringSecurityHS234 and decide whether local SDE import mechanics should rest.
+2. If HS234 recommends another small proof, decide whether to open it.
+3. Rest SDE movement and return to another storage/runtime seam if preferred.
+4. Keep provider-backed Hydration execution, persisted Hydration queues, active runtime enforcement, and UI work parked until Human/Overseer explicitly decides to continue those lines.
 
 See `workspace/current.md` for current truth.
 

@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS232 accepted by HS233; no active Dev runway
+Status: HS234 active advisory request
 Last updated: 2026-06-03
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after real-local SDE topology and inventory/type import/rewrite conformance.
+Current focus: SDE real-local consolidation advisory.
 
 Current heading:
 
@@ -20,7 +20,7 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer
+Current executor: Engineering / Security advisory
 
 Latest accepted handoff:
 
@@ -52,6 +52,18 @@ Latest Overseer review:
 workspace/OverseerHS233-hs232-real-local-sde-inventory-conformance-review.md
 ```
 
+Active advisory request:
+
+```txt
+workspace/OverseerHS234-sde-real-local-consolidation-advisory-request.md
+```
+
+Expected advisory artifact:
+
+```txt
+workspace/EngineeringSecurityHS234-sde-real-local-consolidation-advisory.md
+```
+
 No active Dev runway is open.
 
 ## Resting State
@@ -72,9 +84,28 @@ Accepted 2026-06-03:
 
 Likely next shaping candidates:
 
-1. Decide whether to run a short advisory/safety consolidation before any combined local SDE import, operator source picker, provider-backed download/build, or support artifact writer work.
-2. Rest SDE movement and return to another storage/runtime seam if preferred.
-3. Keep combined SDE behavior, provider-backed `sde.build-lookups`, support artifacts, runtime enforcement, pruning/deletion, and UI work parked.
+1. Review EngineeringSecurityHS234 and decide whether local SDE import mechanics should rest.
+2. If HS234 recommends another small proof, decide whether to open it.
+3. Rest SDE movement and return to another storage/runtime seam if preferred.
+4. Keep combined SDE behavior, provider-backed `sde.build-lookups`, support artifacts, runtime enforcement, pruning/deletion, and UI work parked unless HS234 and Human/Overseer acceptance say otherwise.
+
+## Active HS234 Advisory Request
+
+Opened 2026-06-03:
+
+- `workspace/OverseerHS234-sde-real-local-consolidation-advisory-request.md`
+
+Expected advisory artifact:
+
+```txt
+workspace/EngineeringSecurityHS234-sde-real-local-consolidation-advisory.md
+```
+
+Purpose:
+
+Review the post-HS231/HS233 SDE state and advise what should happen before Atlas opens any combined local SDE import, operator source picker, provider-backed download/build, support artifact writer, or runtime enforcement work.
+
+This is advisory only. It does not authorize Dev work.
 
 ## HS233 Acceptance
 
