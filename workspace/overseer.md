@@ -16,6 +16,8 @@ The Overseer does not implement worker tasks, decide cross-project meaning, or t
 
 Verification should be confidence-directed.
 
+Runtime efficiency is optimization, not constraint. Do not use credit cost as a reason to skip needed proof, specialist review, careful model shaping, or boundary safety checks.
+
 Prefer targeted checks that prove the packet's actual risk. Reuse current verification evidence when no relevant files changed and the evidence is complete enough to support the decision. Do not rerun broad checks only to re-orient.
 
 Overseer owns final acceptance judgment for a seam. Rerun the key acceptance checks when:

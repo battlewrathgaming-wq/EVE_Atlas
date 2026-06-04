@@ -17,6 +17,7 @@ Current product compass:
 - local-first memory
 - respectful provider use
 - one hardening seam at a time
+- optimize runtime only where assurance, clarity, and project quality are preserved
 
 ## Coordination Model
 
@@ -148,7 +149,8 @@ Current heading:
 - operational usefulness over architectural finality
 - one hardening seam at a time
 - Atlas project root remains the anchor
-- verification is confidence-directed: targeted proof, reuse current evidence when unchanged, broad checks only for shared/runtime/schema/registry risk or explicit request
+- verification is confidence-directed: spend proof where it changes confidence, reuse current evidence when unchanged, and reserve broad checks for real shared/runtime/schema/registry risk or explicit request
+- runtime efficiency is optimization, not constraint; do not skip needed proof, specialist review, or model shaping to save credits
 - Observation can form from raw local IDs before labels are complete; Hydration is expected selective readability repair, not a prerequisite or global completion demand
 
 Active state:
@@ -295,6 +297,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS254/HS255 accepted queue/clock no-intent semantics: `runtime.queue_clock_posture.preview` now keeps provider capability separate from current provider-backed work, distinguishes explicit manual discovery intent, Watch acquisition intent, and Watch/background Hydration demand, and preserves read-only/no-dispatch boundaries.
 - Verification cadence adopted: Overseer owns confidence-directed acceptance proof, Dev runs packet-listed checks, specialists reuse current evidence unless assurance is their task, and broad verification is reserved for real shared/runtime/schema/registry risk or explicit request.
 - Data-layer header correction adopted: future seams should read the pipeline as `Evidence/EVEidence -> raw-ID Observation -> selective Hydration for readability -> Assessment`, keeping Hydration expected but selective.
+- Runtime/cost posture clarified: Atlas optimizes repeated work only after assurance is current; credit savings must not steer project quality, boundary safety, specialist review, or necessary verification.
 
 ## Accepted Boundaries
 

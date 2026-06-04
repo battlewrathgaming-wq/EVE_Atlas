@@ -62,6 +62,7 @@ Meaning: Observation can form from local Evidence IDs before labels are complete
 
 Verification cadence:
 
+- Runtime efficiency is optimization, not constraint; do not skip needed proof or model shaping to save credits.
 - Dev packets should run only the checks listed for that packet unless touched files require wider proof.
 - Dev handoffs must report exact commands and results.
 - Do not run live/API/provider checks unless explicitly authorized.
