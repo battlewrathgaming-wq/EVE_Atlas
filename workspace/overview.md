@@ -111,6 +111,7 @@ Current state:
 - HS254 accepted by HS255
 - HS256 advisory opened
 - HS256 accepted by HS257
+- HS258 advisory opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -127,8 +128,10 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is none
+- current executor is Data Engineering / Engineering Review
 - no active Dev runway is open
+- active advisory request is `workspace/OverseerHS258-hydration-request-posture-advisory-request.md`
+- expected advisory artifact is `workspace/DataEngineeringHS258-hydration-request-posture-advisory.md`
 - latest accepted advisory request is `workspace/OverseerHS256-local-readability-report-construction-audit-request.md`
 - latest accepted advisory artifact is `workspace/DataEngineeringHS256-local-readability-report-construction-audit.md`
 - latest Overseer review is `workspace/OverseerHS257-hs256-local-readability-review.md`
@@ -140,7 +143,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is resting after local readability during report / Observation construction acceptance
+- current work is advisory shaping of provider-backed Hydration request posture
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -160,12 +163,12 @@ Current heading:
 - Observation can form from raw local IDs before labels are complete; Hydration is expected selective readability repair, not a prerequisite or global completion demand
 - Hydration selection seam north star: local readability may happen during report construction, but provider-backed readability requires an explicit operator trigger and still passes normal gates
 
-Active state:
+Active advisory packet:
 
-1. HS256 is accepted by `workspace/OverseerHS257-hs256-local-readability-review.md`.
-2. No active Dev runway is open.
-3. Local report / Observation construction can reuse cached/local labels and disclose unresolved IDs without provider-backed Hydration.
-4. Provider lookup for a new unresolved ID remains explicit, gated Hydration.
+1. `workspace/OverseerHS258-hydration-request-posture-advisory-request.md`
+2. Shape selected unresolved ID -> explicit operator request -> local-first check -> Hydration request posture.
+3. Preserve: focus is not request; request is not provider execution; request posture is for pickup, not direct lane injection.
+4. No Dev runway, provider calls, Hydration writes, queue persistence, dispatcher, schema, runtime enforcement, support artifact, Watch mutation, or UI work.
 
 See `workspace/current.md` for current truth.
 
@@ -308,6 +311,7 @@ Keep these as the near-memory breadcrumb trail:
 - Hydration selection north star adopted: local label lookup belongs with report/Observation construction; UI focus is not a Hydration request; explicit operator request is still not provider execution.
 - HS256 opened local readability during report construction advisory: trace existing local label sources and unresolved-ID disclosure before any provider-backed Hydration trigger or UI behavior is shaped.
 - HS256/HS257 accepted local readability audit: reports already use local/cached labels and raw-ID fallbacks without provider calls or Hydration writes; one-time explicit provider resolution becomes reusable local readability cache, and local cache reuse is not Hydration execution.
+- HS258 opened Hydration request posture advisory: define how an explicit operator request for an unresolved ID becomes local-first, gated request posture for pickup without direct queue/lane injection or provider execution.
 
 ## Accepted Boundaries
 

@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS256 accepted by HS257; no active Dev runway
+Status: HS258 hydration request posture advisory request open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after local readability during report / Observation construction acceptance.
+Current focus: advisory shaping of provider-backed Hydration request posture.
 
 Current heading:
 
@@ -20,7 +20,35 @@ Current heading:
 
 ## Executor
 
-Current executor: None
+Current executor: Data Engineering / Engineering Review
+
+Active advisory request:
+
+```txt
+workspace/OverseerHS258-hydration-request-posture-advisory-request.md
+```
+
+Expected advisory artifact:
+
+```txt
+workspace/DataEngineeringHS258-hydration-request-posture-advisory.md
+```
+
+Advisory task:
+
+Shape the read-only semantics for provider-backed Hydration request posture.
+
+Core model:
+
+```txt
+selected unresolved ID
+-> explicit operator request
+-> local-first check
+-> Hydration request posture
+-> eligible / held / blocked / already local / invalid
+```
+
+This is advisory only. Do not implement code. Do not create a Dev runway. Do not run live/API/provider calls.
 
 Latest accepted advisory request:
 
@@ -62,6 +90,14 @@ Provider resolution is a one-time explicit operator act for an unresolved ID.
 Once resolved and stored, that label becomes local readability cache.
 Local cache reuse is not Hydration execution.
 Provider lookup for a new unresolved ID remains explicit, gated Hydration.
+```
+
+HS258 refinement:
+
+```txt
+Explicit act creates a Hydration request posture.
+Request posture is for pickup, not direct lane injection.
+Provider movement remains gated and unopened.
 ```
 
 Latest accepted Dev runway:
