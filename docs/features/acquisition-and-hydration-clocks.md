@@ -18,13 +18,26 @@ Hydration Recovery Clock = makes local facts readable.
 
 ## Trust Ladder
 
+Header correction accepted 2026-06-04:
+
+```text
+Evidence / EVEidence
+-> raw-ID Observation
+-> selective Hydration for readability
+-> Assessment Memory
+```
+
+Hydration is expected selective readability repair for local records and Observations, not a prerequisite for Evidence / EVEidence and not a demand to hydrate every ID before Atlas can form a raw-ID Observation.
+
 ```text
 zKill candidate / summary
 -> Discovery ref / possible lead
 -> ESI killmail expansion
 -> provider-complete killmail report
 -> local Evidence / EVEidence
--> Observation / report / Assessment may cite it
+-> raw-ID Observation / report may cite it
+-> selective Hydration can improve readability
+-> Assessment may cite Evidence / EVEidence or Observation basis
 ```
 
 zKill is a Discovery signal. It may provide useful candidate and preview metadata, but it is not provider-complete Evidence.
@@ -85,6 +98,8 @@ The Hydration Recovery Clock handles the larger readability pressure created by 
 The main pressure is not usually the zKill request or the ESI killmail expansion request. One expanded killmail can expose many participant, corporation, alliance, ship/type, or location IDs. Making those IDs human-readable can require many metadata/name lookups if local records are incomplete.
 
 Hydration repairs readability and metadata. It does not create Evidence / EVEidence and must not replace IDs as facts.
+
+Hydration should be understood as expected but selective. Atlas should prefer local IDs and local records as the truth basis, then hydrate labels where readability changes operator understanding, inspection, Assessment, or point-of-need review. Backlog is normal; global Hydration completeness is not required before raw-ID Observation exists.
 
 It has two conceptual lanes.
 

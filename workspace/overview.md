@@ -1,7 +1,7 @@
 # AURA Atlas Workspace Overview
 
 Status: Active breadcrumb map
-Last reviewed: 2026-06-03
+Last reviewed: 2026-06-04
 
 ## Vision Statement
 
@@ -140,6 +140,7 @@ Current state:
 - local SDE import/rewrite mechanics can rest for now
 - combined SDE behavior, provider-backed download/build, support artifacts, runtime enforcement, pruning/deletion, and UI work remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
+- data-layer header correction accepted: `Evidence/EVEidence -> raw-ID Observation -> selective Hydration for readability -> Assessment`
 
 Current heading:
 
@@ -148,6 +149,7 @@ Current heading:
 - one hardening seam at a time
 - Atlas project root remains the anchor
 - verification is confidence-directed: targeted proof, reuse current evidence when unchanged, broad checks only for shared/runtime/schema/registry risk or explicit request
+- Observation can form from raw local IDs before labels are complete; Hydration is expected selective readability repair, not a prerequisite or global completion demand
 
 Active state:
 
@@ -292,6 +294,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS254 opened queue/clock no-intent semantics matrix: prove capability-only, absent manual intent, Watch acquisition intent, and Hydration demand boundaries before future dispatcher/enforcement/UI work can inherit the readout.
 - HS254/HS255 accepted queue/clock no-intent semantics: `runtime.queue_clock_posture.preview` now keeps provider capability separate from current provider-backed work, distinguishes explicit manual discovery intent, Watch acquisition intent, and Watch/background Hydration demand, and preserves read-only/no-dispatch boundaries.
 - Verification cadence adopted: Overseer owns confidence-directed acceptance proof, Dev runs packet-listed checks, specialists reuse current evidence unless assurance is their task, and broad verification is reserved for real shared/runtime/schema/registry risk or explicit request.
+- Data-layer header correction adopted: future seams should read the pipeline as `Evidence/EVEidence -> raw-ID Observation -> selective Hydration for readability -> Assessment`, keeping Hydration expected but selective.
 
 ## Accepted Boundaries
 

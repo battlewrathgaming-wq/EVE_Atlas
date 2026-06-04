@@ -1,7 +1,7 @@
 # AURA Atlas Current Work
 
 Status: HS254 accepted by HS255; no active Dev runway
-Last updated: 2026-06-03
+Last updated: 2026-06-04
 
 ## Active Milestone
 
@@ -51,6 +51,14 @@ provider capability exists != current provider-backed work exists
 ```
 
 Next useful action: orient and choose the next storage/runtime hardening seam. Do not open Dev work until the next seam is explicit.
+
+Header correction accepted 2026-06-04:
+
+```txt
+Evidence/EVEidence -> raw-ID Observation -> selective Hydration for readability -> Assessment
+```
+
+Meaning: Observation can form from local Evidence IDs before labels are complete. Hydration is expected selective readability repair where labels matter, not a prerequisite for raw-ID Observation and not a global completion demand.
 
 Verification cadence:
 

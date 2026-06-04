@@ -19,6 +19,17 @@ This note is not a schema migration, Dev runway, UI specification, or provider-w
 
 ## Core Ladder
 
+Header correction accepted 2026-06-04:
+
+```text
+Evidence / EVEidence
+-> raw-ID Observation
+-> selective Hydration for readability
+-> Assessment Memory
+```
+
+This correction means Observation can exist from raw local IDs before readable labels are complete. Hydration is expected selective readability repair when human-readable labels are needed, not a prerequisite for Evidence / EVEidence or raw-ID Observation and not a global completion demand.
+
 ```text
 Discovery
 -> Evidence / EVEidence
@@ -30,7 +41,7 @@ Discovery
 The short Observation ladder is:
 
 ```text
-Evidence / EVEidence -> relationships / appearances -> Observation
+Evidence / EVEidence -> relationships / appearances -> raw-ID Observation
 ```
 
 ## Discovery
@@ -121,6 +132,8 @@ Relationship grouping should help Atlas preserve discovery and expansion context
 
 Hydration repairs readability. It does not create Evidence / EVEidence and does not replace IDs as facts.
 
+Hydration is expected as selective readability repair after local facts and raw-ID Observation exist. It should be applied where labels help the operator understand, assess, or inspect the record. It is not optional in the sense of being unimportant, but it is selective and point-of-need rather than automatic global completion.
+
 Hydration can:
 
 - resolve missing names and labels
@@ -171,6 +184,8 @@ Do not use `R-Scanner` or `R-scan` as Atlas internal/source terminology. Those a
 Observation is the Atlas product layer that computes and collates local records into an operator-facing story.
 
 Observation is not Evidence / EVEidence, not Discovery, not Watch, not Hydration, and not Assessment Memory.
+
+Observation may begin as raw-ID Observation. Missing labels should be shown as readable gaps or unresolved IDs, not treated as missing Evidence. Selective Hydration can then improve readability without changing the Evidence basis.
 
 A future UI may present Observations, but the term does not name a required pane or surface.
 
