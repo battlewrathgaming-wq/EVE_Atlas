@@ -101,6 +101,17 @@ Hydration repairs readability and metadata. It does not create Evidence / EVEide
 
 Hydration should be understood as expected but selective. Atlas should prefer local IDs and local records as the truth basis, then hydrate labels where readability changes operator understanding, inspection, Assessment, or point-of-need review. Backlog is normal; global Hydration completeness is not required before raw-ID Observation exists.
 
+Hydration selection north star accepted 2026-06-04:
+
+```text
+Local readability is part of report construction.
+Provider readability is an explicit operator act.
+Focus is not request.
+Request is not provider execution.
+```
+
+Local DB, entity-cache, and SDE readability checks may happen during report or Observation construction. UI focus, hover, highlight, keyboard navigation, or mouse navigation should not by itself create provider-backed Hydration. A distinct operator trigger can create provider-backed Hydration posture for a selected ID, but that posture still passes through External I/O, cadence/provider, storage, and policy gates before any external movement.
+
 It has two conceptual lanes.
 
 ### Watch Hydration Lane

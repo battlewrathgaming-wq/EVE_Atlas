@@ -142,6 +142,7 @@ Current state:
 - combined SDE behavior, provider-backed download/build, support artifacts, runtime enforcement, pruning/deletion, and UI work remain unopened
 - current work now has a durable data-layer spine for future storage/runtime seams
 - data-layer header correction accepted: `Evidence/EVEidence -> raw-ID Observation -> selective Hydration for readability -> Assessment`
+- Hydration attention north star accepted: local readability is report construction; provider readability is an explicit operator act; focus is not request; request is not provider execution
 
 Current heading:
 
@@ -152,6 +153,7 @@ Current heading:
 - verification is confidence-directed: spend proof where it changes confidence, reuse current evidence when unchanged, and reserve broad checks for real shared/runtime/schema/registry risk or explicit request
 - runtime efficiency is optimization, not constraint; do not skip needed proof, specialist review, or model shaping to save credits
 - Observation can form from raw local IDs before labels are complete; Hydration is expected selective readability repair, not a prerequisite or global completion demand
+- Hydration selection seam north star: local readability may happen during report construction, but provider-backed readability requires an explicit operator trigger and still passes normal gates
 
 Active state:
 
@@ -298,6 +300,7 @@ Keep these as the near-memory breadcrumb trail:
 - Verification cadence adopted: Overseer owns confidence-directed acceptance proof, Dev runs packet-listed checks, specialists reuse current evidence unless assurance is their task, and broad verification is reserved for real shared/runtime/schema/registry risk or explicit request.
 - Data-layer header correction adopted: future seams should read the pipeline as `Evidence/EVEidence -> raw-ID Observation -> selective Hydration for readability -> Assessment`, keeping Hydration expected but selective.
 - Runtime/cost posture clarified: Atlas optimizes repeated work only after assurance is current; credit savings must not steer project quality, boundary safety, specialist review, or necessary verification.
+- Hydration selection north star adopted: local label lookup belongs with report/Observation construction; UI focus is not a Hydration request; explicit operator request is still not provider execution.
 
 ## Accepted Boundaries
 

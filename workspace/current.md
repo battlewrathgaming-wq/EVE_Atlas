@@ -60,6 +60,17 @@ Evidence/EVEidence -> raw-ID Observation -> selective Hydration for readability 
 
 Meaning: Observation can form from local Evidence IDs before labels are complete. Hydration is expected selective readability repair where labels matter, not a prerequisite for raw-ID Observation and not a global completion demand.
 
+Current seam north star:
+
+```txt
+Local readability is part of report construction.
+Provider readability is an explicit operator act.
+Focus is not request.
+Request is not provider execution.
+```
+
+Meaning: Atlas may use local DB/SDE/entity cache during report or Observation construction to make IDs readable. UI focus, hover, highlight, or navigation should not create provider-backed Hydration. A distinct operator trigger may create provider-backed Hydration posture, and normal gates still decide whether external movement is eligible, held, or blocked.
+
 Verification cadence:
 
 - Runtime efficiency is optimization, not constraint; do not skip needed proof or model shaping to save credits.
