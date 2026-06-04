@@ -118,6 +118,20 @@ Provider resolution is a one-time explicit operator act for an unresolved ID. On
 
 Local cache reuse is not Hydration execution. Provider lookup for a new unresolved ID remains explicit, gated Hydration.
 
+Hydration request posture accepted 2026-06-05:
+
+```text
+selected unresolved ID
+-> explicit operator act
+-> local-first lookup
+-> Hydration request posture
+-> already local / local lookup available / provider needed / held / blocked / invalid / insufficient basis
+```
+
+Request posture is pickup-readable, not pickup. Pickup is not execution. Execution is not write until the write path succeeds under policy.
+
+A Hydration request posture is read-only classification material for a selected unresolved ID. It must not create a queue, inject a lane, dispatch work, call providers, create `metadata_runs`, write `entities`, patch `activity_events`, or imply provider authorization. Focus, hover, navigation, and report load are not requests.
+
 It has two conceptual lanes.
 
 ### Watch Hydration Lane

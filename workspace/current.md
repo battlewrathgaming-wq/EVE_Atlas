@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS258 hydration request posture advisory request open
+Status: HS258 hydration request posture advisory accepted by HS259; resting
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: advisory shaping of provider-backed Hydration request posture.
+Current focus: resting after provider-backed Hydration request posture advisory acceptance.
 
 Current heading:
 
@@ -20,23 +20,33 @@ Current heading:
 
 ## Executor
 
-Current executor: Data Engineering / Engineering Review
+Current executor: none
 
-Active advisory request:
+Latest accepted advisory request:
 
 ```txt
 workspace/OverseerHS258-hydration-request-posture-advisory-request.md
 ```
 
-Expected advisory artifact:
+Latest accepted advisory artifact:
 
 ```txt
 workspace/DataEngineeringHS258-hydration-request-posture-advisory.md
 ```
 
-Advisory task:
+Latest Overseer review:
 
-Shape the read-only semantics for provider-backed Hydration request posture.
+```txt
+workspace/OverseerHS259-hs258-hydration-request-posture-review.md
+```
+
+Status: accepted.
+
+No active Dev runway is open.
+
+Accepted result:
+
+Shape provider-backed Hydration request posture as a read-only selected-ID classification, not queue insertion, pickup, provider execution, or write behavior.
 
 Core model:
 
@@ -48,31 +58,13 @@ selected unresolved ID
 -> eligible / held / blocked / already local / invalid
 ```
 
-This is advisory only. Do not implement code. Do not create a Dev runway. Do not run live/API/provider calls.
-
-Latest accepted advisory request:
+Accepted distinction:
 
 ```txt
-workspace/OverseerHS256-local-readability-report-construction-audit-request.md
+Request posture is pickup-readable, not pickup.
+Pickup is not execution.
+Execution is not write until the write path succeeds under policy.
 ```
-
-Latest accepted advisory artifact:
-
-```txt
-workspace/DataEngineeringHS256-local-readability-report-construction-audit.md
-```
-
-Latest Overseer review:
-
-```txt
-workspace/OverseerHS257-hs256-local-readability-review.md
-```
-
-Status: accepted.
-
-No active Dev runway is open.
-
-Accepted result: local report / Observation construction can reuse cached/local labels and disclose unresolved IDs without provider-backed Hydration.
 
 Preserve the north star:
 
@@ -92,13 +84,43 @@ Local cache reuse is not Hydration execution.
 Provider lookup for a new unresolved ID remains explicit, gated Hydration.
 ```
 
-HS258 refinement:
+HS258/HS259 refinement:
 
 ```txt
 Explicit act creates a Hydration request posture.
 Request posture is for pickup, not direct lane injection.
 Provider movement remains gated and unopened.
 ```
+
+Next candidate seam, if continuing:
+
+```txt
+read-only selected-ID Hydration request posture preview
+```
+
+No active Dev runway is open for that seam yet.
+
+Recent accepted advisory request:
+
+```txt
+workspace/OverseerHS256-local-readability-report-construction-audit-request.md
+```
+
+Recent accepted advisory artifact:
+
+```txt
+workspace/DataEngineeringHS256-local-readability-report-construction-audit.md
+```
+
+Recent Overseer review:
+
+```txt
+workspace/OverseerHS257-hs256-local-readability-review.md
+```
+
+Status: accepted.
+
+Accepted result: local report / Observation construction can reuse cached/local labels and disclose unresolved IDs without provider-backed Hydration.
 
 Latest accepted Dev runway:
 
