@@ -113,6 +113,7 @@ Current state:
 - HS256 accepted by HS257
 - HS258 advisory opened
 - HS258 accepted by HS259
+- HS260 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -129,8 +130,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is none
-- no active Dev runway is open
+- current executor is Dev
+- active Dev runway is `workspace/OverseerHS260-selected-id-hydration-request-posture-preview-runway.md`
+- expected Dev handoff is `workspace/DevHS260-selected-id-hydration-request-posture-preview.md`
 - latest accepted advisory request is `workspace/OverseerHS258-hydration-request-posture-advisory-request.md`
 - latest accepted advisory artifact is `workspace/DataEngineeringHS258-hydration-request-posture-advisory.md`
 - latest Overseer review is `workspace/OverseerHS259-hs258-hydration-request-posture-review.md`
@@ -142,7 +144,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is resting after provider-backed Hydration request posture advisory acceptance
+- current work is read-only selected-ID Hydration request posture preview
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -163,11 +165,11 @@ Current heading:
 - Observation can form from raw local IDs before labels are complete; Hydration is expected selective readability repair, not a prerequisite or global completion demand
 - Hydration selection seam north star: local readability may happen during report construction, but provider-backed readability requires an explicit operator trigger and still passes normal gates
 
-Resting state:
+Active Dev packet:
 
-1. HS258 accepted by HS259.
-2. No active Dev runway is open.
-3. Next candidate seam, if continuing: read-only selected-ID Hydration request posture preview.
+1. `workspace/OverseerHS260-selected-id-hydration-request-posture-preview-runway.md`
+2. Add a read-only `metadata.hydration_request_posture.preview` proof if implementation confirms that command shape.
+3. Prove selected unresolved ID -> explicit operator act -> local-first lookup -> Hydration request posture.
 4. Preserve: focus is not request; request posture is pickup-readable, not pickup; pickup is not execution; execution is not write until the write path succeeds under policy.
 
 See `workspace/current.md` for current truth.

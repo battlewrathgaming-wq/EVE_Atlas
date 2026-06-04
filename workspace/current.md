@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS258 hydration request posture advisory accepted by HS259; resting
+Status: HS260 selected-ID Hydration request posture preview runway open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after provider-backed Hydration request posture advisory acceptance.
+Current focus: read-only selected-ID Hydration request posture preview.
 
 Current heading:
 
@@ -20,7 +20,38 @@ Current heading:
 
 ## Executor
 
-Current executor: none
+Current executor: Dev
+
+Active Dev runway:
+
+```txt
+workspace/OverseerHS260-selected-id-hydration-request-posture-preview-runway.md
+```
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS260-selected-id-hydration-request-posture-preview.md
+```
+
+Dev task:
+
+Add the smallest read-only service proof for:
+
+```txt
+selected unresolved ID
+-> explicit operator act
+-> local-first lookup
+-> Hydration request posture
+```
+
+Target command concept:
+
+```txt
+metadata.hydration_request_posture.preview
+```
+
+No provider calls, Hydration writes, metadata run creation, entity writes, activity-event patches, queue persistence, dispatcher, schema change, runtime enforcement, storage/config mutation, Watch mutation, support artifact, or renderer UI work.
 
 Latest accepted advisory request:
 
