@@ -112,6 +112,12 @@ Request is not provider execution.
 
 Local DB, entity-cache, and SDE readability checks may happen during report or Observation construction. UI focus, hover, highlight, keyboard navigation, or mouse navigation should not by itself create provider-backed Hydration. A distinct operator trigger can create provider-backed Hydration posture for a selected ID, but that posture still passes through External I/O, cadence/provider, storage, and policy gates before any external movement.
 
+Accepted clarification 2026-06-05:
+
+Provider resolution is a one-time explicit operator act for an unresolved ID. Once resolved and stored, that label becomes local readability cache and can be reused during future report or Observation construction without new provider contact.
+
+Local cache reuse is not Hydration execution. Provider lookup for a new unresolved ID remains explicit, gated Hydration.
+
 It has two conceptual lanes.
 
 ### Watch Hydration Lane

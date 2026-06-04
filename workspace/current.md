@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS256 local readability during report construction advisory request open
+Status: HS256 accepted by HS257; no active Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: advisory audit of local readability during report / Observation construction.
+Current focus: resting after local readability during report / Observation construction acceptance.
 
 Current heading:
 
@@ -20,31 +20,31 @@ Current heading:
 
 ## Executor
 
-Current executor: Data Engineering / Engineering Review
+Current executor: None
 
-Active advisory request:
+Latest accepted advisory request:
 
 ```txt
 workspace/OverseerHS256-local-readability-report-construction-audit-request.md
 ```
 
-Expected advisory artifact:
+Latest accepted advisory artifact:
 
 ```txt
 workspace/DataEngineeringHS256-local-readability-report-construction-audit.md
 ```
 
-Advisory task:
-
-Audit how Atlas currently performs local readability lookup during report / Observation construction.
-
-Core question:
+Latest Overseer review:
 
 ```txt
-What local DB/entity/SDE label lookup already happens when Atlas builds reports, and what should future readouts disclose before provider-backed Hydration exists?
+workspace/OverseerHS257-hs256-local-readability-review.md
 ```
 
-This is advisory only. Do not implement code. Do not create a Dev runway. Do not run live/API/provider calls.
+Status: accepted.
+
+No active Dev runway is open.
+
+Accepted result: local report / Observation construction can reuse cached/local labels and disclose unresolved IDs without provider-backed Hydration.
 
 Preserve the north star:
 
@@ -53,6 +53,15 @@ Local readability is part of report construction.
 Provider readability is an explicit operator act.
 Focus is not request.
 Request is not provider execution.
+```
+
+Accepted clarification:
+
+```txt
+Provider resolution is a one-time explicit operator act for an unresolved ID.
+Once resolved and stored, that label becomes local readability cache.
+Local cache reuse is not Hydration execution.
+Provider lookup for a new unresolved ID remains explicit, gated Hydration.
 ```
 
 Latest accepted Dev runway:

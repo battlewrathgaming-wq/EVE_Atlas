@@ -110,6 +110,7 @@ Current state:
 - HS254 opened
 - HS254 accepted by HS255
 - HS256 advisory opened
+- HS256 accepted by HS257
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -126,10 +127,11 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Data Engineering / Engineering Review
+- current executor is none
 - no active Dev runway is open
-- active advisory request is `workspace/OverseerHS256-local-readability-report-construction-audit-request.md`
-- expected advisory artifact is `workspace/DataEngineeringHS256-local-readability-report-construction-audit.md`
+- latest accepted advisory request is `workspace/OverseerHS256-local-readability-report-construction-audit-request.md`
+- latest accepted advisory artifact is `workspace/DataEngineeringHS256-local-readability-report-construction-audit.md`
+- latest Overseer review is `workspace/OverseerHS257-hs256-local-readability-review.md`
 - latest accepted Dev runway is `workspace/OverseerHS254-queue-clock-no-intent-semantics-matrix-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS254-queue-clock-no-intent-semantics-matrix.md`
 - latest accepted advisory request is `workspace/OverseerHS252-queue-clock-current-work-semantics-review-request.md`
@@ -138,7 +140,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is advisory audit of local readability during report / Observation construction
+- current work is resting after local readability during report / Observation construction acceptance
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -158,12 +160,12 @@ Current heading:
 - Observation can form from raw local IDs before labels are complete; Hydration is expected selective readability repair, not a prerequisite or global completion demand
 - Hydration selection seam north star: local readability may happen during report construction, but provider-backed readability requires an explicit operator trigger and still passes normal gates
 
-Active advisory packet:
+Active state:
 
-1. `workspace/OverseerHS256-local-readability-report-construction-audit-request.md`
-2. Audit what local DB/entity/SDE label lookup already happens during report construction.
-3. Preserve: local readability is report construction; provider readability is explicit operator act; focus is not request; request is not provider execution.
-4. No Dev runway, provider calls, Hydration writes, schema, runtime enforcement, support artifact, or UI work.
+1. HS256 is accepted by `workspace/OverseerHS257-hs256-local-readability-review.md`.
+2. No active Dev runway is open.
+3. Local report / Observation construction can reuse cached/local labels and disclose unresolved IDs without provider-backed Hydration.
+4. Provider lookup for a new unresolved ID remains explicit, gated Hydration.
 
 See `workspace/current.md` for current truth.
 
@@ -305,6 +307,7 @@ Keep these as the near-memory breadcrumb trail:
 - Runtime/cost posture clarified: Atlas optimizes repeated work only after assurance is current; credit savings must not steer project quality, boundary safety, specialist review, or necessary verification.
 - Hydration selection north star adopted: local label lookup belongs with report/Observation construction; UI focus is not a Hydration request; explicit operator request is still not provider execution.
 - HS256 opened local readability during report construction advisory: trace existing local label sources and unresolved-ID disclosure before any provider-backed Hydration trigger or UI behavior is shaped.
+- HS256/HS257 accepted local readability audit: reports already use local/cached labels and raw-ID fallbacks without provider calls or Hydration writes; one-time explicit provider resolution becomes reusable local readability cache, and local cache reuse is not Hydration execution.
 
 ## Accepted Boundaries
 
