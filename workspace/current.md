@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS254 accepted by HS255; no active Dev runway
-Last updated: 2026-06-04
+Status: HS256 local readability during report construction advisory request open
+Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after queue/clock no-intent current-work semantics acceptance.
+Current focus: advisory audit of local readability during report / Observation construction.
 
 Current heading:
 
@@ -20,7 +20,40 @@ Current heading:
 
 ## Executor
 
-Current executor: None
+Current executor: Data Engineering / Engineering Review
+
+Active advisory request:
+
+```txt
+workspace/OverseerHS256-local-readability-report-construction-audit-request.md
+```
+
+Expected advisory artifact:
+
+```txt
+workspace/DataEngineeringHS256-local-readability-report-construction-audit.md
+```
+
+Advisory task:
+
+Audit how Atlas currently performs local readability lookup during report / Observation construction.
+
+Core question:
+
+```txt
+What local DB/entity/SDE label lookup already happens when Atlas builds reports, and what should future readouts disclose before provider-backed Hydration exists?
+```
+
+This is advisory only. Do not implement code. Do not create a Dev runway. Do not run live/API/provider calls.
+
+Preserve the north star:
+
+```txt
+Local readability is part of report construction.
+Provider readability is an explicit operator act.
+Focus is not request.
+Request is not provider execution.
+```
 
 Latest accepted Dev runway:
 
@@ -42,15 +75,7 @@ workspace/OverseerHS255-hs254-queue-clock-no-intent-review.md
 
 Status: accepted.
 
-No active Dev runway is open.
-
-Accepted result:
-
-```txt
-provider capability exists != current provider-backed work exists
-```
-
-Next useful action: orient and choose the next storage/runtime hardening seam. Do not open Dev work until the next seam is explicit.
+No active Dev runway is open. HS256 is advisory review only.
 
 Header correction accepted 2026-06-04:
 
