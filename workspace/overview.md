@@ -147,6 +147,7 @@ Current heading:
 - operational usefulness over architectural finality
 - one hardening seam at a time
 - Atlas project root remains the anchor
+- verification is confidence-directed: targeted proof, reuse current evidence when unchanged, broad checks only for shared/runtime/schema/registry risk or explicit request
 
 Active state:
 
@@ -290,6 +291,7 @@ Keep these as the near-memory breadcrumb trail:
 - HS252/HS253 accepted the advisory: the preview is safe, but provider capability must not inflate current provider-backed work semantics.
 - HS254 opened queue/clock no-intent semantics matrix: prove capability-only, absent manual intent, Watch acquisition intent, and Hydration demand boundaries before future dispatcher/enforcement/UI work can inherit the readout.
 - HS254/HS255 accepted queue/clock no-intent semantics: `runtime.queue_clock_posture.preview` now keeps provider capability separate from current provider-backed work, distinguishes explicit manual discovery intent, Watch acquisition intent, and Watch/background Hydration demand, and preserves read-only/no-dispatch boundaries.
+- Verification cadence adopted: Overseer owns confidence-directed acceptance proof, Dev runs packet-listed checks, specialists reuse current evidence unless assurance is their task, and broad verification is reserved for real shared/runtime/schema/registry risk or explicit request.
 
 ## Accepted Boundaries
 

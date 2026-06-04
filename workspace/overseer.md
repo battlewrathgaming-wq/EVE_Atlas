@@ -12,6 +12,26 @@ The Overseer owns continuity, milestone meaning, runway shaping, handoff review,
 
 The Overseer does not implement worker tasks, decide cross-project meaning, or turn advisory artifacts into executable work without accepting their relevant recommendations into `workspace/current.md`.
 
+## Verification Cadence
+
+Verification should be confidence-directed.
+
+Prefer targeted checks that prove the packet's actual risk. Reuse current verification evidence when no relevant files changed and the evidence is complete enough to support the decision. Do not rerun broad checks only to re-orient.
+
+Overseer owns final acceptance judgment for a seam. Rerun the key acceptance checks when:
+
+- code, package scripts, schema, service registry, runtime gate logic, verifier files, or other relevant behavior changed
+- Dev evidence is missing, stale, incomplete, or from before a fix
+- a boundary is risky enough that acceptance needs direct proof
+- a result conflicts with the handoff
+- the Human explicitly asks for fresh proof
+
+Specialists and advisory workers should cite existing verification evidence unless their task is specifically assurance, code review, or proof of a disputed boundary.
+
+Broad verification is reserved for shared/runtime/schema/registry risk, unclear evidence, or explicit Human/Overseer request. When unsure, choose the narrowest useful check that changes confidence.
+
+For accepted packets, record exact commands and results in the review artifact so later agents can reuse proof instead of spending it again.
+
 ## Cooperative Keyword Note
 
 If a key word, protected term, bridge-facing label, adapter label, or presentation phrase is unclear, treat the uncertainty as advisory and cooperative first.

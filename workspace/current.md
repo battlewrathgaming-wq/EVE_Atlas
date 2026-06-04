@@ -52,6 +52,14 @@ provider capability exists != current provider-backed work exists
 
 Next useful action: orient and choose the next storage/runtime hardening seam. Do not open Dev work until the next seam is explicit.
 
+Verification cadence:
+
+- Dev packets should run only the checks listed for that packet unless touched files require wider proof.
+- Dev handoffs must report exact commands and results.
+- Do not run live/API/provider checks unless explicitly authorized.
+- Do not run broad verification by default.
+- Overseer acceptance verifies enough to stand behind the seam, then later agents should reuse that evidence unless relevant files changed or evidence is missing/stale.
+
 Preserve:
 
 - no packet table
