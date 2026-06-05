@@ -42,6 +42,7 @@
     "verify:queue-clock-posture": "node scripts/verify-queue-clock-posture-preview.js",
     "verify:watch-task-outcome-map": "node scripts/verify-watch-task-outcome-map-preview.js",
     "verify:watch-scope-authority-conformance": "node scripts/verify-watch-scope-authority-conformance.js",
+    "verify:system-radius-authoring-preflight": "node scripts/verify-system-radius-authoring-preflight.js",
     "verify:queue-clock-no-intent": "node scripts/verify-queue-clock-no-intent-semantics.js",
     "verify:patient-packet-identity": "node scripts/verify-patient-packet-identity-preview.js",
     "verify:patient-packet-identity-sparse": "node scripts/verify-patient-packet-identity-sparse.js",

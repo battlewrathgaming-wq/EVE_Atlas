@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS304 system/radius authoring preflight opened
+Status: HS304 system/radius authoring preflight accepted; no active Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: local-only system/radius Watch authoring preflight.
+Current focus: resting after local-only system/radius Watch authoring preflight.
 
 Current heading:
 
@@ -23,21 +23,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS304-system-radius-authoring-preflight-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS304-system-radius-authoring-preflight.md
+none
 ```
 
-HS296, HS298, HS300, HS301, and HS302 are accepted and can rest. HS304 is open as a local-only authoring/preflight readout proof. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, HS301, HS302, and HS304 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
 
 Latest accepted advisory request:
 
@@ -1139,6 +1139,144 @@ Oruse
 Boundary:
 
 This is not Watch result identity work. Watch/task result semantics need richer sample data and remain parked. Do not change provider movement, live testing, topology traversal, Watch execution, Watch rows, Discovery refs, Evidence/EVEidence, Hydration, schema, UI, support artifacts, active enforcement, or fourth-lane behavior.
+
+## HS304 Evidence
+
+Dev updated 2026-06-05:
+
+- Added `watch.system_radius_authoring_preflight.preview` as a renderer-eligible, read-only/local-only system/radius Watch authoring preflight.
+- Added `src/main/services/systemRadiusAuthoringPreflightService.js`.
+- Added `scripts/verify-system-radius-authoring-preflight.js` and `npm.cmd run verify:system-radius-authoring-preflight`.
+- Registered service command and enforcement dry-run coverage as `local_db_inspection` / `system_radius_authoring_preflight_readout` / `read_only_non_enforcing_proof`.
+- Updated service registry, command authority, enforcement dry-run, and passive side-effect verification for the new read-only command.
+- Preflight returns:
+  - selected center system ID/name from local topology
+  - requested radius and guard settings
+  - operator-facing heading
+  - `Included systems` list
+  - center first and marked `(center)`
+  - included system count
+  - direct-neighbor count as diagnostic/detail only
+  - exact `included_system_ids_for_acceptance`
+  - exact `would_store_included_system_ids`
+  - local topology/import posture
+  - acceptance status for Watch authoring
+  - missing topology, unknown system, invalid radius, and capped scope postures
+  - table mutation proof
+- Focused verifier sample:
+  - heading: `System Hare with a radius of 1 jump:`
+  - included systems: `Hare (center)`, `Babirmoult`, `Heluene`, `Ogaria`, `Oruse`
+  - included system count: `5`
+  - direct neighbor count: `4`
+  - direct neighbor count role: `diagnostic_detail_only`
+  - acceptance IDs: `[30003597,30003601,30003599,30003598,30003596]`
+  - acceptable for Watch authoring: `true`
+  - HS305 revision coverage: radius 2 fixture reports included system count `6` while direct neighbor count remains `4`, proving direct neighbors are immediate adjacency only
+  - radius 2 acceptance IDs include the full uncapped included scope: `[30003597,30003601,30003599,30003598,30003596,30003650]`
+  - capped scope reports `included_system_scope_capped_by_max_systems` and does not expose partial IDs as acceptable stored scope
+  - unknown system, invalid radius, and missing topology are distinguished
+  - table mutation proof unchanged
+- Boundaries confirmed:
+  - no provider calls
+  - no live/API verification
+  - no Watch dispatch
+  - no Watch row writes
+  - no task creation
+  - no Discovery ref mutation
+  - no Evidence/EVEidence writes
+  - no Hydration or metadata writes
+  - no schema changes
+  - no durable `watch_result` / `watch_result_items`
+  - no relationship tags
+  - no Discovery ref identity change
+  - no topology traversal behavior change
+  - no imported `stargate` connection type rename
+  - no renderer/UI behavior beyond existing read-only command registration
+  - no runtime enforcement or command blocking
+  - no support artifacts
+  - no fourth lane / fast lane
+- Verification run:
+  - `node --check src\main\services\systemRadiusAuthoringPreflightService.js` passed.
+  - `node --check scripts\verify-system-radius-authoring-preflight.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check src\main\workers\systemRadiusPlanner.js` passed.
+  - `node --check scripts\verify-system-radius-planner.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `node --check scripts\verify-enforcement-dry-run.js` passed.
+  - `npm.cmd run verify:system-radius-authoring-preflight` passed.
+  - `npm.cmd run verify:planner` passed.
+  - `npm.cmd run verify:radius` passed.
+  - `npm.cmd run verify:watch-scope-authority-conformance` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 660 warnings across 11 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS304 working-tree changes.
+
+## HS304 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS304-system-radius-authoring-preflight.md
+```
+
+Status: system/radius authoring preflight complete after HS305 revision; pending Overseer review.
+
+## HS304 Overseer Review
+
+Reviewed:
+
+```txt
+workspace/OverseerHS305-hs304-system-radius-authoring-preflight-review.md
+```
+
+Decision:
+
+HS304 was not accepted at first pass. HS305 revision returned for Overseer review.
+
+Blocking finding:
+
+`direct_neighbor_count` currently appears to be computed as full included radius result minus center. That is correct only for radius 1. For radius 2 or higher, it means all included non-center systems, not direct neighbors.
+
+Required revision:
+
+- compute `direct_neighbor_count` as immediate adjacent systems excluding center;
+- do not let radius 2+ inflate direct-neighbor count;
+- keep `direct_neighbor_count_role: diagnostic_detail_only`;
+- add verifier coverage for a radius 2 or multi-depth fixture proving included system count can exceed direct-neighbor count plus one while direct-neighbor count remains immediate-neighbor-only;
+- preserve read-only/local-only boundaries.
+
+## HS304 Acceptance
+
+Accepted:
+
+```txt
+workspace/OverseerHS306-hs304-system-radius-authoring-preflight-acceptance.md
+```
+
+Decision:
+
+HS304 is accepted after HS305 revision.
+
+Accepted result:
+
+- `watch.system_radius_authoring_preflight.preview` is a renderer-eligible, local-only, read-only authoring/preflight readout.
+- It proves the operator-facing shape for system/radius Watch setup without creating a Watch.
+- Center is listed first and marked `(center)`.
+- `included_system_count` is the primary count.
+- `direct_neighbor_count` is diagnostic/detail only.
+- `direct_neighbor_count` now means immediate adjacent systems excluding center, including for radius 2+.
+- Radius 2 coverage proves included system count can exceed direct-neighbor count plus one.
+- Exact `included_system_ids_for_acceptance` / `would_store_included_system_ids` are exposed only when the scope is acceptable.
+- Capped partial scope is not acceptable without operator adjustment.
+
+HS304 can rest.
 
 Latest accepted advisory request:
 

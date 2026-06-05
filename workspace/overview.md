@@ -158,6 +158,8 @@ Current state:
 - HS302 opened
 - HS302 accepted by HS303
 - HS304 opened
+- HS304 redirected by HS305
+- HS304 accepted by HS306
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -174,9 +176,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS304-system-radius-authoring-preflight-runway.md`
-- expected Dev handoff is `workspace/DevHS304-system-radius-authoring-preflight.md`
+- current executor is Overseer / Human decision
+- active Dev runway is none
+- expected Dev handoff is none
 - latest accepted advisory request is `workspace/OverseerHS298-system-radius-discovery-ref-identity-advisory-request.md`
 - latest accepted advisory artifact is `workspace/EngineeringDataHS298-system-radius-discovery-ref-identity-advisory.md`
 - latest advisory review is `workspace/OverseerHS299-hs298-system-radius-discovery-ref-identity-advisory-review.md`
@@ -233,7 +235,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is local-only system/radius Watch authoring preflight
+- current work is resting after local-only system/radius Watch authoring preflight
 - recommended next rich surface is selected unresolved local ID -> Resolve candidate -> future report readability reuse
 - parked separate lane is Task origin and durable outcome map for Manual Search and Watch
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
@@ -266,14 +268,20 @@ Current heading:
 
 Active Dev packet:
 
-1. `workspace/OverseerHS304-system-radius-authoring-preflight-runway.md`
-2. Expected handoff: `workspace/DevHS304-system-radius-authoring-preflight.md`
-3. Goal: prove the local-only operator-facing preflight/readout shape for authoring a system/radius Watch scope.
-4. The readout should show selected system, radius, `Included systems`, center first and marked `(center)`, cap/guardrail posture, missing/invalid topology posture, and exact `included_system_ids` that would become accepted stored scope if accepted.
-5. Watch/task result semantics remain parked until Atlas has richer sample data for multiple killmails or a clearer presentation model.
-6. Provider movement, live testing, topology behavior changes, Watch execution, Watch rows, Discovery refs, Evidence/EVEidence, Hydration, schema, UI, support artifacts, active enforcement, and fourth-lane work remain unopened.
+No active Dev packet is open.
 
 Latest accepted packet:
+
+1. `workspace/OverseerHS304-system-radius-authoring-preflight-runway.md`
+2. `workspace/DevHS304-system-radius-authoring-preflight.md`
+3. `workspace/OverseerHS305-hs304-system-radius-authoring-preflight-review.md`
+4. `workspace/OverseerHS306-hs304-system-radius-authoring-preflight-acceptance.md`
+5. Accepted result: `watch.system_radius_authoring_preflight.preview` proves local-only system/radius Watch authoring preflight without creating a Watch.
+6. Accepted readout: selected system, radius, `Included systems`, center first and marked `(center)`, cap/guardrail posture, missing/invalid topology posture, and exact `included_system_ids` that would become accepted stored scope if accepted.
+7. HS305 correction accepted: `direct_neighbor_count` is immediate adjacent systems excluding center, not all non-center included systems for radius 2+.
+8. Provider movement, live testing, topology behavior changes, Watch execution, Watch rows, Discovery refs, Evidence/EVEidence, Hydration, schema, UI, support artifacts, active enforcement, and fourth-lane work remain unopened.
+
+Previous accepted packet:
 
 1. `workspace/OverseerHS302-radius-neighbor-wording-refresh-runway.md`
 2. `workspace/DevHS302-radius-neighbor-wording-refresh.md`
