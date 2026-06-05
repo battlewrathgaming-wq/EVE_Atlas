@@ -176,6 +176,7 @@ Current state:
 - HS320 opened
 - HS320 accepted by HS321
 - HS322 opened
+- HS322 accepted by HS323
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -192,9 +193,12 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS322-system-watch-readout-readiness-bridge-runway.md`
-- expected Dev handoff is `workspace/DevHS322-system-watch-readout-readiness-bridge.md`
+- current executor is Overseer / Human decision
+- active Dev runway is none
+- expected Dev handoff is none
+- latest accepted Dev runway is `workspace/OverseerHS322-system-watch-readout-readiness-bridge-runway.md`
+- latest accepted Dev handoff is `workspace/DevHS322-system-watch-readout-readiness-bridge.md`
+- latest Overseer review is `workspace/OverseerHS323-hs322-system-watch-readout-readiness-bridge-review.md`
 - latest accepted Dev runway is `workspace/OverseerHS320-system-watch-post-create-readout-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS320-system-watch-post-create-readout.md`
 - latest Overseer review is `workspace/OverseerHS321-hs320-system-watch-post-create-readout-review.md`

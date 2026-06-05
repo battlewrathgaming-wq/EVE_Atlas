@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS322 system Watch readout/readiness bridge open
+Status: HS322 system Watch readout/readiness bridge accepted; no active Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: read-only bridge between accepted System / Radius Watch setup readout and authored execution readiness.
+Current focus: resting after read-only bridge between accepted System / Radius Watch setup readout and authored execution readiness.
 
 Current heading:
 
@@ -24,21 +24,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS322-system-watch-readout-readiness-bridge-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS322-system-watch-readout-readiness-bridge.md
+none
 ```
 
-HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, HS318, and HS320 are accepted and can rest. HS322 is open to prove a read-only/local-only bridge between System / Radius Watch setup readout and authored execution readiness. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, HS318, HS320, and HS322 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
 
 ## HS322 Active Dev Runway
 
@@ -81,6 +81,112 @@ bridge = conformance proof only
 Boundary:
 
 This packet is read-only/local-only. Do not execute a Watch, arm/disarm Watch runtime, create Watch executor tasks, call providers, perform live/API calls, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, change `watch.create`, change topology traversal behavior, infer execution authority from center/radius, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
+
+## HS322 Evidence
+
+Dev updated 2026-06-05:
+
+- Added `watch.system_radius_readout_readiness_bridge.preview` as a renderer-eligible, read-only/local-only service command.
+- Added `src/main/services/systemRadiusReadoutReadinessBridgeService.js`.
+- Added `scripts/verify-system-radius-readout-readiness-bridge.js` and `npm.cmd run verify:system-radius-readout-readiness-bridge`.
+- Registered command authority, service registry, passive side-effect, and enforcement dry-run coverage for the new bridge.
+- The bridge composes:
+  - `buildSystemRadiusSetupReadout`
+  - `buildWatchAuthoredExecutionReadinessPreview`
+- Bridge output compares per Watch:
+  - Watch ID
+  - active/inactive state
+  - stored-scope status
+  - stored included-system IDs
+  - included-system count
+  - center/radius role as provenance/management
+  - whether center/radius are used as authority
+  - readiness for future execution input
+  - blocked reasons
+  - next safe action
+- The bridge reports matched fields, mismatch fields, equivalent mappings, and report-only mismatch handling.
+- Focused verifier sample:
+  - valid active accepted stored scope matches setup/readiness for Hare radius 1 and accepted IDs `[30003597,30003601,30003599,30003598,30003596]`.
+  - inactive Watch with valid stored scope matches stored IDs/status and is not ready in both views.
+  - missing, malformed, and empty stored scopes are blocked and matched in both views.
+  - valid stored scope with missing local display name remains matched and ready from raw IDs.
+  - invalid stored scope is blocked in both views but reports a source-view mismatch: setup readout exposes no accepted IDs for invalid scope while readiness exposes the valid numeric subset `[30003597]` in `stored_scope.included_system_ids`; the bridge reports this mismatch without fixing it.
+  - next-safe-action wording differs between setup and readiness views; the bridge discloses these as equivalent safe-review mappings rather than silently flattening them.
+- Mutation boundary proof:
+  - no Watch execution
+  - no Watch runtime arm/disarm
+  - no Watch executor task creation
+  - no provider/live/API calls
+  - no Discovery ref mutation
+  - no Evidence/EVEidence writes
+  - no Hydration/metadata label writes
+  - no `watch.create` behavior change
+  - no source readout behavior change
+  - no topology traversal behavior change
+  - no center/radius execution authority
+  - no schema changes
+  - no renderer UI work
+  - no support artifacts
+  - no runtime enforcement or command blocking
+  - no Watch result identity, relationship tags, protected-word JSON, or fourth-lane work
+- Verification run:
+  - `node --check src/main/services/serviceRegistry.js` passed.
+  - `node --check src/main/services/enforcementDryRunService.js` passed.
+  - `node --check scripts/verify-command-authority.js` passed.
+  - `node --check scripts/verify-service-registry.js` passed.
+  - `node --check scripts/verify-passive-side-effects.js` passed.
+  - `node --check src/main/services/systemRadiusReadoutReadinessBridgeService.js` passed.
+  - `node --check scripts/verify-system-radius-readout-readiness-bridge.js` passed.
+  - `npm.cmd run verify:system-radius-readout-readiness-bridge` passed.
+  - `npm.cmd run verify:system-radius-setup-readout` passed.
+  - `npm.cmd run verify:watch-authored-execution-readiness` passed.
+  - `npm.cmd run verify:watch-create-accepted-scope-contract` passed; fixture-only verifier created expected fixture `system_watches` rows and reported only those rows changed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 792 warnings across 10 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS322 working-tree changes.
+
+## HS322 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS322-system-watch-readout-readiness-bridge.md
+```
+
+Status: system Watch readout/readiness bridge complete and accepted by Overseer.
+
+## HS322 Acceptance
+
+Accepted:
+
+```txt
+workspace/OverseerHS323-hs322-system-watch-readout-readiness-bridge-review.md
+```
+
+Decision:
+
+HS322 is accepted.
+
+Accepted result:
+
+- `watch.system_radius_readout_readiness_bridge.preview` is a renderer-eligible, read-only/local-only bridge preview.
+- The bridge composes setup readout and authored execution readiness.
+- Stored `included_system_ids` remain shared authority.
+- Setup readout reports what Atlas accepted/stored.
+- Execution readiness reports whether stored scope is usable as future execution input.
+- Center/radius remain provenance/management and are not authority.
+- Mismatches are reported only and are not repaired or mutated.
+- Invalid stored scope exposed a useful source-view mismatch:
+  - setup readout exposes no accepted IDs for invalid scope
+  - readiness exposes the valid numeric subset in `stored_scope.included_system_ids`
+  - both views still block with `invalid_stored_scope`
+- No Watch execution, runtime arm/disarm, task creation, provider movement, Discovery/Evidence/Hydration mutation, source readout behavior change, topology behavior change, schema change, renderer UI work, enforcement, support artifacts, Watch result semantics, relationship tags, protected-word JSON updates, or fourth-lane behavior were opened.
+
+HS322 can rest.
 
 ## HS320 Active Dev Runway
 

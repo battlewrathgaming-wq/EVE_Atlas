@@ -90,6 +90,7 @@ async function main() {
     const watchScopeAuthorityConformanceCommand = commands.find((entry) => entry.command === 'watch.scope_authority_conformance.preview');
     const watchAuthoredExecutionReadinessCommand = commands.find((entry) => entry.command === 'watch.authored_execution_readiness.preview');
     const systemRadiusSetupReadoutCommand = commands.find((entry) => entry.command === 'watch.system_radius_setup_readout.preview');
+    const systemRadiusReadoutReadinessBridgeCommand = commands.find((entry) => entry.command === 'watch.system_radius_readout_readiness_bridge.preview');
     const watchOperatorConfirmationContractCommand = commands.find((entry) => entry.command === 'watch.operator_confirmation_contract.preview');
     const systemRadiusAuthoringPreflightCommand = commands.find((entry) => entry.command === 'watch.system_radius_authoring_preflight.preview');
     const systemRadiusAcceptancePayloadCommand = commands.find((entry) => entry.command === 'watch.system_radius_acceptance_payload.preview');
@@ -246,6 +247,8 @@ async function main() {
     assert(watchAuthoredExecutionReadinessCommand?.renderer_allowed === true, 'authored Watch execution readiness preview should be renderer eligible');
     assert(systemRadiusSetupReadoutCommand?.classification === 'read-only', 'system/radius setup readout should be read-only');
     assert(systemRadiusSetupReadoutCommand?.renderer_allowed === true, 'system/radius setup readout should be renderer eligible');
+    assert(systemRadiusReadoutReadinessBridgeCommand?.classification === 'read-only', 'system/radius readout/readiness bridge should be read-only');
+    assert(systemRadiusReadoutReadinessBridgeCommand?.renderer_allowed === true, 'system/radius readout/readiness bridge should be renderer eligible');
     assert(watchOperatorConfirmationContractCommand?.classification === 'read-only', 'Watch operator confirmation contract preview should be read-only');
     assert(watchOperatorConfirmationContractCommand?.renderer_allowed === true, 'Watch operator confirmation contract preview should be renderer eligible');
     assert(systemRadiusAuthoringPreflightCommand?.classification === 'read-only', 'system/radius authoring preflight should be read-only');
@@ -533,6 +536,20 @@ async function main() {
     assert(systemRadiusSetupReadout.watch_mutations === 0, 'system/radius setup readout should not mutate Watch rows');
     assert(systemRadiusSetupReadout.schema_changes === 0, 'system/radius setup readout should not change schema');
     assert(systemRadiusSetupReadout.runtime_enforcement_active === false, 'system/radius setup readout should not activate enforcement');
+
+    const systemRadiusReadoutReadinessBridge = await invokeServiceCommand('watch.system_radius_readout_readiness_bridge.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(systemRadiusReadoutReadinessBridge.read_only === true, 'system/radius readout/readiness bridge should declare read-only behavior');
+    assert(systemRadiusReadoutReadinessBridge.provider_calls === 0, 'system/radius readout/readiness bridge should not call providers');
+    assert(systemRadiusReadoutReadinessBridge.watch_dispatches === 0, 'system/radius readout/readiness bridge should not dispatch Watch execution');
+    assert(systemRadiusReadoutReadinessBridge.tasks_created === 0, 'system/radius readout/readiness bridge should not create tasks');
+    assert(systemRadiusReadoutReadinessBridge.evidence_writes === 0, 'system/radius readout/readiness bridge should not write Evidence/EVEidence');
+    assert(systemRadiusReadoutReadinessBridge.hydration_writes === 0, 'system/radius readout/readiness bridge should not write Hydration output');
+    assert(systemRadiusReadoutReadinessBridge.watch_mutations === 0, 'system/radius readout/readiness bridge should not mutate Watch rows');
+    assert(systemRadiusReadoutReadinessBridge.schema_changes === 0, 'system/radius readout/readiness bridge should not change schema');
+    assert(systemRadiusReadoutReadinessBridge.runtime_enforcement_active === false, 'system/radius readout/readiness bridge should not activate enforcement');
 
     const watchOperatorConfirmationContract = await invokeServiceCommand('watch.operator_confirmation_contract.preview', {}, {
       db,
