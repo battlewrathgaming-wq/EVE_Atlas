@@ -147,6 +147,7 @@ Current state:
 - HS290 accepted by HS291
 - HS292 opened
 - HS292 accepted by HS293
+- HS294 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -163,9 +164,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer / Human decision
-- active Dev runway is none
-- expected Dev handoff is none
+- current executor is Dev
+- active Dev runway is `workspace/OverseerHS294-watch-scope-authority-conformance-runway.md`
+- expected Dev handoff is `workspace/DevHS294-watch-scope-authority-conformance.md`
 - latest accepted advisory request is `workspace/OverseerHS290-watch-task-outcome-map-assurance-scope-request.md`
 - latest accepted advisory artifact is `workspace/EngineeringDataHS290-watch-task-outcome-map-assurance-scope.md`
 - latest Overseer advisory review is `workspace/OverseerHS291-hs290-watch-task-outcome-map-assurance-review.md`
@@ -219,7 +220,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is resting after read-only Watch/task origin and durable outcome map preview acceptance
+- current work is read-only Watch scope authority conformance proof
 - recommended next rich surface is selected unresolved local ID -> Resolve candidate -> future report readability reuse
 - parked separate lane is Task origin and durable outcome map for Manual Search and Watch
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
@@ -252,7 +253,11 @@ Current heading:
 
 Active Dev packet:
 
-No active Dev packet is open.
+1. `workspace/OverseerHS294-watch-scope-authority-conformance-runway.md`
+2. Expected handoff: `workspace/DevHS294-watch-scope-authority-conformance.md`
+3. Preferred command: `watch.scope_authority_conformance.preview`
+4. Scope: local-only/read-only conformance proof against accepted Watch scope authority.
+5. No provider calls, Watch dispatch, task creation, writes, schema, execution correction, durable `watch_result`, relationship tags, UI, enforcement, support artifacts, or fourth-lane work.
 
 Latest accepted packet:
 

@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS292 Watch/task outcome map preview accepted; no active Dev runway
+Status: HS294 Watch scope authority conformance runway open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after read-only Watch/task origin and durable outcome map preview acceptance.
+Current focus: read-only Watch scope authority conformance proof.
 
 Current heading:
 
@@ -23,21 +23,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS294-watch-scope-authority-conformance-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS294-watch-scope-authority-conformance.md
 ```
 
-HS292 is accepted and can rest. Do not open provider calls, Watch dispatch, task creation, writes, schema, `watch_result`, relationship tags, UI, enforcement, support artifacts, or fourth-lane work without a new bounded decision.
+Dev may implement the narrow read-only/local-only Watch scope authority conformance preview only. Do not call providers, dispatch Watch execution, create tasks, write rows, add schema, correct execution behavior, create `watch_result`, add relationship tags, change UI, activate enforcement, create support artifacts, or reopen the fourth lane.
 
 Latest accepted advisory request:
 
@@ -481,6 +481,41 @@ Landing:
 Current implication:
 
 HS292's disclosed recomputed topology path is a conformance pressure point. The next safe seam, if this line continues, is read-only Watch scope authority conformance before any durable Watch result semantics.
+
+## HS294 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS294-watch-scope-authority-conformance-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS294-watch-scope-authority-conformance.md
+```
+
+Accepted task:
+
+Add a read-only/local-only Watch scope authority conformance preview, preferably:
+
+```txt
+watch.scope_authority_conformance.preview
+```
+
+It should prove how current Atlas code conforms, or fails to conform, to the accepted Watch scope authority model:
+
+- local topology lookup tables support authoring/preflight geometry
+- accepted stored `included_system_ids` are Watch scope authority
+- center/radius are provenance/explanation after acceptance
+- execution should use stored included system IDs
+- recomputed topology is diagnostic only
+- current execution either uses stored included IDs or exposes the exact conformance gap
+
+The proof may report a mismatch. This packet should not correct execution behavior.
+
+Stop if this requires provider calls, Watch dispatch, task creation, writes, schema, execution correction, durable `watch_result`, relationship tags, UI, runtime enforcement, support artifacts, or fourth-lane work.
 
 Latest accepted advisory request:
 
