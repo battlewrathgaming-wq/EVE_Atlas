@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS262 Hydration request pickup shaping accepted by HS263; resting
+Status: HS264 Hydration pickup eligibility contract preview runway open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after Hydration request pickup shaping acceptance.
+Current focus: read-only selected-ID Hydration pickup eligibility / execution-input contract preview.
 
 Current heading:
 
@@ -20,7 +20,31 @@ Current heading:
 
 ## Executor
 
-Current executor: none
+Current executor: Dev
+
+Active Dev runway:
+
+```txt
+workspace/OverseerHS264-hydration-pickup-eligibility-contract-preview-runway.md
+```
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS264-hydration-pickup-eligibility-contract-preview.md
+```
+
+Dev task:
+
+Add the smallest read-only proof for selected-ID Hydration pickup eligibility / execution-input contract.
+
+Target command concept:
+
+```txt
+metadata.hydration_pickup_contract.preview
+```
+
+No provider calls, Hydration execution, Hydration writes, metadata run creation, entity writes, activity-event patches, pickup persistence, queue persistence, dispatcher, worker, schema change, runtime enforcement, storage/config mutation, Watch mutation, support artifact, or renderer UI work.
 
 Latest accepted advisory request:
 
