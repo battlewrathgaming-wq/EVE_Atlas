@@ -167,6 +167,8 @@ Current state:
 - HS310 accepted by HS311
 - HS312 opened
 - HS312 accepted by HS313
+- HS314 opened
+- HS314 accepted by HS315
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -242,7 +244,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is resting after accepted-scope `watch.create` mutation contract
+- current work is resting after read-only authored Watch execution readiness after accepted-scope `watch.create`
 - recommended next rich surface is selected unresolved local ID -> Resolve candidate -> future report readability reuse
 - parked separate lane is Task origin and durable outcome map for Manual Search and Watch
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
@@ -278,6 +280,17 @@ Active Dev packet:
 No active Dev packet is open.
 
 Latest accepted packet:
+
+1. `workspace/OverseerHS314-authored-watch-execution-readiness-runway.md`
+2. `workspace/DevHS314-authored-watch-execution-readiness.md`
+3. `workspace/OverseerHS315-hs314-authored-watch-execution-readiness-review.md`
+4. Accepted result: `watch.authored_execution_readiness.preview` proves read-only future execution input from authored Watch rows using stored accepted `included_system_ids`.
+5. Center/radius remain provenance/explanation/management fields and must not be used as execution authority for accepted Watches.
+6. Missing, malformed, empty, invalid, and inactive Watch scope cases block before provider movement.
+7. Readiness is not authorization.
+8. Watch execution, task creation, provider movement, live testing, topology behavior changes, Discovery refs, Evidence/EVEidence, Hydration, schema, UI, support artifacts, active enforcement, relationship tags, and fourth-lane work remain unopened.
+
+Previous accepted packet:
 
 1. `workspace/OverseerHS312-watch-create-accepted-scope-mutation-contract-runway.md`
 2. `workspace/DevHS312-watch-create-accepted-scope-mutation-contract.md`

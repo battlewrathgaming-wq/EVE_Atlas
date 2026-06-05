@@ -88,6 +88,7 @@ async function main() {
     const queueClockPostureCommand = commands.find((entry) => entry.command === 'runtime.queue_clock_posture.preview');
     const watchTaskOutcomeMapCommand = commands.find((entry) => entry.command === 'runtime.watch_task_outcome_map.preview');
     const watchScopeAuthorityConformanceCommand = commands.find((entry) => entry.command === 'watch.scope_authority_conformance.preview');
+    const watchAuthoredExecutionReadinessCommand = commands.find((entry) => entry.command === 'watch.authored_execution_readiness.preview');
     const systemRadiusAuthoringPreflightCommand = commands.find((entry) => entry.command === 'watch.system_radius_authoring_preflight.preview');
     const systemRadiusAcceptancePayloadCommand = commands.find((entry) => entry.command === 'watch.system_radius_acceptance_payload.preview');
     const watchCreateMutationSafetyMapCommand = commands.find((entry) => entry.command === 'watch.create_mutation_safety_map.preview');
@@ -239,6 +240,8 @@ async function main() {
     assert(watchTaskOutcomeMapCommand?.renderer_allowed === true, 'Watch/task outcome map preview should be renderer eligible');
     assert(watchScopeAuthorityConformanceCommand?.classification === 'read-only', 'Watch scope authority conformance preview should be read-only');
     assert(watchScopeAuthorityConformanceCommand?.renderer_allowed === true, 'Watch scope authority conformance preview should be renderer eligible');
+    assert(watchAuthoredExecutionReadinessCommand?.classification === 'read-only', 'authored Watch execution readiness preview should be read-only');
+    assert(watchAuthoredExecutionReadinessCommand?.renderer_allowed === true, 'authored Watch execution readiness preview should be renderer eligible');
     assert(systemRadiusAuthoringPreflightCommand?.classification === 'read-only', 'system/radius authoring preflight should be read-only');
     assert(systemRadiusAuthoringPreflightCommand?.renderer_allowed === true, 'system/radius authoring preflight should be renderer eligible');
     assert(systemRadiusAcceptancePayloadCommand?.classification === 'read-only', 'system/radius acceptance payload should be read-only');
@@ -498,6 +501,18 @@ async function main() {
     assert(watchScopeAuthorityConformance.evidence_writes === 0, 'Watch scope authority conformance preview should not write Evidence/EVEidence');
     assert(watchScopeAuthorityConformance.schema_changes === 0, 'Watch scope authority conformance preview should not change schema');
     assert(watchScopeAuthorityConformance.runtime_enforcement_active === false, 'Watch scope authority conformance preview should not activate enforcement');
+
+    const watchAuthoredExecutionReadiness = await invokeServiceCommand('watch.authored_execution_readiness.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchAuthoredExecutionReadiness.read_only === true, 'authored Watch execution readiness preview should declare read-only behavior');
+    assert(watchAuthoredExecutionReadiness.provider_calls === 0, 'authored Watch execution readiness preview should not call providers');
+    assert(watchAuthoredExecutionReadiness.watch_dispatches === 0, 'authored Watch execution readiness preview should not dispatch Watch execution');
+    assert(watchAuthoredExecutionReadiness.tasks_created === 0, 'authored Watch execution readiness preview should not create tasks');
+    assert(watchAuthoredExecutionReadiness.evidence_writes === 0, 'authored Watch execution readiness preview should not write Evidence/EVEidence');
+    assert(watchAuthoredExecutionReadiness.schema_changes === 0, 'authored Watch execution readiness preview should not change schema');
+    assert(watchAuthoredExecutionReadiness.runtime_enforcement_active === false, 'authored Watch execution readiness preview should not activate enforcement');
 
     const systemRadiusAuthoringPreflight = await invokeServiceCommand('watch.system_radius_authoring_preflight.preview', {}, {
       db,

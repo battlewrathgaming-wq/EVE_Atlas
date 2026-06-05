@@ -258,6 +258,10 @@ function verifyCoverageMetadata(map) {
   assert(command(map, 'watch.scope_authority_conformance.preview').runtime_context === 'watch_scope_authority_conformance_readout', 'Watch scope authority conformance preview should be classified as a readout');
   assert(command(map, 'watch.scope_authority_conformance.preview').enforcement_status === 'read_only_non_enforcing_proof', 'Watch scope authority conformance preview should identify itself as a non-enforcing proof');
   assert(command(map, 'watch.scope_authority_conformance.preview').external_io_dependency === 'none', 'Watch scope authority conformance preview should not declare External I/O dependency');
+  assert(command(map, 'watch.authored_execution_readiness.preview').storage_action_class === 'local_db_inspection', 'authored Watch execution readiness preview should be a local DB inspection');
+  assert(command(map, 'watch.authored_execution_readiness.preview').runtime_context === 'authored_watch_execution_readiness_readout', 'authored Watch execution readiness preview should be classified as a readout');
+  assert(command(map, 'watch.authored_execution_readiness.preview').enforcement_status === 'read_only_non_enforcing_proof', 'authored Watch execution readiness preview should identify itself as a non-enforcing proof');
+  assert(command(map, 'watch.authored_execution_readiness.preview').external_io_dependency === 'none', 'authored Watch execution readiness preview should not declare External I/O dependency');
   assert(command(map, 'watch.system_radius_authoring_preflight.preview').storage_action_class === 'local_db_inspection', 'system/radius authoring preflight should be a local DB inspection');
   assert(command(map, 'watch.system_radius_authoring_preflight.preview').runtime_context === 'system_radius_authoring_preflight_readout', 'system/radius authoring preflight should be classified as a readout');
   assert(command(map, 'watch.system_radius_authoring_preflight.preview').enforcement_status === 'read_only_non_enforcing_proof', 'system/radius authoring preflight should identify itself as a non-enforcing proof');

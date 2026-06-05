@@ -109,6 +109,8 @@ async function main() {
     assert(commands.get('runtime.watch_task_outcome_map.preview')?.effects.includes('read-only'), 'Watch/task outcome map preview should declare read-only effect');
     assert(commands.get('watch.scope_authority_conformance.preview')?.classification === 'read-only', 'Watch scope authority conformance preview should be read-only');
     assert(commands.get('watch.scope_authority_conformance.preview')?.effects.includes('read-only'), 'Watch scope authority conformance preview should declare read-only effect');
+    assert(commands.get('watch.authored_execution_readiness.preview')?.classification === 'read-only', 'authored Watch execution readiness preview should be read-only');
+    assert(commands.get('watch.authored_execution_readiness.preview')?.effects.includes('read-only'), 'authored Watch execution readiness preview should declare read-only effect');
     assert(commands.get('watch.system_radius_authoring_preflight.preview')?.classification === 'read-only', 'system/radius authoring preflight should be read-only');
     assert(commands.get('watch.system_radius_authoring_preflight.preview')?.effects.includes('read-only'), 'system/radius authoring preflight should declare read-only effect');
     assert(commands.get('watch.system_radius_acceptance_payload.preview')?.classification === 'read-only', 'system/radius acceptance payload should be read-only');
@@ -168,6 +170,7 @@ async function main() {
     assert(rendererNames.has('runtime.queue_clock_posture.preview'), 'queue/clock posture preview should be renderer eligible as read-only');
     assert(rendererNames.has('runtime.watch_task_outcome_map.preview'), 'Watch/task outcome map preview should be renderer eligible as read-only');
     assert(rendererNames.has('watch.scope_authority_conformance.preview'), 'Watch scope authority conformance preview should be renderer eligible as read-only');
+    assert(rendererNames.has('watch.authored_execution_readiness.preview'), 'authored Watch execution readiness preview should be renderer eligible as read-only');
     assert(rendererNames.has('watch.system_radius_authoring_preflight.preview'), 'system/radius authoring preflight should be renderer eligible as read-only');
     assert(rendererNames.has('watch.system_radius_acceptance_payload.preview'), 'system/radius acceptance payload should be renderer eligible as read-only');
     assert(rendererNames.has('watch.create_mutation_safety_map.preview'), 'watch.create mutation safety map should be renderer eligible as read-only');

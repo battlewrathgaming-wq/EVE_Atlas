@@ -62,6 +62,7 @@ const { buildRuntimeHookTelemetryReadout } = require('./runtimeHookTelemetryRead
 const { buildQueueClockPosturePreview } = require('./queueClockPostureService');
 const { buildWatchTaskOutcomeMapPreview } = require('./watchTaskOutcomeMapPreviewService');
 const { buildWatchScopeAuthorityConformancePreview } = require('./watchScopeAuthorityConformanceService');
+const { buildWatchAuthoredExecutionReadinessPreview } = require('./watchAuthoredExecutionReadinessService');
 const { buildSystemRadiusAuthoringPreflight } = require('./systemRadiusAuthoringPreflightService');
 const { buildSystemRadiusAcceptancePayloadPreview } = require('./systemRadiusAcceptancePayloadService');
 const { buildWatchCreateMutationSafetyMap } = require('./watchCreateMutationSafetyMapService');
@@ -690,6 +691,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview Watch scope authority conformance without provider calls, Watch dispatch, tasks, writes, schema, correction, or UI work',
     handler: ({ db, payload }) => buildWatchScopeAuthorityConformancePreview(db, payload)
+  },
+  'watch.authored_execution_readiness.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview authored system/radius Watch execution readiness from stored included_system_ids without dispatch, providers, tasks, writes, schema, or UI work',
+    handler: ({ db, payload }) => buildWatchAuthoredExecutionReadinessPreview(db, payload)
   },
   'watch.system_radius_authoring_preflight.preview': {
     classification: 'read-only',

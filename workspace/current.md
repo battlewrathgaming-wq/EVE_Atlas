@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS312 Watch create accepted scope mutation contract accepted; no active Dev runway
+Status: HS314 authored Watch execution readiness accepted; no active Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after accepted-scope `watch.create` mutation contract.
+Current focus: resting after read-only authored Watch execution readiness.
 
 Current heading:
 
@@ -37,7 +37,158 @@ Expected Dev handoff:
 none
 ```
 
-HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, and HS312 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, and HS314 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+
+## HS314 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS314-authored-watch-execution-readiness-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS314-authored-watch-execution-readiness.md
+```
+
+Task:
+
+Add a read-only/local-only authored-Watch execution readiness preview, preferably:
+
+```txt
+watch.authored_execution_readiness.preview
+```
+
+The preview should prove that Atlas can read authored system/radius Watch rows and derive future execution input from stored accepted `included_system_ids`.
+
+Boundary:
+
+This is readiness only. Do not dispatch Watch execution, create tasks, call providers, mutate Watch rows, mutate Discovery/Evidence/Hydration, change `watch.create`, change topology traversal behavior, change schema, add UI, create support artifacts, activate enforcement, open result semantics, add relationship tags, rename source-owned terms, or update protected-word JSON.
+
+## HS314 Evidence
+
+Dev updated 2026-06-05:
+
+- Added `watch.authored_execution_readiness.preview` as a renderer-eligible, read-only/local-only service command.
+- Added `src/main/services/watchAuthoredExecutionReadinessService.js`.
+- Added `scripts/verify-watch-authored-execution-readiness.js` and `npm.cmd run verify:watch-authored-execution-readiness`.
+- Registered command authority, service registry, passive side-effect, and enforcement dry-run coverage for the new preview.
+- Preview reads authored `system_watches` rows and derives future execution input only from stored `included_system_ids`.
+- Preview reports center system and radius as `provenance_and_management`.
+- Preview reports:
+  - `execution_ready_from_stored_scope`
+  - `execution_scope_source: stored_included_system_ids`
+  - `execution_system_ids`
+  - `center_radius_role: provenance_and_management`
+  - `would_recompute_from_center_radius: false`
+  - `would_dispatch_watch: false`
+  - `watch_dispatches: 0`
+  - `tasks_created: 0`
+  - `provider_calls: 0`
+  - `discovery_refs_mutated: 0`
+  - `evidence_rows_written: 0`
+  - `hydration_writes: 0`
+- Blocked stored-scope cases are distinguished:
+  - `missing_stored_scope`
+  - `malformed_stored_scope`
+  - `empty_stored_scope`
+  - `invalid_stored_scope`
+  - `inactive_watch`
+- Focused verifier fixture sample:
+  - six authored system/radius Watch rows
+  - one valid active stored-scope row ready for future execution input
+  - one missing stored scope row
+  - one malformed stored scope row
+  - one empty stored scope row
+  - one invalid stored scope row
+  - one inactive Watch row
+  - accepted execution IDs preserved exactly: `[30003597,30003601,30003599,30003598,30003596]`
+- Future consumer disclosure:
+  - `watch.executor.tick`
+  - `watchExecutor.dispatchFor`
+  - `system.radius.watch`
+  - `systemRadiusCollector.collectSystemRadiusWatch`
+  - `systemRadiusPlanner.planSystemRadiusWatch`
+  - future execution field: `acceptedSystemIds`
+  - readiness is not authorization
+- Mutation boundary proof:
+  - no Watch dispatch
+  - no task creation
+  - no provider/live/API calls
+  - no Watch row mutation
+  - no Discovery ref mutation
+  - no Evidence/EVEidence writes
+  - no Hydration writes
+  - no API request log writes
+  - no schema changes
+  - no UI work
+  - no support artifacts
+  - no runtime enforcement
+  - no Watch result / relationship tag / fourth-lane work
+- Verification run:
+  - `node --check src\main\services\watchAuthoredExecutionReadinessService.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check scripts\verify-watch-authored-execution-readiness.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `node --check scripts\verify-enforcement-dry-run.js` passed.
+  - `npm.cmd run verify:watch-authored-execution-readiness` passed.
+  - `npm.cmd run verify:watch-create-accepted-scope-contract` passed.
+  - `npm.cmd run verify:watch-scope-authority-conformance` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 731 warnings across 12 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS314 working-tree changes and Overseer/current workspace updates.
+
+## HS314 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS314-authored-watch-execution-readiness.md
+```
+
+Status: authored Watch execution readiness preview complete and accepted by Overseer.
+
+## HS314 Acceptance
+
+Accepted:
+
+```txt
+workspace/OverseerHS315-hs314-authored-watch-execution-readiness-review.md
+```
+
+Decision:
+
+HS314 is accepted.
+
+Accepted result:
+
+- `watch.authored_execution_readiness.preview` is a renderer-eligible, read-only/local-only authored Watch execution readiness preview.
+- The preview reads authored `system_watches` rows.
+- Future execution input is derived from stored accepted `included_system_ids`.
+- Center system and radius are provenance/management fields only.
+- Ready authored Watch rows expose future payload fields:
+  - `acceptedSystemIds`
+  - `acceptedScopeSource: stored_watch_scope`
+- Missing, malformed, empty, invalid, and inactive Watch scope cases block before provider movement.
+- Readiness is not authorization.
+- No Watch execution, tasks, provider calls, Discovery mutation, Evidence/EVEidence writes, Hydration writes, Watch mutation, schema, UI, support artifacts, active enforcement, Watch result semantics, relationship tags, or fourth-lane behavior were opened.
+
+HS314 can rest.
+
+Likely future seam, not open now:
+
+```txt
+renderer/operator confirmation path for accepted Watch setup
+```
 
 ## HS312 Active Dev Runway
 
