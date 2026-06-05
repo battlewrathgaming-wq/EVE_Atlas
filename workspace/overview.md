@@ -144,6 +144,7 @@ Current state:
 - HS288 opened
 - HS288 accepted by HS289
 - HS290 advisory assurance/scope request opened
+- HS290 accepted by HS291
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -160,10 +161,11 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Engineering / Data Engineering / Security advisory
+- current executor is Overseer / Human decision
 - no active Dev runway is open
-- active advisory request is `workspace/OverseerHS290-watch-task-outcome-map-assurance-scope-request.md`
-- expected advisory artifact is `workspace/EngineeringDataHS290-watch-task-outcome-map-assurance-scope.md`
+- latest accepted advisory request is `workspace/OverseerHS290-watch-task-outcome-map-assurance-scope-request.md`
+- latest accepted advisory artifact is `workspace/EngineeringDataHS290-watch-task-outcome-map-assurance-scope.md`
+- latest Overseer advisory review is `workspace/OverseerHS291-hs290-watch-task-outcome-map-assurance-review.md`
 - latest accepted Dev runway is `workspace/OverseerHS288-selected-id-resolve-candidate-report-handoff-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS288-selected-id-resolve-candidate-report-handoff.md`
 - latest Overseer review is `workspace/OverseerHS289-hs288-selected-id-resolve-candidate-review.md`
@@ -214,7 +216,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is Watch/task outcome map assurance and scope
+- current work is decision on whether to open read-only Watch/task outcome map preview proof
 - recommended next rich surface is selected unresolved local ID -> Resolve candidate -> future report readability reuse
 - parked separate lane is Task origin and durable outcome map for Manual Search and Watch
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
@@ -259,10 +261,15 @@ Latest accepted packet:
 
 Active advisory request:
 
+No active advisory request is open.
+
+Latest accepted Watch/task advisory:
+
 1. `workspace/OverseerHS290-watch-task-outcome-map-assurance-scope-request.md`
-2. Expected artifact: `workspace/EngineeringDataHS290-watch-task-outcome-map-assurance-scope.md`
-3. Scope: source-backed assurance and scoping of Watch/task origin, durable outputs, volatile task state, radius scope identity, and future read-only outcome-map surface.
-4. No implementation, Dev runway, live/API calls, Watch dispatch, task creation, schema, queue/Dispatcher, `watch_result`, relationship tags, UI, enforcement, support artifacts, or term renames.
+2. `workspace/EngineeringDataHS290-watch-task-outcome-map-assurance-scope.md`
+3. `workspace/OverseerHS291-hs290-watch-task-outcome-map-assurance-review.md`
+4. Accepted result: enough source truth exists for a read-only Watch/task origin and durable outcome map without schema, provider calls, task dispatch, or Watch execution.
+5. Not ready: durable `watch_result`, relationship tags, durable task queue, dispatcher/Bucket, schema, or Watch-derived relationship truth.
 
 Latest accepted advisory:
 

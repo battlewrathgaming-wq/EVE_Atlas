@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS290 Watch/task outcome map assurance open; no Dev runway
+Status: HS290 Watch/task outcome map assurance accepted; next seam decision pending
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: assurance and scope for Watch/task outcome map lane.
+Current focus: accepted Watch/task outcome map assurance; decide whether to open read-only proof.
 
 Current heading:
 
@@ -21,7 +21,7 @@ Current heading:
 
 ## Executor
 
-Current executor: Engineering / Data Engineering / Security advisory
+Current executor: Overseer / Human decision
 
 Active Dev runway:
 
@@ -35,18 +35,24 @@ Expected Dev handoff:
 none
 ```
 
-No Dev runway is open. HS288 is accepted and the selected-ID Resolve lane can rest while Watch/task outcome-map assurance is scoped.
+No Dev runway is open. HS290 is accepted as advisory/scoping input.
 
-Active advisory request:
+Latest accepted advisory request:
 
 ```txt
 workspace/OverseerHS290-watch-task-outcome-map-assurance-scope-request.md
 ```
 
-Expected advisory artifact:
+Latest accepted advisory artifact:
 
 ```txt
 workspace/EngineeringDataHS290-watch-task-outcome-map-assurance-scope.md
+```
+
+Latest Overseer advisory review:
+
+```txt
+workspace/OverseerHS291-hs290-watch-task-outcome-map-assurance-review.md
 ```
 
 Latest accepted advisory request:
@@ -271,7 +277,7 @@ Safe options:
 
 Do not open renderer-triggered Resolve execution, UI confirmation behavior, background/report-wide Hydration, Bucket/Dispatcher, schema, runtime enforcement, support artifacts, Watch/task result persistence, or fourth-lane work without a new bounded decision.
 
-## HS290 Active Advisory Request
+## HS290 Accepted State
 
 Opened 2026-06-05:
 
@@ -285,7 +291,13 @@ Expected advisory artifact:
 workspace/EngineeringDataHS290-watch-task-outcome-map-assurance-scope.md
 ```
 
-Task:
+Accepted 2026-06-05:
+
+```txt
+workspace/OverseerHS291-hs290-watch-task-outcome-map-assurance-review.md
+```
+
+Accepted task:
 
 Scope and pressure-test the Watch/task outcome map lane before any implementation.
 
@@ -302,7 +314,27 @@ Focus:
 - whether any source path currently implies `watch_result`, relationship tag, durable task result, or relationship truth
 - smallest future read-only Watch/task outcome map surface, if any
 
-Do not implement code or create a Dev runway.
+Accepted recommendation:
+
+```txt
+Atlas has enough source truth to derive a read-only Watch/task origin and durable outcome map without new schema, provider calls, task dispatch, or Watch execution.
+```
+
+Not ready:
+
+- durable `watch_result`
+- `watch_result_items`
+- relationship tags
+- durable task queues
+- dispatcher/Bucket machinery
+- schema changes
+- Watch-derived relationship truth
+
+Open decision:
+
+```txt
+Should Atlas open a bounded read-only Dev proof for a Watch/task outcome map preview?
+```
 
 Latest accepted advisory request:
 
