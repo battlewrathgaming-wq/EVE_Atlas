@@ -120,28 +120,25 @@ function sourcePathConformance() {
       path: 'watchExecutor.dispatchFor',
       role: 'watch_execution_dispatch_payload',
       source_file: 'src/main/watchlist/watchExecutor.js',
-      current_behavior: 'builds system.radius.watch payload from centerSystemId, radiusJumps, maxSystems, and caps; does not pass stored included_system_ids',
-      accepted_model_status: 'gap',
-      correction_needed: true,
-      exact_correction_seam: 'include accepted stored included_system_ids in system.radius.watch payload, or route through a stored-scope execution command shape'
+      current_behavior: 'passes accepted stored included_system_ids as acceptedSystemIds for system/radius Watch execution and blocks missing/malformed stored scope before task creation',
+      accepted_model_status: 'conforms',
+      correction_needed: false
     },
     {
       path: 'systemRadiusCollector.collectSystemRadiusWatch',
       role: 'system_radius_collection_planning',
       source_file: 'src/main/workers/systemRadiusCollector.js',
-      current_behavior: 'calls planSystemRadiusWatch(input, { topologyService }) unless fixture plannerOutput is injected',
-      accepted_model_status: 'gap',
-      correction_needed: true,
-      exact_correction_seam: 'consume accepted stored included_system_ids as execution authority instead of recomputing authoritative scope from center/radius'
+      current_behavior: 'uses planner scopeAuthority; supplied acceptedSystemIds are carried as stored Watch scope authority and direct/manual calls without accepted IDs retain center/radius planner behavior',
+      accepted_model_status: 'conforms',
+      correction_needed: false
     },
     {
       path: 'systemRadiusPlanner.planSystemRadiusWatch',
       role: 'diagnostic_or_authoring_geometry',
       source_file: 'src/main/workers/systemRadiusPlanner.js',
-      current_behavior: 'recomputes systems with TopologyService.getSystemsWithinRadius(center,radius,excludedSystemIds)',
-      accepted_model_status: 'partial',
-      correction_needed: true,
-      exact_correction_seam: 'keep recompute for authoring/preflight or diagnostic comparison; do not use it as accepted Watch execution authority'
+      current_behavior: 'uses acceptedSystemIds as stored Watch execution authority when supplied; otherwise preserves center/radius planning for direct/manual system.radius.watch behavior',
+      accepted_model_status: 'conforms',
+      correction_needed: false
     },
     {
       path: 'discovered_killmail_refs system_radius identity',
@@ -170,12 +167,12 @@ function summarize(watches, seams) {
     missing_stored_scope_count: watches.filter((watch) => watch.stored_scope.included_status === 'not_stored').length,
     malformed_stored_scope_count: watches.filter((watch) => watch.stored_scope.included_status === 'malformed').length,
     stored_vs_recomputed_mismatch_count: watches.filter((watch) => watch.diagnostic_recomputed_scope.scope_match === false).length,
-    execution_uses_stored_included_ids_now: false,
-    execution_recomputes_from_center_radius_now: true,
+    execution_uses_stored_included_ids_now: true,
+    execution_recomputes_from_center_radius_now: false,
+    invalid_stored_scope_blocks_before_provider: true,
+    direct_manual_system_radius_preserves_center_radius_planner: true,
     accepted_model_conformance: executionGap ? 'gap' : 'conforms',
-    exact_correction_seam: executionGap
-      ? 'watchExecutor.dispatchFor / systemRadiusCollector.collectSystemRadiusWatch / systemRadiusPlanner.planSystemRadiusWatch'
-      : null,
+    exact_correction_seam: executionGap ? 'watchExecutor.dispatchFor / systemRadiusCollector.collectSystemRadiusWatch / systemRadiusPlanner.planSystemRadiusWatch' : null,
     status_counts: statusCounts
   };
 }
@@ -256,14 +253,7 @@ function systemWatchRowConformance(db, row, schedule, offlineReadout) {
       diagnostic_only_under_accepted_model: true,
       scope_match: scopeMatch
     },
-    execution_scope_authority_now: {
-      uses_stored_included_system_ids: false,
-      uses_stored_excluded_system_ids_from_watch_row: false,
-      recomputes_from_center_radius: true,
-      center_radius_used_as_execution_payload: true,
-      accepted_model_status: 'gap',
-      exact_correction_seam: 'watchExecutor.dispatchFor should pass stored included_system_ids into collection execution; systemRadiusCollector/planSystemRadiusWatch should consume stored scope as authority instead of recomputing it.'
-    },
+    execution_scope_authority_now: executionScopeAuthorityForStoredScope(includedStatus, included.values),
     discovery_ref_identity: {
       discovered_by_type: 'system_radius',
       discovered_by_id: String(row.center_system_id),
@@ -293,6 +283,23 @@ function recomputedScope(db, row) {
       error: error.message
     };
   }
+}
+
+function executionScopeAuthorityForStoredScope(includedStatus, includedValues = []) {
+  const validStoredScope = includedStatus === 'valid' && includedValues.length > 0;
+  return {
+    uses_stored_included_system_ids: validStoredScope,
+    accepted_system_ids: validStoredScope ? includedValues : [],
+    uses_stored_excluded_system_ids_from_watch_row: false,
+    recomputes_from_center_radius: false,
+    center_radius_used_as_execution_payload: false,
+    center_radius_preserved_as_provenance: true,
+    invalid_scope_blocks_before_provider: !validStoredScope,
+    accepted_model_status: 'conforms',
+    behavior: validStoredScope
+      ? 'system/radius Watch execution uses stored included_system_ids as authority'
+      : 'system/radius Watch execution blocks missing/malformed stored included_system_ids before provider work'
+  };
 }
 
 function correctionSeams() {

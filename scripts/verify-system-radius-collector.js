@@ -13,9 +13,65 @@ async function main() {
   verifyRuntimeSdeZipGuard();
   await verifyLocalLookupPreflightFailureLogging();
   await verifyLocalLookupPreflightPassesWithFixtureSde();
+  await verifyStoredWatchScopeAuthority();
   await verifyIdempotentCachedSkip();
   await verifyGradualIngestAfterCacheSkip();
   console.log('system radius collector verified');
+}
+
+async function verifyStoredWatchScopeAuthority() {
+  const db = openDatabase(':memory:');
+  migrate(db);
+
+  const importer = new SdeTopologyImporter(db);
+  await importer.importFromPath(path.resolve(__dirname, '..', 'fixtures', 'sde-jsonl'), {
+    buildNumber: 'fixture-build',
+    sourceUrl: 'fixtures/sde-jsonl'
+  });
+
+  const zkillTargets = [];
+  const zkillClient = {
+    async discoverRefs({ targetId }) {
+      zkillTargets.push(targetId);
+      return [];
+    }
+  };
+  const esiClient = {
+    async expandKillmail() {
+      throw new Error('ESI should not be called when stored scope zKill returns no refs');
+    }
+  };
+  const input = {
+    centerSystemId: 30000001,
+    radiusJumps: 1,
+    acceptedSystemIds: [30000001, 30000004],
+    acceptedScopeSource: 'stored_watch_scope',
+    acceptedScopeProvenance: {
+      watchId: 42,
+      centerSystemId: 30000001,
+      radiusJumps: 1
+    },
+    lookbackSeconds: 86400,
+    maxSystems: 2,
+    maxRefsPerSystem: 1,
+    maxExpansions: 2,
+    trigger: 'fixture_stored_scope',
+    watchId: 'system:30000001:radius:1'
+  };
+
+  const result = await collectSystemRadiusWatch(input, { db, zkillClient, esiClient });
+  assertSame(zkillTargets, [30000001, 30000004], 'stored Watch scope should drive exact zKill target systems');
+  assert(result.scope_authority.source === 'stored_watch_scope', 'collector should disclose stored Watch scope authority');
+  assert(result.scope_authority.uses_stored_included_system_ids === true, 'collector should use stored included IDs when supplied');
+  assert(result.scope_authority.recomputed_topology_used_as_authority === false, 'collector should not recompute topology as authority for stored scope');
+  assert(result.collection_plan.scope_authority_source === 'stored_watch_scope', 'collection plan should disclose stored scope source');
+  assert(result.collection_plan.uses_stored_included_system_ids === true, 'collection plan should disclose stored included IDs');
+  assert(result.collection_plan.recomputed_topology_used_as_authority === false, 'collection plan should not claim recompute authority');
+  assert(result.systems_planned === 2, 'stored Watch scope should plan exactly two accepted systems');
+  assert(result.collection_plan.systems_in_scope === 2, 'collection plan should count accepted systems');
+  assert(count(db, 'api_request_logs') === 0, 'injected zKill client should avoid real API request logs');
+
+  closeDatabase(db);
 }
 
 function verifyRuntimeSdeZipGuard() {

@@ -83,7 +83,17 @@ class WatchSessionExecutor {
     }
 
     const watch = selectDueWatch(schedule.due);
-    const dispatch = dispatchFor(watch);
+    let dispatch;
+    try {
+      dispatch = dispatchFor(watch);
+    } catch (error) {
+      this.lastBlockedReason = error.code || 'watch_scope_authority_invalid';
+      return tickResult('blocked', {
+        reason: this.lastBlockedReason,
+        watch,
+        error: error.message
+      });
+    }
     const gate = actionGate(dispatch.command, dispatch.payload);
     if (!gate.allowed) {
       this.lastBlockedReason = gate.blockers[0]?.code || 'live_gate_blocked';
@@ -218,20 +228,44 @@ function dispatchFor(watch) {
   }
 
   const source = watch.source || {};
-  const maxSystems = Number(source.max_systems_per_run || 1);
+  const acceptedSystemIds = acceptedSystemIdsForWatchSource(source);
   const maxKillmails = Number(source.max_killmails_per_run || 1);
+  const acceptedSystemCount = Math.max(acceptedSystemIds.length, 1);
   return {
     command: 'system.radius.watch',
     payload: {
       centerSystemId: source.center_system_id,
       radiusJumps: source.radius_jumps,
+      acceptedSystemIds,
+      acceptedScopeSource: 'stored_watch_scope',
+      acceptedScopeProvenance: {
+        watchId: watch.watch_id,
+        centerSystemId: source.center_system_id,
+        radiusJumps: source.radius_jumps,
+        includedSystemScopeStatus: source.included_system_scope_status,
+        excludedSystemScopeStatus: source.excluded_system_scope_status,
+        excludedSystemIds: Array.isArray(source.excluded_system_ids) ? source.excluded_system_ids : []
+      },
       lookbackSeconds: Number(source.lookback_hours || 24) * 3600,
-      maxSystems,
-      maxRefsPerSystem: Math.max(1, Math.ceil(maxKillmails / Math.max(maxSystems, 1))),
+      maxSystems: acceptedSystemIds.length,
+      maxRefsPerSystem: Math.max(1, Math.ceil(maxKillmails / acceptedSystemCount)),
       maxExpansions: maxKillmails
     },
     runner: collectSystemRadiusWatch
   };
+}
+
+function acceptedSystemIdsForWatchSource(source = {}) {
+  const includedStatus = source.included_system_scope_status || 'not_stored';
+  const included = Array.isArray(source.included_system_ids)
+    ? source.included_system_ids.map(Number).filter(Number.isFinite)
+    : [];
+  if (includedStatus !== 'valid' || included.length === 0) {
+    const error = new Error(`System/radius Watch execution requires valid stored included_system_ids; got ${includedStatus}`);
+    error.code = 'watch_scope_authority_invalid';
+    throw error;
+  }
+  return [...new Set(included)];
 }
 
 function tickResult(status, extra = {}) {
@@ -248,5 +282,6 @@ module.exports = {
   WatchSessionExecutor,
   defaultWatchSessionExecutor,
   selectDueWatch,
-  dispatchFor
+  dispatchFor,
+  acceptedSystemIdsForWatchSource
 };

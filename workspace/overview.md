@@ -150,6 +150,7 @@ Current state:
 - HS294 opened
 - HS294 accepted by HS295
 - HS296 opened
+- HS296 accepted by HS297
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -166,9 +167,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS296-watch-scope-authority-execution-correction-runway.md`
-- expected Dev handoff is `workspace/DevHS296-watch-scope-authority-execution-correction.md`
+- current executor is Overseer / Human decision
+- active Dev runway is none
+- expected Dev handoff is none
 - latest accepted advisory request is `workspace/OverseerHS290-watch-task-outcome-map-assurance-scope-request.md`
 - latest accepted advisory artifact is `workspace/EngineeringDataHS290-watch-task-outcome-map-assurance-scope.md`
 - latest Overseer advisory review is `workspace/OverseerHS291-hs290-watch-task-outcome-map-assurance-review.md`
@@ -222,7 +223,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is system/radius Watch execution stored-scope correction
+- current work is resting after Watch scope authority execution correction
 - recommended next rich surface is selected unresolved local ID -> Resolve candidate -> future report readability reuse
 - parked separate lane is Task origin and durable outcome map for Manual Search and Watch
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
@@ -255,22 +256,19 @@ Current heading:
 
 Active Dev packet:
 
-1. `workspace/OverseerHS296-watch-scope-authority-execution-correction-runway.md`
-2. Expected handoff: `workspace/DevHS296-watch-scope-authority-execution-correction.md`
-3. Scope: system/radius Watch execution consumes accepted stored `included_system_ids`.
-4. Preserve direct/manual `system.radius.watch` center/radius behavior when no stored included IDs are supplied.
-5. No provider calls in verification, schema, Discovery ref identity changes, durable `watch_result`, relationship tags, UI, enforcement, support artifacts, or fourth-lane work.
+No active Dev packet is open.
 
 Latest accepted packet:
 
-1. `workspace/OverseerHS294-watch-scope-authority-conformance-runway.md`
-2. `workspace/DevHS294-watch-scope-authority-conformance.md`
-3. `workspace/OverseerHS295-hs294-watch-scope-authority-conformance-review.md`
-4. Accepted command: `watch.scope_authority_conformance.preview`
-5. Accepted result: current conformance status is `gap`.
-6. Scope: local-only/read-only conformance proof against accepted Watch scope authority.
-7. Next mechanical seam, if continued: system/radius Watch execution should consume accepted stored `included_system_ids`.
-8. Provider calls, Watch dispatch, task creation, writes, schema, execution correction, durable `watch_result`, relationship tags, UI, active enforcement, support artifacts, and fourth-lane work remain unopened.
+1. `workspace/OverseerHS296-watch-scope-authority-execution-correction-runway.md`
+2. `workspace/DevHS296-watch-scope-authority-execution-correction.md`
+3. `workspace/OverseerHS297-hs296-watch-scope-authority-execution-correction-review.md`
+4. Accepted result: system/radius Watch execution now consumes accepted stored `included_system_ids`.
+5. Invalid stored Watch scope blocks before task creation with `watch_scope_authority_invalid`.
+6. Center/radius remain provenance/explanation after Watch acceptance.
+7. Direct/manual `system.radius.watch` remains center/radius planner behavior when no accepted IDs are supplied.
+8. `watch.scope_authority_conformance.preview` now reports execution conformance.
+9. Provider movement, live testing, Discovery ref identity redesign, durable `watch_result`, relationship tags, UI, active enforcement, support artifacts, and fourth-lane work remain unopened.
 
 Active advisory request:
 

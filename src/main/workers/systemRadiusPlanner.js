@@ -15,18 +15,21 @@ function planSystemRadiusWatch(input, { topologyService }) {
   const settings = normalizeInput(input);
   const guardrailWarnings = [];
   const skippedSystems = [];
-  const allSystemIds = topologyService.getSystemsWithinRadius(
-    settings.centerSystemId,
-    settings.radiusJumps,
-    {
-      excludedSystemIds: settings.excludedSystemIds,
-      maxRadius: settings.maxRadius,
-      maxSystems: settings.maxTopologySystems
-    }
-  );
+  const usesStoredWatchScope = settings.acceptedSystemIds.length > 0;
+  const allSystemIds = usesStoredWatchScope
+    ? settings.acceptedSystemIds
+    : topologyService.getSystemsWithinRadius(
+      settings.centerSystemId,
+      settings.radiusJumps,
+      {
+        excludedSystemIds: settings.excludedSystemIds,
+        maxRadius: settings.maxRadius,
+        maxSystems: settings.maxTopologySystems
+      }
+    );
 
   let plannedSystemIds = allSystemIds;
-  if (allSystemIds.length > settings.maxSystems) {
+  if (!usesStoredWatchScope && allSystemIds.length > settings.maxSystems) {
     plannedSystemIds = allSystemIds.slice(0, settings.maxSystems);
     const skippedIds = allSystemIds.slice(settings.maxSystems);
     for (const systemId of skippedIds) {
@@ -52,6 +55,20 @@ function planSystemRadiusWatch(input, { topologyService }) {
 
   return {
     input: settings,
+    scopeAuthority: usesStoredWatchScope ? {
+      source: 'stored_watch_scope',
+      uses_stored_included_system_ids: true,
+      recomputed_topology_used_as_authority: false,
+      center_radius_role: 'provenance_and_explanation',
+      accepted_system_ids: settings.acceptedSystemIds,
+      provenance: settings.acceptedScopeProvenance
+    } : {
+      source: 'center_radius_planner',
+      uses_stored_included_system_ids: false,
+      recomputed_topology_used_as_authority: true,
+      center_radius_role: 'direct_manual_execution_authority',
+      accepted_system_ids: []
+    },
     includedSystems,
     skippedSystems,
     guardrailWarnings,
@@ -62,7 +79,7 @@ function planSystemRadiusWatch(input, { topologyService }) {
       metadata: 0
     },
     caps: {
-      maxSystems: settings.maxSystems,
+      maxSystems: usesStoredWatchScope ? includedSystems.length : settings.maxSystems,
       maxRefsPerSystem: settings.maxRefsPerSystem,
       maxExpansions: settings.maxExpansions
     }
@@ -79,6 +96,7 @@ function normalizeInput(input) {
   const maxRadius = positiveInteger(input?.maxRadius ?? DEFAULTS.maxRadius, 'maxRadius');
   const maxTopologySystems = positiveInteger(input?.maxTopologySystems ?? DEFAULTS.maxTopologySystems, 'maxTopologySystems');
   const excludedSystemIds = [...new Set((input?.excludedSystemIds || []).map((id) => positiveInteger(id, 'excludedSystemIds')))];
+  const acceptedSystemIds = normalizeAcceptedSystemIds(input?.acceptedSystemIds || input?.includedSystemIds || []);
 
   return {
     centerSystemId,
@@ -89,8 +107,21 @@ function normalizeInput(input) {
     maxExpansions,
     maxRadius,
     maxTopologySystems,
-    excludedSystemIds
+    excludedSystemIds,
+    acceptedSystemIds,
+    acceptedScopeSource: input?.acceptedScopeSource || null,
+    acceptedScopeProvenance: input?.acceptedScopeProvenance || null
   };
+}
+
+function normalizeAcceptedSystemIds(value) {
+  if (value === undefined || value === null || value === '') {
+    return [];
+  }
+  if (!Array.isArray(value)) {
+    throw new Error('acceptedSystemIds must be an array when supplied');
+  }
+  return [...new Set(value.map((id) => positiveInteger(id, 'acceptedSystemIds')))];
 }
 
 function systemSummary(topologyService, systemId, skippedReason = null) {

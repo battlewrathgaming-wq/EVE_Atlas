@@ -41,7 +41,9 @@ async function main() {
         stored_included: watch.stored_scope.included_system_ids,
         recomputed: watch.diagnostic_recomputed_scope.system_ids,
         scope_match: watch.diagnostic_recomputed_scope.scope_match,
-        execution_status: watch.execution_scope_authority_now.accepted_model_status
+        execution_status: watch.execution_scope_authority_now.accepted_model_status,
+        uses_stored_scope: watch.execution_scope_authority_now.uses_stored_included_system_ids,
+        invalid_scope_blocks: watch.execution_scope_authority_now.invalid_scope_blocks_before_provider
       })),
       mutation_check: {
         before,
@@ -124,32 +126,36 @@ function verifyWatchScopeRows(preview) {
   assert(valid.diagnostic_recomputed_scope.status === 'computed', 'valid fixture should compute diagnostic topology');
   assert(valid.diagnostic_recomputed_scope.diagnostic_only_under_accepted_model === true, 'recomputed topology should be diagnostic only');
   assert(valid.diagnostic_recomputed_scope.scope_match === false, 'fixture should distinguish stored authority from recomputed topology');
-  assert(valid.execution_scope_authority_now.uses_stored_included_system_ids === false, 'current execution should not claim stored included IDs are used');
-  assert(valid.execution_scope_authority_now.recomputes_from_center_radius === true, 'current execution should report recompute from center/radius');
-  assert(valid.execution_scope_authority_now.accepted_model_status === 'gap', 'current execution should report a conformance gap');
+  assert(valid.execution_scope_authority_now.uses_stored_included_system_ids === true, 'current execution should use stored included IDs');
+  assert(valid.execution_scope_authority_now.accepted_system_ids.includes(30000103), 'stored execution authority should include accepted non-recomputed system');
+  assert(valid.execution_scope_authority_now.recomputes_from_center_radius === false, 'current execution should not recompute from center/radius');
+  assert(valid.execution_scope_authority_now.accepted_model_status === 'conforms', 'current execution should conform for valid stored scope');
   assert(valid.discovery_ref_identity.identity_level === 'center_only', 'system/radius Discovery ref identity should remain center-only');
   assert(valid.discovery_ref_identity.possible_leads_not_evidence === true, 'Discovery refs should remain possible leads');
 
   assert(missing.stored_scope.included_status === 'not_stored', 'missing stored included scope should be distinguished');
   assert(missing.stored_scope.accepted_authority === false, 'missing stored included scope should not be accepted authority');
+  assert(missing.execution_scope_authority_now.invalid_scope_blocks_before_provider === true, 'missing stored scope should block before provider work');
   assert(malformed.stored_scope.included_status === 'malformed', 'malformed stored included scope should be distinguished');
   assert(malformed.stored_scope.accepted_authority === false, 'malformed stored included scope should not be accepted authority');
+  assert(malformed.execution_scope_authority_now.invalid_scope_blocks_before_provider === true, 'malformed stored scope should block before provider work');
   assert(preview.summary.missing_stored_scope_count === 1, 'summary should count missing stored scope');
   assert(preview.summary.malformed_stored_scope_count === 1, 'summary should count malformed stored scope');
   assert(preview.summary.stored_vs_recomputed_mismatch_count >= 1, 'summary should count stored versus recomputed mismatch');
 }
 
 function verifyCorrectionSeams(preview) {
-  assert(preview.summary.accepted_model_conformance === 'gap', 'summary should report current conformance gap');
-  assert(preview.summary.execution_uses_stored_included_ids_now === false, 'summary should not claim execution uses stored IDs');
-  assert(preview.summary.execution_recomputes_from_center_radius_now === true, 'summary should report execution recomputes from center/radius');
-  assert(preview.correction_seams.some((entry) => entry.path === 'watchExecutor.dispatchFor'), 'dispatchFor correction seam should be named');
-  assert(preview.correction_seams.some((entry) => entry.path === 'systemRadiusCollector.collectSystemRadiusWatch'), 'collector correction seam should be named');
-  assert(preview.correction_seams.some((entry) => entry.path === 'systemRadiusPlanner.planSystemRadiusWatch'), 'planner correction seam should be named');
+  assert(preview.summary.accepted_model_conformance === 'conforms', 'summary should report current execution conformance');
+  assert(preview.summary.execution_uses_stored_included_ids_now === true, 'summary should claim execution uses stored IDs');
+  assert(preview.summary.execution_recomputes_from_center_radius_now === false, 'summary should report execution no longer recomputes from center/radius');
+  assert(preview.summary.invalid_stored_scope_blocks_before_provider === true, 'summary should report invalid stored scope blocks before provider work');
+  assert(preview.summary.direct_manual_system_radius_preserves_center_radius_planner === true, 'summary should preserve direct/manual center-radius behavior');
+  assert(preview.correction_seams.length === 0, 'correction seams should be closed');
   assert(preview.source_path_conformance.find((entry) => entry.path === 'watchlistRepository.addSystemRadiusWatch')?.accepted_model_status === 'conforms', 'authoring should conform to local topology lookup use');
   assert(preview.source_path_conformance.find((entry) => entry.path === 'watchScheduler.buildWatchScheduleStatus')?.accepted_model_status === 'conforms', 'scheduler readout should conform');
-  assert(preview.source_path_conformance.find((entry) => entry.path === 'watchExecutor.dispatchFor')?.accepted_model_status === 'gap', 'executor dispatch should report gap');
-  assert(preview.source_path_conformance.find((entry) => entry.path === 'systemRadiusCollector.collectSystemRadiusWatch')?.accepted_model_status === 'gap', 'collector should report gap');
+  assert(preview.source_path_conformance.find((entry) => entry.path === 'watchExecutor.dispatchFor')?.accepted_model_status === 'conforms', 'executor dispatch should conform');
+  assert(preview.source_path_conformance.find((entry) => entry.path === 'systemRadiusCollector.collectSystemRadiusWatch')?.accepted_model_status === 'conforms', 'collector should conform');
+  assert(preview.source_path_conformance.find((entry) => entry.path === 'systemRadiusPlanner.planSystemRadiusWatch')?.accepted_model_status === 'conforms', 'planner should conform');
 }
 
 function seedFixture(db) {

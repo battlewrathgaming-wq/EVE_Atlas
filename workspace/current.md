@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS296 Watch scope authority execution correction runway open
+Status: HS296 Watch scope authority execution correction accepted; no active Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: system/radius Watch execution should consume accepted stored included system IDs.
+Current focus: resting after Watch scope authority execution correction.
 
 Current heading:
 
@@ -23,21 +23,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS296-watch-scope-authority-execution-correction-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS296-watch-scope-authority-execution-correction.md
+none
 ```
 
-Dev may implement the bounded Watch scope authority execution correction only. Do not call providers in verification, change schema, change Discovery ref identity, create durable Watch results, add relationship tags, change UI, activate enforcement, create support artifacts, or reopen the fourth lane.
+HS296 is accepted and can rest. Do not open provider movement, live testing, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
 
 Latest accepted advisory request:
 
@@ -675,6 +675,103 @@ The correction should:
 - update conformance proof so the execution gap closes or narrows explicitly
 
 Stop if this requires provider calls in verification, schema changes, Discovery ref identity changes, durable Watch result semantics, direct/manual collection redesign, UI, active enforcement, support artifacts, or fourth-lane work.
+
+## HS296 Evidence
+
+Dev updated 2026-06-05:
+
+- Corrected system/radius Watch execution so accepted stored `included_system_ids` are passed from `watchExecutor.dispatchFor` into `system.radius.watch` as `acceptedSystemIds`.
+- Watch dispatch now preserves center/radius as provenance fields while identifying `acceptedScopeSource: stored_watch_scope`.
+- Watch dispatch validates stored included scope before task creation. Missing, malformed, or empty stored included scope returns `watch_scope_authority_invalid` from the tick path and creates no task.
+- Updated `systemRadiusPlanner.planSystemRadiusWatch` so supplied `acceptedSystemIds` are used as exact execution authority instead of recomputing topology from center/radius.
+- Preserved direct/manual `system.radius.watch` behavior: when no accepted IDs are supplied, planner continues to use center/radius local topology planning.
+- Updated `systemRadiusCollector` summaries to disclose:
+  - `scope_authority.source`
+  - `uses_stored_included_system_ids`
+  - `recomputed_topology_used_as_authority`
+  - `center_radius_role`
+  - collection-plan scope authority source
+- Updated `watch.scope_authority_conformance.preview` so execution conformance now reports:
+  - `accepted_model_conformance: conforms`
+  - `execution_uses_stored_included_ids_now: true`
+  - `execution_recomputes_from_center_radius_now: false`
+  - `invalid_stored_scope_blocks_before_provider: true`
+  - `direct_manual_system_radius_preserves_center_radius_planner: true`
+  - `exact_correction_seam: null`
+- Focused verifier coverage added:
+  - stored Watch scope `[30000001,30000004]` drives exact zKill target systems in collector fixture even when center/radius topology could differ.
+  - collector discloses `stored_watch_scope`.
+  - direct/manual center/radius collector behavior remains covered by existing collector tests.
+  - valid system/radius Watch dispatch carries stored accepted IDs.
+  - malformed stored scope fails before dispatch payload and blocks executor tick before task creation.
+  - conformance preview fixture still distinguishes stored scope from recomputed diagnostic topology while reporting execution conformance.
+- Boundaries confirmed:
+  - no provider/live/API verification
+  - no schema changes
+  - no `system_watches` stored shape changes
+  - no Discovery ref identity changes
+  - no durable `watch_result`, `watch_result_items`, relationship tag, or relationship truth
+  - no durable Watch result semantics
+  - no renderer/UI work
+  - no runtime enforcement or command blocking activation
+  - no support artifacts
+  - no fourth lane / fast lane
+- Verification run:
+  - `node --check src\main\watchlist\watchExecutor.js` passed.
+  - `node --check src\main\workers\systemRadiusCollector.js` passed.
+  - `node --check src\main\workers\systemRadiusPlanner.js` passed.
+  - `node --check src\main\services\watchScopeAuthorityConformanceService.js` passed.
+  - `node --check scripts\verify-watch-scope-authority-conformance.js` passed.
+  - `node --check scripts\verify-system-radius-collector.js` passed.
+  - `node --check scripts\verify-watch-executor.js` passed.
+  - `npm.cmd run verify:watch-scope-authority-conformance` passed.
+  - `node scripts\verify-system-radius-collector.js` passed.
+  - `npm.cmd run verify:collector` passed as the repo's equivalent package script for `scripts\verify-system-radius-collector.js`.
+  - `npm.cmd run verify:watch-executor` passed.
+  - `npm.cmd run verify:planner` passed.
+  - `npm.cmd run verify:watch-scheduler` passed.
+  - `npm.cmd run verify:watch-offline-readout` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 28 warnings across 7 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS296 working-tree changes.
+
+## HS296 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS296-watch-scope-authority-execution-correction.md
+```
+
+Status: Watch scope authority execution correction complete and accepted by Overseer.
+
+## HS296 Overseer Review
+
+Accepted:
+
+```txt
+workspace/OverseerHS297-hs296-watch-scope-authority-execution-correction-review.md
+```
+
+Decision:
+
+HS296 is accepted.
+
+Accepted state:
+
+- system/radius Watch execution consumes accepted stored `included_system_ids`
+- invalid stored Watch scope blocks before task creation with `watch_scope_authority_invalid`
+- center/radius remain provenance/explanation after Watch acceptance
+- direct/manual `system.radius.watch` behavior remains center/radius planner behavior when no accepted IDs are supplied
+- conformance preview now reports the execution seam as conforming
+
+Watch scope authority can rest.
+
+Do not open Discovery ref identity redesign, durable Watch result semantics, relationship tags, provider movement, live testing, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
 
 Latest accepted advisory request:
 

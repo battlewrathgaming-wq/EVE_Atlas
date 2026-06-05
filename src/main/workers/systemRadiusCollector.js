@@ -123,6 +123,7 @@ async function collectSystemRadiusWatch(input, dependencies = {}) {
       planned_zkill_requests: plannerOutput.plannedZkillRequests.length,
       zkill_discovery_skipped: Boolean(pendingRefs.length),
       collection_plan: buildCollectionPlanSummary(plannerOutput, selection),
+      scope_authority: plannerOutput.scopeAuthority,
       expansion_queue: selection.expansionQueue,
       expansion_queue_summary: selection.skipCounts
     };
@@ -335,6 +336,10 @@ function summarizeExpansionQueue(expansionQueue) {
 
 function buildCollectionPlanSummary(plannerOutput, selection) {
   return {
+    scope_authority_source: plannerOutput.scopeAuthority?.source || 'center_radius_planner',
+    uses_stored_included_system_ids: plannerOutput.scopeAuthority?.uses_stored_included_system_ids === true,
+    recomputed_topology_used_as_authority: plannerOutput.scopeAuthority?.recomputed_topology_used_as_authority === true,
+    center_radius_role: plannerOutput.scopeAuthority?.center_radius_role || 'direct_manual_execution_authority',
     systems_in_scope: plannerOutput.includedSystems.length,
     zkill_requests_planned: plannerOutput.plannedZkillRequests.length,
     known_local_killmails: selection.skipCounts.cached,

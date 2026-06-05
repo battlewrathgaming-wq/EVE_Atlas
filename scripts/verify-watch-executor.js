@@ -105,7 +105,71 @@ async function main() {
     closeDatabase(db);
   }
 
+  await verifySystemRadiusWatchScopeDispatch();
   console.log('watch session executor verified');
+}
+
+async function verifySystemRadiusWatchScopeDispatch() {
+  const db = openDatabase(':memory:');
+  migrate(db);
+  try {
+    const validWatchId = seedSystemWatch(db, {
+      centerSystemId: 30000101,
+      centerSystemName: 'ATLAS-A',
+      includedSystemIds: '[30000101,30000103]',
+      excludedSystemIds: '[30000102]'
+    });
+    const malformedWatchId = seedSystemWatch(db, {
+      centerSystemId: 30000102,
+      centerSystemName: 'ATLAS-B',
+      includedSystemIds: 'not-json',
+      excludedSystemIds: '[]',
+      nextPollAt: '2999-01-01T00:00:00.000Z'
+    });
+
+    const schedule = buildWatchScheduleStatus(db, {
+      sessionArmed: true,
+      liveApiEnabled: true,
+      now: '2026-06-05T00:00:00.000Z'
+    });
+    const validWatch = schedule.due.find((watch) => watch.watch_type === 'system_radius' && watch.watch_id === validWatchId);
+    const dispatch = dispatchFor(validWatch);
+    assert(dispatch.command === 'system.radius.watch', 'system/radius watch should dispatch system collector');
+    assertSame(dispatch.payload.acceptedSystemIds, [30000101, 30000103], 'dispatch should carry stored accepted system IDs');
+    assert(dispatch.payload.acceptedScopeSource === 'stored_watch_scope', 'dispatch should identify stored Watch scope authority');
+    assert(dispatch.payload.centerSystemId === 30000101, 'dispatch should preserve center as provenance');
+    assert(dispatch.payload.radiusJumps === 1, 'dispatch should preserve radius as provenance');
+    assert(dispatch.payload.maxSystems === 2, 'dispatch should not re-cap accepted stored systems');
+
+    const malformedSchedule = buildWatchScheduleStatus(db, {
+      sessionArmed: true,
+      liveApiEnabled: true,
+      now: '3000-01-01T00:00:00.000Z'
+    });
+    const malformedWatch = malformedSchedule.due.find((watch) => watch.watch_type === 'system_radius' && watch.watch_id === malformedWatchId);
+    let malformedError = null;
+    try {
+      dispatchFor(malformedWatch);
+    } catch (error) {
+      malformedError = error;
+    }
+    assert(malformedError?.code === 'watch_scope_authority_invalid', 'malformed stored scope should fail before dispatch payload');
+
+    db.prepare('DELETE FROM system_watches WHERE watch_id = ?').run(validWatchId);
+    db.prepare('UPDATE system_watches SET next_poll_at = NULL WHERE watch_id = ?').run(malformedWatchId);
+    const taskRunner = new TaskRunner({ historyLimit: 10 });
+    const executor = new WatchSessionExecutor({ taskRunner, pollIntervalMs: 0 });
+    executor.sessionArmed = true;
+    const blocked = await executor.tick(db, {
+      liveApiEnabled: true,
+      startInterval: false
+    });
+    assert(blocked.status === 'blocked', 'invalid stored scope should block Watch tick');
+    assert(blocked.reason === 'watch_scope_authority_invalid', 'blocked tick should explain invalid stored scope');
+    assert(taskRunner.listTasks().length === 0, 'invalid stored scope should block before task creation');
+  } finally {
+    closeDatabase(db);
+  }
 }
 
 function seedActorWatch(db, input = {}) {
@@ -120,6 +184,30 @@ function seedActorWatch(db, input = {}) {
     input.entityName,
     7,
     input.maxKillmailsPerRun || 2,
+    1,
+    60,
+    input.nextPollAt || null
+  );
+  return result.lastInsertRowid;
+}
+
+function seedSystemWatch(db, input = {}) {
+  const result = db.prepare(`
+    INSERT INTO system_watches (
+      center_system_id, center_system_name, radius_jumps,
+      included_system_ids, excluded_system_ids,
+      lookback_hours, max_systems_per_run, max_killmails_per_run,
+      is_active, poll_interval_minutes, next_poll_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    input.centerSystemId,
+    input.centerSystemName,
+    1,
+    input.includedSystemIds,
+    input.excludedSystemIds,
+    24,
+    35,
+    10,
     1,
     60,
     input.nextPollAt || null
@@ -157,6 +245,14 @@ async function waitForTask(taskRunner, taskId) {
 function assert(condition, message) {
   if (!condition) {
     throw new Error(message);
+  }
+}
+
+function assertSame(actual, expected, message) {
+  const actualText = JSON.stringify(actual);
+  const expectedText = JSON.stringify(expected);
+  if (actualText !== expectedText) {
+    throw new Error(`${message}: expected ${expectedText}, got ${actualText}`);
   }
 }
 
