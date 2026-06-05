@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS274 selected-ID real Hydration execution gate advisory accepted by HS275; decision point
+Status: HS276 selected-ID real Hydration execution proof runway open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: decision point after Engineering/Security accepted that Atlas is ready only for the smallest trusted, non-renderer, one-ID real selected-ID Hydration execution proof if Human/Overseer explicitly accepts provider contact.
+Current focus: trusted, non-renderer, one-ID real selected-ID Hydration execution proof using a controlled temp store and Human-provided character ID `92418041`.
 
 Current heading:
 
@@ -21,21 +21,21 @@ Current heading:
 
 ## Executor
 
-Current executor: none
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS276-selected-id-real-hydration-execution-proof-runway.md
 ```
 
 Expected handoff:
 
 ```txt
-none
+workspace/DevHS276-selected-id-real-hydration-execution-proof.md
 ```
 
-No Dev task is open. Do not implement code. Do not call providers. Do not open real provider-backed selected-ID Hydration execution without explicit Human/Overseer acceptance of provider contact.
+Human/Overseer accepted crossing the provider-contact boundary for this proof only. Keep it trusted, non-renderer, one selected ID, controlled temp store only. Do not open renderer-triggered Hydration, broad live testing, Bucket/Dispatcher, background Hydration, schema, runtime enforcement, support artifacts, UI, or fourth-lane work.
 
 ## Recent Accepted State
 
@@ -84,6 +84,50 @@ Do we accept crossing the provider-contact boundary for a trusted, non-renderer,
 ```
 
 Do not open renderer-triggered Hydration, full product live Hydration, broad live testing, Bucket/Dispatcher, background Hydration, schema, runtime enforcement, support artifacts, UI, or fourth-lane work.
+
+## HS276 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS276-selected-id-real-hydration-execution-proof-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS276-selected-id-real-hydration-execution-proof.md
+```
+
+Task:
+
+Implement the smallest trusted, non-renderer, one-ID real provider-backed selected-ID Hydration execution proof.
+
+Known selected-ID target:
+
+```txt
+id_type: character
+id_value: 92418041
+basis: Human-provided own character ID for controlled proof
+```
+
+Accepted proof shape:
+
+```txt
+controlled temp Atlas store with local unresolved ID basis
+-> explicit trusted selected-ID execution context
+-> rebuild local-first request posture
+-> rebuild non-durable pickup contract
+-> re-read External I/O and live/provider gate
+-> enter live provider attempt path for one ESI names lookup
+-> call ESI /universe/names for exactly one ID
+-> validate provider response
+-> write Hydration readability repair transaction in controlled temp store
+-> finalize metadata run
+-> verify allowed rows only
+```
+
+Do not mutate the real operator corpus. Do not call zKillboard. Do not perform Discovery or Evidence Expansion. Do not broaden beyond this one selected-ID Hydration proof.
 
 Recent decision surface:
 

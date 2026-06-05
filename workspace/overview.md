@@ -129,6 +129,7 @@ Current state:
 - HS272 accepted by HS273
 - HS274 advisory opened
 - HS274 accepted by HS275
+- HS276 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -145,8 +146,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is none
-- no active Dev runway is open
+- current executor is Dev
+- active Dev runway is `workspace/OverseerHS276-selected-id-real-hydration-execution-proof-runway.md`
+- expected Dev handoff is `workspace/DevHS276-selected-id-real-hydration-execution-proof.md`
 - latest accepted advisory request is `workspace/OverseerHS274-selected-id-real-hydration-execution-gate-advisory-request.md`
 - latest accepted advisory artifact is `workspace/EngineeringSecurityHS274-selected-id-real-hydration-execution-gate-advisory.md`
 - latest Overseer review is `workspace/OverseerHS275-hs274-selected-id-real-hydration-execution-gate-review.md`
@@ -179,7 +181,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is a Human/Overseer decision point on whether to cross the provider-contact boundary for a trusted, non-renderer, one-ID selected Hydration real execution proof
+- current work is trusted, non-renderer, one-ID real selected-ID Hydration execution proof using a controlled temp store and Human-provided character ID `92418041`
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -207,7 +209,11 @@ Current heading:
 
 Active Dev packet:
 
-No active Dev packet is open.
+1. `workspace/OverseerHS276-selected-id-real-hydration-execution-proof-runway.md`
+2. Implement the smallest trusted, non-renderer, one-ID real provider-backed selected-ID Hydration execution proof.
+3. Known selected-ID target: `character:92418041`.
+4. Use a controlled temp Atlas store with local unresolved ID basis; do not mutate the real operator corpus.
+5. Do not call zKillboard, perform Discovery, perform Evidence Expansion, add Bucket/Dispatcher/schema/enforcement/UI, or broaden beyond one ESI `/universe/names` lookup.
 
 Active advisory request:
 
