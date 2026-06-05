@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS300 Watch/task outcome map HS296 refresh accepted; no active Dev runway
+Status: HS302 radius neighbor wording refresh runway open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after Watch/task outcome map HS296 refresh.
+Current focus: tighten radius/neighbors wording so radius-includes-center is not confused with direct neighbors.
 
 Current heading:
 
@@ -23,21 +23,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS302-radius-neighbor-wording-refresh-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS302-radius-neighbor-wording-refresh.md
 ```
 
-HS296, HS298, and HS300 are accepted and can rest. Do not open provider movement, live testing, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, and HS301 are accepted. Dev may perform the bounded HS302 wording/verifier-label refresh only. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
 
 Latest accepted advisory request:
 
@@ -969,6 +969,44 @@ Hare topology semantics note:
 - Use `stargate` only when specifically discussing the imported local topology connection type or source data.
 
 HS300 can rest.
+
+## HS302 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS302-radius-neighbor-wording-refresh-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS302-radius-neighbor-wording-refresh.md
+```
+
+Task:
+
+Tighten radius/topology wording so Atlas distinguishes:
+
+```txt
+radius scope including center
+```
+
+from:
+
+```txt
+direct neighbors excluding center
+```
+
+Accepted semantics:
+
+- radius 0 = center only
+- radius 1 = center + direct neighbors
+- direct neighbor count excludes center
+- prefer `neighbors` / `direct neighbors` for operator-facing adjacency/counts
+- use `stargate` only when discussing imported local topology connection type or source data
+
+Do not change topology traversal behavior, schema, imported connection type values, Watch scope authority, Discovery refs, Evidence/EVEidence, Watch rows, Hydration, UI, support artifacts, durable Watch results, or fourth-lane behavior.
 
 Latest accepted advisory request:
 

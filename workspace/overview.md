@@ -155,6 +155,7 @@ Current state:
 - HS298 accepted by HS299
 - HS300 opened
 - HS300 accepted by HS301
+- HS302 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -171,9 +172,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer / Human decision
-- active Dev runway is none
-- expected Dev handoff is none
+- current executor is Dev
+- active Dev runway is `workspace/OverseerHS302-radius-neighbor-wording-refresh-runway.md`
+- expected Dev handoff is `workspace/DevHS302-radius-neighbor-wording-refresh.md`
 - latest accepted advisory request is `workspace/OverseerHS298-system-radius-discovery-ref-identity-advisory-request.md`
 - latest accepted advisory artifact is `workspace/EngineeringDataHS298-system-radius-discovery-ref-identity-advisory.md`
 - latest advisory review is `workspace/OverseerHS299-hs298-system-radius-discovery-ref-identity-advisory-review.md`
@@ -230,7 +231,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is resting after Watch/task outcome map HS296 refresh
+- current work is radius neighbor wording refresh
 - recommended next rich surface is selected unresolved local ID -> Resolve candidate -> future report readability reuse
 - parked separate lane is Task origin and durable outcome map for Manual Search and Watch
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
@@ -263,7 +264,11 @@ Current heading:
 
 Active Dev packet:
 
-No active Dev packet is open.
+1. `workspace/OverseerHS302-radius-neighbor-wording-refresh-runway.md`
+2. Expected handoff: `workspace/DevHS302-radius-neighbor-wording-refresh.md`
+3. Scope: wording/verifier-label refresh so radius-included scope is not confused with direct neighbors.
+4. Accepted semantics: radius includes center; direct neighbor counts exclude center; prefer `neighbors` for operator-facing adjacency/counts unless discussing imported `stargate` source data.
+5. No runtime topology behavior changes, schema, imported connection type rename, provider calls, Watch execution changes, Discovery ref changes, Evidence/EVEidence changes, UI, support artifacts, durable Watch results, or fourth-lane work.
 
 Latest accepted packet:
 
