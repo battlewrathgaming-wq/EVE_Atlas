@@ -171,6 +171,7 @@ Current state:
 - HS314 accepted by HS315
 - HS316 opened
 - HS316 accepted by HS317
+- HS318 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -187,9 +188,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer / Human decision
-- active Dev runway is none
-- expected Dev handoff is none
+- current executor is Dev
+- active Dev runway is `workspace/OverseerHS318-renderer-system-watch-confirmation-path-runway.md`
+- expected Dev handoff is `workspace/DevHS318-renderer-system-watch-confirmation-path.md`
 - latest accepted advisory request is `workspace/OverseerHS298-system-radius-discovery-ref-identity-advisory-request.md`
 - latest accepted advisory artifact is `workspace/EngineeringDataHS298-system-radius-discovery-ref-identity-advisory.md`
 - latest advisory review is `workspace/OverseerHS299-hs298-system-radius-discovery-ref-identity-advisory-review.md`
@@ -246,7 +247,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is resting after read-only Watch operator confirmation/listen-hook contract after accepted-scope `watch.create`
+- current work is bounded renderer implementation of system/radius Watch confirmation path
 - recommended next rich surface is selected unresolved local ID -> Resolve candidate -> future report readability reuse
 - parked separate lane is Task origin and durable outcome map for Manual Search and Watch
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
@@ -279,7 +280,13 @@ Current heading:
 
 Active Dev packet:
 
-No active Dev packet is open.
+1. `workspace/OverseerHS318-renderer-system-watch-confirmation-path-runway.md`
+2. Expected handoff: `workspace/DevHS318-renderer-system-watch-confirmation-path.md`
+3. Goal: wire the existing System / Radius Watch authoring panel through local preflight and explicit operator confirmation before `watch.create`.
+4. Preflight visibility, focus, hover, highlight, keyboard navigation, and successful local topology lookup remain non-acceptance.
+5. Only explicit confirmation may produce the accepted payload for `watch.create`.
+6. Allowed mutation is local Watch setup through existing `watch.create` after confirmation only.
+7. Final UI design, popup/modal behavior, R-Scanner redesign, Watch execution, provider movement, Discovery refs, Evidence/EVEidence, Hydration, schema, support artifacts, active enforcement, relationship tags, and fourth-lane work remain unopened.
 
 Latest accepted packet:
 

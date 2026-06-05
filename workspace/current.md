@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS316 Watch operator confirmation listen-hook contract accepted; no active Dev runway
+Status: HS318 renderer system Watch confirmation path open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after read-only Watch operator confirmation/listen-hook contract.
+Current focus: bounded renderer implementation of system/radius Watch confirmation path.
 
 Current heading:
 
@@ -24,21 +24,60 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS318-renderer-system-watch-confirmation-path-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS318-renderer-system-watch-confirmation-path.md
 ```
 
-HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, and HS316 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, renderer UI, popup/modal behavior, final copy/design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, and HS316 are accepted and can rest. HS318 is open to wire a bounded renderer/operator confirmation path for existing system/radius Watch authoring. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+
+## HS318 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS318-renderer-system-watch-confirmation-path-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS318-renderer-system-watch-confirmation-path.md
+```
+
+Task:
+
+Implement a bounded renderer/operator confirmation path for existing System / Radius Watch authoring.
+
+Existing direct path to harden:
+
+```txt
+src/renderer/queueWatch.js saveSystemWatch()
+```
+
+Required flow:
+
+```txt
+operator inputs system/radius settings
+renderer runs watch.system_radius_authoring_preflight.preview
+renderer displays included systems/status
+renderer uses watch.operator_confirmation_contract.preview
+explicit operator confirmation produces accepted payload
+watch.create stores the confirmed accepted scope
+```
+
+Boundary:
+
+This packet may call the existing local `watch.create` mutation only after explicit system/radius confirmation. Do not implement final UI design, popup/modal behavior, R-Scanner redesign, Watch execution, Watch executor tasks, provider calls, live/API calls, Discovery/Evidence/Hydration mutation, backend `watch.create` changes, topology traversal changes, schema, support artifacts, runtime enforcement, command blocking, result identity, relationship tags, source-term renames, protected-word JSON updates, or fourth-lane work.
 
 ## HS316 Active Dev Runway
 
