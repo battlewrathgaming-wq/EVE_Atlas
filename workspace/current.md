@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS314 authored Watch execution readiness accepted; no active Dev runway
+Status: HS316 Watch operator confirmation listen-hook contract open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after read-only authored Watch execution readiness.
+Current focus: read-only Watch operator confirmation/listen-hook contract before renderer UI behavior.
 
 Current heading:
 
@@ -19,25 +19,65 @@ Current heading:
 - local SDE lookup readiness is local readability/geometry support, not provider-backed Hydration
 - local topology lookup tables are runtime geometry support; SDE is import/source provenance, not runtime lookup authority
 - accepted Watch scope authority: execution should use the stored included system ID set accepted during Watch setup; center/radius are provenance/explanation after acceptance
+- operator confirmation boundary: preflight visibility is not acceptance; focus/hover/highlight is not acceptance; only an explicit renderer/listen-hook confirming act can create accepted Watch scope
 - active lane model: Discovery outputs possible leads; Evidence Expansion outputs Evidence/EVEidence; Hydration outputs readability repair; fourth lane stays parked
 
 ## Executor
 
-Current executor: Overseer / Human decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS316-watch-operator-confirmation-listen-hook-contract-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS316-watch-operator-confirmation-listen-hook-contract.md
 ```
 
-HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, and HS314 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, and HS314 are accepted and can rest. HS316 is open to seed the operator confirmation/listen-hook contract for accepted Watch setup. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, renderer UI, popup/modal behavior, final copy/design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+
+## HS316 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS316-watch-operator-confirmation-listen-hook-contract-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS316-watch-operator-confirmation-listen-hook-contract.md
+```
+
+Task:
+
+Add a read-only/local-only contract preview for the Watch operator confirmation/listen-hook path.
+
+Preferred command:
+
+```txt
+watch.operator_confirmation_contract.preview
+```
+
+The preview should prove the path from system/radius authoring preflight to accepted `watch.create` payload without implementing renderer behavior.
+
+Core rule:
+
+```txt
+Preflight result visible is not acceptance.
+Focus/hover/highlight is not acceptance.
+Successful local topology lookup is not acceptance.
+Only an explicit renderer/listen-hook confirming act can produce accepted scope for watch.create.
+```
+
+Boundary:
+
+This is contract/preview only. Do not implement renderer UI, popup/modal behavior, final copy/design, Watch execution, Watch tasks, provider calls, live/API calls, Watch row mutation, Discovery/Evidence/Hydration mutation, `watch.create` changes, topology traversal behavior changes, schema, support artifacts, runtime enforcement, command blocking, result identity, relationship tags, source-term renames, protected-word JSON updates, or fourth-lane work.
 
 ## HS314 Active Dev Runway
 
