@@ -140,6 +140,14 @@ metadata.hydration_request_posture.preview
 
 This command is the current read-only selected-ID proof for explicit operator Hydration request posture. It is renderer-eligible as a readout, but it remains non-authorizing and non-mutating.
 
+HS262 pickup shaping accepted 2026-06-05:
+
+```text
+Pickup is explicit acceptance of a current Hydration request posture as candidate work for a future execution command.
+```
+
+Selected-ID pickup is non-durable for now. It is not a queue row, dispatcher packet, retry lease, provider call, `metadata_runs` row, `entities` write, `activity_events` patch, or Hydration write. Future execution must rebuild local-first posture from trusted local state before provider movement; renderer posture is explanation, not authority.
+
 It has two conceptual lanes.
 
 ### Watch Hydration Lane

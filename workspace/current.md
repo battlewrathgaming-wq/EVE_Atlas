@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS262 Hydration request pickup shaping advisory request open
+Status: HS262 Hydration request pickup shaping accepted by HS263; resting
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: advisory shaping of Hydration request pickup semantics.
+Current focus: resting after Hydration request pickup shaping acceptance.
 
 Current heading:
 
@@ -20,23 +20,33 @@ Current heading:
 
 ## Executor
 
-Current executor: Data Engineering / Architecture Review
+Current executor: none
 
-Active advisory request:
+Latest accepted advisory request:
 
 ```txt
 workspace/OverseerHS262-hydration-request-pickup-shaping-advisory-request.md
 ```
 
-Expected advisory artifact:
+Latest accepted advisory artifact:
 
 ```txt
 workspace/DataEngineeringHS262-hydration-request-pickup-shaping-advisory.md
 ```
 
-Advisory task:
+Latest Overseer review:
 
-Define what pickup should mean after `metadata.hydration_request_posture.preview`, without implementing pickup, persistence, dispatcher behavior, provider execution, or Hydration writes.
+```txt
+workspace/OverseerHS263-hs262-hydration-pickup-shaping-review.md
+```
+
+Status: accepted.
+
+No active Dev runway is open.
+
+Accepted result:
+
+Define selected-ID Hydration pickup as non-durable candidate acceptance for a future execution command. Pickup is not queue persistence, dispatcher behavior, provider execution, or Hydration write.
 
 Preserve:
 
@@ -46,7 +56,13 @@ Pickup is not execution.
 Execution is not write until the write path succeeds under policy.
 ```
 
-This is advisory only. Do not create a Dev runway or run live/API/provider calls.
+Next optional seam, if continuing:
+
+```txt
+selected-ID Hydration pickup eligibility / execution-input contract preview
+```
+
+This is optional and read-only only. Provider-backed execution, persistence, dispatcher/worker design, Watch/background pickup, and UI behavior remain parked.
 
 Latest accepted Dev runway:
 
