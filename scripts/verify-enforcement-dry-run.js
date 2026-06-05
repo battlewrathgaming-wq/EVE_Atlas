@@ -189,6 +189,10 @@ function verifyCoverageMetadata(map) {
   assert(command(map, 'metadata.selected_id_readability_repair.product_preflight').storage_action_class === 'hydration_readability_repair', 'selected-ID product preflight should map to Hydration readability repair');
   assert(command(map, 'metadata.selected_id_readability_repair.product_preflight').external_io_dependency === 'none', 'selected-ID product preflight readout should not declare External I/O dependency because it calls no provider');
   assert(command(map, 'metadata.selected_id_readability_repair.product_preflight').enforcement_status === 'covered_read_only', 'selected-ID product preflight should be covered read-only');
+  assert(command(map, 'metadata.selected_id_readability_repair.execute').runtime_context === 'trusted_selected_id_readability_repair_execute', 'selected-ID readability repair execution should be classified as trusted execution');
+  assert(command(map, 'metadata.selected_id_readability_repair.execute').storage_action_class === 'hydration_readability_repair', 'selected-ID readability repair execution should map to Hydration readability repair');
+  assert(command(map, 'metadata.selected_id_readability_repair.execute').external_io_dependency === 'esi_provider_required', 'selected-ID readability repair execution should declare ESI provider dependency');
+  assert(command(map, 'metadata.selected_id_readability_repair.execute').enforcement_status === 'covered_provider_and_storage_gated', 'selected-ID readability repair execution should be provider/storage gated');
   assert(command(map, 'metadata.local_sde_readiness.preview').runtime_context === 'local_sde_readiness_readout', 'local SDE readiness preview should be classified as a readout');
   assert(command(map, 'metadata.local_sde_readiness.preview').external_io_dependency === 'none', 'local SDE readiness preview should not declare External I/O dependency');
   assert(command(map, 'metadata.local_sde_readiness.preview').enforcement_status === 'covered_read_only', 'local SDE readiness preview should be covered read-only');

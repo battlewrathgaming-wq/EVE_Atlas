@@ -138,6 +138,7 @@ Current state:
 - HS282 decision surface recorded
 - HS283 Resolve/readability posture accepted
 - HS284 opened
+- HS284 accepted by HS285
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -154,9 +155,11 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS284-selected-id-readability-repair-execution-runway.md`
-- expected Dev handoff is `workspace/DevHS284-selected-id-readability-repair-execution.md`
+- current executor is Overseer / Human decision
+- no active Dev runway is open
+- latest accepted Dev runway is `workspace/OverseerHS284-selected-id-readability-repair-execution-runway.md`
+- latest accepted Dev handoff is `workspace/DevHS284-selected-id-readability-repair-execution.md`
+- latest Overseer review is `workspace/OverseerHS285-hs284-selected-id-readability-repair-execution-review.md`
 - accepted posture is `workspace/OverseerHS283-selected-id-resolve-readability-posture-acceptance.md`
 - durable selected-ID readability note is `docs/features/selected-id-readability-repair.md`
 - latest accepted Dev runway is `workspace/OverseerHS280-selected-id-product-hydration-authority-preflight-runway.md`
@@ -198,7 +201,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is trusted non-renderer selected-ID Resolve / readability repair execution for one unresolved local ID
+- current work is resting after trusted non-renderer selected-ID Resolve / readability repair execution acceptance
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -228,21 +231,17 @@ Current heading:
 
 Active Dev packet:
 
-1. `workspace/OverseerHS284-selected-id-readability-repair-execution-runway.md`
-2. Expected handoff: `workspace/DevHS284-selected-id-readability-repair-execution.md`
-3. Command: `metadata.selected_id_readability_repair.execute`
-4. Run type: `selected_id_readability_repair`
-5. Scope: trusted non-renderer selected-ID Resolve / readability repair execution for one selected unresolved local ID.
-6. No renderer/UI, background/report-wide Hydration, Bucket/Dispatcher, schema, enforcement, support artifacts, or fourth-lane work.
+No active Dev packet is open.
 
 Latest accepted packet:
 
-1. `workspace/OverseerHS280-selected-id-product-hydration-authority-preflight-runway.md`
-2. `workspace/DevHS280-selected-id-product-hydration-authority-preflight.md`
-3. `workspace/OverseerHS281-hs280-selected-id-product-hydration-preflight-review.md`
-4. Accepted command: `metadata.selected_id_readability_repair.product_preflight`
-5. Scope: read-only product authority/preflight contract only.
-6. Product live Hydration remains unopened.
+1. `workspace/OverseerHS284-selected-id-readability-repair-execution-runway.md`
+2. `workspace/DevHS284-selected-id-readability-repair-execution.md`
+3. `workspace/OverseerHS285-hs284-selected-id-readability-repair-execution-review.md`
+4. Accepted command: `metadata.selected_id_readability_repair.execute`
+5. Accepted run type: `selected_id_readability_repair`
+6. Scope: trusted non-renderer selected-ID Resolve/readability repair execution for one selected unresolved local ID.
+7. Renderer/UI, background/report-wide Hydration, Bucket/Dispatcher, schema, enforcement, support artifacts, and fourth-lane work remain unopened.
 
 Active advisory request:
 
@@ -258,9 +257,9 @@ Latest accepted transition advisory:
 
 Current decision point:
 
-1. Rest selected-ID Hydration productization at accepted preflight.
-2. Ask for an additional Engineering/Security advisory before execution.
-3. If explicitly accepted, open a narrow trusted non-renderer product execution packet for `metadata.selected_id_readability_repair.execute`.
+1. Rest selected-ID Resolve here and return to a different storage/runtime seam.
+2. Ask for additional assurance/security review if a specific concern appears.
+3. Later, shape renderer/UI Resolve trigger behavior when the interface path is ready.
 
 Current decision surface:
 

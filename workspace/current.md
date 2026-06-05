@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS284 selected-ID readability repair execution runway open
+Status: HS284 selected-ID readability repair execution accepted; no active Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: trusted non-renderer selected-ID Resolve / readability repair execution for one unresolved local ID.
+Current focus: trusted non-renderer selected-ID Resolve / readability repair execution accepted; next seam not selected.
 
 Current heading:
 
@@ -21,21 +21,27 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS284-selected-id-readability-repair-execution-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS284-selected-id-readability-repair-execution.md
+none
 ```
 
-Dev may implement the narrow trusted non-renderer execution command only. Do not add renderer/UI, background/report-wide Hydration, Bucket/Dispatcher, schema, runtime enforcement, support artifacts, or fourth-lane work. Do not treat HS276 proof/test scaffolding as product authority.
+No Dev runway is open. HS284 is accepted and should rest unless the Human explicitly selects the next seam.
+
+HS284 Dev handoff:
+
+```txt
+workspace/DevHS284-selected-id-readability-repair-execution.md
+```
 
 Current decision surface:
 
@@ -61,19 +67,19 @@ workspace/DevHS280-selected-id-product-hydration-authority-preflight.md
 Latest accepted Dev runway:
 
 ```txt
-workspace/OverseerHS280-selected-id-product-hydration-authority-preflight-runway.md
+workspace/OverseerHS284-selected-id-readability-repair-execution-runway.md
 ```
 
 Latest accepted Dev handoff:
 
 ```txt
-workspace/DevHS280-selected-id-product-hydration-authority-preflight.md
+workspace/DevHS284-selected-id-readability-repair-execution.md
 ```
 
 Latest Overseer review:
 
 ```txt
-workspace/OverseerHS281-hs280-selected-id-product-hydration-preflight-review.md
+workspace/OverseerHS285-hs284-selected-id-readability-repair-execution-review.md
 ```
 
 Status: accepted.
@@ -104,7 +110,7 @@ ready for read-only product authority/preflight contract only
 
 Do not open renderer-triggered Hydration, full product live Hydration, broad live testing, Bucket/Dispatcher, background Hydration, schema, runtime enforcement, support artifacts, UI, or fourth-lane work.
 
-## HS284 Active Dev Runway
+## HS284 Accepted State
 
 Opened 2026-06-05:
 
@@ -116,6 +122,12 @@ Expected handoff:
 
 ```txt
 workspace/DevHS284-selected-id-readability-repair-execution.md
+```
+
+Accepted 2026-06-05:
+
+```txt
+workspace/OverseerHS285-hs284-selected-id-readability-repair-execution-review.md
 ```
 
 Accepted task:
@@ -154,6 +166,130 @@ Stop if:
 - Watch/Discovery/Assessment-only basis needs to authorize Resolve
 - Hydration blurs into Evidence Expansion
 - HS276 proof scaffolding starts acting as product authority
+
+## HS284 Evidence
+
+Dev updated 2026-06-05:
+
+- Added `metadata.selected_id_readability_repair.execute` as the trusted, non-renderer selected-ID Resolve/readability repair execution command.
+- Added product run type `selected_id_readability_repair`.
+- Added `src/main/services/selectedIdReadabilityRepairExecutionService.js`.
+- Added `scripts/verify-selected-id-readability-repair-execution.js` and `npm.cmd run verify:selected-id-readability-repair-execution`.
+- Registered service command and enforcement dry-run coverage as `hydration_readability_repair` / `trusted_selected_id_readability_repair_execute` / `covered_provider_and_storage_gated`.
+- Updated service registry, command authority, and enforcement dry-run verification for the new non-renderer execution command.
+- Command shape:
+  - user-facing act: `Resolve`
+  - trusted non-renderer only
+  - confirmation authority: `confirm:metadata.hydration`
+  - one selected unresolved ID only
+  - provider-backed ID types only: `character`, `corporation`, `alliance`
+  - strong local basis only: Evidence/EVEidence-derived `activity_events` appearance or existing unlabeled `entities` row
+  - local label short-circuit returns `already_readable` with no provider call, write, or audit row
+  - reuses product preflight facts but re-enters live provider attempt path only after trusted gates pass
+  - calls ESI `/universe/names` for exactly one selected ID through injected/fixture provider in verification
+  - validates provider response ID/category/label before write
+  - rechecks local label before write and closes `race_resolved_already_readable` without overwriting if readability appeared
+  - writes only `metadata_runs`, sanitized `api_request_logs` on provider contact, selected `entities` row, and matching `activity_events` readability label columns
+- Focused verifier covered:
+  - successful character Resolve with Evidence/EVEidence-derived activity basis
+  - successful corporation Resolve
+  - successful alliance Resolve
+  - existing local label short-circuit with no provider/no write/no audit row
+  - local label appears before write and prevents overwrite
+  - unsupported/malformed ID rejected before provider
+  - local SDE/static ID rejected from ESI names path
+  - missing local basis rejected
+  - Discovery-only basis rejected as non-authorizing
+  - Watch-only basis rejected as non-authorizing
+  - Assessment-only basis rejected as non-authorizing
+  - External I/O held produces held/no provider/no write
+  - live/provider gate blocked produces no accepted attempt/no write
+  - storage blocked stops before provider/no write
+  - provider unresolved response produces `partial` metadata run/no label write
+  - provider category mismatch fails/no label write
+  - provider unsafe/empty label fails/no label write
+  - provider/network error fails/no label write
+  - renderer invocation rejected
+  - missing confirmation rejected under authority enforcement
+  - HS276 proof flags rejected as non-authority
+  - fixed HS276 ID is not special
+  - allowed table writes only in success/provider-contact cases
+  - forbidden tables unchanged
+- Sample success output:
+  - `outcome`: `success`
+  - `selected_id`: `character:90000021`
+  - `provider_calls`: `1`
+  - `metadata_run_status`: `success`
+  - `metadata_run_writes`: `1`
+  - `api_request_log_writes`: `1`
+  - `entities_upserted`: `1`
+  - `activity_event_label_patches`: `2`
+- Sample quiet short-circuit:
+  - `outcome`: `already_readable`
+  - `provider_calls`: `0`
+  - `metadata_run_writes`: `0`
+  - `api_request_log_writes`: `0`
+  - `entities_upserted`: `0`
+  - `activity_event_label_patches`: `0`
+- Sample provider outcomes:
+  - unresolved: `partial_unresolved`, metadata status `partial`, no label write
+  - category mismatch: `provider_response_rejected`, metadata status `failed`, no label write
+  - unsafe label: `provider_response_rejected`, metadata status `failed`, no label write
+  - provider error: `provider_error`, metadata status `failed`, no label write
+- Boundaries confirmed:
+  - no zKillboard calls
+  - no killmail expansion / Evidence/EVEidence creation
+  - no raw ESI killmail payload mutation
+  - no numeric `activity_events` fact mutation
+  - no `discovered_killmail_refs`, `fetch_runs`, `ingestion_audits`, Evidence-related `data_quality_warnings`, Watch, Marked, or Assessment Memory mutation
+  - no storage config or External I/O config writes
+  - no support artifacts
+  - no schema changes
+  - no runtime enforcement or command blocking activation
+  - no renderer/UI trigger or confirmation behavior
+  - no background/report-wide/multi-ID Hydration
+  - no Watch/background Hydration pickup
+  - no Bucket, Dispatcher, worker, lease, retry, or persisted queue behavior
+  - no fourth lane / fast lane
+  - HS276 proof/test flags are not product authority
+- Verification run:
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\selectedIdReadabilityRepairExecutionService.js` passed.
+  - `node --check scripts\verify-selected-id-readability-repair-execution.js` passed.
+  - `npm.cmd run verify:selected-id-readability-repair-execution` passed.
+  - `npm.cmd run verify:selected-id-product-hydration-preflight` passed.
+  - `npm.cmd run verify:hydration-selected-id-real-execution-preflight` passed.
+  - `npm.cmd run verify:hydration-pickup-contract` passed.
+  - `npm.cmd run verify:hydration-request-posture` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 253 warnings across 7 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main` with HS284 working-tree changes.
+
+## HS284 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS284-selected-id-readability-repair-execution.md
+```
+
+Status: selected-ID Resolve/readability repair execution complete and accepted by Overseer.
+
+## Current Decision Point
+
+Atlas is resting after accepting the selected-ID Resolve execution seam.
+
+Safe options:
+
+1. Rest selected-ID Resolve here and return to a different storage/runtime seam.
+2. Ask for additional assurance/security review if a specific concern appears.
+3. Later, shape renderer/UI Resolve trigger behavior when the interface path is ready.
+
+Do not open renderer-triggered execution, UI confirmation behavior, background/report-wide Hydration, Bucket/Dispatcher, schema, runtime enforcement, support artifacts, or fourth-lane work without a new bounded decision.
 
 ## HS283 Accepted Resolve Posture
 

@@ -45,6 +45,9 @@ async function main() {
     assert(commands.get('metadata.hydration_selected_id_real_execution_preflight.preview')?.effects.includes('read-only'), 'metadata.hydration_selected_id_real_execution_preflight.preview should declare read-only effect');
     assert(commands.get('metadata.selected_id_readability_repair.product_preflight')?.classification === 'read-only', 'metadata.selected_id_readability_repair.product_preflight should be read-only');
     assert(commands.get('metadata.selected_id_readability_repair.product_preflight')?.effects.includes('read-only'), 'metadata.selected_id_readability_repair.product_preflight should declare read-only effect');
+    assert(commands.get('metadata.selected_id_readability_repair.execute')?.classification === 'metadata-only', 'metadata.selected_id_readability_repair.execute should be metadata-only');
+    assert(commands.get('metadata.selected_id_readability_repair.execute')?.effects.includes('external-live-api'), 'metadata.selected_id_readability_repair.execute should declare live provider effect');
+    assert(commands.get('metadata.selected_id_readability_repair.execute')?.effects.includes('metadata-readability'), 'metadata.selected_id_readability_repair.execute should declare readability metadata effect');
     assert(commands.get('metadata.local_sde_readiness.preview')?.classification === 'read-only', 'metadata.local_sde_readiness.preview should be read-only');
     assert(commands.get('metadata.local_sde_readiness.preview')?.effects.includes('read-only'), 'metadata.local_sde_readiness.preview should declare read-only effect');
     assert(commands.get('metadata.local_sde_source_posture.preview')?.classification === 'read-only', 'metadata.local_sde_source_posture.preview should be read-only');
@@ -123,6 +126,7 @@ async function main() {
     assert(rendererNames.has('metadata.hydration_pickup_contract.preview'), 'metadata.hydration_pickup_contract.preview should be renderer eligible');
     assert(rendererNames.has('metadata.hydration_selected_id_real_execution_preflight.preview'), 'metadata.hydration_selected_id_real_execution_preflight.preview should be renderer eligible');
     assert(rendererNames.has('metadata.selected_id_readability_repair.product_preflight'), 'metadata.selected_id_readability_repair.product_preflight should be renderer eligible');
+    assert(!rendererNames.has('metadata.selected_id_readability_repair.execute'), 'metadata.selected_id_readability_repair.execute should not be renderer eligible');
     assert(rendererNames.has('metadata.local_sde_readiness.preview'), 'metadata.local_sde_readiness.preview should be renderer eligible');
     assert(rendererNames.has('metadata.local_sde_source_posture.preview'), 'metadata.local_sde_source_posture.preview should be renderer eligible');
     assert(!rendererNames.has('metadata.hydration_write_fixture_proof'), 'metadata.hydration_write_fixture_proof should not be renderer eligible');
@@ -205,6 +209,11 @@ async function main() {
       () => invoke(null, { command: 'metadata.hydration_selected_id_real_execution_proof', payload: { idValue: 92418041 } }),
       'SERVICE_COMMAND_NOT_RENDERER_ELIGIBLE',
       'renderer IPC should reject selected-ID real Hydration execution proof'
+    );
+    await assertRejects(
+      () => invoke(null, { command: 'metadata.selected_id_readability_repair.execute', payload: { idValue: 90000002, operatorAct: true, action: 'Resolve' } }),
+      'SERVICE_COMMAND_NOT_RENDERER_ELIGIBLE',
+      'renderer IPC should reject selected-ID readability repair execution'
     );
     await assertRejects(
       () => invoke(null, { command: 'sde.topology_import_rewrite_authority.proof', payload: { sourcePath: 'fixture.zip' } }),

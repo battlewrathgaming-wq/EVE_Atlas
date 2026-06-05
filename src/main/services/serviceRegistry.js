@@ -51,6 +51,7 @@ const { buildHydrationSelectedIdExecutionFixtureProof } = require('./hydrationSe
 const { buildHydrationSelectedIdRealExecutionProof } = require('./hydrationSelectedIdRealExecutionProofService');
 const { buildHydrationSelectedIdRealExecutionPreflight } = require('./hydrationSelectedIdRealExecutionPreflightService');
 const { buildHydrationWriteFixtureProof } = require('./hydrationWriteFixtureProofService');
+const { runSelectedIdReadabilityRepairExecution } = require('./selectedIdReadabilityRepairExecutionService');
 const { buildSelectedIdReadabilityRepairProductPreflight } = require('./selectedIdReadabilityRepairProductPreflightService');
 const { buildLocalSdeReadinessPreview } = require('./localSdeReadinessPreviewService');
 const { buildLocalSdeSourcePosturePreview } = require('./localSdeSourcePostureService');
@@ -270,6 +271,14 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview product selected-ID readability repair authority without provider calls, writes, execution, queues, or UI work',
     handler: ({ db, payload, ...context }) => buildSelectedIdReadabilityRepairProductPreflight(db, payload, context)
+  },
+  'metadata.selected_id_readability_repair.execute': {
+    classification: 'metadata-only',
+    effects: [EFFECTS.EXTERNAL_LIVE_API, EFFECTS.LOCAL_DATA_MUTATION, EFFECTS.METADATA_READABILITY],
+    renderer: false,
+    authority: confirmationAuthority(CONFIRMATION.METADATA_HYDRATION, 'Resolve repairs readability for one selected unresolved local ID through ESI names when all trusted gates pass.'),
+    description: 'Trusted non-renderer selected-ID Resolve/readability repair for one unresolved local ID',
+    handler: ({ db, payload, ...context }) => runSelectedIdReadabilityRepairExecution(db, payload, context)
   },
   'metadata.local_sde_readiness.preview': {
     classification: 'read-only',
