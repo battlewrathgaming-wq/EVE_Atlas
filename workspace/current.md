@@ -17,6 +17,8 @@ Current heading:
 - data-layer boundaries guide the seam before machinery
 - raw IDs remain truthful facts; readable labels are applied attention
 - local SDE lookup readiness is local readability/geometry support, not provider-backed Hydration
+- local topology lookup tables are runtime geometry support; SDE is import/source provenance, not runtime lookup authority
+- accepted Watch scope authority: execution should use the stored included system ID set accepted during Watch setup; center/radius are provenance/explanation after acceptance
 - active lane model: Discovery outputs possible leads; Evidence Expansion outputs Evidence/EVEidence; Hydration outputs readability repair; fourth lane stays parked
 
 ## Executor
@@ -457,6 +459,28 @@ Safe options:
 5. Later decide whether durable `watch_result` / `watch_result_items` schema is needed.
 
 Do not open durable Watch result storage, relationship tags, dispatcher/Bucket machinery, provider movement, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
+
+## Watch Scope Authority Landing
+
+Accepted 2026-06-05:
+
+```txt
+docs/features/watch-scope-authority.md
+```
+
+Landing:
+
+- SDE source material is import provenance, not runtime lookup authority.
+- Runtime geometry should use local topology lookup tables produced from import.
+- During Watch authoring/preflight, Atlas may resolve center system + radius into an included system ID set.
+- Once accepted, the stored included system ID set is the Watch scope authority.
+- Watch execution should use the stored included system ID set.
+- Center system and radius remain provenance/explanation fields.
+- Recomputed topology is diagnostic comparison only unless the operator deliberately re-authors the Watch.
+
+Current implication:
+
+HS292's disclosed recomputed topology path is a conformance pressure point. The next safe seam, if this line continues, is read-only Watch scope authority conformance before any durable Watch result semantics.
 
 Latest accepted advisory request:
 

@@ -234,6 +234,7 @@ Current state:
 - Hydration pickup shaping accepted: selected-ID pickup is non-durable candidate acceptance for a future execution command, not queue persistence, dispatcher behavior, provider execution, or write behavior
 - Hydration pickup contract proof implemented: `metadata.hydration_pickup_contract.preview`
 - Lane simplification accepted: Discovery outputs possible leads; Evidence Expansion outputs Evidence/EVEidence; Hydration outputs readability repair; fourth lane stays parked
+- Watch scope authority accepted: local topology lookup tables support authoring/preflight, accepted stored included system IDs are execution authority, center/radius are provenance, and SDE is import/source provenance only
 - ADR-0006 accepted: HS276 selected-ID Hydration proof/test machinery is not product flow and must not be inherited as operator behavior without a new explicit runway.
 
 Current heading:
@@ -493,6 +494,7 @@ Features / contracts / decisions:
 - `docs/features/observation-lookup-model.md`
 - `docs/features/r-scanner-sequencer-presentation.md`
 - `docs/features/display-boundary-principles.md`
+- `docs/features/watch-scope-authority.md`
 - `docs/adr/`
 - `docs/contracts/`
 - `docs/statements/`

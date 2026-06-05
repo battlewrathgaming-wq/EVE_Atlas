@@ -30,5 +30,6 @@ Current core feature areas:
 - R-Scanner and Sequencer presentation
 - UI triggers and scope mapping
 - presentation layer information index
+- Watch scope authority
 
 Do not use this folder for dated handovers. Use `docs/audits` for reviews and `docs/current-state` for implementation truth.
