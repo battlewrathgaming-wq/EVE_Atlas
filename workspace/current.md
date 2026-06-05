@@ -1005,6 +1005,18 @@ Accepted semantics:
 - direct neighbor count excludes center
 - prefer `neighbors` / `direct neighbors` for operator-facing adjacency/counts
 - use `stargate` only when discussing imported local topology connection type or source data
+- user-facing content should stay simple:
+
+```txt
+System X with a radius of Y jumps:
+
+Included systems:
+Center
+itemlist1
+itemlist2
+itemlist3
+itemlist4
+```
 
 Do not change topology traversal behavior, schema, imported connection type values, Watch scope authority, Discovery refs, Evidence/EVEidence, Watch rows, Hydration, UI, support artifacts, durable Watch results, or fourth-lane behavior.
 

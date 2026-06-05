@@ -44,6 +44,22 @@ Preferred operator-facing wording:
 - Use `neighbors` / `direct neighbors` when describing adjacency/counts.
 - Use `radius includes center` where count semantics matter.
 - Use `stargate` only when specifically discussing imported local topology connection type or source data.
+- Keep user-facing content simple. Do not over-report topology mechanics.
+
+Preferred simple user-facing shape:
+
+```txt
+System X with a radius of Y jumps:
+
+Included systems:
+Center
+itemlist1
+itemlist2
+itemlist3
+itemlist4
+```
+
+Use the exact local product style if needed, but preserve the idea: identify the selected system/radius, then list included systems plainly.
 
 ## Task
 
@@ -59,9 +75,11 @@ Likely files:
 Focus:
 
 - Make plain docs say radius uses local topology lookup tables and that radius scopes include the center.
+- Keep plain docs oriented to user understanding: selected system, radius, included systems.
 - Preserve `stargate` when referring to imported source data / connection type, if needed.
 - Change misleading verifier assertion text such as `radius 1 should return direct neighbors` when the expected list includes center.
 - Prefer `center and direct neighbors` or `center plus neighbors` for radius-1 included scope.
+- Avoid broad explanatory copy that turns the user-facing surface into a topology lesson.
 - Do not change runtime behavior.
 
 ## Boundaries
@@ -84,6 +102,7 @@ Do not:
 
 - Docs explain that Atlas radius includes the center system.
 - Docs distinguish direct neighbors from radius-included systems.
+- Docs preserve a simple included-systems presentation shape.
 - Verifier labels no longer imply that radius-1 included scope is only direct neighbors.
 - Runtime expectations remain unchanged.
 - Existing radius/topology verifier checks still pass.

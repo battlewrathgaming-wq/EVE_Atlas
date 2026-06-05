@@ -268,7 +268,8 @@ Active Dev packet:
 2. Expected handoff: `workspace/DevHS302-radius-neighbor-wording-refresh.md`
 3. Scope: wording/verifier-label refresh so radius-included scope is not confused with direct neighbors.
 4. Accepted semantics: radius includes center; direct neighbor counts exclude center; prefer `neighbors` for operator-facing adjacency/counts unless discussing imported `stargate` source data.
-5. No runtime topology behavior changes, schema, imported connection type rename, provider calls, Watch execution changes, Discovery ref changes, Evidence/EVEidence changes, UI, support artifacts, durable Watch results, or fourth-lane work.
+5. User-facing shape should stay simple: `System X with a radius of Y jumps:` then `Included systems:` with the center and included system list.
+6. No runtime topology behavior changes, schema, imported connection type rename, provider calls, Watch execution changes, Discovery ref changes, Evidence/EVEidence changes, UI, support artifacts, durable Watch results, or fourth-lane work.
 
 Latest accepted packet:
 
