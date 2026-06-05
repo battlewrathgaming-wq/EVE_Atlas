@@ -92,6 +92,7 @@ async function main() {
     const systemRadiusSetupReadoutCommand = commands.find((entry) => entry.command === 'watch.system_radius_setup_readout.preview');
     const systemRadiusReadoutReadinessBridgeCommand = commands.find((entry) => entry.command === 'watch.system_radius_readout_readiness_bridge.preview');
     const watchRuntimePacketPlanCommand = commands.find((entry) => entry.command === 'watch.runtime_packet_plan.preview');
+    const watchExecutorTickDryRunCommand = commands.find((entry) => entry.command === 'watch.executor_tick_dry_run.preview');
     const watchOperatorConfirmationContractCommand = commands.find((entry) => entry.command === 'watch.operator_confirmation_contract.preview');
     const systemRadiusAuthoringPreflightCommand = commands.find((entry) => entry.command === 'watch.system_radius_authoring_preflight.preview');
     const systemRadiusAcceptancePayloadCommand = commands.find((entry) => entry.command === 'watch.system_radius_acceptance_payload.preview');
@@ -252,6 +253,8 @@ async function main() {
     assert(systemRadiusReadoutReadinessBridgeCommand?.renderer_allowed === true, 'system/radius readout/readiness bridge should be renderer eligible');
     assert(watchRuntimePacketPlanCommand?.classification === 'read-only', 'Watch runtime packet plan preview should be read-only');
     assert(watchRuntimePacketPlanCommand?.renderer_allowed === true, 'Watch runtime packet plan preview should be renderer eligible');
+    assert(watchExecutorTickDryRunCommand?.classification === 'read-only', 'Watch executor tick dry-run preview should be read-only');
+    assert(watchExecutorTickDryRunCommand?.renderer_allowed === true, 'Watch executor tick dry-run preview should be renderer eligible');
     assert(watchOperatorConfirmationContractCommand?.classification === 'read-only', 'Watch operator confirmation contract preview should be read-only');
     assert(watchOperatorConfirmationContractCommand?.renderer_allowed === true, 'Watch operator confirmation contract preview should be renderer eligible');
     assert(systemRadiusAuthoringPreflightCommand?.classification === 'read-only', 'system/radius authoring preflight should be read-only');
@@ -569,6 +572,22 @@ async function main() {
     assert(watchRuntimePacketPlan.runtime_packet_rows_persisted === 0, 'Watch runtime packet plan preview should not persist packet rows');
     assert(watchRuntimePacketPlan.schema_changes === 0, 'Watch runtime packet plan preview should not change schema');
     assert(watchRuntimePacketPlan.runtime_enforcement_active === false, 'Watch runtime packet plan preview should not activate enforcement');
+
+    const watchExecutorTickDryRun = await invokeServiceCommand('watch.executor_tick_dry_run.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchExecutorTickDryRun.read_only === true, 'Watch executor tick dry-run preview should declare read-only behavior');
+    assert(watchExecutorTickDryRun.tick_called === false, 'Watch executor tick dry-run preview should not call tick');
+    assert(watchExecutorTickDryRun.provider_calls === 0, 'Watch executor tick dry-run preview should not call providers');
+    assert(watchExecutorTickDryRun.watch_dispatches === 0, 'Watch executor tick dry-run preview should not dispatch Watch execution');
+    assert(watchExecutorTickDryRun.tasks_created === 0, 'Watch executor tick dry-run preview should not create tasks');
+    assert(watchExecutorTickDryRun.would_create_task === false, 'Watch executor tick dry-run preview should not claim task creation');
+    assert(watchExecutorTickDryRun.evidence_writes === 0, 'Watch executor tick dry-run preview should not write Evidence/EVEidence');
+    assert(watchExecutorTickDryRun.hydration_writes === 0, 'Watch executor tick dry-run preview should not write Hydration output');
+    assert(watchExecutorTickDryRun.watch_mutations === 0, 'Watch executor tick dry-run preview should not mutate Watch rows');
+    assert(watchExecutorTickDryRun.schema_changes === 0, 'Watch executor tick dry-run preview should not change schema');
+    assert(watchExecutorTickDryRun.runtime_enforcement_active === false, 'Watch executor tick dry-run preview should not activate enforcement');
 
     const watchOperatorConfirmationContract = await invokeServiceCommand('watch.operator_confirmation_contract.preview', {}, {
       db,

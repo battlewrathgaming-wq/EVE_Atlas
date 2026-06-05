@@ -192,6 +192,84 @@ function selectDueWatch(due = []) {
   ))[0];
 }
 
+function dryRunExecutorTickDecision(schedule = {}, options = {}) {
+  const sessionArmed = options.sessionArmed === true;
+  const activeTaskId = options.activeTaskId || null;
+  const activeTaskPresent = options.activeTaskPresent === true;
+  const liveApiEnabled = options.liveApiEnabled === true;
+  const checkedAt = options.checkedAt || options.now || new Date().toISOString();
+
+  if (!sessionArmed) {
+    return tickDryRunResult('blocked', checkedAt, {
+      reason: 'session_not_armed',
+      reason_codes: ['session_not_armed']
+    });
+  }
+  if (activeTaskId && activeTaskPresent) {
+    return tickDryRunResult('blocked', checkedAt, {
+      reason: 'active_task',
+      reason_codes: ['active_task'],
+      active_task_id: activeTaskId
+    });
+  }
+  if (!liveApiEnabled) {
+    return tickDryRunResult('blocked', checkedAt, {
+      reason: 'live_api_disabled',
+      reason_codes: ['live_api_disabled'],
+      schedule
+    });
+  }
+  const due = Array.isArray(schedule.due) ? schedule.due : [];
+  if (!due.length) {
+    return tickDryRunResult('idle', checkedAt, {
+      reason: 'no_due_watches',
+      reason_codes: ['no_due_watches'],
+      schedule
+    });
+  }
+
+  const watch = selectDueWatch(due);
+  const dispatchBuilder = options.dispatchBuilder || dispatchFor;
+  let dispatch;
+  try {
+    dispatch = dispatchBuilder(watch);
+  } catch (error) {
+    const reason = error.code || 'watch_scope_authority_invalid';
+    return tickDryRunResult('blocked', checkedAt, {
+      reason,
+      reason_codes: [reason],
+      selected_watch: compactWatchSelection(watch),
+      watch,
+      error: error.message
+    });
+  }
+
+  const gateBuilder = options.gateBuilder || actionGate;
+  const gate = gateBuilder(dispatch.command, dispatch.payload);
+  if (!gate.allowed) {
+    const reason = gate.blockers[0]?.code || 'live_gate_blocked';
+    return tickDryRunResult('blocked', checkedAt, {
+      reason,
+      reason_codes: [reason],
+      selected_watch: compactWatchSelection(watch),
+      watch,
+      gate,
+      would_be_command: dispatch.command,
+      would_be_payload: dispatch.payload
+    });
+  }
+
+  return tickDryRunResult('would_dispatch', checkedAt, {
+    reason: 'would_dispatch',
+    reason_codes: ['would_dispatch'],
+    selected_watch: compactWatchSelection(watch),
+    watch,
+    gate,
+    would_be_command: dispatch.command,
+    would_be_payload: dispatch.payload
+  });
+}
+
 function compareTime(left, right) {
   if (!left && !right) {
     return 0;
@@ -276,12 +354,38 @@ function tickResult(status, extra = {}) {
   };
 }
 
+function tickDryRunResult(status, checkedAt, extra = {}) {
+  return {
+    status,
+    checked_at: checkedAt,
+    dry_run: true,
+    dispatches: 0,
+    tasks_created: 0,
+    provider_calls: 0,
+    writes: 0,
+    ...extra
+  };
+}
+
+function compactWatchSelection(watch = {}) {
+  return {
+    watch_type: watch.watch_type || null,
+    watch_id: watch.watch_id ?? null,
+    scope_key: watch.scope_key || null,
+    scheduler_state: watch.scheduler_state || null,
+    next_poll_at: watch.next_poll_at || null,
+    last_success_at: watch.last_success_at || null,
+    blocked_reasons: [...(watch.blocked_reasons || [])]
+  };
+}
+
 const defaultWatchSessionExecutor = new WatchSessionExecutor();
 
 module.exports = {
   WatchSessionExecutor,
   defaultWatchSessionExecutor,
   selectDueWatch,
+  dryRunExecutorTickDecision,
   dispatchFor,
   acceptedSystemIdsForWatchSource
 };

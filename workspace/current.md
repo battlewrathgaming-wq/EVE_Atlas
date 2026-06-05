@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS332 Watch executor tick dry-run preview opened
+Status: HS332 Watch executor tick dry-run preview accepted; no active Dev runway
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: no-dispatch Watch executor/tick dry-run proof before task creation.
+Current focus: resting after Watch executor tick dry-run preview acceptance.
 
 Current heading:
 
@@ -24,18 +24,37 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human decision
 
-Active Dev runway:
+Active Dev runway: none
+
+Expected Dev handoff: none
+
+HS332 is accepted and can rest. Do not open real Watch execution, task creation, provider movement, live testing, durable Watch results, schema, UI, active enforcement, support artifacts, relationship tags, or fourth-lane behavior without a new bounded decision.
+
+## HS332 Acceptance
+
+Accepted:
 
 ```txt
-workspace/OverseerHS332-watch-executor-tick-dry-run-preview-runway.md
+workspace/OverseerHS333-hs332-watch-executor-tick-dry-run-review.md
 ```
 
-Expected Dev handoff:
+Accepted result:
+
+- `watch.executor_tick_dry_run.preview` is a renderer-eligible read-only command.
+- The preview reports blocked, idle, or would-dispatch posture before task creation.
+- It does not call `WatchSessionExecutor.tick(...)`, arm/disarm runtime, start intervals, create tasks, dispatch collectors, call providers, or write rows.
+- Disarmed, active-task, live/provider-gated, no-due, inactive, not-due, backoff, invalid-scope, actor due, system/radius due, and multiple-due cases are covered.
+- System/radius would-dispatch payloads use stored accepted IDs.
+- Invalid stored scope blocks before payload/task shape.
+- Waiting is not failure.
+- Would-dispatch is not execution authority.
+
+Residual note:
 
 ```txt
-workspace/DevHS332-watch-executor-tick-dry-run-preview.md
+Before real task creation or provider movement, preserve or explicitly prove parity between watch.runtime_packet_plan.preview, watch.executor_tick_dry_run.preview, and watchExecutor.dispatchFor(...).
 ```
 
 ## HS332 Active Dev Runway
@@ -66,6 +85,75 @@ dry-run must not make it happen
 Boundary:
 
 This packet is a no-dispatch proof before task creation. Do not execute a Watch, arm/disarm Watch runtime, start/stop intervals, create Watch executor tasks, call providers, perform live/API calls, call collectors, mutate Watch rows, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, change `watch.create`, change topology traversal behavior, infer execution authority from center/radius, persist runtime packet rows, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
+
+## HS332 Evidence
+
+Dev updated 2026-06-06:
+
+- Added read-only renderer-eligible service command `watch.executor_tick_dry_run.preview`.
+- Added pure helper `dryRunExecutorTickDecision(...)` in `src/main/watchlist/watchExecutor.js` to mirror executor tick decision order without calling `WatchSessionExecutor.tick(...)`.
+- Added `src/main/services/watchExecutorTickDryRunService.js` to compose:
+  - `buildWatchScheduleStatus(...)`
+  - `watch.runtime_packet_plan.preview`
+  - `dryRunExecutorTickDecision(...)`
+  - read-only `actionGate(...)`
+- Dry-run decision output reports:
+  - `blocked`, `idle`, or `would_dispatch`
+  - reason codes
+  - selected Watch and scope key when selected
+  - would-be command and payload shape
+  - live gate posture
+  - schedule summary
+  - selected scope authority and invalid-scope diagnostics
+  - non-authority flags
+  - unchanged table mutation proof
+- System/radius would-be payloads use stored accepted `included_system_ids` from packet-plan preview; center/radius remain provenance/management.
+- Invalid stored system/radius scope blocks with `watch_scope_authority_invalid` before command/payload/task shape; any parseable subset remains diagnostic-only and not execution authority.
+- Added `scripts/verify-watch-executor-tick-dry-run.js` and `npm.cmd run verify:watch-executor-tick-dry-run`.
+- Updated service registry, enforcement dry-run coverage, command authority, service registry verification, and passive side-effect verification.
+- Focused verifier proves:
+  - disarmed session blocks with `session_not_armed`
+  - active task blocks before Watch selection
+  - live/provider gate disabled blocks before dispatch
+  - no due Watches idles and waiting is not failure
+  - inactive/not-due/backoff Watches do not become selected
+  - invalid stored scope creates no would-dispatch payload
+  - due actor Watch produces one `actor.watch` would-dispatch payload
+  - due system/radius Watch produces one `system.radius.watch` would-dispatch payload using stored accepted IDs only
+  - multiple due Watches select one stable candidate only
+  - table counts stay unchanged
+- Verification run:
+  - `node --check src\main\watchlist\watchExecutor.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `node --check scripts\verify-watch-executor-tick-dry-run.js` passed.
+  - `npm.cmd run verify:watch-executor-tick-dry-run` passed.
+  - `npm.cmd run verify:watch-runtime-packet-plan` passed.
+  - `npm.cmd run verify:watch-executor` passed.
+  - `npm.cmd run verify:watch-scheduler` passed.
+  - `npm.cmd run verify:watch-scope-authority-conformance` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 342 warnings across 9 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main [ahead 3]` with HS332 working-tree changes.
+
+## HS332 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS332-watch-executor-tick-dry-run-preview.md
+```
+
+Status: Watch executor tick dry-run preview complete; ready for Overseer review.
+
+No Watch execution, runtime arm/disarm, interval changes, task creation, provider movement, collector calls, live/API calls, Watch row mutation, Discovery ref mutation, Evidence/EVEidence writes, Hydration/metadata writes, API log/warning writes, `watch.create` changes, topology behavior changes, runtime packet persistence, broad provider queue, schema changes, renderer UI work, popup/modal behavior, R-Scanner redesign, runtime enforcement, command blocking, support artifacts, durable Watch result identity, relationship tags, protected-word JSON updates, or fourth-lane behavior were opened.
 
 ## HS330 Acceptance
 

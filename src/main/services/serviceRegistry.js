@@ -66,6 +66,7 @@ const { buildWatchAuthoredExecutionReadinessPreview } = require('./watchAuthored
 const { buildSystemRadiusSetupReadout } = require('./systemRadiusSetupReadoutService');
 const { buildSystemRadiusReadoutReadinessBridge } = require('./systemRadiusReadoutReadinessBridgeService');
 const { buildWatchRuntimePacketPlanPreview } = require('./watchRuntimePacketPlanService');
+const { buildWatchExecutorTickDryRunPreview } = require('./watchExecutorTickDryRunService');
 const { buildWatchOperatorConfirmationContractPreview } = require('./watchOperatorConfirmationContractService');
 const { buildSystemRadiusAuthoringPreflight } = require('./systemRadiusAuthoringPreflightService');
 const { buildSystemRadiusAcceptancePayloadPreview } = require('./systemRadiusAcceptancePayloadService');
@@ -723,6 +724,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview future Watch runtime packet plans from accepted scope without dispatch, providers, tasks, writes, schema, or UI work',
     handler: ({ db, payload }) => buildWatchRuntimePacketPlanPreview(db, payload)
+  },
+  'watch.executor_tick_dry_run.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview the next Watch executor tick decision without calling tick, dispatching Watch work, creating tasks, providers, writes, schema, or UI work',
+    handler: ({ db, payload, ...context }) => buildWatchExecutorTickDryRunPreview(db, payload, context)
   },
   'watch.operator_confirmation_contract.preview': {
     classification: 'read-only',
