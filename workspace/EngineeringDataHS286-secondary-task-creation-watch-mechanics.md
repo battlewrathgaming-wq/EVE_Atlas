@@ -582,3 +582,53 @@ If Overseer does not want a Dev packet, the next action should remain a current-
 - Code gaps identified from source: yes.
 - Output posture leads the recommendation: yes.
 - Next action routed to Overseer: yes.
+
+## Appendix A - Human-Shaped Insight For Future Watch / Task Result Work
+
+Status: Human conceptual flattening
+
+Authority: advisory context only. This does not authorize implementation, does not override HS287, does not define schema, and does not reopen the Watch/task lane by itself.
+
+The current Evidence/EVEidence boundary appears mostly sound. Atlas should keep ESI-expanded killmails and normalized activity events as shared corpus truth, not as containers for Watch/task meaning.
+
+Emerging principle:
+
+```txt
+Evidence records what happened.
+Provenance records how Atlas got it.
+Watch/task results group what a specific scope/run found.
+Observation interprets/group-presents local records.
+Assessment remains human judgment.
+```
+
+The likely future need is not to tag Evidence directly. The likely future need is a separate searchable result/readout layer for task outcomes, especially Watch outcomes.
+
+Preferred future direction:
+
+```txt
+watch_result
+watch_result_items
+```
+
+A future result artifact should be able to answer:
+
+- What did this Watch/task find in this window?
+- Which killmails were related?
+- Was the run complete, partial, capped, failed, or deferred?
+- What scope and provider path produced it?
+
+This should point to existing `killmail_id`, `run_id`, Watch scope, and provenance rows. It should not mutate the killmail's meaning.
+
+Current code does not appear to have crossed the line into durable relationship tagging. The mild pressure point is that `activity_events` already carry `discovered_by_type` / `discovered_by_id`, which is acceptable as light provenance but should not become the place where Watch results, relationship tags, or task meaning accumulate.
+
+Smallest useful future decision:
+
+```txt
+Treat Watch/task result as a separate derived artifact/read model, not an Evidence-field extension.
+```
+
+Parked future decisions:
+
+- whether `watch_result` becomes durable schema;
+- whether relationship tags are Observation support or Assessment support;
+- whether Watch result identity is per run, per Watch window, or per generated report.
