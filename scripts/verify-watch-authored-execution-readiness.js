@@ -131,6 +131,14 @@ function verifyReadinessRows(preview) {
   assert(empty.blocked_reasons.includes('empty_stored_scope'), 'empty scope should be blocked');
   assert(invalid.blocked_reasons.includes('invalid_stored_scope'), 'invalid scope should be blocked');
   assert(inactive.blocked_reasons.includes('inactive_watch'), 'inactive Watch should be blocked');
+  assertSame(invalid.execution_system_ids, [], 'invalid scope should expose no execution IDs');
+  assertSame(invalid.stored_scope.included_system_ids, [], 'invalid scope should expose no stored-scope included IDs as authority');
+  assert(invalid.stored_scope.accepted_authority === false, 'invalid stored scope should not be accepted authority');
+  assertSame(invalid.invalid_scope_diagnostic.diagnostic_parseable_system_ids, [30003597], 'invalid scope should retain parseable subset only as diagnostic detail');
+  assert(invalid.invalid_scope_diagnostic.operator_actionable === false, 'invalid diagnostic IDs should not be operator-actionable');
+  assert(invalid.invalid_scope_diagnostic.accepted_authority === false, 'invalid diagnostic IDs should not be accepted authority');
+  assert(invalid.invalid_scope_diagnostic.execution_authority === false, 'invalid diagnostic IDs should not be execution authority');
+  assert(invalid.invalid_scope_diagnostic.repairs_stored_row === false, 'invalid diagnostic should not repair stored row');
   for (const row of [missing, malformed, empty, invalid, inactive]) {
     assert(row.execution_ready_from_stored_scope === false, `watch ${row.watch_id} should be blocked`);
     assert(row.ready_status === 'blocked_before_provider_movement', `watch ${row.watch_id} should block before provider movement`);

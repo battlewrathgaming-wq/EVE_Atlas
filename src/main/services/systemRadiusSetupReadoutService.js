@@ -131,6 +131,7 @@ function setupReadoutForRow(row, localNames) {
   const included = parseStoredSystemIdArray(row.included_system_ids);
   const excluded = parseStoredSystemIdArray(row.excluded_system_ids);
   const validStoredScope = included.status === 'valid';
+  const invalidScopeDiagnosticIds = included.status === 'invalid' ? included.values : [];
   const active = Number(row.is_active) === 1;
   const readyForFutureExecutionInput = active && validStoredScope;
   const includedSystems = validStoredScope
@@ -168,6 +169,13 @@ function setupReadoutForRow(row, localNames) {
       display_names_source: 'local_solar_systems_table_when_available',
       center_radius_used_as_authority: false,
       topology_recomputed_for_readout: false
+    },
+    invalid_scope_diagnostic: {
+      diagnostic_parseable_system_ids: invalidScopeDiagnosticIds,
+      operator_actionable: false,
+      accepted_authority: false,
+      execution_authority: false,
+      repairs_stored_row: false
     },
     included_systems: includedSystems,
     included_system_count: validStoredScope ? included.values.length : 0,

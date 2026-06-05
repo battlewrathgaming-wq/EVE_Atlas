@@ -131,6 +131,13 @@ function verifySetupRows(preview) {
   assert(empty.blocked_reasons.includes('empty_stored_scope'), 'empty scope should block future input');
   assert(invalid.stored_scope_status === 'invalid', 'invalid scope should be reported');
   assert(invalid.blocked_reasons.includes('invalid_stored_scope'), 'invalid scope should block future input');
+  assertSame(invalid.accepted_scope_authority.included_system_ids, [], 'invalid scope should expose no accepted included IDs');
+  assertSame(invalid.included_systems, [], 'invalid scope should expose no operator-actionable included systems');
+  assertSame(invalid.invalid_scope_diagnostic.diagnostic_parseable_system_ids, [30003597], 'invalid scope should retain parseable subset only as diagnostic detail');
+  assert(invalid.invalid_scope_diagnostic.operator_actionable === false, 'invalid diagnostic IDs should not be operator-actionable');
+  assert(invalid.invalid_scope_diagnostic.accepted_authority === false, 'invalid diagnostic IDs should not be accepted authority');
+  assert(invalid.invalid_scope_diagnostic.execution_authority === false, 'invalid diagnostic IDs should not be execution authority');
+  assert(invalid.invalid_scope_diagnostic.repairs_stored_row === false, 'invalid diagnostic should not repair stored row');
   for (const row of [missing, malformed, empty, invalid]) {
     assert(row.ready_for_future_execution_input_from_stored_scope === false, `watch ${row.watch_id} should not be ready`);
     assert(row.included_system_count === 0, `watch ${row.watch_id} should not expose accepted count`);

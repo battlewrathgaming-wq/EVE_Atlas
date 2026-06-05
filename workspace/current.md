@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS324 invalid stored scope authority normalization open
+Status: HS324 invalid stored scope authority normalization accepted; no active Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: normalize invalid stored scope so partial IDs are diagnostic only, not accepted or usable scope.
+Current focus: resting after invalid stored scope authority normalization.
 
 Current heading:
 
@@ -24,21 +24,13 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human decision
 
-Active Dev runway:
+Active Dev runway: none
 
-```txt
-workspace/OverseerHS324-invalid-stored-scope-authority-normalization-runway.md
-```
+Expected Dev handoff: none
 
-Expected Dev handoff:
-
-```txt
-workspace/DevHS324-invalid-stored-scope-authority-normalization.md
-```
-
-HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, HS318, HS320, and HS322 are accepted and can rest. HS324 is open to normalize invalid stored scope handling so partial parsed IDs are diagnostic only and not accepted or usable scope. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, HS318, HS320, HS322, and HS324 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
 
 ## HS324 Active Dev Runway
 
@@ -70,6 +62,99 @@ partial parsed IDs => diagnostic only, never authority
 Boundary:
 
 This packet is local-only normalization. Do not execute a Watch, arm/disarm Watch runtime, create Watch executor tasks, call providers, perform live/API calls, mutate Watch rows, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, change `watch.create`, change topology traversal behavior, infer execution authority from center/radius, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
+
+## HS324 Evidence
+
+Dev updated 2026-06-05:
+
+- Normalized invalid stored System / Radius Watch scope handling across setup readout, authored execution readiness, and the readout/readiness bridge.
+- Invalid stored scope now exposes no accepted or usable included system IDs:
+  - setup `accepted_scope_authority.included_system_ids` is `[]`
+  - setup `included_systems` is `[]`
+  - readiness `execution_system_ids` is `[]`
+  - readiness `stored_scope.included_system_ids` is `[]`
+  - readiness `future_execution_payload` remains `null`
+- Parseable numeric subsets from invalid stored scope are retained only as diagnostic/non-authority detail:
+  - `invalid_scope_diagnostic.diagnostic_parseable_system_ids`
+  - `operator_actionable: false`
+  - `accepted_authority: false`
+  - `execution_authority: false`
+  - `repairs_stored_row: false`
+- The fixture invalid stored scope `[30003597,"bad"]` now reports `stored_scope_status: invalid`, blocked with `invalid_stored_scope`, not ready, empty usable/accepted IDs, and diagnostic subset `[30003597]` only under `invalid_scope_diagnostic`.
+- The HS322 bridge mismatch is resolved:
+  - bridge summary status: `all_setup_readout_and_readiness_rows_match`
+  - bridge rows: 7
+  - matched rows: 7
+  - mismatched rows: 0
+  - mismatch watch IDs: `[]`
+- The bridge also compares `invalid_scope_diagnostic.diagnostic_parseable_system_ids` as a non-authority conformance field.
+- Mutation boundary proof:
+  - no Watch execution
+  - no Watch runtime arm/disarm
+  - no Watch executor task creation
+  - no provider/live/API calls
+  - no Watch row mutation or repair
+  - no Discovery ref mutation
+  - no Evidence/EVEidence writes
+  - no Hydration/metadata label writes
+  - no `watch.create` behavior change
+  - no topology traversal behavior change
+  - no center/radius fallback authority
+  - no schema changes
+  - no renderer/UI work
+  - no support artifacts
+  - no runtime enforcement or command blocking
+  - no Watch result identity, relationship tags, protected-word JSON updates, or fourth-lane behavior
+- Verification run:
+  - `node --check src\main\services\watchAuthoredExecutionReadinessService.js` passed.
+  - `node --check src\main\services\systemRadiusReadoutReadinessBridgeService.js` passed.
+  - `node --check scripts\verify-watch-authored-execution-readiness.js` passed.
+  - `node --check scripts\verify-system-radius-readout-readiness-bridge.js` passed.
+  - `npm.cmd run verify:watch-authored-execution-readiness` passed.
+  - `npm.cmd run verify:system-radius-readout-readiness-bridge` passed.
+  - `npm.cmd run verify:system-radius-setup-readout` passed.
+  - `npm.cmd run verify:watch-create-accepted-scope-contract` passed; fixture-only verifier created expected fixture `system_watches` rows and reported only those rows changed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 53 warnings across 6 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS324 working-tree changes.
+
+## HS324 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS324-invalid-stored-scope-authority-normalization.md
+```
+
+Status: invalid stored scope authority normalization complete; pending Overseer review.
+
+## HS324 Acceptance
+
+Accepted:
+
+```txt
+workspace/OverseerHS325-hs324-invalid-stored-scope-normalization-review.md
+```
+
+Decision:
+
+HS324 is accepted.
+
+Accepted result:
+
+- invalid stored scope exposes no accepted/usable `included_system_ids`
+- invalid stored scope remains not ready and blocked with `invalid_stored_scope`
+- parseable numeric fragments from invalid stored scope are diagnostic only
+- `invalid_scope_diagnostic` explicitly reports no operator action, no accepted authority, no execution authority, and no stored-row repair
+- setup readout and authored execution readiness now match on invalid stored scope handling
+- bridge mismatch count is `0`
+- no Watch execution, provider movement, Watch row repair, Discovery/Evidence/Hydration mutation, schema, UI, support artifact, runtime enforcement, command blocking, Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened
+
+HS324 can rest.
 
 ## HS322 Active Dev Runway
 

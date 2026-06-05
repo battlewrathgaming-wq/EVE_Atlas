@@ -106,10 +106,10 @@ function verifyAcceptedModel(preview) {
 
 function verifyBridgeRows(preview) {
   assert(preview.bridge_rows.length === 7, 'fixture should expose seven bridge rows');
-  assert(preview.summary.status === 'mismatches_present', 'invalid fixture row should expose source-view mismatch');
-  assert(preview.summary.matched_row_count === 6, 'summary should count six matched rows');
-  assert(preview.summary.mismatched_row_count === 1, 'summary should count one mismatch');
-  assertSame(preview.summary.mismatch_watch_ids, [5], 'summary should name invalid row mismatch');
+  assert(preview.summary.status === 'all_setup_readout_and_readiness_rows_match', 'invalid fixture row should now match after diagnostic quarantine');
+  assert(preview.summary.matched_row_count === 7, 'summary should count seven matched rows');
+  assert(preview.summary.mismatched_row_count === 0, 'summary should count no mismatches');
+  assertSame(preview.summary.mismatch_watch_ids, [], 'summary should have no mismatch watch IDs');
 
   const valid = byWatch(preview, 1);
   const missing = byWatch(preview, 2);
@@ -133,7 +133,7 @@ function verifyBridgeRows(preview) {
   assertBlocked(missing, 'missing', 'missing_stored_scope');
   assertBlocked(malformed, 'malformed', 'malformed_stored_scope');
   assertBlocked(empty, 'empty', 'empty_stored_scope');
-  assertInvalidMismatch(invalid);
+  assertInvalidMatched(invalid);
 
   assert(inactive.conformance_status === 'matched', 'inactive valid row should match');
   assert(inactive.stored_scope_status.setup === 'valid', 'inactive setup scope should remain valid');
@@ -160,16 +160,22 @@ function assertBlocked(row, status, reason) {
   assert(row.mismatch_fields.length === 0, `${status} row should have no mismatch fields`);
 }
 
-function assertInvalidMismatch(row) {
-  assert(row.conformance_status === 'mismatch', 'invalid row should expose source-view mismatch');
+function assertInvalidMatched(row) {
+  assert(row.conformance_status === 'matched', 'invalid row should match once diagnostic IDs are quarantined');
   assert(row.stored_scope_status.setup === 'invalid', 'invalid setup status should match');
   assert(row.stored_scope_status.readiness === 'invalid', 'invalid readiness status should match');
+  assertSame(row.stored_included_system_ids.setup, [], 'invalid setup should expose no accepted included IDs');
+  assertSame(row.stored_included_system_ids.readiness, [], 'invalid readiness should expose no stored-scope included IDs');
+  assertSame(row.invalid_scope_diagnostic.setup.diagnostic_parseable_system_ids, [30003597], 'invalid setup diagnostic should retain parseable subset');
+  assertSame(row.invalid_scope_diagnostic.readiness.diagnostic_parseable_system_ids, [30003597], 'invalid readiness diagnostic should retain parseable subset');
+  assert(row.invalid_scope_diagnostic.setup.operator_actionable === false, 'invalid setup diagnostic should not be operator-actionable');
+  assert(row.invalid_scope_diagnostic.readiness.operator_actionable === false, 'invalid readiness diagnostic should not be operator-actionable');
   assert(row.readiness_for_future_execution_input.setup === false, 'invalid setup should not be ready');
   assert(row.readiness_for_future_execution_input.readiness === false, 'invalid readiness should not be ready');
   assert(row.blocked_reasons.setup.includes('invalid_stored_scope'), 'invalid setup should include invalid_stored_scope');
   assert(row.blocked_reasons.readiness.includes('invalid_stored_scope'), 'invalid readiness should include invalid_stored_scope');
-  assert(row.mismatch_fields.some((entry) => entry.field === 'stored_included_system_ids'), 'invalid row should disclose stored included ID mismatch');
-  assert(row.mismatch_handling === 'reported_only_no_fix_or_mutation', 'invalid mismatch should be report-only');
+  assert(row.mismatch_fields.length === 0, 'invalid row should have no mismatch fields');
+  assert(row.mismatch_handling === 'no_mismatch', 'invalid row should not report mismatch handling');
 }
 
 function verifyMismatchHandling() {
@@ -232,6 +238,7 @@ function sample(preview, watchId) {
     conformance_status: row.conformance_status,
     stored_scope_status: row.stored_scope_status,
     stored_included_system_ids: row.stored_included_system_ids,
+    invalid_scope_diagnostic: row.invalid_scope_diagnostic,
     included_system_count: row.included_system_count,
     center_radius_role: row.center_radius_role,
     center_radius_used_as_authority: row.center_radius_used_as_authority,

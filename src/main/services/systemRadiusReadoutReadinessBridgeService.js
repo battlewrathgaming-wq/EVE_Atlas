@@ -114,6 +114,13 @@ function bridgeRow(watchId, setup, readiness) {
     setup?.accepted_scope_authority?.included_system_ids,
     readiness?.stored_scope?.included_system_ids
   );
+  compareArrayField(
+    matched,
+    mismatches,
+    'invalid_scope_diagnostic_parseable_system_ids',
+    setup?.invalid_scope_diagnostic?.diagnostic_parseable_system_ids,
+    readiness?.invalid_scope_diagnostic?.diagnostic_parseable_system_ids
+  );
   compareField(
     matched,
     mismatches,
@@ -171,6 +178,10 @@ function bridgeRow(watchId, setup, readiness) {
     stored_included_system_ids: {
       setup: setup?.accepted_scope_authority?.included_system_ids || [],
       readiness: readiness?.stored_scope?.included_system_ids || []
+    },
+    invalid_scope_diagnostic: {
+      setup: setup?.invalid_scope_diagnostic || null,
+      readiness: readiness?.invalid_scope_diagnostic || null
     },
     included_system_count: {
       setup: setup?.included_system_count ?? null,

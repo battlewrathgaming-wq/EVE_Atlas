@@ -92,6 +92,7 @@ function readinessForRow(row) {
   const reasons = blockedReasons(row, included);
   const ready = reasons.length === 0;
   const validStoredScope = included.status === 'valid';
+  const invalidScopeDiagnosticIds = included.status === 'invalid' ? included.values : [];
 
   return {
     watch_id: row.watch_id,
@@ -148,12 +149,19 @@ function readinessForRow(row) {
       backoff_until: row.backoff_until
     },
     stored_scope: {
-      included_system_ids: included.values,
+      included_system_ids: validStoredScope ? included.values : [],
       included_status: included.status,
       excluded_system_ids: excluded.status === 'valid' ? excluded.values : [],
       excluded_status: excluded.status,
       source_table: 'system_watches',
       accepted_authority: validStoredScope
+    },
+    invalid_scope_diagnostic: {
+      diagnostic_parseable_system_ids: invalidScopeDiagnosticIds,
+      operator_actionable: false,
+      accepted_authority: false,
+      execution_authority: false,
+      repairs_stored_row: false
     }
   };
 }
