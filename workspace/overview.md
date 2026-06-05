@@ -128,6 +128,7 @@ Current state:
 - HS272 opened
 - HS272 accepted by HS273
 - HS274 advisory opened
+- HS274 accepted by HS275
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -144,10 +145,11 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Engineering / Security / Data Engineering advisory
+- current executor is none
 - no active Dev runway is open
-- active advisory request is `workspace/OverseerHS274-selected-id-real-hydration-execution-gate-advisory-request.md`
-- expected advisory artifact is `workspace/EngineeringSecurityHS274-selected-id-real-hydration-execution-gate-advisory.md`
+- latest accepted advisory request is `workspace/OverseerHS274-selected-id-real-hydration-execution-gate-advisory-request.md`
+- latest accepted advisory artifact is `workspace/EngineeringSecurityHS274-selected-id-real-hydration-execution-gate-advisory.md`
+- latest Overseer review is `workspace/OverseerHS275-hs274-selected-id-real-hydration-execution-gate-review.md`
 - latest accepted Dev runway is `workspace/OverseerHS272-selected-id-real-execution-preflight-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS272-selected-id-real-execution-preflight.md`
 - latest Overseer review is `workspace/OverseerHS273-hs272-selected-id-real-execution-preflight-review.md`
@@ -177,7 +179,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is Engineering/Security advisory on whether real selected-ID Hydration execution is ready to open
+- current work is a Human/Overseer decision point on whether to cross the provider-contact boundary for a trusted, non-renderer, one-ID selected Hydration real execution proof
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -209,9 +211,15 @@ No active Dev packet is open.
 
 Active advisory request:
 
+No active advisory request is open.
+
+Latest accepted advisory:
+
 1. `workspace/OverseerHS274-selected-id-real-hydration-execution-gate-advisory-request.md`
-2. Decide whether real provider-backed selected-ID Hydration execution is ready, not ready, or ready only for another smaller proof.
-3. No code, no provider calls, no live/API checks, no Hydration writes, no schema, no Bucket/Dispatcher, no runtime enforcement, and no UI.
+2. `workspace/EngineeringSecurityHS274-selected-id-real-hydration-execution-gate-advisory.md`
+3. `workspace/OverseerHS275-hs274-selected-id-real-hydration-execution-gate-review.md`
+4. Accepted classification: ready only for a smaller real-execution proof.
+5. Decision needed: whether to cross the provider-contact boundary for a trusted, non-renderer, one-ID selected Hydration real execution proof.
 
 Latest accepted packet:
 

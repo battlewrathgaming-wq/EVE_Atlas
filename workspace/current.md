@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS274 selected-ID real Hydration execution gate advisory open
+Status: HS274 selected-ID real Hydration execution gate advisory accepted by HS275; decision point
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Engineering/Security advisory on whether real provider-backed selected-ID Hydration execution is ready to open, or whether another proof is needed first.
+Current focus: decision point after Engineering/Security accepted that Atlas is ready only for the smallest trusted, non-renderer, one-ID real selected-ID Hydration execution proof if Human/Overseer explicitly accepts provider contact.
 
 Current heading:
 
@@ -21,18 +21,18 @@ Current heading:
 
 ## Executor
 
-Current executor: Engineering / Security / Data Engineering advisory
+Current executor: none
 
-Active advisory request:
+Active Dev runway:
 
 ```txt
-workspace/OverseerHS274-selected-id-real-hydration-execution-gate-advisory-request.md
+none
 ```
 
-Expected advisory artifact:
+Expected handoff:
 
 ```txt
-workspace/EngineeringSecurityHS274-selected-id-real-hydration-execution-gate-advisory.md
+none
 ```
 
 No Dev task is open. Do not implement code. Do not call providers. Do not open real provider-backed selected-ID Hydration execution without explicit Human/Overseer acceptance of provider contact.
@@ -54,10 +54,36 @@ workspace/DevHS272-selected-id-real-execution-preflight.md
 Latest Overseer review:
 
 ```txt
-workspace/OverseerHS273-hs272-selected-id-real-execution-preflight-review.md
+workspace/OverseerHS275-hs274-selected-id-real-hydration-execution-gate-review.md
 ```
 
 Status: accepted.
+
+Latest accepted advisory request:
+
+```txt
+workspace/OverseerHS274-selected-id-real-hydration-execution-gate-advisory-request.md
+```
+
+Latest accepted advisory artifact:
+
+```txt
+workspace/EngineeringSecurityHS274-selected-id-real-hydration-execution-gate-advisory.md
+```
+
+Accepted classification:
+
+```txt
+ready only for a smaller real-execution proof
+```
+
+Accepted decision point:
+
+```txt
+Do we accept crossing the provider-contact boundary for a trusted, non-renderer, one-ID selected Hydration real execution proof?
+```
+
+Do not open renderer-triggered Hydration, full product live Hydration, broad live testing, Bucket/Dispatcher, background Hydration, schema, runtime enforcement, support artifacts, UI, or fourth-lane work.
 
 Recent decision surface:
 
