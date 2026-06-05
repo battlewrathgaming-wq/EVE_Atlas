@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS324 invalid stored scope authority normalization accepted; no active Dev runway
+Status: HS324 accepted; resting at Watch setup chain next-seam decision
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after invalid stored scope authority normalization.
+Current focus: choose the next bounded storage/runtime seam after Watch setup chain hardening.
 
 Current heading:
 
@@ -155,6 +155,42 @@ Accepted result:
 - no Watch execution, provider movement, Watch row repair, Discovery/Evidence/Hydration mutation, schema, UI, support artifact, runtime enforcement, command blocking, Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened
 
 HS324 can rest.
+
+## HS326 Watch Setup Chain Next-Seam Decision Surface
+
+Recorded:
+
+```txt
+workspace/OverseerHS326-watch-setup-chain-next-seam-decision-surface.md
+```
+
+Status: resting decision surface; no Dev runway opened.
+
+Stable landing:
+
+- topology preflight -> explicit operator confirmation -> stored included system IDs -> readout -> future execution readiness is coherent
+- accepted Watch scope authority remains stored `included_system_ids`
+- center/radius remain provenance and management after acceptance
+- invalid stored scope is blocked and diagnostic only
+- no Watch execution, provider movement, dispatch, schema, active enforcement, support artifacts, durable Watch result identity, relationship tags, or final UI design is open
+
+Recommended next seam:
+
+```txt
+Watch Runtime Packet Plan Preview
+```
+
+Reason:
+
+Atlas has proven accepted Watch setup and readiness. The next uncertainty is whether stored accepted scope can be shaped into a future runtime/acquisition packet plan while staying read-only, local-only, non-dispatching, and non-live.
+
+Alternative seams:
+
+- Watch Result / Outcome Shape Advisory
+- Local Scope Health / Repair Readout
+- rest Watch chain and return to another storage/runtime seam
+
+Human/Overseer decision needed before Dev runway.
 
 ## HS322 Active Dev Runway
 

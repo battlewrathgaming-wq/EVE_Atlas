@@ -179,6 +179,7 @@ Current state:
 - HS322 accepted by HS323
 - HS324 opened
 - HS324 accepted by HS325
+- HS326 Watch setup chain next-seam decision surface recorded
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -198,6 +199,7 @@ Current state:
 - current executor is Overseer / Human decision
 - active Dev runway is none
 - expected Dev handoff is none
+- latest resting decision surface is `workspace/OverseerHS326-watch-setup-chain-next-seam-decision-surface.md`
 - latest accepted Dev runway is `workspace/OverseerHS324-invalid-stored-scope-authority-normalization-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS324-invalid-stored-scope-authority-normalization.md`
 - latest Overseer review is `workspace/OverseerHS325-hs324-invalid-stored-scope-normalization-review.md`
