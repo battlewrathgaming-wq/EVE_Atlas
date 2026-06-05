@@ -123,9 +123,9 @@ function buildWatchCreateMutationSafetyMap(db, input = {}) {
     read_only: true,
     mutates_state: false,
     renderer_eligible: true,
-    current_watch_create_consumes_preflight_included_ids: false,
-    future_mutation_contract_required: true,
-    future_payload_directly_executable_now: false,
+    current_watch_create_consumes_preflight_included_ids: true,
+    future_mutation_contract_required: false,
+    future_payload_directly_executable_now: true,
     expected_future_mutation_target: 'watch.create',
     current_packet_allows_watch_row_write: false,
     current_watch_create_path: CURRENT_WATCH_CREATE_PATH,
@@ -135,7 +135,7 @@ function buildWatchCreateMutationSafetyMap(db, input = {}) {
       path: 'watchlistRepository.addSystemRadiusWatch -> TopologyService.getSystemsWithinRadius',
       input_basis: 'center_system_id + radius_jumps + maxRadius/maxTopologySystems',
       consumes_accepted_preflight_included_ids: false,
-      posture: 'current_gap_for_future_contract'
+      posture: 'legacy_direct_authoring_only_after_accepted_scope_contract'
     },
     future_required_mutation_contract_inputs: FUTURE_MUTATION_CONTRACT_INPUTS,
     future_allowed_write_surface: {
@@ -167,9 +167,9 @@ function buildWatchCreateMutationSafetyMap(db, input = {}) {
       ]
     },
     readiness: {
-      ready_for_mutation_behavior_change_now: false,
+      ready_for_mutation_behavior_change_now: true,
       ready_for_next_implementation_seam: true,
-      next_implementation_seam: 'actual watch.create mutation contract consuming accepted preflight included_system_ids as stored-scope authority'
+      next_implementation_seam: 'renderer/operator confirmation path for accepted system/radius Watch setup'
     },
     term_drift_assurance: {
       status: 'focused_assurance_warning_only',

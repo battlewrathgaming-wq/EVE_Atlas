@@ -45,6 +45,7 @@
     "verify:system-radius-authoring-preflight": "node scripts/verify-system-radius-authoring-preflight.js",
     "verify:system-radius-acceptance-payload": "node scripts/verify-system-radius-acceptance-payload.js",
     "verify:watch-create-mutation-safety-map": "node scripts/verify-watch-create-mutation-safety-map.js",
+    "verify:watch-create-accepted-scope-contract": "node scripts/verify-watch-create-accepted-scope-contract.js",
     "verify:queue-clock-no-intent": "node scripts/verify-queue-clock-no-intent-semantics.js",
     "verify:patient-packet-identity": "node scripts/verify-patient-packet-identity-preview.js",
     "verify:patient-packet-identity-sparse": "node scripts/verify-patient-packet-identity-sparse.js",

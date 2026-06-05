@@ -93,9 +93,9 @@ function verifyReadOnlyBoundary(preview) {
 }
 
 function verifyCurrentPathAndGap(preview) {
-  assert(preview.current_watch_create_consumes_preflight_included_ids === false, 'current watch.create should not consume preflight included IDs');
-  assert(preview.future_mutation_contract_required === true, 'future mutation contract should be required');
-  assert(preview.future_payload_directly_executable_now === false, 'future payload should not be directly executable now');
+  assert(preview.current_watch_create_consumes_preflight_included_ids === true, 'current watch.create should consume accepted preflight included IDs after HS312');
+  assert(preview.future_mutation_contract_required === false, 'future mutation contract should no longer be required for accepted scope creation');
+  assert(preview.future_payload_directly_executable_now === true, 'accepted payload should now be executable by watch.create');
   assert(preview.expected_future_mutation_target === 'watch.create', 'future mutation target should be watch.create');
   assertSame(
     preview.current_watch_create_path,
@@ -109,7 +109,7 @@ function verifyCurrentPathAndGap(preview) {
     'current watch.create path should disclose recompute path'
   );
   assert(preview.current_recomputation_point.path.includes('TopologyService.getSystemsWithinRadius'), 'current recompute point should be named');
-  assert(preview.current_recomputation_point.consumes_accepted_preflight_included_ids === false, 'recompute point should disclose accepted IDs are not consumed');
+  assert(preview.current_recomputation_point.consumes_accepted_preflight_included_ids === false, 'legacy recompute point should disclose accepted IDs are not consumed by legacy branch');
   assert(preview.current_system_radius_mutation_inputs.includes('centerSystemId / center_system_id'), 'current center input should be mapped');
   assert(preview.current_system_radius_stored_fields.includes('system_watches.included_system_ids'), 'current stored included field should be mapped');
 }
@@ -127,7 +127,7 @@ function verifyFutureMutationSurface(preview) {
   assert(preview.accepted_scope_authority.included_system_ids_role === 'future_stored_scope_authority', 'accepted included IDs should be future stored-scope authority');
   assert(preview.accepted_scope_authority.rejected_if_mismatched_or_forged === true, 'mismatched IDs should be rejected later');
   assert(preview.unsafe_or_mismatched_id_rejection_posture.reject_if_claimed_ids_replace_preflight_ids === true, 'future mutation should reject forged replacement IDs');
-  assert(preview.readiness.ready_for_mutation_behavior_change_now === false, 'HS310 should not say mutation behavior is ready to change now');
+  assert(preview.readiness.ready_for_mutation_behavior_change_now === true, 'accepted-scope mutation behavior should now be implemented');
   assert(preview.readiness.ready_for_next_implementation_seam === true, 'HS310 should identify next implementation seam');
 }
 

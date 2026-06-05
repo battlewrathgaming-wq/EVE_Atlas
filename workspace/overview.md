@@ -165,6 +165,8 @@ Current state:
 - HS307 accepted by HS309
 - HS310 opened
 - HS310 accepted by HS311
+- HS312 opened
+- HS312 accepted by HS313
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -240,7 +242,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is resting after read-only Watch creation mutation safety map
+- current work is resting after accepted-scope `watch.create` mutation contract
 - recommended next rich surface is selected unresolved local ID -> Resolve candidate -> future report readability reuse
 - parked separate lane is Task origin and durable outcome map for Manual Search and Watch
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
@@ -276,6 +278,17 @@ Active Dev packet:
 No active Dev packet is open.
 
 Latest accepted packet:
+
+1. `workspace/OverseerHS312-watch-create-accepted-scope-mutation-contract-runway.md`
+2. `workspace/DevHS312-watch-create-accepted-scope-mutation-contract.md`
+3. `workspace/OverseerHS313-hs312-watch-create-accepted-scope-review.md`
+4. Accepted result: `watch.create` can store accepted system/radius `included_system_ids` exactly as Watch scope authority.
+5. Center/radius remain provenance/explanation/management fields.
+6. Legacy direct center/radius authoring remains separate.
+7. Authoring-time local topology validation does not replace or reorder the accepted list.
+8. Mutation is limited to `system_watches`; Watch execution, provider movement, Discovery refs, Evidence/EVEidence, Hydration, schema, UI, support artifacts, active enforcement, relationship tags, and fourth-lane work remain unopened.
+
+Previous accepted packet:
 
 1. `workspace/OverseerHS310-watch-create-mutation-safety-map-runway.md`
 2. `workspace/DevHS310-watch-create-mutation-safety-map.md`

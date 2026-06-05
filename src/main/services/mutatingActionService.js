@@ -212,6 +212,7 @@ async function runSdeInventoryImportService(db, payload = {}, dependencies = {})
 
 async function runWatchCreateService(db, payload = {}, dependencies = {}) {
   if (isSystemRadiusWatchPayload(payload)) {
+    const acceptedScope = acceptedSystemRadiusScopeFromPayload(payload);
     const normalized = normalizeSystemRadiusWatchScope({
       centerSystemId: payload.centerSystemId || payload.center_system_id,
       radiusJumps: payload.radiusJumps ?? payload.radius_jumps,
@@ -225,6 +226,12 @@ async function runWatchCreateService(db, payload = {}, dependencies = {}) {
     return addSystemRadiusWatch(db, {
       ...payload,
       ...normalized,
+      acceptedIncludedSystemIds: acceptedScope.acceptedIncludedSystemIds,
+      acceptedScopeSource: acceptedScope.acceptedScopeSource,
+      acceptedPreflightAction: acceptedScope.acceptedPreflightAction,
+      acceptedPreflightStatus: acceptedScope.acceptedPreflightStatus,
+      requireAcceptedIncludedSystemIds: acceptedScope.requireAcceptedIncludedSystemIds,
+      acceptedScopePayloadStatus: acceptedScope.acceptedScopePayloadStatus,
       pollIntervalMinutes: payload.pollIntervalMinutes ?? payload.poll_interval_minutes,
       isActive: payload.isActive ?? payload.is_active,
       notes: payload.notes
@@ -253,6 +260,76 @@ function runWatchListService(db) {
 function isSystemRadiusWatchPayload(payload = {}) {
   const watchType = String(payload.watchType || payload.watch_type || '').toLowerCase();
   return watchType === 'system_radius' || watchType === 'system' || payload.centerSystemId || payload.center_system_id;
+}
+
+function acceptedSystemRadiusScopeFromPayload(payload = {}) {
+  const storedScopeAuthority = payload.storedScopeAuthority || payload.stored_scope_authority || {};
+  const candidatePayload = payload.candidateFutureWatchCreatePayload
+    || payload.candidate_future_watch_create_payload
+    || payload.futureWatchCreatePayload
+    || payload.future_watch_create_payload
+    || {};
+  const candidateStoredAuthority = candidatePayload.storedScopeAuthority || candidatePayload.stored_scope_authority || {};
+  const acceptedIds = firstDefined(
+    payload.acceptedIncludedSystemIds,
+    payload.accepted_included_system_ids,
+    payload.includedSystemIds,
+    payload.included_system_ids,
+    storedScopeAuthority.includedSystemIds,
+    storedScopeAuthority.included_system_ids,
+    candidatePayload.acceptedIncludedSystemIds,
+    candidatePayload.accepted_included_system_ids,
+    candidatePayload.includedSystemIds,
+    candidatePayload.included_system_ids,
+    candidateStoredAuthority.includedSystemIds,
+    candidateStoredAuthority.included_system_ids
+  );
+  const acceptedPreflightAction = payload.acceptedPreflightAction
+    || payload.accepted_preflight_action
+    || payload.sourcePreflightAction
+    || payload.source_preflight_action
+    || candidatePayload.acceptedPreflightAction
+    || candidatePayload.accepted_preflight_action
+    || candidatePayload.sourcePreflightAction
+    || candidatePayload.source_preflight_action
+    || null;
+  const acceptedPreflightStatus = payload.acceptedPreflightStatus
+    || payload.accepted_preflight_status
+    || payload.sourcePreflightStatus
+    || payload.source_preflight_status
+    || candidatePayload.acceptedPreflightStatus
+    || candidatePayload.accepted_preflight_status
+    || candidatePayload.sourcePreflightStatus
+    || candidatePayload.source_preflight_status
+    || null;
+  const acceptedScopeSource = payload.acceptedIncludedSystemIdsSource
+    || payload.accepted_included_system_ids_source
+    || payload.includedSystemIdsSource
+    || payload.included_system_ids_source
+    || storedScopeAuthority.source
+    || candidateStoredAuthority.source
+    || null;
+  const acceptedScopePayloadStatus = payload.status || payload.acceptanceStatus || payload.acceptance_status || candidatePayload.status || null;
+  const requireAcceptedIncludedSystemIds = Boolean(
+    acceptedIds !== undefined
+    || acceptedPreflightAction
+    || acceptedPreflightStatus
+    || acceptedScopeSource
+    || payload.requireAcceptedIncludedSystemIds
+    || payload.require_accepted_included_system_ids
+  );
+  return {
+    acceptedIncludedSystemIds: acceptedIds === undefined ? null : acceptedIds,
+    acceptedScopeSource,
+    acceptedPreflightAction,
+    acceptedPreflightStatus,
+    acceptedScopePayloadStatus,
+    requireAcceptedIncludedSystemIds
+  };
+}
+
+function firstDefined(...values) {
+  return values.find((value) => value !== undefined);
 }
 
 function runWatchScheduleService(db, payload = {}) {

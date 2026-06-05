@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS310 Watch create mutation safety map accepted; no active Dev runway
+Status: HS312 Watch create accepted scope mutation contract accepted; no active Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after read-only Watch creation mutation safety map.
+Current focus: resting after accepted-scope `watch.create` mutation contract.
 
 Current heading:
 
@@ -37,7 +37,164 @@ Expected Dev handoff:
 none
 ```
 
-HS296, HS298, HS300, HS301, HS302, HS304, HS307, and HS310 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, actual Watch row writes, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, and HS312 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+
+## HS312 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS312-watch-create-accepted-scope-mutation-contract-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS312-watch-create-accepted-scope-mutation-contract.md
+```
+
+Task:
+
+Implement the first actual `watch.create` mutation contract for accepted system/radius Watch setup.
+
+Intent:
+
+- preflight shows a concrete included-system list;
+- operator accepts that exact list;
+- `watch.create` stores that exact list;
+- later execution reads that stored list.
+
+The mutation should:
+
+- require accepted `included_system_ids` for the accepted-preflight system/radius path;
+- store those exact accepted IDs in `system_watches.included_system_ids`;
+- preserve center system ID/name and radius as provenance/explanation/management fields;
+- preserve existing operator settings such as lookback, caps, active flag, poll interval, notes, and excluded IDs if already supported;
+- reject missing, empty, malformed, capped, unknown, invalid, or mismatched accepted included-ID payloads;
+- avoid silent recomputation from center/radius when accepted IDs are supplied;
+- keep any legacy/direct center-radius authoring behavior explicitly separate if it must remain for compatibility.
+
+Boundary:
+
+This is Watch authoring persistence only. Do not dispatch Watch execution, create tasks, call providers, mutate Discovery/Evidence/Hydration, change topology traversal behavior, add UI, create support artifacts, activate enforcement, open result semantics, add relationship tags, rename source-owned terms, or update protected-word JSON.
+
+## HS312 Evidence
+
+Dev updated 2026-06-05:
+
+- Updated `watch.create` system/radius handling so accepted preflight included-system IDs can be consumed and stored as Watch scope authority.
+- Updated `src/main/services/mutatingActionService.js` to extract accepted scope inputs from accepted payload shapes:
+  - `included_system_ids`
+  - `accepted_included_system_ids`
+  - `stored_scope_authority.included_system_ids`
+  - candidate/future acceptance payload aliases
+  - accepted preflight action/status/source fields
+- Updated `src/main/watchlist/watchlistRepository.js` so `addSystemRadiusWatch`:
+  - validates accepted IDs when the accepted-preflight path is used
+  - rejects missing, empty, malformed, duplicate, capped/not-acceptable, unknown, invalid, or mismatched accepted-ID payloads
+  - validates accepted IDs against current local topology membership without replacing accepted order
+  - stores the exact accepted `included_system_ids` list in `system_watches.included_system_ids`
+  - preserves center system ID/name and radius as provenance/management fields
+  - keeps legacy direct center/radius authoring separate as `legacy_center_radius_authoring`
+- Updated `watch.create_mutation_safety_map.preview` to reflect the post-HS312 state:
+  - accepted-preflight path now consumes accepted included IDs
+  - legacy direct authoring remains the recompute branch
+  - renderer/operator confirmation path is the next seam
+- Added `scripts/verify-watch-create-accepted-scope-contract.js` and `npm.cmd run verify:watch-create-accepted-scope-contract`.
+- Focused verifier sample:
+  - stored IDs: `[30003597,30003601,30003599,30003598,30003596]`
+  - `scope_authority.source: accepted_preflight_included_system_ids`
+  - `center_radius_role: provenance_and_management`
+  - `topology_recomputed_for_storage: false`
+  - center system ID: `30003597`
+  - radius: `1`
+  - lookback hours: `48`
+  - max systems per run: `5`
+  - max killmails per run: `3`
+  - active flag: `0`
+  - poll interval: `45`
+  - legacy direct authoring remains separate with `topology_recomputed_for_storage: true`
+- Rejection coverage:
+  - missing accepted IDs
+  - empty accepted IDs
+  - malformed accepted IDs
+  - mismatched accepted IDs
+  - capped/not-acceptable status
+  - unknown center
+  - invalid radius
+- Mutation boundary proof:
+  - intended mutation is limited to `system_watches`
+  - no provider calls
+  - no Watch dispatch
+  - no task creation
+  - no Discovery ref mutation
+  - no Evidence/EVEidence writes
+  - no Hydration writes
+  - no schema changes
+  - no UI behavior
+  - no support artifacts
+  - no runtime enforcement
+  - no result semantics / relationship tags / fourth lane
+- Verification run:
+  - `node --check src\main\services\mutatingActionService.js` passed.
+  - `node --check src\main\watchlist\watchlistRepository.js` passed.
+  - `node --check src\main\services\watchCreateMutationSafetyMapService.js` passed.
+  - `node --check scripts\verify-watch-create-accepted-scope-contract.js` passed.
+  - `node --check scripts\verify-watch-create-mutation-safety-map.js` passed.
+  - `npm.cmd run verify:watch-create-accepted-scope-contract` passed.
+  - `npm.cmd run verify:watch-create-mutation-safety-map` passed.
+  - `npm.cmd run verify:watch-scope-authority-conformance` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:mutating-services` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 440 warnings across 9 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS312 working-tree changes and Overseer/current workspace updates.
+
+## HS312 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS312-watch-create-accepted-scope-mutation-contract.md
+```
+
+Status: Watch create accepted-scope mutation contract accepted by Overseer.
+
+## HS312 Acceptance
+
+Accepted:
+
+```txt
+workspace/OverseerHS313-hs312-watch-create-accepted-scope-review.md
+```
+
+Decision:
+
+HS312 is accepted.
+
+Accepted result:
+
+- `watch.create` can consume accepted system/radius included IDs from accepted preflight/acceptance payload shapes.
+- `watch.create` stores the accepted IDs exactly in `system_watches.included_system_ids`.
+- Center system and radius are preserved as provenance/explanation/management fields.
+- The accepted-preflight path reports `scope_authority.source: accepted_preflight_included_system_ids`.
+- The accepted-preflight path reports `topology_recomputed_for_storage: false`.
+- Legacy direct center/radius authoring remains separate as `legacy_center_radius_authoring`.
+- Authoring-time local topology validation does not replace or reorder the accepted list.
+- Mutation is limited to `system_watches`.
+
+HS312 can rest.
+
+Likely future seams, not open now:
+
+```txt
+renderer/operator confirmation path for accepted Watch setup
+Watch execution smoke using a real authored Watch
+Watch/task result identity
+```
 
 ## HS310 Active Dev Runway
 

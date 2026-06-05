@@ -69,10 +69,17 @@ function addSystemRadiusWatch(db, input) {
 
   const radiusJumps = nonNegativeIntegerOrDefault(input.radiusJumps, 1, 'radiusJumps');
   const topology = new TopologyService(db);
-  const includedSystemIds = topology.getSystemsWithinRadius(centerSystemId, radiusJumps, {
+  const topologyIncludedSystemIds = topology.getSystemsWithinRadius(centerSystemId, radiusJumps, {
     maxRadius: integerOrDefault(input.maxRadius, 5),
     maxSystems: integerOrDefault(input.maxTopologySystems, 100)
   });
+  const acceptedScope = normalizeAcceptedSystemRadiusScope(input, {
+    centerSystemId,
+    topologyIncludedSystemIds
+  });
+  const includedSystemIds = acceptedScope.usesAcceptedScope
+    ? acceptedScope.acceptedIncludedSystemIds
+    : topologyIncludedSystemIds;
 
   const values = {
     centerSystemId,
@@ -148,8 +155,82 @@ function addSystemRadiusWatch(db, input) {
   return {
     watch_type: 'system_radius',
     watch: row,
+    scope_authority: acceptedScope.usesAcceptedScope
+      ? {
+          source: 'accepted_preflight_included_system_ids',
+          included_system_ids: acceptedScope.acceptedIncludedSystemIds,
+          center_radius_role: 'provenance_and_management',
+          topology_recomputed_for_storage: false
+        }
+      : {
+          source: 'legacy_center_radius_authoring',
+          included_system_ids: includedSystemIds,
+          center_radius_role: 'legacy_authoring_geometry',
+          topology_recomputed_for_storage: true
+        },
     authored_at: nowIso()
   };
+}
+
+function normalizeAcceptedSystemRadiusScope(input, context) {
+  if (!input.requireAcceptedIncludedSystemIds && !input.acceptedIncludedSystemIds) {
+    return {
+      usesAcceptedScope: false,
+      acceptedIncludedSystemIds: []
+    };
+  }
+
+  if (input.acceptedScopePayloadStatus && !acceptedPayloadStatus(input.acceptedScopePayloadStatus)) {
+    throw new Error(`Accepted system/radius Watch scope rejected: payload status ${input.acceptedScopePayloadStatus} is not acceptable`);
+  }
+  if (input.acceptedPreflightStatus && String(input.acceptedPreflightStatus) !== 'acceptable') {
+    throw new Error(`Accepted system/radius Watch scope rejected: preflight status ${input.acceptedPreflightStatus} is not acceptable`);
+  }
+  const accepted = normalizeSystemIdArray(input.acceptedIncludedSystemIds, 'acceptedIncludedSystemIds');
+  if (!accepted.length) {
+    throw new Error('Accepted system/radius Watch scope requires non-empty accepted included_system_ids');
+  }
+  if (!accepted.includes(context.centerSystemId)) {
+    throw new Error('Accepted system/radius Watch scope must include the center system ID');
+  }
+  if (stableJson(sortedNumbers(accepted)) !== stableJson(sortedNumbers(context.topologyIncludedSystemIds))) {
+    throw new Error('Accepted system/radius Watch scope does not match current local topology for center/radius');
+  }
+  return {
+    usesAcceptedScope: true,
+    acceptedIncludedSystemIds: accepted
+  };
+}
+
+function acceptedPayloadStatus(status) {
+  return new Set([
+    'ready_for_future_mutation_contract_payload',
+    'ready_for_future_watch_create_payload',
+    'acceptable',
+    'accepted'
+  ]).has(String(status));
+}
+
+function normalizeSystemIdArray(value, fieldName) {
+  if (!Array.isArray(value)) {
+    throw new Error(`Accepted system/radius Watch scope requires ${fieldName} array`);
+  }
+  const normalized = value.map((item) => Number(item));
+  if (normalized.some((item) => !Number.isInteger(item) || item <= 0)) {
+    throw new Error(`Accepted system/radius Watch scope ${fieldName} must contain positive integer system IDs`);
+  }
+  if (new Set(normalized).size !== normalized.length) {
+    throw new Error(`Accepted system/radius Watch scope ${fieldName} must not contain duplicate system IDs`);
+  }
+  return normalized;
+}
+
+function stableJson(value) {
+  return JSON.stringify(value);
+}
+
+function sortedNumbers(value) {
+  return [...value].map(Number).sort((left, right) => left - right);
 }
 
 function listSystemRadiusWatches(db) {
