@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS266 selected-ID Hydration execution readiness advisory opened
+Status: HS268 selected-ID Hydration execution fixture proof runway open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: advisory readiness review before any selected-ID provider-backed Hydration execution packet.
+Current focus: fixture-only selected-ID Hydration execution proof before any real provider-backed execution packet.
 
 Current heading:
 
@@ -21,25 +21,31 @@ Current heading:
 
 ## Executor
 
-Current executor: Engineering / Data Engineering / Security advisory
+Current executor: Dev
 
-Active advisory request:
-
-```txt
-workspace/OverseerHS266-selected-id-hydration-execution-readiness-advisory-request.md
-```
-
-Expected advisory artifact:
+Active Dev runway:
 
 ```txt
-workspace/DataEngineeringHS266-selected-id-hydration-execution-readiness-advisory.md
+workspace/OverseerHS268-selected-id-hydration-execution-fixture-proof-runway.md
 ```
 
-Advisory task:
+Expected Dev handoff:
 
-Review whether Atlas is ready to shape selected-ID provider-backed Hydration execution, or whether the next safe packet should be read-only execution preflight, fixture-only execution proof, or another design pass.
+```txt
+workspace/DevHS268-selected-id-hydration-execution-fixture-proof.md
+```
 
-Do not implement code. Do not open Dev execution. Do not call providers.
+Dev task:
+
+Add the smallest fixture-only selected-ID Hydration execution proof. This proof should exercise selected-ID execution/write boundaries using injected fixture provider results only.
+
+Suggested command:
+
+```txt
+metadata.hydration_selected_id_execution_fixture_proof
+```
+
+Do not call providers. Do not create real operator Hydration execution. Do not make the command renderer eligible.
 
 Preserve:
 
@@ -58,9 +64,46 @@ Stop if:
 
 - Hydration blurs into Evidence Expansion
 - request posture or pickup contract is treated as execution authority
-- provider-backed execution is proposed without local-first revalidation
-- write behavior is proposed without storage/write-path proof
-- queues, dispatcher, worker, leases, retries, schema, UI, or fourth-lane design become necessary before the advisory question is answered
+- provider-backed execution is implemented
+- write behavior touches anything beyond Hydration/readability proof rows
+- queues, dispatcher, worker, leases, retries, schema, UI, or fourth-lane design become necessary before the fixture proof can stay bounded
+
+## Recent Accepted Advisory
+
+Latest advisory request:
+
+```txt
+workspace/OverseerHS266-selected-id-hydration-execution-readiness-advisory-request.md
+```
+
+Latest advisory artifact:
+
+```txt
+workspace/DataEngineeringHS266-selected-id-hydration-execution-readiness-advisory.md
+```
+
+Latest Overseer review:
+
+```txt
+workspace/OverseerHS267-hs266-hydration-execution-readiness-review.md
+```
+
+Status: accepted.
+
+Accepted result:
+
+Atlas is not ready for real provider-backed selected-ID Hydration execution. Atlas is ready for a fixture-only selected-ID Hydration execution proof.
+
+Recommended proof shape:
+
+```txt
+selected-ID pickup contract
+-> trusted execution revalidation
+-> fixture provider response
+-> provider-response validation
+-> Hydration write transaction
+-> metadata_runs / entities / activity_events / api_request_logs proof
+```
 
 ## Recent Accepted State
 
