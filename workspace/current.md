@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS329 Watch runtime next-seam decision surface recorded; no active Dev runway
+Status: HS330 Watch runtime movement readiness advisory opened
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Human / Overseer decision after Watch runtime packet plan preview acceptance.
+Current focus: assurance that the current Watch read-only runtime chain is coherent enough to build on.
 
 Current heading:
 
@@ -24,11 +24,56 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human decision
+Current executor: Engineering / Data Engineering / Security advisory
 
 Active Dev runway: none
 
-Expected Dev handoff: none
+Expected advisory artifact:
+
+```txt
+workspace/EngineeringDataSecurityHS330-watch-runtime-movement-readiness-advisory.md
+```
+
+## HS330 Watch Runtime Movement Readiness Advisory
+
+Opened:
+
+```txt
+workspace/OverseerHS330-watch-runtime-movement-readiness-advisory-request.md
+```
+
+Task:
+
+Review whether the current Atlas Watch setup-to-runtime-planning chain is coherent enough to build on before any execution-adjacent Dev work is opened.
+
+Purpose:
+
+```txt
+prove what we have now works before building on top of it
+```
+
+Core question:
+
+```txt
+Is a no-dispatch executor/tick dry-run the right next proof, or does Atlas need a different assurance seam first?
+```
+
+Boundary:
+
+This is advisory only. Do not implement code, create a Dev runway, call providers, perform live/API testing, dispatch Watch execution, arm runtime, create tasks, mutate Watch rows, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, change schema, update renderer UI, activate runtime enforcement, create support artifacts, update protected-word JSON, or reopen fourth-lane behavior.
+
+Expected output:
+
+```txt
+workspace/EngineeringDataSecurityHS330-watch-runtime-movement-readiness-advisory.md
+```
+
+The artifact should recommend whether the next safe step is:
+
+1. no-dispatch executor/tick dry-run,
+2. another read-only proof,
+3. rest Watch runtime and choose another seam,
+4. stop until Human/Overseer resolves a decision.
 
 HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, HS318, HS320, HS322, HS324, and HS327 are accepted and can rest. HS329 is a decision surface only. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
 

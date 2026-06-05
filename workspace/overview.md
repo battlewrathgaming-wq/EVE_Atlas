@@ -183,6 +183,7 @@ Current state:
 - HS327 opened
 - HS327 accepted by HS328
 - HS329 Watch runtime next-seam decision surface recorded
+- HS330 Watch runtime movement readiness advisory opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -199,9 +200,10 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer / Human decision
+- current executor is Engineering / Data Engineering / Security advisory
 - active Dev runway is none
-- expected Dev handoff is none
+- expected advisory artifact is `workspace/EngineeringDataSecurityHS330-watch-runtime-movement-readiness-advisory.md`
+- latest advisory request is `workspace/OverseerHS330-watch-runtime-movement-readiness-advisory-request.md`
 - latest resting decision surface is `workspace/OverseerHS329-watch-runtime-next-seam-decision-surface.md`
 - latest accepted Dev runway is `workspace/OverseerHS327-watch-runtime-packet-plan-preview-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS327-watch-runtime-packet-plan-preview.md`
