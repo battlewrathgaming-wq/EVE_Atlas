@@ -140,6 +140,7 @@ Current state:
 - HS284 opened
 - HS284 accepted by HS285
 - HS286 advisory assurance request opened
+- HS286 accepted by HS287
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -156,10 +157,11 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Engineering / Data Engineering / Security advisory
+- current executor is Overseer / Human decision
 - no active Dev runway is open
-- active advisory request is `workspace/OverseerHS286-user-input-fetch-selected-resolution-missing-links-assurance-request.md`
-- expected advisory artifact is `workspace/EngineeringDataHS286-user-input-fetch-selected-resolution-missing-links.md`
+- latest accepted advisory request is `workspace/OverseerHS286-user-input-fetch-selected-resolution-missing-links-assurance-request.md`
+- latest accepted advisory artifacts are `workspace/EngineeringDataHS286-user-input-fetch-selected-resolution-missing-links.md` and `workspace/EngineeringDataHS286-secondary-task-creation-watch-mechanics.md`
+- latest accepted advisory review is `workspace/OverseerHS287-hs286-missing-links-assurance-review.md`
 - latest accepted Dev runway is `workspace/OverseerHS284-selected-id-readability-repair-execution-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS284-selected-id-readability-repair-execution.md`
 - latest Overseer review is `workspace/OverseerHS285-hs284-selected-id-readability-repair-execution-review.md`
@@ -204,7 +206,9 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is assurance and missing-link discovery across operator input, fetch, Evidence Expansion, local Observation/readability, and selected-ID Resolve
+- current work is next-seam selection after accepted missing-link assurance
+- recommended next rich surface is selected unresolved local ID -> Resolve candidate -> future report readability reuse
+- parked separate lane is Task origin and durable outcome map for Manual Search and Watch
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -248,10 +252,15 @@ Latest accepted packet:
 
 Active advisory request:
 
+No active advisory request is open.
+
+Latest accepted advisory:
+
 1. `workspace/OverseerHS286-user-input-fetch-selected-resolution-missing-links-assurance-request.md`
-2. Expected artifact: `workspace/EngineeringDataHS286-user-input-fetch-selected-resolution-missing-links.md`
-3. Scope: source-backed assurance map of user/operator input to complete fetch / selected resolution missing links.
-4. No implementation, Dev runway, live/API calls, renderer/UI, schema, Bucket/Dispatcher, enforcement, support artifacts, storage/External I/O changes, or term renames.
+2. `workspace/EngineeringDataHS286-user-input-fetch-selected-resolution-missing-links.md`
+3. `workspace/EngineeringDataHS286-secondary-task-creation-watch-mechanics.md`
+4. `workspace/OverseerHS287-hs286-missing-links-assurance-review.md`
+5. Accepted recommendation: local-only selected-ID Resolve candidate / report handoff proof if this seam continues.
 
 Latest accepted transition advisory:
 

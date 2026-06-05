@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS286 user-input to fetch / selected-resolution missing-links assurance open; no Dev runway
+Status: HS286 missing-links assurance accepted; next seam decision pending
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: assurance and missing-link discovery across operator input, fetch, Evidence Expansion, local Observation/readability, and selected-ID Resolve.
+Current focus: accepted missing-link assurance; choose next rich surface before opening Dev.
 
 Current heading:
 
@@ -21,7 +21,7 @@ Current heading:
 
 ## Executor
 
-Current executor: Engineering / Data Engineering / Security advisory
+Current executor: Overseer / Human decision
 
 Active Dev runway:
 
@@ -35,18 +35,25 @@ Expected Dev handoff:
 none
 ```
 
-No Dev runway is open. HS284 is accepted and should rest unless the Human explicitly selects the next seam.
+No Dev runway is open. HS286 is accepted and the next seam should be selected deliberately.
 
-Active advisory request:
+Latest accepted advisory request:
 
 ```txt
 workspace/OverseerHS286-user-input-fetch-selected-resolution-missing-links-assurance-request.md
 ```
 
-Expected advisory artifact:
+Accepted advisory artifacts:
 
 ```txt
 workspace/EngineeringDataHS286-user-input-fetch-selected-resolution-missing-links.md
+workspace/EngineeringDataHS286-secondary-task-creation-watch-mechanics.md
+```
+
+Latest Overseer advisory review:
+
+```txt
+workspace/OverseerHS287-hs286-missing-links-assurance-review.md
 ```
 
 HS284 Dev handoff:
@@ -95,6 +102,33 @@ workspace/OverseerHS285-hs284-selected-id-readability-repair-execution-review.md
 ```
 
 Status: accepted.
+
+Latest accepted missing-links advisory request:
+
+```txt
+workspace/OverseerHS286-user-input-fetch-selected-resolution-missing-links-assurance-request.md
+```
+
+Latest accepted missing-links advisory artifacts:
+
+```txt
+workspace/EngineeringDataHS286-user-input-fetch-selected-resolution-missing-links.md
+workspace/EngineeringDataHS286-secondary-task-creation-watch-mechanics.md
+```
+
+Latest accepted missing-links advisory review:
+
+```txt
+workspace/OverseerHS287-hs286-missing-links-assurance-review.md
+```
+
+Accepted recommendation:
+
+```txt
+selected unresolved local ID -> Resolve candidate -> future report readability reuse
+```
+
+This is the recommended next rich surface if selected-ID Resolve continues. The separate Watch/task outcome map is accepted as a useful parked lane, not the same seam.
 
 Latest accepted advisory request:
 
