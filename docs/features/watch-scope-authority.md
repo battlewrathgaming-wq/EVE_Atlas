@@ -1,6 +1,6 @@
 # Feature: Watch Scope Authority
 
-Status: Accepted direction; implementation conformance pending
+Status: Accepted; execution conformance implemented
 Updated: 2026-06-05
 
 ## Purpose
@@ -55,13 +55,13 @@ Discovery refs produced by execution remain possible leads / provenance, not Evi
 
 Evidence/EVEidence is created only through ESI Evidence Expansion of selected refs.
 
-## Current Implementation Pressure
+## Current Implementation State
 
-HS292 exposed that current system/radius collection planning can recompute topology from center and radius, while stored included/excluded scope exists separately.
+HS292 exposed that system/radius collection planning could recompute topology from center and radius, while stored included/excluded scope existed separately.
 
-Under this feature direction, that is a conformance gap to prove and correct before durable Watch result semantics are built on top.
+HS294/HS295 proved the conformance gap. HS296 corrected the execution path so system/radius Watch execution consumes accepted stored `included_system_ids` as execution authority.
 
-The next safe seam should be read-only conformance first, not schema or execution changes.
+Current parked limitation: system/radius Discovery ref identity remains center-only. That is acceptable for current possible-lead behavior, but not a foundation for durable Watch/task result semantics without a separate future result/readout membership decision.
 
 ## Must Not Do
 

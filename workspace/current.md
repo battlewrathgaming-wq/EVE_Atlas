@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS298 system/radius Discovery ref identity advisory open; no active Dev runway
+Status: HS300 Watch/task outcome map HS296 refresh runway open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: pressure-test system/radius Discovery ref identity before durable Watch/task result semantics.
+Current focus: refresh Watch/task outcome map preview so it reflects HS296 stored-scope execution authority and HS298 center-only Discovery ref identity limitation.
 
 Current heading:
 
@@ -23,32 +23,38 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS300-watch-task-outcome-map-hs296-refresh-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS300-watch-task-outcome-map-hs296-refresh.md
 ```
 
-HS296 is accepted and can rest. HS298 is advisory/source-trace only. Do not open provider movement, live testing, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
+HS296 and HS298 are accepted. Dev may perform the bounded HS300 read-only preview refresh only. Do not open provider movement, live testing, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
 
-Active advisory request:
+Latest accepted advisory request:
 
 ```txt
 workspace/OverseerHS298-system-radius-discovery-ref-identity-advisory-request.md
 ```
 
-Expected advisory artifact:
+Latest accepted advisory artifact:
 
 ```txt
 workspace/EngineeringDataHS298-system-radius-discovery-ref-identity-advisory.md
+```
+
+Latest advisory review:
+
+```txt
+workspace/OverseerHS299-hs298-system-radius-discovery-ref-identity-advisory-review.md
 ```
 
 Latest accepted advisory request:
@@ -820,6 +826,54 @@ Scope:
 - no durable `watch_result` / `watch_result_items`
 - no relationship tags
 - no UI, enforcement, support artifacts, or fourth-lane work
+
+## HS298 Overseer Review
+
+Accepted:
+
+```txt
+workspace/OverseerHS299-hs298-system-radius-discovery-ref-identity-advisory-review.md
+```
+
+Decision:
+
+HS298 is accepted.
+
+Accepted posture:
+
+- current `system_radius` Discovery ref identity is center-only
+- center-only identity is acceptable for the current safe phase
+- center-only identity is not sufficient as the foundation for future durable Watch/task result semantics
+- future Watch/task result semantics should use a separate result/readout membership layer rather than mutating Evidence/EVEidence or overloading Discovery refs
+
+Review consequence:
+
+The older `runtime.watch_task_outcome_map.preview` still describes pre-HS296 execution posture and should be refreshed before it is used as a current instrument.
+
+## HS300 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS300-watch-task-outcome-map-hs296-refresh-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS300-watch-task-outcome-map-hs296-refresh.md
+```
+
+Task:
+
+Refresh `runtime.watch_task_outcome_map.preview` so it reflects both:
+
+```txt
+HS296: Watch execution uses stored included_system_ids as authority
+HS298: system_radius Discovery ref identity remains center-only
+```
+
+Do not change Discovery ref identity, create durable Watch results, create relationship tags, call providers, dispatch Watch execution, create tasks, mutate local rows, add schema, change UI, activate enforcement, create support artifacts, or reopen fourth-lane work.
 
 Latest accepted advisory request:
 

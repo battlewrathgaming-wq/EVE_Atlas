@@ -152,6 +152,8 @@ Current state:
 - HS296 opened
 - HS296 accepted by HS297
 - HS298 advisory opened
+- HS298 accepted by HS299
+- HS300 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -168,11 +170,12 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer / Human decision
-- active Dev runway is none
-- expected Dev handoff is none
-- active advisory request is `workspace/OverseerHS298-system-radius-discovery-ref-identity-advisory-request.md`
-- expected advisory artifact is `workspace/EngineeringDataHS298-system-radius-discovery-ref-identity-advisory.md`
+- current executor is Dev
+- active Dev runway is `workspace/OverseerHS300-watch-task-outcome-map-hs296-refresh-runway.md`
+- expected Dev handoff is `workspace/DevHS300-watch-task-outcome-map-hs296-refresh.md`
+- latest accepted advisory request is `workspace/OverseerHS298-system-radius-discovery-ref-identity-advisory-request.md`
+- latest accepted advisory artifact is `workspace/EngineeringDataHS298-system-radius-discovery-ref-identity-advisory.md`
+- latest advisory review is `workspace/OverseerHS299-hs298-system-radius-discovery-ref-identity-advisory-review.md`
 - latest accepted advisory request is `workspace/OverseerHS290-watch-task-outcome-map-assurance-scope-request.md`
 - latest accepted advisory artifact is `workspace/EngineeringDataHS290-watch-task-outcome-map-assurance-scope.md`
 - latest Overseer advisory review is `workspace/OverseerHS291-hs290-watch-task-outcome-map-assurance-review.md`
@@ -226,7 +229,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is system/radius Discovery ref identity advisory/source trace
+- current work is Watch/task outcome map HS296 refresh
 - recommended next rich surface is selected unresolved local ID -> Resolve candidate -> future report readability reuse
 - parked separate lane is Task origin and durable outcome map for Manual Search and Watch
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
@@ -259,7 +262,10 @@ Current heading:
 
 Active Dev packet:
 
-No active Dev packet is open.
+1. `workspace/OverseerHS300-watch-task-outcome-map-hs296-refresh-runway.md`
+2. Expected handoff: `workspace/DevHS300-watch-task-outcome-map-hs296-refresh.md`
+3. Scope: refresh `runtime.watch_task_outcome_map.preview` so it reflects HS296 stored-scope Watch execution authority and HS298 center-only Discovery ref identity limitation.
+4. No provider calls, Watch dispatch/task creation, row mutations, schema, Discovery ref identity redesign, durable Watch results, relationship tags, UI, enforcement, support artifacts, or fourth-lane work.
 
 Latest accepted packet:
 
@@ -275,10 +281,15 @@ Latest accepted packet:
 
 Active advisory request:
 
+No active advisory request is open.
+
+Latest accepted identity advisory:
+
 1. `workspace/OverseerHS298-system-radius-discovery-ref-identity-advisory-request.md`
-2. Expected artifact: `workspace/EngineeringDataHS298-system-radius-discovery-ref-identity-advisory.md`
-3. Scope: source trace current system/radius Discovery ref identity and decide whether center-only identity is sufficient for the next safe Atlas phase.
-4. No implementation, provider calls, Watch dispatch/task creation, mutations, schema, durable Watch results, relationship tags, UI, enforcement, support artifacts, or fourth-lane work.
+2. `workspace/EngineeringDataHS298-system-radius-discovery-ref-identity-advisory.md`
+3. `workspace/OverseerHS299-hs298-system-radius-discovery-ref-identity-advisory-review.md`
+4. Accepted result: current center-only `system_radius` Discovery ref identity is safe for the current phase but not sufficient for future durable Watch/task result semantics.
+5. Accepted follow-up: refresh the older Watch/task outcome map preview so it no longer reports pre-HS296 execution posture.
 
 Latest accepted Watch/task advisory:
 
