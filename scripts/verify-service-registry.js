@@ -50,6 +50,7 @@ async function main() {
     const hydrationPickupContractCommand = commands.find((entry) => entry.command === 'metadata.hydration_pickup_contract.preview');
     const hydrationSelectedIdRealExecutionPreflightCommand = commands.find((entry) => entry.command === 'metadata.hydration_selected_id_real_execution_preflight.preview');
     const selectedIdReadabilityRepairProductPreflightCommand = commands.find((entry) => entry.command === 'metadata.selected_id_readability_repair.product_preflight');
+    const selectedIdResolveCandidatePreviewCommand = commands.find((entry) => entry.command === 'metadata.selected_id_resolve_candidate.preview');
     const selectedIdReadabilityRepairExecuteCommand = commands.find((entry) => entry.command === 'metadata.selected_id_readability_repair.execute');
     const localSdeReadinessCommand = commands.find((entry) => entry.command === 'metadata.local_sde_readiness.preview');
     const localSdeSourcePostureCommand = commands.find((entry) => entry.command === 'metadata.local_sde_source_posture.preview');
@@ -158,6 +159,9 @@ async function main() {
     assert(selectedIdReadabilityRepairProductPreflightCommand?.classification === 'read-only', 'metadata.selected_id_readability_repair.product_preflight should be read-only');
     assert(selectedIdReadabilityRepairProductPreflightCommand?.effects.includes('read-only'), 'metadata.selected_id_readability_repair.product_preflight should declare read-only effect');
     assert(selectedIdReadabilityRepairProductPreflightCommand?.renderer_allowed === true, 'metadata.selected_id_readability_repair.product_preflight should be renderer eligible');
+    assert(selectedIdResolveCandidatePreviewCommand?.classification === 'read-only', 'metadata.selected_id_resolve_candidate.preview should be read-only');
+    assert(selectedIdResolveCandidatePreviewCommand?.effects.includes('read-only'), 'metadata.selected_id_resolve_candidate.preview should declare read-only effect');
+    assert(selectedIdResolveCandidatePreviewCommand?.renderer_allowed === true, 'metadata.selected_id_resolve_candidate.preview should be renderer eligible');
     assert(selectedIdReadabilityRepairExecuteCommand?.classification === 'metadata-only', 'metadata.selected_id_readability_repair.execute should be metadata-only');
     assert(selectedIdReadabilityRepairExecuteCommand?.effects.includes('external-live-api'), 'metadata.selected_id_readability_repair.execute should declare external live API');
     assert(selectedIdReadabilityRepairExecuteCommand?.effects.includes('metadata-readability'), 'metadata.selected_id_readability_repair.execute should declare metadata readability');

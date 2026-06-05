@@ -131,6 +131,16 @@ async function verifySeededDb(root) {
         operatorAct: true,
         sourceSurface: 'passive-sweep'
       }, context)],
+      ['metadata.selected_id_resolve_candidate.preview', () => invokeServiceCommand('metadata.selected_id_resolve_candidate.preview', {
+        report_type: 'actor',
+        report_params: {
+          entityType: 'character',
+          entityId: 90000002,
+          entityName: 'Atlas Scout'
+        },
+        selected_id_type: 'character',
+        selected_id_value: 90000002
+      }, context)],
       ['metadata.local_sde_readiness.preview', () => invokeServiceCommand('metadata.local_sde_readiness.preview', {}, context)],
       ['metadata.local_sde_source_posture.preview', () => invokeServiceCommand('metadata.local_sde_source_posture.preview', {}, context)],
       ['runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],
@@ -229,6 +239,10 @@ async function verifyEmptyDb(root) {
         idValue: 90000002,
         operatorAct: true,
         sourceSurface: 'passive-sweep'
+      }, context)],
+      ['empty metadata.selected_id_resolve_candidate.preview', () => invokeServiceCommand('metadata.selected_id_resolve_candidate.preview', {
+        selected_id_type: 'character',
+        selected_id_value: 90000002
       }, context)],
       ['empty metadata.local_sde_readiness.preview', () => invokeServiceCommand('metadata.local_sde_readiness.preview', {}, context)],
       ['empty metadata.local_sde_source_posture.preview', () => invokeServiceCommand('metadata.local_sde_source_posture.preview', {}, context)],

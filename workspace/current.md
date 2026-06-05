@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS288 selected-ID Resolve candidate/report handoff runway open
+Status: HS288 selected-ID Resolve candidate/report handoff accepted; no active Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: read-only selected-ID Resolve candidate / report handoff proof.
+Current focus: selected-ID Resolve candidate / report handoff proof accepted; next seam not selected.
 
 Current heading:
 
@@ -21,21 +21,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS288-selected-id-resolve-candidate-report-handoff-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS288-selected-id-resolve-candidate-report-handoff.md
+none
 ```
 
-Dev may implement the narrow read-only, local-only candidate/report handoff preview only. Do not call providers, write Hydration output, execute Resolve, add UI, add queue/Dispatcher, change schema, activate enforcement, create support artifacts, reopen Watch/task result work, or reopen the fourth lane.
+No Dev runway is open. HS288 is accepted and should rest unless the Human explicitly selects the next seam.
 
 Latest accepted advisory request:
 
@@ -86,19 +86,19 @@ workspace/DevHS280-selected-id-product-hydration-authority-preflight.md
 Latest accepted Dev runway:
 
 ```txt
-workspace/OverseerHS284-selected-id-readability-repair-execution-runway.md
+workspace/OverseerHS288-selected-id-resolve-candidate-report-handoff-runway.md
 ```
 
 Latest accepted Dev handoff:
 
 ```txt
-workspace/DevHS284-selected-id-readability-repair-execution.md
+workspace/DevHS288-selected-id-resolve-candidate-report-handoff.md
 ```
 
 Latest Overseer review:
 
 ```txt
-workspace/OverseerHS285-hs284-selected-id-readability-repair-execution-review.md
+workspace/OverseerHS289-hs288-selected-id-resolve-candidate-review.md
 ```
 
 Status: accepted.
@@ -130,7 +130,7 @@ selected unresolved local ID -> Resolve candidate -> future report readability r
 
 This is the recommended next rich surface if selected-ID Resolve continues. The separate Watch/task outcome map is accepted as a useful parked lane, not the same seam.
 
-## HS288 Active Dev Runway
+## HS288 Accepted State
 
 Opened 2026-06-05:
 
@@ -144,6 +144,12 @@ Expected handoff:
 workspace/DevHS288-selected-id-resolve-candidate-report-handoff.md
 ```
 
+Accepted 2026-06-05:
+
+```txt
+workspace/OverseerHS289-hs288-selected-id-resolve-candidate-review.md
+```
+
 Accepted task:
 
 Build a read-only selected-ID Resolve candidate/report handoff preview, preferably:
@@ -153,6 +159,105 @@ metadata.selected_id_resolve_candidate.preview
 ```
 
 It should prove the local handoff from a report/Observation-visible unresolved ID into one selected Resolve candidate, without provider calls, writes, Resolve execution, renderer/UI behavior, schema, queues, support artifacts, Watch/task result work, or fourth-lane work.
+
+## HS288 Evidence
+
+Dev updated 2026-06-05:
+
+- Added `metadata.selected_id_resolve_candidate.preview` as a renderer-eligible, read-only/local-only selected-ID Resolve candidate/report handoff preview.
+- Added `src/main/services/selectedIdResolveCandidatePreviewService.js`.
+- Added `scripts/verify-selected-id-resolve-candidate-preview.js` and `npm.cmd run verify:selected-id-resolve-candidate-preview`.
+- Registered service command and enforcement dry-run coverage as `hydration_readability_repair` / `selected_id_resolve_candidate_report_handoff_readout` / `covered_read_only`.
+- Updated service registry, command authority, enforcement dry-run, and passive side-effect verification for the new read-only command.
+- Preview derives candidates from local report response raw IDs when `report_type` / `report_params` are supplied, with equivalent local candidate queries as fallback when report context is absent or cannot be built.
+- Preview returns:
+  - report/local context identity
+  - unresolved visible IDs
+  - selected ID type/value
+  - provider-backed Resolve type support
+  - current local label state
+  - strong local basis
+  - parked/conditional basis
+  - whether selected-ID Resolve preflight would be relevant
+  - report/corpus context that would benefit after later readability repair
+  - future preflight/execution command hints marked as non-authority
+  - boundary statements that focus/visibility/candidate status is not request/provider execution
+  - boundary statements that report-wide or multi-ID Hydration is not being used
+- Basis classification covered:
+  - `provider_backed_resolve_candidate_with_strong_local_basis`
+  - `already_local_readable`
+  - `unsupported_static_local_lookup`
+  - `parked_conditional_basis_only`
+  - `invalid_or_missing_selected_id`
+- Focused verifier sample:
+  - strong selected candidate: `character:91000001`
+  - classification: `provider_backed_resolve_candidate_with_strong_local_basis`
+  - selected-ID Resolve preflight relevant: `true`
+  - provider call authorized: `false`
+  - visible unresolved count: `4`
+  - static selected candidate: `inventory_type:999999` classified `unsupported_static_local_lookup`
+  - parked selected candidate: `alliance:99000999` classified `parked_conditional_basis_only`
+  - provider calls: `0`
+  - Resolve execution invoked: `false`
+  - old report-scoped `metadata.hydration` used: `false`
+  - table mutation proof unchanged: `true`
+- Boundaries confirmed:
+  - no provider calls
+  - no live/API verification
+  - no selected-ID Resolve execution
+  - no old report-scoped `metadata.hydration` selected-ID product path
+  - no Hydration writes
+  - no metadata run writes
+  - no API request log writes
+  - no entity writes/upserts
+  - no `activity_events` label patches
+  - no Evidence/EVEidence creation
+  - no Discovery ref mutation
+  - no queues, Bucket, Dispatcher, worker, lease, retry, or persisted work
+  - no schema changes
+  - no renderer/UI behavior
+  - no runtime enforcement or command blocking
+  - no support artifacts
+  - no Watch/task result work
+  - no fourth lane / fast lane
+- Verification run:
+  - `node --check src\main\services\selectedIdResolveCandidatePreviewService.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check scripts\verify-selected-id-resolve-candidate-preview.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-enforcement-dry-run.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `npm.cmd run verify:selected-id-resolve-candidate-preview` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 282 warnings across 8 changed working-set files; no renames or protected-word JSON updates performed.
+
+## HS288 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS288-selected-id-resolve-candidate-report-handoff.md
+```
+
+Status: selected-ID Resolve candidate/report handoff preview complete and accepted by Overseer.
+
+## Current Decision Point
+
+Atlas is resting after accepting the selected-ID Resolve candidate/report handoff proof.
+
+Safe options:
+
+1. Rest selected-ID Resolve productization here.
+2. Ask for additional assurance/security review if a specific concern appears.
+3. Later, shape renderer/UI Resolve trigger behavior when the interface path is ready.
+4. Pivot to the separate parked Watch/task outcome map lane if Human chooses that direction.
+
+Do not open renderer-triggered Resolve execution, UI confirmation behavior, background/report-wide Hydration, Bucket/Dispatcher, schema, runtime enforcement, support artifacts, Watch/task result persistence, or fourth-lane work without a new bounded decision.
 
 Latest accepted advisory request:
 

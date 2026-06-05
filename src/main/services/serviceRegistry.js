@@ -53,6 +53,7 @@ const { buildHydrationSelectedIdRealExecutionPreflight } = require('./hydrationS
 const { buildHydrationWriteFixtureProof } = require('./hydrationWriteFixtureProofService');
 const { runSelectedIdReadabilityRepairExecution } = require('./selectedIdReadabilityRepairExecutionService');
 const { buildSelectedIdReadabilityRepairProductPreflight } = require('./selectedIdReadabilityRepairProductPreflightService');
+const { buildSelectedIdResolveCandidatePreview } = require('./selectedIdResolveCandidatePreviewService');
 const { buildLocalSdeReadinessPreview } = require('./localSdeReadinessPreviewService');
 const { buildLocalSdeSourcePosturePreview } = require('./localSdeSourcePostureService');
 const { buildSdeInventoryImportRewriteAuthorityProof } = require('./sdeInventoryImportRewriteAuthorityProofService');
@@ -271,6 +272,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview product selected-ID readability repair authority without provider calls, writes, execution, queues, or UI work',
     handler: ({ db, payload, ...context }) => buildSelectedIdReadabilityRepairProductPreflight(db, payload, context)
+  },
+  'metadata.selected_id_resolve_candidate.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview local report-visible selected-ID Resolve candidates without provider calls, writes, execution, queues, or UI work',
+    handler: ({ db, payload, ...context }) => buildSelectedIdResolveCandidatePreview(db, payload, context)
   },
   'metadata.selected_id_readability_repair.execute': {
     classification: 'metadata-only',
