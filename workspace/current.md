@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS294 Watch scope authority conformance runway open
+Status: HS294 Watch scope authority conformance accepted; no active Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: read-only Watch scope authority conformance proof.
+Current focus: resting after Watch scope authority conformance proof.
 
 Current heading:
 
@@ -23,21 +23,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS294-watch-scope-authority-conformance-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS294-watch-scope-authority-conformance.md
+none
 ```
 
-Dev may implement the narrow read-only/local-only Watch scope authority conformance preview only. Do not call providers, dispatch Watch execution, create tasks, write rows, add schema, correct execution behavior, create `watch_result`, add relationship tags, change UI, activate enforcement, create support artifacts, or reopen the fourth lane.
+HS294 is accepted and can rest. Do not open provider calls, Watch dispatch, task creation, writes, schema, execution correction, durable `watch_result`, relationship tags, UI, enforcement, support artifacts, or fourth-lane work without a new bounded decision.
 
 Latest accepted advisory request:
 
@@ -482,7 +482,7 @@ Current implication:
 
 HS292's disclosed recomputed topology path is a conformance pressure point. The next safe seam, if this line continues, is read-only Watch scope authority conformance before any durable Watch result semantics.
 
-## HS294 Active Dev Runway
+## HS294 Accepted State
 
 Opened 2026-06-05:
 
@@ -516,6 +516,136 @@ It should prove how current Atlas code conforms, or fails to conform, to the acc
 The proof may report a mismatch. This packet should not correct execution behavior.
 
 Stop if this requires provider calls, Watch dispatch, task creation, writes, schema, execution correction, durable `watch_result`, relationship tags, UI, runtime enforcement, support artifacts, or fourth-lane work.
+
+Accepted 2026-06-05:
+
+```txt
+workspace/OverseerHS295-hs294-watch-scope-authority-conformance-review.md
+```
+
+Accepted result:
+
+```txt
+watch.scope_authority_conformance.preview
+current conformance status: gap
+```
+
+HS294 is accepted as a read-only/local-only Watch scope authority conformance proof. The gap is intentional proof output: authoring and readout mostly conform, but current system/radius Watch execution still recomputes from center/radius instead of consuming accepted stored included system IDs.
+
+## HS294 Evidence
+
+Dev updated 2026-06-05:
+
+- Added `watch.scope_authority_conformance.preview` as a renderer-eligible, read-only/local-only Watch scope authority conformance preview.
+- Added `src/main/services/watchScopeAuthorityConformanceService.js`.
+- Added `scripts/verify-watch-scope-authority-conformance.js` and `npm.cmd run verify:watch-scope-authority-conformance`.
+- Registered service command and enforcement dry-run coverage as `local_db_inspection` / `watch_scope_authority_conformance_readout` / `read_only_non_enforcing_proof`.
+- Updated service registry, command authority, enforcement dry-run, and passive side-effect verification for the new read-only command.
+- Preview reports:
+  - accepted Watch scope authority chain
+  - SDE source material as import/source provenance only
+  - local topology lookup tables as runtime geometry substrate
+  - stored `included_system_ids` as accepted Watch scope authority
+  - center/radius as provenance/explanation after Watch acceptance
+  - recomputed topology as diagnostic comparison only
+  - Discovery refs as possible leads, not Evidence/EVEidence
+  - Evidence/EVEidence as ESI-expanded killmail records only
+  - source-path conformance for authoring, schedule readout, offline readout, executor dispatch, collector planning, planner recompute, and Discovery ref identity
+  - per-Watch stored scope status for valid, missing, and malformed included scope
+  - stored scope versus recomputed diagnostic scope
+  - exact correction seams if execution still recomputes from center/radius
+- Focused verifier sample:
+  - summary status: `gap`
+  - system/radius Watch count: `3`
+  - valid stored scope count: `1`
+  - missing stored scope count: `1`
+  - malformed stored scope count: `1`
+  - stored versus recomputed mismatch count: `1`
+  - execution uses stored included IDs now: `false`
+  - execution recomputes from center/radius now: `true`
+  - exact correction seam: `watchExecutor.dispatchFor / systemRadiusCollector.collectSystemRadiusWatch / systemRadiusPlanner.planSystemRadiusWatch`
+  - valid fixture stored included scope `[30000101,30000103]` differs from recomputed diagnostic scope `[30000101,30000102]`
+  - table mutation proof unchanged
+- Current conformance result:
+  - `watchlistRepository.addSystemRadiusWatch`: `conforms` for local topology lookup authoring/preflight geometry.
+  - `watchScheduler.buildWatchScheduleStatus`: `conforms` for reading/parsing stored included/excluded scope as readout posture.
+  - `watchOfflineReadout.buildWatchOfflineReadout`: `partial` for local readout context, with center fallback only as diagnostic/readout posture.
+  - `watchExecutor.dispatchFor`: `gap`; builds system-radius execution payload from center/radius and caps, not stored included IDs.
+  - `systemRadiusCollector.collectSystemRadiusWatch`: `gap`; calls planner from input/topology unless fixture planner output is injected.
+  - `systemRadiusPlanner.planSystemRadiusWatch`: `partial`; recompute is useful for authoring/preflight or diagnostics but not accepted execution authority.
+  - system/radius Discovery ref identity remains center-only and separate from Watch scope authority.
+- Boundaries confirmed:
+  - no provider calls
+  - no live/API verification
+  - no Watch dispatch
+  - no Watch arm/tick
+  - no task creation
+  - no queue dispatch
+  - no Evidence/EVEidence writes
+  - no Discovery ref mutation
+  - no Watch row mutation
+  - no Hydration or metadata writes
+  - no API request log writes
+  - no execution correction
+  - no `watch_result`, `watch_result_items`, relationship tag, or relationship truth creation
+  - no schema changes
+  - no runtime enforcement or command blocking
+  - no renderer/UI work beyond renderer-eligible read-only service command registration
+  - no support artifacts
+  - no fourth lane / fast lane
+- Verification run:
+  - `node --check src\main\services\watchScopeAuthorityConformanceService.js` passed.
+  - `node --check scripts\verify-watch-scope-authority-conformance.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `npm.cmd run verify:watch-scope-authority-conformance` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 294 warnings across 8 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS294 working-tree changes.
+
+## HS294 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS294-watch-scope-authority-conformance.md
+```
+
+Status: Watch scope authority conformance preview complete and accepted by Overseer.
+
+## Current Decision Point
+
+Atlas is resting after accepting the Watch scope authority conformance proof.
+
+Accepted next mechanical seam, if this line continues:
+
+```txt
+system/radius Watch execution should consume accepted stored included_system_ids
+```
+
+Likely correction surface:
+
+```txt
+watchExecutor.dispatchFor
+systemRadiusCollector.collectSystemRadiusWatch
+systemRadiusPlanner.planSystemRadiusWatch
+```
+
+Safe options:
+
+1. Rest Watch scope authority here.
+2. Ask for additional assurance if a specific concern appears.
+3. Open a bounded execution correction packet that routes system/radius Watch execution through stored included system IDs while preserving recompute as diagnostic/preflight only.
+4. Later decide system/radius Discovery ref identity before relying on durable result semantics.
+5. Later decide whether durable `watch_result` / `watch_result_items` schema is needed.
+
+Do not open durable Watch result storage, relationship tags, Discovery ref identity changes, provider movement, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
 
 Latest accepted advisory request:
 

@@ -61,6 +61,7 @@ const { buildSdeTopologyImportRewriteAuthorityProof } = require('./sdeTopologyIm
 const { buildRuntimeHookTelemetryReadout } = require('./runtimeHookTelemetryReadoutService');
 const { buildQueueClockPosturePreview } = require('./queueClockPostureService');
 const { buildWatchTaskOutcomeMapPreview } = require('./watchTaskOutcomeMapPreviewService');
+const { buildWatchScopeAuthorityConformancePreview } = require('./watchScopeAuthorityConformanceService');
 const { buildPatientPacketIdentityPreview } = require('./patientPacketIdentityService');
 const {
   buildExternalIoStateConfigReadback,
@@ -679,6 +680,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview local Watch/task origin and durable outcome map without provider calls, dispatch, tasks, writes, schema, or UI work',
     handler: ({ db, payload, ...context }) => buildWatchTaskOutcomeMapPreview(db, payload, context)
+  },
+  'watch.scope_authority_conformance.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview Watch scope authority conformance without provider calls, Watch dispatch, tasks, writes, schema, correction, or UI work',
+    handler: ({ db, payload }) => buildWatchScopeAuthorityConformancePreview(db, payload)
   },
   'runtime.patient_packet_identity.preview': {
     classification: 'read-only',
