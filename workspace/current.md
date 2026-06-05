@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS288 selected-ID Resolve candidate/report handoff accepted; no active Dev runway
+Status: HS290 Watch/task outcome map assurance open; no Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: selected-ID Resolve candidate / report handoff proof accepted; next seam not selected.
+Current focus: assurance and scope for Watch/task outcome map lane.
 
 Current heading:
 
@@ -21,7 +21,7 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human decision
+Current executor: Engineering / Data Engineering / Security advisory
 
 Active Dev runway:
 
@@ -35,7 +35,19 @@ Expected Dev handoff:
 none
 ```
 
-No Dev runway is open. HS288 is accepted and should rest unless the Human explicitly selects the next seam.
+No Dev runway is open. HS288 is accepted and the selected-ID Resolve lane can rest while Watch/task outcome-map assurance is scoped.
+
+Active advisory request:
+
+```txt
+workspace/OverseerHS290-watch-task-outcome-map-assurance-scope-request.md
+```
+
+Expected advisory artifact:
+
+```txt
+workspace/EngineeringDataHS290-watch-task-outcome-map-assurance-scope.md
+```
 
 Latest accepted advisory request:
 
@@ -258,6 +270,39 @@ Safe options:
 4. Pivot to the separate parked Watch/task outcome map lane if Human chooses that direction.
 
 Do not open renderer-triggered Resolve execution, UI confirmation behavior, background/report-wide Hydration, Bucket/Dispatcher, schema, runtime enforcement, support artifacts, Watch/task result persistence, or fourth-lane work without a new bounded decision.
+
+## HS290 Active Advisory Request
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS290-watch-task-outcome-map-assurance-scope-request.md
+```
+
+Expected advisory artifact:
+
+```txt
+workspace/EngineeringDataHS290-watch-task-outcome-map-assurance-scope.md
+```
+
+Task:
+
+Scope and pressure-test the Watch/task outcome map lane before any implementation.
+
+Focus:
+
+- Manual Discovery origin and durable outputs
+- Manual Expansion origin and durable outputs
+- Watch authoring as durable intent
+- Watch schedule state as readout/posture
+- Watch executor task creation as volatile runtime movement
+- Watch collection outputs as durable provenance and Evidence/EVEidence changes
+- radius Watch scope snapshot versus recomputed topology
+- system/radius Discovery ref identity
+- whether any source path currently implies `watch_result`, relationship tag, durable task result, or relationship truth
+- smallest future read-only Watch/task outcome map surface, if any
+
+Do not implement code or create a Dev runway.
 
 Latest accepted advisory request:
 
