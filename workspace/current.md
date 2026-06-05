@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS286 missing-links assurance accepted; next seam decision pending
+Status: HS288 selected-ID Resolve candidate/report handoff runway open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: accepted missing-link assurance; choose next rich surface before opening Dev.
+Current focus: read-only selected-ID Resolve candidate / report handoff proof.
 
 Current heading:
 
@@ -21,21 +21,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS288-selected-id-resolve-candidate-report-handoff-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS288-selected-id-resolve-candidate-report-handoff.md
 ```
 
-No Dev runway is open. HS286 is accepted and the next seam should be selected deliberately.
+Dev may implement the narrow read-only, local-only candidate/report handoff preview only. Do not call providers, write Hydration output, execute Resolve, add UI, add queue/Dispatcher, change schema, activate enforcement, create support artifacts, reopen Watch/task result work, or reopen the fourth lane.
 
 Latest accepted advisory request:
 
@@ -129,6 +129,30 @@ selected unresolved local ID -> Resolve candidate -> future report readability r
 ```
 
 This is the recommended next rich surface if selected-ID Resolve continues. The separate Watch/task outcome map is accepted as a useful parked lane, not the same seam.
+
+## HS288 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS288-selected-id-resolve-candidate-report-handoff-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS288-selected-id-resolve-candidate-report-handoff.md
+```
+
+Accepted task:
+
+Build a read-only selected-ID Resolve candidate/report handoff preview, preferably:
+
+```txt
+metadata.selected_id_resolve_candidate.preview
+```
+
+It should prove the local handoff from a report/Observation-visible unresolved ID into one selected Resolve candidate, without provider calls, writes, Resolve execution, renderer/UI behavior, schema, queues, support artifacts, Watch/task result work, or fourth-lane work.
 
 Latest accepted advisory request:
 

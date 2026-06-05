@@ -141,6 +141,7 @@ Current state:
 - HS284 accepted by HS285
 - HS286 advisory assurance request opened
 - HS286 accepted by HS287
+- HS288 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -157,8 +158,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer / Human decision
-- no active Dev runway is open
+- current executor is Dev
+- active Dev runway is `workspace/OverseerHS288-selected-id-resolve-candidate-report-handoff-runway.md`
+- expected Dev handoff is `workspace/DevHS288-selected-id-resolve-candidate-report-handoff.md`
 - latest accepted advisory request is `workspace/OverseerHS286-user-input-fetch-selected-resolution-missing-links-assurance-request.md`
 - latest accepted advisory artifacts are `workspace/EngineeringDataHS286-user-input-fetch-selected-resolution-missing-links.md` and `workspace/EngineeringDataHS286-secondary-task-creation-watch-mechanics.md`
 - latest accepted advisory review is `workspace/OverseerHS287-hs286-missing-links-assurance-review.md`
@@ -206,7 +208,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is next-seam selection after accepted missing-link assurance
+- current work is read-only selected-ID Resolve candidate / report handoff proof
 - recommended next rich surface is selected unresolved local ID -> Resolve candidate -> future report readability reuse
 - parked separate lane is Task origin and durable outcome map for Manual Search and Watch
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
@@ -238,7 +240,11 @@ Current heading:
 
 Active Dev packet:
 
-No active Dev packet is open.
+1. `workspace/OverseerHS288-selected-id-resolve-candidate-report-handoff-runway.md`
+2. Expected handoff: `workspace/DevHS288-selected-id-resolve-candidate-report-handoff.md`
+3. Preferred command: `metadata.selected_id_resolve_candidate.preview`
+4. Scope: local-only/read-only candidate/report handoff from visible unresolved ID to possible one-ID Resolve.
+5. No provider calls, writes, Resolve execution, UI, queue/Dispatcher, schema, support artifacts, Watch/task result work, enforcement, or fourth-lane work.
 
 Latest accepted packet:
 
