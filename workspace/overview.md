@@ -131,6 +131,7 @@ Current state:
 - HS274 accepted by HS275
 - HS276 opened
 - HS276 accepted by HS277
+- HS278 advisory opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -147,8 +148,10 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is none
+- current executor is Engineering / Security / Data Engineering / Product Architecture advisory
 - no active Dev runway is open
+- active advisory request is `workspace/OverseerHS278-selected-id-product-hydration-transition-advisory-request.md`
+- expected advisory artifact is `workspace/EngineeringSecurityHS278-selected-id-product-hydration-transition-advisory.md`
 - latest accepted Dev runway is `workspace/OverseerHS276-selected-id-real-hydration-execution-proof-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS276-selected-id-real-hydration-execution-proof.md`
 - latest Overseer review is `workspace/OverseerHS277-hs276-selected-id-real-hydration-execution-proof-review.md`
@@ -184,7 +187,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is resting after trusted, non-renderer, one-ID real selected-ID Hydration execution proof
+- current work is advisory transition mapping before selected-ID Hydration proof machinery can become product behavior
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -226,7 +229,9 @@ Latest accepted packet:
 
 Active advisory request:
 
-No active advisory request is open.
+1. `workspace/OverseerHS278-selected-id-product-hydration-transition-advisory-request.md`
+2. Define what must change before selected-ID Hydration can move from HS276 proof/test machinery toward product behavior.
+3. Do not implement code, call providers, mutate corpus, add schema, add Bucket/Dispatcher, activate enforcement, change UI, or treat HS276 proof scaffolding as product authority.
 
 Latest accepted advisory:
 

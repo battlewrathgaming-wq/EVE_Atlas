@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS276 selected-ID real Hydration execution proof accepted by HS277; resting
+Status: HS278 selected-ID product Hydration transition advisory open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after trusted, non-renderer, one-ID real selected-ID Hydration execution proof. Product live Hydration remains unopened.
+Current focus: advisory transition map for what must change before selected-ID Hydration can move from HS276 proof/test machinery toward product behavior.
 
 Current heading:
 
@@ -21,21 +21,21 @@ Current heading:
 
 ## Executor
 
-Current executor: none
+Current executor: Engineering / Security / Data Engineering / Product Architecture advisory
 
-Active Dev runway:
-
-```txt
-none
-```
-
-Expected handoff:
+Active advisory request:
 
 ```txt
-none
+workspace/OverseerHS278-selected-id-product-hydration-transition-advisory-request.md
 ```
 
-No Dev task is open. HS276 crossed the provider-contact boundary for one controlled proof only. Do not open renderer-triggered Hydration, broad live testing, Bucket/Dispatcher, background Hydration, schema, runtime enforcement, support artifacts, UI, or fourth-lane work without a new explicit runway.
+Expected advisory artifact:
+
+```txt
+workspace/EngineeringSecurityHS278-selected-id-product-hydration-transition-advisory.md
+```
+
+No Dev task is open. Do not implement code. Do not call providers. Do not treat HS276 proof/test scaffolding as product authority.
 
 ## Recent Accepted State
 
