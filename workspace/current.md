@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS272 selected-ID real execution preflight runway open
+Status: HS272 selected-ID real execution preflight accepted by HS273; resting
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: read-only selected-ID real execution preflight before any real provider-backed Hydration execution.
+Current focus: resting after read-only selected-ID real execution preflight acceptance. Real provider-backed Hydration execution remains unopened.
 
 Current heading:
 
@@ -21,50 +21,40 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: none
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS272-selected-id-real-execution-preflight-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS272-selected-id-real-execution-preflight.md
+none
 ```
 
-Dev task:
-
-Add a read-only selected-ID real execution preflight. It should compose local-first posture, pickup contract, External I/O, live/provider gate, storage write posture, supported selected-ID type, expected write path, and execution/write revalidation checklists without providers, writes, Bucket persistence, Dispatcher, schema, runtime enforcement, or UI.
-
-Suggested command:
-
-```txt
-metadata.hydration_selected_id_real_execution_preflight.preview
-```
-
-Do not call providers. Do not write Hydration output. Do not create real operator Hydration execution.
+No Dev task is open. Do not open real provider-backed selected-ID Hydration execution without explicit Human/Overseer acceptance of provider contact.
 
 ## Recent Accepted State
 
 Latest accepted Dev runway:
 
 ```txt
-workspace/OverseerHS268-selected-id-hydration-execution-fixture-proof-runway.md
+workspace/OverseerHS272-selected-id-real-execution-preflight-runway.md
 ```
 
 Latest accepted Dev handoff:
 
 ```txt
-workspace/DevHS268-selected-id-hydration-execution-fixture-proof.md
+workspace/DevHS272-selected-id-real-execution-preflight.md
 ```
 
 Latest Overseer review:
 
 ```txt
-workspace/OverseerHS269-hs268-hydration-execution-fixture-proof-review.md
+workspace/OverseerHS273-hs272-selected-id-real-execution-preflight-review.md
 ```
 
 Status: accepted.
@@ -129,6 +119,110 @@ Stop if:
 - provider-backed execution is implemented
 - write behavior touches anything beyond Hydration/readability proof rows
 - queues, dispatcher, worker, leases, retries, schema, UI, or fourth-lane design become necessary before the fixture proof can stay bounded
+
+## HS272 Accepted State
+
+Overseer reviewed 2026-06-05:
+
+- Accepted HS272 in `workspace/OverseerHS273-hs272-selected-id-real-execution-preflight-review.md`.
+- Accepted `metadata.hydration_selected_id_real_execution_preflight.preview` as a read-only, renderer-eligible selected-ID real execution preflight.
+- Confirmed the command composes local-first request posture, non-durable pickup contract, External I/O, live/provider gate, storage write posture, supported selected-ID type, expected future write path, and revalidation checklists.
+- Confirmed no provider calls, Hydration writes, metadata/API/entity/activity writes, Bucket persistence, Dispatcher, schema, runtime enforcement, or UI work.
+- Real provider-backed selected-ID Hydration execution remains unopened.
+
+## HS272 Evidence
+
+Dev updated 2026-06-05:
+
+- Added `metadata.hydration_selected_id_real_execution_preflight.preview` as a read-only, renderer-eligible selected-ID real Hydration execution preflight.
+- Added `src/main/services/hydrationSelectedIdRealExecutionPreflightService.js`.
+- Added `scripts/verify-hydration-selected-id-real-execution-preflight.js` and `npm.cmd run verify:hydration-selected-id-real-execution-preflight`.
+- Registered service command and enforcement dry-run coverage as `hydration_readability_repair` / `selected_id_hydration_real_execution_preflight_readout` / `covered_read_only`.
+- Updated service registry, command authority, enforcement dry-run, and passive side-effect verification for the new read-only command.
+- Preflight composes:
+  - local-first selected-ID request posture
+  - non-durable pickup contract
+  - External I/O posture
+  - live/provider gate posture with blocked-attempt recording disabled
+  - storage write posture for future Hydration readability repair
+  - supported selected-ID type
+  - expected write path
+  - execution revalidation checklist
+  - post-provider write checklist
+- Focused verifier covered states:
+  - `not_a_request`
+  - `invalid`
+  - `insufficient_basis`
+  - `already_local`
+  - `local_lookup_available`
+  - `held`
+  - `blocked`
+  - `provider_needed_but_not_live_ready`
+  - `provider_needed_live_preflight_ready`
+- Ready sample:
+  - `preflight_state`: `provider_needed_live_preflight_ready`
+  - `request_posture_state`: `provider_needed`
+  - `provider_posture`: `released_to_normal_gates_only`
+  - External I/O held: false
+  - live gate allowed: true
+  - storage writes blocked: false
+  - next safe action: `future_explicit_execution_command_must_revalidate_before_provider_contact`
+- Not-live-ready sample:
+  - `preflight_state`: `provider_needed_but_not_live_ready`
+  - `request_posture_state`: `blocked`
+  - `provider_posture`: `blocked`
+  - live gate allowed: false
+  - storage writes blocked: false
+  - next safe action: `do_not_call_provider_recheck_live_gate_and_command_authority`
+- Renderer anti-forgery proof:
+  - renderer invocation is allowed only as read-only preview
+  - forged local label, storage posture, External I/O state, live gate, and provider posture were ignored as authority
+  - renderer-supplied posture remains explanation only
+- Table mutation proof:
+  - unchanged before/after counts for `killmails`, `activity_events`, `discovered_killmail_refs`, `fetch_runs`, `api_request_logs`, `metadata_runs`, `entities`, `watchlist_entities`, `system_watches`, and `assessment_artifacts`
+- Boundaries confirmed:
+  - no provider calls
+  - no Hydration writes
+  - no `metadata_runs` writes
+  - no `api_request_logs` writes
+  - no entity writes
+  - no `activity_events` patches
+  - no Evidence/EVEidence writes
+  - no Discovery ref mutations
+  - no Watch, Marked, or Assessment Memory mutations
+  - no pickup/request persistence
+  - no Bucket persistence
+  - no Dispatcher, worker, lease, retry, queue dispatch, or background Hydration
+  - no storage config or External I/O config writes
+  - no support artifacts
+  - no schema changes
+  - no runtime enforcement or command blocking activation
+  - no UI work
+  - fourth lane stays parked
+- Verification run:
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\hydrationSelectedIdRealExecutionPreflightService.js` passed.
+  - `node --check scripts\verify-hydration-selected-id-real-execution-preflight.js` passed.
+  - `npm.cmd run verify:hydration-selected-id-real-execution-preflight` passed.
+  - `npm.cmd run verify:hydration-selected-id-execution-fixture` passed.
+  - `npm.cmd run verify:hydration-pickup-contract` passed.
+  - `npm.cmd run verify:hydration-request-posture` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main` with HS272 working-tree changes.
+
+## HS272 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS272-selected-id-real-execution-preflight.md
+```
+
+Status: selected-ID real execution preflight complete and ready for Overseer review.
 
 ## HS268 Evidence
 

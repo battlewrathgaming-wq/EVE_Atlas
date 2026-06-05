@@ -126,6 +126,7 @@ Current state:
 - HS270 decision surface recorded
 - HS271 provider-work structure advisory accepted
 - HS272 opened
+- HS272 accepted by HS273
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -142,12 +143,11 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS272-selected-id-real-execution-preflight-runway.md`
-- expected Dev handoff is `workspace/DevHS272-selected-id-real-execution-preflight.md`
-- latest accepted Dev runway is `workspace/OverseerHS268-selected-id-hydration-execution-fixture-proof-runway.md`
-- latest accepted Dev handoff is `workspace/DevHS268-selected-id-hydration-execution-fixture-proof.md`
-- latest Overseer review is `workspace/OverseerHS269-hs268-hydration-execution-fixture-proof-review.md`
+- current executor is none
+- no active Dev runway is open
+- latest accepted Dev runway is `workspace/OverseerHS272-selected-id-real-execution-preflight-runway.md`
+- latest accepted Dev handoff is `workspace/DevHS272-selected-id-real-execution-preflight.md`
+- latest Overseer review is `workspace/OverseerHS273-hs272-selected-id-real-execution-preflight-review.md`
 - current decision surface is `workspace/OverseerHS270-hydration-real-execution-decision-surface.md`
 - latest provider-work advisory artifact is `workspace/DataEngineering-provider-work-structure-readiness-advisory.md`
 - latest provider-work advisory review is `workspace/OverseerHS271-provider-work-structure-readiness-review.md`
@@ -174,7 +174,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is read-only selected-ID real execution preflight before any real provider-backed Hydration execution
+- current work is resting after read-only selected-ID real execution preflight acceptance
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -202,11 +202,15 @@ Current heading:
 
 Active Dev packet:
 
+No active Dev packet is open.
+
+Latest accepted packet:
+
 1. `workspace/OverseerHS272-selected-id-real-execution-preflight-runway.md`
-2. Add read-only selected-ID real execution preflight.
-3. No provider calls, Hydration writes, metadata run writes, API log writes, Bucket persistence, Dispatcher, schema, runtime enforcement, support artifacts, or UI.
-4. Preserve: request posture is pickup-readable, not pickup; pickup is not execution; execution is not write until the write path succeeds under policy.
-5. Preserve lane simplification: Discovery outputs possible leads; Evidence Expansion outputs Evidence/EVEidence; Hydration outputs readability repair; fourth lane stays parked.
+2. `workspace/DevHS272-selected-id-real-execution-preflight.md`
+3. `workspace/OverseerHS273-hs272-selected-id-real-execution-preflight-review.md`
+4. Accepted command: `metadata.hydration_selected_id_real_execution_preflight.preview`
+5. Real provider-backed selected-ID Hydration execution remains unopened.
 
 See `workspace/current.md` for current truth.
 

@@ -41,6 +41,8 @@ async function main() {
     assert(commands.get('metadata.hydration_request_posture.preview')?.effects.includes('read-only'), 'metadata.hydration_request_posture.preview should declare read-only effect');
     assert(commands.get('metadata.hydration_pickup_contract.preview')?.classification === 'read-only', 'metadata.hydration_pickup_contract.preview should be read-only');
     assert(commands.get('metadata.hydration_pickup_contract.preview')?.effects.includes('read-only'), 'metadata.hydration_pickup_contract.preview should declare read-only effect');
+    assert(commands.get('metadata.hydration_selected_id_real_execution_preflight.preview')?.classification === 'read-only', 'metadata.hydration_selected_id_real_execution_preflight.preview should be read-only');
+    assert(commands.get('metadata.hydration_selected_id_real_execution_preflight.preview')?.effects.includes('read-only'), 'metadata.hydration_selected_id_real_execution_preflight.preview should declare read-only effect');
     assert(commands.get('metadata.local_sde_readiness.preview')?.classification === 'read-only', 'metadata.local_sde_readiness.preview should be read-only');
     assert(commands.get('metadata.local_sde_readiness.preview')?.effects.includes('read-only'), 'metadata.local_sde_readiness.preview should declare read-only effect');
     assert(commands.get('metadata.local_sde_source_posture.preview')?.classification === 'read-only', 'metadata.local_sde_source_posture.preview should be read-only');
@@ -114,6 +116,7 @@ async function main() {
     assert(rendererNames.has('metadata.hydration_attention_runtime.preview'), 'metadata.hydration_attention_runtime.preview should be renderer eligible');
     assert(rendererNames.has('metadata.hydration_request_posture.preview'), 'metadata.hydration_request_posture.preview should be renderer eligible');
     assert(rendererNames.has('metadata.hydration_pickup_contract.preview'), 'metadata.hydration_pickup_contract.preview should be renderer eligible');
+    assert(rendererNames.has('metadata.hydration_selected_id_real_execution_preflight.preview'), 'metadata.hydration_selected_id_real_execution_preflight.preview should be renderer eligible');
     assert(rendererNames.has('metadata.local_sde_readiness.preview'), 'metadata.local_sde_readiness.preview should be renderer eligible');
     assert(rendererNames.has('metadata.local_sde_source_posture.preview'), 'metadata.local_sde_source_posture.preview should be renderer eligible');
     assert(!rendererNames.has('metadata.hydration_write_fixture_proof'), 'metadata.hydration_write_fixture_proof should not be renderer eligible');

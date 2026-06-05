@@ -48,6 +48,7 @@ const { buildHydrationExecutionPolicyPreview } = require('./hydrationExecutionPo
 const { buildHydrationPickupContractPreview } = require('./hydrationPickupContractService');
 const { buildHydrationRequestPosturePreview } = require('./hydrationRequestPostureService');
 const { buildHydrationSelectedIdExecutionFixtureProof } = require('./hydrationSelectedIdExecutionFixtureProofService');
+const { buildHydrationSelectedIdRealExecutionPreflight } = require('./hydrationSelectedIdRealExecutionPreflightService');
 const { buildHydrationWriteFixtureProof } = require('./hydrationWriteFixtureProofService');
 const { buildLocalSdeReadinessPreview } = require('./localSdeReadinessPreviewService');
 const { buildLocalSdeSourcePosturePreview } = require('./localSdeSourcePostureService');
@@ -253,6 +254,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview selected-ID Hydration pickup eligibility and future execution-input hints without provider calls, writes, persistence, dispatch, enforcement, or UI work',
     handler: ({ db, payload, ...context }) => buildHydrationPickupContractPreview(db, payload, context)
+  },
+  'metadata.hydration_selected_id_real_execution_preflight.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview selected-ID real Hydration execution facts without provider calls, writes, Bucket persistence, dispatch, enforcement, or UI work',
+    handler: ({ db, payload, ...context }) => buildHydrationSelectedIdRealExecutionPreflight(db, payload, context)
   },
   'metadata.local_sde_readiness.preview': {
     classification: 'read-only',

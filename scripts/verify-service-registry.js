@@ -48,6 +48,7 @@ async function main() {
     const hydrationAttentionRuntimeCommand = commands.find((entry) => entry.command === 'metadata.hydration_attention_runtime.preview');
     const hydrationRequestPostureCommand = commands.find((entry) => entry.command === 'metadata.hydration_request_posture.preview');
     const hydrationPickupContractCommand = commands.find((entry) => entry.command === 'metadata.hydration_pickup_contract.preview');
+    const hydrationSelectedIdRealExecutionPreflightCommand = commands.find((entry) => entry.command === 'metadata.hydration_selected_id_real_execution_preflight.preview');
     const localSdeReadinessCommand = commands.find((entry) => entry.command === 'metadata.local_sde_readiness.preview');
     const localSdeSourcePostureCommand = commands.find((entry) => entry.command === 'metadata.local_sde_source_posture.preview');
     const hydrationWriteFixtureCommand = commands.find((entry) => entry.command === 'metadata.hydration_write_fixture_proof');
@@ -148,6 +149,9 @@ async function main() {
     assert(hydrationPickupContractCommand?.classification === 'read-only', 'metadata.hydration_pickup_contract.preview should be read-only');
     assert(hydrationPickupContractCommand?.effects.includes('read-only'), 'metadata.hydration_pickup_contract.preview should declare read-only effect');
     assert(hydrationPickupContractCommand?.renderer_allowed === true, 'metadata.hydration_pickup_contract.preview should be renderer eligible');
+    assert(hydrationSelectedIdRealExecutionPreflightCommand?.classification === 'read-only', 'metadata.hydration_selected_id_real_execution_preflight.preview should be read-only');
+    assert(hydrationSelectedIdRealExecutionPreflightCommand?.effects.includes('read-only'), 'metadata.hydration_selected_id_real_execution_preflight.preview should declare read-only effect');
+    assert(hydrationSelectedIdRealExecutionPreflightCommand?.renderer_allowed === true, 'metadata.hydration_selected_id_real_execution_preflight.preview should be renderer eligible');
     assert(localSdeReadinessCommand?.classification === 'read-only', 'metadata.local_sde_readiness.preview should be read-only');
     assert(localSdeReadinessCommand?.effects.includes('read-only'), 'metadata.local_sde_readiness.preview should declare read-only effect');
     assert(localSdeReadinessCommand?.renderer_allowed === true, 'metadata.local_sde_readiness.preview should be renderer eligible');
