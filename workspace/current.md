@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS327 Watch runtime packet plan preview accepted; no active Dev runway
+Status: HS329 Watch runtime next-seam decision surface recorded; no active Dev runway
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after Watch runtime packet plan preview acceptance.
+Current focus: Human / Overseer decision after Watch runtime packet plan preview acceptance.
 
 Current heading:
 
@@ -30,7 +30,42 @@ Active Dev runway: none
 
 Expected Dev handoff: none
 
-HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, HS318, HS320, HS322, HS324, and HS327 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, HS318, HS320, HS322, HS324, and HS327 are accepted and can rest. HS329 is a decision surface only. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+
+## HS329 Watch Runtime Next-Seam Decision Surface
+
+Recorded:
+
+```txt
+workspace/OverseerHS329-watch-runtime-next-seam-decision-surface.md
+```
+
+Status: resting decision surface; no Dev runway opened.
+
+Context:
+
+- HS327 proved Watch runtime packet plan preview without dispatch.
+- Watch/task outcome map already exists and was refreshed through HS300 / HS301.
+- System/radius setup health/readout already exists through HS320 / HS321.
+- Setup/readiness bridge and invalid stored-scope normalization already exist through HS322 / HS324.
+
+Recommended next seam:
+
+```txt
+Watch Runtime Movement Readiness Advisory
+```
+
+Reason:
+
+Atlas is now at the edge between read-only runtime planning and execution-adjacent proof. The next question is whether a no-dispatch executor/tick dry-run is useful, premature, or already covered by HS327.
+
+Options:
+
+1. Open Watch Runtime Movement Readiness Advisory.
+2. Open packet-plan/outcome-map conformance preview directly.
+3. Rest Watch runtime and choose another storage/runtime seam.
+
+Human / Overseer decision needed before any new Dev runway.
 
 ## HS327 Active Dev Runway
 

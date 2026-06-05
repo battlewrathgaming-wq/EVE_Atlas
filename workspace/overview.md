@@ -1,7 +1,7 @@
 # AURA Atlas Workspace Overview
 
 Status: Active breadcrumb map
-Last reviewed: 2026-06-05
+Last reviewed: 2026-06-06
 
 ## Vision Statement
 
@@ -182,6 +182,7 @@ Current state:
 - HS326 Watch setup chain next-seam decision surface recorded
 - HS327 opened
 - HS327 accepted by HS328
+- HS329 Watch runtime next-seam decision surface recorded
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -201,6 +202,7 @@ Current state:
 - current executor is Overseer / Human decision
 - active Dev runway is none
 - expected Dev handoff is none
+- latest resting decision surface is `workspace/OverseerHS329-watch-runtime-next-seam-decision-surface.md`
 - latest accepted Dev runway is `workspace/OverseerHS327-watch-runtime-packet-plan-preview-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS327-watch-runtime-packet-plan-preview.md`
 - latest Overseer review is `workspace/OverseerHS328-hs327-watch-runtime-packet-plan-review.md`
