@@ -149,6 +149,7 @@ Current state:
 - HS292 accepted by HS293
 - HS294 opened
 - HS294 accepted by HS295
+- HS296 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -165,9 +166,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer / Human decision
-- active Dev runway is none
-- expected Dev handoff is none
+- current executor is Dev
+- active Dev runway is `workspace/OverseerHS296-watch-scope-authority-execution-correction-runway.md`
+- expected Dev handoff is `workspace/DevHS296-watch-scope-authority-execution-correction.md`
 - latest accepted advisory request is `workspace/OverseerHS290-watch-task-outcome-map-assurance-scope-request.md`
 - latest accepted advisory artifact is `workspace/EngineeringDataHS290-watch-task-outcome-map-assurance-scope.md`
 - latest Overseer advisory review is `workspace/OverseerHS291-hs290-watch-task-outcome-map-assurance-review.md`
@@ -221,7 +222,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is resting after Watch scope authority conformance proof
+- current work is system/radius Watch execution stored-scope correction
 - recommended next rich surface is selected unresolved local ID -> Resolve candidate -> future report readability reuse
 - parked separate lane is Task origin and durable outcome map for Manual Search and Watch
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
@@ -254,7 +255,11 @@ Current heading:
 
 Active Dev packet:
 
-No active Dev packet is open.
+1. `workspace/OverseerHS296-watch-scope-authority-execution-correction-runway.md`
+2. Expected handoff: `workspace/DevHS296-watch-scope-authority-execution-correction.md`
+3. Scope: system/radius Watch execution consumes accepted stored `included_system_ids`.
+4. Preserve direct/manual `system.radius.watch` center/radius behavior when no stored included IDs are supplied.
+5. No provider calls in verification, schema, Discovery ref identity changes, durable `watch_result`, relationship tags, UI, enforcement, support artifacts, or fourth-lane work.
 
 Latest accepted packet:
 

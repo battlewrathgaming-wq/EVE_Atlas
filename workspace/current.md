@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS294 Watch scope authority conformance accepted; no active Dev runway
+Status: HS296 Watch scope authority execution correction runway open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after Watch scope authority conformance proof.
+Current focus: system/radius Watch execution should consume accepted stored included system IDs.
 
 Current heading:
 
@@ -23,21 +23,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS296-watch-scope-authority-execution-correction-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS296-watch-scope-authority-execution-correction.md
 ```
 
-HS294 is accepted and can rest. Do not open provider calls, Watch dispatch, task creation, writes, schema, execution correction, durable `watch_result`, relationship tags, UI, enforcement, support artifacts, or fourth-lane work without a new bounded decision.
+Dev may implement the bounded Watch scope authority execution correction only. Do not call providers in verification, change schema, change Discovery ref identity, create durable Watch results, add relationship tags, change UI, activate enforcement, create support artifacts, or reopen the fourth lane.
 
 Latest accepted advisory request:
 
@@ -646,6 +646,35 @@ Safe options:
 5. Later decide whether durable `watch_result` / `watch_result_items` schema is needed.
 
 Do not open durable Watch result storage, relationship tags, Discovery ref identity changes, provider movement, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
+
+## HS296 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS296-watch-scope-authority-execution-correction-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS296-watch-scope-authority-execution-correction.md
+```
+
+Accepted task:
+
+Correct the Watch executor path so system/radius Watch execution consumes accepted stored `included_system_ids`.
+
+The correction should:
+
+- pass stored included system IDs from `watchExecutor.dispatchFor` into system/radius collection when schedule source has valid stored scope
+- preserve center/radius as provenance/explanation
+- use supplied stored included IDs as execution authority when present
+- preserve existing direct/manual `system.radius.watch` center/radius planner behavior when no stored included IDs are supplied
+- fail/block missing or malformed stored Watch scope before provider work instead of silently recomputing
+- update conformance proof so the execution gap closes or narrows explicitly
+
+Stop if this requires provider calls in verification, schema changes, Discovery ref identity changes, durable Watch result semantics, direct/manual collection redesign, UI, active enforcement, support artifacts, or fourth-lane work.
 
 Latest accepted advisory request:
 
