@@ -122,6 +122,7 @@ Current state:
 - HS266 advisory opened
 - HS266 accepted by HS267
 - HS268 opened
+- HS268 accepted by HS269
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -138,9 +139,11 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS268-selected-id-hydration-execution-fixture-proof-runway.md`
-- expected Dev handoff is `workspace/DevHS268-selected-id-hydration-execution-fixture-proof.md`
+- current executor is none
+- no active Dev runway is open
+- latest accepted Dev runway is `workspace/OverseerHS268-selected-id-hydration-execution-fixture-proof-runway.md`
+- latest accepted Dev handoff is `workspace/DevHS268-selected-id-hydration-execution-fixture-proof.md`
+- latest Overseer review is `workspace/OverseerHS269-hs268-hydration-execution-fixture-proof-review.md`
 - latest accepted advisory request is `workspace/OverseerHS266-selected-id-hydration-execution-readiness-advisory-request.md`
 - latest accepted advisory artifact is `workspace/DataEngineeringHS266-selected-id-hydration-execution-readiness-advisory.md`
 - latest Overseer review is `workspace/OverseerHS267-hs266-hydration-execution-readiness-review.md`
@@ -164,7 +167,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is fixture-only selected-ID Hydration execution proof before any real provider-backed execution packet
+- current work is resting after fixture-only selected-ID Hydration execution proof acceptance
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -190,11 +193,11 @@ Current heading:
 - Hydration selection seam north star: local readability may happen during report construction, but provider-backed readability requires an explicit operator trigger and still passes normal gates
 - Do not reopen a separate fast lane unless a later bounded product/mechanical need proves it
 
-Active Dev packet:
+Resting state:
 
-1. `workspace/OverseerHS268-selected-id-hydration-execution-fixture-proof-runway.md`
-2. Prove selected-ID Hydration execution/write lifecycle with injected fixture provider results only.
-3. No provider calls, real operator execution, renderer eligibility, queues, dispatcher, worker, schema, runtime enforcement, support artifacts, or UI.
+1. HS268 accepted by HS269.
+2. No active Dev runway is open.
+3. `metadata.hydration_selected_id_execution_fixture_proof` proves selected-ID Hydration execution/write lifecycle with injected fixture provider results only.
 4. Preserve: request posture is pickup-readable, not pickup; pickup is not execution; execution is not write until the write path succeeds under policy.
 5. Preserve lane simplification: Discovery outputs possible leads; Evidence Expansion outputs Evidence/EVEidence; Hydration outputs readability repair; fourth lane stays parked.
 

@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS268 selected-ID Hydration execution fixture proof runway open
+Status: HS268 selected-ID Hydration execution fixture proof accepted by HS269; resting
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: fixture-only selected-ID Hydration execution proof before any real provider-backed execution packet.
+Current focus: resting after fixture-only selected-ID Hydration execution proof acceptance.
 
 Current heading:
 
@@ -21,31 +21,43 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: none
 
-Active Dev runway:
+Latest accepted Dev runway:
 
 ```txt
 workspace/OverseerHS268-selected-id-hydration-execution-fixture-proof-runway.md
 ```
 
-Expected Dev handoff:
+Latest accepted Dev handoff:
 
 ```txt
 workspace/DevHS268-selected-id-hydration-execution-fixture-proof.md
 ```
 
-Dev task:
+Latest Overseer review:
 
-Add the smallest fixture-only selected-ID Hydration execution proof. This proof should exercise selected-ID execution/write boundaries using injected fixture provider results only.
+```txt
+workspace/OverseerHS269-hs268-hydration-execution-fixture-proof-review.md
+```
 
-Suggested command:
+Status: accepted.
+
+No active Dev runway is open.
+
+Accepted result:
+
+HS268 added the smallest fixture-only selected-ID Hydration execution proof. This proof exercises selected-ID execution/write boundaries using injected fixture provider results only.
+
+Accepted command:
 
 ```txt
 metadata.hydration_selected_id_execution_fixture_proof
 ```
 
-Do not call providers. Do not create real operator Hydration execution. Do not make the command renderer eligible.
+Overseer correction: the new command's dry-run coverage label was changed from `fast_view_metadata_hydration` to `hydration_readability_repair` to preserve the accepted lane simplification.
+
+No providers are called. No real operator Hydration execution exists. The command is not renderer eligible.
 
 Preserve:
 
@@ -67,6 +79,95 @@ Stop if:
 - provider-backed execution is implemented
 - write behavior touches anything beyond Hydration/readability proof rows
 - queues, dispatcher, worker, leases, retries, schema, UI, or fourth-lane design become necessary before the fixture proof can stay bounded
+
+## HS268 Evidence
+
+Dev updated 2026-06-05:
+
+- Added `metadata.hydration_selected_id_execution_fixture_proof` as a trusted fixture-only, non-renderer service command.
+- Added `src/main/services/hydrationSelectedIdExecutionFixtureProofService.js`.
+- Added `scripts/verify-hydration-selected-id-execution-fixture.js` and `npm.cmd run verify:hydration-selected-id-execution-fixture`.
+- Registered enforcement dry-run coverage for the new command as `hydration_readability_repair` / `fixture_selected_id_hydration_execution_proof` / `fixture_only_non_production`.
+- Updated service registry, command authority, and service registry verification for the new command.
+- Fixture proof shape:
+  - selected-ID pickup contract
+  - trusted execution revalidation
+  - injected fixture provider response
+  - provider-response validation
+  - Hydration write transaction
+  - `metadata_runs` / `entities` / `activity_events` / optional sanitized `api_request_logs` proof
+- Success case proved:
+  - rebuilt request posture: `provider_needed`
+  - provider posture: `released_to_normal_gates_only`
+  - metadata run status: `success`
+  - metadata run writes: 1
+  - fixture API log writes: 1
+  - selected entity upserts: 1
+  - activity event readability label patches: 2
+  - provider response validation: `fixture_provider_response_valid`
+- Rejection cases proved:
+  - `not_a_request`
+  - `invalid`
+  - `insufficient_basis`
+  - `already_local` / local label short-circuit
+  - `local_lookup_available`
+  - `held`
+  - `blocked`
+  - fixture provider response ID mismatch
+  - fixture provider response category/type mismatch
+  - empty/unsafe provider label
+- Rejected cases finalize a fixture `metadata_runs` row as partial/failed and do not upsert entities or patch activity labels.
+- Invariants proved:
+  - numeric activity-event IDs/facts unchanged
+  - raw killmail payloads unchanged
+  - Discovery refs unchanged
+  - `fetch_runs` unchanged
+  - Watch rows unchanged
+  - Assessment Memory rows unchanged
+  - only expected tables changed in success
+- Boundaries confirmed:
+  - no live/API/provider calls
+  - no real operator Hydration execution
+  - command is not renderer eligible
+  - no pickup/request persistence
+  - no queue, dispatcher, worker, lease, or retry state
+  - no schema changes
+  - no `killmails` mutation
+  - no raw ESI payload mutation
+  - no numeric activity fact mutation
+  - no Discovery ref mutation
+  - no `fetch_runs`, ingestion audit, or data quality warning mutation
+  - no Watch, Marked, or Assessment Memory mutation
+  - no storage config or External I/O config writes
+  - no support artifacts
+  - no runtime enforcement activation or command blocking
+  - no renderer UI work
+  - fourth lane stays parked
+- Verification run:
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\hydrationSelectedIdExecutionFixtureProofService.js` passed.
+  - `node --check scripts\verify-hydration-selected-id-execution-fixture.js` passed.
+  - `npm.cmd run verify:hydration-selected-id-execution-fixture` passed.
+  - `npm.cmd run verify:hydration-pickup-contract` passed.
+  - `npm.cmd run verify:hydration-request-posture` passed.
+  - `npm.cmd run verify:hydration-write-fixture` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 248 warnings across 7 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main` with HS268 working-tree changes.
+
+## HS268 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS268-selected-id-hydration-execution-fixture-proof.md
+```
+
+Status: selected-ID Hydration execution fixture proof complete and ready for Overseer review.
 
 ## Recent Accepted Advisory
 

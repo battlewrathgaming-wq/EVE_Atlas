@@ -47,6 +47,7 @@ const { buildHydrationAttentionRuntimePosturePreview } = require('./hydrationAtt
 const { buildHydrationExecutionPolicyPreview } = require('./hydrationExecutionPolicyPreviewService');
 const { buildHydrationPickupContractPreview } = require('./hydrationPickupContractService');
 const { buildHydrationRequestPosturePreview } = require('./hydrationRequestPostureService');
+const { buildHydrationSelectedIdExecutionFixtureProof } = require('./hydrationSelectedIdExecutionFixtureProofService');
 const { buildHydrationWriteFixtureProof } = require('./hydrationWriteFixtureProofService');
 const { buildLocalSdeReadinessPreview } = require('./localSdeReadinessPreviewService');
 const { buildLocalSdeSourcePosturePreview } = require('./localSdeSourcePostureService');
@@ -276,6 +277,13 @@ const COMMANDS = {
     renderer: false,
     description: 'Write fixture-only Hydration readability labels from local entities without providers, Evidence writes, queues, or enforcement',
     handler: ({ db, payload, ...context }) => buildHydrationWriteFixtureProof(db, payload, context)
+  },
+  'metadata.hydration_selected_id_execution_fixture_proof': {
+    classification: 'metadata-only',
+    effects: [EFFECTS.LOCAL_DATA_MUTATION, EFFECTS.METADATA_READABILITY],
+    renderer: false,
+    description: 'Fixture-only selected-ID Hydration execution/write proof using injected provider results without live providers, queues, dispatch, enforcement, or UI work',
+    handler: ({ db, payload, ...context }) => buildHydrationSelectedIdExecutionFixtureProof(db, payload, context)
   },
   'sde.topology_import_rewrite_authority.proof': {
     classification: 'metadata-only',

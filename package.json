@@ -95,6 +95,7 @@
     "verify:hydration-pickup-contract": "node scripts/verify-hydration-pickup-contract.js",
     "verify:hydration-execution-policy": "node scripts/verify-hydration-execution-policy.js",
     "verify:hydration-write-fixture": "node scripts/verify-hydration-write-fixture.js",
+    "verify:hydration-selected-id-execution-fixture": "node scripts/verify-hydration-selected-id-execution-fixture.js",
     "verify:external-io-state": "node scripts/verify-external-io-state.js",
     "verify:support-artifact-path-authority": "node scripts/verify-support-artifact-path-authority.js",
     "verify:support-artifact-creation-policy": "node scripts/verify-support-artifact-creation-policy.js",
