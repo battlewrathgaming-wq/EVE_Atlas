@@ -270,6 +270,10 @@ function verifyCoverageMetadata(map) {
   assert(command(map, 'watch.system_radius_readout_readiness_bridge.preview').runtime_context === 'system_radius_readout_readiness_bridge', 'system/radius readout/readiness bridge should be classified as a readout');
   assert(command(map, 'watch.system_radius_readout_readiness_bridge.preview').enforcement_status === 'read_only_non_enforcing_proof', 'system/radius readout/readiness bridge should identify itself as a non-enforcing proof');
   assert(command(map, 'watch.system_radius_readout_readiness_bridge.preview').external_io_dependency === 'none', 'system/radius readout/readiness bridge should not declare External I/O dependency');
+  assert(command(map, 'watch.runtime_packet_plan.preview').storage_action_class === 'local_db_inspection', 'Watch runtime packet plan preview should be a local DB inspection');
+  assert(command(map, 'watch.runtime_packet_plan.preview').runtime_context === 'watch_runtime_packet_plan_readout', 'Watch runtime packet plan preview should be classified as a readout');
+  assert(command(map, 'watch.runtime_packet_plan.preview').enforcement_status === 'read_only_non_enforcing_proof', 'Watch runtime packet plan preview should identify itself as a non-enforcing proof');
+  assert(command(map, 'watch.runtime_packet_plan.preview').external_io_dependency === 'none', 'Watch runtime packet plan preview should not declare External I/O dependency');
   assert(command(map, 'watch.operator_confirmation_contract.preview').storage_action_class === 'local_db_inspection', 'Watch operator confirmation contract preview should be a local DB inspection');
   assert(command(map, 'watch.operator_confirmation_contract.preview').runtime_context === 'watch_operator_confirmation_contract_readout', 'Watch operator confirmation contract preview should be classified as a readout');
   assert(command(map, 'watch.operator_confirmation_contract.preview').enforcement_status === 'read_only_non_enforcing_proof', 'Watch operator confirmation contract preview should identify itself as a non-enforcing proof');

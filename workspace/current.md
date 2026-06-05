@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS327 Watch runtime packet plan preview open
-Last updated: 2026-06-05
+Status: HS327 Watch runtime packet plan preview accepted; no active Dev runway
+Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: prove a read-only runtime packet plan from accepted Watch scope without dispatch or provider movement.
+Current focus: resting after Watch runtime packet plan preview acceptance.
 
 Current heading:
 
@@ -24,21 +24,13 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human decision
 
-Active Dev runway:
+Active Dev runway: none
 
-```txt
-workspace/OverseerHS327-watch-runtime-packet-plan-preview-runway.md
-```
+Expected Dev handoff: none
 
-Expected Dev handoff:
-
-```txt
-workspace/DevHS327-watch-runtime-packet-plan-preview.md
-```
-
-HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, HS318, HS320, HS322, and HS324 are accepted and can rest. HS327 is open to add a read-only Watch runtime packet plan preview. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, HS318, HS320, HS322, HS324, and HS327 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
 
 ## HS327 Active Dev Runway
 
@@ -76,6 +68,140 @@ invalid stored scope creates no accepted packet plan
 Boundary:
 
 This packet is local-only/read-only planning proof. Do not execute a Watch, arm/disarm Watch runtime, create Watch executor tasks, call providers, perform live/API calls, mutate Watch rows, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, change `watch.create`, change topology traversal behavior, infer execution authority from center/radius, create or persist runtime packet rows, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
+
+## HS327 Evidence
+
+Dev updated 2026-06-05:
+
+- Added `watch.runtime_packet_plan.preview` as a renderer-eligible, read-only/local-only service command.
+- Added `src/main/services/watchRuntimePacketPlanService.js`.
+- Added `scripts/verify-watch-runtime-packet-plan.js` and `npm.cmd run verify:watch-runtime-packet-plan`.
+- Registered command authority, service registry, passive side-effect, and enforcement dry-run coverage for the new command.
+- The preview composes existing local facts:
+  - `buildWatchScheduleStatus(...)`
+  - `watch.authored_execution_readiness.preview`
+- The preview does not call `dispatchFor(...)`, Watch runners, provider gates, task runners, or collectors.
+- Actor Watch plan proof:
+  - uses `watchlist_entities` actor Watch source fields
+  - planned lane: `Discovery_then_Evidence_Expansion`
+  - zKill Discovery packet count: 1
+  - ESI Evidence Expansion cap: 7 in fixture sample
+  - `would_dispatch_watch: false`
+  - `would_create_task: false`
+  - `provider_calls: 0`
+  - `writes: 0`
+- System / Radius Watch plan proof:
+  - uses stored `system_watches.included_system_ids`
+  - valid stored scope reports `acceptedScopeSource: stored_watch_scope`
+  - fixture accepted IDs: `[30003597,30003601,30003599]`
+  - center/radius remain `provenance_and_management`
+  - `center_radius_used_as_authority: false`
+  - `would_recompute_from_center_radius: false`
+  - zKill Discovery packet count: 3
+  - ESI Evidence Expansion cap: 9 in fixture sample
+  - max refs per system: 3
+- Waiting/gated rows:
+  - inactive, not-due, and backoff rows report `blocked_no_plan`
+  - waiting is explicitly not failure
+  - valid stored scope can remain visible as accepted authority while `selected_for_packet_plan: false`
+- Invalid stored scope proof:
+  - invalid stored scope reports `blocked_no_plan`
+  - blocked reason includes `watch_scope_authority_invalid`
+  - accepted system IDs are `[]`
+  - selected runtime systems are `[]`
+  - runtime packet plan is `null`
+  - diagnostic parseable IDs remain only under `invalid_scope_diagnostic.diagnostic_parseable_system_ids`
+  - diagnostic IDs are not operator-actionable, accepted authority, execution authority, selected runtime systems, or stored-row repair
+- Focused verifier summary:
+  - watch count: 10
+  - planned count: 2
+  - blocked/no-plan count: 8
+  - actor plan count: 1
+  - system/radius plan count: 1
+  - invalid stored scope blocked count: 1
+  - dispatches: 0
+  - tasks created: 0
+  - provider calls: 0
+  - writes: 0
+  - readiness is authorization: false
+- Mutation boundary proof:
+  - no Watch execution
+  - no Watch runtime arm/disarm
+  - no Watch executor task creation
+  - no provider/live/API calls
+  - no Watch row mutation
+  - no Discovery ref mutation
+  - no Evidence/EVEidence writes
+  - no Hydration/metadata label writes
+  - no `watch.create` behavior change
+  - no topology traversal behavior change
+  - no center/radius fallback authority
+  - no runtime packet row creation/persistence
+  - no broad provider queue
+  - no schema changes
+  - no renderer/UI work
+  - no support artifacts
+  - no runtime enforcement or command blocking
+  - no Watch result identity, relationship tags, protected-word JSON updates, or fourth-lane behavior
+- Verification run:
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `node --check src\main\watchlist\watchScheduler.js` passed.
+  - `node --check src\main\watchlist\watchExecutor.js` passed.
+  - `node --check scripts\verify-watch-scheduler.js` passed.
+  - `node --check scripts\verify-watch-executor.js` passed.
+  - `node --check scripts\verify-watch-authored-execution-readiness.js` passed.
+  - `node --check src\main\services\watchRuntimePacketPlanService.js` passed.
+  - `node --check scripts\verify-watch-runtime-packet-plan.js` passed.
+  - `npm.cmd run verify:watch-runtime-packet-plan` passed.
+  - `npm.cmd run verify:watch-scheduler` passed.
+  - `npm.cmd run verify:watch-executor` passed.
+  - `npm.cmd run verify:watch-authored-execution-readiness` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 341 warnings across 8 changed working-set files; no renames or protected-word JSON updates performed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS327 working-tree changes.
+
+## HS327 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS327-watch-runtime-packet-plan-preview.md
+```
+
+Status: Watch runtime packet plan preview complete; pending Overseer review.
+
+## HS327 Acceptance
+
+Accepted:
+
+```txt
+workspace/OverseerHS328-hs327-watch-runtime-packet-plan-review.md
+```
+
+Decision:
+
+HS327 is accepted.
+
+Accepted result:
+
+- `watch.runtime_packet_plan.preview` is a renderer-eligible read-only command.
+- The preview shapes accepted Watch state into future runtime/acquisition packet plans without dispatch.
+- Actor Watch plans use `watchlist_entities` source fields.
+- System / Radius Watch plans use stored accepted `included_system_ids` only.
+- Center/radius remain provenance and management after acceptance.
+- Inactive, not-due, backoff, and invalid-scope rows are `blocked_no_plan`.
+- Invalid stored scope creates no accepted packet plan and keeps diagnostic parseable IDs diagnostic-only.
+- No Watch execution, runtime arm/disarm, task creation, provider movement, Watch row mutation, Discovery/Evidence/Hydration mutation, schema, UI, support artifact, active enforcement, command blocking, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
+
+HS327 can rest.
 
 ## HS324 Active Dev Runway
 

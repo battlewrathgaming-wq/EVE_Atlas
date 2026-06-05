@@ -65,6 +65,7 @@ const { buildWatchScopeAuthorityConformancePreview } = require('./watchScopeAuth
 const { buildWatchAuthoredExecutionReadinessPreview } = require('./watchAuthoredExecutionReadinessService');
 const { buildSystemRadiusSetupReadout } = require('./systemRadiusSetupReadoutService');
 const { buildSystemRadiusReadoutReadinessBridge } = require('./systemRadiusReadoutReadinessBridgeService');
+const { buildWatchRuntimePacketPlanPreview } = require('./watchRuntimePacketPlanService');
 const { buildWatchOperatorConfirmationContractPreview } = require('./watchOperatorConfirmationContractService');
 const { buildSystemRadiusAuthoringPreflight } = require('./systemRadiusAuthoringPreflightService');
 const { buildSystemRadiusAcceptancePayloadPreview } = require('./systemRadiusAcceptancePayloadService');
@@ -715,6 +716,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview conformance between system/radius Watch setup readout and authored execution readiness without dispatch, providers, tasks, writes, schema, or UI work',
     handler: ({ db, payload }) => buildSystemRadiusReadoutReadinessBridge(db, payload)
+  },
+  'watch.runtime_packet_plan.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview future Watch runtime packet plans from accepted scope without dispatch, providers, tasks, writes, schema, or UI work',
+    handler: ({ db, payload }) => buildWatchRuntimePacketPlanPreview(db, payload)
   },
   'watch.operator_confirmation_contract.preview': {
     classification: 'read-only',

@@ -91,6 +91,7 @@ async function main() {
     const watchAuthoredExecutionReadinessCommand = commands.find((entry) => entry.command === 'watch.authored_execution_readiness.preview');
     const systemRadiusSetupReadoutCommand = commands.find((entry) => entry.command === 'watch.system_radius_setup_readout.preview');
     const systemRadiusReadoutReadinessBridgeCommand = commands.find((entry) => entry.command === 'watch.system_radius_readout_readiness_bridge.preview');
+    const watchRuntimePacketPlanCommand = commands.find((entry) => entry.command === 'watch.runtime_packet_plan.preview');
     const watchOperatorConfirmationContractCommand = commands.find((entry) => entry.command === 'watch.operator_confirmation_contract.preview');
     const systemRadiusAuthoringPreflightCommand = commands.find((entry) => entry.command === 'watch.system_radius_authoring_preflight.preview');
     const systemRadiusAcceptancePayloadCommand = commands.find((entry) => entry.command === 'watch.system_radius_acceptance_payload.preview');
@@ -249,6 +250,8 @@ async function main() {
     assert(systemRadiusSetupReadoutCommand?.renderer_allowed === true, 'system/radius setup readout should be renderer eligible');
     assert(systemRadiusReadoutReadinessBridgeCommand?.classification === 'read-only', 'system/radius readout/readiness bridge should be read-only');
     assert(systemRadiusReadoutReadinessBridgeCommand?.renderer_allowed === true, 'system/radius readout/readiness bridge should be renderer eligible');
+    assert(watchRuntimePacketPlanCommand?.classification === 'read-only', 'Watch runtime packet plan preview should be read-only');
+    assert(watchRuntimePacketPlanCommand?.renderer_allowed === true, 'Watch runtime packet plan preview should be renderer eligible');
     assert(watchOperatorConfirmationContractCommand?.classification === 'read-only', 'Watch operator confirmation contract preview should be read-only');
     assert(watchOperatorConfirmationContractCommand?.renderer_allowed === true, 'Watch operator confirmation contract preview should be renderer eligible');
     assert(systemRadiusAuthoringPreflightCommand?.classification === 'read-only', 'system/radius authoring preflight should be read-only');
@@ -550,6 +553,22 @@ async function main() {
     assert(systemRadiusReadoutReadinessBridge.watch_mutations === 0, 'system/radius readout/readiness bridge should not mutate Watch rows');
     assert(systemRadiusReadoutReadinessBridge.schema_changes === 0, 'system/radius readout/readiness bridge should not change schema');
     assert(systemRadiusReadoutReadinessBridge.runtime_enforcement_active === false, 'system/radius readout/readiness bridge should not activate enforcement');
+
+    const watchRuntimePacketPlan = await invokeServiceCommand('watch.runtime_packet_plan.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchRuntimePacketPlan.read_only === true, 'Watch runtime packet plan preview should declare read-only behavior');
+    assert(watchRuntimePacketPlan.provider_calls === 0, 'Watch runtime packet plan preview should not call providers');
+    assert(watchRuntimePacketPlan.watch_dispatches === 0, 'Watch runtime packet plan preview should not dispatch Watch execution');
+    assert(watchRuntimePacketPlan.tasks_created === 0, 'Watch runtime packet plan preview should not create tasks');
+    assert(watchRuntimePacketPlan.would_create_task === false, 'Watch runtime packet plan preview should not claim task creation');
+    assert(watchRuntimePacketPlan.evidence_writes === 0, 'Watch runtime packet plan preview should not write Evidence/EVEidence');
+    assert(watchRuntimePacketPlan.hydration_writes === 0, 'Watch runtime packet plan preview should not write Hydration output');
+    assert(watchRuntimePacketPlan.watch_mutations === 0, 'Watch runtime packet plan preview should not mutate Watch rows');
+    assert(watchRuntimePacketPlan.runtime_packet_rows_persisted === 0, 'Watch runtime packet plan preview should not persist packet rows');
+    assert(watchRuntimePacketPlan.schema_changes === 0, 'Watch runtime packet plan preview should not change schema');
+    assert(watchRuntimePacketPlan.runtime_enforcement_active === false, 'Watch runtime packet plan preview should not activate enforcement');
 
     const watchOperatorConfirmationContract = await invokeServiceCommand('watch.operator_confirmation_contract.preview', {}, {
       db,
