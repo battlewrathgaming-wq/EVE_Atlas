@@ -63,6 +63,7 @@ const { buildQueueClockPosturePreview } = require('./queueClockPostureService');
 const { buildWatchTaskOutcomeMapPreview } = require('./watchTaskOutcomeMapPreviewService');
 const { buildWatchScopeAuthorityConformancePreview } = require('./watchScopeAuthorityConformanceService');
 const { buildSystemRadiusAuthoringPreflight } = require('./systemRadiusAuthoringPreflightService');
+const { buildSystemRadiusAcceptancePayloadPreview } = require('./systemRadiusAcceptancePayloadService');
 const { buildPatientPacketIdentityPreview } = require('./patientPacketIdentityService');
 const {
   buildExternalIoStateConfigReadback,
@@ -695,6 +696,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview local system/radius Watch authoring scope without providers, Watch row writes, dispatch, tasks, schema, or UI work',
     handler: ({ db, payload }) => buildSystemRadiusAuthoringPreflight(db, payload)
+  },
+  'watch.system_radius_acceptance_payload.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview future system/radius watch.create payload from accepted preflight without Watch writes, dispatch, providers, tasks, schema, or UI work',
+    handler: ({ db, payload }) => buildSystemRadiusAcceptancePayloadPreview(db, payload)
   },
   'runtime.patient_packet_identity.preview': {
     classification: 'read-only',

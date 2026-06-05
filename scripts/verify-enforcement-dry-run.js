@@ -262,6 +262,10 @@ function verifyCoverageMetadata(map) {
   assert(command(map, 'watch.system_radius_authoring_preflight.preview').runtime_context === 'system_radius_authoring_preflight_readout', 'system/radius authoring preflight should be classified as a readout');
   assert(command(map, 'watch.system_radius_authoring_preflight.preview').enforcement_status === 'read_only_non_enforcing_proof', 'system/radius authoring preflight should identify itself as a non-enforcing proof');
   assert(command(map, 'watch.system_radius_authoring_preflight.preview').external_io_dependency === 'none', 'system/radius authoring preflight should not declare External I/O dependency');
+  assert(command(map, 'watch.system_radius_acceptance_payload.preview').storage_action_class === 'local_db_inspection', 'system/radius acceptance payload should be a local DB inspection');
+  assert(command(map, 'watch.system_radius_acceptance_payload.preview').runtime_context === 'system_radius_acceptance_payload_readout', 'system/radius acceptance payload should be classified as a readout');
+  assert(command(map, 'watch.system_radius_acceptance_payload.preview').enforcement_status === 'read_only_non_enforcing_proof', 'system/radius acceptance payload should identify itself as a non-enforcing proof');
+  assert(command(map, 'watch.system_radius_acceptance_payload.preview').external_io_dependency === 'none', 'system/radius acceptance payload should not declare External I/O dependency');
   assert(command(map, 'runtime.patient_packet_identity.preview').runtime_context === 'patient_packet_identity_readout', 'patient packet identity preview should be classified as a readout');
   assert(command(map, 'runtime.patient_packet_identity.preview').enforcement_status === 'read_only_non_enforcing_proof', 'patient packet identity preview should identify itself as a non-enforcing proof');
   assert(command(map, 'runtime.patient_packet_identity.preview').external_io_dependency === 'none', 'patient packet identity preview should not declare External I/O dependency');

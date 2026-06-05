@@ -173,6 +173,7 @@ async function verifySeededDb(root) {
       ['runtime.watch_task_outcome_map.preview', () => invokeServiceCommand('runtime.watch_task_outcome_map.preview', {}, context)],
       ['watch.scope_authority_conformance.preview', () => invokeServiceCommand('watch.scope_authority_conformance.preview', {}, context)],
       ['watch.system_radius_authoring_preflight.preview', () => invokeServiceCommand('watch.system_radius_authoring_preflight.preview', {}, context)],
+      ['watch.system_radius_acceptance_payload.preview', () => invokeServiceCommand('watch.system_radius_acceptance_payload.preview', {}, context)],
       ['runtime.patient_packet_identity.preview', () => invokeServiceCommand('runtime.patient_packet_identity.preview', {}, context)],
       ['task.list', () => invokeServiceCommand('task.list', { limit: 10 }, context)],
       ['assessment.list', () => invokeServiceCommand('assessment.list', {
@@ -274,6 +275,7 @@ async function verifyEmptyDb(root) {
       ['empty runtime.watch_task_outcome_map.preview', () => invokeServiceCommand('runtime.watch_task_outcome_map.preview', {}, context)],
       ['empty watch.scope_authority_conformance.preview', () => invokeServiceCommand('watch.scope_authority_conformance.preview', {}, context)],
       ['empty watch.system_radius_authoring_preflight.preview', () => invokeServiceCommand('watch.system_radius_authoring_preflight.preview', {}, context)],
+      ['empty watch.system_radius_acceptance_payload.preview', () => invokeServiceCommand('watch.system_radius_acceptance_payload.preview', {}, context)],
       ['empty runtime.patient_packet_identity.preview', () => invokeServiceCommand('runtime.patient_packet_identity.preview', {}, context)],
       ['empty assessment.list', () => invokeServiceCommand('assessment.list', {}, context)]
     ];

@@ -89,6 +89,7 @@ async function main() {
     const watchTaskOutcomeMapCommand = commands.find((entry) => entry.command === 'runtime.watch_task_outcome_map.preview');
     const watchScopeAuthorityConformanceCommand = commands.find((entry) => entry.command === 'watch.scope_authority_conformance.preview');
     const systemRadiusAuthoringPreflightCommand = commands.find((entry) => entry.command === 'watch.system_radius_authoring_preflight.preview');
+    const systemRadiusAcceptancePayloadCommand = commands.find((entry) => entry.command === 'watch.system_radius_acceptance_payload.preview');
     const patientPacketIdentityCommand = commands.find((entry) => entry.command === 'runtime.patient_packet_identity.preview');
     const snapshotSettingsGetCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.get');
     const snapshotSettingsUpdateCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.update');
@@ -239,6 +240,8 @@ async function main() {
     assert(watchScopeAuthorityConformanceCommand?.renderer_allowed === true, 'Watch scope authority conformance preview should be renderer eligible');
     assert(systemRadiusAuthoringPreflightCommand?.classification === 'read-only', 'system/radius authoring preflight should be read-only');
     assert(systemRadiusAuthoringPreflightCommand?.renderer_allowed === true, 'system/radius authoring preflight should be renderer eligible');
+    assert(systemRadiusAcceptancePayloadCommand?.classification === 'read-only', 'system/radius acceptance payload should be read-only');
+    assert(systemRadiusAcceptancePayloadCommand?.renderer_allowed === true, 'system/radius acceptance payload should be renderer eligible');
     assert(patientPacketIdentityCommand?.classification === 'read-only', 'patient packet identity preview should be read-only');
     assert(patientPacketIdentityCommand?.renderer_allowed === true, 'patient packet identity preview should be renderer eligible');
     assert(snapshotSettingsGetCommand?.classification === 'read-only', 'runtime snapshot settings get should be read-only');
@@ -505,6 +508,19 @@ async function main() {
     assert(systemRadiusAuthoringPreflight.evidence_writes === 0, 'system/radius authoring preflight should not write Evidence/EVEidence');
     assert(systemRadiusAuthoringPreflight.schema_changes === 0, 'system/radius authoring preflight should not change schema');
     assert(systemRadiusAuthoringPreflight.runtime_enforcement_active === false, 'system/radius authoring preflight should not activate enforcement');
+
+    const systemRadiusAcceptancePayload = await invokeServiceCommand('watch.system_radius_acceptance_payload.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(systemRadiusAcceptancePayload.read_only === true, 'system/radius acceptance payload should declare read-only behavior');
+    assert(systemRadiusAcceptancePayload.provider_calls === 0, 'system/radius acceptance payload should not call providers');
+    assert(systemRadiusAcceptancePayload.watch_rows_written === 0, 'system/radius acceptance payload should not write Watch rows');
+    assert(systemRadiusAcceptancePayload.watch_dispatches === 0, 'system/radius acceptance payload should not dispatch Watch execution');
+    assert(systemRadiusAcceptancePayload.tasks_created === 0, 'system/radius acceptance payload should not create tasks');
+    assert(systemRadiusAcceptancePayload.evidence_writes === 0, 'system/radius acceptance payload should not write Evidence/EVEidence');
+    assert(systemRadiusAcceptancePayload.schema_changes === 0, 'system/radius acceptance payload should not change schema');
+    assert(systemRadiusAcceptancePayload.runtime_enforcement_active === false, 'system/radius acceptance payload should not activate enforcement');
 
     const patientPacketIdentity = await invokeServiceCommand('runtime.patient_packet_identity.preview', {}, {
       db,

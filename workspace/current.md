@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS307 system/radius Watch authoring acceptance payload opened
+Status: HS307 system/radius Watch authoring acceptance payload accepted; no active Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: local-only system/radius Watch authoring acceptance payload.
+Current focus: resting after local-only system/radius Watch authoring acceptance payload.
 
 Current heading:
 
@@ -23,21 +23,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS307-system-radius-watch-authoring-acceptance-payload-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS307-system-radius-watch-authoring-acceptance-payload.md
+none
 ```
 
-HS296, HS298, HS300, HS301, HS302, and HS304 are accepted and can rest. HS307 is open to prove a read-only Watch authoring acceptance payload from HS304 preflight output. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, actual Watch row writes, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, HS301, HS302, HS304, and HS307 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, actual Watch row writes, or fourth-lane work without a new bounded decision.
 
 Latest accepted advisory request:
 
@@ -1332,6 +1332,172 @@ Reject or mark not acceptable:
 Boundary:
 
 This is not Watch creation. Do not write Watch rows, dispatch Watch execution, create tasks, call providers, mutate Discovery/Evidence/Hydration, change schema, change `watch.create`, add UI, create support artifacts, activate enforcement, or open Watch/result semantics.
+
+## HS307 Evidence
+
+Dev updated 2026-06-05:
+
+- Added `watch.system_radius_acceptance_payload.preview` as a renderer-eligible, local-only, read-only acceptance payload preview.
+- Added `src/main/services/systemRadiusAcceptancePayloadService.js`.
+- Added `scripts/verify-system-radius-acceptance-payload.js` and `npm.cmd run verify:system-radius-acceptance-payload`.
+- Registered service command and enforcement dry-run coverage as `local_db_inspection` / `system_radius_acceptance_payload_readout` / `read_only_non_enforcing_proof`.
+- Updated service registry, command authority, enforcement dry-run, and passive side-effect verification for the new read-only command.
+- Preview composes a candidate future `watch.create` mutation-contract payload from accepted HS304 preflight output and exposes:
+  - source preflight action: `watch.system_radius_authoring_preflight.preview`
+  - source preflight status
+  - preflight authoring acceptability
+  - selected center system ID/name
+  - radius
+  - exact accepted `included_system_ids`
+  - center/radius role as provenance/explanation only
+  - stored included IDs as future execution authority after `watch.create`
+  - optional operator settings: lookback, max systems, max refs, max killmails, poll interval, active, notes
+  - future target command: `watch.create`
+  - current `watch.create` compatibility: `requires_future_mutation_contract`
+  - current `watch.create` consumes accepted preflight IDs: `false`
+  - future mutation contract required: `true`
+  - future payload directly executable now: `false`
+  - future confirmation token posture: `confirm:watch.create`
+  - explicit `would_write_watch_row: false`
+  - explicit `watch_rows_written: 0`
+  - explicit no-dispatch/no-provider/no-task posture
+- Focused verifier sample:
+  - source preflight status: `acceptable`
+  - payload status: `ready_for_future_mutation_contract_payload`
+  - future target command: `watch.create`
+  - current `watch.create` compatibility: `requires_future_mutation_contract`
+  - current `watch.create` consumes accepted preflight IDs: `false`
+  - future mutation contract required: `true`
+  - future payload directly executable now: `false`
+  - included IDs: `[30003597,30003601,30003599,30003598,30003596]`
+  - future payload stored scope source: `accepted_preflight_included_system_ids`
+  - center/radius provenance: Hare / radius 1
+  - optional settings preserved: lookback 48, max systems 10, max refs 25, max killmails 10, poll interval 60, active true, fixture notes
+  - `would_write_watch_row: false`
+  - `watch_rows_written: 0`
+  - `watch_dispatches: 0`
+  - `provider_calls: 0`
+- HS308 revision coverage:
+  - disclosed current path: `serviceRegistry watch.create -> mutatingActionService.runWatchCreateService -> normalizeSystemRadiusWatchScope -> watchlistRepository.addSystemRadiusWatch -> TopologyService.getSystemsWithinRadius`
+  - disclosed current gap: current `watch.create` recomputes included systems from center/radius and does not yet consume accepted preflight `included_system_ids`
+  - candidate payload is marked `contract_role: candidate_future_mutation_contract`
+  - candidate payload is marked `directly_executable_by_current_watch_create: false`
+  - stored scope authority marks `current_watch_create_consumes_this_field: false`
+  - stored scope authority marks `future_mutation_contract_required: true`
+- Rejection coverage:
+  - capped preflight -> `preflight_capped_not_acceptable`
+  - unknown system -> `preflight_unknown_system`
+  - invalid radius -> `preflight_invalid_radius`
+  - missing topology -> `preflight_missing_topology`
+  - forged/mismatched included IDs -> `payload_claim_rejected` with `included_system_ids_claim_mismatch`
+- Boundaries confirmed:
+  - no provider calls
+  - no live/API verification
+  - no Watch row writes
+  - no Watch dispatch
+  - no task creation
+  - no Discovery ref mutation
+  - no Evidence/EVEidence writes
+  - no Hydration or metadata writes
+  - no schema changes
+  - no `watch.create` behavior change
+  - no topology traversal behavior change
+  - no Discovery ref identity change
+  - no durable `watch_result` / `watch_result_items`
+  - no relationship tags
+  - no renderer/UI behavior beyond existing read-only command registration
+  - no runtime enforcement or command blocking
+  - no support artifacts
+  - no fourth lane / fast lane
+- Verification run:
+  - `node --check src\main\services\systemRadiusAcceptancePayloadService.js` passed.
+  - `node --check scripts\verify-system-radius-acceptance-payload.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `node --check scripts\verify-enforcement-dry-run.js` passed.
+  - `npm.cmd run verify:system-radius-acceptance-payload` passed.
+  - `npm.cmd run verify:system-radius-authoring-preflight` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:watch-scope-authority-conformance` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 663 warnings across 11 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS307 working-tree changes.
+
+## HS307 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS307-system-radius-watch-authoring-acceptance-payload.md
+```
+
+Status: system/radius Watch authoring acceptance payload accepted by Overseer after HS308 revision.
+
+## HS307 Overseer Review
+
+Reviewed:
+
+```txt
+workspace/OverseerHS308-hs307-system-radius-acceptance-payload-review.md
+```
+
+Decision:
+
+HS307 was not accepted at first pass. HS308 revision returned for Overseer review.
+
+Blocking finding:
+
+The preview presents a future `watch.create` payload that includes accepted preflight `included_system_ids`, but current `watch.create` system/radius handling does not consume those IDs as stored-scope authority. Current `watch.create` still normalizes center/radius and `addSystemRadiusWatch` recomputes included systems from local topology.
+
+Required revision:
+
+- disclose that current `watch.create` does not yet consume accepted preflight `included_system_ids`;
+- keep the preview payload as a future/candidate mutation contract, not a directly executable current command payload;
+- expose compatibility posture such as:
+  - `current_watch_create_consumes_preflight_included_ids: false`
+  - `future_mutation_contract_required: true`
+  - `future_payload_directly_executable_now: false`
+- preserve read-only/local-only boundaries.
+
+## HS307 Acceptance
+
+Accepted:
+
+```txt
+workspace/OverseerHS309-hs307-system-radius-acceptance-payload-acceptance.md
+```
+
+Decision:
+
+HS307 is accepted after HS308 revision.
+
+Accepted result:
+
+- `watch.system_radius_acceptance_payload.preview` is a renderer-eligible, local-only, read-only acceptance payload preview.
+- It composes accepted HS304 preflight output into a candidate future `watch.create` mutation-contract payload.
+- Accepted `included_system_ids` are preserved as the future stored-scope authority.
+- Center system and radius remain provenance/explanation only.
+- The preview explicitly discloses the current `watch.create` gap:
+  - `current_watch_create_compatibility: requires_future_mutation_contract`
+  - `current_watch_create_consumes_preflight_included_ids: false`
+  - `future_mutation_contract_required: true`
+  - `future_payload_directly_executable_now: false`
+- Capped, unknown, invalid, missing topology, and forged/mismatched included-ID cases are not acceptable.
+- No Watch row writes, Watch dispatch, provider calls, tasks, schema changes, topology behavior changes, Discovery/Evidence/Hydration mutation, UI behavior, runtime enforcement, support artifacts, or fourth-lane work were opened.
+
+HS307 can rest.
+
+Future possible seam, not open now:
+
+```txt
+Actual watch.create mutation contract consuming accepted preflight included_system_ids as stored-scope authority.
+```
 
 Latest accepted advisory request:
 
