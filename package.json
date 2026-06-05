@@ -97,6 +97,7 @@
     "verify:hydration-write-fixture": "node scripts/verify-hydration-write-fixture.js",
     "verify:hydration-selected-id-execution-fixture": "node scripts/verify-hydration-selected-id-execution-fixture.js",
     "verify:hydration-selected-id-real-execution-preflight": "node scripts/verify-hydration-selected-id-real-execution-preflight.js",
+    "verify:selected-id-product-hydration-preflight": "node scripts/verify-selected-id-product-hydration-preflight.js",
     "verify:hydration-selected-id-real-execution": "node scripts/verify-hydration-selected-id-real-execution.js",
     "verify:external-io-state": "node scripts/verify-external-io-state.js",
     "verify:support-artifact-path-authority": "node scripts/verify-support-artifact-path-authority.js",

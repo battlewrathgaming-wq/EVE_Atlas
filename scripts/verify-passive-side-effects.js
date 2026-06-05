@@ -125,6 +125,12 @@ async function verifySeededDb(root) {
         operatorAct: true,
         sourceSurface: 'passive-sweep'
       }, context)],
+      ['metadata.selected_id_readability_repair.product_preflight', () => invokeServiceCommand('metadata.selected_id_readability_repair.product_preflight', {
+        idType: 'character',
+        idValue: 90000002,
+        operatorAct: true,
+        sourceSurface: 'passive-sweep'
+      }, context)],
       ['metadata.local_sde_readiness.preview', () => invokeServiceCommand('metadata.local_sde_readiness.preview', {}, context)],
       ['metadata.local_sde_source_posture.preview', () => invokeServiceCommand('metadata.local_sde_source_posture.preview', {}, context)],
       ['runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],
@@ -213,6 +219,12 @@ async function verifyEmptyDb(root) {
         sourceSurface: 'passive-sweep'
       }, context)],
       ['empty metadata.hydration_selected_id_real_execution_preflight.preview', () => invokeServiceCommand('metadata.hydration_selected_id_real_execution_preflight.preview', {
+        idType: 'character',
+        idValue: 90000002,
+        operatorAct: true,
+        sourceSurface: 'passive-sweep'
+      }, context)],
+      ['empty metadata.selected_id_readability_repair.product_preflight', () => invokeServiceCommand('metadata.selected_id_readability_repair.product_preflight', {
         idType: 'character',
         idValue: 90000002,
         operatorAct: true,

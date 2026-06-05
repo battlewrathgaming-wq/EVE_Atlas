@@ -51,6 +51,7 @@ const { buildHydrationSelectedIdExecutionFixtureProof } = require('./hydrationSe
 const { buildHydrationSelectedIdRealExecutionProof } = require('./hydrationSelectedIdRealExecutionProofService');
 const { buildHydrationSelectedIdRealExecutionPreflight } = require('./hydrationSelectedIdRealExecutionPreflightService');
 const { buildHydrationWriteFixtureProof } = require('./hydrationWriteFixtureProofService');
+const { buildSelectedIdReadabilityRepairProductPreflight } = require('./selectedIdReadabilityRepairProductPreflightService');
 const { buildLocalSdeReadinessPreview } = require('./localSdeReadinessPreviewService');
 const { buildLocalSdeSourcePosturePreview } = require('./localSdeSourcePostureService');
 const { buildSdeInventoryImportRewriteAuthorityProof } = require('./sdeInventoryImportRewriteAuthorityProofService');
@@ -262,6 +263,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview selected-ID real Hydration execution facts without provider calls, writes, Bucket persistence, dispatch, enforcement, or UI work',
     handler: ({ db, payload, ...context }) => buildHydrationSelectedIdRealExecutionPreflight(db, payload, context)
+  },
+  'metadata.selected_id_readability_repair.product_preflight': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview product selected-ID readability repair authority without provider calls, writes, execution, queues, or UI work',
+    handler: ({ db, payload, ...context }) => buildSelectedIdReadabilityRepairProductPreflight(db, payload, context)
   },
   'metadata.local_sde_readiness.preview': {
     classification: 'read-only',

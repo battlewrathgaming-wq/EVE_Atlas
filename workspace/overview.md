@@ -134,6 +134,8 @@ Current state:
 - HS278 advisory opened
 - HS278 accepted by HS279
 - HS280 opened
+- HS280 accepted by HS281
+- HS282 decision surface recorded
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -150,22 +152,22 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS280-selected-id-product-hydration-authority-preflight-runway.md`
-- expected Dev handoff is `workspace/DevHS280-selected-id-product-hydration-authority-preflight.md`
+- current executor is Overseer / Human decision
+- no active Dev runway is open
+- latest accepted Dev runway is `workspace/OverseerHS280-selected-id-product-hydration-authority-preflight-runway.md`
+- latest accepted Dev handoff is `workspace/DevHS280-selected-id-product-hydration-authority-preflight.md`
+- latest Overseer review is `workspace/OverseerHS281-hs280-selected-id-product-hydration-preflight-review.md`
+- current decision surface is `workspace/OverseerHS282-selected-id-product-hydration-execution-decision-surface.md`
 - latest accepted advisory request is `workspace/OverseerHS278-selected-id-product-hydration-transition-advisory-request.md`
 - latest accepted advisory artifact is `workspace/EngineeringSecurityHS278-selected-id-product-hydration-transition-advisory.md`
 - latest accepted advisory review is `workspace/OverseerHS279-hs278-selected-id-product-hydration-transition-review.md`
-- latest accepted Dev runway is `workspace/OverseerHS276-selected-id-real-hydration-execution-proof-runway.md`
-- latest accepted Dev handoff is `workspace/DevHS276-selected-id-real-hydration-execution-proof.md`
-- latest Overseer review is `workspace/OverseerHS277-hs276-selected-id-real-hydration-execution-proof-review.md`
 - latest accepted advisory request is `workspace/OverseerHS274-selected-id-real-hydration-execution-gate-advisory-request.md`
 - latest accepted advisory artifact is `workspace/EngineeringSecurityHS274-selected-id-real-hydration-execution-gate-advisory.md`
 - latest Overseer review is `workspace/OverseerHS275-hs274-selected-id-real-hydration-execution-gate-review.md`
 - latest accepted Dev runway is `workspace/OverseerHS272-selected-id-real-execution-preflight-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS272-selected-id-real-execution-preflight.md`
 - latest Overseer review is `workspace/OverseerHS273-hs272-selected-id-real-execution-preflight-review.md`
-- current decision surface is `workspace/OverseerHS270-hydration-real-execution-decision-surface.md`
+- previous decision surface is `workspace/OverseerHS270-hydration-real-execution-decision-surface.md`
 - latest provider-work advisory artifact is `workspace/DataEngineering-provider-work-structure-readiness-advisory.md`
 - latest provider-work advisory review is `workspace/OverseerHS271-provider-work-structure-readiness-review.md`
 - latest accepted advisory request is `workspace/OverseerHS266-selected-id-hydration-execution-readiness-advisory-request.md`
@@ -191,7 +193,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is read-only selected-ID product Hydration authority/preflight contract before provider contact or writes
+- current work is selected-ID product Hydration execution decision boundary after accepted read-only authority/preflight
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -220,19 +222,15 @@ Current heading:
 
 Active Dev packet:
 
-1. `workspace/OverseerHS280-selected-id-product-hydration-authority-preflight-runway.md`
-2. Expected handoff: `workspace/DevHS280-selected-id-product-hydration-authority-preflight.md`
-3. Preferred command: `metadata.selected_id_readability_repair.product_preflight`
-4. Scope: read-only product authority/preflight contract only.
-5. No providers, Hydration writes, corpus mutation, product execution, Bucket/Dispatcher, schema, enforcement, support artifacts, UI, or fourth-lane work.
+No active Dev packet is open.
 
 Latest accepted packet:
 
-1. `workspace/OverseerHS276-selected-id-real-hydration-execution-proof-runway.md`
-2. `workspace/DevHS276-selected-id-real-hydration-execution-proof.md`
-3. `workspace/OverseerHS277-hs276-selected-id-real-hydration-execution-proof-review.md`
-4. Accepted command: `metadata.hydration_selected_id_real_execution_proof`
-5. Live proof resolved `character:92418041` as `Reuben Orlenard` through one ESI `/universe/names` lookup in a controlled temp store.
+1. `workspace/OverseerHS280-selected-id-product-hydration-authority-preflight-runway.md`
+2. `workspace/DevHS280-selected-id-product-hydration-authority-preflight.md`
+3. `workspace/OverseerHS281-hs280-selected-id-product-hydration-preflight-review.md`
+4. Accepted command: `metadata.selected_id_readability_repair.product_preflight`
+5. Scope: read-only product authority/preflight contract only.
 6. Product live Hydration remains unopened.
 
 Active advisory request:
@@ -246,6 +244,18 @@ Latest accepted transition advisory:
 3. `workspace/OverseerHS279-hs278-selected-id-product-hydration-transition-review.md`
 4. Accepted result: selected-ID Hydration must not move directly from HS276 proof/test machinery into product behavior.
 5. Next safe packet: read-only selected-ID product Hydration authority/preflight contract.
+
+Current decision point:
+
+1. Rest selected-ID Hydration productization at accepted preflight.
+2. Ask for an additional Engineering/Security advisory before execution.
+3. If explicitly accepted, open a narrow trusted non-renderer product execution packet for `metadata.selected_id_readability_repair.execute`.
+
+Current decision surface:
+
+```txt
+workspace/OverseerHS282-selected-id-product-hydration-execution-decision-surface.md
+```
 
 Latest accepted advisory:
 

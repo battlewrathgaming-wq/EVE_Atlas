@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS280 selected-ID product Hydration authority preflight runway open
+Status: HS280 selected-ID product Hydration authority preflight accepted; product execution decision point
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: read-only selected-ID product Hydration authority/preflight contract before any product provider contact or writes.
+Current focus: selected-ID product Hydration authority/preflight accepted; product provider contact and writes remain unopened pending explicit Human/Overseer decision.
 
 Current heading:
 
@@ -21,40 +21,52 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS280-selected-id-product-hydration-authority-preflight-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS280-selected-id-product-hydration-authority-preflight.md
+none
 ```
 
-Do not implement product selected-ID Hydration execution. Do not call providers. Do not write Hydration rows. Do not treat HS276 proof/test scaffolding as product authority.
+No Dev task is open. Do not implement product selected-ID Hydration execution. Do not call providers. Do not write Hydration rows. Do not treat HS276 proof/test scaffolding as product authority.
+
+Current decision surface:
+
+```txt
+workspace/OverseerHS282-selected-id-product-hydration-execution-decision-surface.md
+```
+
+HS280 Dev handoff:
+
+```txt
+workspace/DevHS280-selected-id-product-hydration-authority-preflight.md
+```
 
 ## Recent Accepted State
 
 Latest accepted Dev runway:
 
 ```txt
-workspace/OverseerHS276-selected-id-real-hydration-execution-proof-runway.md
+workspace/OverseerHS280-selected-id-product-hydration-authority-preflight-runway.md
 ```
 
 Latest accepted Dev handoff:
 
 ```txt
-workspace/DevHS276-selected-id-real-hydration-execution-proof.md
+workspace/DevHS280-selected-id-product-hydration-authority-preflight.md
 ```
 
 Latest Overseer review:
 
 ```txt
-workspace/OverseerHS277-hs276-selected-id-real-hydration-execution-proof-review.md
+workspace/OverseerHS281-hs280-selected-id-product-hydration-preflight-review.md
 ```
 
 Status: accepted.
@@ -85,9 +97,17 @@ ready for read-only product authority/preflight contract only
 
 Do not open renderer-triggered Hydration, full product live Hydration, broad live testing, Bucket/Dispatcher, background Hydration, schema, runtime enforcement, support artifacts, UI, or fourth-lane work.
 
-## HS280 Active Dev Runway
+## HS280 Accepted State
 
-Opened 2026-06-05:
+Overseer reviewed 2026-06-05:
+
+- Accepted HS280 in `workspace/OverseerHS281-hs280-selected-id-product-hydration-preflight-review.md`.
+- Accepted `metadata.selected_id_readability_repair.product_preflight` as a renderer-eligible, read-only selected-ID product readability repair authority preflight.
+- Confirmed no provider calls, no Hydration writes, no corpus mutation, no product execution, no Bucket/Dispatcher, no schema, no runtime enforcement, no support artifact, no UI, and no fourth-lane work.
+- Confirmed HS276 proof/test scaffolding remains non-authority.
+- Product live selected-ID Hydration execution remains unopened.
+
+Runway:
 
 ```txt
 workspace/OverseerHS280-selected-id-product-hydration-authority-preflight-runway.md
@@ -131,6 +151,23 @@ Stop if:
 - Hydration blurs into Evidence Expansion
 - HS276 proof scaffolding starts acting as product authority
 
+## Current Decision Point
+
+Atlas is now at a product execution boundary.
+
+Safe options:
+
+1. Rest selected-ID Hydration productization at accepted preflight.
+2. Ask for an additional Engineering/Security advisory before execution.
+3. If explicitly accepted, open a narrow trusted non-renderer product execution packet for:
+
+```txt
+metadata.selected_id_readability_repair.execute
+selected_id_readability_repair
+```
+
+Do not open renderer-triggered execution, UI confirmation behavior, background/report-wide Hydration, Bucket/Dispatcher, schema, runtime enforcement, support artifacts, or fourth-lane work.
+
 ## HS278 Accepted State
 
 Overseer reviewed 2026-06-05:
@@ -147,6 +184,93 @@ Accepted product command/run-type candidates:
 metadata.selected_id_readability_repair.execute
 selected_id_readability_repair
 ```
+
+## HS280 Evidence
+
+Dev updated 2026-06-05:
+
+- Added `metadata.selected_id_readability_repair.product_preflight` as a renderer-eligible, read-only selected-ID product readability repair authority/preflight command.
+- Added `src/main/services/selectedIdReadabilityRepairProductPreflightService.js`.
+- Added `scripts/verify-selected-id-product-hydration-preflight.js` and `npm.cmd run verify:selected-id-product-hydration-preflight`.
+- Registered service command and enforcement dry-run coverage as `hydration_readability_repair` / `selected_id_product_readability_repair_preflight_readout` / `covered_read_only`.
+- Updated service registry, command authority, enforcement dry-run, and passive side-effect verification for the new read-only command.
+- Product preflight composes:
+  - normalized selected ID type/value
+  - supported product provider-backed ID types: `character`, `corporation`, `alliance`
+  - local/static lookup posture for `inventory_type` and `solar_system`
+  - strong local basis from Evidence/EVEidence-derived `activity_events` appearance
+  - strong local basis from existing local `entities` rows missing labels
+  - parked/conditional basis for Watch-only, Assessment-only, and Discovery-only appearances
+  - local label short-circuit
+  - External I/O readback
+  - live/provider gate posture without provider-attempt recording
+  - storage/write posture from trusted storage setup gate state
+  - command authority and confirmation requirements for future execution
+  - future command/run-type candidates: `metadata.selected_id_readability_repair.execute` / `selected_id_readability_repair`
+  - expected allowed writes and forbidden mutations for later execution
+  - explicit `Bucket`/`Dispatcher` not required posture
+- Focused verifier covered:
+  - character with Evidence/EVEidence-derived activity basis and no label
+  - corporation and alliance supported shapes
+  - fixed HS276 ID `character:92418041` is not special product authority
+  - HS276 proof flags are disclosed and ignored as non-authority
+  - renderer-forged local label, local basis, storage, External I/O, live gate, confirmation, and command-authority claims are ignored
+  - missing local basis rejected
+  - Discovery-only, Watch-only, and Assessment-only basis classified as conditional/parked, not first product authority
+  - existing local label short-circuits
+  - local SDE/static ID does not use ESI names Hydration
+  - External I/O held is held, not failure
+  - live gate blocked does not record provider attempts
+  - storage write blocked stops before provider contact
+  - unsupported/malformed ID rejected
+  - no providers and no table writes occur
+- Sample ready output:
+  - `product_preflight_state`: `provider_needed_product_preflight_ready`
+  - `selected_id`: `character:90000011`
+  - `strong_basis`: `activity_events`
+  - `provider_calls`: `0`
+  - `writes_authorized_now`: `false`
+  - `next_safe_action`: `future_execution_command_must_revalidate_before_provider_contact`
+- Sample parked-only output:
+  - `product_preflight_state`: `conditional_basis_only`
+  - `parked_basis`: `discovered_killmail_refs`, `watchlist_entities`, or `assessment_artifacts`
+  - `next_safe_action`: `require_evidence_activity_or_unlabeled_entity_basis_before_provider_hydration`
+- Boundaries confirmed:
+  - no zKillboard or ESI calls
+  - no Hydration writes
+  - no `metadata_runs`, `api_request_logs`, entity writes, or `activity_events` patches
+  - no Evidence/EVEidence writes
+  - no Discovery ref, Watch, Marked, or Assessment Memory mutation
+  - no storage config or External I/O config writes
+  - no product execution
+  - no Bucket, Dispatcher, worker, lease, retry, persisted queue, schema, runtime enforcement, command blocking, support artifact, or UI behavior
+  - no fourth lane / fast lane
+  - HS276 proof/test scaffolding remains non-authority
+- Verification run:
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\selectedIdReadabilityRepairProductPreflightService.js` passed.
+  - `node --check scripts\verify-selected-id-product-hydration-preflight.js` passed.
+  - `npm.cmd run verify:selected-id-product-hydration-preflight` passed.
+  - `npm.cmd run verify:hydration-selected-id-real-execution-preflight` passed.
+  - `npm.cmd run verify:hydration-pickup-contract` passed.
+  - `npm.cmd run verify:hydration-request-posture` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 271 warnings across 8 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main` with HS280 working-tree changes.
+
+## HS280 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS280-selected-id-product-hydration-authority-preflight.md
+```
+
+Status: selected-ID product Hydration authority/preflight contract complete and ready for Overseer review.
 
 ## HS276 Accepted State
 
