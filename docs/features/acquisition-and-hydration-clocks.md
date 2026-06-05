@@ -16,6 +16,17 @@ Acquisition Clock = builds the local evidence corpus.
 Hydration Recovery Clock = makes local facts readable.
 ```
 
+Lane simplification accepted 2026-06-05:
+
+```text
+Discovery outputs possible leads.
+Evidence Expansion outputs Evidence / EVEidence.
+Hydration outputs readability repair.
+Fourth lane stays parked.
+```
+
+This replaces the earlier exploratory fast/background hydration split as active direction. A separate fast lane is parked as over-engineering for current Atlas scope unless a later bounded need proves it.
+
 ## Trust Ladder
 
 Header correction accepted 2026-06-04:

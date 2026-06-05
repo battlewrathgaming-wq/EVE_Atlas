@@ -169,6 +169,7 @@ Current state:
 - Hydration request posture proof implemented: `metadata.hydration_request_posture.preview`
 - Hydration pickup shaping accepted: selected-ID pickup is non-durable candidate acceptance for a future execution command, not queue persistence, dispatcher behavior, provider execution, or write behavior
 - Hydration pickup contract proof implemented: `metadata.hydration_pickup_contract.preview`
+- Lane simplification accepted: Discovery outputs possible leads; Evidence Expansion outputs Evidence/EVEidence; Hydration outputs readability repair; fourth lane stays parked
 
 Current heading:
 
@@ -180,6 +181,7 @@ Current heading:
 - runtime efficiency is optimization, not constraint; do not skip needed proof, specialist review, or model shaping to save credits
 - Observation can form from raw local IDs before labels are complete; Hydration is expected selective readability repair, not a prerequisite or global completion demand
 - Hydration selection seam north star: local readability may happen during report construction, but provider-backed readability requires an explicit operator trigger and still passes normal gates
+- Do not reopen a separate fast lane unless a later bounded product/mechanical need proves it
 
 Resting state:
 

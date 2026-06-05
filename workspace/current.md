@@ -17,6 +17,7 @@ Current heading:
 - data-layer boundaries guide the seam before machinery
 - raw IDs remain truthful facts; readable labels are applied attention
 - local SDE lookup readiness is local readability/geometry support, not provider-backed Hydration
+- active lane model: Discovery outputs possible leads; Evidence Expansion outputs Evidence/EVEidence; Hydration outputs readability repair; fourth lane stays parked
 
 ## Executor
 
