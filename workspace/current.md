@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS296 Watch scope authority execution correction accepted; no active Dev runway
+Status: HS298 system/radius Discovery ref identity advisory open; no active Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after Watch scope authority execution correction.
+Current focus: pressure-test system/radius Discovery ref identity before durable Watch/task result semantics.
 
 Current heading:
 
@@ -37,7 +37,19 @@ Expected Dev handoff:
 none
 ```
 
-HS296 is accepted and can rest. Do not open provider movement, live testing, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
+HS296 is accepted and can rest. HS298 is advisory/source-trace only. Do not open provider movement, live testing, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
+
+Active advisory request:
+
+```txt
+workspace/OverseerHS298-system-radius-discovery-ref-identity-advisory-request.md
+```
+
+Expected advisory artifact:
+
+```txt
+workspace/EngineeringDataHS298-system-radius-discovery-ref-identity-advisory.md
+```
 
 Latest accepted advisory request:
 
@@ -772,6 +784,42 @@ Accepted state:
 Watch scope authority can rest.
 
 Do not open Discovery ref identity redesign, durable Watch result semantics, relationship tags, provider movement, live testing, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
+
+## HS298 Active Advisory Request
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS298-system-radius-discovery-ref-identity-advisory-request.md
+```
+
+Expected artifact:
+
+```txt
+workspace/EngineeringDataHS298-system-radius-discovery-ref-identity-advisory.md
+```
+
+Purpose:
+
+Pressure-test current system/radius Discovery ref identity before Atlas builds durable Watch/task result semantics.
+
+Question:
+
+```txt
+Is center-only system/radius Discovery ref identity sufficient for the next safe Atlas phase?
+```
+
+Scope:
+
+- source trace only
+- no code implementation
+- no provider calls
+- no Watch dispatch/task creation
+- no Discovery/Evidence/Watch/Assessment mutation
+- no schema
+- no durable `watch_result` / `watch_result_items`
+- no relationship tags
+- no UI, enforcement, support artifacts, or fourth-lane work
 
 Latest accepted advisory request:
 

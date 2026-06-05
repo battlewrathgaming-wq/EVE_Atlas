@@ -151,6 +151,7 @@ Current state:
 - HS294 accepted by HS295
 - HS296 opened
 - HS296 accepted by HS297
+- HS298 advisory opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -170,6 +171,8 @@ Current state:
 - current executor is Overseer / Human decision
 - active Dev runway is none
 - expected Dev handoff is none
+- active advisory request is `workspace/OverseerHS298-system-radius-discovery-ref-identity-advisory-request.md`
+- expected advisory artifact is `workspace/EngineeringDataHS298-system-radius-discovery-ref-identity-advisory.md`
 - latest accepted advisory request is `workspace/OverseerHS290-watch-task-outcome-map-assurance-scope-request.md`
 - latest accepted advisory artifact is `workspace/EngineeringDataHS290-watch-task-outcome-map-assurance-scope.md`
 - latest Overseer advisory review is `workspace/OverseerHS291-hs290-watch-task-outcome-map-assurance-review.md`
@@ -223,7 +226,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is resting after Watch scope authority execution correction
+- current work is system/radius Discovery ref identity advisory/source trace
 - recommended next rich surface is selected unresolved local ID -> Resolve candidate -> future report readability reuse
 - parked separate lane is Task origin and durable outcome map for Manual Search and Watch
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
@@ -272,7 +275,10 @@ Latest accepted packet:
 
 Active advisory request:
 
-No active advisory request is open.
+1. `workspace/OverseerHS298-system-radius-discovery-ref-identity-advisory-request.md`
+2. Expected artifact: `workspace/EngineeringDataHS298-system-radius-discovery-ref-identity-advisory.md`
+3. Scope: source trace current system/radius Discovery ref identity and decide whether center-only identity is sufficient for the next safe Atlas phase.
+4. No implementation, provider calls, Watch dispatch/task creation, mutations, schema, durable Watch results, relationship tags, UI, enforcement, support artifacts, or fourth-lane work.
 
 Latest accepted Watch/task advisory:
 
