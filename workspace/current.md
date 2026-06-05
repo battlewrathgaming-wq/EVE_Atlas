@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS320 system Watch post-create readout accepted; no active Dev runway
+Status: HS322 system Watch readout/readiness bridge open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after read-only post-create setup readout for accepted System / Radius Watches.
+Current focus: read-only bridge between accepted System / Radius Watch setup readout and authored execution readiness.
 
 Current heading:
 
@@ -24,21 +24,63 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS322-system-watch-readout-readiness-bridge-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS322-system-watch-readout-readiness-bridge.md
 ```
 
-HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, HS318, and HS320 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, HS318, and HS320 are accepted and can rest. HS322 is open to prove a read-only/local-only bridge between System / Radius Watch setup readout and authored execution readiness. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+
+## HS322 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS322-system-watch-readout-readiness-bridge-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS322-system-watch-readout-readiness-bridge.md
+```
+
+Task:
+
+Add a read-only/local-only bridge preview that compares:
+
+```txt
+watch.system_radius_setup_readout.preview
+watch.authored_execution_readiness.preview
+```
+
+Preferred command:
+
+```txt
+watch.system_radius_readout_readiness_bridge.preview
+```
+
+Core rule:
+
+```txt
+stored included_system_ids = shared authority
+setup readout = what Atlas accepted/stored
+execution readiness = whether the stored scope is usable as future execution input
+bridge = conformance proof only
+```
+
+Boundary:
+
+This packet is read-only/local-only. Do not execute a Watch, arm/disarm Watch runtime, create Watch executor tasks, call providers, perform live/API calls, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, change `watch.create`, change topology traversal behavior, infer execution authority from center/radius, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
 
 ## HS320 Active Dev Runway
 
