@@ -53,6 +53,7 @@ async function main() {
     const localSdeSourcePostureCommand = commands.find((entry) => entry.command === 'metadata.local_sde_source_posture.preview');
     const hydrationWriteFixtureCommand = commands.find((entry) => entry.command === 'metadata.hydration_write_fixture_proof');
     const hydrationSelectedIdFixtureCommand = commands.find((entry) => entry.command === 'metadata.hydration_selected_id_execution_fixture_proof');
+    const hydrationSelectedIdRealExecutionCommand = commands.find((entry) => entry.command === 'metadata.hydration_selected_id_real_execution_proof');
     const sdeTopologyAuthorityProofCommand = commands.find((entry) => entry.command === 'sde.topology_import_rewrite_authority.proof');
     const sdeInventoryAuthorityProofCommand = commands.find((entry) => entry.command === 'sde.inventory_import_rewrite_authority.proof');
     const sdeBuildLookupsCommand = commands.find((entry) => entry.command === 'sde.build-lookups');
@@ -164,6 +165,10 @@ async function main() {
     assert(hydrationSelectedIdFixtureCommand?.classification === 'metadata-only', 'metadata.hydration_selected_id_execution_fixture_proof should be metadata-only');
     assert(hydrationSelectedIdFixtureCommand?.effects.includes('metadata-readability'), 'metadata.hydration_selected_id_execution_fixture_proof should declare metadata readability');
     assert(hydrationSelectedIdFixtureCommand?.renderer_allowed === false, 'metadata.hydration_selected_id_execution_fixture_proof should not be renderer eligible');
+    assert(hydrationSelectedIdRealExecutionCommand?.classification === 'metadata-only', 'metadata.hydration_selected_id_real_execution_proof should be metadata-only');
+    assert(hydrationSelectedIdRealExecutionCommand?.effects.includes('external-live-api'), 'metadata.hydration_selected_id_real_execution_proof should declare external live API');
+    assert(hydrationSelectedIdRealExecutionCommand?.effects.includes('metadata-readability'), 'metadata.hydration_selected_id_real_execution_proof should declare metadata readability');
+    assert(hydrationSelectedIdRealExecutionCommand?.renderer_allowed === false, 'metadata.hydration_selected_id_real_execution_proof should not be renderer eligible');
     assert(sdeTopologyAuthorityProofCommand?.classification === 'metadata-only', 'sde topology authority proof should be metadata-only');
     assert(sdeTopologyAuthorityProofCommand?.effects.includes('local-data-mutation'), 'sde topology authority proof should declare fixture local mutation');
     assert(sdeTopologyAuthorityProofCommand?.renderer_allowed === false, 'sde topology authority proof should not be renderer eligible');

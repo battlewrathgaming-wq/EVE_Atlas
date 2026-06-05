@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS276 selected-ID real Hydration execution proof runway open
+Status: HS276 selected-ID real Hydration execution proof accepted by HS277; resting
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: trusted, non-renderer, one-ID real selected-ID Hydration execution proof using a controlled temp store and Human-provided character ID `92418041`.
+Current focus: resting after trusted, non-renderer, one-ID real selected-ID Hydration execution proof. Product live Hydration remains unopened.
 
 Current heading:
 
@@ -21,40 +21,40 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: none
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS276-selected-id-real-hydration-execution-proof-runway.md
+none
 ```
 
 Expected handoff:
 
 ```txt
-workspace/DevHS276-selected-id-real-hydration-execution-proof.md
+none
 ```
 
-Human/Overseer accepted crossing the provider-contact boundary for this proof only. Keep it trusted, non-renderer, one selected ID, controlled temp store only. Do not open renderer-triggered Hydration, broad live testing, Bucket/Dispatcher, background Hydration, schema, runtime enforcement, support artifacts, UI, or fourth-lane work.
+No Dev task is open. HS276 crossed the provider-contact boundary for one controlled proof only. Do not open renderer-triggered Hydration, broad live testing, Bucket/Dispatcher, background Hydration, schema, runtime enforcement, support artifacts, UI, or fourth-lane work without a new explicit runway.
 
 ## Recent Accepted State
 
 Latest accepted Dev runway:
 
 ```txt
-workspace/OverseerHS272-selected-id-real-execution-preflight-runway.md
+workspace/OverseerHS276-selected-id-real-hydration-execution-proof-runway.md
 ```
 
 Latest accepted Dev handoff:
 
 ```txt
-workspace/DevHS272-selected-id-real-execution-preflight.md
+workspace/DevHS276-selected-id-real-hydration-execution-proof.md
 ```
 
 Latest Overseer review:
 
 ```txt
-workspace/OverseerHS275-hs274-selected-id-real-hydration-execution-gate-review.md
+workspace/OverseerHS277-hs276-selected-id-real-hydration-execution-proof-review.md
 ```
 
 Status: accepted.
@@ -85,9 +85,26 @@ Do we accept crossing the provider-contact boundary for a trusted, non-renderer,
 
 Do not open renderer-triggered Hydration, full product live Hydration, broad live testing, Bucket/Dispatcher, background Hydration, schema, runtime enforcement, support artifacts, UI, or fourth-lane work.
 
-## HS276 Active Dev Runway
+## HS276 Accepted State
 
-Opened 2026-06-05:
+Overseer reviewed 2026-06-05:
+
+- Accepted HS276 in `workspace/OverseerHS277-hs276-selected-id-real-hydration-execution-proof-review.md`.
+- Accepted `metadata.hydration_selected_id_real_execution_proof` as a trusted, non-renderer, controlled-temp-store proof command.
+- Confirmed one live ESI `/universe/names` lookup for `[92418041]`.
+- Confirmed ESI returned `character:92418041` / `Reuben Orlenard`.
+- Confirmed successful proof writes only controlled temp-store Hydration/readability rows:
+  - one `metadata_runs` row
+  - one sanitized `api_request_logs` row
+  - one selected `entities` row
+  - matching `activity_events` readability label columns only
+- Confirmed real operator corpus was not mutated.
+- Confirmed no zKillboard, Discovery, Evidence Expansion, Bucket/Dispatcher, schema, enforcement, support artifact, UI, or fourth-lane work.
+- Product live Hydration remains unopened.
+
+## HS276 Evidence
+
+Opened 2026-06-05 and accepted by HS277:
 
 ```txt
 workspace/OverseerHS276-selected-id-real-hydration-execution-proof-runway.md
@@ -99,7 +116,7 @@ Expected handoff:
 workspace/DevHS276-selected-id-real-hydration-execution-proof.md
 ```
 
-Task:
+Accepted task:
 
 Implement the smallest trusted, non-renderer, one-ID real provider-backed selected-ID Hydration execution proof.
 
@@ -189,6 +206,119 @@ Stop if:
 - provider-backed execution is implemented
 - write behavior touches anything beyond Hydration/readability proof rows
 - queues, dispatcher, worker, leases, retries, schema, UI, or fourth-lane design become necessary before the fixture proof can stay bounded
+
+## HS276 Evidence
+
+Dev updated 2026-06-05:
+
+- Added `metadata.hydration_selected_id_real_execution_proof` as a trusted, non-renderer, one-ID selected-ID real Hydration execution proof command.
+- Added `src/main/services/hydrationSelectedIdRealExecutionProofService.js`.
+- Added `scripts/verify-hydration-selected-id-real-execution.js` and `npm.cmd run verify:hydration-selected-id-real-execution`.
+- Registered service command and enforcement dry-run coverage as `hydration_readability_repair` / `trusted_selected_id_real_hydration_execution_proof` / `trusted_controlled_proof_only`.
+- Command shape:
+  - non-renderer eligible
+  - requires trusted context: `allowHydrationSelectedIdRealExecutionProof=true`
+  - requires controlled temp/test store context: `controlledTempAtlasStore=true`
+  - supports only the HS276 target for this first proof: `character:92418041`
+  - rebuilds local-first request posture from trusted local state
+  - rebuilds non-durable pickup contract
+  - short-circuits before provider contact when a local label exists
+  - requires External I/O released, live/provider gate allowed, and storage write posture safe before provider contact
+  - uses `enterLiveProviderAttempt('metadata.hydration', ...)` for accepted-attempt/cadence recording
+  - calls ESI `/universe/names` for exactly one ID
+  - validates provider response ID/category/label safety before writing
+  - writes Hydration/readability repair rows only in the controlled temp store
+- Controlled temp store setup:
+  - verifier creates per-case DBs under `.tmp/hydration-selected-id-real-execution/<case>/atlas.sqlite`
+  - local basis is intentionally seeded in `activity_events` for `character:92418041`
+  - no real operator corpus DB is mutated
+- Focused verifier default mode uses counted fetch doubles and covered:
+  - successful provider response
+  - local label short-circuit before provider contact
+  - External I/O held
+  - storage write blocked
+  - live/provider gate blocked
+  - provider selected ID missing
+  - provider category mismatch
+  - empty/unsafe provider label
+  - provider error
+  - untrusted context rejected before provider/write
+  - renderer invocation rejected by service registry
+- Default success sample:
+  - provider calls: 1
+  - endpoint: `https://esi.evetech.net/latest/universe/names/?datasource=tranquility`
+  - method: `POST`
+  - body: `[92418041]`
+  - provider validation: `provider_response_valid`
+  - metadata run status: `success`
+  - metadata run writes: 1
+  - API request log writes: 1
+  - entity upserts: 1
+  - activity event label patches: 2
+- Opt-in live proof run:
+  - command: `$env:AURA_ATLAS_HS276_LIVE='1'; npm.cmd run verify:hydration-selected-id-real-execution`
+  - live success provider calls: 1
+  - live endpoint: `https://esi.evetech.net/latest/universe/names/?datasource=tranquility`
+  - live method: `POST`
+  - live body: `[92418041]`
+  - returned/persisted label: `Reuben Orlenard`
+  - persisted entity row: `character:92418041 -> Reuben Orlenard`
+  - patched labels: `entity_name` and `character_name` on event `276:attacker:92418041`
+  - metadata run: `selected_id_real_hydration_execution_proof`, `status=success`, `requested_from_esi=1`, `resolved=1`, `entities_upserted=1`, `activity_events_patched=2`, `api_calls_esi=1`
+  - API log: provider `esi`, method `POST`, status `200`, endpoint persisted as `https://esi.evetech.net/latest/universe/names/?datasource=[redacted]`
+- Invariants proved:
+  - raw killmail payloads unchanged
+  - numeric `activity_events` IDs/facts unchanged
+  - Discovery refs unchanged
+  - `fetch_runs` unchanged
+  - `ingestion_audits` unchanged
+  - `data_quality_warnings` unchanged
+  - Watch rows unchanged
+  - Assessment Memory rows unchanged
+  - only allowed tables changed in success/provider-attempt cases
+- Boundaries confirmed:
+  - no zKillboard calls
+  - no Discovery
+  - no Evidence Expansion
+  - no real operator corpus mutation
+  - no pickup/request persistence
+  - no Bucket persistence
+  - no Dispatcher, worker, lease, retry, queue, or background Hydration machinery
+  - no schema changes
+  - no `killmails` mutation
+  - no raw ESI killmail payload mutation
+  - no numeric activity fact mutation
+  - no Watch, Marked, or Assessment Memory mutation
+  - no storage config or External I/O config writes
+  - no support artifacts
+  - no runtime enforcement or command blocking activation
+  - no renderer UI work
+  - fourth lane stays parked
+- Verification run:
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\hydrationSelectedIdRealExecutionProofService.js` passed.
+  - `node --check scripts\verify-hydration-selected-id-real-execution.js` passed.
+  - `npm.cmd run verify:hydration-selected-id-real-execution` passed.
+  - `$env:AURA_ATLAS_HS276_LIVE='1'; npm.cmd run verify:hydration-selected-id-real-execution` passed with the accepted one-ID live proof.
+  - `npm.cmd run verify:hydration-selected-id-real-execution-preflight` passed.
+  - `npm.cmd run verify:hydration-selected-id-execution-fixture` passed.
+  - `npm.cmd run verify:hydration-pickup-contract` passed.
+  - `npm.cmd run verify:hydration-request-posture` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 250 warnings across 7 changed working-set files before workspace handoff updates; no renames or protected-word JSON updates performed.
+
+## HS276 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS276-selected-id-real-hydration-execution-proof.md
+```
+
+Status: selected-ID real Hydration execution proof complete and ready for Overseer review.
 
 ## HS272 Accepted State
 

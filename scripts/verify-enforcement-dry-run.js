@@ -202,6 +202,10 @@ function verifyCoverageMetadata(map) {
   assert(command(map, 'metadata.hydration_selected_id_execution_fixture_proof').runtime_context === 'fixture_selected_id_hydration_execution_proof', 'selected-ID Hydration execution fixture proof should be classified as fixture proof');
   assert(command(map, 'metadata.hydration_selected_id_execution_fixture_proof').external_io_dependency === 'none', 'selected-ID Hydration execution fixture proof should not declare provider dependency');
   assert(command(map, 'metadata.hydration_selected_id_execution_fixture_proof').enforcement_status === 'fixture_only_non_production', 'selected-ID Hydration execution fixture proof should be fixture-only');
+  assert(command(map, 'metadata.hydration_selected_id_real_execution_proof').runtime_context === 'trusted_selected_id_real_hydration_execution_proof', 'selected-ID real Hydration execution proof should be classified as trusted proof');
+  assert(command(map, 'metadata.hydration_selected_id_real_execution_proof').storage_action_class === 'hydration_readability_repair', 'selected-ID real Hydration execution proof should map to Hydration readability repair');
+  assert(command(map, 'metadata.hydration_selected_id_real_execution_proof').external_io_dependency === 'esi_provider_required', 'selected-ID real Hydration execution proof should declare ESI provider dependency');
+  assert(command(map, 'metadata.hydration_selected_id_real_execution_proof').enforcement_status === 'trusted_controlled_proof_only', 'selected-ID real Hydration execution proof should be trusted controlled proof only');
   assert(command(map, 'external_io.state_readout').runtime_context === 'external_io_state_readout', 'External I/O state readout should be classified as a readout');
   assert(command(map, 'external_io.state_readout').external_io_dependency === 'none', 'External I/O state readout should not declare provider dependency');
   assert(command(map, 'external_io.state_config_readback').runtime_context === 'external_io_config_readback', 'External I/O config readback should be classified as readback');

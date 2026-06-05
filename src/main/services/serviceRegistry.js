@@ -48,6 +48,7 @@ const { buildHydrationExecutionPolicyPreview } = require('./hydrationExecutionPo
 const { buildHydrationPickupContractPreview } = require('./hydrationPickupContractService');
 const { buildHydrationRequestPosturePreview } = require('./hydrationRequestPostureService');
 const { buildHydrationSelectedIdExecutionFixtureProof } = require('./hydrationSelectedIdExecutionFixtureProofService');
+const { buildHydrationSelectedIdRealExecutionProof } = require('./hydrationSelectedIdRealExecutionProofService');
 const { buildHydrationSelectedIdRealExecutionPreflight } = require('./hydrationSelectedIdRealExecutionPreflightService');
 const { buildHydrationWriteFixtureProof } = require('./hydrationWriteFixtureProofService');
 const { buildLocalSdeReadinessPreview } = require('./localSdeReadinessPreviewService');
@@ -292,6 +293,14 @@ const COMMANDS = {
     renderer: false,
     description: 'Fixture-only selected-ID Hydration execution/write proof using injected provider results without live providers, queues, dispatch, enforcement, or UI work',
     handler: ({ db, payload, ...context }) => buildHydrationSelectedIdExecutionFixtureProof(db, payload, context)
+  },
+  'metadata.hydration_selected_id_real_execution_proof': {
+    classification: 'metadata-only',
+    effects: [EFFECTS.EXTERNAL_LIVE_API, EFFECTS.LOCAL_DATA_MUTATION, EFFECTS.METADATA_READABILITY],
+    renderer: false,
+    authority: confirmationAuthority(CONFIRMATION.METADATA_HYDRATION, 'Trusted selected-ID real Hydration proof calls ESI names once and writes readability repair rows in a controlled temp store only.'),
+    description: 'Trusted non-renderer one-ID real selected-ID Hydration proof using controlled temp storage only',
+    handler: ({ db, payload, ...context }) => buildHydrationSelectedIdRealExecutionProof(db, payload, context)
   },
   'sde.topology_import_rewrite_authority.proof': {
     classification: 'metadata-only',
