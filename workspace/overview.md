@@ -132,6 +132,8 @@ Current state:
 - HS276 opened
 - HS276 accepted by HS277
 - HS278 advisory opened
+- HS278 accepted by HS279
+- HS280 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -148,10 +150,12 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Engineering / Security / Data Engineering / Product Architecture advisory
-- no active Dev runway is open
-- active advisory request is `workspace/OverseerHS278-selected-id-product-hydration-transition-advisory-request.md`
-- expected advisory artifact is `workspace/EngineeringSecurityHS278-selected-id-product-hydration-transition-advisory.md`
+- current executor is Dev
+- active Dev runway is `workspace/OverseerHS280-selected-id-product-hydration-authority-preflight-runway.md`
+- expected Dev handoff is `workspace/DevHS280-selected-id-product-hydration-authority-preflight.md`
+- latest accepted advisory request is `workspace/OverseerHS278-selected-id-product-hydration-transition-advisory-request.md`
+- latest accepted advisory artifact is `workspace/EngineeringSecurityHS278-selected-id-product-hydration-transition-advisory.md`
+- latest accepted advisory review is `workspace/OverseerHS279-hs278-selected-id-product-hydration-transition-review.md`
 - latest accepted Dev runway is `workspace/OverseerHS276-selected-id-real-hydration-execution-proof-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS276-selected-id-real-hydration-execution-proof.md`
 - latest Overseer review is `workspace/OverseerHS277-hs276-selected-id-real-hydration-execution-proof-review.md`
@@ -187,7 +191,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is advisory transition mapping before selected-ID Hydration proof machinery can become product behavior
+- current work is read-only selected-ID product Hydration authority/preflight contract before provider contact or writes
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -216,7 +220,11 @@ Current heading:
 
 Active Dev packet:
 
-No active Dev packet is open.
+1. `workspace/OverseerHS280-selected-id-product-hydration-authority-preflight-runway.md`
+2. Expected handoff: `workspace/DevHS280-selected-id-product-hydration-authority-preflight.md`
+3. Preferred command: `metadata.selected_id_readability_repair.product_preflight`
+4. Scope: read-only product authority/preflight contract only.
+5. No providers, Hydration writes, corpus mutation, product execution, Bucket/Dispatcher, schema, enforcement, support artifacts, UI, or fourth-lane work.
 
 Latest accepted packet:
 
@@ -229,9 +237,15 @@ Latest accepted packet:
 
 Active advisory request:
 
+No active advisory request is open.
+
+Latest accepted transition advisory:
+
 1. `workspace/OverseerHS278-selected-id-product-hydration-transition-advisory-request.md`
-2. Define what must change before selected-ID Hydration can move from HS276 proof/test machinery toward product behavior.
-3. Do not implement code, call providers, mutate corpus, add schema, add Bucket/Dispatcher, activate enforcement, change UI, or treat HS276 proof scaffolding as product authority.
+2. `workspace/EngineeringSecurityHS278-selected-id-product-hydration-transition-advisory.md`
+3. `workspace/OverseerHS279-hs278-selected-id-product-hydration-transition-review.md`
+4. Accepted result: selected-ID Hydration must not move directly from HS276 proof/test machinery into product behavior.
+5. Next safe packet: read-only selected-ID product Hydration authority/preflight contract.
 
 Latest accepted advisory:
 

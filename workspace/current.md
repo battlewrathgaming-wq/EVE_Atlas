@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS278 selected-ID product Hydration transition advisory open
+Status: HS280 selected-ID product Hydration authority preflight runway open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: advisory transition map for what must change before selected-ID Hydration can move from HS276 proof/test machinery toward product behavior.
+Current focus: read-only selected-ID product Hydration authority/preflight contract before any product provider contact or writes.
 
 Current heading:
 
@@ -21,21 +21,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Engineering / Security / Data Engineering / Product Architecture advisory
+Current executor: Dev
 
-Active advisory request:
-
-```txt
-workspace/OverseerHS278-selected-id-product-hydration-transition-advisory-request.md
-```
-
-Expected advisory artifact:
+Active Dev runway:
 
 ```txt
-workspace/EngineeringSecurityHS278-selected-id-product-hydration-transition-advisory.md
+workspace/OverseerHS280-selected-id-product-hydration-authority-preflight-runway.md
 ```
 
-No Dev task is open. Do not implement code. Do not call providers. Do not treat HS276 proof/test scaffolding as product authority.
+Expected Dev handoff:
+
+```txt
+workspace/DevHS280-selected-id-product-hydration-authority-preflight.md
+```
+
+Do not implement product selected-ID Hydration execution. Do not call providers. Do not write Hydration rows. Do not treat HS276 proof/test scaffolding as product authority.
 
 ## Recent Accepted State
 
@@ -62,28 +62,91 @@ Status: accepted.
 Latest accepted advisory request:
 
 ```txt
-workspace/OverseerHS274-selected-id-real-hydration-execution-gate-advisory-request.md
+workspace/OverseerHS278-selected-id-product-hydration-transition-advisory-request.md
 ```
 
 Latest accepted advisory artifact:
 
 ```txt
-workspace/EngineeringSecurityHS274-selected-id-real-hydration-execution-gate-advisory.md
+workspace/EngineeringSecurityHS278-selected-id-product-hydration-transition-advisory.md
+```
+
+Latest advisory review:
+
+```txt
+workspace/OverseerHS279-hs278-selected-id-product-hydration-transition-review.md
 ```
 
 Accepted classification:
 
 ```txt
-ready only for a smaller real-execution proof
-```
-
-Accepted decision point:
-
-```txt
-Do we accept crossing the provider-contact boundary for a trusted, non-renderer, one-ID selected Hydration real execution proof?
+ready for read-only product authority/preflight contract only
 ```
 
 Do not open renderer-triggered Hydration, full product live Hydration, broad live testing, Bucket/Dispatcher, background Hydration, schema, runtime enforcement, support artifacts, UI, or fourth-lane work.
+
+## HS280 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS280-selected-id-product-hydration-authority-preflight-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS280-selected-id-product-hydration-authority-preflight.md
+```
+
+Accepted task:
+
+Add a read-only selected-ID product Hydration authority/preflight contract. Preferred command:
+
+```txt
+metadata.selected_id_readability_repair.product_preflight
+```
+
+The command should prove product-authority posture for selected-ID readability repair/Hydration without provider calls or writes.
+
+Preserve:
+
+- read-only preview only
+- no zKillboard or ESI calls
+- no Hydration writes
+- no corpus mutation
+- no product execution
+- no Bucket, Dispatcher, worker, lease, retry, persisted queue, schema, runtime enforcement, command blocking, support artifact, or UI behavior
+- no fourth lane / fast lane
+- HS276 proof/test scaffolding remains non-authority
+
+Stop if:
+
+- product execution becomes necessary
+- provider contact becomes necessary
+- writes become necessary
+- renderer-triggered execution becomes necessary
+- Bucket/Dispatcher/queue design becomes necessary
+- local basis policy needs Human/Overseer choice
+- Hydration blurs into Evidence Expansion
+- HS276 proof scaffolding starts acting as product authority
+
+## HS278 Accepted State
+
+Overseer reviewed 2026-06-05:
+
+- Accepted HS278 in `workspace/OverseerHS279-hs278-selected-id-product-hydration-transition-review.md`.
+- Accepted `workspace/EngineeringSecurityHS278-selected-id-product-hydration-transition-advisory.md` as the selected-ID product Hydration transition advisory.
+- Accepted that selected-ID Hydration should not move directly from HS276 proof/test machinery into product behavior.
+- Accepted that the next safe packet is a read-only product authority/preflight contract.
+- Product live Hydration, renderer-triggered Hydration, background Hydration, Bucket/Dispatcher, schema, runtime enforcement, support artifacts, UI, and fourth-lane work remain parked.
+
+Accepted product command/run-type candidates:
+
+```txt
+metadata.selected_id_readability_repair.execute
+selected_id_readability_repair
+```
 
 ## HS276 Accepted State
 
