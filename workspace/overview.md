@@ -170,6 +170,7 @@ Current state:
 - HS314 opened
 - HS314 accepted by HS315
 - HS316 opened
+- HS316 accepted by HS317
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -186,9 +187,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS316-watch-operator-confirmation-listen-hook-contract-runway.md`
-- expected Dev handoff is `workspace/DevHS316-watch-operator-confirmation-listen-hook-contract.md`
+- current executor is Overseer / Human decision
+- active Dev runway is none
+- expected Dev handoff is none
 - latest accepted advisory request is `workspace/OverseerHS298-system-radius-discovery-ref-identity-advisory-request.md`
 - latest accepted advisory artifact is `workspace/EngineeringDataHS298-system-radius-discovery-ref-identity-advisory.md`
 - latest advisory review is `workspace/OverseerHS299-hs298-system-radius-discovery-ref-identity-advisory-review.md`
@@ -245,7 +246,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is read-only Watch operator confirmation/listen-hook contract after accepted-scope `watch.create`
+- current work is resting after read-only Watch operator confirmation/listen-hook contract after accepted-scope `watch.create`
 - recommended next rich surface is selected unresolved local ID -> Resolve candidate -> future report readability reuse
 - parked separate lane is Task origin and durable outcome map for Manual Search and Watch
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
@@ -278,15 +279,21 @@ Current heading:
 
 Active Dev packet:
 
-1. `workspace/OverseerHS316-watch-operator-confirmation-listen-hook-contract-runway.md`
-2. Expected handoff: `workspace/DevHS316-watch-operator-confirmation-listen-hook-contract.md`
-3. Goal: prove the read-only operator confirmation/listen-hook contract from system/radius preflight to accepted `watch.create` payload.
-4. Preflight visibility, focus, hover, highlight, keyboard navigation, and successful local topology lookup are not acceptance.
-5. Only an explicit renderer/listen-hook confirming act can produce accepted Watch scope.
-6. Exact final UI affordance is parked for UI design and may later be typed command, keyboard action, click, hold, check, or terminal-style initialize action.
-7. Renderer UI, popup/modal behavior, final copy/design, Watch execution, provider movement, Watch rows, Discovery refs, Evidence/EVEidence, Hydration, schema, support artifacts, active enforcement, relationship tags, and fourth-lane work remain unopened.
+No active Dev packet is open.
 
 Latest accepted packet:
+
+1. `workspace/OverseerHS316-watch-operator-confirmation-listen-hook-contract-runway.md`
+2. `workspace/DevHS316-watch-operator-confirmation-listen-hook-contract.md`
+3. `workspace/OverseerHS317-hs316-watch-operator-confirmation-contract-review.md`
+4. Accepted result: `watch.operator_confirmation_contract.preview` proves the read-only operator confirmation/listen-hook contract from system/radius preflight to accepted `watch.create` payload.
+5. Preflight visibility, focus, hover, highlight, keyboard navigation, and successful local topology lookup are not acceptance.
+6. Only explicit operator confirmation can produce accepted Watch scope.
+7. Exact final UI affordance is parked for UI design and may later be typed command, keyboard action, click, hold, check, or terminal-style initialize action.
+8. Accepted payload shape is suitable for the accepted `watch.create` contract after explicit confirmation, but it is not Watch execution authorization.
+9. Renderer UI, popup/modal behavior, final copy/design, Watch execution, provider movement, Watch rows, Discovery refs, Evidence/EVEidence, Hydration, schema, support artifacts, active enforcement, relationship tags, and fourth-lane work remain unopened.
+
+Previous accepted packet:
 
 1. `workspace/OverseerHS314-authored-watch-execution-readiness-runway.md`
 2. `workspace/DevHS314-authored-watch-execution-readiness.md`

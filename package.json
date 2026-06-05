@@ -43,6 +43,7 @@
     "verify:watch-task-outcome-map": "node scripts/verify-watch-task-outcome-map-preview.js",
     "verify:watch-scope-authority-conformance": "node scripts/verify-watch-scope-authority-conformance.js",
     "verify:watch-authored-execution-readiness": "node scripts/verify-watch-authored-execution-readiness.js",
+    "verify:watch-operator-confirmation-contract": "node scripts/verify-watch-operator-confirmation-contract.js",
     "verify:system-radius-authoring-preflight": "node scripts/verify-system-radius-authoring-preflight.js",
     "verify:system-radius-acceptance-payload": "node scripts/verify-system-radius-acceptance-payload.js",
     "verify:watch-create-mutation-safety-map": "node scripts/verify-watch-create-mutation-safety-map.js",

@@ -89,6 +89,7 @@ async function main() {
     const watchTaskOutcomeMapCommand = commands.find((entry) => entry.command === 'runtime.watch_task_outcome_map.preview');
     const watchScopeAuthorityConformanceCommand = commands.find((entry) => entry.command === 'watch.scope_authority_conformance.preview');
     const watchAuthoredExecutionReadinessCommand = commands.find((entry) => entry.command === 'watch.authored_execution_readiness.preview');
+    const watchOperatorConfirmationContractCommand = commands.find((entry) => entry.command === 'watch.operator_confirmation_contract.preview');
     const systemRadiusAuthoringPreflightCommand = commands.find((entry) => entry.command === 'watch.system_radius_authoring_preflight.preview');
     const systemRadiusAcceptancePayloadCommand = commands.find((entry) => entry.command === 'watch.system_radius_acceptance_payload.preview');
     const watchCreateMutationSafetyMapCommand = commands.find((entry) => entry.command === 'watch.create_mutation_safety_map.preview');
@@ -242,6 +243,8 @@ async function main() {
     assert(watchScopeAuthorityConformanceCommand?.renderer_allowed === true, 'Watch scope authority conformance preview should be renderer eligible');
     assert(watchAuthoredExecutionReadinessCommand?.classification === 'read-only', 'authored Watch execution readiness preview should be read-only');
     assert(watchAuthoredExecutionReadinessCommand?.renderer_allowed === true, 'authored Watch execution readiness preview should be renderer eligible');
+    assert(watchOperatorConfirmationContractCommand?.classification === 'read-only', 'Watch operator confirmation contract preview should be read-only');
+    assert(watchOperatorConfirmationContractCommand?.renderer_allowed === true, 'Watch operator confirmation contract preview should be renderer eligible');
     assert(systemRadiusAuthoringPreflightCommand?.classification === 'read-only', 'system/radius authoring preflight should be read-only');
     assert(systemRadiusAuthoringPreflightCommand?.renderer_allowed === true, 'system/radius authoring preflight should be renderer eligible');
     assert(systemRadiusAcceptancePayloadCommand?.classification === 'read-only', 'system/radius acceptance payload should be read-only');
@@ -513,6 +516,18 @@ async function main() {
     assert(watchAuthoredExecutionReadiness.evidence_writes === 0, 'authored Watch execution readiness preview should not write Evidence/EVEidence');
     assert(watchAuthoredExecutionReadiness.schema_changes === 0, 'authored Watch execution readiness preview should not change schema');
     assert(watchAuthoredExecutionReadiness.runtime_enforcement_active === false, 'authored Watch execution readiness preview should not activate enforcement');
+
+    const watchOperatorConfirmationContract = await invokeServiceCommand('watch.operator_confirmation_contract.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchOperatorConfirmationContract.read_only === true, 'Watch operator confirmation contract preview should declare read-only behavior');
+    assert(watchOperatorConfirmationContract.provider_calls === 0, 'Watch operator confirmation contract preview should not call providers');
+    assert(watchOperatorConfirmationContract.watch_dispatches === 0, 'Watch operator confirmation contract preview should not dispatch Watch execution');
+    assert(watchOperatorConfirmationContract.tasks_created === 0, 'Watch operator confirmation contract preview should not create tasks');
+    assert(watchOperatorConfirmationContract.evidence_writes === 0, 'Watch operator confirmation contract preview should not write Evidence/EVEidence');
+    assert(watchOperatorConfirmationContract.schema_changes === 0, 'Watch operator confirmation contract preview should not change schema');
+    assert(watchOperatorConfirmationContract.runtime_enforcement_active === false, 'Watch operator confirmation contract preview should not activate enforcement');
 
     const systemRadiusAuthoringPreflight = await invokeServiceCommand('watch.system_radius_authoring_preflight.preview', {}, {
       db,

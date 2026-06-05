@@ -63,6 +63,7 @@ const { buildQueueClockPosturePreview } = require('./queueClockPostureService');
 const { buildWatchTaskOutcomeMapPreview } = require('./watchTaskOutcomeMapPreviewService');
 const { buildWatchScopeAuthorityConformancePreview } = require('./watchScopeAuthorityConformanceService');
 const { buildWatchAuthoredExecutionReadinessPreview } = require('./watchAuthoredExecutionReadinessService');
+const { buildWatchOperatorConfirmationContractPreview } = require('./watchOperatorConfirmationContractService');
 const { buildSystemRadiusAuthoringPreflight } = require('./systemRadiusAuthoringPreflightService');
 const { buildSystemRadiusAcceptancePayloadPreview } = require('./systemRadiusAcceptancePayloadService');
 const { buildWatchCreateMutationSafetyMap } = require('./watchCreateMutationSafetyMapService');
@@ -698,6 +699,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview authored system/radius Watch execution readiness from stored included_system_ids without dispatch, providers, tasks, writes, schema, or UI work',
     handler: ({ db, payload }) => buildWatchAuthoredExecutionReadinessPreview(db, payload)
+  },
+  'watch.operator_confirmation_contract.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview Watch operator confirmation/listen-hook contract without renderer UI, Watch writes, dispatch, providers, tasks, schema, or enforcement',
+    handler: ({ db, payload }) => buildWatchOperatorConfirmationContractPreview(db, payload)
   },
   'watch.system_radius_authoring_preflight.preview': {
     classification: 'read-only',
