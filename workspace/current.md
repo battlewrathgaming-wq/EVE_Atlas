@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS324 accepted; resting at Watch setup chain next-seam decision
+Status: HS327 Watch runtime packet plan preview open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: choose the next bounded storage/runtime seam after Watch setup chain hardening.
+Current focus: prove a read-only runtime packet plan from accepted Watch scope without dispatch or provider movement.
 
 Current heading:
 
@@ -24,13 +24,58 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human decision
+Current executor: Dev
 
-Active Dev runway: none
+Active Dev runway:
 
-Expected Dev handoff: none
+```txt
+workspace/OverseerHS327-watch-runtime-packet-plan-preview-runway.md
+```
 
-HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, HS318, HS320, HS322, and HS324 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+Expected Dev handoff:
+
+```txt
+workspace/DevHS327-watch-runtime-packet-plan-preview.md
+```
+
+HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, HS318, HS320, HS322, and HS324 are accepted and can rest. HS327 is open to add a read-only Watch runtime packet plan preview. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+
+## HS327 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS327-watch-runtime-packet-plan-preview-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS327-watch-runtime-packet-plan-preview.md
+```
+
+Task:
+
+Add a read-only/local-only Watch runtime packet plan preview.
+
+Preferred command:
+
+```txt
+watch.runtime_packet_plan.preview
+```
+
+Core rule:
+
+```txt
+accepted Watch scope -> runtime packet plan preview only
+preview is not dispatch
+readiness is not authorization
+invalid stored scope creates no accepted packet plan
+```
+
+Boundary:
+
+This packet is local-only/read-only planning proof. Do not execute a Watch, arm/disarm Watch runtime, create Watch executor tasks, call providers, perform live/API calls, mutate Watch rows, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, change `watch.create`, change topology traversal behavior, infer execution authority from center/radius, create or persist runtime packet rows, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
 
 ## HS324 Active Dev Runway
 
