@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS270 Hydration real execution decision surface; resting
+Status: HS272 selected-ID real execution preflight runway open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting at the decision point before any real provider-backed selected-ID Hydration execution.
+Current focus: read-only selected-ID real execution preflight before any real provider-backed Hydration execution.
 
 Current heading:
 
@@ -21,7 +21,33 @@ Current heading:
 
 ## Executor
 
-Current executor: none
+Current executor: Dev
+
+Active Dev runway:
+
+```txt
+workspace/OverseerHS272-selected-id-real-execution-preflight-runway.md
+```
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS272-selected-id-real-execution-preflight.md
+```
+
+Dev task:
+
+Add a read-only selected-ID real execution preflight. It should compose local-first posture, pickup contract, External I/O, live/provider gate, storage write posture, supported selected-ID type, expected write path, and execution/write revalidation checklists without providers, writes, Bucket persistence, Dispatcher, schema, runtime enforcement, or UI.
+
+Suggested command:
+
+```txt
+metadata.hydration_selected_id_real_execution_preflight.preview
+```
+
+Do not call providers. Do not write Hydration output. Do not create real operator Hydration execution.
+
+## Recent Accepted State
 
 Latest accepted Dev runway:
 
@@ -43,15 +69,25 @@ workspace/OverseerHS269-hs268-hydration-execution-fixture-proof-review.md
 
 Status: accepted.
 
-No active Dev runway is open.
-
-Current decision surface:
+Recent decision surface:
 
 ```txt
 workspace/OverseerHS270-hydration-real-execution-decision-surface.md
 ```
 
-Current recommendation:
+Latest advisory artifact:
+
+```txt
+workspace/DataEngineering-provider-work-structure-readiness-advisory.md
+```
+
+Latest Overseer review:
+
+```txt
+workspace/OverseerHS271-provider-work-structure-readiness-review.md
+```
+
+Accepted recommendation:
 
 Do not open real provider-backed selected-ID Hydration execution automatically. Choose deliberately between:
 

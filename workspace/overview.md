@@ -124,6 +124,8 @@ Current state:
 - HS268 opened
 - HS268 accepted by HS269
 - HS270 decision surface recorded
+- HS271 provider-work structure advisory accepted
+- HS272 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -140,12 +142,15 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is none
-- no active Dev runway is open
+- current executor is Dev
+- active Dev runway is `workspace/OverseerHS272-selected-id-real-execution-preflight-runway.md`
+- expected Dev handoff is `workspace/DevHS272-selected-id-real-execution-preflight.md`
 - latest accepted Dev runway is `workspace/OverseerHS268-selected-id-hydration-execution-fixture-proof-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS268-selected-id-hydration-execution-fixture-proof.md`
 - latest Overseer review is `workspace/OverseerHS269-hs268-hydration-execution-fixture-proof-review.md`
 - current decision surface is `workspace/OverseerHS270-hydration-real-execution-decision-surface.md`
+- latest provider-work advisory artifact is `workspace/DataEngineering-provider-work-structure-readiness-advisory.md`
+- latest provider-work advisory review is `workspace/OverseerHS271-provider-work-structure-readiness-review.md`
 - latest accepted advisory request is `workspace/OverseerHS266-selected-id-hydration-execution-readiness-advisory-request.md`
 - latest accepted advisory artifact is `workspace/DataEngineeringHS266-selected-id-hydration-execution-readiness-advisory.md`
 - latest Overseer review is `workspace/OverseerHS267-hs266-hydration-execution-readiness-review.md`
@@ -169,7 +174,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is resting at the decision point before any real provider-backed selected-ID Hydration execution
+- current work is read-only selected-ID real execution preflight before any real provider-backed Hydration execution
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -195,14 +200,13 @@ Current heading:
 - Hydration selection seam north star: local readability may happen during report construction, but provider-backed readability requires an explicit operator trigger and still passes normal gates
 - Do not reopen a separate fast lane unless a later bounded product/mechanical need proves it
 
-Resting state:
+Active Dev packet:
 
-1. HS268 accepted by HS269.
-2. No active Dev runway is open.
-3. `metadata.hydration_selected_id_execution_fixture_proof` proves selected-ID Hydration execution/write lifecycle with injected fixture provider results only.
-4. HS270 records the decision surface before real provider-backed selected-ID Hydration execution.
-5. Preserve: request posture is pickup-readable, not pickup; pickup is not execution; execution is not write until the write path succeeds under policy.
-6. Preserve lane simplification: Discovery outputs possible leads; Evidence Expansion outputs Evidence/EVEidence; Hydration outputs readability repair; fourth lane stays parked.
+1. `workspace/OverseerHS272-selected-id-real-execution-preflight-runway.md`
+2. Add read-only selected-ID real execution preflight.
+3. No provider calls, Hydration writes, metadata run writes, API log writes, Bucket persistence, Dispatcher, schema, runtime enforcement, support artifacts, or UI.
+4. Preserve: request posture is pickup-readable, not pickup; pickup is not execution; execution is not write until the write path succeeds under policy.
+5. Preserve lane simplification: Discovery outputs possible leads; Evidence Expansion outputs Evidence/EVEidence; Hydration outputs readability repair; fourth lane stays parked.
 
 See `workspace/current.md` for current truth.
 
