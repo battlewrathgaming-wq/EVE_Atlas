@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS318 renderer system Watch confirmation path accepted; no active Dev runway
+Status: HS320 system Watch post-create readout open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after bounded renderer implementation of system/radius Watch confirmation path.
+Current focus: read-only post-create setup readout for accepted System / Radius Watches.
 
 Current heading:
 
@@ -24,21 +24,71 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS320-system-watch-post-create-readout-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS320-system-watch-post-create-readout.md
 ```
 
-HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, and HS318 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, and HS318 are accepted and can rest. HS320 is open to prove a boring, read-only post-create System / Radius Watch setup readout from stored local rows. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+
+## HS320 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS320-system-watch-post-create-readout-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS320-system-watch-post-create-readout.md
+```
+
+Task:
+
+Add a read-only post-create Watch setup readout for accepted System / Radius Watches.
+
+Preferred command:
+
+```txt
+watch.system_radius_setup_readout.preview
+```
+
+Core rule:
+
+```txt
+stored included_system_ids = accepted Watch scope authority
+center/radius = provenance and management after acceptance
+readout = inspection only
+```
+
+Required readout:
+
+- Watch ID
+- active/inactive state
+- center system ID/name as provenance/management
+- radius as provenance/management
+- stored included system IDs as accepted Watch scope authority
+- included system display names when available locally
+- included system count
+- stored-scope status
+- whether the row is ready for future execution input from stored scope
+- next safe operator/system action
+- what this readout does not do
+
+Boundary:
+
+This packet is read-only/local-only. Do not execute a Watch, create Watch executor tasks, call providers, perform live/API calls, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, change `watch.create`, change topology traversal behavior, recompute accepted scope from center/radius as readout authority, change schema, implement final renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
 
 ## HS318 Active Dev Runway
 
