@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS302 radius neighbor wording refresh accepted; no active Dev runway
+Status: HS304 system/radius authoring preflight opened
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after radius neighbor wording refresh.
+Current focus: local-only system/radius Watch authoring preflight.
 
 Current heading:
 
@@ -23,21 +23,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS304-system-radius-authoring-preflight-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS304-system-radius-authoring-preflight.md
 ```
 
-HS296, HS298, HS300, HS301, and HS302 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, HS301, and HS302 are accepted and can rest. HS304 is open as a local-only authoring/preflight readout proof. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
 
 Latest accepted advisory request:
 
@@ -1090,6 +1090,55 @@ Accepted result:
 Runtime topology behavior did not change.
 
 HS302 can rest.
+
+## HS304 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS304-system-radius-authoring-preflight-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS304-system-radius-authoring-preflight.md
+```
+
+Task:
+
+Prove the local-only operator-facing preflight/readout shape for authoring a system/radius Watch scope.
+
+The readout should show:
+
+- selected center system ID/name
+- requested radius
+- included systems in operator-facing order
+- center first and marked `(center)`
+- included system count
+- direct-neighbor count only as diagnostic/detail, if present
+- cap/guardrail posture
+- missing topology / unknown system posture
+- invalid radius posture
+- whether the scope is acceptable for Watch authoring
+- the exact `included_system_ids` that would become accepted stored scope if the operator accepts
+
+Preferred plain shape:
+
+```txt
+System Hare with a radius of 1 jump:
+
+Included systems:
+Hare (center)
+Babirmoult
+Heluene
+Ogaria
+Oruse
+```
+
+Boundary:
+
+This is not Watch result identity work. Watch/task result semantics need richer sample data and remain parked. Do not change provider movement, live testing, topology traversal, Watch execution, Watch rows, Discovery refs, Evidence/EVEidence, Hydration, schema, UI, support artifacts, active enforcement, or fourth-lane behavior.
 
 Latest accepted advisory request:
 
