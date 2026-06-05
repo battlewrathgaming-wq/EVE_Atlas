@@ -119,6 +119,7 @@ Current state:
 - HS262 accepted by HS263
 - HS264 opened
 - HS264 accepted by HS265
+- HS266 advisory opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -135,7 +136,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is none
+- current executor is Engineering / Data Engineering / Security advisory
+- active advisory request is `workspace/OverseerHS266-selected-id-hydration-execution-readiness-advisory-request.md`
+- expected advisory artifact is `workspace/DataEngineeringHS266-selected-id-hydration-execution-readiness-advisory.md`
 - no active Dev runway is open
 - latest accepted Dev runway is `workspace/OverseerHS264-hydration-pickup-eligibility-contract-preview-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS264-hydration-pickup-eligibility-contract-preview.md`
@@ -157,7 +160,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is resting after read-only selected-ID Hydration pickup eligibility / execution-input contract preview acceptance
+- current work is advisory readiness review before any selected-ID provider-backed Hydration execution packet
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -183,12 +186,13 @@ Current heading:
 - Hydration selection seam north star: local readability may happen during report construction, but provider-backed readability requires an explicit operator trigger and still passes normal gates
 - Do not reopen a separate fast lane unless a later bounded product/mechanical need proves it
 
-Resting state:
+Active advisory state:
 
-1. HS264 accepted by HS265.
+1. HS266 opened.
 2. No active Dev runway is open.
-3. `metadata.hydration_pickup_contract.preview` is the read-only pickup eligibility / execution-input contract proof.
+3. Advisory should decide whether the next safe packet is read-only execution preflight, fixture-only execution proof, real provider-backed execution, or another design pass.
 4. Preserve: request posture is pickup-readable, not pickup; pickup is not execution; execution is not write until the write path succeeds under policy.
+5. Preserve lane simplification: Discovery outputs possible leads; Evidence Expansion outputs Evidence/EVEidence; Hydration outputs readability repair; fourth lane stays parked.
 
 See `workspace/current.md` for current truth.
 

@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS264 Hydration pickup eligibility contract preview accepted by HS265; resting
+Status: HS266 selected-ID Hydration execution readiness advisory opened
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after read-only selected-ID Hydration pickup eligibility / execution-input contract preview acceptance.
+Current focus: advisory readiness review before any selected-ID provider-backed Hydration execution packet.
 
 Current heading:
 
@@ -21,7 +21,50 @@ Current heading:
 
 ## Executor
 
-Current executor: none
+Current executor: Engineering / Data Engineering / Security advisory
+
+Active advisory request:
+
+```txt
+workspace/OverseerHS266-selected-id-hydration-execution-readiness-advisory-request.md
+```
+
+Expected advisory artifact:
+
+```txt
+workspace/DataEngineeringHS266-selected-id-hydration-execution-readiness-advisory.md
+```
+
+Advisory task:
+
+Review whether Atlas is ready to shape selected-ID provider-backed Hydration execution, or whether the next safe packet should be read-only execution preflight, fixture-only execution proof, or another design pass.
+
+Do not implement code. Do not open Dev execution. Do not call providers.
+
+Preserve:
+
+```txt
+Discovery outputs possible leads.
+Evidence Expansion outputs Evidence/EVEidence.
+Hydration outputs readability repair.
+Fourth lane stays parked.
+
+Request posture is pickup-readable, not pickup.
+Pickup is not execution.
+Execution is not write until the write path succeeds under policy.
+```
+
+Stop if:
+
+- Hydration blurs into Evidence Expansion
+- request posture or pickup contract is treated as execution authority
+- provider-backed execution is proposed without local-first revalidation
+- write behavior is proposed without storage/write-path proof
+- queues, dispatcher, worker, leases, retries, schema, UI, or fourth-lane design become necessary before the advisory question is answered
+
+## Recent Accepted State
+
+Current executor before HS266: none
 
 Latest accepted Dev runway:
 
