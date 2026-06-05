@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS330 Watch runtime movement readiness advisory opened
+Status: HS332 Watch executor tick dry-run preview opened
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: assurance that the current Watch read-only runtime chain is coherent enough to build on.
+Current focus: no-dispatch Watch executor/tick dry-run proof before task creation.
 
 Current heading:
 
@@ -24,15 +24,66 @@ Current heading:
 
 ## Executor
 
-Current executor: Engineering / Data Engineering / Security advisory
+Current executor: Dev
 
-Active Dev runway: none
+Active Dev runway:
 
-Expected advisory artifact:
+```txt
+workspace/OverseerHS332-watch-executor-tick-dry-run-preview-runway.md
+```
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS332-watch-executor-tick-dry-run-preview.md
+```
+
+## HS332 Active Dev Runway
+
+Opened:
+
+```txt
+workspace/OverseerHS332-watch-executor-tick-dry-run-preview-runway.md
+```
+
+Task:
+
+Add a read-only/local-only Watch executor tick dry-run preview.
+
+Preferred command:
+
+```txt
+watch.executor_tick_dry_run.preview
+```
+
+Core rule:
+
+```txt
+dry-run may say what would happen
+dry-run must not make it happen
+```
+
+Boundary:
+
+This packet is a no-dispatch proof before task creation. Do not execute a Watch, arm/disarm Watch runtime, start/stop intervals, create Watch executor tasks, call providers, perform live/API calls, call collectors, mutate Watch rows, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, change `watch.create`, change topology traversal behavior, infer execution authority from center/radius, persist runtime packet rows, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
+
+## HS330 Acceptance
+
+Accepted:
+
+```txt
+workspace/OverseerHS331-hs330-watch-runtime-readiness-advisory-review.md
+```
+
+Accepted advisory artifact:
 
 ```txt
 workspace/EngineeringDataSecurityHS330-watch-runtime-movement-readiness-advisory.md
 ```
+
+Decision:
+
+HS330 is accepted. A no-dispatch executor/tick dry-run is the right next proof.
 
 ## HS330 Watch Runtime Movement Readiness Advisory
 
