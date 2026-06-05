@@ -454,7 +454,7 @@ Safe options:
 
 1. Rest Watch/task outcome map here.
 2. Ask for additional assurance if a specific concern appears.
-3. Later decide system/radius scope policy: stored snapshot, recomputed topology, or both with disclosed basis.
+3. Later prove Watch scope authority conformance: execution should use stored included system IDs, while recomputed topology is diagnostic only.
 4. Later decide system/radius Discovery ref identity before relying on durable result semantics.
 5. Later decide whether durable `watch_result` / `watch_result_items` schema is needed.
 
