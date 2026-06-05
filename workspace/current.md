@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS272 selected-ID real execution preflight accepted by HS273; resting
+Status: HS274 selected-ID real Hydration execution gate advisory open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after read-only selected-ID real execution preflight acceptance. Real provider-backed Hydration execution remains unopened.
+Current focus: Engineering/Security advisory on whether real provider-backed selected-ID Hydration execution is ready to open, or whether another proof is needed first.
 
 Current heading:
 
@@ -21,21 +21,21 @@ Current heading:
 
 ## Executor
 
-Current executor: none
+Current executor: Engineering / Security / Data Engineering advisory
 
-Active Dev runway:
-
-```txt
-none
-```
-
-Expected Dev handoff:
+Active advisory request:
 
 ```txt
-none
+workspace/OverseerHS274-selected-id-real-hydration-execution-gate-advisory-request.md
 ```
 
-No Dev task is open. Do not open real provider-backed selected-ID Hydration execution without explicit Human/Overseer acceptance of provider contact.
+Expected advisory artifact:
+
+```txt
+workspace/EngineeringSecurityHS274-selected-id-real-hydration-execution-gate-advisory.md
+```
+
+No Dev task is open. Do not implement code. Do not call providers. Do not open real provider-backed selected-ID Hydration execution without explicit Human/Overseer acceptance of provider contact.
 
 ## Recent Accepted State
 
