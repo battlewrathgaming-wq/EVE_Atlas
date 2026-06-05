@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS284 selected-ID readability repair execution accepted; no active Dev runway
+Status: HS286 user-input to fetch / selected-resolution missing-links assurance open; no Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: trusted non-renderer selected-ID Resolve / readability repair execution accepted; next seam not selected.
+Current focus: assurance and missing-link discovery across operator input, fetch, Evidence Expansion, local Observation/readability, and selected-ID Resolve.
 
 Current heading:
 
@@ -21,7 +21,7 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human decision
+Current executor: Engineering / Data Engineering / Security advisory
 
 Active Dev runway:
 
@@ -36,6 +36,18 @@ none
 ```
 
 No Dev runway is open. HS284 is accepted and should rest unless the Human explicitly selects the next seam.
+
+Active advisory request:
+
+```txt
+workspace/OverseerHS286-user-input-fetch-selected-resolution-missing-links-assurance-request.md
+```
+
+Expected advisory artifact:
+
+```txt
+workspace/EngineeringDataHS286-user-input-fetch-selected-resolution-missing-links.md
+```
 
 HS284 Dev handoff:
 
