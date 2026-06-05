@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS304 system/radius authoring preflight accepted; no active Dev runway
+Status: HS307 system/radius Watch authoring acceptance payload opened
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after local-only system/radius Watch authoring preflight.
+Current focus: local-only system/radius Watch authoring acceptance payload.
 
 Current heading:
 
@@ -23,21 +23,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS307-system-radius-watch-authoring-acceptance-payload-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS307-system-radius-watch-authoring-acceptance-payload.md
 ```
 
-HS296, HS298, HS300, HS301, HS302, and HS304 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, HS301, HS302, and HS304 are accepted and can rest. HS307 is open to prove a read-only Watch authoring acceptance payload from HS304 preflight output. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, actual Watch row writes, or fourth-lane work without a new bounded decision.
 
 Latest accepted advisory request:
 
@@ -1277,6 +1277,61 @@ Accepted result:
 - Capped partial scope is not acceptable without operator adjustment.
 
 HS304 can rest.
+
+## HS307 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS307-system-radius-watch-authoring-acceptance-payload-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS307-system-radius-watch-authoring-acceptance-payload.md
+```
+
+Task:
+
+Prove how an accepted HS304 system/radius authoring preflight becomes a future Watch authoring payload, without writing the Watch row yet.
+
+Preferred proof target:
+
+```txt
+watch.system_radius_acceptance_payload.preview
+```
+
+Use a better existing naming pattern if the repo already has one.
+
+The proof should expose:
+
+- source preflight action/name
+- source preflight status
+- whether the preflight is acceptable for Watch authoring
+- selected center system ID/name
+- radius
+- exact `included_system_ids` that would be supplied to/stored by future Watch creation
+- center/radius as provenance/explanation
+- optional operator settings for future `watch.create`
+- confirmation/authority posture for the future write
+- future target command, likely `watch.create`
+- explicit `would_write_watch_row: false`
+- explicit `watch_rows_written: 0`
+- explicit no-dispatch/no-provider/no-task posture
+
+Reject or mark not acceptable:
+
+- capped preflight
+- unknown system
+- missing topology
+- invalid radius
+- preflight without accepted included IDs
+- mismatched or forged payload claims that try to replace the preflight's accepted IDs
+
+Boundary:
+
+This is not Watch creation. Do not write Watch rows, dispatch Watch execution, create tasks, call providers, mutate Discovery/Evidence/Hydration, change schema, change `watch.create`, add UI, create support artifacts, activate enforcement, or open Watch/result semantics.
 
 Latest accepted advisory request:
 
