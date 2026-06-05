@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS307 system/radius Watch authoring acceptance payload accepted; no active Dev runway
+Status: HS310 Watch create mutation safety map accepted; no active Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after local-only system/radius Watch authoring acceptance payload.
+Current focus: resting after read-only Watch creation mutation safety map.
 
 Current heading:
 
@@ -37,7 +37,176 @@ Expected Dev handoff:
 none
 ```
 
-HS296, HS298, HS300, HS301, HS302, HS304, and HS307 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, actual Watch row writes, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, HS301, HS302, HS304, HS307, and HS310 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, actual Watch row writes, or fourth-lane work without a new bounded decision.
+
+## HS310 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS310-watch-create-mutation-safety-map-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS310-watch-create-mutation-safety-map.md
+```
+
+Task:
+
+Build a read-only/local-only mutation safety map for the future system/radius `watch.create` contract before changing mutation behavior.
+
+Preferred proof target:
+
+```txt
+watch.create_mutation_safety_map.preview
+```
+
+Use a better local naming pattern if the repo already has one.
+
+The proof should expose:
+
+- current `watch.create` path;
+- current system/radius mutation inputs and stored fields;
+- current recomputation point from center/radius;
+- future required mutation-contract input for accepted preflight `included_system_ids`;
+- future fields that may be written in a real mutation packet;
+- fields/tables that must not be touched;
+- center/radius as provenance/explanation;
+- accepted included IDs as future stored-scope authority;
+- unsafe/mismatched accepted-ID rejection posture for later mutation;
+- focused term drift assurance for Watch/scope/radius wording and nearby Atlas terms.
+
+## HS310 Evidence
+
+Dev updated 2026-06-05:
+
+- Added `watch.create_mutation_safety_map.preview` as a renderer-eligible, local-only, read-only mutation safety map.
+- Added `src/main/services/watchCreateMutationSafetyMapService.js`.
+- Added `scripts/verify-watch-create-mutation-safety-map.js` and `npm.cmd run verify:watch-create-mutation-safety-map`.
+- Registered service command and enforcement dry-run coverage as `local_db_inspection` / `watch_create_mutation_safety_map_readout` / `read_only_non_enforcing_proof`.
+- Updated service registry, command authority, enforcement dry-run, and passive side-effect verification for the new read-only command.
+- Preview exposes:
+  - `current_watch_create_consumes_preflight_included_ids: false`
+  - `future_mutation_contract_required: true`
+  - `future_payload_directly_executable_now: false`
+  - `expected_future_mutation_target: watch.create`
+  - `current_packet_allows_watch_row_write: false`
+  - `would_write_watch_row: false`
+  - `watch_rows_written: 0`
+  - `watch_dispatches: 0`
+  - `provider_calls: 0`
+  - `discovery_refs_mutated: 0`
+  - `evidence_rows_written: 0`
+  - `hydration_writes: 0`
+- Current `watch.create` path disclosed:
+  - `serviceRegistry watch.create`
+  - `mutatingActionService.runWatchCreateService`
+  - `normalizeSystemRadiusWatchScope`
+  - `watchlistRepository.addSystemRadiusWatch`
+  - `TopologyService.getSystemsWithinRadius`
+- Current recomputation point disclosed:
+  - `watchlistRepository.addSystemRadiusWatch -> TopologyService.getSystemsWithinRadius`
+  - input basis: `center_system_id + radius_jumps + maxRadius/maxTopologySystems`
+  - consumes accepted preflight included IDs: `false`
+- Future allowed write surface is bounded to `system_watches` Watch authoring fields only:
+  - center system ID/name
+  - radius
+  - accepted included system IDs
+  - excluded IDs
+  - lookback/max systems/max killmails
+  - active/poll interval/notes
+- Must-not-touch surface includes Evidence/EVEidence tables, Discovery refs, run/API provenance, Hydration/metadata output, Assessment, support artifacts, provider calls, dispatch, task creation, schema, topology behavior, UI, runtime enforcement, durable Watch result semantics, relationship tags, and fourth lane.
+- Focused term drift assurance included for:
+  - Watch
+  - `watch.create`
+  - system/radius
+  - radius
+  - included systems
+  - direct neighbors
+  - stargate / topology source data
+  - Discovery
+  - Evidence/EVEidence
+  - Hydration
+  - Observation
+  - Assessment
+- Term assurance is warning-only and reports:
+  - renames performed: `false`
+  - protected-word JSON updated: `false`
+  - caution-prone terms: `watch.create`, `radius`, `stargate / topology source data`
+- Verification run:
+  - `node --check src\main\services\watchCreateMutationSafetyMapService.js` passed.
+  - `node --check scripts\verify-watch-create-mutation-safety-map.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `node --check scripts\verify-enforcement-dry-run.js` passed.
+  - `npm.cmd run verify:watch-create-mutation-safety-map` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 718 warnings across 12 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS310 working-tree changes and Overseer/current workspace updates.
+
+## HS310 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS310-watch-create-mutation-safety-map.md
+```
+
+Status: Watch create mutation safety map accepted by Overseer.
+
+Boundary:
+
+This is not Watch creation. Do not change `watch.create`, write Watch rows, dispatch Watch execution, create tasks, call providers, mutate Discovery/Evidence/Hydration, change topology traversal behavior, change schema, add UI, create support artifacts, activate enforcement, rename source-owned terms, update protected-word JSON, or open Watch/result semantics.
+
+Follow-up, not open now:
+
+```txt
+Actual watch.create mutation contract consuming accepted preflight included_system_ids as stored-scope authority.
+```
+
+## HS310 Acceptance
+
+Accepted:
+
+```txt
+workspace/OverseerHS311-hs310-watch-create-mutation-safety-map-acceptance.md
+```
+
+Decision:
+
+HS310 is accepted.
+
+Accepted result:
+
+- `watch.create_mutation_safety_map.preview` is a renderer-eligible, local-only, read-only mutation safety map.
+- It preserves the accepted gap:
+  - `current_watch_create_consumes_preflight_included_ids: false`
+  - `future_mutation_contract_required: true`
+  - `future_payload_directly_executable_now: false`
+  - `expected_future_mutation_target: watch.create`
+  - `current_packet_allows_watch_row_write: false`
+- Current `watch.create` path and recomputation point are disclosed.
+- Future allowed write surface is bounded to `system_watches` Watch-authoring fields only.
+- Must-not-touch surface includes Evidence/EVEidence, Discovery refs, run/API provenance, Hydration/metadata output, Assessment, support artifacts, provider calls, dispatch, task creation, schema, topology behavior, UI, runtime enforcement, durable Watch result semantics, relationship tags, and fourth lane.
+- Focused term drift assurance is warning-only and performs no renames or protected-word JSON updates.
+- No `watch.create` behavior change, Watch row writes, Watch dispatch, provider calls, tasks, Discovery/Evidence/Hydration mutation, topology behavior changes, schema changes, UI behavior, runtime enforcement, support artifacts, relationship tags, or fourth-lane work were opened.
+
+HS310 can rest.
+
+Likely next seam if this line continues, not open now:
+
+```txt
+Actual watch.create mutation contract consuming accepted preflight included_system_ids as stored-scope authority.
+```
 
 Latest accepted advisory request:
 

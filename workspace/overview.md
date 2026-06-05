@@ -163,6 +163,8 @@ Current state:
 - HS307 opened
 - HS307 redirected by HS308
 - HS307 accepted by HS309
+- HS310 opened
+- HS310 accepted by HS311
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -238,7 +240,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is resting after local-only system/radius Watch authoring acceptance payload
+- current work is resting after read-only Watch creation mutation safety map
 - recommended next rich surface is selected unresolved local ID -> Resolve candidate -> future report readability reuse
 - parked separate lane is Task origin and durable outcome map for Manual Search and Watch
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
@@ -274,6 +276,17 @@ Active Dev packet:
 No active Dev packet is open.
 
 Latest accepted packet:
+
+1. `workspace/OverseerHS310-watch-create-mutation-safety-map-runway.md`
+2. `workspace/DevHS310-watch-create-mutation-safety-map.md`
+3. `workspace/OverseerHS311-hs310-watch-create-mutation-safety-map-acceptance.md`
+4. Accepted result: `watch.create_mutation_safety_map.preview` proves a read-only mutation safety map for future system/radius `watch.create` behavior before any mutation implementation.
+5. Accepted gap: current `watch.create` does not consume accepted preflight `included_system_ids`.
+6. Future write surface is bounded to `system_watches` Watch-authoring fields only.
+7. Focused term drift assurance was warning-only; no term renames or protected-word JSON updates were performed.
+8. Actual Watch row writes, provider movement, live testing, Watch execution, topology behavior changes, Discovery refs, Evidence/EVEidence, Hydration, schema, UI, support artifacts, active enforcement, relationship tags, and fourth-lane work remain unopened.
+
+Previous accepted packet:
 
 1. `workspace/OverseerHS307-system-radius-watch-authoring-acceptance-payload-runway.md`
 2. `workspace/DevHS307-system-radius-watch-authoring-acceptance-payload.md`

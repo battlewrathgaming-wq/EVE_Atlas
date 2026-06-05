@@ -113,6 +113,8 @@ async function main() {
     assert(commands.get('watch.system_radius_authoring_preflight.preview')?.effects.includes('read-only'), 'system/radius authoring preflight should declare read-only effect');
     assert(commands.get('watch.system_radius_acceptance_payload.preview')?.classification === 'read-only', 'system/radius acceptance payload should be read-only');
     assert(commands.get('watch.system_radius_acceptance_payload.preview')?.effects.includes('read-only'), 'system/radius acceptance payload should declare read-only effect');
+    assert(commands.get('watch.create_mutation_safety_map.preview')?.classification === 'read-only', 'watch.create mutation safety map should be read-only');
+    assert(commands.get('watch.create_mutation_safety_map.preview')?.effects.includes('read-only'), 'watch.create mutation safety map should declare read-only effect');
     assert(commands.get('runtime.patient_packet_identity.preview')?.classification === 'read-only', 'patient packet identity preview should be read-only');
     assert(commands.get('runtime.patient_packet_identity.preview')?.effects.includes('read-only'), 'patient packet identity preview should declare read-only effect');
     assert(commands.get('task.cancel')?.classification === 'runtime-control', 'task.cancel should be runtime-control');
@@ -168,6 +170,7 @@ async function main() {
     assert(rendererNames.has('watch.scope_authority_conformance.preview'), 'Watch scope authority conformance preview should be renderer eligible as read-only');
     assert(rendererNames.has('watch.system_radius_authoring_preflight.preview'), 'system/radius authoring preflight should be renderer eligible as read-only');
     assert(rendererNames.has('watch.system_radius_acceptance_payload.preview'), 'system/radius acceptance payload should be renderer eligible as read-only');
+    assert(rendererNames.has('watch.create_mutation_safety_map.preview'), 'watch.create mutation safety map should be renderer eligible as read-only');
     assert(rendererNames.has('runtime.patient_packet_identity.preview'), 'patient packet identity preview should be renderer eligible as read-only');
     assert(rendererNames.has('runtime.db_snapshot.create'), 'snapshot create should be renderer eligible');
     assert(!rendererNames.has('sde.import.topology'), 'SDE import should not be renderer eligible');

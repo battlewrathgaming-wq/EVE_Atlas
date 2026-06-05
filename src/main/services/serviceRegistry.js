@@ -64,6 +64,7 @@ const { buildWatchTaskOutcomeMapPreview } = require('./watchTaskOutcomeMapPrevie
 const { buildWatchScopeAuthorityConformancePreview } = require('./watchScopeAuthorityConformanceService');
 const { buildSystemRadiusAuthoringPreflight } = require('./systemRadiusAuthoringPreflightService');
 const { buildSystemRadiusAcceptancePayloadPreview } = require('./systemRadiusAcceptancePayloadService');
+const { buildWatchCreateMutationSafetyMap } = require('./watchCreateMutationSafetyMapService');
 const { buildPatientPacketIdentityPreview } = require('./patientPacketIdentityService');
 const {
   buildExternalIoStateConfigReadback,
@@ -703,6 +704,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview future system/radius watch.create payload from accepted preflight without Watch writes, dispatch, providers, tasks, schema, or UI work',
     handler: ({ db, payload }) => buildSystemRadiusAcceptancePayloadPreview(db, payload)
+  },
+  'watch.create_mutation_safety_map.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview watch.create mutation safety map and term-drift assurance without Watch writes, dispatch, providers, schema, or UI work',
+    handler: ({ db, payload }) => buildWatchCreateMutationSafetyMap(db, payload)
   },
   'runtime.patient_packet_identity.preview': {
     classification: 'read-only',

@@ -90,6 +90,7 @@ async function main() {
     const watchScopeAuthorityConformanceCommand = commands.find((entry) => entry.command === 'watch.scope_authority_conformance.preview');
     const systemRadiusAuthoringPreflightCommand = commands.find((entry) => entry.command === 'watch.system_radius_authoring_preflight.preview');
     const systemRadiusAcceptancePayloadCommand = commands.find((entry) => entry.command === 'watch.system_radius_acceptance_payload.preview');
+    const watchCreateMutationSafetyMapCommand = commands.find((entry) => entry.command === 'watch.create_mutation_safety_map.preview');
     const patientPacketIdentityCommand = commands.find((entry) => entry.command === 'runtime.patient_packet_identity.preview');
     const snapshotSettingsGetCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.get');
     const snapshotSettingsUpdateCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.update');
@@ -242,6 +243,8 @@ async function main() {
     assert(systemRadiusAuthoringPreflightCommand?.renderer_allowed === true, 'system/radius authoring preflight should be renderer eligible');
     assert(systemRadiusAcceptancePayloadCommand?.classification === 'read-only', 'system/radius acceptance payload should be read-only');
     assert(systemRadiusAcceptancePayloadCommand?.renderer_allowed === true, 'system/radius acceptance payload should be renderer eligible');
+    assert(watchCreateMutationSafetyMapCommand?.classification === 'read-only', 'watch.create mutation safety map should be read-only');
+    assert(watchCreateMutationSafetyMapCommand?.renderer_allowed === true, 'watch.create mutation safety map should be renderer eligible');
     assert(patientPacketIdentityCommand?.classification === 'read-only', 'patient packet identity preview should be read-only');
     assert(patientPacketIdentityCommand?.renderer_allowed === true, 'patient packet identity preview should be renderer eligible');
     assert(snapshotSettingsGetCommand?.classification === 'read-only', 'runtime snapshot settings get should be read-only');
@@ -521,6 +524,19 @@ async function main() {
     assert(systemRadiusAcceptancePayload.evidence_writes === 0, 'system/radius acceptance payload should not write Evidence/EVEidence');
     assert(systemRadiusAcceptancePayload.schema_changes === 0, 'system/radius acceptance payload should not change schema');
     assert(systemRadiusAcceptancePayload.runtime_enforcement_active === false, 'system/radius acceptance payload should not activate enforcement');
+
+    const watchCreateMutationSafetyMap = await invokeServiceCommand('watch.create_mutation_safety_map.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchCreateMutationSafetyMap.read_only === true, 'watch.create mutation safety map should declare read-only behavior');
+    assert(watchCreateMutationSafetyMap.provider_calls === 0, 'watch.create mutation safety map should not call providers');
+    assert(watchCreateMutationSafetyMap.watch_rows_written === 0, 'watch.create mutation safety map should not write Watch rows');
+    assert(watchCreateMutationSafetyMap.watch_dispatches === 0, 'watch.create mutation safety map should not dispatch Watch execution');
+    assert(watchCreateMutationSafetyMap.tasks_created === 0, 'watch.create mutation safety map should not create tasks');
+    assert(watchCreateMutationSafetyMap.evidence_writes === 0, 'watch.create mutation safety map should not write Evidence/EVEidence');
+    assert(watchCreateMutationSafetyMap.schema_changes === 0, 'watch.create mutation safety map should not change schema');
+    assert(watchCreateMutationSafetyMap.runtime_enforcement_active === false, 'watch.create mutation safety map should not activate enforcement');
 
     const patientPacketIdentity = await invokeServiceCommand('runtime.patient_packet_identity.preview', {}, {
       db,
