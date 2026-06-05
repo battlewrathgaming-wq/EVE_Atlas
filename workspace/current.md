@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS268 selected-ID Hydration execution fixture proof accepted by HS269; resting
+Status: HS270 Hydration real execution decision surface; resting
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after fixture-only selected-ID Hydration execution proof acceptance.
+Current focus: resting at the decision point before any real provider-backed selected-ID Hydration execution.
 
 Current heading:
 
@@ -44,6 +44,20 @@ workspace/OverseerHS269-hs268-hydration-execution-fixture-proof-review.md
 Status: accepted.
 
 No active Dev runway is open.
+
+Current decision surface:
+
+```txt
+workspace/OverseerHS270-hydration-real-execution-decision-surface.md
+```
+
+Current recommendation:
+
+Do not open real provider-backed selected-ID Hydration execution automatically. Choose deliberately between:
+
+1. Engineering/Security advisory on real execution gate fit.
+2. Read-only selected-ID real execution preflight.
+3. Real provider-backed execution packet, only after explicit Human/Overseer acceptance of external-contact movement.
 
 Accepted result:
 

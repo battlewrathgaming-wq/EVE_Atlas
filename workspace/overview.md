@@ -123,6 +123,7 @@ Current state:
 - HS266 accepted by HS267
 - HS268 opened
 - HS268 accepted by HS269
+- HS270 decision surface recorded
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -144,6 +145,7 @@ Current state:
 - latest accepted Dev runway is `workspace/OverseerHS268-selected-id-hydration-execution-fixture-proof-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS268-selected-id-hydration-execution-fixture-proof.md`
 - latest Overseer review is `workspace/OverseerHS269-hs268-hydration-execution-fixture-proof-review.md`
+- current decision surface is `workspace/OverseerHS270-hydration-real-execution-decision-surface.md`
 - latest accepted advisory request is `workspace/OverseerHS266-selected-id-hydration-execution-readiness-advisory-request.md`
 - latest accepted advisory artifact is `workspace/DataEngineeringHS266-selected-id-hydration-execution-readiness-advisory.md`
 - latest Overseer review is `workspace/OverseerHS267-hs266-hydration-execution-readiness-review.md`
@@ -167,7 +169,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is resting after fixture-only selected-ID Hydration execution proof acceptance
+- current work is resting at the decision point before any real provider-backed selected-ID Hydration execution
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -198,8 +200,9 @@ Resting state:
 1. HS268 accepted by HS269.
 2. No active Dev runway is open.
 3. `metadata.hydration_selected_id_execution_fixture_proof` proves selected-ID Hydration execution/write lifecycle with injected fixture provider results only.
-4. Preserve: request posture is pickup-readable, not pickup; pickup is not execution; execution is not write until the write path succeeds under policy.
-5. Preserve lane simplification: Discovery outputs possible leads; Evidence Expansion outputs Evidence/EVEidence; Hydration outputs readability repair; fourth lane stays parked.
+4. HS270 records the decision surface before real provider-backed selected-ID Hydration execution.
+5. Preserve: request posture is pickup-readable, not pickup; pickup is not execution; execution is not write until the write path succeeds under policy.
+6. Preserve lane simplification: Discovery outputs possible leads; Evidence Expansion outputs Evidence/EVEidence; Hydration outputs readability repair; fourth lane stays parked.
 
 See `workspace/current.md` for current truth.
 
