@@ -102,6 +102,14 @@ Overseer reviewed 2026-06-05:
 - Confirmed no zKillboard, Discovery, Evidence Expansion, Bucket/Dispatcher, schema, enforcement, support artifact, UI, or fourth-lane work.
 - Product live Hydration remains unopened.
 
+Follow-up local ADR:
+
+```txt
+docs/adr/ADR-0006-selected-id-hydration-proof-is-not-product-flow.md
+```
+
+Accepted guardrail: HS276 proof/test machinery must not become product Hydration flow by accident.
+
 ## HS276 Evidence
 
 Opened 2026-06-05 and accepted by HS277:

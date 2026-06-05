@@ -197,6 +197,7 @@ Current state:
 - Hydration pickup shaping accepted: selected-ID pickup is non-durable candidate acceptance for a future execution command, not queue persistence, dispatcher behavior, provider execution, or write behavior
 - Hydration pickup contract proof implemented: `metadata.hydration_pickup_contract.preview`
 - Lane simplification accepted: Discovery outputs possible leads; Evidence Expansion outputs Evidence/EVEidence; Hydration outputs readability repair; fourth lane stays parked
+- ADR-0006 accepted: HS276 selected-ID Hydration proof/test machinery is not product flow and must not be inherited as operator behavior without a new explicit runway.
 
 Current heading:
 
