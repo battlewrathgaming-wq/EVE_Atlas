@@ -170,6 +170,7 @@ async function verifySeededDb(root) {
       ['runtime.enforcement_active_semantics.preview', () => invokeServiceCommand('runtime.enforcement_active_semantics.preview', {}, context)],
       ['runtime.enforcement_hook_telemetry.readout', () => invokeServiceCommand('runtime.enforcement_hook_telemetry.readout', {}, context)],
       ['runtime.queue_clock_posture.preview', () => invokeServiceCommand('runtime.queue_clock_posture.preview', {}, context)],
+      ['runtime.watch_task_outcome_map.preview', () => invokeServiceCommand('runtime.watch_task_outcome_map.preview', {}, context)],
       ['runtime.patient_packet_identity.preview', () => invokeServiceCommand('runtime.patient_packet_identity.preview', {}, context)],
       ['task.list', () => invokeServiceCommand('task.list', { limit: 10 }, context)],
       ['assessment.list', () => invokeServiceCommand('assessment.list', {
@@ -268,6 +269,7 @@ async function verifyEmptyDb(root) {
       ['empty runtime.enforcement_active_semantics.preview', () => invokeServiceCommand('runtime.enforcement_active_semantics.preview', {}, context)],
       ['empty runtime.enforcement_hook_telemetry.readout', () => invokeServiceCommand('runtime.enforcement_hook_telemetry.readout', {}, context)],
       ['empty runtime.queue_clock_posture.preview', () => invokeServiceCommand('runtime.queue_clock_posture.preview', {}, context)],
+      ['empty runtime.watch_task_outcome_map.preview', () => invokeServiceCommand('runtime.watch_task_outcome_map.preview', {}, context)],
       ['empty runtime.patient_packet_identity.preview', () => invokeServiceCommand('runtime.patient_packet_identity.preview', {}, context)],
       ['empty assessment.list', () => invokeServiceCommand('assessment.list', {}, context)]
     ];

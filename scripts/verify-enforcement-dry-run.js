@@ -250,6 +250,10 @@ function verifyCoverageMetadata(map) {
   assert(command(map, 'runtime.queue_clock_posture.preview').runtime_context === 'queue_clock_posture_readout', 'queue/clock posture preview should be classified as a readout');
   assert(command(map, 'runtime.queue_clock_posture.preview').enforcement_status === 'read_only_non_enforcing_proof', 'queue/clock posture preview should identify itself as a non-enforcing proof');
   assert(command(map, 'runtime.queue_clock_posture.preview').external_io_dependency === 'none', 'queue/clock posture preview should not declare External I/O dependency');
+  assert(command(map, 'runtime.watch_task_outcome_map.preview').storage_action_class === 'local_db_inspection', 'Watch/task outcome map preview should be a local DB inspection');
+  assert(command(map, 'runtime.watch_task_outcome_map.preview').runtime_context === 'watch_task_outcome_map_readout', 'Watch/task outcome map preview should be classified as a readout');
+  assert(command(map, 'runtime.watch_task_outcome_map.preview').enforcement_status === 'read_only_non_enforcing_proof', 'Watch/task outcome map preview should identify itself as a non-enforcing proof');
+  assert(command(map, 'runtime.watch_task_outcome_map.preview').external_io_dependency === 'none', 'Watch/task outcome map preview should not declare External I/O dependency');
   assert(command(map, 'runtime.patient_packet_identity.preview').runtime_context === 'patient_packet_identity_readout', 'patient packet identity preview should be classified as a readout');
   assert(command(map, 'runtime.patient_packet_identity.preview').enforcement_status === 'read_only_non_enforcing_proof', 'patient packet identity preview should identify itself as a non-enforcing proof');
   assert(command(map, 'runtime.patient_packet_identity.preview').external_io_dependency === 'none', 'patient packet identity preview should not declare External I/O dependency');

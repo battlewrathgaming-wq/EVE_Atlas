@@ -146,6 +146,7 @@ Current state:
 - HS290 advisory assurance/scope request opened
 - HS290 accepted by HS291
 - HS292 opened
+- HS292 accepted by HS293
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -162,15 +163,15 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS292-watch-task-outcome-map-preview-runway.md`
-- expected Dev handoff is `workspace/DevHS292-watch-task-outcome-map-preview.md`
+- current executor is Overseer / Human decision
+- active Dev runway is none
+- expected Dev handoff is none
 - latest accepted advisory request is `workspace/OverseerHS290-watch-task-outcome-map-assurance-scope-request.md`
 - latest accepted advisory artifact is `workspace/EngineeringDataHS290-watch-task-outcome-map-assurance-scope.md`
 - latest Overseer advisory review is `workspace/OverseerHS291-hs290-watch-task-outcome-map-assurance-review.md`
-- latest accepted Dev runway is `workspace/OverseerHS288-selected-id-resolve-candidate-report-handoff-runway.md`
-- latest accepted Dev handoff is `workspace/DevHS288-selected-id-resolve-candidate-report-handoff.md`
-- latest Overseer review is `workspace/OverseerHS289-hs288-selected-id-resolve-candidate-review.md`
+- latest accepted Dev runway is `workspace/OverseerHS292-watch-task-outcome-map-preview-runway.md`
+- latest accepted Dev handoff is `workspace/DevHS292-watch-task-outcome-map-preview.md`
+- latest Overseer review is `workspace/OverseerHS293-hs292-watch-task-outcome-map-preview-review.md`
 - latest accepted advisory request is `workspace/OverseerHS286-user-input-fetch-selected-resolution-missing-links-assurance-request.md`
 - latest accepted advisory artifacts are `workspace/EngineeringDataHS286-user-input-fetch-selected-resolution-missing-links.md` and `workspace/EngineeringDataHS286-secondary-task-creation-watch-mechanics.md`
 - latest accepted advisory review is `workspace/OverseerHS287-hs286-missing-links-assurance-review.md`
@@ -218,7 +219,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is read-only Watch/task origin and durable outcome map preview
+- current work is resting after read-only Watch/task origin and durable outcome map preview acceptance
 - recommended next rich surface is selected unresolved local ID -> Resolve candidate -> future report readability reuse
 - parked separate lane is Task origin and durable outcome map for Manual Search and Watch
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
@@ -250,20 +251,16 @@ Current heading:
 
 Active Dev packet:
 
-1. `workspace/OverseerHS292-watch-task-outcome-map-preview-runway.md`
-2. Expected handoff: `workspace/DevHS292-watch-task-outcome-map-preview.md`
-3. Preferred command: `runtime.watch_task_outcome_map.preview`
-4. Scope: local-only/read-only Watch/task origin and durable outcome map preview.
-5. No provider calls, Watch dispatch, task creation, writes, schema, `watch_result`, relationship tags, UI, enforcement, support artifacts, or fourth-lane work.
+No active Dev packet is open.
 
 Latest accepted packet:
 
-1. `workspace/OverseerHS288-selected-id-resolve-candidate-report-handoff-runway.md`
-2. `workspace/DevHS288-selected-id-resolve-candidate-report-handoff.md`
-3. `workspace/OverseerHS289-hs288-selected-id-resolve-candidate-review.md`
-4. Accepted command: `metadata.selected_id_resolve_candidate.preview`
-5. Scope: local-only/read-only candidate/report handoff from visible unresolved ID to possible one-ID Resolve.
-6. Provider calls, writes, Resolve execution, UI, queue/Dispatcher, schema, support artifacts, Watch/task result work, enforcement, and fourth-lane work remain unopened.
+1. `workspace/OverseerHS292-watch-task-outcome-map-preview-runway.md`
+2. `workspace/DevHS292-watch-task-outcome-map-preview.md`
+3. `workspace/OverseerHS293-hs292-watch-task-outcome-map-preview-review.md`
+4. Accepted command: `runtime.watch_task_outcome_map.preview`
+5. Scope: local-only/read-only Watch/task origin and durable outcome map preview.
+6. Provider calls, Watch dispatch, task creation, writes, schema, durable `watch_result`, relationship tags, UI, active enforcement, support artifacts, and fourth-lane work remain unopened.
 
 Active advisory request:
 

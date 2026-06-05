@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS292 Watch/task outcome map preview runway open
+Status: HS292 Watch/task outcome map preview accepted; no active Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: read-only Watch/task origin and durable outcome map preview.
+Current focus: resting after read-only Watch/task origin and durable outcome map preview acceptance.
 
 Current heading:
 
@@ -21,21 +21,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS292-watch-task-outcome-map-preview-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS292-watch-task-outcome-map-preview.md
+none
 ```
 
-Dev may implement the narrow read-only/local-only Watch/task outcome map preview only. Do not call providers, dispatch Watch execution, create tasks, write rows, add schema, create `watch_result`, add relationship tags, change UI, activate enforcement, create support artifacts, or reopen the fourth lane.
+HS292 is accepted and can rest. Do not open provider calls, Watch dispatch, task creation, writes, schema, `watch_result`, relationship tags, UI, enforcement, support artifacts, or fourth-lane work without a new bounded decision.
 
 Latest accepted advisory request:
 
@@ -336,7 +336,7 @@ Open decision:
 Should Atlas open a bounded read-only Dev proof for a Watch/task outcome map preview?
 ```
 
-## HS292 Active Dev Runway
+## HS292 Accepted State
 
 Opened 2026-06-05:
 
@@ -359,6 +359,104 @@ runtime.watch_task_outcome_map.preview
 ```
 
 It should prove Atlas can explain origin kind, operator act/trigger, command, volatile versus durable state, expected durable rows, latest matching `fetch_runs`, Discovery ref counts, Evidence/EVEidence counts, Watch schedule posture, system/radius authored versus planned scope, and queue identity posture without provider calls, task dispatch, writes, schema, `watch_result`, relationship tags, UI, enforcement, support artifacts, or fourth-lane work.
+
+Accepted 2026-06-05:
+
+```txt
+workspace/OverseerHS293-hs292-watch-task-outcome-map-preview-review.md
+```
+
+Accepted result:
+
+```txt
+runtime.watch_task_outcome_map.preview
+```
+
+HS292 is accepted as a read-only/local-only Watch/task origin and durable outcome map preview. It proves current origin/output posture and exposes system/radius identity ambiguity without creating durable Watch results or relationship truth.
+
+## HS292 Evidence
+
+Dev updated 2026-06-05:
+
+- Added `runtime.watch_task_outcome_map.preview` as a renderer-eligible, read-only/local-only Watch/task origin and durable outcome map preview.
+- Added `src/main/services/watchTaskOutcomeMapPreviewService.js`.
+- Added `scripts/verify-watch-task-outcome-map-preview.js` and `npm.cmd run verify:watch-task-outcome-map`.
+- Registered service command and enforcement dry-run coverage as `local_db_inspection` / `watch_task_outcome_map_readout` / `read_only_non_enforcing_proof`.
+- Updated service registry, command authority, enforcement dry-run, and passive side-effect verification for the new read-only command.
+- Preview returns:
+  - Manual Discovery origin and durable Discovery ref/provenance posture.
+  - Manual Expansion origin and durable Evidence/EVEidence/provenance posture.
+  - Watch authoring durable intent rows.
+  - Watch schedule readout posture derived from existing Watch rows and gates.
+  - Watch executor dispatch posture with direct volatile executor/task snapshots only.
+  - Actor Watch and system/radius Watch collection durable outputs from existing `fetch_runs`, Discovery refs, Evidence/EVEidence rows, warnings, and deferrals.
+  - system/radius authored included/excluded scope versus current collector planned scope.
+  - system/radius queue identity posture as current center-only `discovered_by_id`, with radius/watch id not present.
+  - absence of durable `watch_result`, `watch_results`, `watch_result_items`, relationship tag column, and relationship truth artifacts.
+- Focused verifier sample:
+  - origin sections: Manual Discovery, Manual Expansion, Watch authoring, Watch schedule readout, Watch executor dispatch, Actor Watch collection, System/radius Watch collection.
+  - volatile task snapshot: 2 total in-memory fixture tasks, 1 Watch executor task, `creates_tasks: false`.
+  - system/radius identity: `center_only`, no radius or watch id in Discovery ref identity.
+  - authored system/radius scope: valid included `[30000101,30000102]`, valid excluded `[30000102]`.
+  - current collector planned scope: recomputed from `TopologyService.getSystemsWithinRadius(center,radius)`, excluded systems not applied from Watch row.
+  - malformed stored included scope distinguished.
+  - durable result artifacts absent.
+  - table mutation proof unchanged.
+- Boundaries confirmed:
+  - no provider calls
+  - no live/API verification
+  - no Watch dispatch
+  - no task creation
+  - no queue dispatch
+  - no Evidence/EVEidence writes
+  - no Discovery ref mutation
+  - no Watch row mutation
+  - no Hydration or metadata writes
+  - no `watch_result`, `watch_result_items`, relationship tag, or relationship truth creation
+  - no schema changes
+  - no runtime enforcement or command blocking
+  - no renderer/UI work beyond renderer-eligible read-only service command registration
+  - no support artifacts
+  - no fourth lane / fast lane
+- Verification run:
+  - `node --check src\main\services\watchTaskOutcomeMapPreviewService.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check scripts\verify-watch-task-outcome-map-preview.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `npm.cmd run verify:watch-task-outcome-map` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS292 working-tree changes.
+
+## HS292 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS292-watch-task-outcome-map-preview.md
+```
+
+Status: Watch/task outcome map preview complete and accepted by Overseer.
+
+## Current Decision Point
+
+Atlas is resting after accepting the Watch/task outcome map preview.
+
+Safe options:
+
+1. Rest Watch/task outcome map here.
+2. Ask for additional assurance if a specific concern appears.
+3. Later decide system/radius scope policy: stored snapshot, recomputed topology, or both with disclosed basis.
+4. Later decide system/radius Discovery ref identity before relying on durable result semantics.
+5. Later decide whether durable `watch_result` / `watch_result_items` schema is needed.
+
+Do not open durable Watch result storage, relationship tags, dispatcher/Bucket machinery, provider movement, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
 
 Latest accepted advisory request:
 

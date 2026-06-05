@@ -86,6 +86,7 @@ async function main() {
     const runtimeEnforcementBoundaryCommand = commands.find((entry) => entry.command === 'runtime.enforcement_boundary.preview');
     const runtimeHookTelemetryCommand = commands.find((entry) => entry.command === 'runtime.enforcement_hook_telemetry.readout');
     const queueClockPostureCommand = commands.find((entry) => entry.command === 'runtime.queue_clock_posture.preview');
+    const watchTaskOutcomeMapCommand = commands.find((entry) => entry.command === 'runtime.watch_task_outcome_map.preview');
     const patientPacketIdentityCommand = commands.find((entry) => entry.command === 'runtime.patient_packet_identity.preview');
     const snapshotSettingsGetCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.get');
     const snapshotSettingsUpdateCommand = commands.find((entry) => entry.command === 'runtime.db_snapshot.settings.update');
@@ -230,6 +231,8 @@ async function main() {
     assert(runtimeHookTelemetryCommand?.renderer_allowed === true, 'runtime hook telemetry readout should be renderer eligible');
     assert(queueClockPostureCommand?.classification === 'read-only', 'queue/clock posture preview should be read-only');
     assert(queueClockPostureCommand?.renderer_allowed === true, 'queue/clock posture preview should be renderer eligible');
+    assert(watchTaskOutcomeMapCommand?.classification === 'read-only', 'Watch/task outcome map preview should be read-only');
+    assert(watchTaskOutcomeMapCommand?.renderer_allowed === true, 'Watch/task outcome map preview should be renderer eligible');
     assert(patientPacketIdentityCommand?.classification === 'read-only', 'patient packet identity preview should be read-only');
     assert(patientPacketIdentityCommand?.renderer_allowed === true, 'patient packet identity preview should be renderer eligible');
     assert(snapshotSettingsGetCommand?.classification === 'read-only', 'runtime snapshot settings get should be read-only');
@@ -459,6 +462,18 @@ async function main() {
     assert(queueClockPosture.evidence_writes === 0, 'queue/clock posture preview should not write evidence');
     assert(queueClockPosture.hydration_writes === 0, 'queue/clock posture preview should not write hydration output');
     assert(queueClockPosture.runtime_enforcement_active === false, 'queue/clock posture preview should not activate enforcement');
+
+    const watchTaskOutcomeMap = await invokeServiceCommand('runtime.watch_task_outcome_map.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchTaskOutcomeMap.read_only === true, 'Watch/task outcome map preview should declare read-only behavior');
+    assert(watchTaskOutcomeMap.provider_calls === 0, 'Watch/task outcome map preview should not call providers');
+    assert(watchTaskOutcomeMap.watch_dispatches === 0, 'Watch/task outcome map preview should not dispatch Watch execution');
+    assert(watchTaskOutcomeMap.tasks_created === 0, 'Watch/task outcome map preview should not create tasks');
+    assert(watchTaskOutcomeMap.evidence_writes === 0, 'Watch/task outcome map preview should not write Evidence/EVEidence');
+    assert(watchTaskOutcomeMap.schema_changes === 0, 'Watch/task outcome map preview should not change schema');
+    assert(watchTaskOutcomeMap.runtime_enforcement_active === false, 'Watch/task outcome map preview should not activate enforcement');
 
     const patientPacketIdentity = await invokeServiceCommand('runtime.patient_packet_identity.preview', {}, {
       db,

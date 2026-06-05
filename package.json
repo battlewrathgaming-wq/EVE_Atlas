@@ -40,6 +40,7 @@
     "verify:report-indexes": "node scripts/verify-report-indexes.js",
     "verify:queue-selection": "node scripts/verify-queue-selection.js",
     "verify:queue-clock-posture": "node scripts/verify-queue-clock-posture-preview.js",
+    "verify:watch-task-outcome-map": "node scripts/verify-watch-task-outcome-map-preview.js",
     "verify:queue-clock-no-intent": "node scripts/verify-queue-clock-no-intent-semantics.js",
     "verify:patient-packet-identity": "node scripts/verify-patient-packet-identity-preview.js",
     "verify:patient-packet-identity-sparse": "node scripts/verify-patient-packet-identity-sparse.js",
