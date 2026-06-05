@@ -7,6 +7,10 @@ Date: 2026-05-21
 
 System watches should support a center system plus a jump radius derived from local SDE stargate topology.
 
+The radius scope includes the center system. A radius of 0 is the center only; a radius of 1 is the center plus direct neighbors.
+
+User-facing lists should put the center first and mark it as the center. Counts should be labeled as included systems; direct-neighbor counts exclude the center and are only for diagnostic or detail wording.
+
 The core question is:
 
 > Who is operating in and around this watched system?
@@ -15,12 +19,12 @@ The core question is:
 
 EVE activity is spatial. Pipes, neighboring systems, chokepoints, and pockets matter.
 
-Radius watches let the user express intent without manually tracking many systems.
+Radius watches let the user express intent without manually tracking many systems. User-facing output should show the selected system, radius, and included systems plainly.
 
 ## Staging
 
 1. Import SDE topology.
-2. Calculate radius scope with BFS.
+2. Calculate included system scope with BFS.
 3. Plan zKill system discovery routes.
 4. Collect refs respectfully.
 5. Expand only uncached killmails through ESI.
@@ -46,4 +50,3 @@ Radius watches let the user express intent without manually tracking many system
 - `docs/tenets/tenets.md`
 - `docs/adr/ADR-0001-zkill-is-discovery-only.md`
 - `docs/adr/ADR-0002-expanded-killmails-authoritative.md`
-

@@ -15,7 +15,7 @@ async function main() {
   const topology = new TopologyService(db);
 
   assertSame(topology.getSystemsWithinRadius(30000001, 0), [30000001], 'radius 0 should return only center');
-  assertSame(topology.getSystemsWithinRadius(30000001, 1), [30000001, 30000002, 30000003], 'radius 1 should return direct neighbors');
+  assertSame(topology.getSystemsWithinRadius(30000001, 1), [30000001, 30000002, 30000003], 'radius 1 should return center and direct neighbors');
   assertSame(topology.getSystemsWithinRadius(30000001, 2), [30000001, 30000002, 30000003, 30000004], 'radius 2 should cross cycle and reach edge');
   assertThrows(() => topology.getSystemsWithinRadius(39999999, 1), 'Unknown center system ID', 'unknown center should fail clearly');
   assertThrows(() => topology.getSystemsWithinRadius(30000001, 6), 'exceeds guard max', 'radius guard should fail clearly');

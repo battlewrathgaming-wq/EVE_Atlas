@@ -15,13 +15,28 @@ Radius: 1 jump
 
 Atlas uses local SDE stargate topology to find the nearby systems.
 
+Radius scopes include the center system. A radius of 1 jump means the center system plus its direct neighbors.
+
+Simple presentation:
+
+```txt
+System ZTS-4D with a radius of 1 jump:
+
+Included systems:
+- ZTS-4D (center)
+- Neighbor 1
+- Neighbor 2
+```
+
+The center system should appear first and be marked as the center. If a count is shown, label it as included systems, not neighbors. Direct neighbor counts exclude the center system and should be reserved for diagnostic or detail wording.
+
 ## Question It Answers
 
 > Who is operating in and around this place?
 
 ## Why It Matters
 
-EVE activity is spatial. Neighboring systems, pipes, chokepoints, and pockets matter.
+EVE activity is spatial. Direct neighbors, pipes, chokepoints, and pockets matter.
 
 A radius watch can reveal multi-system presence that a single-system watch might miss.
 

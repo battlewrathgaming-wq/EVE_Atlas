@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS302 radius neighbor wording refresh runway open
+Status: HS302 radius neighbor wording refresh accepted; no active Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: tighten radius/neighbors wording so radius-includes-center is not confused with direct neighbors.
+Current focus: resting after radius neighbor wording refresh.
 
 Current heading:
 
@@ -23,21 +23,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS302-radius-neighbor-wording-refresh-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS302-radius-neighbor-wording-refresh.md
+none
 ```
 
-HS296, HS298, HS300, and HS301 are accepted. Dev may perform the bounded HS302 wording/verifier-label refresh only. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, HS301, and HS302 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
 
 Latest accepted advisory request:
 
@@ -1019,6 +1019,77 @@ itemlist4
 ```
 
 Do not change topology traversal behavior, schema, imported connection type values, Watch scope authority, Discovery refs, Evidence/EVEidence, Watch rows, Hydration, UI, support artifacts, durable Watch results, or fourth-lane behavior.
+
+## HS302 Evidence
+
+Dev updated 2026-06-05:
+
+- Updated `docs/terms/system-radius-watch.md` to state:
+  - radius scopes include the center system
+  - radius 1 means center plus direct neighbors
+  - direct neighbor counts exclude the center system
+  - simple presentation should show selected system, radius, and included systems plainly
+  - center appears first and is marked as `(center)`
+  - counts should be labeled as included systems, not neighbors
+  - direct-neighbor count is reserved for diagnostic/detail wording
+- Updated `docs/roadmap/system-radius-watch.md` to state:
+  - radius 0 is center only
+  - radius 1 is center plus direct neighbors
+  - user-facing output should show selected system, radius, and included systems plainly
+  - user-facing lists should put the center first and mark it as the center
+  - direct-neighbor counts exclude center and should be diagnostic/detail wording only
+  - planning calculates included system scope
+- Updated `scripts/verify-radius.js` assertion text from stale `direct neighbors` wording to `center and direct neighbors` while preserving the same expected IDs.
+- Runtime behavior unchanged:
+  - no topology traversal behavior change
+  - no schema change
+  - no `system_adjacency.connection_type = stargate` rename
+  - no Watch scope authority change
+  - no Discovery refs, Evidence/EVEidence, Watch rows, Hydration, UI, support artifact, durable Watch result, or fourth-lane work
+- Verification run:
+  - `node --check scripts\verify-radius.js` passed.
+  - `node --check scripts\verify-system-radius-planner.js` passed.
+  - `npm.cmd run verify:radius` passed.
+  - `npm.cmd run verify:planner` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 356 warnings across 5 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS302 working-tree changes.
+
+## HS302 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS302-radius-neighbor-wording-refresh.md
+```
+
+Status: radius neighbor wording refresh complete and accepted by Overseer.
+
+## HS302 Overseer Review
+
+Accepted:
+
+```txt
+workspace/OverseerHS303-hs302-radius-neighbor-wording-refresh-review.md
+```
+
+Decision:
+
+HS302 is accepted.
+
+Accepted result:
+
+- radius scope includes center
+- radius 0 = center only
+- radius 1 = center plus direct neighbors
+- direct neighbor count excludes center
+- user-facing radius lists should use `Included systems`
+- center should appear first and be marked as `(center)`
+- direct-neighbor counts belong in diagnostic/detail wording only
+
+Runtime topology behavior did not change.
+
+HS302 can rest.
 
 Latest accepted advisory request:
 
