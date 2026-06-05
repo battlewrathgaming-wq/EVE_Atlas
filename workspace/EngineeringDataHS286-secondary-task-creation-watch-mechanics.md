@@ -632,3 +632,10 @@ Parked future decisions:
 - whether `watch_result` becomes durable schema;
 - whether relationship tags are Observation support or Assessment support;
 - whether Watch result identity is per run, per Watch window, or per generated report.
+
+Residual Overseer notes:
+
+- Keep this lane parked until Atlas deliberately returns to Watch/task outputs.
+- The useful pressure is not "create more task machinery"; it is "do not lose the meaning of what a scope/run found."
+- If reopened, start with a read-only outcome map before schema or writer behavior.
+- Evidence should stay clean. Watch/task meaning should point at Evidence, not live inside it.
