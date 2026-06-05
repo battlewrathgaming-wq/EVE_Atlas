@@ -118,6 +118,7 @@ Current state:
 - HS262 advisory opened
 - HS262 accepted by HS263
 - HS264 opened
+- HS264 accepted by HS265
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -134,9 +135,11 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS264-hydration-pickup-eligibility-contract-preview-runway.md`
-- expected Dev handoff is `workspace/DevHS264-hydration-pickup-eligibility-contract-preview.md`
+- current executor is none
+- no active Dev runway is open
+- latest accepted Dev runway is `workspace/OverseerHS264-hydration-pickup-eligibility-contract-preview-runway.md`
+- latest accepted Dev handoff is `workspace/DevHS264-hydration-pickup-eligibility-contract-preview.md`
+- latest Overseer review is `workspace/OverseerHS265-hs264-hydration-pickup-contract-review.md`
 - latest accepted advisory request is `workspace/OverseerHS262-hydration-request-pickup-shaping-advisory-request.md`
 - latest accepted advisory artifact is `workspace/DataEngineeringHS262-hydration-request-pickup-shaping-advisory.md`
 - latest Overseer review is `workspace/OverseerHS263-hs262-hydration-pickup-shaping-review.md`
@@ -154,7 +157,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is read-only selected-ID Hydration pickup eligibility / execution-input contract preview
+- current work is resting after read-only selected-ID Hydration pickup eligibility / execution-input contract preview acceptance
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -165,6 +168,7 @@ Current state:
 - Hydration request posture accepted: request posture is pickup-readable, not pickup; pickup is not execution; execution is not write until the write path succeeds under policy
 - Hydration request posture proof implemented: `metadata.hydration_request_posture.preview`
 - Hydration pickup shaping accepted: selected-ID pickup is non-durable candidate acceptance for a future execution command, not queue persistence, dispatcher behavior, provider execution, or write behavior
+- Hydration pickup contract proof implemented: `metadata.hydration_pickup_contract.preview`
 
 Current heading:
 
@@ -177,11 +181,11 @@ Current heading:
 - Observation can form from raw local IDs before labels are complete; Hydration is expected selective readability repair, not a prerequisite or global completion demand
 - Hydration selection seam north star: local readability may happen during report construction, but provider-backed readability requires an explicit operator trigger and still passes normal gates
 
-Active Dev packet:
+Resting state:
 
-1. `workspace/OverseerHS264-hydration-pickup-eligibility-contract-preview-runway.md`
-2. Prove selected-ID Hydration pickup eligibility / execution-input contract as read-only.
-3. No provider calls, execution, writes, pickup persistence, queue, dispatcher, worker, schema, runtime enforcement, support artifact, or UI work.
+1. HS264 accepted by HS265.
+2. No active Dev runway is open.
+3. `metadata.hydration_pickup_contract.preview` is the read-only pickup eligibility / execution-input contract proof.
 4. Preserve: request posture is pickup-readable, not pickup; pickup is not execution; execution is not write until the write path succeeds under policy.
 
 See `workspace/current.md` for current truth.

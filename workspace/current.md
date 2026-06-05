@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS264 Hydration pickup eligibility contract preview runway open
+Status: HS264 Hydration pickup eligibility contract preview accepted by HS265; resting
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: read-only selected-ID Hydration pickup eligibility / execution-input contract preview.
+Current focus: resting after read-only selected-ID Hydration pickup eligibility / execution-input contract preview acceptance.
 
 Current heading:
 
@@ -20,23 +20,33 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: none
 
-Active Dev runway:
+Latest accepted Dev runway:
 
 ```txt
 workspace/OverseerHS264-hydration-pickup-eligibility-contract-preview-runway.md
 ```
 
-Expected Dev handoff:
+Latest accepted Dev handoff:
 
 ```txt
 workspace/DevHS264-hydration-pickup-eligibility-contract-preview.md
 ```
 
-Dev task:
+Latest Overseer review:
 
-Add the smallest read-only proof for selected-ID Hydration pickup eligibility / execution-input contract.
+```txt
+workspace/OverseerHS265-hs264-hydration-pickup-contract-review.md
+```
+
+Status: accepted.
+
+No active Dev runway is open.
+
+Accepted result:
+
+HS264 added the read-only selected-ID Hydration pickup eligibility / execution-input contract preview.
 
 Target command concept:
 
@@ -300,6 +310,88 @@ Preserve:
 - no command blocking
 - no pruning/deletion behavior
 - no renderer UI work
+
+## HS264 Evidence
+
+Dev updated 2026-06-05:
+
+- Added `metadata.hydration_pickup_contract.preview` as a read-only, renderer-eligible service command.
+- Added `src/main/services/hydrationPickupContractService.js` to rebuild HS260 request posture from trusted local state/gates and emit a selected-ID pickup eligibility / execution-input contract preview.
+- Added `scripts/verify-hydration-pickup-contract.js` and `npm.cmd run verify:hydration-pickup-contract`.
+- Registered enforcement dry-run coverage for the new command as `local_db_inspection` / `selected_id_hydration_pickup_contract_readout` / `covered_read_only`.
+- Updated service registry, command authority, enforcement dry-run, and passive side-effect verifiers for the new command.
+- Focused verifier proves non-candidate rejection for:
+  - `not_a_request`
+  - `invalid`
+  - `insufficient_basis`
+  - `already_local`
+  - `local_lookup_available`
+  - `held`
+  - `blocked`
+- Focused verifier proves the only accepted pickup candidate shape:
+  - rebuilt request posture: `provider_needed`
+  - provider posture: `released_to_normal_gates_only`
+  - pickup state: `pickup_candidate`
+  - non-durable: true
+  - persisted: false
+  - execution authorized: false
+  - provider call authorized: false
+  - Hydration write authorized: false
+- Execution-input hints include:
+  - `id_type`
+  - `id_value`
+  - `source_surface`
+  - `source_context`
+  - `basis_anchor`
+  - `basis_layer`
+  - `request_reason`
+  - `request_posture_id`
+  - `request_digest`
+  - `posture_gate_summary`
+- Renderer anti-forgery proof shows renderer-supplied `localLabel`, `gateSummary`, `storagePosture`, `externalIoState`, `liveGate`, and `pickupEligible` are ignored as authority.
+- Boundary confirmations:
+  - pickup candidate is not execution or authorization
+  - future execution input is hints/explanation only
+  - request digest comparison is freshness evidence only, not authority
+  - future execution must rebuild local-first posture from trusted local state
+  - future execution must short-circuit to local readability if a label has become local
+  - no provider calls
+  - no Hydration execution or Hydration writes
+  - no `metadata_runs` writes
+  - no entity writes or activity-event label patches
+  - no Evidence/EVEidence writes
+  - no Discovery ref mutation
+  - no Watch, Assessment Memory, or Marked mutation
+  - no pickup, request, queue, lease, or retry persistence
+  - no dispatcher or worker
+  - no schema changes
+  - no runtime enforcement activation or command blocking
+  - no storage config / External I/O config writes
+  - no support artifact creation
+  - no renderer UI work
+- Verification run:
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\hydrationPickupContractService.js` passed.
+  - `node --check scripts\verify-hydration-pickup-contract.js` passed.
+  - `npm.cmd run verify:hydration-pickup-contract` passed.
+  - `npm.cmd run verify:hydration-request-posture` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 261 warnings across 8 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main` with HS264 working-tree changes.
+
+## HS264 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS264-hydration-pickup-eligibility-contract-preview.md
+```
+
+Status: accepted by `workspace/OverseerHS265-hs264-hydration-pickup-contract-review.md`.
 
 ## HS260 Evidence
 

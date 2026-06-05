@@ -45,6 +45,7 @@ const { buildHydrationCandidatePreview } = require('./hydrationCandidatePreviewS
 const { buildHydrationAttentionLensPreview } = require('./hydrationAttentionLensService');
 const { buildHydrationAttentionRuntimePosturePreview } = require('./hydrationAttentionRuntimePostureService');
 const { buildHydrationExecutionPolicyPreview } = require('./hydrationExecutionPolicyPreviewService');
+const { buildHydrationPickupContractPreview } = require('./hydrationPickupContractService');
 const { buildHydrationRequestPosturePreview } = require('./hydrationRequestPostureService');
 const { buildHydrationWriteFixtureProof } = require('./hydrationWriteFixtureProofService');
 const { buildLocalSdeReadinessPreview } = require('./localSdeReadinessPreviewService');
@@ -244,6 +245,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview explicit selected-ID Hydration request posture without provider calls, writes, queues, dispatch, enforcement, or UI work',
     handler: ({ db, payload, ...context }) => buildHydrationRequestPosturePreview(db, payload, context)
+  },
+  'metadata.hydration_pickup_contract.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview selected-ID Hydration pickup eligibility and future execution-input hints without provider calls, writes, persistence, dispatch, enforcement, or UI work',
+    handler: ({ db, payload, ...context }) => buildHydrationPickupContractPreview(db, payload, context)
   },
   'metadata.local_sde_readiness.preview': {
     classification: 'read-only',

@@ -113,6 +113,12 @@ async function verifySeededDb(root) {
         operatorAct: true,
         sourceSurface: 'passive-sweep'
       }, context)],
+      ['metadata.hydration_pickup_contract.preview', () => invokeServiceCommand('metadata.hydration_pickup_contract.preview', {
+        idType: 'character',
+        idValue: 90000002,
+        operatorAct: true,
+        sourceSurface: 'passive-sweep'
+      }, context)],
       ['metadata.local_sde_readiness.preview', () => invokeServiceCommand('metadata.local_sde_readiness.preview', {}, context)],
       ['metadata.local_sde_source_posture.preview', () => invokeServiceCommand('metadata.local_sde_source_posture.preview', {}, context)],
       ['runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],
@@ -189,6 +195,12 @@ async function verifyEmptyDb(root) {
       ['empty metadata.hydration_attention_lens.preview', () => invokeServiceCommand('metadata.hydration_attention_lens.preview', {}, context)],
       ['empty metadata.hydration_attention_runtime.preview', () => invokeServiceCommand('metadata.hydration_attention_runtime.preview', {}, context)],
       ['empty metadata.hydration_request_posture.preview', () => invokeServiceCommand('metadata.hydration_request_posture.preview', {
+        idType: 'character',
+        idValue: 90000002,
+        operatorAct: true,
+        sourceSurface: 'passive-sweep'
+      }, context)],
+      ['empty metadata.hydration_pickup_contract.preview', () => invokeServiceCommand('metadata.hydration_pickup_contract.preview', {
         idType: 'character',
         idValue: 90000002,
         operatorAct: true,

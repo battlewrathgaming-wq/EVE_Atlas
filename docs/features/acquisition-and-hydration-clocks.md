@@ -148,6 +148,14 @@ Pickup is explicit acceptance of a current Hydration request posture as candidat
 
 Selected-ID pickup is non-durable for now. It is not a queue row, dispatcher packet, retry lease, provider call, `metadata_runs` row, `entities` write, `activity_events` patch, or Hydration write. Future execution must rebuild local-first posture from trusted local state before provider movement; renderer posture is explanation, not authority.
 
+HS264 implementation note:
+
+```text
+metadata.hydration_pickup_contract.preview
+```
+
+This command is the current read-only proof for selected-ID pickup eligibility and future execution-input hints. It rejects non-candidate posture states, accepts only provider-needed posture released to normal gates as a non-durable candidate, and keeps execution input as hints/explanation only.
+
 It has two conceptual lanes.
 
 ### Watch Hydration Lane

@@ -178,6 +178,9 @@ function verifyCoverageMetadata(map) {
   assert(command(map, 'metadata.hydration_request_posture.preview').runtime_context === 'selected_id_hydration_request_posture_readout', 'hydration request posture should be classified as a selected-ID readout');
   assert(command(map, 'metadata.hydration_request_posture.preview').external_io_dependency === 'none', 'hydration request posture readout should not declare External I/O dependency');
   assert(command(map, 'metadata.hydration_request_posture.preview').enforcement_status === 'covered_read_only', 'hydration request posture should be covered read-only');
+  assert(command(map, 'metadata.hydration_pickup_contract.preview').runtime_context === 'selected_id_hydration_pickup_contract_readout', 'hydration pickup contract should be classified as a selected-ID readout');
+  assert(command(map, 'metadata.hydration_pickup_contract.preview').external_io_dependency === 'none', 'hydration pickup contract readout should not declare External I/O dependency');
+  assert(command(map, 'metadata.hydration_pickup_contract.preview').enforcement_status === 'covered_read_only', 'hydration pickup contract should be covered read-only');
   assert(command(map, 'metadata.local_sde_readiness.preview').runtime_context === 'local_sde_readiness_readout', 'local SDE readiness preview should be classified as a readout');
   assert(command(map, 'metadata.local_sde_readiness.preview').external_io_dependency === 'none', 'local SDE readiness preview should not declare External I/O dependency');
   assert(command(map, 'metadata.local_sde_readiness.preview').enforcement_status === 'covered_read_only', 'local SDE readiness preview should be covered read-only');
