@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS300 Watch/task outcome map HS296 refresh runway open
+Status: HS300 Watch/task outcome map HS296 refresh accepted; no active Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: refresh Watch/task outcome map preview so it reflects HS296 stored-scope execution authority and HS298 center-only Discovery ref identity limitation.
+Current focus: resting after Watch/task outcome map HS296 refresh.
 
 Current heading:
 
@@ -23,21 +23,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS300-watch-task-outcome-map-hs296-refresh-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS300-watch-task-outcome-map-hs296-refresh.md
+none
 ```
 
-HS296 and HS298 are accepted. Dev may perform the bounded HS300 read-only preview refresh only. Do not open provider movement, live testing, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
+HS296, HS298, and HS300 are accepted and can rest. Do not open provider movement, live testing, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
 
 Latest accepted advisory request:
 
@@ -874,6 +874,101 @@ HS298: system_radius Discovery ref identity remains center-only
 ```
 
 Do not change Discovery ref identity, create durable Watch results, create relationship tags, call providers, dispatch Watch execution, create tasks, mutate local rows, add schema, change UI, activate enforcement, create support artifacts, or reopen fourth-lane work.
+
+## HS300 Evidence
+
+Dev updated 2026-06-05:
+
+- Refreshed `runtime.watch_task_outcome_map.preview` so `system_radius_scope` now reports:
+  - `watch_execution_scope_authority: stored_watch_scope`
+  - `direct_manual_scope_authority: center_radius_planner`
+  - `discovery_ref_identity_level: center_only`
+  - `result_semantics_ready: false`
+  - Watch execution does not recompute topology from center/radius as authority.
+  - Direct/manual `system.radius.watch` preserves center/radius planner behavior.
+  - invalid stored scope blocks before provider work.
+- Updated system/radius Watch scope rows to show:
+  - authored/stored included scope status and accepted authority
+  - Watch execution scope authority from stored included IDs
+  - diagnostic recomputed topology as diagnostic-only
+  - direct/manual planner scope as separate from accepted Watch execution authority
+  - center-only Discovery ref identity separate from Watch execution scope authority
+  - parked durable result semantics
+- Updated queue identity wording so center-only `system_radius` Discovery refs remain possible leads/provenance and not exact Watch result membership.
+- Updated `scripts/verify-watch-task-outcome-map-preview.js` so it no longer asserts the stale pre-HS296 posture.
+- Fixture coverage now proves stored Watch execution authority can differ from diagnostic recomputed topology:
+  - stored accepted scope: `[30000101,30000103]`
+  - diagnostic recompute from center/radius: `[30000101,30000102]`
+  - `scope_match: false`
+  - Discovery ref identity remains `center_only`
+  - valid, missing, and malformed stored scopes are distinguished.
+- Boundaries confirmed:
+  - no provider calls
+  - no live/API verification
+  - no Watch dispatch
+  - no Watch arming
+  - no task creation
+  - no Discovery ref mutation
+  - no Evidence/EVEidence writes
+  - no Watch row mutation
+  - no Assessment Memory mutation
+  - no schema changes
+  - no durable `watch_result` / `watch_result_items`
+  - no relationship tags or relationship truth
+  - no renderer/UI behavior beyond existing read-only command
+  - no runtime enforcement or command blocking
+  - no support artifacts
+  - no fourth lane / fast lane
+- Verification run:
+  - `node --check src\main\services\watchTaskOutcomeMapPreviewService.js` passed.
+  - `node --check scripts\verify-watch-task-outcome-map-preview.js` passed.
+  - `npm.cmd run verify:watch-task-outcome-map` passed.
+  - `npm.cmd run verify:watch-scope-authority-conformance` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 31 warnings across 2 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS300 working-tree changes.
+
+## HS300 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS300-watch-task-outcome-map-hs296-refresh.md
+```
+
+Status: Watch/task outcome map HS296 refresh complete and accepted by Overseer.
+
+## HS300 Overseer Review
+
+Accepted:
+
+```txt
+workspace/OverseerHS301-hs300-watch-task-outcome-map-refresh-review.md
+```
+
+Decision:
+
+HS300 is accepted.
+
+Accepted result:
+
+- `runtime.watch_task_outcome_map.preview` now reflects HS296 stored-scope Watch execution authority.
+- It also preserves HS298 center-only `system_radius` Discovery ref identity limitation.
+- It distinguishes Watch execution authority from direct/manual `system.radius.watch` planner behavior.
+- It keeps durable Watch/task result semantics parked.
+
+Hare topology semantics note:
+
+- Atlas radius semantics include the center system.
+- Direct neighbor counts exclude the center system.
+- Prefer `neighbors` / `direct neighbors` in operator-facing wording when describing adjacency/counts.
+- Use `stargate` only when specifically discussing the imported local topology connection type or source data.
+
+HS300 can rest.
 
 Latest accepted advisory request:
 

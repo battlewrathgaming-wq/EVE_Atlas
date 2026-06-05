@@ -154,6 +154,7 @@ Current state:
 - HS298 advisory opened
 - HS298 accepted by HS299
 - HS300 opened
+- HS300 accepted by HS301
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -170,9 +171,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS300-watch-task-outcome-map-hs296-refresh-runway.md`
-- expected Dev handoff is `workspace/DevHS300-watch-task-outcome-map-hs296-refresh.md`
+- current executor is Overseer / Human decision
+- active Dev runway is none
+- expected Dev handoff is none
 - latest accepted advisory request is `workspace/OverseerHS298-system-radius-discovery-ref-identity-advisory-request.md`
 - latest accepted advisory artifact is `workspace/EngineeringDataHS298-system-radius-discovery-ref-identity-advisory.md`
 - latest advisory review is `workspace/OverseerHS299-hs298-system-radius-discovery-ref-identity-advisory-review.md`
@@ -229,7 +230,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is Watch/task outcome map HS296 refresh
+- current work is resting after Watch/task outcome map HS296 refresh
 - recommended next rich surface is selected unresolved local ID -> Resolve candidate -> future report readability reuse
 - parked separate lane is Task origin and durable outcome map for Manual Search and Watch
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
@@ -262,12 +263,18 @@ Current heading:
 
 Active Dev packet:
 
-1. `workspace/OverseerHS300-watch-task-outcome-map-hs296-refresh-runway.md`
-2. Expected handoff: `workspace/DevHS300-watch-task-outcome-map-hs296-refresh.md`
-3. Scope: refresh `runtime.watch_task_outcome_map.preview` so it reflects HS296 stored-scope Watch execution authority and HS298 center-only Discovery ref identity limitation.
-4. No provider calls, Watch dispatch/task creation, row mutations, schema, Discovery ref identity redesign, durable Watch results, relationship tags, UI, enforcement, support artifacts, or fourth-lane work.
+No active Dev packet is open.
 
 Latest accepted packet:
+
+1. `workspace/OverseerHS300-watch-task-outcome-map-hs296-refresh-runway.md`
+2. `workspace/DevHS300-watch-task-outcome-map-hs296-refresh.md`
+3. `workspace/OverseerHS301-hs300-watch-task-outcome-map-refresh-review.md`
+4. Accepted result: `runtime.watch_task_outcome_map.preview` now reflects HS296 stored-scope Watch execution authority and HS298 center-only Discovery ref identity limitation.
+5. Accepted semantics note: radius includes the center system; direct neighbor counts exclude the center system; prefer `neighbors` for operator-facing adjacency/counts unless discussing imported `stargate` source data.
+6. Provider movement, live testing, Discovery ref identity redesign, durable Watch results, relationship tags, UI, active enforcement, support artifacts, and fourth-lane work remain unopened.
+
+Previous accepted packet:
 
 1. `workspace/OverseerHS296-watch-scope-authority-execution-correction-runway.md`
 2. `workspace/DevHS296-watch-scope-authority-execution-correction.md`

@@ -79,10 +79,13 @@ function buildWatchTaskOutcomeMapPreview(db, input = {}, context = {}) {
         discovered_by_type: 'system_radius',
         current_discovered_by_id: 'center_system_id',
         current_identity_level: 'center_only',
+        watch_execution_scope_authority: 'stored_watch_scope',
+        discovery_ref_identity_level: 'center_only',
+        separate_from_watch_scope_authority: true,
         center_plus_radius_watch_capable_now: false,
         radius_or_watch_id_in_discovery_ref_identity: false,
         risk: 'multiple radius Watches sharing one center can be ambiguous for future outcome-map semantics',
-        decision_needed: 'center_only_or_center_plus_radius_watch_identity_before_durable_result_semantics'
+        decision_needed: 'separate_result_membership_layer_before_durable_watch_result_semantics'
       }
     },
     no_durable_result_artifacts: {
@@ -113,6 +116,9 @@ function buildWatchTaskOutcomeMapPreview(db, input = {}, context = {}) {
       'Manual Discovery maps to Discovery refs as possible leads, not Evidence/EVEidence.',
       'Manual Expansion maps to Evidence/EVEidence and run provenance.',
       'Watch authoring maps to durable Watch intent rows only; schedule/offline state is derived posture only.',
+      'Accepted system/radius Watch execution uses stored included_system_ids as execution authority; center/radius remain provenance/explanation after acceptance.',
+      'Direct/manual system.radius.watch without accepted stored IDs remains center/radius planner behavior.',
+      'System/radius Discovery ref identity remains center-only and is separate from Watch execution scope authority.',
       'No durable watch_result/watch_result_items, relationship tag, relationship truth, schema, UI, enforcement, support artifact, or fourth-lane work is created.'
     ]
   };
@@ -238,6 +244,7 @@ function watchExecutorDispatchSection(db, { executorSnapshot, taskSnapshot }) {
     },
     notes: [
       'Executor dispatch can create a volatile task only when due Watch movement occurs.',
+      'After HS296, system/radius Watch dispatch requires valid stored included_system_ids and passes them as stored Watch scope authority before provider work.',
       'This preview does not arm, tick, dispatch, or create tasks.'
     ]
   });
@@ -258,10 +265,17 @@ function watchCollectionSection(db, watchType) {
     evidenceCounts: evidenceCountsForRun(db, latest?.run_id),
     warnings: warningsForRun(db, latest?.run_id),
     deferralBasis: deferralsForRun(db, latest?.run_id),
-    notes: [
-      'Watch collection durable truth is local collection provenance plus Discovery/Evidence rows.',
-      'No durable watch_result or relationship tag is written by current source.'
-    ]
+    notes: isActor
+      ? [
+          'Watch collection durable truth is local collection provenance plus Discovery/Evidence rows.',
+          'No durable watch_result or relationship tag is written by current source.'
+        ]
+      : [
+          'System/radius Watch execution uses stored included_system_ids when dispatched from an accepted Watch.',
+          'Direct/manual system.radius.watch remains center/radius planner behavior when no accepted stored IDs are supplied.',
+          'Discovery refs remain center-only possible leads; they are not exact Watch result membership.',
+          'No durable watch_result or relationship tag is written by current source.'
+        ]
   });
 }
 
@@ -314,15 +328,28 @@ function systemRadiusScopeComparison(db, schedule) {
     ORDER BY watch_id
   `).all();
   return {
-    behavior: 'read_only_scope_comparison',
-    executor_dispatch_payload_uses_stored_included_excluded_lists: false,
-    collector_planning_recomputes_topology_from_center_radius: true,
+    behavior: 'read_only_scope_authority_and_identity_comparison',
+    watch_execution_scope_authority: 'stored_watch_scope',
+    direct_manual_scope_authority: 'center_radius_planner',
+    discovery_ref_identity_level: 'center_only',
+    result_semantics_ready: false,
+    executor_dispatch_payload_uses_stored_included_system_ids: true,
+    executor_dispatch_payload_uses_stored_excluded_system_ids: false,
+    watch_execution_recomputes_topology_from_center_radius: false,
+    direct_manual_collection_recomputes_topology_from_center_radius: true,
+    invalid_stored_scope_blocks_before_provider: true,
+    center_radius_role_after_watch_acceptance: 'provenance_and_explanation',
+    recomputed_topology_role_after_watch_acceptance: 'diagnostic_comparison_only',
     comparison_available: rows.length > 0,
     watches: rows.map((row) => {
       const authoredIncluded = parseJsonArray(row.included_system_ids);
       const authoredExcluded = parseJsonArray(row.excluded_system_ids);
-      const planned = currentPlannedScope(db, row);
+      const includedStatus = authoredIncluded.status === 'valid' && authoredIncluded.values.length === 0
+        ? 'not_stored'
+        : authoredIncluded.status;
+      const diagnostic = diagnosticRecomputedScope(db, row);
       const scheduleWatch = (schedule.watches || []).find((watch) => watch.watch_type === 'system_radius' && watch.watch_id === row.watch_id);
+      const validStoredScope = includedStatus === 'valid';
       return {
         watch_id: row.watch_id,
         center_system_id: row.center_system_id,
@@ -332,27 +359,38 @@ function systemRadiusScopeComparison(db, schedule) {
           discovered_by_id: String(row.center_system_id),
           identity_level: 'center_only',
           includes_radius: false,
-          includes_watch_id: false
+          includes_watch_id: false,
+          separate_from_watch_scope_authority: true,
+          possible_leads_not_evidence: true
         },
         authored_scope: {
           included_system_ids: authoredIncluded.values,
-          included_scope_status: authoredIncluded.status,
+          included_scope_status: includedStatus,
           excluded_system_ids: authoredExcluded.values,
           excluded_scope_status: authoredExcluded.status,
-          source_table: 'system_watches'
+          source_table: 'system_watches',
+          accepted_authority: validStoredScope,
+          center_radius_role_after_acceptance: 'provenance_and_explanation'
         },
-        current_collector_planned_scope: planned,
+        watch_execution_scope_authority: executionScopeAuthorityForStoredScope(includedStatus, authoredIncluded.values),
+        diagnostic_recomputed_scope: diagnostic,
+        direct_manual_planner_scope: {
+          ...diagnostic,
+          authority_for_direct_manual_system_radius_watch: true,
+          authority_for_accepted_watch_execution: false
+        },
         schedule_scope_status: scheduleWatch?.source?.included_system_scope_status || null,
-        scope_match: authoredIncluded.status === 'valid' && planned.status === 'computed'
-          ? sameNumberSet(authoredIncluded.values, planned.system_ids)
+        scope_match: validStoredScope && diagnostic.status === 'computed'
+          ? sameNumberSet(authoredIncluded.values, diagnostic.system_ids)
           : null,
-        open_decision: 'stored_snapshot_vs_recomputed_topology_policy_unresolved'
+        result_semantics_ready: false,
+        open_decision: 'durable_watch_result_membership_layer_parked'
       };
     })
   };
 }
 
-function currentPlannedScope(db, row) {
+function diagnosticRecomputedScope(db, row) {
   try {
     const topology = new TopologyService(db);
     const systemIds = topology.getSystemsWithinRadius(row.center_system_id, row.radius_jumps, {
@@ -362,6 +400,7 @@ function currentPlannedScope(db, row) {
       status: 'computed',
       system_ids: systemIds,
       source: 'TopologyService.getSystemsWithinRadius(center,radius)',
+      diagnostic_only_under_accepted_model: true,
       excluded_systems_applied_from_watch_row: false
     };
   } catch (error) {
@@ -370,9 +409,28 @@ function currentPlannedScope(db, row) {
       system_ids: [],
       source: 'TopologyService.getSystemsWithinRadius(center,radius)',
       error: error.message,
+      diagnostic_only_under_accepted_model: true,
       excluded_systems_applied_from_watch_row: false
     };
   }
+}
+
+function executionScopeAuthorityForStoredScope(includedStatus, includedValues = []) {
+  const validStoredScope = includedStatus === 'valid' && includedValues.length > 0;
+  return {
+    source: 'stored_watch_scope',
+    uses_stored_included_system_ids: validStoredScope,
+    accepted_system_ids: validStoredScope ? includedValues : [],
+    uses_stored_excluded_system_ids_from_watch_row: false,
+    recomputes_from_center_radius: false,
+    center_radius_used_as_execution_payload: false,
+    center_radius_preserved_as_provenance: true,
+    invalid_scope_blocks_before_provider: !validStoredScope,
+    accepted_model_status: 'conforms',
+    behavior: validStoredScope
+      ? 'system/radius Watch execution uses stored included_system_ids as authority'
+      : 'system/radius Watch execution blocks missing/malformed stored included_system_ids before provider work'
+  };
 }
 
 function durableStateSummary(db) {

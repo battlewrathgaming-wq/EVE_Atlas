@@ -137,20 +137,44 @@ function verifyWatchAndTaskState(preview) {
 }
 
 function verifySystemRadiusSignals(preview) {
-  assert(preview.system_radius_scope.collector_planning_recomputes_topology_from_center_radius === true, 'collector scope should be disclosed as recomputed topology');
-  assert(preview.system_radius_scope.executor_dispatch_payload_uses_stored_included_excluded_lists === false, 'executor should disclose stored included/excluded lists are not dispatch payload');
-  assert(preview.system_radius_scope.watches.length >= 2, 'fixture should include system radius Watches');
+  assert(preview.system_radius_scope.watch_execution_scope_authority === 'stored_watch_scope', 'Watch execution should disclose stored Watch scope authority');
+  assert(preview.system_radius_scope.direct_manual_scope_authority === 'center_radius_planner', 'direct/manual system.radius.watch should remain center/radius planner behavior');
+  assert(preview.system_radius_scope.discovery_ref_identity_level === 'center_only', 'system/radius Discovery ref identity should remain center-only');
+  assert(preview.system_radius_scope.result_semantics_ready === false, 'durable result semantics should remain parked');
+  assert(preview.system_radius_scope.executor_dispatch_payload_uses_stored_included_system_ids === true, 'executor should disclose stored included IDs are dispatch authority');
+  assert(preview.system_radius_scope.executor_dispatch_payload_uses_stored_excluded_system_ids === false, 'executor should disclose stored excluded IDs are not a separate execution payload');
+  assert(preview.system_radius_scope.watch_execution_recomputes_topology_from_center_radius === false, 'Watch execution should not be described as recomputing topology authority');
+  assert(preview.system_radius_scope.direct_manual_collection_recomputes_topology_from_center_radius === true, 'direct/manual collection should preserve center/radius planner behavior');
+  assert(preview.system_radius_scope.invalid_stored_scope_blocks_before_provider === true, 'invalid stored scope should block before provider work');
+  assert(preview.system_radius_scope.watches.length >= 3, 'fixture should include valid, missing, and malformed system radius Watches');
   const first = preview.system_radius_scope.watches.find((watch) => watch.watch_id === 1);
-  const malformed = preview.system_radius_scope.watches.find((watch) => watch.watch_id === 2);
+  const missing = preview.system_radius_scope.watches.find((watch) => watch.watch_id === 2);
+  const malformed = preview.system_radius_scope.watches.find((watch) => watch.watch_id === 3);
   assert(first.authored_scope.included_scope_status === 'valid', 'valid included scope should be distinguished');
   assert(first.authored_scope.excluded_scope_status === 'valid', 'valid excluded scope should be distinguished');
-  assert(first.current_collector_planned_scope.status === 'computed', 'current collector scope should be computable from topology');
-  assert(first.current_collector_planned_scope.excluded_systems_applied_from_watch_row === false, 'preview should disclose excluded systems are not applied by current collector plan');
+  assert(first.authored_scope.accepted_authority === true, 'valid stored included scope should be accepted Watch authority');
+  assert(first.watch_execution_scope_authority.uses_stored_included_system_ids === true, 'valid Watch execution should use stored included IDs');
+  assert(first.watch_execution_scope_authority.accepted_system_ids.includes(30000103), 'stored execution authority should include accepted non-recomputed system');
+  assert(first.watch_execution_scope_authority.recomputes_from_center_radius === false, 'Watch execution should not recompute from center/radius');
+  assert(first.watch_execution_scope_authority.invalid_scope_blocks_before_provider === false, 'valid stored scope should not block before provider work');
+  assert(first.diagnostic_recomputed_scope.status === 'computed', 'diagnostic scope should be computable from topology');
+  assert(first.diagnostic_recomputed_scope.diagnostic_only_under_accepted_model === true, 'recomputed topology should be diagnostic only after acceptance');
+  assert(first.diagnostic_recomputed_scope.excluded_systems_applied_from_watch_row === false, 'preview should disclose excluded systems are not applied by diagnostic recompute');
+  assert(first.direct_manual_planner_scope.authority_for_direct_manual_system_radius_watch === true, 'direct/manual path should keep planner authority');
+  assert(first.direct_manual_planner_scope.authority_for_accepted_watch_execution === false, 'direct/manual planner scope should not be accepted Watch execution authority');
+  assert(first.scope_match === false, 'fixture should prove stored Watch scope can differ from diagnostic recompute');
   assert(first.queue_identity.identity_level === 'center_only', 'system/radius identity should be center-only today');
   assert(first.queue_identity.includes_radius === false, 'system/radius identity should not include radius today');
   assert(first.queue_identity.includes_watch_id === false, 'system/radius identity should not include watch id today');
+  assert(first.queue_identity.separate_from_watch_scope_authority === true, 'Discovery ref identity should be separate from Watch scope authority');
+  assert(first.result_semantics_ready === false, 'Watch result semantics should stay parked');
+  assert(missing.authored_scope.included_scope_status === 'not_stored', 'missing stored scope should be distinguished');
+  assert(missing.watch_execution_scope_authority.invalid_scope_blocks_before_provider === true, 'missing stored scope should block before provider work');
   assert(malformed.authored_scope.included_scope_status === 'malformed', 'malformed stored scope should be distinguished');
+  assert(malformed.watch_execution_scope_authority.invalid_scope_blocks_before_provider === true, 'malformed stored scope should block before provider work');
   assert(preview.queue_identity.system_radius.current_identity_level === 'center_only', 'top-level queue identity should disclose center-only scope');
+  assert(preview.queue_identity.system_radius.watch_execution_scope_authority === 'stored_watch_scope', 'top-level queue identity should disclose stored Watch execution authority');
+  assert(preview.queue_identity.system_radius.separate_from_watch_scope_authority === true, 'top-level queue identity should separate identity from execution authority');
   assert(preview.queue_identity.system_radius.radius_or_watch_id_in_discovery_ref_identity === false, 'top-level queue identity should disclose missing radius/watch id identity');
 }
 
@@ -213,7 +237,7 @@ function seedWatchRows(db) {
       last_polled_at, next_poll_at, last_success_at, last_error_at,
       backoff_until, notes
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(1, 30000101, 'ATLAS-A', 1, '[30000101,30000102]', '[30000102]', 24, 10, 10, 1, 60, '2026-06-05T08:00:00.000Z', '2026-06-05T09:00:00.000Z', null, null, null, 'HS292 fixture');
+  `).run(1, 30000101, 'ATLAS-A', 1, '[30000101,30000103]', '[30000102]', 24, 10, 10, 1, 60, '2026-06-05T08:00:00.000Z', '2026-06-05T09:00:00.000Z', null, null, null, 'HS300 fixture');
   db.prepare(`
     INSERT INTO system_watches (
       watch_id, center_system_id, center_system_name, radius_jumps,
@@ -223,7 +247,17 @@ function seedWatchRows(db) {
       last_polled_at, next_poll_at, last_success_at, last_error_at,
       backoff_until, notes
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(2, 30000102, 'ATLAS-B', 1, 'not-json', '[]', 24, 10, 10, 1, 60, null, null, null, null, null, 'HS292 fixture');
+  `).run(2, 30000102, 'ATLAS-B', 1, '[]', '[]', 24, 10, 10, 1, 60, null, null, null, null, null, 'HS300 fixture');
+  db.prepare(`
+    INSERT INTO system_watches (
+      watch_id, center_system_id, center_system_name, radius_jumps,
+      included_system_ids, excluded_system_ids,
+      lookback_hours, max_systems_per_run, max_killmails_per_run,
+      is_active, poll_interval_minutes,
+      last_polled_at, next_poll_at, last_success_at, last_error_at,
+      backoff_until, notes
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(3, 30000103, 'ATLAS-C', 1, 'not-json', '[]', 24, 10, 10, 1, 60, null, null, null, null, null, 'HS300 fixture');
 }
 
 function seedRuns(db) {
