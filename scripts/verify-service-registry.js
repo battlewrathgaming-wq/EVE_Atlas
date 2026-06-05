@@ -89,6 +89,7 @@ async function main() {
     const watchTaskOutcomeMapCommand = commands.find((entry) => entry.command === 'runtime.watch_task_outcome_map.preview');
     const watchScopeAuthorityConformanceCommand = commands.find((entry) => entry.command === 'watch.scope_authority_conformance.preview');
     const watchAuthoredExecutionReadinessCommand = commands.find((entry) => entry.command === 'watch.authored_execution_readiness.preview');
+    const systemRadiusSetupReadoutCommand = commands.find((entry) => entry.command === 'watch.system_radius_setup_readout.preview');
     const watchOperatorConfirmationContractCommand = commands.find((entry) => entry.command === 'watch.operator_confirmation_contract.preview');
     const systemRadiusAuthoringPreflightCommand = commands.find((entry) => entry.command === 'watch.system_radius_authoring_preflight.preview');
     const systemRadiusAcceptancePayloadCommand = commands.find((entry) => entry.command === 'watch.system_radius_acceptance_payload.preview');
@@ -243,6 +244,8 @@ async function main() {
     assert(watchScopeAuthorityConformanceCommand?.renderer_allowed === true, 'Watch scope authority conformance preview should be renderer eligible');
     assert(watchAuthoredExecutionReadinessCommand?.classification === 'read-only', 'authored Watch execution readiness preview should be read-only');
     assert(watchAuthoredExecutionReadinessCommand?.renderer_allowed === true, 'authored Watch execution readiness preview should be renderer eligible');
+    assert(systemRadiusSetupReadoutCommand?.classification === 'read-only', 'system/radius setup readout should be read-only');
+    assert(systemRadiusSetupReadoutCommand?.renderer_allowed === true, 'system/radius setup readout should be renderer eligible');
     assert(watchOperatorConfirmationContractCommand?.classification === 'read-only', 'Watch operator confirmation contract preview should be read-only');
     assert(watchOperatorConfirmationContractCommand?.renderer_allowed === true, 'Watch operator confirmation contract preview should be renderer eligible');
     assert(systemRadiusAuthoringPreflightCommand?.classification === 'read-only', 'system/radius authoring preflight should be read-only');
@@ -516,6 +519,20 @@ async function main() {
     assert(watchAuthoredExecutionReadiness.evidence_writes === 0, 'authored Watch execution readiness preview should not write Evidence/EVEidence');
     assert(watchAuthoredExecutionReadiness.schema_changes === 0, 'authored Watch execution readiness preview should not change schema');
     assert(watchAuthoredExecutionReadiness.runtime_enforcement_active === false, 'authored Watch execution readiness preview should not activate enforcement');
+
+    const systemRadiusSetupReadout = await invokeServiceCommand('watch.system_radius_setup_readout.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(systemRadiusSetupReadout.read_only === true, 'system/radius setup readout should declare read-only behavior');
+    assert(systemRadiusSetupReadout.provider_calls === 0, 'system/radius setup readout should not call providers');
+    assert(systemRadiusSetupReadout.watch_dispatches === 0, 'system/radius setup readout should not dispatch Watch execution');
+    assert(systemRadiusSetupReadout.tasks_created === 0, 'system/radius setup readout should not create tasks');
+    assert(systemRadiusSetupReadout.evidence_writes === 0, 'system/radius setup readout should not write Evidence/EVEidence');
+    assert(systemRadiusSetupReadout.hydration_writes === 0, 'system/radius setup readout should not write Hydration output');
+    assert(systemRadiusSetupReadout.watch_mutations === 0, 'system/radius setup readout should not mutate Watch rows');
+    assert(systemRadiusSetupReadout.schema_changes === 0, 'system/radius setup readout should not change schema');
+    assert(systemRadiusSetupReadout.runtime_enforcement_active === false, 'system/radius setup readout should not activate enforcement');
 
     const watchOperatorConfirmationContract = await invokeServiceCommand('watch.operator_confirmation_contract.preview', {}, {
       db,

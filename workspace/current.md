@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS320 system Watch post-create readout open
+Status: HS320 system Watch post-create readout accepted; no active Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: read-only post-create setup readout for accepted System / Radius Watches.
+Current focus: resting after read-only post-create setup readout for accepted System / Radius Watches.
 
 Current heading:
 
@@ -24,21 +24,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS320-system-watch-post-create-readout-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS320-system-watch-post-create-readout.md
+none
 ```
 
-HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, and HS318 are accepted and can rest. HS320 is open to prove a boring, read-only post-create System / Radius Watch setup readout from stored local rows. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, HS318, and HS320 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
 
 ## HS320 Active Dev Runway
 
@@ -89,6 +89,104 @@ Required readout:
 Boundary:
 
 This packet is read-only/local-only. Do not execute a Watch, create Watch executor tasks, call providers, perform live/API calls, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, change `watch.create`, change topology traversal behavior, recompute accepted scope from center/radius as readout authority, change schema, implement final renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
+
+## HS320 Evidence
+
+Dev updated 2026-06-05:
+
+- Added `watch.system_radius_setup_readout.preview` as a renderer-eligible, read-only/local-only service command.
+- Added `src/main/services/systemRadiusSetupReadoutService.js`.
+- Added `scripts/verify-system-radius-setup-readout.js` and `npm.cmd run verify:system-radius-setup-readout`.
+- Registered command authority, service registry, passive side-effect, and enforcement dry-run coverage for the new readout.
+- The readout inspects existing `system_watches` rows and reports:
+  - Watch ID
+  - active/inactive state
+  - center system ID/name as provenance/management
+  - radius as provenance/management
+  - stored `included_system_ids` as accepted Watch scope authority
+  - local included-system display names when available
+  - included system count
+  - stored-scope status: `valid`, `missing`, `malformed`, `empty`, `invalid`
+  - whether the row is ready for future execution input from stored scope
+  - next safe operator/system action
+  - explicit `does_not_do` and boundary statements
+- The readout does not recompute accepted scope from center/radius; it uses stored `system_watches.included_system_ids` only.
+- Local display names are readability only and do not replace raw stored IDs.
+- Focused verifier sample:
+  - valid active accepted stored scope: Hare center, radius 1, 5 included systems `[30003597,30003601,30003599,30003598,30003596]`, ready from stored scope.
+  - inactive Watch with valid stored scope: stored IDs preserved, not ready because inactive.
+  - missing stored scope: blocked with `missing_stored_scope`.
+  - malformed stored scope: blocked with `malformed_stored_scope`.
+  - empty stored scope: blocked with `empty_stored_scope`.
+  - invalid stored scope: blocked with `invalid_stored_scope`.
+  - valid stored scope with unknown local display name: raw ID preserved and `missing_local_name` reported.
+- Mutation boundary proof:
+  - no Watch execution
+  - no Watch executor task creation
+  - no provider/live/API calls
+  - no Discovery ref mutation
+  - no Evidence/EVEidence writes
+  - no Hydration/metadata label writes
+  - no `watch.create` behavior change
+  - no topology traversal behavior change
+  - no schema changes
+  - no renderer UI work
+  - no support artifacts
+  - no runtime enforcement or command blocking
+  - no Watch result identity, relationship tags, protected-word JSON, or fourth-lane work
+- Verification run:
+  - `node --check src/main/services/serviceRegistry.js` passed.
+  - `node --check src/main/services/enforcementDryRunService.js` passed.
+  - `node --check scripts/verify-command-authority.js` passed.
+  - `node --check scripts/verify-service-registry.js` passed.
+  - `node --check scripts/verify-passive-side-effects.js` passed.
+  - `node --check src/main/services/systemRadiusSetupReadoutService.js` passed.
+  - `node --check scripts/verify-system-radius-setup-readout.js` passed.
+  - `npm.cmd run verify:system-radius-setup-readout` passed.
+  - `npm.cmd run verify:watch-create-accepted-scope-contract` passed; fixture-only verifier created expected fixture `system_watches` rows and reported only those rows changed.
+  - `npm.cmd run verify:watch-authored-execution-readiness` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 690 warnings across 9 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS320 working-tree changes.
+
+## HS320 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS320-system-watch-post-create-readout.md
+```
+
+Status: system Watch post-create setup readout complete and accepted by Overseer.
+
+## HS320 Acceptance
+
+Accepted:
+
+```txt
+workspace/OverseerHS321-hs320-system-watch-post-create-readout-review.md
+```
+
+Decision:
+
+HS320 is accepted.
+
+Accepted result:
+
+- `watch.system_radius_setup_readout.preview` is a renderer-eligible, read-only/local-only post-create setup readout.
+- Stored `included_system_ids` are reported as accepted Watch scope authority.
+- Center system and radius are reported as provenance/management after acceptance.
+- Local display names are readability only and do not replace raw stored IDs.
+- Missing local names are disclosed without invalidating valid stored scope.
+- Missing, malformed, empty, invalid, inactive, and valid setup states are explicit.
+- The readout does not recompute accepted scope from center/radius.
+- No Watch execution, task creation, provider movement, Discovery/Evidence/Hydration mutation, schema change, renderer UI work, enforcement, support artifacts, Watch result semantics, relationship tags, protected-word JSON updates, or fourth-lane behavior were opened.
+
+HS320 can rest.
 
 ## HS318 Active Dev Runway
 
