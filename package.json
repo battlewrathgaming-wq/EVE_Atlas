@@ -91,6 +91,7 @@
     "verify:hydration-candidate-preview": "node scripts/verify-hydration-candidate-preview.js",
     "verify:hydration-attention-lens": "node scripts/verify-hydration-attention-lens.js",
     "verify:hydration-attention-runtime": "node scripts/verify-hydration-attention-runtime-posture.js",
+    "verify:hydration-request-posture": "node scripts/verify-hydration-request-posture.js",
     "verify:hydration-execution-policy": "node scripts/verify-hydration-execution-policy.js",
     "verify:hydration-write-fixture": "node scripts/verify-hydration-write-fixture.js",
     "verify:external-io-state": "node scripts/verify-external-io-state.js",

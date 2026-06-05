@@ -46,6 +46,7 @@ async function main() {
     const hydrationCandidatePreviewCommand = commands.find((entry) => entry.command === 'metadata.hydration_candidates.preview');
     const hydrationAttentionLensCommand = commands.find((entry) => entry.command === 'metadata.hydration_attention_lens.preview');
     const hydrationAttentionRuntimeCommand = commands.find((entry) => entry.command === 'metadata.hydration_attention_runtime.preview');
+    const hydrationRequestPostureCommand = commands.find((entry) => entry.command === 'metadata.hydration_request_posture.preview');
     const localSdeReadinessCommand = commands.find((entry) => entry.command === 'metadata.local_sde_readiness.preview');
     const localSdeSourcePostureCommand = commands.find((entry) => entry.command === 'metadata.local_sde_source_posture.preview');
     const hydrationWriteFixtureCommand = commands.find((entry) => entry.command === 'metadata.hydration_write_fixture_proof');
@@ -139,6 +140,9 @@ async function main() {
     assert(hydrationAttentionRuntimeCommand?.classification === 'read-only', 'metadata.hydration_attention_runtime.preview should be read-only');
     assert(hydrationAttentionRuntimeCommand?.effects.includes('read-only'), 'metadata.hydration_attention_runtime.preview should declare read-only effect');
     assert(hydrationAttentionRuntimeCommand?.renderer_allowed === true, 'metadata.hydration_attention_runtime.preview should be renderer eligible');
+    assert(hydrationRequestPostureCommand?.classification === 'read-only', 'metadata.hydration_request_posture.preview should be read-only');
+    assert(hydrationRequestPostureCommand?.effects.includes('read-only'), 'metadata.hydration_request_posture.preview should declare read-only effect');
+    assert(hydrationRequestPostureCommand?.renderer_allowed === true, 'metadata.hydration_request_posture.preview should be renderer eligible');
     assert(localSdeReadinessCommand?.classification === 'read-only', 'metadata.local_sde_readiness.preview should be read-only');
     assert(localSdeReadinessCommand?.effects.includes('read-only'), 'metadata.local_sde_readiness.preview should declare read-only effect');
     assert(localSdeReadinessCommand?.renderer_allowed === true, 'metadata.local_sde_readiness.preview should be renderer eligible');

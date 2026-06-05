@@ -107,6 +107,12 @@ async function verifySeededDb(root) {
       ['metadata.hydration_candidates.preview', () => invokeServiceCommand('metadata.hydration_candidates.preview', {}, context)],
       ['metadata.hydration_attention_lens.preview', () => invokeServiceCommand('metadata.hydration_attention_lens.preview', {}, context)],
       ['metadata.hydration_attention_runtime.preview', () => invokeServiceCommand('metadata.hydration_attention_runtime.preview', {}, context)],
+      ['metadata.hydration_request_posture.preview', () => invokeServiceCommand('metadata.hydration_request_posture.preview', {
+        idType: 'character',
+        idValue: 90000002,
+        operatorAct: true,
+        sourceSurface: 'passive-sweep'
+      }, context)],
       ['metadata.local_sde_readiness.preview', () => invokeServiceCommand('metadata.local_sde_readiness.preview', {}, context)],
       ['metadata.local_sde_source_posture.preview', () => invokeServiceCommand('metadata.local_sde_source_posture.preview', {}, context)],
       ['runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],
@@ -182,6 +188,12 @@ async function verifyEmptyDb(root) {
       ['empty metadata.hydration_candidates.preview', () => invokeServiceCommand('metadata.hydration_candidates.preview', {}, context)],
       ['empty metadata.hydration_attention_lens.preview', () => invokeServiceCommand('metadata.hydration_attention_lens.preview', {}, context)],
       ['empty metadata.hydration_attention_runtime.preview', () => invokeServiceCommand('metadata.hydration_attention_runtime.preview', {}, context)],
+      ['empty metadata.hydration_request_posture.preview', () => invokeServiceCommand('metadata.hydration_request_posture.preview', {
+        idType: 'character',
+        idValue: 90000002,
+        operatorAct: true,
+        sourceSurface: 'passive-sweep'
+      }, context)],
       ['empty metadata.local_sde_readiness.preview', () => invokeServiceCommand('metadata.local_sde_readiness.preview', {}, context)],
       ['empty metadata.local_sde_source_posture.preview', () => invokeServiceCommand('metadata.local_sde_source_posture.preview', {}, context)],
       ['empty runtime.db_snapshot.preflight', () => invokeServiceCommand('runtime.db_snapshot.preflight', {}, context)],

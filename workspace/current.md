@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS260 selected-ID Hydration request posture preview runway open
+Status: HS260 selected-ID Hydration request posture preview accepted by HS261; resting
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: read-only selected-ID Hydration request posture preview.
+Current focus: resting after read-only selected-ID Hydration request posture preview acceptance.
 
 Current heading:
 
@@ -20,23 +20,33 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: none
 
-Active Dev runway:
+Latest accepted Dev runway:
 
 ```txt
 workspace/OverseerHS260-selected-id-hydration-request-posture-preview-runway.md
 ```
 
-Expected Dev handoff:
+Latest accepted Dev handoff:
 
 ```txt
 workspace/DevHS260-selected-id-hydration-request-posture-preview.md
 ```
 
-Dev task:
+Latest Overseer review:
 
-Add the smallest read-only service proof for:
+```txt
+workspace/OverseerHS261-hs260-selected-id-hydration-request-posture-review.md
+```
+
+Status: accepted.
+
+No active Dev runway is open.
+
+Accepted result:
+
+HS260 added the read-only selected-ID Hydration request posture proof:
 
 ```txt
 selected unresolved ID
@@ -224,6 +234,66 @@ Preserve:
 - no command blocking
 - no pruning/deletion behavior
 - no renderer UI work
+
+## HS260 Evidence
+
+Dev updated 2026-06-05:
+
+- Added `metadata.hydration_request_posture.preview` as a read-only, renderer-eligible service command.
+- Added `src/main/services/hydrationRequestPostureService.js` to classify explicit selected-ID Hydration request posture from existing local state and existing gate readouts only.
+- Registered enforcement dry-run coverage for the new command as `local_db_inspection` / `selected_id_hydration_request_posture_readout` / `covered_read_only`.
+- Added `scripts/verify-hydration-request-posture.js` and `npm.cmd run verify:hydration-request-posture`.
+- Updated service registry, command authority, enforcement dry-run, and passive side-effect verifiers for the new command.
+- Fixture coverage proves:
+  - focus/hover-style non-request posture: `not_a_request`
+  - local entity cache label posture: `already_local`
+  - local SDE/static lookup label posture: `local_lookup_available`
+  - local SDE/static lookup gap posture: `local_lookup_available` / `local_sde_gap`, not ESI Hydration
+  - supported unresolved local-basis ID posture: `held` / `held_by_external_io` when External I/O is off
+  - storage-missing future write posture: `blocked` / `blocked_by_storage_write_posture`
+  - free-floating supported ID without Atlas-local basis: `insufficient_basis`
+  - unsupported ID type: `invalid` / `invalid_or_unsupported_id`
+- Sample focused verifier output:
+  - status: `hydration request posture preview verified`
+  - provider-held sample: `request_posture_state=held`, `label_state=provider_needed`, `provider_posture=held_by_external_io`, `pickup_eligible=false`
+  - storage-block sample: `storage_state=configured_storage_missing_unavailable`, `future_hydration_write_posture=block_writes`, `future_hydration_writes_blocked=true`
+  - local SDE gap sample: `next_safe_action=repair_local_sde_lookup_or_continue_without_provider`
+- Boundaries confirmed:
+  - no provider calls
+  - no Hydration execution or Hydration writes
+  - no `metadata_runs` writes
+  - no entity writes or activity-event label patches
+  - no Evidence/EVEidence writes
+  - no Discovery ref mutation
+  - no Watch, Assessment Memory, or Marked mutation
+  - no persisted queue, pickup creation, dispatcher, or execution start
+  - no schema changes
+  - no runtime enforcement activation or command blocking
+  - no storage config / External I/O config writes
+  - no support artifact creation
+  - no renderer UI work
+- Verification run:
+  - `node --check src\main\services\hydrationRequestPostureService.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check scripts\verify-hydration-request-posture.js` passed.
+  - `npm.cmd run verify:hydration-request-posture` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 264 warnings across 8 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main` with HS260 working-tree changes.
+
+## HS260 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS260-selected-id-hydration-request-posture-preview.md
+```
+
+Status: accepted by `workspace/OverseerHS261-hs260-selected-id-hydration-request-posture-review.md`.
 
 Recent accepted advisory request:
 

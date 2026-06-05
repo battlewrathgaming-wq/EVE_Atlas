@@ -132,6 +132,14 @@ Request posture is pickup-readable, not pickup. Pickup is not execution. Executi
 
 A Hydration request posture is read-only classification material for a selected unresolved ID. It must not create a queue, inject a lane, dispatch work, call providers, create `metadata_runs`, write `entities`, patch `activity_events`, or imply provider authorization. Focus, hover, navigation, and report load are not requests.
 
+HS260 implementation note:
+
+```text
+metadata.hydration_request_posture.preview
+```
+
+This command is the current read-only selected-ID proof for explicit operator Hydration request posture. It is renderer-eligible as a readout, but it remains non-authorizing and non-mutating.
+
 It has two conceptual lanes.
 
 ### Watch Hydration Lane
