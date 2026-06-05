@@ -136,6 +136,8 @@ Current state:
 - HS280 opened
 - HS280 accepted by HS281
 - HS282 decision surface recorded
+- HS283 Resolve/readability posture accepted
+- HS284 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -152,8 +154,11 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer / Human decision
-- no active Dev runway is open
+- current executor is Dev
+- active Dev runway is `workspace/OverseerHS284-selected-id-readability-repair-execution-runway.md`
+- expected Dev handoff is `workspace/DevHS284-selected-id-readability-repair-execution.md`
+- accepted posture is `workspace/OverseerHS283-selected-id-resolve-readability-posture-acceptance.md`
+- durable selected-ID readability note is `docs/features/selected-id-readability-repair.md`
 - latest accepted Dev runway is `workspace/OverseerHS280-selected-id-product-hydration-authority-preflight-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS280-selected-id-product-hydration-authority-preflight.md`
 - latest Overseer review is `workspace/OverseerHS281-hs280-selected-id-product-hydration-preflight-review.md`
@@ -193,7 +198,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is selected-ID product Hydration execution decision boundary after accepted read-only authority/preflight
+- current work is trusted non-renderer selected-ID Resolve / readability repair execution for one unresolved local ID
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
 - inventory/type real-local import matches accepted HS226 authority/recovery semantics under fixture verification
 - local SDE import/rewrite mechanics can rest for now
@@ -218,11 +223,17 @@ Current heading:
 - runtime efficiency is optimization, not constraint; do not skip needed proof, specialist review, or model shaping to save credits
 - Observation can form from raw local IDs before labels are complete; Hydration is expected selective readability repair, not a prerequisite or global completion demand
 - Hydration selection seam north star: local readability may happen during report construction, but provider-backed readability requires an explicit operator trigger and still passes normal gates
+- Selected-ID user-facing act accepted: Resolve. Resolve repairs readability for one selected unresolved local ID; it does not create Evidence/EVEidence or hydrate a whole report.
 - Do not reopen a separate fast lane unless a later bounded product/mechanical need proves it
 
 Active Dev packet:
 
-No active Dev packet is open.
+1. `workspace/OverseerHS284-selected-id-readability-repair-execution-runway.md`
+2. Expected handoff: `workspace/DevHS284-selected-id-readability-repair-execution.md`
+3. Command: `metadata.selected_id_readability_repair.execute`
+4. Run type: `selected_id_readability_repair`
+5. Scope: trusted non-renderer selected-ID Resolve / readability repair execution for one selected unresolved local ID.
+6. No renderer/UI, background/report-wide Hydration, Bucket/Dispatcher, schema, enforcement, support artifacts, or fourth-lane work.
 
 Latest accepted packet:
 

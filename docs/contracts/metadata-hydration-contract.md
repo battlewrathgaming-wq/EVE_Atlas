@@ -9,6 +9,8 @@ Metadata hydration makes reports readable by resolving names and labels for alre
 
 Names are labels. IDs remain facts.
 
+Selected-ID readability repair may be user-facing as **Resolve**. Resolve means repairing readability for one selected unresolved local ID. It remains Hydration/readability repair internally and does not create Evidence.
+
 ## Boundary
 
 Owned by:
@@ -36,6 +38,8 @@ Owned by:
 - Hydration must not mutate raw killmail evidence.
 - Hydration must not replace numeric IDs.
 - Entity hydration is scoped by report relevance or explicit user action.
+- Selected-ID Resolve is an explicit operator action for one unresolved local ID.
+- If a local label already exists, report construction should use it automatically and selected-ID Resolve should close quietly without provider contact or writes.
 - Static type labels come from local SDE metadata, not live ESI, during normal reporting.
 - Metadata runs use `metadata_runs`, not `fetch_runs`.
 
@@ -53,4 +57,3 @@ Owned by:
 - `verify:actor-resolution`
 - `verify:actor-metadata`
 - `verify:corporation-metadata`
-

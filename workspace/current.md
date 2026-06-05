@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS280 selected-ID product Hydration authority preflight accepted; product execution decision point
+Status: HS284 selected-ID readability repair execution runway open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: selected-ID product Hydration authority/preflight accepted; product provider contact and writes remain unopened pending explicit Human/Overseer decision.
+Current focus: trusted non-renderer selected-ID Resolve / readability repair execution for one unresolved local ID.
 
 Current heading:
 
@@ -21,26 +21,33 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS284-selected-id-readability-repair-execution-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS284-selected-id-readability-repair-execution.md
 ```
 
-No Dev task is open. Do not implement product selected-ID Hydration execution. Do not call providers. Do not write Hydration rows. Do not treat HS276 proof/test scaffolding as product authority.
+Dev may implement the narrow trusted non-renderer execution command only. Do not add renderer/UI, background/report-wide Hydration, Bucket/Dispatcher, schema, runtime enforcement, support artifacts, or fourth-lane work. Do not treat HS276 proof/test scaffolding as product authority.
 
 Current decision surface:
 
 ```txt
 workspace/OverseerHS282-selected-id-product-hydration-execution-decision-surface.md
+```
+
+Accepted posture:
+
+```txt
+workspace/OverseerHS283-selected-id-resolve-readability-posture-acceptance.md
+docs/features/selected-id-readability-repair.md
 ```
 
 HS280 Dev handoff:
@@ -96,6 +103,68 @@ ready for read-only product authority/preflight contract only
 ```
 
 Do not open renderer-triggered Hydration, full product live Hydration, broad live testing, Bucket/Dispatcher, background Hydration, schema, runtime enforcement, support artifacts, UI, or fourth-lane work.
+
+## HS284 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS284-selected-id-readability-repair-execution-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS284-selected-id-readability-repair-execution.md
+```
+
+Accepted task:
+
+Add product execution command:
+
+```txt
+metadata.selected_id_readability_repair.execute
+selected_id_readability_repair
+```
+
+The command should perform selected-ID Resolve / readability repair for one selected unresolved local ID if all trusted gates pass.
+
+Preserve:
+
+- trusted / non-renderer only
+- one selected unresolved ID only
+- user-facing act: `Resolve`
+- internal lane: Hydration/readability repair
+- supported provider-backed ID types only: `character`, `corporation`, `alliance`
+- strong local basis only: Evidence/EVEidence-derived `activity_events` appearance or existing local `entities` row missing label
+- local label short-circuit with no provider call, no write, no audit row
+- External I/O, live/provider gate, storage/write posture, command authority, and provider cadence re-read from trusted state
+- allowed writes only: `metadata_runs`, sanitized `api_request_logs`, selected `entities` row, matching `activity_events` readability label columns
+
+Stop if:
+
+- live/API verification is needed
+- renderer/UI behavior becomes necessary
+- background/report-wide/multi-ID Hydration becomes necessary
+- Bucket/Dispatcher/queue design becomes necessary
+- schema changes become necessary
+- runtime enforcement or command blocking becomes necessary
+- support artifacts become necessary
+- command authority cannot be satisfied without a new project decision
+- Watch/Discovery/Assessment-only basis needs to authorize Resolve
+- Hydration blurs into Evidence Expansion
+- HS276 proof scaffolding starts acting as product authority
+
+## HS283 Accepted Resolve Posture
+
+Accepted 2026-06-05:
+
+- Human/Overseer accepted the user-facing act `Resolve`.
+- Resolve means repairing readability for one selected unresolved local ID.
+- Atlas trusts deliberate operator intent, but moderates provider movement through local-first checks, gates, and pacing.
+- If a local label already exists, report / Observation construction should use it automatically.
+- If Resolve is requested and local readability already exists, Atlas should close quietly without provider call, write, or audit row.
+- Durable note: `docs/features/selected-id-readability-repair.md`.
 
 ## HS280 Accepted State
 
