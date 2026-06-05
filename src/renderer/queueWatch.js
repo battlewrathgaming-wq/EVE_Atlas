@@ -316,16 +316,22 @@ async function saveActorWatch() {
 async function saveSystemWatch() {
   setBusy(els.saveSystemWatch, true);
   try {
-    const validation = await service.invoke('scope.validate', {
-      kind: 'system_radius_watch',
-      input: systemWatchAuthoringInput()
-    });
+    if (!els.confirmSystemWatchScope.checked) {
+      throw new Error('System / Radius Watch setup requires explicit confirmation of the current included systems');
+    }
+    const currentKey = systemWatchAuthoringKey();
+    if (!state.systemWatchConfirmation?.confirmable || state.systemWatchConfirmation.key !== currentKey) {
+      throw new Error('Preview the current System / Radius Watch scope before confirming local Watch setup');
+    }
+    const { contract } = await systemWatchConfirmedContract();
+    if (!contract.accepted_payload_ready_for_watch_create || !contract.accepted_payload_shape) {
+      throw new Error('System / Radius Watch setup requires a confirmable accepted scope payload');
+    }
+    renderSystemWatchScopePreview(contract);
+    const watchPayload = watchCreatePayloadFromConfirmedContract(contract.accepted_payload_shape);
     const result = await service.invoke('watch.create', {
-      watchType: 'system_radius',
-      ...validation.normalized,
+      ...watchPayload,
       confirmation: 'confirm:watch.create',
-      pollIntervalMinutes: numberOrUndefined(els.watchAuthorSystemPoll.value),
-      notes: textOrUndefined(els.watchAuthorSystemNotes.value)
     }, {
       asTask: true
     });
@@ -342,6 +348,139 @@ async function saveSystemWatch() {
   } finally {
     setBusy(els.saveSystemWatch, false);
   }
+}
+
+async function previewSystemWatchScope() {
+  setBusy(els.previewSystemWatchScope, true);
+  try {
+    const { contract } = await systemWatchVisibleContract();
+    renderSystemWatchScopePreview(contract);
+    state.systemWatchConfirmation = {
+      key: systemWatchAuthoringKey(),
+      confirmable: contract.confirmation_ready === true,
+      state: contract.contract_state || 'unknown'
+    };
+    els.confirmSystemWatchScope.checked = false;
+  } catch (error) {
+    resetSystemWatchConfirmation();
+    renderError(els.systemWatchScopePreview, error);
+  } finally {
+    setBusy(els.previewSystemWatchScope, false);
+  }
+}
+
+async function systemWatchVisibleContract() {
+  const preflight = await service.invoke('watch.system_radius_authoring_preflight.preview', {
+    ...systemWatchAuthoringInput(),
+    preflightVisible: true
+  });
+  const contract = await service.invoke('watch.operator_confirmation_contract.preview', {
+    ...systemWatchContractInput(),
+    preflight,
+    preflightVisible: true,
+    localTopologyLookupSuccess: preflight.status === 'acceptable'
+  });
+  return { preflight, contract };
+}
+
+async function systemWatchConfirmedContract() {
+  const preflight = await service.invoke('watch.system_radius_authoring_preflight.preview', systemWatchAuthoringInput());
+  const contract = await service.invoke('watch.operator_confirmation_contract.preview', {
+    ...systemWatchContractInput(),
+    preflight,
+    explicitConfirmation: true
+  });
+  return { preflight, contract };
+}
+
+function systemWatchContractInput() {
+  return cleanObject({
+    ...systemWatchAuthoringInput(),
+    lookbackHours: hoursFromSeconds(numberOrUndefined(els.watchAuthorSystemLookback.value)),
+    maxKillmails: numberOrUndefined(els.watchAuthorSystemExpansions.value),
+    pollIntervalMinutes: numberOrUndefined(els.watchAuthorSystemPoll.value),
+    active: true,
+    notes: textOrUndefined(els.watchAuthorSystemNotes.value)
+  });
+}
+
+function watchCreatePayloadFromConfirmedContract(payload) {
+  return cleanObject({
+    watchType: payload.watchType || 'system_radius',
+    centerSystemId: payload.centerSystemId,
+    centerSystemName: payload.centerSystemName,
+    radiusJumps: payload.radiusJumps,
+    included_system_ids: Array.isArray(payload.included_system_ids) ? [...payload.included_system_ids] : [],
+    accepted_preflight_action: payload.accepted_preflight_action,
+    accepted_preflight_status: payload.accepted_preflight_status,
+    included_system_ids_source: payload.included_system_ids_source,
+    accepted_scope_source: payload.accepted_scope_source,
+    stored_scope_authority: payload.stored_scope_authority,
+    lookbackSeconds: numberOrUndefined(els.watchAuthorSystemLookback.value),
+    maxSystems: numberOrUndefined(els.watchAuthorMaxSystems.value),
+    maxExpansions: numberOrUndefined(els.watchAuthorSystemExpansions.value),
+    pollIntervalMinutes: numberOrUndefined(els.watchAuthorSystemPoll.value),
+    notes: textOrUndefined(els.watchAuthorSystemNotes.value)
+  });
+}
+
+function renderSystemWatchScopePreview(contract) {
+  const payload = contract.visible_operator_payload_before_acceptance || {};
+  const includedSystems = payload.included_systems || [];
+  const acceptedPayload = contract.accepted_payload_shape || null;
+  renderRows(els.systemWatchScopePreview, [
+    ['State', contract.contract_state || 'unknown'],
+    ['Center', systemWatchCenterLabel(payload.center_system)],
+    ['Radius', payload.radius_jumps ?? 'unknown'],
+    ['Included Systems', includedSystems.length],
+    ['Confirmable', contract.confirmation_ready ? 'yes' : 'no'],
+    ['Visible Scope Accepted', 'no'],
+    ['Explicit Confirmation Required', contract.listen_hook_confirmation_boundary?.explicit_operator_confirmation_required ? 'yes' : 'yes'],
+    ['Accepted Payload', acceptedPayload ? 'ready for local watch.create setup' : 'not produced']
+  ]);
+  if (includedSystems.length) {
+    const list = document.createElement('ol');
+    list.className = 'included-system-list';
+    includedSystems.forEach((system) => {
+      const item = document.createElement('li');
+      item.textContent = system.display_name || system.solar_system_name || system.solar_system_id;
+      list.appendChild(item);
+    });
+    els.systemWatchScopePreview.appendChild(list);
+  }
+  const boundary = document.createElement('p');
+  boundary.className = 'form-note';
+  boundary.textContent = 'Visible preflight, focus, hover, keyboard navigation, and local topology lookup are not acceptance. Save uses a fresh explicit confirmation payload.';
+  els.systemWatchScopePreview.appendChild(boundary);
+}
+
+function resetSystemWatchConfirmation() {
+  state.systemWatchConfirmation = null;
+  if (els.confirmSystemWatchScope) {
+    els.confirmSystemWatchScope.checked = false;
+  }
+  if (els.systemWatchScopePreview) {
+    els.systemWatchScopePreview.innerHTML = '';
+    const note = document.createElement('p');
+    note.className = 'form-note';
+    note.textContent = 'Preview the current System / Radius Watch scope before confirming local Watch setup.';
+    els.systemWatchScopePreview.appendChild(note);
+  }
+}
+
+function systemWatchAuthoringKey() {
+  return JSON.stringify(systemWatchContractInput());
+}
+
+function systemWatchCenterLabel(center) {
+  if (!center) {
+    return 'unresolved';
+  }
+  return `${center.solar_system_name || 'system'} [${center.solar_system_id || 'unknown'}]`;
+}
+
+function hoursFromSeconds(seconds) {
+  return Number.isFinite(Number(seconds)) ? Number(seconds) / 3600 : undefined;
 }
 
 function actorWatchAuthoringInput() {

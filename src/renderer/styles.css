@@ -811,6 +811,25 @@ h4 {
   height: 16px;
 }
 
+.watch-confirmation-actions {
+  align-items: center;
+  margin: 12px 0 10px;
+}
+
+.system-watch-confirmation {
+  margin-bottom: 0;
+}
+
+.watch-scope-preview {
+  margin-bottom: 10px;
+}
+
+.included-system-list {
+  margin: 4px 0 0;
+  padding-left: 22px;
+  color: var(--text);
+}
+
 .form-note {
   margin-top: 10px;
   color: var(--muted);

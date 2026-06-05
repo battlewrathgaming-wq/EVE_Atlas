@@ -172,6 +172,7 @@ Current state:
 - HS316 opened
 - HS316 accepted by HS317
 - HS318 opened
+- HS318 accepted by HS319
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -188,9 +189,12 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS318-renderer-system-watch-confirmation-path-runway.md`
-- expected Dev handoff is `workspace/DevHS318-renderer-system-watch-confirmation-path.md`
+- current executor is Overseer / Human decision
+- active Dev runway is none
+- expected Dev handoff is none
+- latest accepted Dev runway is `workspace/OverseerHS318-renderer-system-watch-confirmation-path-runway.md`
+- latest accepted Dev handoff is `workspace/DevHS318-renderer-system-watch-confirmation-path.md`
+- latest Overseer review is `workspace/OverseerHS319-hs318-renderer-system-watch-confirmation-path-review.md`
 - latest accepted advisory request is `workspace/OverseerHS298-system-radius-discovery-ref-identity-advisory-request.md`
 - latest accepted advisory artifact is `workspace/EngineeringDataHS298-system-radius-discovery-ref-identity-advisory.md`
 - latest advisory review is `workspace/OverseerHS299-hs298-system-radius-discovery-ref-identity-advisory-review.md`

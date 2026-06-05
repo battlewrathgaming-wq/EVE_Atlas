@@ -8,6 +8,7 @@ const state = {
   queueSelection: null,
   watchSchedule: null,
   watchOfflineReadout: null,
+  systemWatchConfirmation: null,
   tasks: [],
   selectedTaskId: null,
   selectedTask: null,
@@ -159,6 +160,9 @@ const els = {
   watchAuthorSystemExpansions: document.querySelector('#watch-author-system-expansions'),
   watchAuthorSystemPoll: document.querySelector('#watch-author-system-poll'),
   watchAuthorSystemNotes: document.querySelector('#watch-author-system-notes'),
+  previewSystemWatchScope: document.querySelector('#preview-system-watch-scope'),
+  confirmSystemWatchScope: document.querySelector('#confirm-system-watch-scope'),
+  systemWatchScopePreview: document.querySelector('#system-watch-scope-preview'),
   saveSystemWatch: document.querySelector('#save-system-watch'),
   watchAuthoringStatus: document.querySelector('#watch-authoring-status'),
   watchList: document.querySelector('#watch-list'),
@@ -284,6 +288,18 @@ function bindEvents() {
   els.armWatchSession.addEventListener('click', armWatchSession);
   els.disarmWatchSession.addEventListener('click', disarmWatchSession);
   els.saveActorWatch.addEventListener('click', saveActorWatch);
+  els.previewSystemWatchScope.addEventListener('click', previewSystemWatchScope);
+  [
+    els.watchAuthorSystemId,
+    els.watchAuthorRadius,
+    els.watchAuthorSystemLookback,
+    els.watchAuthorMaxSystems,
+    els.watchAuthorSystemExpansions,
+    els.watchAuthorSystemPoll,
+    els.watchAuthorSystemNotes
+  ].forEach((input) => {
+    input.addEventListener('input', resetSystemWatchConfirmation);
+  });
   els.saveSystemWatch.addEventListener('click', saveSystemWatch);
   els.preflightManualDiscovery.addEventListener('click', preflightManualDiscovery);
   els.runManualDiscovery.addEventListener('click', runManualDiscovery);

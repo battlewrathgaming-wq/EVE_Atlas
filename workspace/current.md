@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS318 renderer system Watch confirmation path open
+Status: HS318 renderer system Watch confirmation path accepted; no active Dev runway
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: bounded renderer implementation of system/radius Watch confirmation path.
+Current focus: resting after bounded renderer implementation of system/radius Watch confirmation path.
 
 Current heading:
 
@@ -24,21 +24,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Overseer / Human decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS318-renderer-system-watch-confirmation-path-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS318-renderer-system-watch-confirmation-path.md
+none
 ```
 
-HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, and HS316 are accepted and can rest. HS318 is open to wire a bounded renderer/operator confirmation path for existing system/radius Watch authoring. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
+HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, and HS318 are accepted and can rest. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
 
 ## HS318 Active Dev Runway
 
@@ -78,6 +78,101 @@ watch.create stores the confirmed accepted scope
 Boundary:
 
 This packet may call the existing local `watch.create` mutation only after explicit system/radius confirmation. Do not implement final UI design, popup/modal behavior, R-Scanner redesign, Watch execution, Watch executor tasks, provider calls, live/API calls, Discovery/Evidence/Hydration mutation, backend `watch.create` changes, topology traversal changes, schema, support artifacts, runtime enforcement, command blocking, result identity, relationship tags, source-term renames, protected-word JSON updates, or fourth-lane work.
+
+## HS318 Evidence
+
+Dev updated 2026-06-05:
+
+- Added light renderer wiring to the existing System / Radius Watch authoring panel:
+  - `Preview System Watch Scope`
+  - explicit `Confirm current included systems for local Watch setup` checkbox
+  - `system-watch-scope-preview` readout for status and included systems
+- Updated `src/renderer/queueWatch.js` so `saveSystemWatch()` no longer validates scope and calls `watch.create` directly.
+- New system/radius Watch save path now requires:
+  - current-scope preview through `watch.system_radius_authoring_preflight.preview`
+  - operator confirmation contract through `watch.operator_confirmation_contract.preview`
+  - explicit confirmation checkbox
+  - current authoring input match between preview and save
+  - fresh confirmed contract at save time
+  - `accepted_payload_shape` before calling `watch.create`
+- `watch.create` payload is built from the confirmed accepted payload shape and preserves exact accepted `included_system_ids`; center/radius remain provenance/management fields.
+- Renderer displays included systems/status and states that visible preflight, focus, hover, keyboard navigation, and local topology lookup are not acceptance.
+- Blocked/capped/unknown or otherwise non-confirmable preflight states cannot produce an accepted payload through this renderer path.
+- Actor Watch authoring was not changed except shared event-binding proximity in `app.js`.
+- Added renderer-shell verifier coverage for the new controls, service calls, explicit-confirmation contract input, accepted payload usage, passive-signal boundary copy, and light CSS hooks.
+- Boundary confirmation:
+  - no final UI design
+  - no popup/modal behavior
+  - no R-Scanner redesign
+  - no Watch execution
+  - no Watch executor task creation
+  - no provider/live/API calls
+  - no Discovery ref mutation
+  - no Evidence/EVEidence writes
+  - no Hydration writes
+  - no backend `watch.create` behavior change
+  - no topology traversal behavior change
+  - no schema changes
+  - no support artifacts
+  - no runtime enforcement or command blocking
+  - no Watch/result identity, relationship tags, protected-word JSON, or fourth-lane work
+- Verification run:
+  - `node --check src/renderer/app.js` passed.
+  - `node --check src/renderer/queueWatch.js` passed.
+  - `node --check scripts/verify-renderer-shell.js` passed.
+  - `npm.cmd run verify:watch-operator-confirmation-contract` passed.
+  - `npm.cmd run verify:system-radius-authoring-preflight` passed.
+  - `npm.cmd run verify:watch-create-accepted-scope-contract` passed; fixture-only verifier created expected fixture `system_watches` rows and reported only those rows changed.
+  - `npm.cmd run verify:watch-authored-execution-readiness` passed.
+  - `npm.cmd run verify:renderer-shell` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 554 warnings across 6 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed with CRLF normalization warnings only.
+  - `git status --short --branch` showed branch `main...origin/main` with HS318 working-tree changes.
+
+## HS318 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS318-renderer-system-watch-confirmation-path.md
+```
+
+Status: renderer system Watch confirmation path complete and accepted by Overseer.
+
+## HS318 Acceptance
+
+Accepted:
+
+```txt
+workspace/OverseerHS319-hs318-renderer-system-watch-confirmation-path-review.md
+```
+
+Decision:
+
+HS318 is accepted.
+
+Accepted result:
+
+- System/radius Watch authoring now uses a renderer preview and explicit confirmation path before `watch.create`.
+- Preflight visibility, focus, hover, keyboard navigation, and local topology lookup are not acceptance.
+- Blocked/capped/unknown or otherwise non-confirmable preflight states cannot save through this path.
+- The save path reruns a fresh explicit confirmation contract before calling `watch.create`.
+- `watch.create` receives the confirmed accepted payload preserving exact `included_system_ids`.
+- Center/radius remain provenance/management fields after acceptance.
+- Stored included system IDs remain future execution authority.
+- Actor Watch authoring behavior remains materially unchanged.
+- No provider movement, Watch execution, task creation, Discovery/Evidence/Hydration mutation, backend `watch.create` behavior change, topology behavior change, schema, enforcement, support artifacts, result semantics, relationship tags, protected-word JSON updates, popup/modal behavior, final UI design, R-Scanner redesign, or fourth-lane work were opened.
+
+Naming breadcrumb:
+
+- `accepted_payload_shape` remains acceptable as contract output.
+- Future renderer-local or handoff naming should prefer `user_confirmed_*` when a value exists only after explicit operator intent.
+
+HS318 can rest.
 
 ## HS316 Active Dev Runway
 

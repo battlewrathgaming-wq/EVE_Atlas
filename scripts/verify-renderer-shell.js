@@ -158,6 +158,9 @@ function main() {
   assert(htmlText.includes('watch-author-actor-type'), 'watch view should include actor watch authoring controls');
   assert(htmlText.includes('save-actor-watch'), 'watch view should include explicit actor watch save action');
   assert(htmlText.includes('watch-author-system-id'), 'watch view should include system watch authoring controls');
+  assert(htmlText.includes('preview-system-watch-scope'), 'system watch authoring should include a scope preflight preview action');
+  assert(htmlText.includes('confirm-system-watch-scope'), 'system watch authoring should include explicit scope confirmation');
+  assert(htmlText.includes('system-watch-scope-preview'), 'system watch authoring should include included-system preview readout');
   assert(htmlText.includes('save-system-watch'), 'watch view should include explicit system watch save action');
   assert(htmlText.includes('watch-authoring-status'), 'watch view should include watch authoring status');
   assert(htmlText.includes('watch-list'), 'watch view should include watch list');
@@ -298,6 +301,11 @@ function main() {
   assert(rendererText.includes('do not draw exact coverage'), 'R-Scanner should preserve malformed radius scope limitation');
   assert(rendererText.includes("service.invoke('watch.list'"), 'renderer should call watch.list through service bridge');
   assert(rendererText.includes("service.invoke('watch.create'"), 'renderer should create watches through service bridge');
+  assert(rendererText.includes("service.invoke('watch.system_radius_authoring_preflight.preview'"), 'renderer should preview system/radius Watch scope before confirmation');
+  assert(rendererText.includes("service.invoke('watch.operator_confirmation_contract.preview'"), 'renderer should use operator confirmation contract before system watch.create');
+  assert(rendererText.includes('explicitConfirmation: true'), 'system/radius Watch save should require explicit confirmation contract input');
+  assert(rendererText.includes('accepted_payload_shape'), 'system/radius Watch save should use the accepted payload shape');
+  assert(rendererText.includes('Visible preflight, focus, hover, keyboard navigation, and local topology lookup are not acceptance'), 'system/radius Watch preview should state visible/passive signals are not acceptance');
   assert(rendererText.includes("service.invoke('watch.executor.status'"), 'renderer should read watch executor state through service bridge');
   assert(rendererText.includes("service.invoke('watch.executor.arm'"), 'renderer should explicitly arm watch executor through service bridge');
   assert(rendererText.includes("service.invoke('watch.executor.disarm'"), 'renderer should explicitly disarm watch executor through service bridge');
@@ -364,6 +372,8 @@ function main() {
   assert(styleText.includes('.timeline-row'), 'renderer styles should define progress timeline rows');
   assert(styleText.includes('.queue-ref-list'), 'renderer styles should define queue ref list');
   assert(styleText.includes('.watch-list'), 'renderer styles should define watch list');
+  assert(styleText.includes('.watch-scope-preview'), 'renderer styles should define system Watch scope preview');
+  assert(styleText.includes('.included-system-list'), 'renderer styles should define included system list');
   assert(styleText.includes('.r-scanner-panel'), 'renderer styles should define R-Scanner panel');
   assert(styleText.includes('.r-scanner-rings'), 'renderer styles should define static R-Scanner face rings');
   assert(styleText.includes('.r-scanner-signals'), 'renderer styles should define R-Scanner signal grid');
