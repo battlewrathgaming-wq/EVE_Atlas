@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS290 Watch/task outcome map assurance accepted; next seam decision pending
+Status: HS292 Watch/task outcome map preview runway open
 Last updated: 2026-06-05
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: accepted Watch/task outcome map assurance; decide whether to open read-only proof.
+Current focus: read-only Watch/task origin and durable outcome map preview.
 
 Current heading:
 
@@ -21,21 +21,21 @@ Current heading:
 
 ## Executor
 
-Current executor: Overseer / Human decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS292-watch-task-outcome-map-preview-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS292-watch-task-outcome-map-preview.md
 ```
 
-No Dev runway is open. HS290 is accepted as advisory/scoping input.
+Dev may implement the narrow read-only/local-only Watch/task outcome map preview only. Do not call providers, dispatch Watch execution, create tasks, write rows, add schema, create `watch_result`, add relationship tags, change UI, activate enforcement, create support artifacts, or reopen the fourth lane.
 
 Latest accepted advisory request:
 
@@ -335,6 +335,30 @@ Open decision:
 ```txt
 Should Atlas open a bounded read-only Dev proof for a Watch/task outcome map preview?
 ```
+
+## HS292 Active Dev Runway
+
+Opened 2026-06-05:
+
+```txt
+workspace/OverseerHS292-watch-task-outcome-map-preview-runway.md
+```
+
+Expected handoff:
+
+```txt
+workspace/DevHS292-watch-task-outcome-map-preview.md
+```
+
+Accepted task:
+
+Build a read-only Watch/task origin and durable outcome map preview, preferably:
+
+```txt
+runtime.watch_task_outcome_map.preview
+```
+
+It should prove Atlas can explain origin kind, operator act/trigger, command, volatile versus durable state, expected durable rows, latest matching `fetch_runs`, Discovery ref counts, Evidence/EVEidence counts, Watch schedule posture, system/radius authored versus planned scope, and queue identity posture without provider calls, task dispatch, writes, schema, `watch_result`, relationship tags, UI, enforcement, support artifacts, or fourth-lane work.
 
 Latest accepted advisory request:
 

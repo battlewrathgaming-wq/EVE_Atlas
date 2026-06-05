@@ -145,6 +145,7 @@ Current state:
 - HS288 accepted by HS289
 - HS290 advisory assurance/scope request opened
 - HS290 accepted by HS291
+- HS292 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -161,8 +162,9 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer / Human decision
-- no active Dev runway is open
+- current executor is Dev
+- active Dev runway is `workspace/OverseerHS292-watch-task-outcome-map-preview-runway.md`
+- expected Dev handoff is `workspace/DevHS292-watch-task-outcome-map-preview.md`
 - latest accepted advisory request is `workspace/OverseerHS290-watch-task-outcome-map-assurance-scope-request.md`
 - latest accepted advisory artifact is `workspace/EngineeringDataHS290-watch-task-outcome-map-assurance-scope.md`
 - latest Overseer advisory review is `workspace/OverseerHS291-hs290-watch-task-outcome-map-assurance-review.md`
@@ -216,7 +218,7 @@ Current state:
 - latest advisory request is `workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md`
 - latest advisory artifact is `workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md`
 - latest advisory acceptance is `workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md`
-- current work is decision on whether to open read-only Watch/task outcome map preview proof
+- current work is read-only Watch/task origin and durable outcome map preview
 - recommended next rich surface is selected unresolved local ID -> Resolve candidate -> future report readability reuse
 - parked separate lane is Task origin and durable outcome map for Manual Search and Watch
 - topology real-local import matches accepted HS224 authority/recovery semantics under fixture verification
@@ -248,7 +250,11 @@ Current heading:
 
 Active Dev packet:
 
-No active Dev packet is open.
+1. `workspace/OverseerHS292-watch-task-outcome-map-preview-runway.md`
+2. Expected handoff: `workspace/DevHS292-watch-task-outcome-map-preview.md`
+3. Preferred command: `runtime.watch_task_outcome_map.preview`
+4. Scope: local-only/read-only Watch/task origin and durable outcome map preview.
+5. No provider calls, Watch dispatch, task creation, writes, schema, `watch_result`, relationship tags, UI, enforcement, support artifacts, or fourth-lane work.
 
 Latest accepted packet:
 
