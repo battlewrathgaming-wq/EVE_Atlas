@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS338 Watch no-provider task-creation fixture proof accepted
+Status: HS340 Watch task to Discovery bus input envelope open
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Resting after Watch no-provider task-creation fixture proof for how Evidence generation follows user intent before provider movement.
+Current focus: Watch task envelope to Discovery bus input envelope before provider movement.
 
 Current heading:
 
@@ -25,19 +25,57 @@ Current heading:
 
 ## Executor
 
-Current executor: Human / Overseer decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS340-watch-task-to-discovery-bus-input-envelope-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS340-watch-discovery-bus-input-envelope.md
 ```
+
+## HS340 Active Dev Runway
+
+Opened:
+
+```txt
+workspace/OverseerHS340-watch-task-to-discovery-bus-input-envelope-runway.md
+```
+
+Task:
+
+Add a read-only/local-only proof that converts accepted Watch task shape into a Discovery bus input envelope.
+
+Suggested verifier:
+
+```txt
+verify:watch-discovery-bus-input-envelope
+```
+
+Purpose:
+
+```txt
+prove Watch task intent can feed the shared Discovery candidate-intake bus without becoming Discovery refs or Evidence
+```
+
+Core rule:
+
+```txt
+Discovery bus input is acquisition intent
+Discovery bus input is not Discovery refs
+Discovery bus input is not Evidence
+```
+
+Boundary:
+
+This packet is read-only/local-only. Do not execute a Watch, invoke Watch dispatch runners, call collectors, call zKillboard, ESI, or any provider, perform live/API calls, write Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, mutate real/operator Watch rows, persist real runtime packet rows, create real/product tasks beyond existing fixture-only proof use, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
+
+Stop if the proof requires provider/live calls, Discovery ref writes, Evidence/EVEidence writes, real dispatch/collector invocation, schema changes, or a Watch-only Discovery bus model.
 
 ## HS338 Acceptance
 

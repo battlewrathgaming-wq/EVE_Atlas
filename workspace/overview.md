@@ -193,6 +193,7 @@ Current state:
 - HS336 accepted by HS337
 - HS338 opened
 - HS338 accepted by HS339
+- HS340 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -209,17 +210,17 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Human / Overseer decision
-- active Dev runway is none
-- expected Dev handoff is none
+- current executor is Dev
+- active Dev runway is `workspace/OverseerHS340-watch-task-to-discovery-bus-input-envelope-runway.md`
+- expected Dev handoff is `workspace/DevHS340-watch-discovery-bus-input-envelope.md`
 - latest accepted heading is `How does Evidence get generated from user intent?`
-- current Watch seam is resting after no-provider task-creation fixture proof
+- current Watch seam is task envelope to Discovery bus input envelope
 - accepted Watch chain now proves setup -> packet plan -> dry-run -> dispatch payload-builder -> task envelope without creating tasks or touching providers
 - latest accepted Dev runway is `workspace/OverseerHS336-watch-task-creation-boundary-proof-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS336-watch-task-creation-boundary-proof.md`
 - latest Overseer review is `workspace/OverseerHS337-hs336-watch-task-boundary-review.md`
 - latest accepted command is `watch.task_creation_boundary.preview`
-- current next-seam decision candidates are Watch execution-adjacent readiness review, no-provider task execution harness proof, or rest Watch runtime and return to Manual Discovery
+- current next-seam decision accepted: prove Watch task intent can feed the shared Discovery candidate-intake bus without provider movement, Discovery ref writes, or Evidence writes
 - latest accepted Dev runway is `workspace/OverseerHS338-watch-no-provider-task-creation-fixture-proof-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS338-watch-no-provider-task-creation-fixture-proof.md`
 - latest Overseer review is `workspace/OverseerHS339-hs338-watch-task-fixture-proof-review.md`
