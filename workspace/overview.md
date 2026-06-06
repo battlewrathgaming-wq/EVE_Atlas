@@ -194,6 +194,7 @@ Current state:
 - HS338 opened
 - HS338 accepted by HS339
 - HS340 opened
+- HS340 accepted by HS341
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -210,17 +211,21 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS340-watch-task-to-discovery-bus-input-envelope-runway.md`
-- expected Dev handoff is `workspace/DevHS340-watch-discovery-bus-input-envelope.md`
+- current executor is Human / Overseer decision
+- active Dev runway is none
+- expected Dev handoff is none
 - latest accepted heading is `How does Evidence get generated from user intent?`
-- current Watch seam is task envelope to Discovery bus input envelope
+- current Watch seam is resting after task envelope to Discovery bus input envelope
 - accepted Watch chain now proves setup -> packet plan -> dry-run -> dispatch payload-builder -> task envelope without creating tasks or touching providers
 - latest accepted Dev runway is `workspace/OverseerHS336-watch-task-creation-boundary-proof-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS336-watch-task-creation-boundary-proof.md`
 - latest Overseer review is `workspace/OverseerHS337-hs336-watch-task-boundary-review.md`
 - latest accepted command is `watch.task_creation_boundary.preview`
-- current next-seam decision accepted: prove Watch task intent can feed the shared Discovery candidate-intake bus without provider movement, Discovery ref writes, or Evidence writes
+- current next-seam decision candidates are no-provider Discovery intake consumer proof, fixture-only Discovery ref write proof, or rest Watch runtime and shape User-driven Discovery
+- latest accepted Dev runway is `workspace/OverseerHS340-watch-task-to-discovery-bus-input-envelope-runway.md`
+- latest accepted Dev handoff is `workspace/DevHS340-watch-discovery-bus-input-envelope.md`
+- latest Overseer review is `workspace/OverseerHS341-hs340-watch-discovery-bus-input-review.md`
+- latest accepted result is Watch task envelope to shared Discovery bus input envelope; candidate intake only, not Discovery refs and not Evidence/EVEidence
 - latest accepted Dev runway is `workspace/OverseerHS338-watch-no-provider-task-creation-fixture-proof-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS338-watch-no-provider-task-creation-fixture-proof.md`
 - latest Overseer review is `workspace/OverseerHS339-hs338-watch-task-fixture-proof-review.md`

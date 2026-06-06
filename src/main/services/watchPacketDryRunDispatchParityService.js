@@ -310,6 +310,7 @@ function payloadShape(payload = null) {
     keys: Object.keys(payload).sort(),
     entity_type: payload.entityType || null,
     entity_id: payload.entityId ?? null,
+    entity_name: payload.entityName || null,
     center_system_id: payload.centerSystemId ?? null,
     radius_jumps: payload.radiusJumps ?? null,
     accepted_system_ids: Array.isArray(payload.acceptedSystemIds) ? [...payload.acceptedSystemIds] : [],

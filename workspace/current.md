@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS340 Watch task to Discovery bus input envelope open
+Status: HS340 Watch task to Discovery bus input envelope accepted
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Watch task envelope to Discovery bus input envelope before provider movement.
+Current focus: Resting after Watch task envelope to Discovery bus input envelope before provider movement.
 
 Current heading:
 
@@ -25,19 +25,53 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Human / Overseer decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS340-watch-task-to-discovery-bus-input-envelope-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS340-watch-discovery-bus-input-envelope.md
+none
 ```
+
+## HS340 Acceptance
+
+Accepted:
+
+```txt
+workspace/OverseerHS341-hs340-watch-discovery-bus-input-review.md
+```
+
+Accepted result:
+
+- `buildWatchDiscoveryBusInputEnvelopeProof(...)` proves Watch task intent as a shared Discovery bus input envelope.
+- `npm.cmd run verify:watch-discovery-bus-input-envelope` verifies the proof.
+- No renderer/product service command was added.
+- Discovery bus input is acquisition intent only.
+- Discovery bus input is not Discovery refs.
+- Discovery bus input is not Evidence/EVEidence.
+- Actor Watch bus input preserves `source_lane: watch`, `source_kind: actor`, selected scope key, Watch ID, `watch.executor.actor.watch`, `evidence-creating`, candidate-only posture, lookback/caps, entity type, entity ID, and local entity name when available.
+- System/radius Watch bus input preserves `source_lane: watch`, `source_kind: system_radius`, selected scope key, Watch ID, `watch.executor.system.radius.watch`, `evidence-creating`, candidate-only posture, lookback/caps, stored accepted `included_system_ids`, `accepted_scope_source: stored_watch_scope`, and center/radius as provenance/management only.
+- Invalid stored system/radius scope emits no Discovery bus input and reports `watch_scope_authority_invalid`.
+- Disarmed, active-task, live/provider-gated, no-due, inactive, not-due, and backoff states emit no Discovery bus input.
+- Watch packet/dry-run/dispatch parity payload shape now includes local actor `entity_name`, preserving already-local naming without provider lookup.
+
+Boundary:
+
+No Watch execution, Watch dispatch runner invocation, collector call, zKillboard call, ESI call, provider/live/API call, Discovery ref write, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, real/operator Watch mutation, real runtime packet persistence, broad provider queue, schema change, renderer UI work, popup/modal behavior, R-Scanner redesign, runtime enforcement, command blocking, support artifact creation, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
+
+Resting next options:
+
+1. No-provider Discovery intake consumer proof: convert the bus input envelope into stubbed candidate refs without provider calls or durable ref writes.
+2. Discovery ref write fixture proof: if accepted later, prove stubbed candidate refs can become durable Discovery refs with Watch provenance in disposable fixture scope only.
+3. Rest Watch runtime and shape User-driven Discovery as the shorter non-repeatable path into the same Discovery bus.
+
+Human / Overseer decision needed before a new Dev runway.
 
 ## HS340 Active Dev Runway
 
@@ -76,6 +110,68 @@ Boundary:
 This packet is read-only/local-only. Do not execute a Watch, invoke Watch dispatch runners, call collectors, call zKillboard, ESI, or any provider, perform live/API calls, write Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, mutate real/operator Watch rows, persist real runtime packet rows, create real/product tasks beyond existing fixture-only proof use, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
 
 Stop if the proof requires provider/live calls, Discovery ref writes, Evidence/EVEidence writes, real dispatch/collector invocation, schema changes, or a Watch-only Discovery bus model.
+
+## HS340 Evidence
+
+Dev updated 2026-06-06:
+
+- Added `buildWatchDiscoveryBusInputEnvelopeProof(...)` in `src/main/services/watchDiscoveryBusInputEnvelopeService.js`.
+- Added `scripts/verify-watch-discovery-bus-input-envelope.js` and `npm.cmd run verify:watch-discovery-bus-input-envelope`.
+- The proof composes HS338 `buildWatchTaskCreationFixtureProof(...)`; no renderer/product service command was added.
+- The proof emits plain-data Discovery bus input envelopes only when the accepted Watch task fixture shape exists.
+- Actor bus input sample proves:
+  - `source_lane: watch`
+  - `source_kind: actor`
+  - `scope_key: actor:character:90000001`
+  - `task_type: watch.executor.actor.watch`
+  - `candidate_only: true`
+  - actor local identity fields preserved, including `entity_name` when available.
+- System/radius bus input sample proves:
+  - `source_lane: watch`
+  - `source_kind: system_radius`
+  - `scope_key: system:30003597:radius:1`
+  - `task_type: watch.executor.system.radius.watch`
+  - accepted stored system IDs preserved: `[30003597, 30003599, 30003601]`
+  - `accepted_scope_source: stored_watch_scope`
+  - center/radius remain provenance/management only.
+- Updated Watch packet/dry-run/dispatch parity payload shape to expose `entity_name` from the selected actor payload so the bus input proof can preserve available local actor naming without provider lookup.
+- Invalid stored system/radius scope emits no bus input envelope and reports `watch_scope_authority_invalid`.
+- Disarmed, active-task, live-provider-gated, no-due, inactive, not-due, and backoff states emit no bus input envelope.
+- The accepted model reports:
+  - Discovery bus input role: acquisition intent
+  - Discovery bus input is not Discovery refs
+  - Discovery bus input is not Evidence
+  - shared candidate intake shape: true
+  - Watch-only bus model: false
+- Mutation boundary proof reports unchanged durable Atlas table counts for emitted, invalid, blocked, and idle cases.
+- Verification run:
+  - `node --check src\main\services\watchDiscoveryBusInputEnvelopeService.js` passed.
+  - `node --check scripts\verify-watch-discovery-bus-input-envelope.js` passed.
+  - `node --check src\main\services\watchPacketDryRunDispatchParityService.js` passed.
+  - `npm.cmd run verify:watch-discovery-bus-input-envelope` passed.
+  - `npm.cmd run verify:watch-task-creation-fixture-proof` passed.
+  - `npm.cmd run verify:watch-task-creation-boundary` passed.
+  - `npm.cmd run verify:watch-packet-dry-run-dispatch-parity` passed.
+  - `npm.cmd run verify:watch-executor-tick-dry-run` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output. The final working-set scan covered 5 changed files and reported 472 warning-only items, mostly from the long existing `workspace/current.md` record; no renames or protected-word JSON updates were performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main [ahead 11]` with HS340 working-tree changes.
+
+## HS340 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS340-watch-discovery-bus-input-envelope.md
+```
+
+Status: Watch task to Discovery bus input envelope proof complete; ready for Overseer review.
+
+Discovery refs, Evidence/EVEidence, provider movement, Watch execution, schema, UI, enforcement, support artifacts, durable Watch results, relationship tags, and fourth-lane behavior remain unopened.
+
+No Watch dispatch runners, collectors, zKillboard, ESI, provider/live/API calls, Discovery ref writes, Evidence/EVEidence writes, Hydration/metadata writes, API log/warning writes, real/operator Watch mutations, real runtime packet persistence, broad provider queue, protected-word JSON updates, renderer UI, support artifact creation, runtime enforcement, or command blocking were added.
 
 ## HS338 Acceptance
 
