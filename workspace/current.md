@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS334 Watch packet/dry-run/dispatch parity proof accepted
+Status: HS336 Watch task-creation boundary proof opened
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Resting after Watch parity proof for how Evidence generation follows user intent before task creation.
+Current focus: Watch task-creation boundary proof for how Evidence generation follows user intent before provider movement.
 
 Current heading:
 
@@ -25,19 +25,54 @@ Current heading:
 
 ## Executor
 
-Current executor: Human / Overseer decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS336-watch-task-creation-boundary-proof-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS336-watch-task-creation-boundary-proof.md
 ```
+
+## HS336 Active Dev Runway
+
+Opened:
+
+```txt
+workspace/OverseerHS336-watch-task-creation-boundary-proof-runway.md
+```
+
+Task:
+
+Add a read-only/local-only task-creation boundary proof for Watch execution.
+
+Preferred command:
+
+```txt
+watch.task_creation_boundary.preview
+```
+
+Purpose:
+
+```txt
+prove the task envelope that would be created from accepted Watch intent without creating the task
+```
+
+Core rule:
+
+```txt
+task boundary proof may describe the task envelope
+task boundary proof must not create the task
+```
+
+Boundary:
+
+This packet is read-only/local-only. Do not create tasks, call `TaskRunner.runTask`, `TaskRunner.runDetachedTask`, `TaskRunner.prepareTask`, `TaskRunner.createTask`, call `WatchSessionExecutor.tick(...)`, execute a Watch, arm/disarm Watch runtime, start/stop intervals, invoke dispatch runners, call collectors, call providers, perform live/API calls, mutate Watch rows, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, change `watch.create`, change topology traversal behavior, infer execution authority from center/radius, persist runtime packet rows, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
 
 ## HS334 Acceptance
 

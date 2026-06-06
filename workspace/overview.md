@@ -189,6 +189,7 @@ Current state:
 - HS332 accepted by HS333
 - HS334 opened
 - HS334 accepted by HS335
+- HS336 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -205,11 +206,12 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Human / Overseer decision
-- active Dev runway is none
-- expected Dev handoff is none
+- current executor is Dev
+- active Dev runway is `workspace/OverseerHS336-watch-task-creation-boundary-proof-runway.md`
+- expected Dev handoff is `workspace/DevHS336-watch-task-creation-boundary-proof.md`
 - latest accepted heading is `How does Evidence get generated from user intent?`
-- current Watch seam is resting after packet-plan / dry-run / `dispatchFor(...)` parity before task creation
+- current Watch seam is task-creation boundary proof after packet-plan / dry-run / `dispatchFor(...)` parity
+- current packet proves the would-task envelope without creating tasks or touching providers
 - latest accepted Dev runway is `workspace/OverseerHS334-watch-packet-dry-run-dispatch-parity-proof-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS334-watch-packet-dry-run-dispatch-parity-proof.md`
 - latest Overseer review is `workspace/OverseerHS335-hs334-watch-dispatch-parity-review.md`
@@ -322,7 +324,13 @@ Current heading:
 
 Active Dev packet:
 
-None. HS334 is accepted and the project is at a Human / Overseer decision point.
+1. `workspace/OverseerHS336-watch-task-creation-boundary-proof-runway.md`
+2. Expected handoff: `workspace/DevHS336-watch-task-creation-boundary-proof.md`
+3. Goal: prove the Watch task envelope that would be created from accepted Watch intent without creating the task.
+4. Preferred command: `watch.task_creation_boundary.preview`
+5. Core rule: task boundary proof may describe the task envelope; task boundary proof must not create the task.
+6. Expected task envelope: `type=watch.executor.<dispatch command>`, `classification=evidence-creating`, `scopeKey=<selected Watch scope_key>`.
+7. TaskRunner creation methods, Watch execution, provider movement, Discovery refs, Evidence/EVEidence, Hydration, schema, support artifacts, active enforcement, relationship tags, UI, and fourth-lane work remain unopened.
 
 Latest accepted packet:
 
