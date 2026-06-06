@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS338 Watch no-provider task-creation fixture proof open
+Status: HS338 Watch no-provider task-creation fixture proof accepted
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Watch pre-live confidence steps for how Evidence generation follows user intent before provider movement.
+Current focus: Resting after Watch no-provider task-creation fixture proof for how Evidence generation follows user intent before provider movement.
 
 Current heading:
 
@@ -25,19 +25,55 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Human / Overseer decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS338-watch-no-provider-task-creation-fixture-proof-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS338-watch-no-provider-task-creation-fixture-proof.md
+none
 ```
+
+## HS338 Acceptance
+
+Accepted:
+
+```txt
+workspace/OverseerHS339-hs338-watch-task-fixture-proof-review.md
+```
+
+Accepted result:
+
+- `buildWatchTaskCreationFixtureProof(...)` proves fixture-only Watch task creation shape.
+- `npm.cmd run verify:watch-task-creation-fixture-proof` verifies the proof.
+- No renderer/product service command was added.
+- The proof composes HS336 `watch.task_creation_boundary.preview`.
+- Valid actor and system/radius would-task envelopes are passed to a disposable local `TaskRunner` instance.
+- Only `TaskRunner.createTask` is called.
+- `TaskRunner.runTask`, `TaskRunner.runDetachedTask`, and `TaskRunner.prepareTask` are not called.
+- The default runtime task runner is not used.
+- Created fixture tasks stay queued, with no handler attached and no handler invoked.
+- Actor task shape preserves `watch.executor.actor.watch`, `evidence-creating`, selected scope key, and actor payload meaning.
+- System/radius task shape preserves `watch.executor.system.radius.watch`, `evidence-creating`, selected scope key, stored accepted `included_system_ids`, and center/radius as provenance/management only.
+- Invalid stored system/radius scope creates no fixture task and reports `watch_scope_authority_invalid`.
+- Disarmed, active-task, live/provider-gated, no-due, inactive, not-due, and backoff states create no fixture task.
+
+Boundary:
+
+No live Watch execution, provider movement, provider-backed collector call, zKillboard call, ESI call, live/API call, Watch dispatch runner invocation, Discovery ref write, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, real/operator Watch row mutation, runtime arm/disarm, executor interval change, real runtime packet persistence, broad provider queue, schema change, renderer UI work, popup/modal behavior, R-Scanner redesign, runtime enforcement, command blocking, support artifact, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
+
+Resting next options:
+
+1. Watch execution-adjacent readiness review: decide what remains before a no-provider execution harness or live test can be considered.
+2. No-provider task execution harness proof, if Human/Overseer accept executing a stub handler as the next pre-live seam.
+3. Rest Watch runtime and return to Manual Discovery as the second path for how Evidence gets generated from user intent.
+
+Human / Overseer decision needed before a new Dev runway.
 
 ## HS338 Active Dev Runway
 
@@ -76,6 +112,80 @@ Boundary:
 This packet is fixture-only and no-provider. Do not execute a Watch, call provider-backed collectors, call zKillboard, ESI, or any provider, perform live/API calls, invoke Watch dispatch runners, write Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, mutate real/operator Watch rows, arm/disarm Watch runtime, start/stop executor intervals, persist real runtime packet rows, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
 
 Stop if the proof requires live/provider movement, real dispatch/collector invocation, Evidence/EVEidence writes, Discovery writes, schema changes, or real/operator runtime task persistence.
+
+## HS338 Evidence
+
+Dev updated 2026-06-06:
+
+- Added fixture-only helper `buildWatchTaskCreationFixtureProof(...)` in `src/main/services/watchTaskCreationFixtureProofService.js`.
+- Added `scripts/verify-watch-task-creation-fixture-proof.js` and `npm.cmd run verify:watch-task-creation-fixture-proof`.
+- No renderer/product service command was added.
+- Proof composes HS336 `watch.task_creation_boundary.preview`.
+- Valid actor/system would-task envelopes are handed to a disposable local `TaskRunner` instance using only `TaskRunner.createTask`.
+- Fixture task shape proves:
+  - `type` preserved
+  - `classification` preserved
+  - `scopeKey` preserved
+  - task status remains `queued`
+  - `handler_attached: false`
+  - `handler_invoked: false`
+  - `persisted_in_default_runner: false`
+- Actor fixture task sample:
+  - type: `watch.executor.actor.watch`
+  - classification: `evidence-creating`
+  - scope key: `actor:character:90000001`
+  - payload meaning preserved from HS336
+- System/radius fixture task sample:
+  - type: `watch.executor.system.radius.watch`
+  - classification: `evidence-creating`
+  - scope key: `system:30003597:radius:1`
+  - stored accepted system IDs: `[30003597, 30003599, 30003601]`
+  - accepted scope source: `stored_watch_scope`
+  - center/radius remain provenance/management
+- Invalid stored system/radius scope creates no fixture task and reports `watch_scope_authority_invalid`.
+- Disarmed, active-task, live-provider-gated, no-due, inactive, not-due, and backoff states create no fixture task.
+- No-provider/no-execution proof reports:
+  - `fixture_only: true`
+  - `provider_movement: false`
+  - `watch_execution: false`
+  - `dispatch_runner_invoked: false`
+  - `collectors_called: false`
+  - `provider_calls: 0`
+  - `zkill_calls: 0`
+  - `esi_calls: 0`
+  - `evidence_written: false`
+  - `discovery_refs_mutated: 0`
+  - `hydration_writes: 0`
+  - `api_request_log_writes: 0`
+  - `real_runtime_task_persistence: false`
+  - `default_task_runner_used: false`
+  - `product_authorization: false`
+- Verification run:
+  - `node --check src\main\services\watchTaskCreationFixtureProofService.js` passed.
+  - `node --check src\main\services\watchTaskCreationBoundaryService.js` passed.
+  - `node --check scripts\verify-watch-task-creation-fixture-proof.js` passed.
+  - `npm.cmd run verify:watch-task-creation-fixture-proof` passed.
+  - `npm.cmd run verify:watch-task-creation-boundary` passed.
+  - `npm.cmd run verify:watch-packet-dry-run-dispatch-parity` passed.
+  - `npm.cmd run verify:watch-executor-tick-dry-run` passed.
+  - `npm.cmd run verify:task-runner` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 8 warnings across 2 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warning for `package.json` was emitted.
+  - `git status --short --branch` showed branch `main...origin/main [ahead 9]` with HS338 working-tree changes.
+
+## HS338 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS338-watch-no-provider-task-creation-fixture-proof.md
+```
+
+Status: Watch no-provider task-creation fixture proof complete; ready for Overseer review.
+
+No live Watch execution, provider movement, provider-backed collector call, zKillboard call, ESI call, live/API call, Watch dispatch runner invocation, Discovery ref write, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, real/operator Watch row mutation, runtime arm/disarm, executor interval change, real runtime packet persistence, broad provider queue, schema change, renderer UI work, popup/modal behavior, R-Scanner redesign, runtime enforcement, command blocking, support artifact, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
 
 ## HS336 Acceptance
 

@@ -192,6 +192,7 @@ Current state:
 - HS336 opened
 - HS336 accepted by HS337
 - HS338 opened
+- HS338 accepted by HS339
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -208,17 +209,21 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS338-watch-no-provider-task-creation-fixture-proof-runway.md`
-- expected Dev handoff is `workspace/DevHS338-watch-no-provider-task-creation-fixture-proof.md`
+- current executor is Human / Overseer decision
+- active Dev runway is none
+- expected Dev handoff is none
 - latest accepted heading is `How does Evidence get generated from user intent?`
-- current Watch seam is no-provider task-creation fixture proof before any live execution
+- current Watch seam is resting after no-provider task-creation fixture proof
 - accepted Watch chain now proves setup -> packet plan -> dry-run -> dispatch payload-builder -> task envelope without creating tasks or touching providers
 - latest accepted Dev runway is `workspace/OverseerHS336-watch-task-creation-boundary-proof-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS336-watch-task-creation-boundary-proof.md`
 - latest Overseer review is `workspace/OverseerHS337-hs336-watch-task-boundary-review.md`
 - latest accepted command is `watch.task_creation_boundary.preview`
-- current next-seam decision accepted: fixture-only no-provider task creation proof before any live Watch execution
+- current next-seam decision candidates are Watch execution-adjacent readiness review, no-provider task execution harness proof, or rest Watch runtime and return to Manual Discovery
+- latest accepted Dev runway is `workspace/OverseerHS338-watch-no-provider-task-creation-fixture-proof-runway.md`
+- latest accepted Dev handoff is `workspace/DevHS338-watch-no-provider-task-creation-fixture-proof.md`
+- latest Overseer review is `workspace/OverseerHS339-hs338-watch-task-fixture-proof-review.md`
+- latest accepted result is fixture-only task creation via disposable `TaskRunner.createTask`, with no handler, no default runner, no Watch execution, no provider movement, and no persistent Atlas table mutation
 - previous accepted Dev runway is `workspace/OverseerHS334-watch-packet-dry-run-dispatch-parity-proof-runway.md`
 - previous accepted Dev handoff is `workspace/DevHS334-watch-packet-dry-run-dispatch-parity-proof.md`
 - previous Overseer review is `workspace/OverseerHS335-hs334-watch-dispatch-parity-review.md`
