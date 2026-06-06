@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS342 Discovery intake consumer stub candidate proof accepted
+Status: HS344 source trace accepted by HS345
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Resting after Discovery bus input to stub candidate refs before provider movement or durable Discovery writes.
+Current focus: Resting after blind source trace of user intent to Discovery bus and pre-I/O boundary.
 
 Current heading:
 
@@ -68,11 +68,50 @@ No durable Discovery refs, `discovered_killmail_refs` writes, Evidence/EVEidence
 
 Resting next options:
 
-1. Fixture-only Discovery ref write proof: prove stub candidates can become durable Discovery refs with Watch provenance in disposable fixture scope only.
-2. Pre-write Discovery ref contract/advisory: review exact fields, uniqueness, provenance, and source-lane semantics before writing any `discovered_killmail_refs`, even in fixture.
-3. Rest Watch runtime and shape User-driven Discovery as the shorter non-repeatable path into the same Discovery bus.
+1. Offline accepted-scope propagation proof for the existing direct system/radius collector path: `dispatchFor -> runSystemRadiusWatchService / collector injection -> planSystemRadiusWatch`.
+2. Decide whether the newer Discovery bus/intake shape should become runtime architecture before provider testing.
+3. Fixture-only Discovery ref write proof, if Watch direct path risk is resolved or deliberately parked.
+4. Rest Watch runtime and shape User-driven Discovery as the shorter non-repeatable path into the same Discovery bus.
 
 Human / Overseer decision needed before a new Dev runway.
+
+## HS344 Source Trace Acceptance
+
+Accepted:
+
+```txt
+workspace/EngineeringTraceHS344-user-intent-to-discovery-bus-source-trace.md
+workspace/OverseerHS345-hs344-source-trace-acceptance.md
+```
+
+Accepted result:
+
+- HS344 performed a blind source-code inspection without reading `workspace/current.md`, `workspace/overview.md`, recent HS handoffs, chat summaries, or external shaping material.
+- The current code has two distinct Watch paths:
+  - implemented runtime path: `watch.executor.tick -> dispatchFor -> actor.watch/system.radius.watch -> collectors -> providers/persistence once live gates allow`;
+  - newer proof path: packet plan / dry-run -> task envelope -> fixture task -> Discovery bus input -> stub candidate refs.
+- The proof path is clean and pre-live, but it is not yet the real runtime provider path.
+- The sharpest pre-live risk is accepted stored system IDs through the implemented direct system/radius collector path.
+
+Accepted risk:
+
+```txt
+watchExecutor.dispatchFor(...) builds a payload with accepted IDs,
+but runSystemRadiusWatchService normalizes through normalizeSystemRadiusWatchScope,
+which does not include accepted IDs in its returned object.
+```
+
+Recommended next seam:
+
+```txt
+dispatchFor -> runSystemRadiusWatchService / collector injection -> planSystemRadiusWatch
+```
+
+That proof should stay offline and assert accepted stored `included_system_ids` survive into `planSystemRadiusWatch`, `acceptedScopeSource` remains `stored_watch_scope`, center/radius are not recomputed as execution authority, invalid stored scope blocks before task/provider movement, fake provider clients prevent live provider calls, and no durable Discovery refs or Evidence writes occur unless separately authorized.
+
+Boundary:
+
+HS344 / HS345 do not authorize live Watch execution, provider movement, Discovery ref writes, Evidence/EVEidence writes, schema changes, UI work, runtime enforcement, support artifacts, durable Watch result identity, or relationship tags.
 
 ## HS342 Active Dev Runway
 

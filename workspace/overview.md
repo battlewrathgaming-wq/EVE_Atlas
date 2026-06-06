@@ -197,6 +197,7 @@ Current state:
 - HS340 accepted by HS341
 - HS342 opened
 - HS342 accepted by HS343
+- HS344 blind source trace accepted by HS345
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -217,13 +218,16 @@ Current state:
 - active Dev runway is none
 - expected Dev handoff is none
 - latest accepted heading is `How does Evidence get generated from user intent?`
-- current Watch seam is resting after Discovery bus input to stub candidate refs
+- current Watch seam is resting after blind source trace of user intent to Discovery bus and pre-I/O boundary
 - accepted Watch chain now proves setup -> packet plan -> dry-run -> dispatch payload-builder -> task envelope without creating tasks or touching providers
 - latest accepted Dev runway is `workspace/OverseerHS336-watch-task-creation-boundary-proof-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS336-watch-task-creation-boundary-proof.md`
 - latest Overseer review is `workspace/OverseerHS337-hs336-watch-task-boundary-review.md`
 - latest accepted command is `watch.task_creation_boundary.preview`
-- current next-seam decision candidates are fixture-only Discovery ref write proof, pre-write Discovery ref contract/advisory, or rest Watch runtime and shape User-driven Discovery
+- current next-seam decision candidates are offline accepted-scope propagation proof for the existing direct system/radius collector path, decide whether Discovery bus/intake becomes runtime architecture before provider testing, fixture-only Discovery ref write proof, or rest Watch runtime and shape User-driven Discovery
+- latest accepted advisory artifact is `workspace/EngineeringTraceHS344-user-intent-to-discovery-bus-source-trace.md`
+- latest advisory review is `workspace/OverseerHS345-hs344-source-trace-acceptance.md`
+- latest accepted source-trace finding is that Atlas has a clean pre-live proof path but also an implemented direct Watch collector path; before live Watch testing, accepted stored system IDs should be proven through `dispatchFor -> runSystemRadiusWatchService / collector injection -> planSystemRadiusWatch`
 - latest accepted Dev runway is `workspace/OverseerHS342-discovery-intake-consumer-stub-candidate-proof-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS342-discovery-intake-consumer-stub-candidates.md`
 - latest Overseer review is `workspace/OverseerHS343-hs342-discovery-stub-candidates-review.md`
