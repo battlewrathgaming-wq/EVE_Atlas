@@ -282,6 +282,10 @@ function verifyCoverageMetadata(map) {
   assert(command(map, 'watch.packet_dry_run_dispatch_parity.preview').runtime_context === 'watch_packet_dry_run_dispatch_parity_readout', 'Watch packet/dry-run/dispatch parity preview should be classified as a readout');
   assert(command(map, 'watch.packet_dry_run_dispatch_parity.preview').enforcement_status === 'read_only_non_enforcing_proof', 'Watch packet/dry-run/dispatch parity preview should identify itself as a non-enforcing proof');
   assert(command(map, 'watch.packet_dry_run_dispatch_parity.preview').external_io_dependency === 'none', 'Watch packet/dry-run/dispatch parity preview should not declare External I/O dependency');
+  assert(command(map, 'watch.task_creation_boundary.preview').storage_action_class === 'local_db_inspection', 'Watch task creation boundary preview should be a local DB inspection');
+  assert(command(map, 'watch.task_creation_boundary.preview').runtime_context === 'watch_task_creation_boundary_readout', 'Watch task creation boundary preview should be classified as a readout');
+  assert(command(map, 'watch.task_creation_boundary.preview').enforcement_status === 'read_only_non_enforcing_proof', 'Watch task creation boundary preview should identify itself as a non-enforcing proof');
+  assert(command(map, 'watch.task_creation_boundary.preview').external_io_dependency === 'none', 'Watch task creation boundary preview should not declare External I/O dependency');
   assert(command(map, 'watch.operator_confirmation_contract.preview').storage_action_class === 'local_db_inspection', 'Watch operator confirmation contract preview should be a local DB inspection');
   assert(command(map, 'watch.operator_confirmation_contract.preview').runtime_context === 'watch_operator_confirmation_contract_readout', 'Watch operator confirmation contract preview should be classified as a readout');
   assert(command(map, 'watch.operator_confirmation_contract.preview').enforcement_status === 'read_only_non_enforcing_proof', 'Watch operator confirmation contract preview should identify itself as a non-enforcing proof');

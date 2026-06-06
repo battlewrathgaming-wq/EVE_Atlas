@@ -68,6 +68,7 @@ const { buildSystemRadiusReadoutReadinessBridge } = require('./systemRadiusReado
 const { buildWatchRuntimePacketPlanPreview } = require('./watchRuntimePacketPlanService');
 const { buildWatchExecutorTickDryRunPreview } = require('./watchExecutorTickDryRunService');
 const { buildWatchPacketDryRunDispatchParityPreview } = require('./watchPacketDryRunDispatchParityService');
+const { buildWatchTaskCreationBoundaryPreview } = require('./watchTaskCreationBoundaryService');
 const { buildWatchOperatorConfirmationContractPreview } = require('./watchOperatorConfirmationContractService');
 const { buildSystemRadiusAuthoringPreflight } = require('./systemRadiusAuthoringPreflightService');
 const { buildSystemRadiusAcceptancePayloadPreview } = require('./systemRadiusAcceptancePayloadService');
@@ -739,6 +740,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview parity between Watch packet plan, executor tick dry-run, and dispatchFor payload shape without execution, tasks, providers, writes, schema, or UI work',
     handler: ({ db, payload, ...context }) => buildWatchPacketDryRunDispatchParityPreview(db, payload, context)
+  },
+  'watch.task_creation_boundary.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview the would-task envelope for selected Watch intent without calling TaskRunner methods, execution, providers, writes, schema, or UI work',
+    handler: ({ db, payload, ...context }) => buildWatchTaskCreationBoundaryPreview(db, payload, context)
   },
   'watch.operator_confirmation_contract.preview': {
     classification: 'read-only',

@@ -94,6 +94,7 @@ async function main() {
     const watchRuntimePacketPlanCommand = commands.find((entry) => entry.command === 'watch.runtime_packet_plan.preview');
     const watchExecutorTickDryRunCommand = commands.find((entry) => entry.command === 'watch.executor_tick_dry_run.preview');
     const watchPacketDryRunDispatchParityCommand = commands.find((entry) => entry.command === 'watch.packet_dry_run_dispatch_parity.preview');
+    const watchTaskCreationBoundaryCommand = commands.find((entry) => entry.command === 'watch.task_creation_boundary.preview');
     const watchOperatorConfirmationContractCommand = commands.find((entry) => entry.command === 'watch.operator_confirmation_contract.preview');
     const systemRadiusAuthoringPreflightCommand = commands.find((entry) => entry.command === 'watch.system_radius_authoring_preflight.preview');
     const systemRadiusAcceptancePayloadCommand = commands.find((entry) => entry.command === 'watch.system_radius_acceptance_payload.preview');
@@ -258,6 +259,8 @@ async function main() {
     assert(watchExecutorTickDryRunCommand?.renderer_allowed === true, 'Watch executor tick dry-run preview should be renderer eligible');
     assert(watchPacketDryRunDispatchParityCommand?.classification === 'read-only', 'Watch packet/dry-run/dispatch parity preview should be read-only');
     assert(watchPacketDryRunDispatchParityCommand?.renderer_allowed === true, 'Watch packet/dry-run/dispatch parity preview should be renderer eligible');
+    assert(watchTaskCreationBoundaryCommand?.classification === 'read-only', 'Watch task creation boundary preview should be read-only');
+    assert(watchTaskCreationBoundaryCommand?.renderer_allowed === true, 'Watch task creation boundary preview should be renderer eligible');
     assert(watchOperatorConfirmationContractCommand?.classification === 'read-only', 'Watch operator confirmation contract preview should be read-only');
     assert(watchOperatorConfirmationContractCommand?.renderer_allowed === true, 'Watch operator confirmation contract preview should be renderer eligible');
     assert(systemRadiusAuthoringPreflightCommand?.classification === 'read-only', 'system/radius authoring preflight should be read-only');
@@ -606,6 +609,22 @@ async function main() {
     assert(watchPacketDryRunDispatchParity.watch_mutations === 0, 'Watch packet/dry-run/dispatch parity preview should not mutate Watch rows');
     assert(watchPacketDryRunDispatchParity.schema_changes === 0, 'Watch packet/dry-run/dispatch parity preview should not change schema');
     assert(watchPacketDryRunDispatchParity.runtime_enforcement_active === false, 'Watch packet/dry-run/dispatch parity preview should not activate enforcement');
+
+    const watchTaskCreationBoundary = await invokeServiceCommand('watch.task_creation_boundary.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchTaskCreationBoundary.read_only === true, 'Watch task creation boundary preview should declare read-only behavior');
+    assert(watchTaskCreationBoundary.provider_calls === 0, 'Watch task creation boundary preview should not call providers');
+    assert(watchTaskCreationBoundary.watch_dispatches === 0, 'Watch task creation boundary preview should not dispatch Watch execution');
+    assert(watchTaskCreationBoundary.tasks_created === 0, 'Watch task creation boundary preview should not create tasks');
+    assert(watchTaskCreationBoundary.task_runner_untouched === true, 'Watch task creation boundary preview should not touch TaskRunner');
+    assert(Array.isArray(watchTaskCreationBoundary.task_runner_methods_called) && watchTaskCreationBoundary.task_runner_methods_called.length === 0, 'Watch task creation boundary preview should call no TaskRunner methods');
+    assert(watchTaskCreationBoundary.evidence_writes === 0, 'Watch task creation boundary preview should not write Evidence/EVEidence');
+    assert(watchTaskCreationBoundary.hydration_writes === 0, 'Watch task creation boundary preview should not write Hydration output');
+    assert(watchTaskCreationBoundary.watch_mutations === 0, 'Watch task creation boundary preview should not mutate Watch rows');
+    assert(watchTaskCreationBoundary.schema_changes === 0, 'Watch task creation boundary preview should not change schema');
+    assert(watchTaskCreationBoundary.runtime_enforcement_active === false, 'Watch task creation boundary preview should not activate enforcement');
 
     const watchOperatorConfirmationContract = await invokeServiceCommand('watch.operator_confirmation_contract.preview', {}, {
       db,

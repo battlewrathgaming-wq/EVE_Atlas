@@ -190,6 +190,7 @@ Current state:
 - HS334 opened
 - HS334 accepted by HS335
 - HS336 opened
+- HS336 accepted by HS337
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -206,18 +207,22 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS336-watch-task-creation-boundary-proof-runway.md`
-- expected Dev handoff is `workspace/DevHS336-watch-task-creation-boundary-proof.md`
+- current executor is Human / Overseer decision
+- active Dev runway is none
+- expected Dev handoff is none
 - latest accepted heading is `How does Evidence get generated from user intent?`
-- current Watch seam is task-creation boundary proof after packet-plan / dry-run / `dispatchFor(...)` parity
-- current packet proves the would-task envelope without creating tasks or touching providers
-- latest accepted Dev runway is `workspace/OverseerHS334-watch-packet-dry-run-dispatch-parity-proof-runway.md`
-- latest accepted Dev handoff is `workspace/DevHS334-watch-packet-dry-run-dispatch-parity-proof.md`
-- latest Overseer review is `workspace/OverseerHS335-hs334-watch-dispatch-parity-review.md`
-- latest accepted command is `watch.packet_dry_run_dispatch_parity.preview`
-- latest accepted result is read-only/local-only parity proof across `watch.runtime_packet_plan.preview`, `watch.executor_tick_dry_run.preview`, and `watchExecutor.dispatchFor(...)`
-- current next-seam decision candidates are Watch task-creation boundary proof, Watch dispatch packet fixture/readiness proof, or rest Watch runtime and return to Manual Discovery
+- current Watch seam is resting after task-creation boundary proof
+- accepted Watch chain now proves setup -> packet plan -> dry-run -> dispatch payload-builder -> task envelope without creating tasks or touching providers
+- latest accepted Dev runway is `workspace/OverseerHS336-watch-task-creation-boundary-proof-runway.md`
+- latest accepted Dev handoff is `workspace/DevHS336-watch-task-creation-boundary-proof.md`
+- latest Overseer review is `workspace/OverseerHS337-hs336-watch-task-boundary-review.md`
+- latest accepted command is `watch.task_creation_boundary.preview`
+- current next-seam decision candidates are Watch execution-adjacent readiness advisory, no-provider task creation fixture proof, or rest Watch runtime and return to Manual Discovery
+- previous accepted Dev runway is `workspace/OverseerHS334-watch-packet-dry-run-dispatch-parity-proof-runway.md`
+- previous accepted Dev handoff is `workspace/DevHS334-watch-packet-dry-run-dispatch-parity-proof.md`
+- previous Overseer review is `workspace/OverseerHS335-hs334-watch-dispatch-parity-review.md`
+- previous accepted command is `watch.packet_dry_run_dispatch_parity.preview`
+- previous accepted result is read-only/local-only parity proof across `watch.runtime_packet_plan.preview`, `watch.executor_tick_dry_run.preview`, and `watchExecutor.dispatchFor(...)`
 - latest advisory acceptance is `workspace/OverseerHS331-hs330-watch-runtime-readiness-advisory-review.md`
 - latest accepted advisory artifact is `workspace/EngineeringDataSecurityHS330-watch-runtime-movement-readiness-advisory.md`
 - latest advisory request is `workspace/OverseerHS330-watch-runtime-movement-readiness-advisory-request.md`
@@ -324,25 +329,19 @@ Current heading:
 
 Active Dev packet:
 
-1. `workspace/OverseerHS336-watch-task-creation-boundary-proof-runway.md`
-2. Expected handoff: `workspace/DevHS336-watch-task-creation-boundary-proof.md`
-3. Goal: prove the Watch task envelope that would be created from accepted Watch intent without creating the task.
-4. Preferred command: `watch.task_creation_boundary.preview`
-5. Core rule: task boundary proof may describe the task envelope; task boundary proof must not create the task.
-6. Expected task envelope: `type=watch.executor.<dispatch command>`, `classification=evidence-creating`, `scopeKey=<selected Watch scope_key>`.
-7. TaskRunner creation methods, Watch execution, provider movement, Discovery refs, Evidence/EVEidence, Hydration, schema, support artifacts, active enforcement, relationship tags, UI, and fourth-lane work remain unopened.
+None. HS336 is accepted and the project is at a Human / Overseer decision point.
 
 Latest accepted packet:
 
-1. `workspace/OverseerHS334-watch-packet-dry-run-dispatch-parity-proof-runway.md`
-2. `workspace/DevHS334-watch-packet-dry-run-dispatch-parity-proof.md`
-3. `workspace/OverseerHS335-hs334-watch-dispatch-parity-review.md`
-4. Accepted result: `watch.packet_dry_run_dispatch_parity.preview` proves read-only/local-only parity across packet plan, executor tick dry-run, and `dispatchFor(...)`.
-5. Actor and system/radius command/payload shapes match across all three surfaces.
-6. Stored accepted `included_system_ids` are system/radius movement authority; center/radius remain provenance/management.
-7. Malformed stored scope blocks before task creation with `watch_scope_authority_invalid`.
-8. Inactive, not-due, and backoff rows are skipped or diagnostic-only and do not imply dispatch.
-9. Watch execution, task creation, provider movement, Discovery refs, Evidence/EVEidence, Hydration, schema, support artifacts, active enforcement, relationship tags, UI, and fourth-lane work remain unopened.
+1. `workspace/OverseerHS336-watch-task-creation-boundary-proof-runway.md`
+2. `workspace/DevHS336-watch-task-creation-boundary-proof.md`
+3. `workspace/OverseerHS337-hs336-watch-task-boundary-review.md`
+4. Accepted result: `watch.task_creation_boundary.preview` proves the would-task envelope as plain data only.
+5. Accepted task shape: `type=watch.executor.<dispatch command>`, `classification=evidence-creating`, `scopeKey=<selected Watch scope_key>`.
+6. Actor and system/radius task envelopes preserve the selected Watch command/payload shape.
+7. System/radius task envelope preserves stored accepted `included_system_ids`; center/radius remain provenance/management.
+8. Invalid stored scope and blocked/idle/skipped states emit no task envelope.
+9. Task creation, TaskRunner creation methods, Watch execution, provider movement, Discovery refs, Evidence/EVEidence, Hydration, schema, support artifacts, active enforcement, relationship tags, UI, and fourth-lane work remain unopened.
 
 Previous accepted packet:
 

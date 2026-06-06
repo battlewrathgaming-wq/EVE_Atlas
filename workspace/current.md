@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS336 Watch task-creation boundary proof opened
+Status: HS336 Watch task-creation boundary proof accepted
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Watch task-creation boundary proof for how Evidence generation follows user intent before provider movement.
+Current focus: Resting after Watch task-creation boundary proof for how Evidence generation follows user intent before provider movement.
 
 Current heading:
 
@@ -25,19 +25,52 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Human / Overseer decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS336-watch-task-creation-boundary-proof-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS336-watch-task-creation-boundary-proof.md
+none
 ```
+
+## HS336 Acceptance
+
+Accepted:
+
+```txt
+workspace/OverseerHS337-hs336-watch-task-boundary-review.md
+```
+
+Accepted result:
+
+- `watch.task_creation_boundary.preview` is a renderer-eligible read-only/local-only command.
+- The preview describes the would-task envelope as plain data only.
+- The accepted would-task shape is `type: watch.executor.<dispatch command>`, `classification: evidence-creating`, and `scopeKey: selected Watch scope key`.
+- Due actor Watch produces would-task type `watch.executor.actor.watch`.
+- Due system/radius Watch produces would-task type `watch.executor.system.radius.watch`.
+- System/radius task envelope preserves stored accepted `included_system_ids`.
+- Center/radius remain provenance/management, not execution authority.
+- Invalid stored scope emits no task envelope and reports `watch_scope_authority_invalid`.
+- Disarmed, active-task, live/provider-gated, no-due, inactive, not-due, and backoff states emit no task envelope.
+- TaskRunner task-creation methods are not called.
+
+Boundary:
+
+No task creation, `TaskRunner.runTask`, `TaskRunner.runDetachedTask`, `TaskRunner.prepareTask`, `TaskRunner.createTask`, `WatchSessionExecutor.tick(...)`, Watch execution, runtime arm/disarm, interval change, dispatch runner invocation, collector call, provider movement, live/API call, Watch row mutation, Discovery ref mutation, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, `watch.create` change, topology behavior change, runtime packet persistence, broad provider queue, schema change, renderer UI work, popup/modal behavior, R-Scanner redesign, runtime enforcement, command blocking, support artifact, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
+
+Resting next options:
+
+1. Watch execution-adjacent readiness advisory before any real task creation.
+2. A no-provider task creation fixture proof, if Human/Overseer accept task creation as the next movement seam.
+3. Rest Watch runtime and return to Manual Discovery as the second path for how Evidence gets generated from user intent.
+
+Human / Overseer decision needed before a new Dev runway.
 
 ## HS336 Active Dev Runway
 
@@ -73,6 +106,69 @@ task boundary proof must not create the task
 Boundary:
 
 This packet is read-only/local-only. Do not create tasks, call `TaskRunner.runTask`, `TaskRunner.runDetachedTask`, `TaskRunner.prepareTask`, `TaskRunner.createTask`, call `WatchSessionExecutor.tick(...)`, execute a Watch, arm/disarm Watch runtime, start/stop intervals, invoke dispatch runners, call collectors, call providers, perform live/API calls, mutate Watch rows, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, change `watch.create`, change topology traversal behavior, infer execution authority from center/radius, persist runtime packet rows, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
+
+## HS336 Evidence
+
+Dev updated 2026-06-06:
+
+- Added read-only renderer-eligible service command `watch.task_creation_boundary.preview`.
+- Added `src/main/services/watchTaskCreationBoundaryService.js`.
+- The service composes `watch.packet_dry_run_dispatch_parity.preview` and TaskRunner task definition semantics as plain data only.
+- Would-task envelope shape:
+  - `type: watch.executor.<dispatch command>`
+  - `classification: evidence-creating`
+  - `scopeKey: selected Watch scope key`
+- TaskRunner non-use is explicitly reported:
+  - `would_create_task: false`
+  - `task_creation_authorized: false`
+  - `task_runner_untouched: true`
+  - `task_runner_methods_called: []`
+  - `tasks_created: 0`
+- Added `scripts/verify-watch-task-creation-boundary.js` and `npm.cmd run verify:watch-task-creation-boundary`.
+- Updated service registry, enforcement dry-run coverage, command authority, service registry verification, and passive side-effect verification.
+- Focused verifier proves:
+  - due actor Watch would-task type `watch.executor.actor.watch`
+  - actor classification `evidence-creating`
+  - actor scopeKey matches selected actor Watch scope key
+  - actor payload meaning matches HS334 parity payload
+  - due system/radius Watch would-task type `watch.executor.system.radius.watch`
+  - system/radius classification `evidence-creating`
+  - system/radius scopeKey matches selected system/radius Watch scope key
+  - system/radius payload uses stored accepted `included_system_ids`
+  - center/radius remain provenance/management
+  - invalid stored scope emits no task envelope and reason `watch_scope_authority_invalid`
+  - disarmed, active-task, live-provider-gated, no-due, inactive, not-due, and backoff states emit no task envelope
+  - sentinel TaskRunner methods `runTask`, `runDetachedTask`, `prepareTask`, and `createTask` are not called
+  - table counts stay unchanged
+- Verification run:
+  - `node --check src\main\services\watchTaskCreationBoundaryService.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check scripts\verify-watch-task-creation-boundary.js` passed.
+  - `npm.cmd run verify:watch-task-creation-boundary` passed.
+  - `npm.cmd run verify:watch-packet-dry-run-dispatch-parity` passed.
+  - `npm.cmd run verify:watch-executor-tick-dry-run` passed.
+  - `npm.cmd run verify:watch-runtime-packet-plan` passed.
+  - `npm.cmd run verify:task-runner` passed.
+  - `npm.cmd run verify:service-registry` passed on rerun with 240 second timeout after an initial 120 second timeout.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 348 warnings across 8 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main [ahead 7]` with HS336 working-tree changes.
+
+## HS336 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS336-watch-task-creation-boundary-proof.md
+```
+
+Status: Watch task-creation boundary proof complete; ready for Overseer review.
+
+No task creation, TaskRunner task-creation method call, `WatchSessionExecutor.tick(...)`, Watch execution, runtime arm/disarm, interval change, dispatch runner invocation, collector call, provider movement, live/API call, Watch row mutation, Discovery ref mutation, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, `watch.create` change, topology behavior change, runtime packet persistence, broad provider queue, schema change, renderer UI work, popup/modal behavior, R-Scanner redesign, runtime enforcement, command blocking, support artifact, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
 
 ## HS334 Acceptance
 

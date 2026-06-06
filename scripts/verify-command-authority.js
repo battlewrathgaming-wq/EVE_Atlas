@@ -121,6 +121,8 @@ async function main() {
     assert(commands.get('watch.executor_tick_dry_run.preview')?.effects.includes('read-only'), 'Watch executor tick dry-run preview should declare read-only effect');
     assert(commands.get('watch.packet_dry_run_dispatch_parity.preview')?.classification === 'read-only', 'Watch packet/dry-run/dispatch parity preview should be read-only');
     assert(commands.get('watch.packet_dry_run_dispatch_parity.preview')?.effects.includes('read-only'), 'Watch packet/dry-run/dispatch parity preview should declare read-only effect');
+    assert(commands.get('watch.task_creation_boundary.preview')?.classification === 'read-only', 'Watch task creation boundary preview should be read-only');
+    assert(commands.get('watch.task_creation_boundary.preview')?.effects.includes('read-only'), 'Watch task creation boundary preview should declare read-only effect');
     assert(commands.get('watch.operator_confirmation_contract.preview')?.classification === 'read-only', 'Watch operator confirmation contract preview should be read-only');
     assert(commands.get('watch.operator_confirmation_contract.preview')?.effects.includes('read-only'), 'Watch operator confirmation contract preview should declare read-only effect');
     assert(commands.get('watch.system_radius_authoring_preflight.preview')?.classification === 'read-only', 'system/radius authoring preflight should be read-only');
@@ -188,6 +190,7 @@ async function main() {
     assert(rendererNames.has('watch.runtime_packet_plan.preview'), 'Watch runtime packet plan preview should be renderer eligible as read-only');
     assert(rendererNames.has('watch.executor_tick_dry_run.preview'), 'Watch executor tick dry-run preview should be renderer eligible as read-only');
     assert(rendererNames.has('watch.packet_dry_run_dispatch_parity.preview'), 'Watch packet/dry-run/dispatch parity preview should be renderer eligible as read-only');
+    assert(rendererNames.has('watch.task_creation_boundary.preview'), 'Watch task creation boundary preview should be renderer eligible as read-only');
     assert(rendererNames.has('watch.operator_confirmation_contract.preview'), 'Watch operator confirmation contract preview should be renderer eligible as read-only');
     assert(rendererNames.has('watch.system_radius_authoring_preflight.preview'), 'system/radius authoring preflight should be renderer eligible as read-only');
     assert(rendererNames.has('watch.system_radius_acceptance_payload.preview'), 'system/radius acceptance payload should be renderer eligible as read-only');
