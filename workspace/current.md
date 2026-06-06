@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS344 source trace accepted by HS345
+Status: HS347 opened
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Resting after blind source trace of user intent to Discovery bus and pre-I/O boundary.
+Current focus: Discovery pickup packet proof for due Watch scope.
 
 Current heading:
 
@@ -19,25 +19,118 @@ Current heading:
 - local SDE lookup readiness is local readability/geometry support, not provider-backed Hydration
 - local topology lookup tables are runtime geometry support; SDE is import/source provenance, not runtime lookup authority
 - accepted Watch scope authority: execution should use the stored included system ID set accepted during Watch setup; center/radius are provenance/explanation after acceptance
+- Watch is a scheduler and scope-authority source; Discovery is the acquisition utility
+- a due Watch emits Discovery pickup intent; it does not acquire candidates itself
+- system/radius Discovery pickup should fan out stored accepted `included_system_ids` into one packet per accepted system
 - operator confirmation boundary: preflight visibility is not acceptance; focus/hover/highlight is not acceptance; only an explicit renderer/listen-hook confirming act can create accepted Watch scope
 - active lane model: Discovery outputs possible leads; Evidence Expansion outputs Evidence/EVEidence; Hydration outputs readability repair; fourth lane stays parked
 - near-term development focus: how Evidence gets generated from user intent; continue through Watch first, then later return to Manual Discovery
 
 ## Executor
 
-Current executor: Human / Overseer decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS347-discovery-pickup-packet-proof-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS347-discovery-pickup-packet-proof.md
 ```
+
+## HS347 Active Dev Runway
+
+Opened:
+
+```txt
+workspace/OverseerHS347-discovery-pickup-packet-proof-runway.md
+```
+
+Task:
+
+Add a read-only/local-only Discovery pickup packet proof that converts one selected due Watch into candidate Discovery pickup packet data only.
+
+Suggested command:
+
+```txt
+watch.discovery_pickup_packet_proof.preview
+```
+
+Suggested verifier:
+
+```txt
+verify:watch-discovery-pickup-packets
+```
+
+Purpose:
+
+```txt
+prove a due Watch can emit shared Discovery pickup intent without Watch doing Discovery
+```
+
+Core rule:
+
+```txt
+Watch is a scheduler and scope-authority source.
+Discovery is the acquisition utility.
+A due Watch emits Discovery pickup intent; it does not acquire candidates itself.
+```
+
+System/radius rule:
+
+```txt
+stored accepted included_system_ids are execution authority
+one accepted system ID becomes one Discovery pickup packet
+center/radius are provenance/explanation only after acceptance
+```
+
+Boundary:
+
+This packet is read-only/local-only and pre-provider/pre-persistence. Do not execute a Watch, invoke Watch dispatch runners, call collectors, call zKillboard, ESI, or any provider, perform live/API calls, write `discovered_killmail_refs`, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, mutate real/operator Watch rows, persist real runtime packet rows, create real/product tasks, create a broad provider queue, change schema, implement renderer UI, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
+
+Stop if this proof requires provider/live calls, durable Discovery ref writes, Evidence/EVEidence writes, real dispatch/collector invocation, schema changes, or Watch-only Discovery machinery that cannot later be reused by Manual/User-driven Discovery.
+
+## HS346 Source Trace Acceptance
+
+Accepted:
+
+```txt
+workspace/EngineeringTraceHS346-watch-due-and-discovery-pickup-surfaces.md
+workspace/OverseerHS346-watch-due-discovery-pickup-acceptance.md
+```
+
+Accepted result:
+
+- HS346 separated Watch Due / Scheduler Surface from Discovery Pickup Surface.
+- The due/scheduler surface decides whether a Watch is due, held, not due, active/running, or blocked.
+- The Discovery pickup surface starts after a Watch is due and should create candidate acquisition packet data only.
+- `WatchSessionExecutor.tick` is currently mixed: due selection, live gating, task creation, collector invocation, and schedule result recording.
+- Current collectors are mixed: Discovery acquisition, durable Discovery ref writes, ESI Evidence Expansion, Evidence persistence, logs/warnings, and fetch-run lifecycle.
+- Existing proof surfaces are clean but still lack a first-class N-per-system Discovery pickup packet proof.
+
+Accepted clarification:
+
+```txt
+Watch is a scheduler and scope-authority source.
+Discovery is the acquisition utility.
+A due Watch emits Discovery pickup intent; it does not acquire candidates itself.
+```
+
+Recommended next seam:
+
+```txt
+selected due Watch -> Discovery pickup packet plan
+```
+
+The next proof should emit zero packets when held/invalid/not due, one packet for a valid actor Watch, and N packets for a valid system/radius Watch with N stored accepted system IDs.
+
+Boundary:
+
+HS346 does not authorize live Watch execution, provider movement, Discovery ref writes, Evidence/EVEidence writes, Hydration writes, Observation work, schema changes, UI work, runtime enforcement, support artifacts, durable Watch result identity, or relationship tags.
 
 ## HS342 Acceptance
 
