@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS332 Watch executor tick dry-run preview accepted; no active Dev runway
+Status: HS334 Watch packet/dry-run/dispatch parity proof opened
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: resting after Watch executor tick dry-run preview acceptance.
+Current focus: Watch parity proof for how Evidence generation follows user intent before task creation.
 
 Current heading:
 
@@ -21,14 +21,58 @@ Current heading:
 - accepted Watch scope authority: execution should use the stored included system ID set accepted during Watch setup; center/radius are provenance/explanation after acceptance
 - operator confirmation boundary: preflight visibility is not acceptance; focus/hover/highlight is not acceptance; only an explicit renderer/listen-hook confirming act can create accepted Watch scope
 - active lane model: Discovery outputs possible leads; Evidence Expansion outputs Evidence/EVEidence; Hydration outputs readability repair; fourth lane stays parked
+- near-term development focus: how Evidence gets generated from user intent; continue through Watch first, then later return to Manual Discovery
 
 ## Executor
 
-Current executor: Overseer / Human decision
+Current executor: Dev
 
-Active Dev runway: none
+Active Dev runway:
 
-Expected Dev handoff: none
+```txt
+workspace/OverseerHS334-watch-packet-dry-run-dispatch-parity-proof-runway.md
+```
+
+Expected Dev handoff:
+
+```txt
+workspace/DevHS334-watch-packet-dry-run-dispatch-parity-proof.md
+```
+
+## HS334 Active Dev Runway
+
+Opened:
+
+```txt
+workspace/OverseerHS334-watch-packet-dry-run-dispatch-parity-proof-runway.md
+```
+
+Task:
+
+Add a read-only/local-only parity proof between:
+
+```txt
+watch.runtime_packet_plan.preview
+watch.executor_tick_dry_run.preview
+watchExecutor.dispatchFor(...)
+```
+
+Purpose:
+
+```txt
+prove the Watch surfaces that explain future Evidence generation from user intent are not drifting apart
+```
+
+Core rule:
+
+```txt
+parity proof compares future movement shape
+parity proof does not move
+```
+
+Boundary:
+
+This packet is read-only/local-only. Do not execute a Watch, call `WatchSessionExecutor.tick(...)`, arm/disarm Watch runtime, start/stop intervals, create Watch executor tasks, call providers, perform live/API calls, call collectors or dispatch runners, mutate Watch rows, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, change `watch.create`, change topology traversal behavior, infer execution authority from center/radius, persist runtime packet rows, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
 
 HS332 is accepted and can rest. Do not open real Watch execution, task creation, provider movement, live testing, durable Watch results, schema, UI, active enforcement, support artifacts, relationship tags, or fourth-lane behavior without a new bounded decision.
 

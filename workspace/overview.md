@@ -187,6 +187,7 @@ Current state:
 - HS330 accepted by HS331
 - HS332 opened
 - HS332 accepted by HS333
+- HS334 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -203,9 +204,11 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Overseer / Human decision
-- active Dev runway is none
-- expected Dev handoff is none
+- current executor is Dev
+- active Dev runway is `workspace/OverseerHS334-watch-packet-dry-run-dispatch-parity-proof-runway.md`
+- expected Dev handoff is `workspace/DevHS334-watch-packet-dry-run-dispatch-parity-proof.md`
+- latest accepted heading is `How does Evidence get generated from user intent?`
+- current Watch seam is packet-plan / dry-run / `dispatchFor(...)` parity before task creation
 - latest accepted Dev runway is `workspace/OverseerHS332-watch-executor-tick-dry-run-preview-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS332-watch-executor-tick-dry-run-preview.md`
 - latest Overseer review is `workspace/OverseerHS333-hs332-watch-executor-tick-dry-run-review.md`
