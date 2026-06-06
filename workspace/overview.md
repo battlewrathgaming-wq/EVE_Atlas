@@ -196,6 +196,7 @@ Current state:
 - HS340 opened
 - HS340 accepted by HS341
 - HS342 opened
+- HS342 accepted by HS343
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -212,17 +213,21 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS342-discovery-intake-consumer-stub-candidate-proof-runway.md`
-- expected Dev handoff is `workspace/DevHS342-discovery-intake-consumer-stub-candidates.md`
+- current executor is Human / Overseer decision
+- active Dev runway is none
+- expected Dev handoff is none
 - latest accepted heading is `How does Evidence get generated from user intent?`
-- current Watch seam is Discovery bus input to stub candidate refs before durable Discovery writes
+- current Watch seam is resting after Discovery bus input to stub candidate refs
 - accepted Watch chain now proves setup -> packet plan -> dry-run -> dispatch payload-builder -> task envelope without creating tasks or touching providers
 - latest accepted Dev runway is `workspace/OverseerHS336-watch-task-creation-boundary-proof-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS336-watch-task-creation-boundary-proof.md`
 - latest Overseer review is `workspace/OverseerHS337-hs336-watch-task-boundary-review.md`
 - latest accepted command is `watch.task_creation_boundary.preview`
-- current next-seam decision accepted: no-provider Discovery intake consumer proof producing stub candidate refs only
+- current next-seam decision candidates are fixture-only Discovery ref write proof, pre-write Discovery ref contract/advisory, or rest Watch runtime and shape User-driven Discovery
+- latest accepted Dev runway is `workspace/OverseerHS342-discovery-intake-consumer-stub-candidate-proof-runway.md`
+- latest accepted Dev handoff is `workspace/DevHS342-discovery-intake-consumer-stub-candidates.md`
+- latest Overseer review is `workspace/OverseerHS343-hs342-discovery-stub-candidates-review.md`
+- latest accepted result is Discovery bus input to stub candidate refs; stub candidates are pre-persistence plain data, not durable Discovery refs and not Evidence/EVEidence
 - latest accepted Dev runway is `workspace/OverseerHS340-watch-task-to-discovery-bus-input-envelope-runway.md`
 - latest accepted Dev handoff is `workspace/DevHS340-watch-discovery-bus-input-envelope.md`
 - latest Overseer review is `workspace/OverseerHS341-hs340-watch-discovery-bus-input-review.md`

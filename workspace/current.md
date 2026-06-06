@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS342 Discovery intake consumer stub candidate proof open
+Status: HS342 Discovery intake consumer stub candidate proof accepted
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Discovery bus input to stub candidate refs before provider movement or durable Discovery writes.
+Current focus: Resting after Discovery bus input to stub candidate refs before provider movement or durable Discovery writes.
 
 Current heading:
 
@@ -25,19 +25,54 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Human / Overseer decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS342-discovery-intake-consumer-stub-candidate-proof-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS342-discovery-intake-consumer-stub-candidates.md
+none
 ```
+
+## HS342 Acceptance
+
+Accepted:
+
+```txt
+workspace/OverseerHS343-hs342-discovery-stub-candidates-review.md
+```
+
+Accepted result:
+
+- `buildDiscoveryIntakeConsumerStubCandidateProof(...)` proves Discovery bus input to stub candidate refs.
+- `npm.cmd run verify:discovery-intake-consumer-stub-candidates` verifies the proof.
+- No renderer/product service command was added.
+- The proof composes HS340 `buildWatchDiscoveryBusInputEnvelopeProof(...)`.
+- Stub candidates use deterministic local provider marker `zkill_stub`.
+- Stub candidates are pre-persistence plain data.
+- Stub candidates are not durable Discovery refs.
+- Stub candidates are not Evidence/EVEidence.
+- Actor stub candidates preserve Watch source lane/kind, selected scope key, Watch ID, stub `killmail_id`, stub `killmail_hash`, lookback/caps, candidate-only posture, and local actor context including entity name when available.
+- System/radius stub candidates preserve Watch source lane/kind, selected scope key, Watch ID, stub `killmail_id`, stub `killmail_hash`, stored accepted `included_system_ids`, `candidate_system_id` from accepted stored system IDs, `accepted_scope_source: stored_watch_scope`, and center/radius as provenance/management only.
+- Invalid stored system/radius scope emits no stub candidates and reports `watch_scope_authority_invalid`.
+- Disarmed, active-task, live/provider-gated, no-due, inactive, not-due, and backoff states emit no stub candidates.
+
+Boundary:
+
+No durable Discovery refs, `discovered_killmail_refs` writes, Evidence/EVEidence writes, Hydration/metadata writes, API log/warning writes, Watch execution, Watch dispatch runner invocation, collector call, zKillboard call, ESI call, provider/live/API call, real/operator Watch mutation, real runtime packet persistence, broad provider queue, schema change, renderer UI work, popup/modal behavior, R-Scanner redesign, runtime enforcement, command blocking, support artifact creation, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
+
+Resting next options:
+
+1. Fixture-only Discovery ref write proof: prove stub candidates can become durable Discovery refs with Watch provenance in disposable fixture scope only.
+2. Pre-write Discovery ref contract/advisory: review exact fields, uniqueness, provenance, and source-lane semantics before writing any `discovered_killmail_refs`, even in fixture.
+3. Rest Watch runtime and shape User-driven Discovery as the shorter non-repeatable path into the same Discovery bus.
+
+Human / Overseer decision needed before a new Dev runway.
 
 ## HS342 Active Dev Runway
 
@@ -76,6 +111,72 @@ Boundary:
 This packet is read-only/local-only and pre-persistence. Do not execute a Watch, invoke Watch dispatch runners, call collectors, call zKillboard, ESI, or any provider, perform live/API calls, write `discovered_killmail_refs`, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, mutate real/operator Watch rows, persist real runtime packet rows, create real/product tasks beyond existing fixture-only proof use, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
 
 Stop if the proof requires provider/live calls, durable Discovery ref writes, Evidence/EVEidence writes, real dispatch/collector invocation, schema changes, or Watch-only Discovery intake machinery.
+
+## HS342 Evidence
+
+Dev updated 2026-06-06:
+
+- Added `buildDiscoveryIntakeConsumerStubCandidateProof(...)` in `src/main/services/discoveryIntakeConsumerStubCandidateService.js`.
+- Added `scripts/verify-discovery-intake-consumer-stub-candidates.js` and `npm.cmd run verify:discovery-intake-consumer-stub-candidates`.
+- The proof composes HS340 `buildWatchDiscoveryBusInputEnvelopeProof(...)`; no renderer/product service command was added.
+- The proof emits deterministic local `zkill_stub` candidate refs only when the Watch Discovery bus input envelope exists.
+- Actor stub candidate sample proves:
+  - `source_lane: watch`
+  - `source_kind: actor`
+  - `scope_key: actor:character:90000001`
+  - stub `killmail_id` and `killmail_hash`
+  - `candidate_only: true`
+  - `stub_only: true`
+  - `durable_ref_written: false`
+  - `evidence_created: false`
+  - local actor context preserved, including `entity_name` when available.
+- System/radius stub candidate sample proves:
+  - `source_lane: watch`
+  - `source_kind: system_radius`
+  - `scope_key: system:30003597:radius:1`
+  - stub `killmail_id` and `killmail_hash`
+  - stored accepted system IDs preserved: `[30003597, 30003599, 30003601]`
+  - `candidate_system_id` is selected from accepted stored system IDs
+  - `accepted_scope_source: stored_watch_scope`
+  - center/radius remain provenance/management only.
+- Invalid stored system/radius scope emits no stub candidate refs and reports `watch_scope_authority_invalid`.
+- Disarmed, active-task, live-provider-gated, no-due, inactive, not-due, and backoff states emit no stub candidate refs.
+- The accepted model reports:
+  - Discovery intake consumer role: candidate ref stub output
+  - stub candidate refs are not durable Discovery refs
+  - stub candidate refs are not Evidence
+  - shared candidate intake shape: true
+  - Watch-only intake model: false
+  - durable Discovery ref write surface: unopened
+  - Evidence write surface: unopened
+- Mutation boundary proof reports unchanged durable Atlas table counts for emitted, invalid, blocked, and idle cases.
+- Verification run:
+  - `node --check src\main\services\discoveryIntakeConsumerStubCandidateService.js` passed.
+  - `node --check scripts\verify-discovery-intake-consumer-stub-candidates.js` passed.
+  - `npm.cmd run verify:discovery-intake-consumer-stub-candidates` passed.
+  - `npm.cmd run verify:watch-discovery-bus-input-envelope` passed.
+  - `npm.cmd run verify:watch-task-creation-fixture-proof` passed.
+  - `npm.cmd run verify:watch-task-creation-boundary` passed.
+  - `npm.cmd run verify:watch-packet-dry-run-dispatch-parity` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:protected-terms` passed with zero warnings before workspace handoff files were added. Final working-set scan after workspace updates covered 4 changed files and reported 475 warning-only items, mostly from the long existing `workspace/current.md` record; no renames or protected-word JSON updates were performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main [ahead 13]` with HS342 working-tree changes.
+
+## HS342 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS342-discovery-intake-consumer-stub-candidates.md
+```
+
+Status: Discovery intake consumer stub candidate proof complete; ready for Overseer review.
+
+Durable Discovery refs, Evidence/EVEidence, provider movement, Watch execution, schema, UI, enforcement, support artifacts, durable Watch results, relationship tags, and fourth-lane behavior remain unopened.
+
+No Watch dispatch runners, collectors, zKillboard, ESI, provider/live/API calls, `discovered_killmail_refs` writes, Evidence/EVEidence writes, Hydration/metadata writes, API log/warning writes, real/operator Watch mutations, real runtime packet persistence, broad provider queue, protected-word JSON updates, renderer UI, support artifact creation, runtime enforcement, or command blocking were added.
 
 ## HS340 Acceptance
 
