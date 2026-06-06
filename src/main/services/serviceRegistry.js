@@ -70,6 +70,7 @@ const { buildWatchExecutorTickDryRunPreview } = require('./watchExecutorTickDryR
 const { buildWatchPacketDryRunDispatchParityPreview } = require('./watchPacketDryRunDispatchParityService');
 const { buildWatchTaskCreationBoundaryPreview } = require('./watchTaskCreationBoundaryService');
 const { buildWatchDiscoveryPickupPacketProof } = require('./watchDiscoveryPickupPacketProofService');
+const { buildDiscoveryPickupConsumerFixtureProof } = require('./discoveryPickupConsumerFixtureService');
 const { buildWatchOperatorConfirmationContractPreview } = require('./watchOperatorConfirmationContractService');
 const { buildSystemRadiusAuthoringPreflight } = require('./systemRadiusAuthoringPreflightService');
 const { buildSystemRadiusAcceptancePayloadPreview } = require('./systemRadiusAcceptancePayloadService');
@@ -755,6 +756,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview Discovery pickup packets from one selected due Watch without Watch execution, tasks, providers, collectors, writes, schema, or UI work',
     handler: ({ db, payload, ...context }) => buildWatchDiscoveryPickupPacketProof(db, payload, context)
+  },
+  'discovery.pickup_consumer_fixture.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview fixture candidate refs from Discovery pickup packets without providers, durable refs, Evidence, writes, schema, or UI work',
+    handler: ({ db, payload, ...context }) => buildDiscoveryPickupConsumerFixtureProof(db, payload, context)
   },
   'watch.operator_confirmation_contract.preview': {
     classification: 'read-only',

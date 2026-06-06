@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS349 opened
+Status: HS349 accepted by HS350
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Discovery pickup consumer fixture proof.
+Current focus: Resting after Discovery pickup consumer fixture proof; Dev paused for boundary consolidation.
 
 Current heading:
 
@@ -28,19 +28,65 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Human / Overseer decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS349-discovery-pickup-consumer-fixture-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS349-discovery-pickup-consumer-fixture.md
+none
 ```
+
+## HS349 Acceptance
+
+Accepted:
+
+```txt
+workspace/OverseerHS350-hs349-discovery-pickup-consumer-fixture-review.md
+```
+
+Accepted result:
+
+- `discovery.pickup_consumer_fixture.preview` proves Discovery can consume HS347 pickup packets into provider-return-like fixture candidate refs.
+- Valid actor pickup emits fixture candidate refs with stub `killmail_id` and `killmail_hash`.
+- Valid system/radius pickup emits fixture candidate refs tied to pickup packet `candidate_system_id`.
+- Candidate refs preserve Watch/source lane, source kind, scope key, Watch ID, lookback/caps, provider target posture, accepted-scope context, and provenance.
+- Invalid stored scope, disarmed, active-task, live-disabled, no-due, inactive, not-due, and backoff states emit zero candidate refs.
+- Candidate refs are fixture/plain data only, not durable Discovery refs, Evidence/EVEidence, Hydration, or Observation.
+
+Boundary:
+
+No Watch execution, Watch dispatch runner invocation, collector call, zKillboard call, ESI call, provider/live/API call, `discovered_killmail_refs` write, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, real/operator Watch mutation, real runtime packet persistence, real/product task creation, broad provider queue, schema change, renderer UI work, runtime enforcement, command blocking, support artifact creation, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
+
+Resting state:
+
+```txt
+Watch due -> Discovery pickup intent -> fixture candidate refs
+```
+
+Dev pause:
+
+Do not open another implementation packet until boundary consolidation has reviewed the current proofs, stale docs, and code crossings.
+
+Recommended next activity:
+
+Boundary consolidation pass across:
+
+1. Intent -> Watch
+2. Watch -> Discovery
+3. Discovery -> Candidate Refs
+4. Candidate Refs -> ESI Evidence Expansion
+5. Evidence Expansion -> EVEidence corpus write
+6. EVEidence -> Observation
+7. Observation -> Assessment
+8. Hydration / Readability
+
+Human / Overseer decision needed before a new Dev runway.
 
 ## HS349 Active Dev Runway
 
@@ -86,6 +132,54 @@ Boundary:
 This packet is read-only/local-only, fixture-only, pre-provider, and pre-persistence. Do not execute a Watch, invoke Watch dispatch runners, call collectors, call zKillboard, ESI, or any provider, perform live/API calls, write `discovered_killmail_refs`, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, mutate real/operator Watch rows, persist real runtime packet rows, create real/product tasks, create a broad provider queue, change schema, implement renderer UI, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
 
 Stop if this proof requires provider/live calls, durable Discovery ref writes, Evidence/EVEidence writes, real dispatch/collector invocation, schema changes, or Watch-only Discovery machinery that cannot later be reused by Manual/User-driven Discovery.
+
+## HS349 Evidence
+
+Dev updated 2026-06-06:
+
+- Added read-only renderer-eligible command `discovery.pickup_consumer_fixture.preview`.
+- Added `buildDiscoveryPickupConsumerFixtureProof(...)` in `src/main/services/discoveryPickupConsumerFixtureService.js`.
+- Added `scripts/verify-discovery-pickup-consumer-fixture.js` and `npm.cmd run verify:discovery-pickup-consumer-fixture`.
+- The proof composes `watch.discovery_pickup_packet_proof.preview` and consumes pickup packets into fixture-only provider-return-like candidate refs.
+- Valid actor pickup consumes one pickup packet and emits two fixture candidate refs with stub `killmail_id` / `killmail_hash`, source lane/kind, Watch ID, scope key, entity type/ID/name, lookback/caps, provider target posture, candidate-only posture, and provenance.
+- Valid system/radius pickup consumes four pickup packets from stored accepted system IDs and emits four fixture candidate refs whose `candidate_system_id` values exactly match the pickup packet system IDs:
+  - `[30003597, 30003599, 30003601, 30003602]`
+- System/radius candidates preserve full accepted system ID set, packet index/count, `accepted_scope_source: stored_watch_scope`, accepted-scope provenance, center/radius provenance/explanation, lookback/caps, candidate-only posture, and provenance.
+- System/radius candidates report `topology_recomputed: false` and `center_radius_used_as_execution_authority: false`.
+- Invalid stored system/radius scope emits zero candidate refs and preserves `watch_scope_authority_invalid`.
+- Disarmed, active-task, live-disabled, no-due, inactive, not-due, and backoff states emit zero candidate refs and preserve the pickup reason.
+- Candidate refs are plain fixture data only, not durable Discovery refs, Evidence/EVEidence, Hydration, or Observation.
+- Mutation boundary proof reports unchanged durable Atlas table counts for emitted, invalid, blocked, and idle cases.
+- Added command authority, service registry, passive side-effect, and enforcement dry-run coverage for the new command.
+- Verification run:
+  - `node --check src\main\services\discoveryPickupConsumerFixtureService.js` passed.
+  - `node --check scripts\verify-discovery-pickup-consumer-fixture.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `npm.cmd run verify:discovery-pickup-consumer-fixture` passed.
+  - `npm.cmd run verify:watch-discovery-pickup-packets` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed with coverage complete for 102 commands.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: working-set scan covered 7 files and reported 262 warning-only items; no renames or protected-word JSON updates were performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main [ahead 18]` with HS349 working-tree changes.
+
+## HS349 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS349-discovery-pickup-consumer-fixture.md
+```
+
+Status: Discovery pickup consumer fixture proof complete; ready for Overseer review.
+
+No Watch execution, Watch dispatch runner invocation, collector call, zKillboard call, ESI call, provider/live/API call, `discovered_killmail_refs` write, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, real/operator Watch mutation, real runtime packet persistence, real/product task creation, broad provider queue, schema change, renderer UI work, runtime enforcement, command blocking, support artifact creation, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
 
 ## HS347 Acceptance
 
