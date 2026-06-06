@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS347 accepted by HS348
+Status: HS349 opened
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Resting after Discovery pickup packet proof for due Watch scope.
+Current focus: Discovery pickup consumer fixture proof.
 
 Current heading:
 
@@ -28,19 +28,64 @@ Current heading:
 
 ## Executor
 
-Current executor: Human / Overseer decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS349-discovery-pickup-consumer-fixture-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS349-discovery-pickup-consumer-fixture.md
 ```
+
+## HS349 Active Dev Runway
+
+Opened:
+
+```txt
+workspace/OverseerHS349-discovery-pickup-consumer-fixture-runway.md
+```
+
+Task:
+
+Add a read-only/local-only Discovery pickup consumer fixture proof that consumes HS347 Discovery pickup packets and produces provider-return-like stub candidate refs.
+
+Suggested command:
+
+```txt
+discovery.pickup_consumer_fixture.preview
+```
+
+Suggested verifier:
+
+```txt
+verify:discovery-pickup-consumer-fixture
+```
+
+Purpose:
+
+```txt
+prove Discovery can consume pickup packets into fixture candidate refs without providers or durable writes
+```
+
+Core rule:
+
+```txt
+Watch emits Discovery pickup intent.
+Discovery consumes pickup packets.
+Candidate refs are not durable Discovery refs.
+Candidate refs are not Evidence/EVEidence.
+```
+
+Boundary:
+
+This packet is read-only/local-only, fixture-only, pre-provider, and pre-persistence. Do not execute a Watch, invoke Watch dispatch runners, call collectors, call zKillboard, ESI, or any provider, perform live/API calls, write `discovered_killmail_refs`, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, mutate real/operator Watch rows, persist real runtime packet rows, create real/product tasks, create a broad provider queue, change schema, implement renderer UI, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
+
+Stop if this proof requires provider/live calls, durable Discovery ref writes, Evidence/EVEidence writes, real dispatch/collector invocation, schema changes, or Watch-only Discovery machinery that cannot later be reused by Manual/User-driven Discovery.
 
 ## HS347 Acceptance
 

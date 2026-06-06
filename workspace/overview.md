@@ -201,6 +201,7 @@ Current state:
 - HS346 Watch due / Discovery pickup source trace accepted
 - HS347 opened
 - HS347 accepted by HS348
+- HS349 opened
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -217,11 +218,11 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Human / Overseer decision
-- active Dev runway is none
-- expected Dev handoff is none
+- current executor is Dev
+- active Dev runway is `workspace/OverseerHS349-discovery-pickup-consumer-fixture-runway.md`
+- expected Dev handoff is `workspace/DevHS349-discovery-pickup-consumer-fixture.md`
 - latest accepted heading is `How does Evidence get generated from user intent?`
-- current Watch seam is resting after Discovery pickup packet proof for due Watch scope
+- current seam is Discovery pickup consumer fixture proof
 - accepted Watch/Discovery boundary is that Watch is a scheduler and scope-authority source, Discovery is the acquisition utility, and a due Watch emits Discovery pickup intent without acquiring candidates itself
 - system/radius Discovery pickup should fan out stored accepted `included_system_ids` into one packet per accepted system, with center/radius retained as provenance/explanation only
 - accepted Watch chain now proves setup -> packet plan -> dry-run -> dispatch payload-builder -> task envelope without creating tasks or touching providers
@@ -229,7 +230,7 @@ Current state:
 - latest accepted Dev handoff is `workspace/DevHS336-watch-task-creation-boundary-proof.md`
 - latest Overseer review is `workspace/OverseerHS337-hs336-watch-task-boundary-review.md`
 - latest accepted command is `watch.task_creation_boundary.preview`
-- current next-seam candidates are no-provider Discovery pickup consumer fixture, Manual/User-driven Discovery pickup posture, direct collector path retirement/adaptation proof, or Discovery output / Evidence Expansion boundary discussion
+- current next-seam is a no-provider Discovery pickup consumer fixture: consume HS347 pickup packets and emit provider-return-like stub candidate refs with no providers, durable Discovery refs, Evidence/EVEidence, Hydration, or Observation
 - older direct-collector accepted-scope risk remains parked until the Discovery pickup packet boundary is deliberately routed into runtime
 - latest accepted advisory artifact is `workspace/EngineeringTraceHS346-watch-due-and-discovery-pickup-surfaces.md`
 - latest advisory review is `workspace/OverseerHS346-watch-due-discovery-pickup-acceptance.md`
@@ -239,6 +240,7 @@ Current state:
 - latest Overseer review is `workspace/OverseerHS348-hs347-discovery-pickup-packet-proof-review.md`
 - latest accepted command is `watch.discovery_pickup_packet_proof.preview`
 - latest accepted result is due Watch to Discovery pickup packet proof; actor emits one packet, system/radius emits one packet per stored accepted system ID, and no providers, durable Discovery refs, Evidence/EVEidence, Hydration, Observation, Watch execution, tasks, schema, UI, or enforcement are opened
+- latest active Dev runway is `workspace/OverseerHS349-discovery-pickup-consumer-fixture-runway.md`
 - latest accepted advisory artifact is `workspace/EngineeringTraceHS344-user-intent-to-discovery-bus-source-trace.md`
 - latest advisory review is `workspace/OverseerHS345-hs344-source-trace-acceptance.md`
 - latest accepted source-trace finding is that Atlas has a clean pre-live proof path but also an implemented direct Watch collector path; before live Watch testing, accepted stored system IDs should be proven through `dispatchFor -> runSystemRadiusWatchService / collector injection -> planSystemRadiusWatch`
