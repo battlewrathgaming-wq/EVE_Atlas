@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS340 Watch task to Discovery bus input envelope accepted
+Status: HS342 Discovery intake consumer stub candidate proof open
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Resting after Watch task envelope to Discovery bus input envelope before provider movement.
+Current focus: Discovery bus input to stub candidate refs before provider movement or durable Discovery writes.
 
 Current heading:
 
@@ -25,19 +25,57 @@ Current heading:
 
 ## Executor
 
-Current executor: Human / Overseer decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS342-discovery-intake-consumer-stub-candidate-proof-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS342-discovery-intake-consumer-stub-candidates.md
 ```
+
+## HS342 Active Dev Runway
+
+Opened:
+
+```txt
+workspace/OverseerHS342-discovery-intake-consumer-stub-candidate-proof-runway.md
+```
+
+Task:
+
+Add a read-only/local-only Discovery intake consumer proof that converts Watch Discovery bus input envelopes into stubbed candidate ref outputs.
+
+Suggested verifier:
+
+```txt
+verify:discovery-intake-consumer-stub-candidates
+```
+
+Purpose:
+
+```txt
+prove Discovery bus input can become stub candidate refs without provider calls, durable Discovery refs, or Evidence
+```
+
+Core rule:
+
+```txt
+Discovery intake consumer may produce stub candidate refs
+stub candidate refs are not durable Discovery refs
+stub candidate refs are not Evidence
+```
+
+Boundary:
+
+This packet is read-only/local-only and pre-persistence. Do not execute a Watch, invoke Watch dispatch runners, call collectors, call zKillboard, ESI, or any provider, perform live/API calls, write `discovered_killmail_refs`, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, mutate real/operator Watch rows, persist real runtime packet rows, create real/product tasks beyond existing fixture-only proof use, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
+
+Stop if the proof requires provider/live calls, durable Discovery ref writes, Evidence/EVEidence writes, real dispatch/collector invocation, schema changes, or Watch-only Discovery intake machinery.
 
 ## HS340 Acceptance
 
