@@ -69,6 +69,7 @@ const { buildWatchRuntimePacketPlanPreview } = require('./watchRuntimePacketPlan
 const { buildWatchExecutorTickDryRunPreview } = require('./watchExecutorTickDryRunService');
 const { buildWatchPacketDryRunDispatchParityPreview } = require('./watchPacketDryRunDispatchParityService');
 const { buildWatchTaskCreationBoundaryPreview } = require('./watchTaskCreationBoundaryService');
+const { buildWatchDiscoveryPickupPacketProof } = require('./watchDiscoveryPickupPacketProofService');
 const { buildWatchOperatorConfirmationContractPreview } = require('./watchOperatorConfirmationContractService');
 const { buildSystemRadiusAuthoringPreflight } = require('./systemRadiusAuthoringPreflightService');
 const { buildSystemRadiusAcceptancePayloadPreview } = require('./systemRadiusAcceptancePayloadService');
@@ -747,6 +748,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview the would-task envelope for selected Watch intent without calling TaskRunner methods, execution, providers, writes, schema, or UI work',
     handler: ({ db, payload, ...context }) => buildWatchTaskCreationBoundaryPreview(db, payload, context)
+  },
+  'watch.discovery_pickup_packet_proof.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview Discovery pickup packets from one selected due Watch without Watch execution, tasks, providers, collectors, writes, schema, or UI work',
+    handler: ({ db, payload, ...context }) => buildWatchDiscoveryPickupPacketProof(db, payload, context)
   },
   'watch.operator_confirmation_contract.preview': {
     classification: 'read-only',

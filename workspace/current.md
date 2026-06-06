@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS347 opened
+Status: HS347 accepted by HS348
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Discovery pickup packet proof for due Watch scope.
+Current focus: Resting after Discovery pickup packet proof for due Watch scope.
 
 Current heading:
 
@@ -28,19 +28,51 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Human / Overseer decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS347-discovery-pickup-packet-proof-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS347-discovery-pickup-packet-proof.md
+none
 ```
+
+## HS347 Acceptance
+
+Accepted:
+
+```txt
+workspace/OverseerHS348-hs347-discovery-pickup-packet-proof-review.md
+```
+
+Accepted result:
+
+- `watch.discovery_pickup_packet_proof.preview` proves due Watch to Discovery pickup packet shape.
+- Valid actor Watch emits exactly one Discovery pickup packet.
+- Valid system/radius Watch emits exactly one Discovery pickup packet per stored accepted system ID.
+- System/radius `candidate_system_id` values exactly match stored accepted `included_system_ids`.
+- Center/radius remain provenance/explanation only after acceptance.
+- Invalid stored system/radius scope emits zero pickup packets and reports `watch_scope_authority_invalid`.
+- Disarmed, active-task, live-disabled, no-due, inactive, not-due, and backoff states emit zero pickup packets.
+- Pickup packets are candidate intent only, not durable Discovery refs, Evidence/EVEidence, Hydration, or Observation.
+
+Boundary:
+
+No Watch execution, Watch dispatch runner invocation, collector call, zKillboard call, ESI call, provider/live/API call, `discovered_killmail_refs` write, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, real/operator Watch mutation, real runtime packet persistence, real/product task creation, broad provider queue, schema change, renderer UI work, runtime enforcement, command blocking, support artifact creation, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
+
+Resting next options:
+
+1. Add a no-provider Discovery pickup consumer fixture that consumes pickup packets and returns pre-persistence candidate refs.
+2. Shape Manual/User-driven Discovery pickup packet posture so non-repeatable operator intent can feed the same Discovery utility.
+3. Inspect or prove how the current direct collector path should be retired, bypassed, or adapted once pickup packets are accepted.
+4. Rest Watch-side pre-provider architecture and discuss Discovery output / Evidence Expansion boundary.
+
+Human / Overseer decision needed before a new Dev runway.
 
 ## HS347 Active Dev Runway
 
@@ -93,6 +125,69 @@ Boundary:
 This packet is read-only/local-only and pre-provider/pre-persistence. Do not execute a Watch, invoke Watch dispatch runners, call collectors, call zKillboard, ESI, or any provider, perform live/API calls, write `discovered_killmail_refs`, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, mutate real/operator Watch rows, persist real runtime packet rows, create real/product tasks, create a broad provider queue, change schema, implement renderer UI, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
 
 Stop if this proof requires provider/live calls, durable Discovery ref writes, Evidence/EVEidence writes, real dispatch/collector invocation, schema changes, or Watch-only Discovery machinery that cannot later be reused by Manual/User-driven Discovery.
+
+## HS347 Evidence
+
+Dev updated 2026-06-06:
+
+- Added read-only renderer-eligible command `watch.discovery_pickup_packet_proof.preview`.
+- Added `buildWatchDiscoveryPickupPacketProof(...)` in `src/main/services/watchDiscoveryPickupPacketProofService.js`.
+- Added `scripts/verify-watch-discovery-pickup-packets.js` and `npm.cmd run verify:watch-discovery-pickup-packets`.
+- The proof composes `watch.executor_tick_dry_run.preview` to select one due Watch without calling `WatchSessionExecutor.tick(...)`, dispatch runners, collectors, providers, TaskRunner methods, or persistence writers.
+- Added command authority, service registry, passive side-effect, and enforcement dry-run coverage for the new command.
+- Valid actor Watch emits exactly one Discovery pickup packet with:
+  - `source_lane: watch`
+  - `source_kind: actor`
+  - selected Watch ID and scope key
+  - local entity type/ID/name when available
+  - lookback/caps
+  - `provider_target_posture` for zKill actor acquisition
+  - `candidate_only: true`
+  - `pickup_intent_only: true`
+  - no provider movement, durable ref write, Evidence, Hydration, or Observation.
+- Valid system/radius Watch with four stored accepted system IDs emits exactly four Discovery pickup packets.
+- System/radius `candidate_system_id` values exactly match stored accepted IDs in deterministic order:
+  - `[30003597, 30003599, 30003601, 30003602]`
+- System/radius packets preserve:
+  - full accepted system ID set
+  - packet index/count
+  - `accepted_scope_source: stored_watch_scope`
+  - accepted-scope provenance
+  - center/radius as provenance/explanation only
+  - `center_radius_used_as_execution_authority: false`.
+- Invalid stored system/radius scope emits zero pickup packets and reports `watch_scope_authority_invalid`.
+- Disarmed, active-task, live-disabled, no-due, inactive, not-due, and backoff states emit zero pickup packets.
+- Mutation boundary proof reports unchanged durable Atlas table counts for emitted, invalid, blocked, and idle cases.
+- Verification run:
+  - `node --check src\main\services\watchDiscoveryPickupPacketProofService.js` passed.
+  - `node --check scripts\verify-watch-discovery-pickup-packets.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `npm.cmd run verify:watch-discovery-pickup-packets` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:service-registry` passed after creating missing local test temp directory `.tmp\passive-side-effects`.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:watch-executor-tick-dry-run` passed.
+  - `npm.cmd run verify:watch-runtime-packet-plan` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed with coverage complete for 101 commands.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: final working-set scan covered 9 files and reported 739 warning-only items; no renames or protected-word JSON updates were performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main [ahead 16]` with HS347 working-tree changes.
+
+## HS347 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS347-discovery-pickup-packet-proof.md
+```
+
+Status: Discovery pickup packet proof complete; ready for Overseer review.
+
+No Watch execution, Watch dispatch runner invocation, collector call, zKillboard call, ESI call, provider/live/API call, `discovered_killmail_refs` write, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, real/operator Watch mutation, real runtime packet persistence, real/product task creation, broad provider queue, schema change, renderer UI work, runtime enforcement, command blocking, support artifact creation, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
 
 ## HS346 Source Trace Acceptance
 

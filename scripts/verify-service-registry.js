@@ -95,6 +95,7 @@ async function main() {
     const watchExecutorTickDryRunCommand = commands.find((entry) => entry.command === 'watch.executor_tick_dry_run.preview');
     const watchPacketDryRunDispatchParityCommand = commands.find((entry) => entry.command === 'watch.packet_dry_run_dispatch_parity.preview');
     const watchTaskCreationBoundaryCommand = commands.find((entry) => entry.command === 'watch.task_creation_boundary.preview');
+    const watchDiscoveryPickupPacketCommand = commands.find((entry) => entry.command === 'watch.discovery_pickup_packet_proof.preview');
     const watchOperatorConfirmationContractCommand = commands.find((entry) => entry.command === 'watch.operator_confirmation_contract.preview');
     const systemRadiusAuthoringPreflightCommand = commands.find((entry) => entry.command === 'watch.system_radius_authoring_preflight.preview');
     const systemRadiusAcceptancePayloadCommand = commands.find((entry) => entry.command === 'watch.system_radius_acceptance_payload.preview');
@@ -261,6 +262,8 @@ async function main() {
     assert(watchPacketDryRunDispatchParityCommand?.renderer_allowed === true, 'Watch packet/dry-run/dispatch parity preview should be renderer eligible');
     assert(watchTaskCreationBoundaryCommand?.classification === 'read-only', 'Watch task creation boundary preview should be read-only');
     assert(watchTaskCreationBoundaryCommand?.renderer_allowed === true, 'Watch task creation boundary preview should be renderer eligible');
+    assert(watchDiscoveryPickupPacketCommand?.classification === 'read-only', 'Watch Discovery pickup packet proof should be read-only');
+    assert(watchDiscoveryPickupPacketCommand?.renderer_allowed === true, 'Watch Discovery pickup packet proof should be renderer eligible');
     assert(watchOperatorConfirmationContractCommand?.classification === 'read-only', 'Watch operator confirmation contract preview should be read-only');
     assert(watchOperatorConfirmationContractCommand?.renderer_allowed === true, 'Watch operator confirmation contract preview should be renderer eligible');
     assert(systemRadiusAuthoringPreflightCommand?.classification === 'read-only', 'system/radius authoring preflight should be read-only');
@@ -625,6 +628,22 @@ async function main() {
     assert(watchTaskCreationBoundary.watch_mutations === 0, 'Watch task creation boundary preview should not mutate Watch rows');
     assert(watchTaskCreationBoundary.schema_changes === 0, 'Watch task creation boundary preview should not change schema');
     assert(watchTaskCreationBoundary.runtime_enforcement_active === false, 'Watch task creation boundary preview should not activate enforcement');
+
+    const watchDiscoveryPickupPacket = await invokeServiceCommand('watch.discovery_pickup_packet_proof.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchDiscoveryPickupPacket.read_only === true, 'Watch Discovery pickup packet proof should declare read-only behavior');
+    assert(watchDiscoveryPickupPacket.provider_calls === 0, 'Watch Discovery pickup packet proof should not call providers');
+    assert(watchDiscoveryPickupPacket.watch_dispatches === 0, 'Watch Discovery pickup packet proof should not dispatch Watch execution');
+    assert(watchDiscoveryPickupPacket.tasks_created === 0, 'Watch Discovery pickup packet proof should not create tasks');
+    assert(Array.isArray(watchDiscoveryPickupPacket.task_runner_methods_called) && watchDiscoveryPickupPacket.task_runner_methods_called.length === 0, 'Watch Discovery pickup packet proof should call no TaskRunner methods');
+    assert(watchDiscoveryPickupPacket.discovery_refs_mutated === 0, 'Watch Discovery pickup packet proof should not mutate Discovery refs');
+    assert(watchDiscoveryPickupPacket.evidence_writes === 0, 'Watch Discovery pickup packet proof should not write Evidence/EVEidence');
+    assert(watchDiscoveryPickupPacket.hydration_writes === 0, 'Watch Discovery pickup packet proof should not write Hydration output');
+    assert(watchDiscoveryPickupPacket.watch_mutations === 0, 'Watch Discovery pickup packet proof should not mutate Watch rows');
+    assert(watchDiscoveryPickupPacket.schema_changes === 0, 'Watch Discovery pickup packet proof should not change schema');
+    assert(watchDiscoveryPickupPacket.runtime_enforcement_active === false, 'Watch Discovery pickup packet proof should not activate enforcement');
 
     const watchOperatorConfirmationContract = await invokeServiceCommand('watch.operator_confirmation_contract.preview', {}, {
       db,
