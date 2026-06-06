@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS334 Watch packet/dry-run/dispatch parity proof opened
+Status: HS334 Watch packet/dry-run/dispatch parity proof accepted
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Watch parity proof for how Evidence generation follows user intent before task creation.
+Current focus: Resting after Watch parity proof for how Evidence generation follows user intent before task creation.
 
 Current heading:
 
@@ -25,19 +25,51 @@ Current heading:
 
 ## Executor
 
-Current executor: Dev
+Current executor: Human / Overseer decision
 
 Active Dev runway:
 
 ```txt
-workspace/OverseerHS334-watch-packet-dry-run-dispatch-parity-proof-runway.md
+none
 ```
 
 Expected Dev handoff:
 
 ```txt
-workspace/DevHS334-watch-packet-dry-run-dispatch-parity-proof.md
+none
 ```
+
+## HS334 Acceptance
+
+Accepted:
+
+```txt
+workspace/OverseerHS335-hs334-watch-dispatch-parity-review.md
+```
+
+Accepted result:
+
+- `watch.packet_dry_run_dispatch_parity.preview` is a renderer-eligible read-only/local-only command.
+- The preview proves parity between `watch.runtime_packet_plan.preview`, `watch.executor_tick_dry_run.preview`, and `watchExecutor.dispatchFor(...)`.
+- Due actor command/payload shape matches across all three surfaces.
+- Due system/radius command/payload shape matches across all three surfaces.
+- System/radius movement shape uses stored accepted `included_system_ids`.
+- Center/radius remain provenance/management after accepted Watch setup.
+- Malformed stored `included_system_ids` block with `watch_scope_authority_invalid` instead of becoming partial execution scope.
+- Inactive, not-due, and backoff rows are skipped or diagnostic-only and do not imply dispatch.
+- `dispatchFor(...)` is used only as a pure payload builder; returned runners are not invoked.
+
+Boundary:
+
+No Watch execution, `WatchSessionExecutor.tick(...)`, runtime arm/disarm, interval change, task creation, provider movement, live/API call, collector/runner invocation, Watch row mutation, Discovery ref mutation, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, `watch.create` change, topology traversal behavior change, runtime packet persistence, broad provider queue, schema change, renderer UI work, popup/modal behavior, R-Scanner redesign, runtime enforcement, command blocking, support artifact, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
+
+Resting next options:
+
+1. Watch task-creation boundary proof, still no provider movement.
+2. Watch dispatch packet fixture/readiness proof from selected accepted scope into a task-shaped record without executing providers.
+3. Rest Watch runtime and return to Manual Discovery as the second path for how Evidence gets generated from user intent.
+
+Human / Overseer decision needed before a new Dev runway.
 
 ## HS334 Active Dev Runway
 
@@ -75,6 +107,65 @@ Boundary:
 This packet is read-only/local-only. Do not execute a Watch, call `WatchSessionExecutor.tick(...)`, arm/disarm Watch runtime, start/stop intervals, create Watch executor tasks, call providers, perform live/API calls, call collectors or dispatch runners, mutate Watch rows, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, change `watch.create`, change topology traversal behavior, infer execution authority from center/radius, persist runtime packet rows, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
 
 HS332 is accepted and can rest. Do not open real Watch execution, task creation, provider movement, live testing, durable Watch results, schema, UI, active enforcement, support artifacts, relationship tags, or fourth-lane behavior without a new bounded decision.
+
+## HS334 Evidence
+
+Dev updated 2026-06-06:
+
+- Added read-only renderer-eligible service command `watch.packet_dry_run_dispatch_parity.preview`.
+- Added `src/main/services/watchPacketDryRunDispatchParityService.js`.
+- The parity service composes:
+  - `watch.runtime_packet_plan.preview`
+  - `watch.executor_tick_dry_run.preview`
+  - `watchExecutor.dispatchFor(...)`
+- `dispatchFor(...)` is used only as a pure payload builder; returned runners are reported as present but are never invoked.
+- Updated `watch.runtime_packet_plan.preview` system/radius payload preview to include `acceptedScopeProvenance`, matching `dispatchFor(...)`.
+- Tightened `acceptedSystemIdsForWatchSource(...)` so malformed stored `included_system_ids` cannot be partially filtered into an accepted dispatch payload; malformed scope now throws `watch_scope_authority_invalid`.
+- Added `scripts/verify-watch-packet-dry-run-dispatch-parity.js` and `npm.cmd run verify:watch-packet-dry-run-dispatch-parity`.
+- Updated service registry, enforcement dry-run coverage, command authority, service registry verification, and passive side-effect verification.
+- Focused verifier proves:
+  - due actor packet-plan command equals dry-run command equals `dispatchFor(...)` command
+  - due actor payload meaning matches entity type, entity ID, entity name, lookback seconds, max refs, and max expansions
+  - due system/radius packet-plan command equals dry-run command equals `dispatchFor(...)` command
+  - due system/radius payload uses stored accepted `included_system_ids`
+  - system/radius center/radius remain provenance/management, not execution authority
+  - max systems, max refs per system, max expansions, and lookback seconds match
+  - invalid stored system/radius scope blocks across packet-plan, dry-run, and `dispatchFor(...)` before task creation
+  - inactive, not-due, and backoff rows are skipped or diagnostic-only and do not imply dispatch
+  - table counts stay unchanged
+- Verification run:
+  - `node --check src\main\watchlist\watchExecutor.js` passed.
+  - `node --check src\main\services\serviceRegistry.js` passed.
+  - `node --check src\main\services\enforcementDryRunService.js` passed.
+  - `node --check src\main\services\watchPacketDryRunDispatchParityService.js` passed.
+  - `node --check scripts\verify-command-authority.js` passed.
+  - `node --check scripts\verify-service-registry.js` passed.
+  - `node --check scripts\verify-passive-side-effects.js` passed.
+  - `node --check scripts\verify-watch-packet-dry-run-dispatch-parity.js` passed.
+  - `npm.cmd run verify:watch-packet-dry-run-dispatch-parity` passed.
+  - `npm.cmd run verify:watch-runtime-packet-plan` passed.
+  - `npm.cmd run verify:watch-executor-tick-dry-run` passed.
+  - `npm.cmd run verify:watch-executor` passed.
+  - `npm.cmd run verify:watch-scope-authority-conformance` passed.
+  - `npm.cmd run verify:service-registry` passed.
+  - `npm.cmd run verify:command-authority` passed.
+  - `npm.cmd run verify:passive-side-effects` passed.
+  - `npm.cmd run verify:enforcement-dry-run` passed.
+  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 345 warnings across 10 changed working-set files; no renames or protected-word JSON updates performed.
+  - `git diff --check` passed; only CRLF normalization warnings were emitted.
+  - `git status --short --branch` showed branch `main...origin/main [ahead 5]` with HS334 working-tree changes.
+
+## HS334 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS334-watch-packet-dry-run-dispatch-parity-proof.md
+```
+
+Status: Watch packet/dry-run/dispatch parity proof complete; ready for Overseer review.
+
+No Watch execution, `WatchSessionExecutor.tick(...)` call, runtime arm/disarm, interval change, task creation, provider movement, live/API call, collector/runner invocation, Watch row mutation, Discovery ref mutation, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, `watch.create` change, topology behavior change, runtime packet persistence, broad provider queue, schema change, renderer UI work, popup/modal behavior, R-Scanner redesign, runtime enforcement, command blocking, support artifact, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
 
 ## HS332 Acceptance
 

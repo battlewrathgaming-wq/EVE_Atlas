@@ -228,7 +228,7 @@ function systemRadiusPacketPlan(watch, readinessRow = null) {
         centerSystemId: source.center_system_id,
         radiusJumps: source.radius_jumps,
         includedSystemScopeStatus: readinessRow.stored_scope_status,
-        excludedSystemScopeStatus: readinessRow.stored_scope?.excluded_status || source.excluded_system_scope_status || null,
+        excludedSystemScopeStatus: source.excluded_system_scope_status || readinessRow.stored_scope?.excluded_status || null,
         excludedSystemIds: readinessRow.stored_scope?.excluded_system_ids || []
       },
       selected_accepted_system_ids: acceptedSystemIds,
@@ -242,6 +242,14 @@ function systemRadiusPacketPlan(watch, readinessRow = null) {
         radiusJumps: source.radius_jumps,
         acceptedSystemIds,
         acceptedScopeSource: 'stored_watch_scope',
+        acceptedScopeProvenance: {
+          watchId: watch.watch_id,
+          centerSystemId: source.center_system_id,
+          radiusJumps: source.radius_jumps,
+          includedSystemScopeStatus: readinessRow.stored_scope_status,
+          excludedSystemScopeStatus: source.excluded_system_scope_status || readinessRow.stored_scope?.excluded_status || null,
+          excludedSystemIds: readinessRow.stored_scope?.excluded_system_ids || []
+        },
         lookbackSeconds,
         maxSystems: acceptedSystemIds.length,
         maxRefsPerSystem,

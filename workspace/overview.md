@@ -188,6 +188,7 @@ Current state:
 - HS332 opened
 - HS332 accepted by HS333
 - HS334 opened
+- HS334 accepted by HS335
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -204,14 +205,17 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Dev
-- active Dev runway is `workspace/OverseerHS334-watch-packet-dry-run-dispatch-parity-proof-runway.md`
-- expected Dev handoff is `workspace/DevHS334-watch-packet-dry-run-dispatch-parity-proof.md`
+- current executor is Human / Overseer decision
+- active Dev runway is none
+- expected Dev handoff is none
 - latest accepted heading is `How does Evidence get generated from user intent?`
-- current Watch seam is packet-plan / dry-run / `dispatchFor(...)` parity before task creation
-- latest accepted Dev runway is `workspace/OverseerHS332-watch-executor-tick-dry-run-preview-runway.md`
-- latest accepted Dev handoff is `workspace/DevHS332-watch-executor-tick-dry-run-preview.md`
-- latest Overseer review is `workspace/OverseerHS333-hs332-watch-executor-tick-dry-run-review.md`
+- current Watch seam is resting after packet-plan / dry-run / `dispatchFor(...)` parity before task creation
+- latest accepted Dev runway is `workspace/OverseerHS334-watch-packet-dry-run-dispatch-parity-proof-runway.md`
+- latest accepted Dev handoff is `workspace/DevHS334-watch-packet-dry-run-dispatch-parity-proof.md`
+- latest Overseer review is `workspace/OverseerHS335-hs334-watch-dispatch-parity-review.md`
+- latest accepted command is `watch.packet_dry_run_dispatch_parity.preview`
+- latest accepted result is read-only/local-only parity proof across `watch.runtime_packet_plan.preview`, `watch.executor_tick_dry_run.preview`, and `watchExecutor.dispatchFor(...)`
+- current next-seam decision candidates are Watch task-creation boundary proof, Watch dispatch packet fixture/readiness proof, or rest Watch runtime and return to Manual Discovery
 - latest advisory acceptance is `workspace/OverseerHS331-hs330-watch-runtime-readiness-advisory-review.md`
 - latest accepted advisory artifact is `workspace/EngineeringDataSecurityHS330-watch-runtime-movement-readiness-advisory.md`
 - latest advisory request is `workspace/OverseerHS330-watch-runtime-movement-readiness-advisory-request.md`
@@ -318,25 +322,19 @@ Current heading:
 
 Active Dev packet:
 
-1. `workspace/OverseerHS318-renderer-system-watch-confirmation-path-runway.md`
-2. Expected handoff: `workspace/DevHS318-renderer-system-watch-confirmation-path.md`
-3. Goal: wire the existing System / Radius Watch authoring panel through local preflight and explicit operator confirmation before `watch.create`.
-4. Preflight visibility, focus, hover, highlight, keyboard navigation, and successful local topology lookup remain non-acceptance.
-5. Only explicit confirmation may produce the accepted payload for `watch.create`.
-6. Allowed mutation is local Watch setup through existing `watch.create` after confirmation only.
-7. Final UI design, popup/modal behavior, R-Scanner redesign, Watch execution, provider movement, Discovery refs, Evidence/EVEidence, Hydration, schema, support artifacts, active enforcement, relationship tags, and fourth-lane work remain unopened.
+None. HS334 is accepted and the project is at a Human / Overseer decision point.
 
 Latest accepted packet:
 
-1. `workspace/OverseerHS316-watch-operator-confirmation-listen-hook-contract-runway.md`
-2. `workspace/DevHS316-watch-operator-confirmation-listen-hook-contract.md`
-3. `workspace/OverseerHS317-hs316-watch-operator-confirmation-contract-review.md`
-4. Accepted result: `watch.operator_confirmation_contract.preview` proves the read-only operator confirmation/listen-hook contract from system/radius preflight to accepted `watch.create` payload.
-5. Preflight visibility, focus, hover, highlight, keyboard navigation, and successful local topology lookup are not acceptance.
-6. Only explicit operator confirmation can produce accepted Watch scope.
-7. Exact final UI affordance is parked for UI design and may later be typed command, keyboard action, click, hold, check, or terminal-style initialize action.
-8. Accepted payload shape is suitable for the accepted `watch.create` contract after explicit confirmation, but it is not Watch execution authorization.
-9. Renderer UI, popup/modal behavior, final copy/design, Watch execution, provider movement, Watch rows, Discovery refs, Evidence/EVEidence, Hydration, schema, support artifacts, active enforcement, relationship tags, and fourth-lane work remain unopened.
+1. `workspace/OverseerHS334-watch-packet-dry-run-dispatch-parity-proof-runway.md`
+2. `workspace/DevHS334-watch-packet-dry-run-dispatch-parity-proof.md`
+3. `workspace/OverseerHS335-hs334-watch-dispatch-parity-review.md`
+4. Accepted result: `watch.packet_dry_run_dispatch_parity.preview` proves read-only/local-only parity across packet plan, executor tick dry-run, and `dispatchFor(...)`.
+5. Actor and system/radius command/payload shapes match across all three surfaces.
+6. Stored accepted `included_system_ids` are system/radius movement authority; center/radius remain provenance/management.
+7. Malformed stored scope blocks before task creation with `watch_scope_authority_invalid`.
+8. Inactive, not-due, and backoff rows are skipped or diagnostic-only and do not imply dispatch.
+9. Watch execution, task creation, provider movement, Discovery refs, Evidence/EVEidence, Hydration, schema, support artifacts, active enforcement, relationship tags, UI, and fourth-lane work remain unopened.
 
 Previous accepted packet:
 

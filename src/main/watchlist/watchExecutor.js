@@ -335,11 +335,16 @@ function dispatchFor(watch) {
 
 function acceptedSystemIdsForWatchSource(source = {}) {
   const includedStatus = source.included_system_scope_status || 'not_stored';
-  const included = Array.isArray(source.included_system_ids)
-    ? source.included_system_ids.map(Number).filter(Number.isFinite)
+  const rawIncluded = Array.isArray(source.included_system_ids)
+    ? source.included_system_ids
     : [];
-  if (includedStatus !== 'valid' || included.length === 0) {
-    const error = new Error(`System/radius Watch execution requires valid stored included_system_ids; got ${includedStatus}`);
+  const included = rawIncluded.map(Number).filter(Number.isFinite);
+  const everyIncludedIdValid = rawIncluded.every((value) => Number.isFinite(Number(value)));
+  if (includedStatus !== 'valid' || included.length === 0 || included.length !== rawIncluded.length || !everyIncludedIdValid) {
+    const detail = includedStatus === 'valid' && (!everyIncludedIdValid || included.length !== rawIncluded.length)
+      ? 'valid status with malformed IDs'
+      : includedStatus;
+    const error = new Error(`System/radius Watch execution requires valid stored included_system_ids; got ${detail}`);
     error.code = 'watch_scope_authority_invalid';
     throw error;
   }
