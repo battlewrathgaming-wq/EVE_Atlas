@@ -1,13 +1,13 @@
 # AURA Atlas Current Work
 
-Status: HS336 Watch task-creation boundary proof accepted
+Status: HS338 Watch no-provider task-creation fixture proof open
 Last updated: 2026-06-06
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Resting after Watch task-creation boundary proof for how Evidence generation follows user intent before provider movement.
+Current focus: Watch pre-live confidence steps for how Evidence generation follows user intent before provider movement.
 
 Current heading:
 
@@ -25,19 +25,57 @@ Current heading:
 
 ## Executor
 
-Current executor: Human / Overseer decision
+Current executor: Dev
 
 Active Dev runway:
 
 ```txt
-none
+workspace/OverseerHS338-watch-no-provider-task-creation-fixture-proof-runway.md
 ```
 
 Expected Dev handoff:
 
 ```txt
-none
+workspace/DevHS338-watch-no-provider-task-creation-fixture-proof.md
 ```
+
+## HS338 Active Dev Runway
+
+Opened:
+
+```txt
+workspace/OverseerHS338-watch-no-provider-task-creation-fixture-proof-runway.md
+```
+
+Task:
+
+Add a fixture-only, no-provider Watch task-creation proof.
+
+Suggested verifier:
+
+```txt
+verify:watch-task-creation-fixture-proof
+```
+
+Purpose:
+
+```txt
+prove the accepted Watch task envelope can cross into controlled task machinery without executing Watch or touching providers
+```
+
+Core rule:
+
+```txt
+fixture task creation may prove the task boundary
+fixture task creation must not execute the Watch
+fixture task creation must not become product authorization
+```
+
+Boundary:
+
+This packet is fixture-only and no-provider. Do not execute a Watch, call provider-backed collectors, call zKillboard, ESI, or any provider, perform live/API calls, invoke Watch dispatch runners, write Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, mutate real/operator Watch rows, arm/disarm Watch runtime, start/stop executor intervals, persist real runtime packet rows, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
+
+Stop if the proof requires live/provider movement, real dispatch/collector invocation, Evidence/EVEidence writes, Discovery writes, schema changes, or real/operator runtime task persistence.
 
 ## HS336 Acceptance
 
