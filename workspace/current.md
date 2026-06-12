@@ -1,6 +1,6 @@
 # AURA Atlas Current Work
 
-Status: HS482 product Watch bucket persistence accepted
+Status: HS495 Discovery candidate-ref landing boundary preview accepted
 Last updated: 2026-06-12
 
 This file is the active working desk. Older milestone detail was preserved before flattening at:
@@ -72,9 +72,33 @@ HS480 is accepted by HS481. Atlas should introduce a small product Watch bucket 
 
 HS482 is accepted by HS484. Atlas now has a minimal product `watch_bucket_items` persistence surface for system/radius emitted work identity, with one open item per Watch and no Discovery/provider/Evidence movement.
 
+HS485 opens the next narrow seam: a read-only product Watch bucket pickup readout over real `watch_bucket_items` rows. It should classify future pickup posture without starting Discovery pickup, provider movement, leases, candidate refs, Evidence/EVEidence, Hydration, Observation, Watch cadence mutation, receipt mutation, or UI.
+
+HS485 is accepted by HS486. Atlas can now inspect product `watch_bucket_items` rows and classify future pickup posture without mutating rows or starting Discovery/provider movement.
+
+HS487 opens the next narrow seam: a read-only Discovery pickup selection contract over eligible product bucket readout rows. It should select future Discovery pickup input shape only, without starting pickup, provider movement, leases, queues, candidate refs, Discovery refs, Evidence/EVEidence, Hydration, Observation, Watch cadence mutation, bucket status mutation, receipt mutation, or UI.
+
+HS487 is accepted by HS488. Atlas can now shape eligible product bucket readout rows into future Discovery pickup selection candidates without creating pickup units, provider packets, leases, queues, durable Discovery task rows, refs, Evidence/EVEidence, Hydration, Observation, Watch cadence mutation, bucket status mutation, receipt mutation, schema changes, enforcement, or UI.
+
+HS489 opens the next narrow seam: a read-only provider-route packet preview from selected Discovery pickup candidates. It should fan accepted system/radius scope into inert zKill route packet previews only, without pickup execution, leases, queues, dispatcher runtime, provider calls, candidate refs, Discovery refs, Evidence/EVEidence, Hydration, Observation, Watch cadence mutation, bucket status mutation, receipt mutation, schema changes, enforcement, or UI.
+
+HS489 is accepted by HS490. Atlas can now fan selected system/radius Discovery pickup candidates into inert zKill provider-route packet previews while preserving Watch/run/bucket/scope/window/cap/provenance/source selection basis. The route preview is structured and non-executing only; no pickup execution, leases, queues, dispatcher runtime, provider calls, candidate refs, Discovery refs, Evidence/EVEidence, Hydration, Observation, Watch cadence mutation, bucket status mutation, receipt mutation, schema changes, enforcement, or UI is open.
+
+HS491 opens the next narrow seam: a read-only Discovery pickup execution boundary preview from accepted HS489 route packet previews. It should classify what would be needed before provider execution without creating pickup units, leases, queues, dispatcher runtime, provider calls, executable provider packets, candidate refs, Discovery refs, Evidence/EVEidence, Hydration, Observation, Watch cadence mutation, bucket status mutation, receipt mutation, schema changes, enforcement, or UI.
+
+HS491 is accepted by HS492. Atlas can now classify accepted HS489 zKill route packet previews at the pre-provider pickup execution boundary while preserving route/Watch/run/bucket/scope/window/cap/provenance/source-selection basis. The preview names future prerequisites only: External I/O open, dispatcher ownership, lease/claim semantics, provider pacing, and zKill candidate-ref write handling. No pickup execution, leases, queues, dispatcher runtime, provider calls, executable provider packets, candidate refs, Discovery refs, Evidence/EVEidence, Hydration, Observation, Watch cadence mutation, bucket status mutation, receipt mutation, schema changes, enforcement, or UI is open.
+
+HS493 opens the next narrow seam: a read-only Discovery dispatcher/lease boundary preview from accepted HS491 boundary packets. It should classify future lease candidacy and lease prerequisites without creating dispatcher runtime, queues, leases, lease claims, provider calls, executable provider packets, candidate refs, Discovery refs, Evidence/EVEidence, Hydration, Observation, Watch cadence mutation, bucket status mutation, receipt mutation, schema changes, enforcement, or UI.
+
+HS493 is accepted by HS494. Atlas can now classify accepted HS491 pickup execution boundary packets as future dispatcher/lease candidates while preserving Watch/run/bucket/scope/window/cap/provenance/source-selection basis. The preview names future lease identity, owner, expiry, retry/provider eligibility, provider pacing, and abandoned-lease recovery basis only. No dispatcher runtime, durable queue, durable lease, lease claim, provider call, executable provider packet, candidate ref, Discovery ref, Evidence/EVEidence, Hydration, Observation, Watch cadence mutation, bucket status mutation, receipt mutation, schema change, enforcement, or UI is open.
+
+HS495 opens the next narrow seam: a read-only Discovery candidate-ref landing boundary preview from accepted HS493 lease candidates and fixture provider-result examples. It should classify `killmail_id + hash` candidate refs, dedupe posture, malformed/missing-hash posture, capped/deferred/failure posture, and provenance relationship preview without provider calls, candidate-ref writes, Discovery ref writes, Evidence/EVEidence, Hydration, Observation, Watch cadence mutation, bucket status mutation, receipt mutation, schema changes, enforcement, or UI.
+
+HS495 is accepted by HS496. Atlas can now classify fixture zKill provider-result refs at the Discovery candidate-ref landing boundary while keeping candidate refs as Discovery possible leads only, not Evidence/EVEidence. It proves `killmail_id + hash` identity, dedupe posture, malformed/missing-hash rejection, capped/deferred/failure posture, and provenance relationship preview without provider calls, candidate-ref writes, Discovery ref writes, Evidence/EVEidence, Hydration, Observation, Watch cadence mutation, bucket status mutation, receipt mutation, schema changes, enforcement, or UI.
+
 ## Current Executor
 
-Current executor: none - stable landing / pushed-state prep
+Current executor: none - stable landing
 
 Active Dev runway:
 
@@ -85,7 +109,7 @@ none
 Accepted Dev handoff:
 
 ```txt
-workspace/DevHS482-product-watch-bucket-persistence.md
+workspace/DevHS495-discovery-candidate-ref-landing-boundary-preview.md
 ```
 
 Latest accepted advisory review:
@@ -109,12 +133,24 @@ workspace/OverseerHS483-warm-start-hs482-review.md
 Latest accepted review:
 
 ```txt
-workspace/OverseerHS484-hs482-product-watch-bucket-persistence-review.md
+workspace/OverseerHS496-hs495-discovery-candidate-ref-landing-boundary-preview-review.md
+```
+
+Latest completed Dev handoff:
+
+```txt
+workspace/DevHS495-discovery-candidate-ref-landing-boundary-preview.md
+```
+
+Expected Dev handoff:
+
+```txt
+none
 ```
 
 ## Resting State
 
-HS482: product Watch bucket persistence accepted.
+HS495: Discovery candidate-ref landing boundary preview accepted.
 
 Active Dev runway:
 
@@ -125,23 +161,23 @@ none
 Latest accepted handoff:
 
 ```txt
-workspace/DevHS482-product-watch-bucket-persistence.md
+workspace/DevHS495-discovery-candidate-ref-landing-boundary-preview.md
 ```
 
 Purpose:
 
 ```txt
-add the smallest durable Watch bucket persistence surface for system/radius emitted work identity while deferring Discovery pickup, dispatcher/lease/provider movement, candidate refs, Evidence/EVEidence writes, Watch cadence mutation, UI, and actor Watch migration
+accepted read-only Discovery candidate-ref landing boundary preview from accepted HS493 lease candidates and fixture provider results; next decision is whether to prove receipt/status handling, audit candidate-ref persistence readiness, or pause for cleanup/commit readiness before any live/provider movement
 ```
 
 Boundary:
 
-HS482 is accepted and no Dev runway is open. No production actor Watch runtime change, `collectActorWatch(...)` retirement, system/radius Watch redirect, live/provider call, operator corpus write beyond the scoped bucket table, Hydration write, Observation/report change, dispatcher/queue/lease behavior, runtime enforcement, command blocking, UI, source-term rename, or protected-word JSON update is open.
+HS495 is accepted as a read-only candidate-ref landing boundary preview only. No production actor Watch runtime change, `collectActorWatch(...)` retirement, system/radius Watch redirect, live/provider call, provider execution, Discovery pickup execution, durable lease, durable queue, dispatcher runtime, lease claim, candidate ref write, Discovery ref write, Evidence/EVEidence write, Hydration write, Observation/report change, Watch cadence mutation, bucket status mutation, receipt mutation, runtime enforcement, command blocking, UI, source-term rename, or protected-word JSON update is open.
 
 Latest accepted review:
 
 ```txt
-workspace/OverseerHS484-hs482-product-watch-bucket-persistence-review.md
+workspace/OverseerHS496-hs495-discovery-candidate-ref-landing-boundary-preview-review.md
 ```
 
 Latest forecast note:
@@ -165,13 +201,13 @@ workspace/ArchitectureDataHS474-watch-bucket-next-seam-assurance.md
 Latest accepted Dev handoff:
 
 ```txt
-workspace/DevHS478-discovery-pickup-consumer-hold-contract.md
+workspace/DevHS495-discovery-candidate-ref-landing-boundary-preview.md
 ```
 
-Latest landed Dev handoff pending review:
+Latest landed Dev handoff reviewed and accepted:
 
 ```txt
-workspace/DevHS482-product-watch-bucket-persistence.md
+workspace/DevHS495-discovery-candidate-ref-landing-boundary-preview.md
 ```
 
 ## Stable Landing
@@ -231,7 +267,965 @@ Likely next seam:
 read-only product bucket pickup readout / Discovery pickup selection over open bucket rows
 ```
 
-No new runway is open.
+HS495 Dev handoff has landed and is ready for Overseer review.
+
+## HS495 Evidence
+
+Dev updated 2026-06-12:
+
+- Added read-only Discovery candidate-ref landing boundary preview service:
+
+```txt
+src/main/services/discoveryCandidateRefLandingBoundaryPreviewService.js
+```
+
+- Added renderer-eligible read-only command:
+
+```txt
+discovery.candidate_ref_landing_boundary.preview
+```
+
+- Added focused verifier and package script:
+
+```txt
+scripts/verify-discovery-candidate-ref-landing-boundary-preview.js
+npm.cmd run verify:discovery-candidate-ref-landing-boundary-preview
+```
+
+- Registered command metadata / coverage in:
+
+```txt
+package.json
+src/main/services/serviceRegistry.js
+src/main/services/enforcementDryRunService.js
+scripts/verify-service-registry.js
+scripts/verify-command-authority.js
+scripts/verify-passive-side-effects.js
+scripts/verify-enforcement-dry-run.js
+```
+
+Focused verifier sample:
+
+```json
+{
+  "status": "Discovery candidate ref landing boundary preview verified",
+  "command": "discovery.candidate_ref_landing_boundary.preview",
+  "summary": {
+    "source_lease_candidate_count": 5,
+    "fixture_provider_result_count": 5,
+    "candidate_ref_landing_preview_count": 8,
+    "unique_candidate_ref_identity_count": 3,
+    "landing_action_preview_count": 2,
+    "new_candidate_ref_count": 2,
+    "duplicate_within_provider_result_count": 1,
+    "duplicate_against_preview_count": 1,
+    "existing_memory_duplicate_count": 1,
+    "malformed_ref_count": 1,
+    "capped_result_count": 4,
+    "provider_deferred_count": 1,
+    "provider_failed_count": 1,
+    "provider_calls": 0,
+    "live_api_calls": 0,
+    "zkill_calls": 0,
+    "esi_calls": 0,
+    "candidate_refs_written": 0,
+    "discovered_killmail_refs_written": 0,
+    "discovery_refs_written": false,
+    "evidence_eveidence_writes": 0,
+    "hydration_writes": 0,
+    "watch_cadence_mutations": 0,
+    "receipt_mutations": 0,
+    "watch_bucket_status_mutations": 0,
+    "schema_changes": 0
+  }
+}
+```
+
+Behavior proven:
+
+- accepted HS493 lease candidates can be paired with fixture provider-result examples and classified without provider calls
+- candidate-ref identity is `killmail_id + hash`
+- new candidate refs are previewed as future Discovery possible leads only
+- duplicate refs within one provider result are suppressed
+- duplicate refs against fixture existing Discovery memory are disclosed as already known
+- duplicate refs across overlapping Watch/route candidates attach provenance only and do not duplicate Evidence
+- malformed/missing-hash refs are rejected before landing
+- capped result posture is disclosed as more refs may exist, not as failure
+- deferred and failed provider-result examples produce no landing action
+- Watch completion semantics stay out of the preview
+- no `discovered_killmail_refs`, candidate refs, Discovery refs, Evidence/EVEidence, Hydration, Observation, Watch cadence, bucket status, receipt, schema, enforcement, or UI side effect occurs
+
+Verification completed:
+
+```txt
+node --check src\main\services\discoveryCandidateRefLandingBoundaryPreviewService.js
+node --check scripts\verify-discovery-candidate-ref-landing-boundary-preview.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-passive-side-effects.js
+node --check scripts\verify-enforcement-dry-run.js
+npm.cmd run verify:discovery-candidate-ref-landing-boundary-preview
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+git diff --check
+git diff -- src\main\db\schema.sql
+git status --short --branch
+```
+
+Results:
+
+- listed syntax checks passed
+- focused Discovery candidate-ref landing boundary preview verifier passed
+- service registry verifier passed
+- command authority verifier passed
+- passive side-effect verifier passed
+- enforcement dry-run verifier passed with 129/129 commands covered and no gaps
+- `git diff --check` returned exit code 0 with CRLF normalization warnings only
+- `git diff -- src/main/db/schema.sql` returned no diff
+- `git status --short --branch` showed `main...origin/main` with HS485/HS487/HS489/HS491/HS493/HS495 touched files and active workspace runway/review files
+- no schema changes were made
+
+Boundary confirmation:
+
+- read-only candidate-ref landing boundary preview only
+- no schema changes
+- no live provider calls, zKill calls, or ESI calls
+- no real Discovery pickup execution
+- no executable provider packets
+- no dispatcher runtime, queue runtime, durable queues, durable leases, or lease claims
+- no candidate-ref writes, Discovery ref writes, or `discovered_killmail_refs` writes
+- no Evidence/EVEidence writes
+- no Hydration
+- no Observation/reporting behavior
+- no Watch cadence mutation
+- no Watch bucket status mutation
+- no receipt mutation
+- no Watch completion semantics
+- no UI
+- no actor Watch migration
+- no `collectActorWatch(...)` retirement
+- no system/radius collector redirect
+- no source-term rename or protected-word JSON update
+
+## HS495 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS495-discovery-candidate-ref-landing-boundary-preview.md
+```
+
+Status: ready for Overseer review.
+
+## HS493 Evidence
+
+## HS493 Evidence
+
+Dev updated 2026-06-12:
+
+- Added read-only Discovery dispatcher/lease boundary preview service:
+
+```txt
+src/main/services/discoveryDispatcherLeaseBoundaryPreviewService.js
+```
+
+- Added renderer-eligible read-only command:
+
+```txt
+discovery.dispatcher_lease_boundary.preview
+```
+
+- Added focused verifier and package script:
+
+```txt
+scripts/verify-discovery-dispatcher-lease-boundary-preview.js
+npm.cmd run verify:discovery-dispatcher-lease-boundary-preview
+```
+
+- Registered command metadata / coverage in:
+
+```txt
+package.json
+src/main/services/serviceRegistry.js
+src/main/services/enforcementDryRunService.js
+scripts/verify-service-registry.js
+scripts/verify-command-authority.js
+scripts/verify-passive-side-effects.js
+scripts/verify-enforcement-dry-run.js
+```
+
+Focused verifier sample:
+
+```json
+{
+  "status": "Discovery dispatcher lease boundary preview verified",
+  "command": "discovery.dispatcher_lease_boundary.preview",
+  "external_io_on_summary": {
+    "source_pickup_execution_boundary_packet_count": 5,
+    "lease_candidate_count": 5,
+    "not_leased_candidate_count": 5,
+    "one_accepted_system_id_maps_to_one_lease_candidate": true,
+    "future_lease_owner_required_count": 5,
+    "future_lease_expires_at_required_count": 5,
+    "future_retry_after_basis_count": 5,
+    "future_provider_pacing_basis_count": 5,
+    "future_expired_lease_recovery_basis_count": 5,
+    "provider_calls": 0,
+    "live_api_calls": 0,
+    "zkill_calls": 0,
+    "esi_calls": 0,
+    "executable_provider_packets_created": 0,
+    "dispatcher_runtime_started": false,
+    "queue_items_created": 0,
+    "leases_created": 0,
+    "lease_claims_created": 0,
+    "candidate_refs_written": 0,
+    "discovery_refs_written": false,
+    "evidence_eveidence_writes": 0,
+    "hydration_writes": 0,
+    "watch_cadence_mutations": 0,
+    "receipt_mutations": 0,
+    "watch_bucket_status_mutations": 0,
+    "schema_changes": 0
+  },
+  "external_io_off_summary": {
+    "source_pickup_execution_boundary_packet_count": 0,
+    "lease_candidate_count": 0,
+    "external_io_hold_before_lease_candidacy": true,
+    "excluded_row_count": 7,
+    "held_excluded_count": 3,
+    "provider_calls": 0,
+    "zkill_calls": 0,
+    "esi_calls": 0
+  }
+}
+```
+
+Behavior proven:
+
+- accepted HS491 pickup execution boundary packets can be classified as future dispatcher/lease candidates
+- one accepted included system ID remains one not-leased lease candidate when External I/O is on
+- route packet identity, Watch/run/bucket/scope/window/cap/provenance/source-selection basis is preserved
+- lease candidates are not leased, not dispatchable now, not executable now, and do not have lease rows or claims
+- candidates report future lease facts: identity basis, owner requirement, expiry requirement, retry/provider eligibility basis, provider pacing basis, and expired/abandoned lease recovery basis
+- External I/O closed remains a hold before lease candidacy
+- held/rejected/not-input rows do not enter lease candidacy
+- renderer-supplied boundary previews are not authoritative
+- no dispatcher runtime, queue item, durable queue row, lease row, lease claim, provider call, zKill call, ESI call, executable provider packet, candidate ref, Discovery ref, Evidence/EVEidence, Hydration, Observation, Watch cadence, bucket status, receipt, schema, enforcement, or UI side effect occurs
+
+Verification completed:
+
+```txt
+node --check src\main\services\discoveryDispatcherLeaseBoundaryPreviewService.js
+node --check scripts\verify-discovery-dispatcher-lease-boundary-preview.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-passive-side-effects.js
+node --check scripts\verify-enforcement-dry-run.js
+npm.cmd run verify:discovery-dispatcher-lease-boundary-preview
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+git diff --check
+git diff -- src\main\db\schema.sql
+git status --short --branch
+```
+
+Results:
+
+- listed syntax checks passed
+- focused Discovery dispatcher/lease boundary preview verifier passed
+- service registry verifier passed
+- command authority verifier passed
+- passive side-effect verifier passed
+- enforcement dry-run verifier passed with 128/128 commands covered and no gaps
+- `git diff --check` returned exit code 0 with CRLF normalization warnings only
+- `git diff -- src/main/db/schema.sql` returned no diff
+- `git status --short --branch` showed `main...origin/main` with HS485/HS487/HS489/HS491/HS493 touched files and active workspace runway/review files
+- no schema changes were made
+
+Boundary confirmation:
+
+- read-only dispatcher/lease boundary preview only
+- no schema changes
+- no Discovery pickup execution
+- no executable provider packets
+- no dispatcher runtime, dispatcher loop, queue runtime, durable queue rows, durable leases, or lease claims
+- no provider calls, zKill calls, or ESI calls
+- no candidate refs or Discovery ref writes
+- no Evidence/EVEidence writes
+- no Hydration
+- no Observation/reporting behavior
+- no Watch cadence mutation
+- no Watch bucket status mutation
+- no receipt mutation
+- no UI
+- no actor Watch migration
+- no `collectActorWatch(...)` retirement
+- no system/radius collector redirect
+- no source-term rename or protected-word JSON update
+
+## HS493 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS493-discovery-dispatcher-lease-boundary-preview.md
+```
+
+Status: ready for Overseer review.
+
+## HS491 Evidence
+
+## HS491 Evidence
+
+Dev updated 2026-06-12:
+
+- Added read-only Discovery pickup execution boundary preview service:
+
+```txt
+src/main/services/discoveryPickupExecutionBoundaryPreviewService.js
+```
+
+- Added renderer-eligible read-only command:
+
+```txt
+discovery.pickup_execution_boundary.preview
+```
+
+- Added focused verifier and package script:
+
+```txt
+scripts/verify-discovery-pickup-execution-boundary-preview.js
+npm.cmd run verify:discovery-pickup-execution-boundary-preview
+```
+
+- Registered command metadata / coverage in:
+
+```txt
+package.json
+src/main/services/serviceRegistry.js
+src/main/services/enforcementDryRunService.js
+scripts/verify-service-registry.js
+scripts/verify-command-authority.js
+scripts/verify-passive-side-effects.js
+scripts/verify-enforcement-dry-run.js
+```
+
+Focused verifier sample:
+
+```json
+{
+  "status": "Discovery pickup execution boundary preview verified",
+  "command": "discovery.pickup_execution_boundary.preview",
+  "external_io_on_summary": {
+    "source_route_packet_preview_count": 5,
+    "pickup_execution_boundary_packet_count": 5,
+    "not_executed_packet_count": 5,
+    "one_accepted_system_id_maps_to_one_boundary_packet": true,
+    "requires_external_io_open_count": 5,
+    "requires_future_dispatcher_ownership_count": 5,
+    "requires_future_lease_claim_semantics_count": 5,
+    "requires_future_provider_pacing_count": 5,
+    "requires_future_zkill_candidate_ref_write_handling_count": 5,
+    "excluded_row_count": 4,
+    "provider_calls": 0,
+    "live_api_calls": 0,
+    "zkill_calls": 0,
+    "esi_calls": 0,
+    "executable_provider_packets_created": 0,
+    "pickup_units_created": 0,
+    "leases_created": 0,
+    "queue_items_created": 0,
+    "candidate_refs_written": 0,
+    "discovery_refs_written": false,
+    "evidence_eveidence_writes": 0,
+    "hydration_writes": 0,
+    "watch_cadence_mutations": 0,
+    "receipt_mutations": 0,
+    "watch_bucket_status_mutations": 0,
+    "schema_changes": 0
+  },
+  "external_io_off_summary": {
+    "source_route_packet_preview_count": 0,
+    "pickup_execution_boundary_packet_count": 0,
+    "excluded_row_count": 7,
+    "held_excluded_count": 3,
+    "provider_calls": 0,
+    "zkill_calls": 0,
+    "esi_calls": 0
+  }
+}
+```
+
+Behavior proven:
+
+- accepted HS489 provider-route packet previews can be classified at the pre-provider execution boundary
+- one accepted included system ID remains one not-executed boundary packet
+- route packet identity, Watch/run/bucket/scope/window/cap/provenance/source-selection basis is preserved
+- boundary packets are not executed, not executable now, not dispatchable now, and not leased
+- boundary packets report future prerequisites: External I/O open, dispatcher ownership, lease/claim semantics, provider pacing, and zKill candidate-ref write handling
+- held-by-External-I/O rows do not enter executable packet posture
+- malformed/rejected/not-input rows do not enter executable packet posture
+- renderer-supplied route previews are not authoritative
+- no pickup unit, lease, queue item, dispatcher runtime, provider call, zKill call, ESI call, executable provider packet, candidate ref, Discovery ref, Evidence/EVEidence, Hydration, Observation, Watch cadence, bucket status, receipt, schema, or UI side effect occurs
+
+Verification completed:
+
+```txt
+node --check src\main\services\discoveryPickupExecutionBoundaryPreviewService.js
+node --check scripts\verify-discovery-pickup-execution-boundary-preview.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-passive-side-effects.js
+node --check scripts\verify-enforcement-dry-run.js
+npm.cmd run verify:discovery-pickup-execution-boundary-preview
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+```
+
+Results:
+
+- listed syntax checks passed
+- focused Discovery pickup execution boundary preview verifier passed
+- service registry verifier passed
+- command authority verifier passed
+- passive side-effect verifier passed
+- enforcement dry-run verifier passed with 127/127 commands covered and no gaps
+- `git diff --check` returned exit code 0 with CRLF normalization warnings only
+- `git diff -- src/main/db/schema.sql` returned no diff
+- `git status --short --branch` showed `main...origin/main` with HS485/HS487/HS489/HS491 touched files and active workspace runway/review files
+- no schema changes were made
+
+Boundary confirmation:
+
+- read-only pickup execution boundary preview only
+- no schema changes
+- no Discovery pickup execution
+- no executable provider packets
+- no pickup units, leases, dispatcher runtime, queue runtime, or durable Discovery task rows
+- no provider calls, zKill calls, or ESI calls
+- no candidate refs or Discovery ref writes
+- no Evidence/EVEidence writes
+- no Hydration
+- no Observation/reporting behavior
+- no Watch cadence mutation
+- no Watch bucket status mutation
+- no receipt mutation
+- no UI
+- no actor Watch migration
+- no `collectActorWatch(...)` retirement
+- no system/radius collector redirect
+- no source-term rename or protected-word JSON update
+
+## HS491 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS491-discovery-pickup-execution-boundary-preview.md
+```
+
+Status: ready for Overseer review.
+
+## HS489 Evidence
+
+Dev updated 2026-06-12:
+
+- Added read-only Discovery provider-route packet preview service:
+
+```txt
+src/main/services/discoveryProviderRoutePacketPreviewService.js
+```
+
+- Added renderer-eligible read-only command:
+
+```txt
+discovery.provider_route_packet.preview
+```
+
+- Added focused verifier and package script:
+
+```txt
+scripts/verify-discovery-provider-route-packet-preview.js
+npm.cmd run verify:discovery-provider-route-packet-preview
+```
+
+- Registered command metadata / coverage in:
+
+```txt
+package.json
+src/main/services/serviceRegistry.js
+src/main/services/enforcementDryRunService.js
+scripts/verify-service-registry.js
+scripts/verify-command-authority.js
+scripts/verify-passive-side-effects.js
+scripts/verify-enforcement-dry-run.js
+```
+
+Focused verifier sample:
+
+```json
+{
+  "status": "Discovery provider route packet preview verified",
+  "command": "discovery.provider_route_packet.preview",
+  "external_io_on_summary": {
+    "selected_candidate_count": 3,
+    "provider_route_packet_preview_count": 5,
+    "packet_preview_count": 5,
+    "packet_count_by_candidate": [
+      {
+        "watch_id": 1,
+        "accepted_included_system_count": 2,
+        "route_packet_preview_count": 2,
+        "creates_provider_packets": false,
+        "provider_calls": 0,
+        "candidate_refs_written": 0
+      },
+      {
+        "watch_id": 2,
+        "accepted_included_system_count": 2,
+        "route_packet_preview_count": 2,
+        "creates_provider_packets": false,
+        "provider_calls": 0,
+        "candidate_refs_written": 0
+      },
+      {
+        "watch_id": 3,
+        "accepted_included_system_count": 1,
+        "route_packet_preview_count": 1,
+        "creates_provider_packets": false,
+        "provider_calls": 0,
+        "candidate_refs_written": 0
+      }
+    ],
+    "excluded_row_count": 4,
+    "overlapping_watch_scopes_remain_independent": 1,
+    "provider_calls": 0,
+    "live_api_calls": 0,
+    "zkill_calls": 0,
+    "esi_calls": 0,
+    "pickup_units_created": 0,
+    "leases_created": 0,
+    "queue_items_created": 0,
+    "candidate_refs_written": 0,
+    "discovery_refs_written": false,
+    "evidence_eveidence_writes": 0,
+    "hydration_writes": 0,
+    "watch_cadence_mutations": 0,
+    "receipt_mutations": 0,
+    "watch_bucket_status_mutations": 0,
+    "schema_changes": 0
+  },
+  "external_io_off_summary": {
+    "selected_candidate_count": 0,
+    "provider_route_packet_preview_count": 0,
+    "excluded_row_count": 7,
+    "held_excluded_count": 3,
+    "provider_calls": 0,
+    "zkill_calls": 0,
+    "esi_calls": 0
+  }
+}
+```
+
+Behavior proven:
+
+- HS487 selected candidates can become inert zKill provider-route packet previews
+- one accepted included system ID yields one preview route packet
+- Watch ID, `watch_run_id`, bucket item ID, accepted scope, system ID, window, caps, provenance, and source selection basis are preserved
+- center/radius remains provenance/explanation only and not execution authority
+- held, rejected, not-input, actor, non-open, and malformed/missing-scope rows do not create route packets
+- overlapping Watch scopes remain independent route packet previews
+- route packet previews are for later zKill candidate acquisition only, not Evidence expansion and not Hydration
+- renderer-supplied selected candidates are not authoritative
+- no pickup unit, lease, queue item, dispatcher runtime, provider call, zKill call, ESI call, executable provider packet, candidate ref, Discovery ref, Evidence/EVEidence, Hydration, Observation, Watch cadence, bucket status, receipt, schema, or UI side effect occurs
+
+Verification completed:
+
+```txt
+node --check src\main\services\discoveryProviderRoutePacketPreviewService.js
+node --check scripts\verify-discovery-provider-route-packet-preview.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-passive-side-effects.js
+node --check scripts\verify-enforcement-dry-run.js
+npm.cmd run verify:discovery-provider-route-packet-preview
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+```
+
+Results:
+
+- listed syntax checks passed
+- focused Discovery provider route packet preview verifier passed
+- service registry verifier passed
+- command authority verifier passed
+- passive side-effect verifier passed
+- enforcement dry-run verifier passed with 126/126 commands covered and no gaps
+- `git diff --check` returned exit code 0 with CRLF normalization warnings only
+- `git diff -- src/main/db/schema.sql` returned no diff
+- `git status --short --branch` showed `main...origin/main` with HS485/HS487/HS489 touched files and active workspace runway/review files
+- no schema changes were made
+
+Boundary confirmation:
+
+- read-only provider-route packet preview only
+- no schema changes
+- no Discovery pickup execution
+- no pickup units, leases, dispatcher runtime, queue runtime, or durable Discovery task rows
+- no provider calls, zKill calls, ESI calls, or executable provider packets
+- no candidate refs or Discovery ref writes
+- no Evidence/EVEidence writes
+- no Hydration
+- no Observation/reporting behavior
+- no Watch cadence mutation
+- no Watch bucket status mutation
+- no receipt mutation
+- no UI
+- no actor Watch migration
+- no `collectActorWatch(...)` retirement
+- no system/radius collector redirect
+- no source-term rename or protected-word JSON update
+
+## HS489 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS489-discovery-provider-route-packet-preview.md
+```
+
+Status: ready for Overseer review.
+
+## HS487 Evidence
+
+Dev updated 2026-06-12:
+
+- Added read-only Discovery pickup selection contract service:
+
+```txt
+src/main/services/discoveryPickupSelectionContractService.js
+```
+
+- Added renderer-eligible read-only command:
+
+```txt
+discovery.pickup_selection_contract.preview
+```
+
+- Added focused verifier and package script:
+
+```txt
+scripts/verify-discovery-pickup-selection-contract.js
+npm.cmd run verify:discovery-pickup-selection-contract
+```
+
+- Registered command metadata / coverage in:
+
+```txt
+package.json
+src/main/services/serviceRegistry.js
+src/main/services/enforcementDryRunService.js
+scripts/verify-service-registry.js
+scripts/verify-command-authority.js
+scripts/verify-passive-side-effects.js
+scripts/verify-enforcement-dry-run.js
+```
+
+Focused verifier sample:
+
+```json
+{
+  "status": "Discovery pickup selection contract verified",
+  "command": "discovery.pickup_selection_contract.preview",
+  "external_io_on_summary": {
+    "product_readout_row_count": 7,
+    "selected_candidate_count": 3,
+    "excluded_row_count": 4,
+    "held_excluded_count": 0,
+    "rejected_excluded_count": 2,
+    "not_input_excluded_count": 2,
+    "actor_excluded_count": 1,
+    "non_open_excluded_count": 1,
+    "malformed_or_missing_scope_excluded_count": 2,
+    "independent_overlap_count": 1,
+    "pickup_units_created": 0,
+    "provider_packets": 0,
+    "discovery_pickup_started": false,
+    "candidate_refs_written": 0,
+    "discovery_refs_written": false,
+    "evidence_eveidence_writes": 0,
+    "hydration_writes": 0,
+    "watch_cadence_mutations": 0,
+    "receipt_mutations": 0,
+    "watch_bucket_status_mutations": 0
+  },
+  "external_io_off_summary": {
+    "product_readout_row_count": 7,
+    "selected_candidate_count": 0,
+    "excluded_row_count": 7,
+    "held_excluded_count": 3,
+    "rejected_excluded_count": 2,
+    "not_input_excluded_count": 2,
+    "pickup_units_created": 0,
+    "provider_packets": 0,
+    "discovery_pickup_started": false,
+    "candidate_refs_written": 0,
+    "discovery_refs_written": false,
+    "evidence_eveidence_writes": 0,
+    "hydration_writes": 0,
+    "watch_cadence_mutations": 0,
+    "receipt_mutations": 0,
+    "watch_bucket_status_mutations": 0
+  }
+}
+```
+
+Behavior proven:
+
+- eligible product bucket readout rows can become Discovery pickup selection candidates
+- selected candidates preserve `bucket_item_id`, Watch identity, `watch_run_id`, accepted scope, scope posture, window, caps, provenance, and provider posture basis
+- selected candidates are future Discovery pickup input only
+- External I/O off held rows are excluded and not selected
+- invalid/rejected rows are excluded and not selected
+- actor rows are excluded and not selected
+- non-open rows are excluded and not selected
+- malformed/missing accepted scope rows are excluded and not selected
+- overlapping Watch scopes remain independent selected candidates when both are eligible
+- renderer-supplied readout rows are not authoritative
+- no pickup unit, lease, queue item, durable Discovery task row, provider packet, candidate ref, Discovery ref, Evidence/EVEidence, Hydration, Observation, Watch cadence, bucket status, receipt, or UI side effect occurs
+
+Verification completed:
+
+```txt
+node --check src\main\services\discoveryPickupSelectionContractService.js
+node --check scripts\verify-discovery-pickup-selection-contract.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-passive-side-effects.js
+node --check scripts\verify-enforcement-dry-run.js
+npm.cmd run verify:discovery-pickup-selection-contract
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+```
+
+Results:
+
+- listed syntax checks passed
+- focused Discovery pickup selection contract verifier passed
+- service registry verifier passed
+- command authority verifier passed
+- passive side-effect verifier passed
+- enforcement dry-run verifier passed with 125/125 commands covered and no gaps
+- `git diff --check` returned exit code 0 with CRLF normalization warnings only
+- `git diff -- src/main/db/schema.sql` returned no diff
+- `git status --short --branch` showed `main...origin/main` with HS485/HS487 touched files and the active workspace runway/review files
+
+Boundary confirmation:
+
+- read-only selection contract only
+- no schema changes
+- no Discovery pickup execution
+- no pickup units, leases, dispatcher runtime, queue runtime, or durable Discovery task rows
+- no provider packets, zKill calls, or ESI calls
+- no candidate refs or Discovery ref writes
+- no Evidence/EVEidence writes
+- no Hydration
+- no Observation/reporting behavior
+- no Watch cadence mutation
+- no Watch bucket status mutation
+- no receipt mutation
+- no UI
+- no actor Watch migration
+- no `collectActorWatch(...)` retirement
+- no system/radius collector redirect
+- no source-term rename or protected-word JSON update
+
+## HS487 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS487-discovery-pickup-selection-contract.md
+```
+
+Status: ready for Overseer review.
+
+## HS485 Evidence
+
+Dev updated 2026-06-12:
+
+- Added read-only product Watch bucket pickup readout service:
+
+```txt
+src/main/services/watchBucketProductPickupReadoutService.js
+```
+
+- Extended product bucket repository read support:
+
+```txt
+src/main/db/watchBucketRepository.js
+```
+
+- Added renderer-eligible read-only command:
+
+```txt
+watch.bucket_product_pickup_readout.preview
+```
+
+- Added focused verifier and package script:
+
+```txt
+scripts/verify-watch-bucket-product-pickup-readout.js
+npm.cmd run verify:watch-bucket-product-pickup-readout
+```
+
+- Registered command metadata / coverage in:
+
+```txt
+package.json
+src/main/services/serviceRegistry.js
+src/main/services/enforcementDryRunService.js
+scripts/verify-service-registry.js
+scripts/verify-command-authority.js
+scripts/verify-passive-side-effects.js
+scripts/verify-enforcement-dry-run.js
+```
+
+Focused verifier sample:
+
+```json
+{
+  "status": "Watch bucket product pickup readout verified",
+  "command": "watch.bucket_product_pickup_readout.preview",
+  "external_io_on_summary": {
+    "product_bucket_row_count": 7,
+    "open_system_radius_row_count": 5,
+    "future_pickup_eligible_count": 3,
+    "held_by_external_io_count": 0,
+    "rejected_before_pickup_consumption_count": 2,
+    "not_pickup_input_count": 2,
+    "unsupported_actor_row_count": 1,
+    "non_open_row_count": 1,
+    "malformed_or_missing_scope_count": 2,
+    "provider_packets": 0,
+    "discovery_pickup_started": false,
+    "candidate_refs_written": 0,
+    "evidence_eveidence_writes": 0,
+    "hydration_writes": 0,
+    "watch_cadence_mutations": 0,
+    "receipt_mutations": 0,
+    "watch_bucket_status_mutations": 0
+  },
+  "external_io_off_summary": {
+    "future_pickup_eligible_count": 0,
+    "held_by_external_io_count": 3,
+    "rejected_before_pickup_consumption_count": 2,
+    "not_pickup_input_count": 2,
+    "provider_packets": 0,
+    "discovery_pickup_started": false,
+    "candidate_refs_written": 0,
+    "evidence_eveidence_writes": 0,
+    "hydration_writes": 0,
+    "watch_cadence_mutations": 0,
+    "receipt_mutations": 0,
+    "watch_bucket_status_mutations": 0
+  }
+}
+```
+
+Behavior proven:
+
+- product `watch_bucket_items` rows can be inspected without mutation
+- open system/radius rows with valid accepted stored scope classify as `future_pickup_eligible` when External I/O is on
+- open system/radius rows with valid accepted stored scope classify as `held_by_external_io` when External I/O is off
+- `held_by_external_io` is reported as provider movement posture and is not persisted as bucket lifecycle status or `pickup_posture`
+- actor rows classify as `not_pickup_input`
+- non-open rows classify as `not_pickup_input`
+- malformed/unparseable accepted scope and missing included-system scope classify as `rejected_before_pickup_consumption`
+- overlapping valid open rows remain independently visible
+- no Discovery pickup starts and no provider packets, leases, queues, candidate refs, Discovery refs, Evidence/EVEidence, Hydration, Observation, Watch cadence, receipt, or UI side effects occur
+
+Verification completed:
+
+```txt
+node --check src\main\db\watchBucketRepository.js
+node --check src\main\services\watchBucketProductPickupReadoutService.js
+node --check scripts\verify-watch-bucket-product-pickup-readout.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-passive-side-effects.js
+node --check scripts\verify-enforcement-dry-run.js
+npm.cmd run verify:watch-bucket-product-pickup-readout
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+```
+
+Results:
+
+- listed syntax checks passed
+- focused product Watch bucket pickup readout verifier passed
+- service registry verifier passed
+- command authority verifier passed
+- passive side-effect verifier passed
+- enforcement dry-run verifier passed with 124/124 commands covered and no gaps
+- `git diff --check` returned exit code 0 with CRLF normalization warnings only
+- `git diff -- src/main/db/schema.sql` returned no diff
+- `git status --short --branch` showed `main...origin/main` with HS485-touched files plus pre-existing workspace/current, workspace/overview, and HS485 runway workspace changes
+
+Boundary confirmation:
+
+- read-only product row inspection only
+- no schema changes
+- no Watch bucket status mutation
+- no receipt mutation
+- no Discovery pickup execution
+- no leases, dispatcher runtime, or queue runtime
+- no provider packets, zKill calls, or ESI calls
+- no candidate refs or Discovery ref writes
+- no Evidence/EVEidence writes
+- no Hydration
+- no Observation/reporting behavior
+- no Watch cadence mutation
+- no UI
+- no actor Watch migration
+- no `collectActorWatch(...)` retirement
+- no system/radius collector redirect
+- no source-term rename or protected-word JSON update
+
+## HS485 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS485-product-watch-bucket-pickup-readout.md
+```
+
+Status: ready for Overseer review.
 
 ## HS482 Evidence
 

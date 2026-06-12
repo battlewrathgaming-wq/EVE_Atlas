@@ -22,6 +22,14 @@ class WatchBucketRepository {
     return rows.map(rowFromDb);
   }
 
+  listItems() {
+    return this.db.prepare(`
+      SELECT *
+      FROM watch_bucket_items
+      ORDER BY emitted_at, watch_type, watch_id, bucket_item_id
+    `).all().map(rowFromDb);
+  }
+
   getOpenItem(watchType, watchId) {
     const row = this.db.prepare(`
       SELECT *

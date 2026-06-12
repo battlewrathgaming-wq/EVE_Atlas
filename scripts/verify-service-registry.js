@@ -100,9 +100,15 @@ async function main() {
     const watchBucketPickupPostureBridgeCommand = commands.find((entry) => entry.command === 'watch.bucket_pickup_posture_bridge.preview');
     const watchBucketDisposablePersistenceFixtureCommand = commands.find((entry) => entry.command === 'watch.bucket_disposable_persistence_fixture.preview');
     const watchBucketProductPersistenceCommand = commands.find((entry) => entry.command === 'watch.bucket_product_persistence.emit');
+    const watchBucketProductPickupReadoutCommand = commands.find((entry) => entry.command === 'watch.bucket_product_pickup_readout.preview');
     const watchDiscoveryPickupPacketCommand = commands.find((entry) => entry.command === 'watch.discovery_pickup_packet_proof.preview');
     const discoveryPickupConsumerFixtureCommand = commands.find((entry) => entry.command === 'discovery.pickup_consumer_fixture.preview');
     const discoveryPickupConsumerHoldContractCommand = commands.find((entry) => entry.command === 'discovery.pickup_consumer_hold_contract.preview');
+    const discoveryPickupSelectionContractCommand = commands.find((entry) => entry.command === 'discovery.pickup_selection_contract.preview');
+    const discoveryProviderRoutePacketCommand = commands.find((entry) => entry.command === 'discovery.provider_route_packet.preview');
+    const discoveryPickupExecutionBoundaryCommand = commands.find((entry) => entry.command === 'discovery.pickup_execution_boundary.preview');
+    const discoveryDispatcherLeaseBoundaryCommand = commands.find((entry) => entry.command === 'discovery.dispatcher_lease_boundary.preview');
+    const discoveryCandidateRefLandingBoundaryCommand = commands.find((entry) => entry.command === 'discovery.candidate_ref_landing_boundary.preview');
     const discoveryOutcomeDerivationCommand = commands.find((entry) => entry.command === 'discovery.outcome_derivation.preview');
     const discoveryReceiptProjectionFixtureCommand = commands.find((entry) => entry.command === 'discovery.receipt_projection_fixture.preview');
     const watchDiscoveryAcquisitionSplitFixtureCommand = commands.find((entry) => entry.command === 'watch.discovery_acquisition_split_fixture.preview');
@@ -295,12 +301,30 @@ async function main() {
     assert(watchBucketProductPersistenceCommand?.classification === 'metadata-only', 'Watch bucket product persistence should be metadata-only');
     assert(watchBucketProductPersistenceCommand?.renderer_allowed === false, 'Watch bucket product persistence should not be renderer eligible');
     assert(watchBucketProductPersistenceCommand?.effects.includes('local-data-mutation'), 'Watch bucket product persistence should declare local-data-mutation effect');
+    assert(watchBucketProductPickupReadoutCommand?.classification === 'read-only', 'Watch bucket product pickup readout should be read-only');
+    assert(watchBucketProductPickupReadoutCommand?.renderer_allowed === true, 'Watch bucket product pickup readout should be renderer eligible');
+    assert(watchBucketProductPickupReadoutCommand?.effects.includes('read-only'), 'Watch bucket product pickup readout should declare read-only effect');
     assert(watchDiscoveryPickupPacketCommand?.classification === 'read-only', 'Watch Discovery pickup packet proof should be read-only');
     assert(watchDiscoveryPickupPacketCommand?.renderer_allowed === true, 'Watch Discovery pickup packet proof should be renderer eligible');
     assert(discoveryPickupConsumerFixtureCommand?.classification === 'read-only', 'Discovery pickup consumer fixture should be read-only');
     assert(discoveryPickupConsumerFixtureCommand?.renderer_allowed === true, 'Discovery pickup consumer fixture should be renderer eligible');
     assert(discoveryPickupConsumerHoldContractCommand?.classification === 'read-only', 'Discovery pickup consumer hold contract should be read-only');
     assert(discoveryPickupConsumerHoldContractCommand?.renderer_allowed === true, 'Discovery pickup consumer hold contract should be renderer eligible');
+    assert(discoveryPickupSelectionContractCommand?.classification === 'read-only', 'Discovery pickup selection contract should be read-only');
+    assert(discoveryPickupSelectionContractCommand?.renderer_allowed === true, 'Discovery pickup selection contract should be renderer eligible');
+    assert(discoveryPickupSelectionContractCommand?.effects.includes('read-only'), 'Discovery pickup selection contract should declare read-only effect');
+    assert(discoveryProviderRoutePacketCommand?.classification === 'read-only', 'Discovery provider route packet preview should be read-only');
+    assert(discoveryProviderRoutePacketCommand?.renderer_allowed === true, 'Discovery provider route packet preview should be renderer eligible');
+    assert(discoveryProviderRoutePacketCommand?.effects.includes('read-only'), 'Discovery provider route packet preview should declare read-only effect');
+    assert(discoveryPickupExecutionBoundaryCommand?.classification === 'read-only', 'Discovery pickup execution boundary preview should be read-only');
+    assert(discoveryPickupExecutionBoundaryCommand?.renderer_allowed === true, 'Discovery pickup execution boundary preview should be renderer eligible');
+    assert(discoveryPickupExecutionBoundaryCommand?.effects.includes('read-only'), 'Discovery pickup execution boundary preview should declare read-only effect');
+    assert(discoveryDispatcherLeaseBoundaryCommand?.classification === 'read-only', 'Discovery dispatcher lease boundary preview should be read-only');
+    assert(discoveryDispatcherLeaseBoundaryCommand?.renderer_allowed === true, 'Discovery dispatcher lease boundary preview should be renderer eligible');
+    assert(discoveryDispatcherLeaseBoundaryCommand?.effects.includes('read-only'), 'Discovery dispatcher lease boundary preview should declare read-only effect');
+    assert(discoveryCandidateRefLandingBoundaryCommand?.classification === 'read-only', 'Discovery candidate ref landing boundary preview should be read-only');
+    assert(discoveryCandidateRefLandingBoundaryCommand?.renderer_allowed === true, 'Discovery candidate ref landing boundary preview should be renderer eligible');
+    assert(discoveryCandidateRefLandingBoundaryCommand?.effects.includes('read-only'), 'Discovery candidate ref landing boundary preview should declare read-only effect');
     assert(discoveryOutcomeDerivationCommand?.classification === 'read-only', 'Discovery outcome derivation should be read-only');
     assert(discoveryOutcomeDerivationCommand?.renderer_allowed === true, 'Discovery outcome derivation should be renderer eligible');
     assert(discoveryReceiptProjectionFixtureCommand?.classification === 'read-only', 'Discovery receipt projection fixture should be read-only');
@@ -851,6 +875,235 @@ async function main() {
     assert(discoveryPickupConsumerHoldContract.cadence_mutations === 0, 'Discovery pickup consumer hold contract should not mutate cadence');
     assert(discoveryPickupConsumerHoldContract.schema_changes === 0, 'Discovery pickup consumer hold contract should not change schema');
     assert(discoveryPickupConsumerHoldContract.runtime_enforcement_active === false, 'Discovery pickup consumer hold contract should not activate enforcement');
+
+    const watchBucketProductPickupReadout = await invokeServiceCommand('watch.bucket_product_pickup_readout.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchBucketProductPickupReadout.read_only === true, 'Watch bucket product pickup readout should declare read-only behavior');
+    assert(watchBucketProductPickupReadout.product_bucket_readout === true, 'Watch bucket product pickup readout should be product bucket readout');
+    assert(watchBucketProductPickupReadout.fixture_only === false, 'Watch bucket product pickup readout should not be fixture-only');
+    assert(watchBucketProductPickupReadout.product_schema_used === true, 'Watch bucket product pickup readout should use product schema rows');
+    assert(watchBucketProductPickupReadout.product_schema_updated === false, 'Watch bucket product pickup readout should not update product schema');
+    assert(watchBucketProductPickupReadout.operator_corpus_mutated === false, 'Watch bucket product pickup readout should not mutate operator corpus');
+    assert(watchBucketProductPickupReadout.provider_calls === 0, 'Watch bucket product pickup readout should not call providers');
+    assert(watchBucketProductPickupReadout.live_api_calls === 0, 'Watch bucket product pickup readout should not make live/API calls');
+    assert(watchBucketProductPickupReadout.provider_packets === 0, 'Watch bucket product pickup readout should not create provider packets');
+    assert(watchBucketProductPickupReadout.discovery_pickup_started === false, 'Watch bucket product pickup readout should not start Discovery pickup');
+    assert(watchBucketProductPickupReadout.discovery_pickup_packets_created === 0, 'Watch bucket product pickup readout should not create Discovery pickup packets');
+    assert(watchBucketProductPickupReadout.leases_created === 0, 'Watch bucket product pickup readout should not create leases');
+    assert(watchBucketProductPickupReadout.queue_items_created === 0, 'Watch bucket product pickup readout should not create queue items');
+    assert(watchBucketProductPickupReadout.dispatcher_queue_lease_behavior === false, 'Watch bucket product pickup readout should not implement dispatcher/queue/lease behavior');
+    assert(watchBucketProductPickupReadout.candidate_refs_written === 0, 'Watch bucket product pickup readout should not write candidate refs');
+    assert(watchBucketProductPickupReadout.discovery_refs_mutated === 0, 'Watch bucket product pickup readout should not mutate Discovery refs');
+    assert(watchBucketProductPickupReadout.discovered_killmail_refs_written === 0, 'Watch bucket product pickup readout should not write discovered_killmail_refs');
+    assert(watchBucketProductPickupReadout.evidence_writes === 0, 'Watch bucket product pickup readout should not write Evidence/EVEidence');
+    assert(watchBucketProductPickupReadout.hydration_writes === 0, 'Watch bucket product pickup readout should not write Hydration output');
+    assert(watchBucketProductPickupReadout.observation_created === false, 'Watch bucket product pickup readout should not create Observation');
+    assert(watchBucketProductPickupReadout.watch_mutations === 0, 'Watch bucket product pickup readout should not mutate Watch rows');
+    assert(watchBucketProductPickupReadout.cadence_mutations === 0, 'Watch bucket product pickup readout should not mutate cadence');
+    assert(watchBucketProductPickupReadout.watch_bucket_status_mutations === 0, 'Watch bucket product pickup readout should not mutate bucket status');
+    assert(watchBucketProductPickupReadout.receipt_mutations === 0, 'Watch bucket product pickup readout should not mutate receipts');
+    assert(watchBucketProductPickupReadout.schema_changes === 0, 'Watch bucket product pickup readout should not change schema');
+    assert(watchBucketProductPickupReadout.runtime_enforcement_active === false, 'Watch bucket product pickup readout should not activate enforcement');
+    assert(watchBucketProductPickupReadout.command_blocking_active === false, 'Watch bucket product pickup readout should not activate command blocking');
+    assert(watchBucketProductPickupReadout.ui_work === false, 'Watch bucket product pickup readout should not do UI work');
+
+    const discoveryPickupSelectionContract = await invokeServiceCommand('discovery.pickup_selection_contract.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(discoveryPickupSelectionContract.read_only === true, 'Discovery pickup selection contract should declare read-only behavior');
+    assert(discoveryPickupSelectionContract.contract_only === true, 'Discovery pickup selection contract should be contract-only');
+    assert(discoveryPickupSelectionContract.product_bucket_readout_basis === true, 'Discovery pickup selection contract should use product bucket readout basis');
+    assert(discoveryPickupSelectionContract.product_schema_used === true, 'Discovery pickup selection contract should use product schema rows');
+    assert(discoveryPickupSelectionContract.product_schema_updated === false, 'Discovery pickup selection contract should not update product schema');
+    assert(discoveryPickupSelectionContract.operator_corpus_mutated === false, 'Discovery pickup selection contract should not mutate operator corpus');
+    assert(discoveryPickupSelectionContract.selection_creates_pickup_units === false, 'Discovery pickup selection contract should not create pickup units');
+    assert(discoveryPickupSelectionContract.production_pickup_execution === false, 'Discovery pickup selection contract should not execute pickup');
+    assert(discoveryPickupSelectionContract.provider_calls === 0, 'Discovery pickup selection contract should not call providers');
+    assert(discoveryPickupSelectionContract.live_api_calls === 0, 'Discovery pickup selection contract should not make live/API calls');
+    assert(discoveryPickupSelectionContract.provider_packets === 0, 'Discovery pickup selection contract should not create provider packets');
+    assert(discoveryPickupSelectionContract.discovery_pickup_started === false, 'Discovery pickup selection contract should not start Discovery pickup');
+    assert(discoveryPickupSelectionContract.discovery_pickup_packets_created === 0, 'Discovery pickup selection contract should not create Discovery pickup packets');
+    assert(discoveryPickupSelectionContract.pickup_units_created === 0, 'Discovery pickup selection contract should not create pickup units');
+    assert(discoveryPickupSelectionContract.leases_created === 0, 'Discovery pickup selection contract should not create leases');
+    assert(discoveryPickupSelectionContract.queue_items_created === 0, 'Discovery pickup selection contract should not create queue items');
+    assert(discoveryPickupSelectionContract.durable_discovery_task_rows_written === 0, 'Discovery pickup selection contract should not write durable Discovery task rows');
+    assert(discoveryPickupSelectionContract.dispatcher_queue_lease_behavior === false, 'Discovery pickup selection contract should not implement dispatcher/queue/lease behavior');
+    assert(discoveryPickupSelectionContract.candidate_refs_written === 0, 'Discovery pickup selection contract should not write candidate refs');
+    assert(discoveryPickupSelectionContract.discovery_refs_mutated === 0, 'Discovery pickup selection contract should not mutate Discovery refs');
+    assert(discoveryPickupSelectionContract.discovered_killmail_refs_written === 0, 'Discovery pickup selection contract should not write discovered_killmail_refs');
+    assert(discoveryPickupSelectionContract.evidence_writes === 0, 'Discovery pickup selection contract should not write Evidence/EVEidence');
+    assert(discoveryPickupSelectionContract.hydration_writes === 0, 'Discovery pickup selection contract should not write Hydration output');
+    assert(discoveryPickupSelectionContract.observation_created === false, 'Discovery pickup selection contract should not create Observation');
+    assert(discoveryPickupSelectionContract.watch_mutations === 0, 'Discovery pickup selection contract should not mutate Watch rows');
+    assert(discoveryPickupSelectionContract.cadence_mutations === 0, 'Discovery pickup selection contract should not mutate cadence');
+    assert(discoveryPickupSelectionContract.watch_bucket_status_mutations === 0, 'Discovery pickup selection contract should not mutate bucket status');
+    assert(discoveryPickupSelectionContract.receipt_mutations === 0, 'Discovery pickup selection contract should not mutate receipts');
+    assert(discoveryPickupSelectionContract.schema_changes === 0, 'Discovery pickup selection contract should not change schema');
+    assert(discoveryPickupSelectionContract.runtime_enforcement_active === false, 'Discovery pickup selection contract should not activate enforcement');
+    assert(discoveryPickupSelectionContract.command_blocking_active === false, 'Discovery pickup selection contract should not activate command blocking');
+    assert(discoveryPickupSelectionContract.ui_work === false, 'Discovery pickup selection contract should not do UI work');
+
+    const discoveryProviderRoutePacket = await invokeServiceCommand('discovery.provider_route_packet.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(discoveryProviderRoutePacket.read_only === true, 'Discovery provider route packet preview should declare read-only behavior');
+    assert(discoveryProviderRoutePacket.contract_only === true, 'Discovery provider route packet preview should be contract-only');
+    assert(discoveryProviderRoutePacket.preview_only === true, 'Discovery provider route packet preview should be preview-only');
+    assert(discoveryProviderRoutePacket.product_bucket_selection_basis === true, 'Discovery provider route packet preview should use product selection basis');
+    assert(discoveryProviderRoutePacket.provider_route_packet_shape_only === true, 'Discovery provider route packet preview should be shape-only');
+    assert(discoveryProviderRoutePacket.provider_route_packets_are_preview_only === true, 'Discovery provider route packets should be preview-only');
+    assert(discoveryProviderRoutePacket.provider_route_packets_execute === false, 'Discovery provider route packets should not execute');
+    assert(discoveryProviderRoutePacket.route_packets_for_later_zkill_candidate_acquisition_only === true, 'Discovery provider route packets should be for later zKill candidate acquisition only');
+    assert(discoveryProviderRoutePacket.route_packets_are_not_evidence_expansion === true, 'Discovery provider route packets should not be Evidence expansion');
+    assert(discoveryProviderRoutePacket.route_packets_are_not_hydration === true, 'Discovery provider route packets should not be Hydration');
+    assert(discoveryProviderRoutePacket.center_radius_execution_authority === false, 'Discovery provider route packet preview should not use center/radius as execution authority');
+    assert(discoveryProviderRoutePacket.center_radius_provenance_only === true, 'Discovery provider route packet preview should keep center/radius as provenance only');
+    assert(discoveryProviderRoutePacket.product_schema_updated === false, 'Discovery provider route packet preview should not update product schema');
+    assert(discoveryProviderRoutePacket.operator_corpus_mutated === false, 'Discovery provider route packet preview should not mutate operator corpus');
+    assert(discoveryProviderRoutePacket.production_pickup_execution === false, 'Discovery provider route packet preview should not execute pickup');
+    assert(discoveryProviderRoutePacket.provider_calls === 0, 'Discovery provider route packet preview should not call providers');
+    assert(discoveryProviderRoutePacket.live_api_calls === 0, 'Discovery provider route packet preview should not make live/API calls');
+    assert(discoveryProviderRoutePacket.zkill_calls === 0, 'Discovery provider route packet preview should not call zKill');
+    assert(discoveryProviderRoutePacket.esi_calls === 0, 'Discovery provider route packet preview should not call ESI');
+    assert(discoveryProviderRoutePacket.discovery_pickup_started === false, 'Discovery provider route packet preview should not start Discovery pickup');
+    assert(discoveryProviderRoutePacket.pickup_units_created === 0, 'Discovery provider route packet preview should not create pickup units');
+    assert(discoveryProviderRoutePacket.leases_created === 0, 'Discovery provider route packet preview should not create leases');
+    assert(discoveryProviderRoutePacket.queue_items_created === 0, 'Discovery provider route packet preview should not create queue items');
+    assert(discoveryProviderRoutePacket.durable_discovery_task_rows_written === 0, 'Discovery provider route packet preview should not write durable Discovery task rows');
+    assert(discoveryProviderRoutePacket.dispatcher_queue_lease_behavior === false, 'Discovery provider route packet preview should not implement dispatcher/queue/lease behavior');
+    assert(discoveryProviderRoutePacket.provider_packets_created === 0, 'Discovery provider route packet preview should not create executable provider packets');
+    assert(discoveryProviderRoutePacket.provider_packets_dispatched === 0, 'Discovery provider route packet preview should not dispatch provider packets');
+    assert(discoveryProviderRoutePacket.candidate_refs_written === 0, 'Discovery provider route packet preview should not write candidate refs');
+    assert(discoveryProviderRoutePacket.discovery_refs_mutated === 0, 'Discovery provider route packet preview should not mutate Discovery refs');
+    assert(discoveryProviderRoutePacket.discovered_killmail_refs_written === 0, 'Discovery provider route packet preview should not write discovered_killmail_refs');
+    assert(discoveryProviderRoutePacket.evidence_writes === 0, 'Discovery provider route packet preview should not write Evidence/EVEidence');
+    assert(discoveryProviderRoutePacket.hydration_writes === 0, 'Discovery provider route packet preview should not write Hydration output');
+    assert(discoveryProviderRoutePacket.observation_created === false, 'Discovery provider route packet preview should not create Observation');
+    assert(discoveryProviderRoutePacket.watch_mutations === 0, 'Discovery provider route packet preview should not mutate Watch rows');
+    assert(discoveryProviderRoutePacket.cadence_mutations === 0, 'Discovery provider route packet preview should not mutate cadence');
+    assert(discoveryProviderRoutePacket.watch_bucket_status_mutations === 0, 'Discovery provider route packet preview should not mutate bucket status');
+    assert(discoveryProviderRoutePacket.receipt_mutations === 0, 'Discovery provider route packet preview should not mutate receipts');
+    assert(discoveryProviderRoutePacket.schema_changes === 0, 'Discovery provider route packet preview should not change schema');
+    assert(discoveryProviderRoutePacket.runtime_enforcement_active === false, 'Discovery provider route packet preview should not activate enforcement');
+    assert(discoveryProviderRoutePacket.command_blocking_active === false, 'Discovery provider route packet preview should not activate command blocking');
+    assert(discoveryProviderRoutePacket.ui_work === false, 'Discovery provider route packet preview should not do UI work');
+
+    const discoveryPickupExecutionBoundary = await invokeServiceCommand('discovery.pickup_execution_boundary.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(discoveryPickupExecutionBoundary.read_only === true, 'Discovery pickup execution boundary preview should declare read-only behavior');
+    assert(discoveryPickupExecutionBoundary.boundary_preview_only === true, 'Discovery pickup execution boundary preview should be boundary-only');
+    assert(discoveryPickupExecutionBoundary.contract_only === true, 'Discovery pickup execution boundary preview should be contract-only');
+    assert(discoveryPickupExecutionBoundary.preview_only === true, 'Discovery pickup execution boundary preview should be preview-only');
+    assert(discoveryPickupExecutionBoundary.hs489_route_packet_preview_basis === true, 'Discovery pickup execution boundary preview should use HS489 route preview basis');
+    assert(discoveryPickupExecutionBoundary.pickup_execution_started === false, 'Discovery pickup execution boundary preview should not start pickup execution');
+    assert(discoveryPickupExecutionBoundary.boundary_preview_is_dispatcher === false, 'Discovery pickup execution boundary preview should not be dispatcher');
+    assert(discoveryPickupExecutionBoundary.boundary_preview_is_queue === false, 'Discovery pickup execution boundary preview should not be queue');
+    assert(discoveryPickupExecutionBoundary.boundary_preview_is_lease === false, 'Discovery pickup execution boundary preview should not be lease');
+    assert(discoveryPickupExecutionBoundary.boundary_preview_is_provider_worker === false, 'Discovery pickup execution boundary preview should not be provider worker');
+    assert(discoveryPickupExecutionBoundary.executable_provider_packets_created === 0, 'Discovery pickup execution boundary preview should not create executable provider packets');
+    assert(discoveryPickupExecutionBoundary.provider_calls === 0, 'Discovery pickup execution boundary preview should not call providers');
+    assert(discoveryPickupExecutionBoundary.live_api_calls === 0, 'Discovery pickup execution boundary preview should not make live/API calls');
+    assert(discoveryPickupExecutionBoundary.zkill_calls === 0, 'Discovery pickup execution boundary preview should not call zKill');
+    assert(discoveryPickupExecutionBoundary.esi_calls === 0, 'Discovery pickup execution boundary preview should not call ESI');
+    assert(discoveryPickupExecutionBoundary.pickup_units_created === 0, 'Discovery pickup execution boundary preview should not create pickup units');
+    assert(discoveryPickupExecutionBoundary.leases_created === 0, 'Discovery pickup execution boundary preview should not create leases');
+    assert(discoveryPickupExecutionBoundary.queue_items_created === 0, 'Discovery pickup execution boundary preview should not create queue items');
+    assert(discoveryPickupExecutionBoundary.durable_discovery_task_rows_written === 0, 'Discovery pickup execution boundary preview should not write durable Discovery task rows');
+    assert(discoveryPickupExecutionBoundary.dispatcher_queue_lease_behavior === false, 'Discovery pickup execution boundary preview should not implement dispatcher/queue/lease behavior');
+    assert(discoveryPickupExecutionBoundary.candidate_refs_written === 0, 'Discovery pickup execution boundary preview should not write candidate refs');
+    assert(discoveryPickupExecutionBoundary.discovery_refs_mutated === 0, 'Discovery pickup execution boundary preview should not mutate Discovery refs');
+    assert(discoveryPickupExecutionBoundary.discovered_killmail_refs_written === 0, 'Discovery pickup execution boundary preview should not write discovered_killmail_refs');
+    assert(discoveryPickupExecutionBoundary.evidence_writes === 0, 'Discovery pickup execution boundary preview should not write Evidence/EVEidence');
+    assert(discoveryPickupExecutionBoundary.hydration_writes === 0, 'Discovery pickup execution boundary preview should not write Hydration output');
+    assert(discoveryPickupExecutionBoundary.observation_created === false, 'Discovery pickup execution boundary preview should not create Observation');
+    assert(discoveryPickupExecutionBoundary.watch_mutations === 0, 'Discovery pickup execution boundary preview should not mutate Watch rows');
+    assert(discoveryPickupExecutionBoundary.cadence_mutations === 0, 'Discovery pickup execution boundary preview should not mutate cadence');
+    assert(discoveryPickupExecutionBoundary.watch_bucket_status_mutations === 0, 'Discovery pickup execution boundary preview should not mutate bucket status');
+    assert(discoveryPickupExecutionBoundary.receipt_mutations === 0, 'Discovery pickup execution boundary preview should not mutate receipts');
+    assert(discoveryPickupExecutionBoundary.schema_changes === 0, 'Discovery pickup execution boundary preview should not change schema');
+    assert(discoveryPickupExecutionBoundary.runtime_enforcement_active === false, 'Discovery pickup execution boundary preview should not activate enforcement');
+    assert(discoveryPickupExecutionBoundary.command_blocking_active === false, 'Discovery pickup execution boundary preview should not activate command blocking');
+    assert(discoveryPickupExecutionBoundary.ui_work === false, 'Discovery pickup execution boundary preview should not do UI work');
+
+    const discoveryDispatcherLeaseBoundary = await invokeServiceCommand('discovery.dispatcher_lease_boundary.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(discoveryDispatcherLeaseBoundary.read_only === true, 'Discovery dispatcher lease boundary preview should declare read-only behavior');
+    assert(discoveryDispatcherLeaseBoundary.lease_boundary_preview_only === true, 'Discovery dispatcher lease boundary preview should be boundary-only');
+    assert(discoveryDispatcherLeaseBoundary.contract_only === true, 'Discovery dispatcher lease boundary preview should be contract-only');
+    assert(discoveryDispatcherLeaseBoundary.preview_only === true, 'Discovery dispatcher lease boundary preview should be preview-only');
+    assert(discoveryDispatcherLeaseBoundary.hs491_pickup_execution_boundary_basis === true, 'Discovery dispatcher lease boundary preview should use HS491 boundary basis');
+    assert(discoveryDispatcherLeaseBoundary.dispatcher_runtime_started === false, 'Discovery dispatcher lease boundary preview should not start dispatcher runtime');
+    assert(discoveryDispatcherLeaseBoundary.dispatcher_loop_started === false, 'Discovery dispatcher lease boundary preview should not start dispatcher loop');
+    assert(discoveryDispatcherLeaseBoundary.queue_runtime_created === false, 'Discovery dispatcher lease boundary preview should not create queue runtime');
+    assert(discoveryDispatcherLeaseBoundary.durable_queue_rows_written === 0, 'Discovery dispatcher lease boundary preview should not write durable queue rows');
+    assert(discoveryDispatcherLeaseBoundary.durable_lease_rows_written === 0, 'Discovery dispatcher lease boundary preview should not write durable lease rows');
+    assert(discoveryDispatcherLeaseBoundary.leases_created === 0, 'Discovery dispatcher lease boundary preview should not create leases');
+    assert(discoveryDispatcherLeaseBoundary.lease_claims_created === 0, 'Discovery dispatcher lease boundary preview should not create lease claims');
+    assert(discoveryDispatcherLeaseBoundary.lease_claimed === false, 'Discovery dispatcher lease boundary preview should not claim leases');
+    assert(discoveryDispatcherLeaseBoundary.pickup_execution_started === false, 'Discovery dispatcher lease boundary preview should not start pickup execution');
+    assert(discoveryDispatcherLeaseBoundary.executable_provider_packets_created === 0, 'Discovery dispatcher lease boundary preview should not create executable provider packets');
+    assert(discoveryDispatcherLeaseBoundary.provider_calls === 0, 'Discovery dispatcher lease boundary preview should not call providers');
+    assert(discoveryDispatcherLeaseBoundary.live_api_calls === 0, 'Discovery dispatcher lease boundary preview should not make live/API calls');
+    assert(discoveryDispatcherLeaseBoundary.zkill_calls === 0, 'Discovery dispatcher lease boundary preview should not call zKill');
+    assert(discoveryDispatcherLeaseBoundary.esi_calls === 0, 'Discovery dispatcher lease boundary preview should not call ESI');
+    assert(discoveryDispatcherLeaseBoundary.candidate_refs_written === 0, 'Discovery dispatcher lease boundary preview should not write candidate refs');
+    assert(discoveryDispatcherLeaseBoundary.discovery_refs_mutated === 0, 'Discovery dispatcher lease boundary preview should not mutate Discovery refs');
+    assert(discoveryDispatcherLeaseBoundary.discovered_killmail_refs_written === 0, 'Discovery dispatcher lease boundary preview should not write discovered_killmail_refs');
+    assert(discoveryDispatcherLeaseBoundary.evidence_writes === 0, 'Discovery dispatcher lease boundary preview should not write Evidence/EVEidence');
+    assert(discoveryDispatcherLeaseBoundary.hydration_writes === 0, 'Discovery dispatcher lease boundary preview should not write Hydration output');
+    assert(discoveryDispatcherLeaseBoundary.observation_created === false, 'Discovery dispatcher lease boundary preview should not create Observation');
+    assert(discoveryDispatcherLeaseBoundary.watch_mutations === 0, 'Discovery dispatcher lease boundary preview should not mutate Watch rows');
+    assert(discoveryDispatcherLeaseBoundary.cadence_mutations === 0, 'Discovery dispatcher lease boundary preview should not mutate cadence');
+    assert(discoveryDispatcherLeaseBoundary.watch_bucket_status_mutations === 0, 'Discovery dispatcher lease boundary preview should not mutate bucket status');
+    assert(discoveryDispatcherLeaseBoundary.receipt_mutations === 0, 'Discovery dispatcher lease boundary preview should not mutate receipts');
+    assert(discoveryDispatcherLeaseBoundary.schema_changes === 0, 'Discovery dispatcher lease boundary preview should not change schema');
+    assert(discoveryDispatcherLeaseBoundary.runtime_enforcement_active === false, 'Discovery dispatcher lease boundary preview should not activate enforcement');
+    assert(discoveryDispatcherLeaseBoundary.command_blocking_active === false, 'Discovery dispatcher lease boundary preview should not activate command blocking');
+    assert(discoveryDispatcherLeaseBoundary.ui_work === false, 'Discovery dispatcher lease boundary preview should not do UI work');
+
+    const discoveryCandidateRefLandingBoundary = await invokeServiceCommand('discovery.candidate_ref_landing_boundary.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(discoveryCandidateRefLandingBoundary.read_only === true, 'Discovery candidate ref landing boundary preview should declare read-only behavior');
+    assert(discoveryCandidateRefLandingBoundary.candidate_ref_landing_boundary_preview_only === true, 'Discovery candidate ref landing boundary preview should be boundary-only');
+    assert(discoveryCandidateRefLandingBoundary.contract_only === true, 'Discovery candidate ref landing boundary preview should be contract-only');
+    assert(discoveryCandidateRefLandingBoundary.preview_only === true, 'Discovery candidate ref landing boundary preview should be preview-only');
+    assert(discoveryCandidateRefLandingBoundary.hs493_dispatcher_lease_boundary_basis === true, 'Discovery candidate ref landing boundary preview should use HS493 lease basis');
+    assert(discoveryCandidateRefLandingBoundary.provider_results_fixture_only === true, 'Discovery candidate ref landing boundary preview should use fixture provider results only');
+    assert(discoveryCandidateRefLandingBoundary.provider_result_examples_execute_provider_calls === false, 'Discovery candidate ref landing boundary preview should not execute provider result examples');
+    assert(discoveryCandidateRefLandingBoundary.provider_calls === 0, 'Discovery candidate ref landing boundary preview should not call providers');
+    assert(discoveryCandidateRefLandingBoundary.live_api_calls === 0, 'Discovery candidate ref landing boundary preview should not make live/API calls');
+    assert(discoveryCandidateRefLandingBoundary.zkill_calls === 0, 'Discovery candidate ref landing boundary preview should not call zKill');
+    assert(discoveryCandidateRefLandingBoundary.esi_calls === 0, 'Discovery candidate ref landing boundary preview should not call ESI');
+    assert(discoveryCandidateRefLandingBoundary.discovery_pickup_execution === false, 'Discovery candidate ref landing boundary preview should not execute pickup');
+    assert(discoveryCandidateRefLandingBoundary.dispatcher_runtime_started === false, 'Discovery candidate ref landing boundary preview should not start dispatcher runtime');
+    assert(discoveryCandidateRefLandingBoundary.durable_queue_rows_written === 0, 'Discovery candidate ref landing boundary preview should not write durable queue rows');
+    assert(discoveryCandidateRefLandingBoundary.durable_lease_rows_written === 0, 'Discovery candidate ref landing boundary preview should not write durable lease rows');
+    assert(discoveryCandidateRefLandingBoundary.lease_claims_created === 0, 'Discovery candidate ref landing boundary preview should not create lease claims');
+    assert(discoveryCandidateRefLandingBoundary.candidate_refs_written === 0, 'Discovery candidate ref landing boundary preview should not write candidate refs');
+    assert(discoveryCandidateRefLandingBoundary.discovered_killmail_refs_written === 0, 'Discovery candidate ref landing boundary preview should not write discovered_killmail_refs');
+    assert(discoveryCandidateRefLandingBoundary.discovery_refs_mutated === 0, 'Discovery candidate ref landing boundary preview should not mutate Discovery refs');
+    assert(discoveryCandidateRefLandingBoundary.evidence_writes === 0, 'Discovery candidate ref landing boundary preview should not write Evidence/EVEidence');
+    assert(discoveryCandidateRefLandingBoundary.hydration_writes === 0, 'Discovery candidate ref landing boundary preview should not write Hydration output');
+    assert(discoveryCandidateRefLandingBoundary.observation_created === false, 'Discovery candidate ref landing boundary preview should not create Observation');
+    assert(discoveryCandidateRefLandingBoundary.watch_completion_semantics_opened === false, 'Discovery candidate ref landing boundary preview should not open Watch completion semantics');
+    assert(discoveryCandidateRefLandingBoundary.watch_mutations === 0, 'Discovery candidate ref landing boundary preview should not mutate Watch rows');
+    assert(discoveryCandidateRefLandingBoundary.cadence_mutations === 0, 'Discovery candidate ref landing boundary preview should not mutate cadence');
+    assert(discoveryCandidateRefLandingBoundary.watch_bucket_status_mutations === 0, 'Discovery candidate ref landing boundary preview should not mutate bucket status');
+    assert(discoveryCandidateRefLandingBoundary.receipt_mutations === 0, 'Discovery candidate ref landing boundary preview should not mutate receipts');
+    assert(discoveryCandidateRefLandingBoundary.schema_changes === 0, 'Discovery candidate ref landing boundary preview should not change schema');
+    assert(discoveryCandidateRefLandingBoundary.runtime_enforcement_active === false, 'Discovery candidate ref landing boundary preview should not activate enforcement');
+    assert(discoveryCandidateRefLandingBoundary.command_blocking_active === false, 'Discovery candidate ref landing boundary preview should not activate command blocking');
+    assert(discoveryCandidateRefLandingBoundary.ui_work === false, 'Discovery candidate ref landing boundary preview should not do UI work');
 
     const discoveryOutcomeDerivation = await invokeServiceCommand('discovery.outcome_derivation.preview', {}, {
       db,

@@ -74,9 +74,15 @@ const { buildWatchBucketIdentityProjectionPreview } = require('./watchBucketIden
 const { buildWatchBucketPickupPostureBridgePreview } = require('./watchBucketPickupPostureBridgeService');
 const { buildWatchBucketDisposablePersistenceFixtureProof } = require('./watchBucketDisposablePersistenceFixtureService');
 const { buildWatchBucketProductPersistenceProof } = require('./watchBucketProductPersistenceService');
+const { buildWatchBucketProductPickupReadout } = require('./watchBucketProductPickupReadoutService');
 const { buildWatchDiscoveryPickupPacketProof } = require('./watchDiscoveryPickupPacketProofService');
 const { buildDiscoveryPickupConsumerFixtureProof } = require('./discoveryPickupConsumerFixtureService');
 const { buildDiscoveryPickupConsumerHoldContractProof } = require('./discoveryPickupConsumerHoldContractService');
+const { buildDiscoveryPickupSelectionContract } = require('./discoveryPickupSelectionContractService');
+const { buildDiscoveryProviderRoutePacketPreview } = require('./discoveryProviderRoutePacketPreviewService');
+const { buildDiscoveryPickupExecutionBoundaryPreview } = require('./discoveryPickupExecutionBoundaryPreviewService');
+const { buildDiscoveryDispatcherLeaseBoundaryPreview } = require('./discoveryDispatcherLeaseBoundaryPreviewService');
+const { buildDiscoveryCandidateRefLandingBoundaryPreview } = require('./discoveryCandidateRefLandingBoundaryPreviewService');
 const { buildDiscoveryOutcomeDerivationPreview } = require('./discoveryOutcomeDerivationService');
 const { buildDiscoveryReceiptProjectionFixturePreview } = require('./discoveryReceiptProjectionFixtureService');
 const { buildWatchDiscoveryAcquisitionSplitFixturePreview } = require('./watchDiscoveryAcquisitionSplitFixtureService');
@@ -806,6 +812,13 @@ const COMMANDS = {
     description: 'Trusted local system/radius Watch bucket persistence surface; creates or reads open bucket items without Discovery pickup, providers, refs, Evidence, Watch cadence mutation, schema runtime, or UI work',
     handler: ({ db, payload, ...context }) => buildWatchBucketProductPersistenceProof(db, payload, context)
   },
+  'watch.bucket_product_pickup_readout.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Read product watch_bucket_items rows and classify future Discovery pickup posture without pickup, providers, refs, writes, schema, cadence, receipts, or UI work',
+    handler: ({ db, payload }) => buildWatchBucketProductPickupReadout(db, payload)
+  },
   'watch.discovery_pickup_packet_proof.preview': {
     classification: 'read-only',
     effects: [EFFECTS.READ_ONLY],
@@ -826,6 +839,41 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview fixture-only Discovery pickup consumer eligibility or External I/O hold contract from disposable bucket rows without pickup, leases, providers, refs, writes, schema, or UI work',
     handler: ({ db, payload }) => buildDiscoveryPickupConsumerHoldContractProof(db, payload)
+  },
+  'discovery.pickup_selection_contract.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview Discovery pickup selection candidates from eligible product Watch bucket readout rows without pickup, leases, providers, refs, writes, schema, receipts, cadence, or UI work',
+    handler: ({ db, payload, ...context }) => buildDiscoveryPickupSelectionContract(db, payload, context)
+  },
+  'discovery.provider_route_packet.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview inert zKill provider-route packets from selected Discovery pickup candidates without pickup, dispatch, providers, refs, writes, schema, receipts, cadence, or UI work',
+    handler: ({ db, payload, ...context }) => buildDiscoveryProviderRoutePacketPreview(db, payload, context)
+  },
+  'discovery.pickup_execution_boundary.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview the pre-provider Discovery pickup execution boundary from inert route packets without pickup, dispatch, leases, providers, refs, writes, schema, receipts, cadence, or UI work',
+    handler: ({ db, payload, ...context }) => buildDiscoveryPickupExecutionBoundaryPreview(db, payload, context)
+  },
+  'discovery.dispatcher_lease_boundary.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview future Discovery dispatcher lease candidacy from pickup execution boundary packets without dispatcher runtime, queues, leases, claims, providers, refs, writes, schema, receipts, cadence, or UI work',
+    handler: ({ db, payload, ...context }) => buildDiscoveryDispatcherLeaseBoundaryPreview(db, payload, context)
+  },
+  'discovery.candidate_ref_landing_boundary.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview Discovery candidate-ref landing posture from lease candidates and fixture provider results without providers, ref writes, Evidence, Hydration, schema, receipts, cadence, or UI work',
+    handler: ({ db, payload, ...context }) => buildDiscoveryCandidateRefLandingBoundaryPreview(db, payload, context)
   },
   'discovery.outcome_derivation.preview': {
     classification: 'read-only',
