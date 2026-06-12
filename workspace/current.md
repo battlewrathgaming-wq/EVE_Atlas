@@ -1,6 +1,6 @@
 # AURA Atlas Current Work
 
-Status: HS495 Discovery candidate-ref landing boundary preview accepted
+Status: HS497 Discovery settled receipt boundary preview accepted
 Last updated: 2026-06-12
 
 This file is the active working desk. Older milestone detail was preserved before flattening at:
@@ -96,6 +96,8 @@ HS495 opens the next narrow seam: a read-only Discovery candidate-ref landing bo
 
 HS495 is accepted by HS496. Atlas can now classify fixture zKill provider-result refs at the Discovery candidate-ref landing boundary while keeping candidate refs as Discovery possible leads only, not Evidence/EVEidence. It proves `killmail_id + hash` identity, dedupe posture, malformed/missing-hash rejection, capped/deferred/failure posture, and provenance relationship preview without provider calls, candidate-ref writes, Discovery ref writes, Evidence/EVEidence, Hydration, Observation, Watch cadence mutation, bucket status mutation, receipt mutation, schema changes, enforcement, or UI.
 
+HS497 is accepted by HS499 after HS498 correction. Atlas can now project bounded factual caller-safe Discovery receipt rows from HS495 candidate-ref landing posture while keeping accepted new refs, already-known refs, suppressed duplicates, and malformed rejections distinct. Discovery still does not decide Watch cadence/completion behavior or mutate receipts, buckets, Watch rows, Discovery refs, Evidence/EVEidence, Hydration, Observation, schema, enforcement, or UI.
+
 ## Current Executor
 
 Current executor: none - stable landing
@@ -133,13 +135,13 @@ workspace/OverseerHS483-warm-start-hs482-review.md
 Latest accepted review:
 
 ```txt
-workspace/OverseerHS496-hs495-discovery-candidate-ref-landing-boundary-preview-review.md
+workspace/OverseerHS499-hs497-discovery-settled-receipt-boundary-preview-correction-review.md
 ```
 
 Latest completed Dev handoff:
 
 ```txt
-workspace/DevHS495-discovery-candidate-ref-landing-boundary-preview.md
+workspace/DevHS497-discovery-settled-receipt-boundary-preview.md
 ```
 
 Expected Dev handoff:
@@ -150,7 +152,7 @@ none
 
 ## Resting State
 
-HS495: Discovery candidate-ref landing boundary preview accepted.
+HS497: Discovery settled receipt boundary preview accepted.
 
 Active Dev runway:
 
@@ -161,18 +163,24 @@ none
 Latest accepted handoff:
 
 ```txt
-workspace/DevHS495-discovery-candidate-ref-landing-boundary-preview.md
+workspace/DevHS497-discovery-settled-receipt-boundary-preview.md
 ```
 
 Purpose:
 
 ```txt
-accepted read-only Discovery candidate-ref landing boundary preview from accepted HS493 lease candidates and fixture provider results; next decision is whether to prove receipt/status handling, audit candidate-ref persistence readiness, or pause for cleanup/commit readiness before any live/provider movement
+accepted read-only Discovery settled receipt boundary preview; next decision is whether to inspect receipt persistence readiness, Watch receipt consumption policy, or candidate-ref persistence readiness
 ```
 
 Boundary:
 
-HS495 is accepted as a read-only candidate-ref landing boundary preview only. No production actor Watch runtime change, `collectActorWatch(...)` retirement, system/radius Watch redirect, live/provider call, provider execution, Discovery pickup execution, durable lease, durable queue, dispatcher runtime, lease claim, candidate ref write, Discovery ref write, Evidence/EVEidence write, Hydration write, Observation/report change, Watch cadence mutation, bucket status mutation, receipt mutation, runtime enforcement, command blocking, UI, source-term rename, or protected-word JSON update is open.
+HS497 is accepted as a read-only settled receipt boundary preview only. No production actor Watch runtime change, `collectActorWatch(...)` retirement, system/radius Watch redirect, live/provider call, provider execution, Discovery pickup execution, durable lease, durable queue, dispatcher runtime, lease claim, candidate ref write, Discovery ref write, Evidence/EVEidence write, Hydration write, Observation/report change, Watch cadence mutation, bucket status mutation, receipt mutation, runtime enforcement, command blocking, UI, worker/runtime placement change, source-term rename, or protected-word JSON update is open.
+
+Latest review:
+
+```txt
+workspace/OverseerHS499-hs497-discovery-settled-receipt-boundary-preview-correction-review.md
+```
 
 Latest accepted review:
 
@@ -201,13 +209,13 @@ workspace/ArchitectureDataHS474-watch-bucket-next-seam-assurance.md
 Latest accepted Dev handoff:
 
 ```txt
-workspace/DevHS495-discovery-candidate-ref-landing-boundary-preview.md
+workspace/DevHS497-discovery-settled-receipt-boundary-preview.md
 ```
 
 Latest landed Dev handoff reviewed and accepted:
 
 ```txt
-workspace/DevHS495-discovery-candidate-ref-landing-boundary-preview.md
+workspace/DevHS497-discovery-settled-receipt-boundary-preview.md
 ```
 
 ## Stable Landing
@@ -267,7 +275,241 @@ Likely next seam:
 read-only product bucket pickup readout / Discovery pickup selection over open bucket rows
 ```
 
-HS495 Dev handoff has landed and is ready for Overseer review.
+HS497 Dev handoff has landed and the HS498 correction is ready for Overseer review.
+
+## HS497 Correction Evidence
+
+Dev updated 2026-06-12 after HS498 review:
+
+- Tightened settled receipt caller projection duplicate handling in:
+
+```txt
+src/main/services/discoverySettledReceiptBoundaryPreviewService.js
+```
+
+- Updated focused verifier assertions in:
+
+```txt
+scripts/verify-discovery-settled-receipt-boundary-preview.js
+```
+
+Corrected behavior:
+
+- `candidate_refs_found_previewed` now contains accepted new candidate-ref facts only
+- `duplicate_refs_suppressed` carries suppressed duplicate occurrences with `counted_as_found_ref: false`
+- `already_known_refs` carries already-known refs separately with `counted_as_new_found_ref: false`
+- caller projection summary separates accepted new refs, already-known refs, suppressed duplicates, and malformed rejected refs
+- verifier asserts caller found refs are only `new_candidate_ref` rows and duplicate/already-known rows are not counted as found refs
+
+Focused correction verifier sample:
+
+```json
+{
+  "status": "Discovery settled receipt boundary preview verified",
+  "command": "discovery.settled_receipt_boundary.preview",
+  "summary": {
+    "source_candidate_ref_landing_row_count": 8,
+    "settled_receipt_boundary_row_count": 5,
+    "caller_receipt_projection_count": 5,
+    "refs_found_count": 2,
+    "capped_count": 1,
+    "provider_deferred_count": 1,
+    "failed_retryable_count": 1,
+    "candidate_refs_found_previewed_count": 2,
+    "accepted_new_candidate_ref_count": 2,
+    "already_known_candidate_ref_count": 1,
+    "duplicate_refs_suppressed_count": 2,
+    "already_known_refs_count": 1,
+    "malformed_refs_rejected_count": 1,
+    "provider_calls": 0,
+    "live_api_calls": 0,
+    "zkill_calls": 0,
+    "esi_calls": 0,
+    "candidate_refs_written": 0,
+    "discovered_killmail_refs_written": 0,
+    "discovery_refs_written": false,
+    "evidence_eveidence_writes": 0,
+    "hydration_writes": 0,
+    "watch_cadence_mutations": 0,
+    "receipt_mutations": 0,
+    "watch_bucket_status_mutations": 0,
+    "schema_changes": 0
+  }
+}
+```
+
+Correction verification completed:
+
+```txt
+node --check src\main\services\discoverySettledReceiptBoundaryPreviewService.js
+node --check scripts\verify-discovery-settled-receipt-boundary-preview.js
+npm.cmd run verify:discovery-settled-receipt-boundary-preview
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+npm.cmd run verify:service-registry
+```
+
+Results:
+
+- focused Discovery settled receipt boundary preview verifier passed with corrected duplicate counts
+- command authority verifier passed
+- passive side-effect verifier passed
+- enforcement dry-run verifier passed with 130/130 commands covered and no gaps
+- service registry verifier passed
+- no provider calls, writes, schema changes, Watch cadence/completion behavior, receipt persistence, enforcement, or UI work were added by the correction
+
+## HS497 Evidence
+
+Dev updated 2026-06-12:
+
+- Added read-only Discovery settled receipt boundary preview service:
+
+```txt
+src/main/services/discoverySettledReceiptBoundaryPreviewService.js
+```
+
+- Added renderer-eligible read-only command:
+
+```txt
+discovery.settled_receipt_boundary.preview
+```
+
+- Added focused verifier and package script:
+
+```txt
+scripts/verify-discovery-settled-receipt-boundary-preview.js
+npm.cmd run verify:discovery-settled-receipt-boundary-preview
+```
+
+- Registered command metadata / coverage in:
+
+```txt
+package.json
+src/main/services/serviceRegistry.js
+src/main/services/enforcementDryRunService.js
+scripts/verify-service-registry.js
+scripts/verify-command-authority.js
+scripts/verify-passive-side-effects.js
+scripts/verify-enforcement-dry-run.js
+```
+
+Focused verifier sample:
+
+```json
+{
+  "status": "Discovery settled receipt boundary preview verified",
+  "command": "discovery.settled_receipt_boundary.preview",
+  "summary": {
+    "source_candidate_ref_landing_row_count": 8,
+    "settled_receipt_boundary_row_count": 5,
+    "caller_receipt_projection_count": 5,
+    "refs_found_count": 2,
+    "capped_count": 1,
+    "provider_deferred_count": 1,
+    "failed_retryable_count": 1,
+    "candidate_refs_found_previewed_count": 5,
+    "duplicate_refs_suppressed_count": 2,
+    "already_known_refs_count": 1,
+    "malformed_refs_rejected_count": 1,
+    "receipts_settled_enough_for_caller_count": 5,
+    "provider_calls": 0,
+    "live_api_calls": 0,
+    "zkill_calls": 0,
+    "esi_calls": 0,
+    "candidate_refs_written": 0,
+    "discovered_killmail_refs_written": 0,
+    "discovery_refs_written": false,
+    "evidence_eveidence_writes": 0,
+    "hydration_writes": 0,
+    "watch_cadence_mutations": 0,
+    "receipt_mutations": 0,
+    "watch_bucket_status_mutations": 0,
+    "schema_changes": 0
+  }
+}
+```
+
+Behavior proven:
+
+- accepted HS495 candidate-ref landing posture can be projected into bounded factual caller receipt rows
+- canonical/internal Discovery basis may remain capture-rich while caller receipt projection stays bounded
+- default path projects `refs_found`, `capped`, `provider_deferred`, and `failed_retryable`
+- trusted fixture variant coverage also proves `no_refs_found` and `failed_terminal`
+- candidate refs remain Discovery possible leads only, not Evidence/EVEidence
+- duplicate refs are suppressed without duplicate Evidence or duplicate receipt facts
+- malformed/missing-hash refs are rejected without landing refs
+- capped posture is disclosed as limited provider result, not failure
+- provider deferred and failed postures produce receipt facts without refs
+- every default projected receipt is settled enough for caller consumption
+- Watch cadence, Watch completion, and Watch next action stay `not_decided_here`
+- renderer-supplied rich landing preview input is not authoritative
+- no `discovered_killmail_refs`, candidate refs, Discovery refs, Evidence/EVEidence, Hydration, Observation, Watch cadence, bucket status, receipt, schema, enforcement, or UI side effect occurs
+
+Verification completed:
+
+```txt
+node --check src\main\services\discoverySettledReceiptBoundaryPreviewService.js
+node --check scripts\verify-discovery-settled-receipt-boundary-preview.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-enforcement-dry-run.js
+npm.cmd run verify:discovery-settled-receipt-boundary-preview
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+npm.cmd run verify:service-registry
+node --check scripts\verify-service-registry.js
+git diff --check
+git diff -- src\main\db\schema.sql
+git status --short --branch
+```
+
+Results:
+
+- listed syntax checks passed
+- focused Discovery settled receipt boundary preview verifier passed
+- command authority verifier passed
+- passive side-effect verifier passed
+- enforcement dry-run verifier passed with 130/130 commands covered and no gaps
+- service registry verifier passed after the broad empty-fixture assertion was corrected to verify safe shape rather than requiring populated receipt rows
+- `git diff --check` returned exit code 0 with CRLF normalization warnings only
+- `git diff -- src/main/db/schema.sql` returned no diff
+- `git status --short --branch` showed `main...origin/main` with HS497 implementation files plus active workspace current/overview/runway files
+- no schema changes were made
+
+Boundary confirmation:
+
+- read-only settled receipt boundary preview only
+- no schema changes
+- no live provider calls, zKill calls, or ESI calls
+- no real Discovery pickup execution
+- no executable provider packets
+- no dispatcher runtime, queue runtime, durable queues, durable leases, or lease claims
+- no candidate-ref writes, Discovery ref writes, or `discovered_killmail_refs` writes
+- no Evidence/EVEidence writes
+- no Hydration
+- no Observation/reporting behavior
+- no Watch cadence mutation
+- no Watch bucket status mutation
+- no receipt mutation
+- no Watch completion semantics or next-action decision
+- no UI
+- no actor Watch migration
+- no `collectActorWatch(...)` retirement
+- no system/radius collector redirect
+- no source-term rename or protected-word JSON update
+
+## HS497 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS497-discovery-settled-receipt-boundary-preview.md
+```
+
+Status: ready for Overseer review.
 
 ## HS495 Evidence
 

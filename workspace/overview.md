@@ -37,15 +37,16 @@ Milestone: Atlas Storage And Runtime Hardening
 
 ## Active Now
 
-- status: HS495 Discovery candidate-ref landing boundary preview accepted
+- status: HS497 Discovery settled receipt boundary preview accepted
 - executor: none - stable landing
 - active Dev runway: none
-- latest accepted Dev handoff: `workspace/DevHS495-discovery-candidate-ref-landing-boundary-preview.md`
-- latest accepted review: `workspace/OverseerHS496-hs495-discovery-candidate-ref-landing-boundary-preview-review.md`
+- latest accepted Dev handoff: `workspace/DevHS497-discovery-settled-receipt-boundary-preview.md`
+- latest accepted review: `workspace/OverseerHS499-hs497-discovery-settled-receipt-boundary-preview-correction-review.md`
+- latest HS497 review: `workspace/OverseerHS498-hs497-discovery-settled-receipt-boundary-preview-review.md`
 - latest accepted advisory artifact: `workspace/ArchitectureDataHS480-watch-bucket-schema-runtime-design.md`
 - supporting advisory input: `workspace/ExternalIntegrationHS480-provider-policy-watch-bucket-discovery-pickup-design-pressure.md`
 - warm-start note: `workspace/OverseerHS483-warm-start-hs482-review.md`
-- current question: next safe seam after accepted candidate-ref landing boundary preview
+- current question: next safe seam after accepted settled Discovery receipt boundary preview
 
 Current state:
 

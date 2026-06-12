@@ -165,6 +165,10 @@ async function main() {
     assert(commands.get('discovery.candidate_ref_landing_boundary.preview')?.effects.includes('read-only'), 'Discovery candidate ref landing boundary preview should declare read-only effect');
     assert(!commands.get('discovery.candidate_ref_landing_boundary.preview')?.effects.includes('external-live-api'), 'Discovery candidate ref landing boundary preview should not declare external-live-api effect');
     assert(!commands.get('discovery.candidate_ref_landing_boundary.preview')?.effects.includes('evidence-creation'), 'Discovery candidate ref landing boundary preview should not declare Evidence/EVEidence creation effect');
+    assert(commands.get('discovery.settled_receipt_boundary.preview')?.classification === 'read-only', 'Discovery settled receipt boundary preview should be read-only');
+    assert(commands.get('discovery.settled_receipt_boundary.preview')?.effects.includes('read-only'), 'Discovery settled receipt boundary preview should declare read-only effect');
+    assert(!commands.get('discovery.settled_receipt_boundary.preview')?.effects.includes('external-live-api'), 'Discovery settled receipt boundary preview should not declare external-live-api effect');
+    assert(!commands.get('discovery.settled_receipt_boundary.preview')?.effects.includes('evidence-creation'), 'Discovery settled receipt boundary preview should not declare Evidence/EVEidence creation effect');
     assert(commands.get('discovery.outcome_derivation.preview')?.classification === 'read-only', 'Discovery outcome derivation should be read-only');
     assert(commands.get('discovery.outcome_derivation.preview')?.effects.includes('read-only'), 'Discovery outcome derivation should declare read-only effect');
     assert(commands.get('discovery.receipt_projection_fixture.preview')?.classification === 'read-only', 'Discovery receipt projection fixture should be read-only');
@@ -279,6 +283,7 @@ async function main() {
     assert(rendererNames.has('discovery.pickup_execution_boundary.preview'), 'Discovery pickup execution boundary preview should be renderer eligible as read-only');
     assert(rendererNames.has('discovery.dispatcher_lease_boundary.preview'), 'Discovery dispatcher lease boundary preview should be renderer eligible as read-only');
     assert(rendererNames.has('discovery.candidate_ref_landing_boundary.preview'), 'Discovery candidate ref landing boundary preview should be renderer eligible as read-only');
+    assert(rendererNames.has('discovery.settled_receipt_boundary.preview'), 'Discovery settled receipt boundary preview should be renderer eligible as read-only');
     assert(rendererNames.has('discovery.outcome_derivation.preview'), 'Discovery outcome derivation should be renderer eligible as read-only');
     assert(rendererNames.has('discovery.receipt_projection_fixture.preview'), 'Discovery receipt projection fixture should be renderer eligible as read-only');
     assert(rendererNames.has('watch.discovery_acquisition_split_fixture.preview'), 'Watch Discovery acquisition split fixture should be renderer eligible as read-only');

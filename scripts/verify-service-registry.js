@@ -109,6 +109,7 @@ async function main() {
     const discoveryPickupExecutionBoundaryCommand = commands.find((entry) => entry.command === 'discovery.pickup_execution_boundary.preview');
     const discoveryDispatcherLeaseBoundaryCommand = commands.find((entry) => entry.command === 'discovery.dispatcher_lease_boundary.preview');
     const discoveryCandidateRefLandingBoundaryCommand = commands.find((entry) => entry.command === 'discovery.candidate_ref_landing_boundary.preview');
+    const discoverySettledReceiptBoundaryCommand = commands.find((entry) => entry.command === 'discovery.settled_receipt_boundary.preview');
     const discoveryOutcomeDerivationCommand = commands.find((entry) => entry.command === 'discovery.outcome_derivation.preview');
     const discoveryReceiptProjectionFixtureCommand = commands.find((entry) => entry.command === 'discovery.receipt_projection_fixture.preview');
     const watchDiscoveryAcquisitionSplitFixtureCommand = commands.find((entry) => entry.command === 'watch.discovery_acquisition_split_fixture.preview');
@@ -325,6 +326,9 @@ async function main() {
     assert(discoveryCandidateRefLandingBoundaryCommand?.classification === 'read-only', 'Discovery candidate ref landing boundary preview should be read-only');
     assert(discoveryCandidateRefLandingBoundaryCommand?.renderer_allowed === true, 'Discovery candidate ref landing boundary preview should be renderer eligible');
     assert(discoveryCandidateRefLandingBoundaryCommand?.effects.includes('read-only'), 'Discovery candidate ref landing boundary preview should declare read-only effect');
+    assert(discoverySettledReceiptBoundaryCommand?.classification === 'read-only', 'Discovery settled receipt boundary preview should be read-only');
+    assert(discoverySettledReceiptBoundaryCommand?.renderer_allowed === true, 'Discovery settled receipt boundary preview should be renderer eligible');
+    assert(discoverySettledReceiptBoundaryCommand?.effects.includes('read-only'), 'Discovery settled receipt boundary preview should declare read-only effect');
     assert(discoveryOutcomeDerivationCommand?.classification === 'read-only', 'Discovery outcome derivation should be read-only');
     assert(discoveryOutcomeDerivationCommand?.renderer_allowed === true, 'Discovery outcome derivation should be renderer eligible');
     assert(discoveryReceiptProjectionFixtureCommand?.classification === 'read-only', 'Discovery receipt projection fixture should be read-only');
@@ -1104,6 +1108,45 @@ async function main() {
     assert(discoveryCandidateRefLandingBoundary.runtime_enforcement_active === false, 'Discovery candidate ref landing boundary preview should not activate enforcement');
     assert(discoveryCandidateRefLandingBoundary.command_blocking_active === false, 'Discovery candidate ref landing boundary preview should not activate command blocking');
     assert(discoveryCandidateRefLandingBoundary.ui_work === false, 'Discovery candidate ref landing boundary preview should not do UI work');
+
+    const discoverySettledReceiptBoundary = await invokeServiceCommand('discovery.settled_receipt_boundary.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(discoverySettledReceiptBoundary.read_only === true, 'Discovery settled receipt boundary preview should declare read-only behavior');
+    assert(discoverySettledReceiptBoundary.settled_receipt_boundary_preview_only === true, 'Discovery settled receipt boundary preview should be boundary-only');
+    assert(discoverySettledReceiptBoundary.contract_only === true, 'Discovery settled receipt boundary preview should be contract-only');
+    assert(discoverySettledReceiptBoundary.preview_only === true, 'Discovery settled receipt boundary preview should be preview-only');
+    assert(discoverySettledReceiptBoundary.hs495_candidate_ref_landing_basis === true, 'Discovery settled receipt boundary preview should use HS495 landing basis');
+    assert(discoverySettledReceiptBoundary.caller_receipt_projection_bounded === true, 'Discovery settled receipt boundary preview should provide bounded caller projections');
+    assert(discoverySettledReceiptBoundary.caller_receipt_projection_factual_only === true, 'Discovery settled receipt boundary preview should be factual-only');
+    assert(discoverySettledReceiptBoundary.watch_cadence_completion_decision === 'not_decided_here', 'Discovery settled receipt boundary preview should not decide Watch cadence/completion');
+    assert(discoverySettledReceiptBoundary.watch_completion_semantics_opened === false, 'Discovery settled receipt boundary preview should not open Watch completion semantics');
+    assert(Array.isArray(discoverySettledReceiptBoundary.settled_receipt_boundary_rows), 'Discovery settled receipt boundary preview should expose receipt rows array');
+    assert(Array.isArray(discoverySettledReceiptBoundary.caller_receipt_projections), 'Discovery settled receipt boundary preview should expose caller projections array');
+    assert(discoverySettledReceiptBoundary.provider_calls === 0, 'Discovery settled receipt boundary preview should not call providers');
+    assert(discoverySettledReceiptBoundary.live_api_calls === 0, 'Discovery settled receipt boundary preview should not make live/API calls');
+    assert(discoverySettledReceiptBoundary.zkill_calls === 0, 'Discovery settled receipt boundary preview should not call zKill');
+    assert(discoverySettledReceiptBoundary.esi_calls === 0, 'Discovery settled receipt boundary preview should not call ESI');
+    assert(discoverySettledReceiptBoundary.discovery_pickup_execution === false, 'Discovery settled receipt boundary preview should not execute pickup');
+    assert(discoverySettledReceiptBoundary.dispatcher_runtime_started === false, 'Discovery settled receipt boundary preview should not start dispatcher runtime');
+    assert(discoverySettledReceiptBoundary.durable_queue_rows_written === 0, 'Discovery settled receipt boundary preview should not write durable queue rows');
+    assert(discoverySettledReceiptBoundary.durable_lease_rows_written === 0, 'Discovery settled receipt boundary preview should not write durable lease rows');
+    assert(discoverySettledReceiptBoundary.lease_claims_created === 0, 'Discovery settled receipt boundary preview should not create lease claims');
+    assert(discoverySettledReceiptBoundary.candidate_refs_written === 0, 'Discovery settled receipt boundary preview should not write candidate refs');
+    assert(discoverySettledReceiptBoundary.discovered_killmail_refs_written === 0, 'Discovery settled receipt boundary preview should not write discovered_killmail_refs');
+    assert(discoverySettledReceiptBoundary.discovery_refs_mutated === 0, 'Discovery settled receipt boundary preview should not mutate Discovery refs');
+    assert(discoverySettledReceiptBoundary.evidence_writes === 0, 'Discovery settled receipt boundary preview should not write Evidence/EVEidence');
+    assert(discoverySettledReceiptBoundary.hydration_writes === 0, 'Discovery settled receipt boundary preview should not write Hydration output');
+    assert(discoverySettledReceiptBoundary.observation_created === false, 'Discovery settled receipt boundary preview should not create Observation');
+    assert(discoverySettledReceiptBoundary.watch_mutations === 0, 'Discovery settled receipt boundary preview should not mutate Watch rows');
+    assert(discoverySettledReceiptBoundary.cadence_mutations === 0, 'Discovery settled receipt boundary preview should not mutate cadence');
+    assert(discoverySettledReceiptBoundary.watch_bucket_status_mutations === 0, 'Discovery settled receipt boundary preview should not mutate bucket status');
+    assert(discoverySettledReceiptBoundary.receipt_mutations === 0, 'Discovery settled receipt boundary preview should not mutate receipts');
+    assert(discoverySettledReceiptBoundary.schema_changes === 0, 'Discovery settled receipt boundary preview should not change schema');
+    assert(discoverySettledReceiptBoundary.runtime_enforcement_active === false, 'Discovery settled receipt boundary preview should not activate enforcement');
+    assert(discoverySettledReceiptBoundary.command_blocking_active === false, 'Discovery settled receipt boundary preview should not activate command blocking');
+    assert(discoverySettledReceiptBoundary.ui_work === false, 'Discovery settled receipt boundary preview should not do UI work');
 
     const discoveryOutcomeDerivation = await invokeServiceCommand('discovery.outcome_derivation.preview', {}, {
       db,

@@ -64,6 +64,7 @@
     "verify:discovery-pickup-execution-boundary-preview": "node scripts/verify-discovery-pickup-execution-boundary-preview.js",
     "verify:discovery-dispatcher-lease-boundary-preview": "node scripts/verify-discovery-dispatcher-lease-boundary-preview.js",
     "verify:discovery-candidate-ref-landing-boundary-preview": "node scripts/verify-discovery-candidate-ref-landing-boundary-preview.js",
+    "verify:discovery-settled-receipt-boundary-preview": "node scripts/verify-discovery-settled-receipt-boundary-preview.js",
     "verify:watch-discovery-pickup-packets": "node scripts/verify-watch-discovery-pickup-packets.js",
     "verify:discovery-pickup-consumer-fixture": "node scripts/verify-discovery-pickup-consumer-fixture.js",
     "verify:discovery-outcome-derivation": "node scripts/verify-discovery-outcome-derivation.js",

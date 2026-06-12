@@ -83,6 +83,7 @@ const { buildDiscoveryProviderRoutePacketPreview } = require('./discoveryProvide
 const { buildDiscoveryPickupExecutionBoundaryPreview } = require('./discoveryPickupExecutionBoundaryPreviewService');
 const { buildDiscoveryDispatcherLeaseBoundaryPreview } = require('./discoveryDispatcherLeaseBoundaryPreviewService');
 const { buildDiscoveryCandidateRefLandingBoundaryPreview } = require('./discoveryCandidateRefLandingBoundaryPreviewService');
+const { buildDiscoverySettledReceiptBoundaryPreview } = require('./discoverySettledReceiptBoundaryPreviewService');
 const { buildDiscoveryOutcomeDerivationPreview } = require('./discoveryOutcomeDerivationService');
 const { buildDiscoveryReceiptProjectionFixturePreview } = require('./discoveryReceiptProjectionFixtureService');
 const { buildWatchDiscoveryAcquisitionSplitFixturePreview } = require('./watchDiscoveryAcquisitionSplitFixtureService');
@@ -874,6 +875,13 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview Discovery candidate-ref landing posture from lease candidates and fixture provider results without providers, ref writes, Evidence, Hydration, schema, receipts, cadence, or UI work',
     handler: ({ db, payload, ...context }) => buildDiscoveryCandidateRefLandingBoundaryPreview(db, payload, context)
+  },
+  'discovery.settled_receipt_boundary.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview bounded factual Discovery receipt projections from candidate-ref landing posture without providers, writes, schema, Watch cadence decisions, enforcement, or UI work',
+    handler: ({ db, payload, ...context }) => buildDiscoverySettledReceiptBoundaryPreview(db, payload, context)
   },
   'discovery.outcome_derivation.preview': {
     classification: 'read-only',
