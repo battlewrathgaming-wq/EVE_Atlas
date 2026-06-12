@@ -1,34 +1,80 @@
 # AURA Atlas Current Work
 
-Status: HS349 accepted by HS350
-Last updated: 2026-06-06
+Status: HS482 product Watch bucket persistence accepted
+Last updated: 2026-06-12
+
+This file is the active working desk. Older milestone detail was preserved before flattening at:
+
+```txt
+workspace/archive/current-legacy-2026-06-07-pre-flatten.md
+```
+
+Use `workspace/overview.md` for the active breadcrumb map and individual HS artifacts for transaction evidence.
 
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
 
-Current focus: Resting after Discovery pickup consumer fixture proof; Dev paused for boundary consolidation.
-
 Current heading:
 
+- How does Evidence get generated from user intent?
 - system hardening next
 - operational usefulness over architectural finality
 - one hardening seam at a time
-- data-layer boundaries guide the seam before machinery
-- raw IDs remain truthful facts; readable labels are applied attention
-- local SDE lookup readiness is local readability/geometry support, not provider-backed Hydration
-- local topology lookup tables are runtime geometry support; SDE is import/source provenance, not runtime lookup authority
-- accepted Watch scope authority: execution should use the stored included system ID set accepted during Watch setup; center/radius are provenance/explanation after acceptance
-- Watch is a scheduler and scope-authority source; Discovery is the acquisition utility
-- a due Watch emits Discovery pickup intent; it does not acquire candidates itself
-- system/radius Discovery pickup should fan out stored accepted `included_system_ids` into one packet per accepted system
-- operator confirmation boundary: preflight visibility is not acceptance; focus/hover/highlight is not acceptance; only an explicit renderer/listen-hook confirming act can create accepted Watch scope
-- active lane model: Discovery outputs possible leads; Evidence Expansion outputs Evidence/EVEidence; Hydration outputs readability repair; fourth lane stays parked
-- near-term development focus: how Evidence gets generated from user intent; continue through Watch first, then later return to Manual Discovery
+- data-layer boundaries guide machinery
 
-## Executor
+Current focus:
 
-Current executor: Human / Overseer decision
+HS440 is accepted by HS441. Direct production `actor.watch` now routes through the boundary-owned direct body while scheduled actor Watch remains parked on the legacy collector.
+
+HS442 is accepted by HS443. The older controlled-adapter return-path proof now distinguishes direct production redirect, scheduled legacy runtime, and fixture-only preview posture.
+
+HS444 is accepted by HS445. Scheduled actor Watch is structurally ready for a narrow redirect if Watch executor/task/cadence/result ownership is preserved.
+
+HS446 is accepted through HS449. Scheduled actor Watch now routes through the boundary-owned actor Watch route while preserving Watch executor/task/cadence/result ownership.
+
+HS448 is accepted by HS449. The stale production-like fake-client proof/verifier now reflects the post-HS446 scheduled actor Watch state without adding runtime movement.
+
+HS450 is accepted by HS451. The trace found that actor Watch and Discovery communicate through the current redirected path, but the request/receipt contract remains implicit and compatibility-shaped.
+
+HS452 is accepted by HS453. Current direct and scheduled actor Watch outputs can be projected into explicit `actor_watch_discovery_request` and `actor_watch_discovery_receipt` shapes without runtime movement, while preserving the 22-field compatibility summary under `compatibility_summary` only.
+
+HS454 packet-shape acceptance pressure is accepted with changes by HS455. Discovery should remain capture-rich internally, while callers consume bounded projections shaped for their needs.
+
+HS456 is accepted by HS458. `collectActorWatch(...)` is no longer the active direct/scheduled actor Watch runtime path, but is not retirement-ready because live scripts, verifier seed paths, availability assertions, and stale compatibility readouts still depend on it.
+
+HS457 captures the settled-posture reporting rule: Discovery should be capture-rich internally, but report to callers only when emitted work reaches a settled posture. Provider timing facts may cross the boundary; Watch scheduling decisions do not.
+
+HS459 is accepted by HS460. Stale actor Watch compatibility-wrapper readouts/assertions now reflect that direct and scheduled actor Watch use the boundary-owned direct body, while `collectActorWatch(...)` remains parked legacy compatibility code and retirement candidate.
+
+HS461 Dev handoff has landed. The transport-failure parity proof/readout no longer says scheduled actor Watch is legacy parked and now reports the current `runScheduledActorWatch -> runActorWatchDirectBody` posture.
+HS461 is accepted by HS462. The old scheduled actor Watch stale readout has been removed from the active transport-failure parity proof surface.
+
+HS463 is accepted by HS464. System/radius Watch can express one due run as a bounded read-only Watch-run stub from accepted stored scope without buckets, Discovery pickup, providers, writes, or cadence mutation.
+
+HS465 is accepted by HS466. The durable blind Watch bucket and provenance-preserving dedupe model is accepted as architecture direction and promoted to `docs/adr/ADR-0007-watch-bucket-and-provenance-preserving-dedupe.md`.
+HS467 captures the pause/forecast posture after ADR-0007. No implementation is open. Next decision is whether to start with read-only Watch bucket identity projection or disposable write fixture.
+HS468 is accepted by HS469. The practical risk check confirms that the next seam should be a read-only Watch bucket identity projection, with existing-open bucket state represented only as fixture input and no schema/runtime implication.
+
+HS470 is accepted by HS471. Watch bucket identity rules are represented as a read-only fixture/projection proof using fixture existing-open state, without schema, runtime bucket writes, Discovery pickup, providers, or Evidence movement.
+
+HS472 is accepted by HS473. Projected Watch bucket candidates can now be classified into future Discovery pickup eligibility, External I/O hold, or rejected-before-pickup posture in a read-only fixture/projection proof without durable bucket rows, Discovery pickup, providers, or writes.
+
+HS474 is accepted by HS475. The next seam should be a disposable Watch bucket persistence fixture before a Discovery pickup consumer hold contract.
+
+HS476 is accepted by HS477. Watch bucket identity rules are now proven as isolated disposable persistence semantics without product schema, operator corpus mutation, Discovery pickup, providers, candidate refs, Evidence movement, or Watch cadence mutation.
+
+HS478 is accepted by HS479. Discovery pickup consumer hold contract can classify disposable open bucket fixture rows as future pickup eligible or held by External I/O without starting pickup, leasing work, writing refs, or calling providers.
+
+The Watch bucket / Discovery pickup seam has completed its non-production proof chain.
+
+HS480 is accepted by HS481. Atlas should introduce a small product Watch bucket persistence surface for emitted Watch work identity, separate from `fetch_runs`, `discovered_killmail_refs`, Watch source rows, and Evidence/EVEidence. First implementation should be system/radius only and must not start Discovery pickup/provider movement.
+
+HS482 is accepted by HS484. Atlas now has a minimal product `watch_bucket_items` persistence surface for system/radius emitted work identity, with one open item per Watch and no Discovery/provider/Evidence movement.
+
+## Current Executor
+
+Current executor: none - stable landing / pushed-state prep
 
 Active Dev runway:
 
@@ -36,9734 +82,2840 @@ Active Dev runway:
 none
 ```
 
-Expected Dev handoff:
+Accepted Dev handoff:
+
+```txt
+workspace/DevHS482-product-watch-bucket-persistence.md
+```
+
+Latest accepted advisory review:
+
+```txt
+workspace/OverseerHS481-hs480-watch-bucket-schema-runtime-design-review.md
+```
+
+Latest accepted advisory artifact:
+
+```txt
+workspace/ArchitectureDataHS480-watch-bucket-schema-runtime-design.md
+```
+
+Warm-start note:
+
+```txt
+workspace/OverseerHS483-warm-start-hs482-review.md
+```
+
+Latest accepted review:
+
+```txt
+workspace/OverseerHS484-hs482-product-watch-bucket-persistence-review.md
+```
+
+## Resting State
+
+HS482: product Watch bucket persistence accepted.
+
+Active Dev runway:
 
 ```txt
 none
 ```
 
-## HS349 Acceptance
-
-Accepted:
+Latest accepted handoff:
 
 ```txt
-workspace/OverseerHS350-hs349-discovery-pickup-consumer-fixture-review.md
-```
-
-Accepted result:
-
-- `discovery.pickup_consumer_fixture.preview` proves Discovery can consume HS347 pickup packets into provider-return-like fixture candidate refs.
-- Valid actor pickup emits fixture candidate refs with stub `killmail_id` and `killmail_hash`.
-- Valid system/radius pickup emits fixture candidate refs tied to pickup packet `candidate_system_id`.
-- Candidate refs preserve Watch/source lane, source kind, scope key, Watch ID, lookback/caps, provider target posture, accepted-scope context, and provenance.
-- Invalid stored scope, disarmed, active-task, live-disabled, no-due, inactive, not-due, and backoff states emit zero candidate refs.
-- Candidate refs are fixture/plain data only, not durable Discovery refs, Evidence/EVEidence, Hydration, or Observation.
-
-Boundary:
-
-No Watch execution, Watch dispatch runner invocation, collector call, zKillboard call, ESI call, provider/live/API call, `discovered_killmail_refs` write, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, real/operator Watch mutation, real runtime packet persistence, real/product task creation, broad provider queue, schema change, renderer UI work, runtime enforcement, command blocking, support artifact creation, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
-
-Resting state:
-
-```txt
-Watch due -> Discovery pickup intent -> fixture candidate refs
-```
-
-Dev pause:
-
-Do not open another implementation packet until boundary consolidation has reviewed the current proofs, stale docs, and code crossings.
-
-Recommended next activity:
-
-Boundary consolidation pass across:
-
-1. Intent -> Watch
-2. Watch -> Discovery
-3. Discovery -> Candidate Refs
-4. Candidate Refs -> ESI Evidence Expansion
-5. Evidence Expansion -> EVEidence corpus write
-6. EVEidence -> Observation
-7. Observation -> Assessment
-8. Hydration / Readability
-
-Human / Overseer decision needed before a new Dev runway.
-
-## HS349 Active Dev Runway
-
-Opened:
-
-```txt
-workspace/OverseerHS349-discovery-pickup-consumer-fixture-runway.md
-```
-
-Task:
-
-Add a read-only/local-only Discovery pickup consumer fixture proof that consumes HS347 Discovery pickup packets and produces provider-return-like stub candidate refs.
-
-Suggested command:
-
-```txt
-discovery.pickup_consumer_fixture.preview
-```
-
-Suggested verifier:
-
-```txt
-verify:discovery-pickup-consumer-fixture
+workspace/DevHS482-product-watch-bucket-persistence.md
 ```
 
 Purpose:
 
 ```txt
-prove Discovery can consume pickup packets into fixture candidate refs without providers or durable writes
-```
-
-Core rule:
-
-```txt
-Watch emits Discovery pickup intent.
-Discovery consumes pickup packets.
-Candidate refs are not durable Discovery refs.
-Candidate refs are not Evidence/EVEidence.
+add the smallest durable Watch bucket persistence surface for system/radius emitted work identity while deferring Discovery pickup, dispatcher/lease/provider movement, candidate refs, Evidence/EVEidence writes, Watch cadence mutation, UI, and actor Watch migration
 ```
 
 Boundary:
 
-This packet is read-only/local-only, fixture-only, pre-provider, and pre-persistence. Do not execute a Watch, invoke Watch dispatch runners, call collectors, call zKillboard, ESI, or any provider, perform live/API calls, write `discovered_killmail_refs`, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, mutate real/operator Watch rows, persist real runtime packet rows, create real/product tasks, create a broad provider queue, change schema, implement renderer UI, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
+HS482 is accepted and no Dev runway is open. No production actor Watch runtime change, `collectActorWatch(...)` retirement, system/radius Watch redirect, live/provider call, operator corpus write beyond the scoped bucket table, Hydration write, Observation/report change, dispatcher/queue/lease behavior, runtime enforcement, command blocking, UI, source-term rename, or protected-word JSON update is open.
 
-Stop if this proof requires provider/live calls, durable Discovery ref writes, Evidence/EVEidence writes, real dispatch/collector invocation, schema changes, or Watch-only Discovery machinery that cannot later be reused by Manual/User-driven Discovery.
+Latest accepted review:
 
-## HS349 Evidence
-
-Dev updated 2026-06-06:
-
-- Added read-only renderer-eligible command `discovery.pickup_consumer_fixture.preview`.
-- Added `buildDiscoveryPickupConsumerFixtureProof(...)` in `src/main/services/discoveryPickupConsumerFixtureService.js`.
-- Added `scripts/verify-discovery-pickup-consumer-fixture.js` and `npm.cmd run verify:discovery-pickup-consumer-fixture`.
-- The proof composes `watch.discovery_pickup_packet_proof.preview` and consumes pickup packets into fixture-only provider-return-like candidate refs.
-- Valid actor pickup consumes one pickup packet and emits two fixture candidate refs with stub `killmail_id` / `killmail_hash`, source lane/kind, Watch ID, scope key, entity type/ID/name, lookback/caps, provider target posture, candidate-only posture, and provenance.
-- Valid system/radius pickup consumes four pickup packets from stored accepted system IDs and emits four fixture candidate refs whose `candidate_system_id` values exactly match the pickup packet system IDs:
-  - `[30003597, 30003599, 30003601, 30003602]`
-- System/radius candidates preserve full accepted system ID set, packet index/count, `accepted_scope_source: stored_watch_scope`, accepted-scope provenance, center/radius provenance/explanation, lookback/caps, candidate-only posture, and provenance.
-- System/radius candidates report `topology_recomputed: false` and `center_radius_used_as_execution_authority: false`.
-- Invalid stored system/radius scope emits zero candidate refs and preserves `watch_scope_authority_invalid`.
-- Disarmed, active-task, live-disabled, no-due, inactive, not-due, and backoff states emit zero candidate refs and preserve the pickup reason.
-- Candidate refs are plain fixture data only, not durable Discovery refs, Evidence/EVEidence, Hydration, or Observation.
-- Mutation boundary proof reports unchanged durable Atlas table counts for emitted, invalid, blocked, and idle cases.
-- Added command authority, service registry, passive side-effect, and enforcement dry-run coverage for the new command.
-- Verification run:
-  - `node --check src\main\services\discoveryPickupConsumerFixtureService.js` passed.
-  - `node --check scripts\verify-discovery-pickup-consumer-fixture.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `npm.cmd run verify:discovery-pickup-consumer-fixture` passed.
-  - `npm.cmd run verify:watch-discovery-pickup-packets` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed with coverage complete for 102 commands.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: working-set scan covered 7 files and reported 262 warning-only items; no renames or protected-word JSON updates were performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main [ahead 18]` with HS349 working-tree changes.
-
-## HS349 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS349-discovery-pickup-consumer-fixture.md
-```
-
-Status: Discovery pickup consumer fixture proof complete; ready for Overseer review.
-
-No Watch execution, Watch dispatch runner invocation, collector call, zKillboard call, ESI call, provider/live/API call, `discovered_killmail_refs` write, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, real/operator Watch mutation, real runtime packet persistence, real/product task creation, broad provider queue, schema change, renderer UI work, runtime enforcement, command blocking, support artifact creation, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
-
-## HS347 Acceptance
-
-Accepted:
-
-```txt
-workspace/OverseerHS348-hs347-discovery-pickup-packet-proof-review.md
-```
-
-Accepted result:
-
-- `watch.discovery_pickup_packet_proof.preview` proves due Watch to Discovery pickup packet shape.
-- Valid actor Watch emits exactly one Discovery pickup packet.
-- Valid system/radius Watch emits exactly one Discovery pickup packet per stored accepted system ID.
-- System/radius `candidate_system_id` values exactly match stored accepted `included_system_ids`.
-- Center/radius remain provenance/explanation only after acceptance.
-- Invalid stored system/radius scope emits zero pickup packets and reports `watch_scope_authority_invalid`.
-- Disarmed, active-task, live-disabled, no-due, inactive, not-due, and backoff states emit zero pickup packets.
-- Pickup packets are candidate intent only, not durable Discovery refs, Evidence/EVEidence, Hydration, or Observation.
-
-Boundary:
-
-No Watch execution, Watch dispatch runner invocation, collector call, zKillboard call, ESI call, provider/live/API call, `discovered_killmail_refs` write, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, real/operator Watch mutation, real runtime packet persistence, real/product task creation, broad provider queue, schema change, renderer UI work, runtime enforcement, command blocking, support artifact creation, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
-
-Resting next options:
-
-1. Add a no-provider Discovery pickup consumer fixture that consumes pickup packets and returns pre-persistence candidate refs.
-2. Shape Manual/User-driven Discovery pickup packet posture so non-repeatable operator intent can feed the same Discovery utility.
-3. Inspect or prove how the current direct collector path should be retired, bypassed, or adapted once pickup packets are accepted.
-4. Rest Watch-side pre-provider architecture and discuss Discovery output / Evidence Expansion boundary.
-
-Human / Overseer decision needed before a new Dev runway.
-
-## HS347 Active Dev Runway
-
-Opened:
-
-```txt
-workspace/OverseerHS347-discovery-pickup-packet-proof-runway.md
-```
-
-Task:
-
-Add a read-only/local-only Discovery pickup packet proof that converts one selected due Watch into candidate Discovery pickup packet data only.
-
-Suggested command:
-
-```txt
-watch.discovery_pickup_packet_proof.preview
-```
-
-Suggested verifier:
-
-```txt
-verify:watch-discovery-pickup-packets
-```
-
-Purpose:
-
-```txt
-prove a due Watch can emit shared Discovery pickup intent without Watch doing Discovery
-```
-
-Core rule:
-
-```txt
-Watch is a scheduler and scope-authority source.
-Discovery is the acquisition utility.
-A due Watch emits Discovery pickup intent; it does not acquire candidates itself.
-```
-
-System/radius rule:
-
-```txt
-stored accepted included_system_ids are execution authority
-one accepted system ID becomes one Discovery pickup packet
-center/radius are provenance/explanation only after acceptance
-```
-
-Boundary:
-
-This packet is read-only/local-only and pre-provider/pre-persistence. Do not execute a Watch, invoke Watch dispatch runners, call collectors, call zKillboard, ESI, or any provider, perform live/API calls, write `discovered_killmail_refs`, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, mutate real/operator Watch rows, persist real runtime packet rows, create real/product tasks, create a broad provider queue, change schema, implement renderer UI, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
-
-Stop if this proof requires provider/live calls, durable Discovery ref writes, Evidence/EVEidence writes, real dispatch/collector invocation, schema changes, or Watch-only Discovery machinery that cannot later be reused by Manual/User-driven Discovery.
-
-## HS347 Evidence
-
-Dev updated 2026-06-06:
-
-- Added read-only renderer-eligible command `watch.discovery_pickup_packet_proof.preview`.
-- Added `buildWatchDiscoveryPickupPacketProof(...)` in `src/main/services/watchDiscoveryPickupPacketProofService.js`.
-- Added `scripts/verify-watch-discovery-pickup-packets.js` and `npm.cmd run verify:watch-discovery-pickup-packets`.
-- The proof composes `watch.executor_tick_dry_run.preview` to select one due Watch without calling `WatchSessionExecutor.tick(...)`, dispatch runners, collectors, providers, TaskRunner methods, or persistence writers.
-- Added command authority, service registry, passive side-effect, and enforcement dry-run coverage for the new command.
-- Valid actor Watch emits exactly one Discovery pickup packet with:
-  - `source_lane: watch`
-  - `source_kind: actor`
-  - selected Watch ID and scope key
-  - local entity type/ID/name when available
-  - lookback/caps
-  - `provider_target_posture` for zKill actor acquisition
-  - `candidate_only: true`
-  - `pickup_intent_only: true`
-  - no provider movement, durable ref write, Evidence, Hydration, or Observation.
-- Valid system/radius Watch with four stored accepted system IDs emits exactly four Discovery pickup packets.
-- System/radius `candidate_system_id` values exactly match stored accepted IDs in deterministic order:
-  - `[30003597, 30003599, 30003601, 30003602]`
-- System/radius packets preserve:
-  - full accepted system ID set
-  - packet index/count
-  - `accepted_scope_source: stored_watch_scope`
-  - accepted-scope provenance
-  - center/radius as provenance/explanation only
-  - `center_radius_used_as_execution_authority: false`.
-- Invalid stored system/radius scope emits zero pickup packets and reports `watch_scope_authority_invalid`.
-- Disarmed, active-task, live-disabled, no-due, inactive, not-due, and backoff states emit zero pickup packets.
-- Mutation boundary proof reports unchanged durable Atlas table counts for emitted, invalid, blocked, and idle cases.
-- Verification run:
-  - `node --check src\main\services\watchDiscoveryPickupPacketProofService.js` passed.
-  - `node --check scripts\verify-watch-discovery-pickup-packets.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `npm.cmd run verify:watch-discovery-pickup-packets` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:service-registry` passed after creating missing local test temp directory `.tmp\passive-side-effects`.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:watch-executor-tick-dry-run` passed.
-  - `npm.cmd run verify:watch-runtime-packet-plan` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed with coverage complete for 101 commands.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: final working-set scan covered 9 files and reported 739 warning-only items; no renames or protected-word JSON updates were performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main [ahead 16]` with HS347 working-tree changes.
-
-## HS347 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS347-discovery-pickup-packet-proof.md
-```
-
-Status: Discovery pickup packet proof complete; ready for Overseer review.
-
-No Watch execution, Watch dispatch runner invocation, collector call, zKillboard call, ESI call, provider/live/API call, `discovered_killmail_refs` write, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, real/operator Watch mutation, real runtime packet persistence, real/product task creation, broad provider queue, schema change, renderer UI work, runtime enforcement, command blocking, support artifact creation, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
-
-## HS346 Source Trace Acceptance
-
-Accepted:
-
-```txt
-workspace/EngineeringTraceHS346-watch-due-and-discovery-pickup-surfaces.md
-workspace/OverseerHS346-watch-due-discovery-pickup-acceptance.md
-```
-
-Accepted result:
-
-- HS346 separated Watch Due / Scheduler Surface from Discovery Pickup Surface.
-- The due/scheduler surface decides whether a Watch is due, held, not due, active/running, or blocked.
-- The Discovery pickup surface starts after a Watch is due and should create candidate acquisition packet data only.
-- `WatchSessionExecutor.tick` is currently mixed: due selection, live gating, task creation, collector invocation, and schedule result recording.
-- Current collectors are mixed: Discovery acquisition, durable Discovery ref writes, ESI Evidence Expansion, Evidence persistence, logs/warnings, and fetch-run lifecycle.
-- Existing proof surfaces are clean but still lack a first-class N-per-system Discovery pickup packet proof.
-
-Accepted clarification:
-
-```txt
-Watch is a scheduler and scope-authority source.
-Discovery is the acquisition utility.
-A due Watch emits Discovery pickup intent; it does not acquire candidates itself.
-```
-
-Recommended next seam:
-
-```txt
-selected due Watch -> Discovery pickup packet plan
-```
-
-The next proof should emit zero packets when held/invalid/not due, one packet for a valid actor Watch, and N packets for a valid system/radius Watch with N stored accepted system IDs.
-
-Boundary:
-
-HS346 does not authorize live Watch execution, provider movement, Discovery ref writes, Evidence/EVEidence writes, Hydration writes, Observation work, schema changes, UI work, runtime enforcement, support artifacts, durable Watch result identity, or relationship tags.
-
-## HS342 Acceptance
-
-Accepted:
-
-```txt
-workspace/OverseerHS343-hs342-discovery-stub-candidates-review.md
-```
-
-Accepted result:
-
-- `buildDiscoveryIntakeConsumerStubCandidateProof(...)` proves Discovery bus input to stub candidate refs.
-- `npm.cmd run verify:discovery-intake-consumer-stub-candidates` verifies the proof.
-- No renderer/product service command was added.
-- The proof composes HS340 `buildWatchDiscoveryBusInputEnvelopeProof(...)`.
-- Stub candidates use deterministic local provider marker `zkill_stub`.
-- Stub candidates are pre-persistence plain data.
-- Stub candidates are not durable Discovery refs.
-- Stub candidates are not Evidence/EVEidence.
-- Actor stub candidates preserve Watch source lane/kind, selected scope key, Watch ID, stub `killmail_id`, stub `killmail_hash`, lookback/caps, candidate-only posture, and local actor context including entity name when available.
-- System/radius stub candidates preserve Watch source lane/kind, selected scope key, Watch ID, stub `killmail_id`, stub `killmail_hash`, stored accepted `included_system_ids`, `candidate_system_id` from accepted stored system IDs, `accepted_scope_source: stored_watch_scope`, and center/radius as provenance/management only.
-- Invalid stored system/radius scope emits no stub candidates and reports `watch_scope_authority_invalid`.
-- Disarmed, active-task, live/provider-gated, no-due, inactive, not-due, and backoff states emit no stub candidates.
-
-Boundary:
-
-No durable Discovery refs, `discovered_killmail_refs` writes, Evidence/EVEidence writes, Hydration/metadata writes, API log/warning writes, Watch execution, Watch dispatch runner invocation, collector call, zKillboard call, ESI call, provider/live/API call, real/operator Watch mutation, real runtime packet persistence, broad provider queue, schema change, renderer UI work, popup/modal behavior, R-Scanner redesign, runtime enforcement, command blocking, support artifact creation, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
-
-Resting next options:
-
-1. Offline accepted-scope propagation proof for the existing direct system/radius collector path: `dispatchFor -> runSystemRadiusWatchService / collector injection -> planSystemRadiusWatch`.
-2. Decide whether the newer Discovery bus/intake shape should become runtime architecture before provider testing.
-3. Fixture-only Discovery ref write proof, if Watch direct path risk is resolved or deliberately parked.
-4. Rest Watch runtime and shape User-driven Discovery as the shorter non-repeatable path into the same Discovery bus.
-
-Human / Overseer decision needed before a new Dev runway.
-
-## HS344 Source Trace Acceptance
-
-Accepted:
-
-```txt
-workspace/EngineeringTraceHS344-user-intent-to-discovery-bus-source-trace.md
-workspace/OverseerHS345-hs344-source-trace-acceptance.md
-```
-
-Accepted result:
-
-- HS344 performed a blind source-code inspection without reading `workspace/current.md`, `workspace/overview.md`, recent HS handoffs, chat summaries, or external shaping material.
-- The current code has two distinct Watch paths:
-  - implemented runtime path: `watch.executor.tick -> dispatchFor -> actor.watch/system.radius.watch -> collectors -> providers/persistence once live gates allow`;
-  - newer proof path: packet plan / dry-run -> task envelope -> fixture task -> Discovery bus input -> stub candidate refs.
-- The proof path is clean and pre-live, but it is not yet the real runtime provider path.
-- The sharpest pre-live risk is accepted stored system IDs through the implemented direct system/radius collector path.
-
-Accepted risk:
-
-```txt
-watchExecutor.dispatchFor(...) builds a payload with accepted IDs,
-but runSystemRadiusWatchService normalizes through normalizeSystemRadiusWatchScope,
-which does not include accepted IDs in its returned object.
-```
-
-Recommended next seam:
-
-```txt
-dispatchFor -> runSystemRadiusWatchService / collector injection -> planSystemRadiusWatch
-```
-
-That proof should stay offline and assert accepted stored `included_system_ids` survive into `planSystemRadiusWatch`, `acceptedScopeSource` remains `stored_watch_scope`, center/radius are not recomputed as execution authority, invalid stored scope blocks before task/provider movement, fake provider clients prevent live provider calls, and no durable Discovery refs or Evidence writes occur unless separately authorized.
-
-Boundary:
-
-HS344 / HS345 do not authorize live Watch execution, provider movement, Discovery ref writes, Evidence/EVEidence writes, schema changes, UI work, runtime enforcement, support artifacts, durable Watch result identity, or relationship tags.
-
-## HS342 Active Dev Runway
-
-Opened:
-
-```txt
-workspace/OverseerHS342-discovery-intake-consumer-stub-candidate-proof-runway.md
-```
-
-Task:
-
-Add a read-only/local-only Discovery intake consumer proof that converts Watch Discovery bus input envelopes into stubbed candidate ref outputs.
-
-Suggested verifier:
-
-```txt
-verify:discovery-intake-consumer-stub-candidates
-```
-
-Purpose:
-
-```txt
-prove Discovery bus input can become stub candidate refs without provider calls, durable Discovery refs, or Evidence
-```
-
-Core rule:
-
-```txt
-Discovery intake consumer may produce stub candidate refs
-stub candidate refs are not durable Discovery refs
-stub candidate refs are not Evidence
-```
-
-Boundary:
-
-This packet is read-only/local-only and pre-persistence. Do not execute a Watch, invoke Watch dispatch runners, call collectors, call zKillboard, ESI, or any provider, perform live/API calls, write `discovered_killmail_refs`, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, mutate real/operator Watch rows, persist real runtime packet rows, create real/product tasks beyond existing fixture-only proof use, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
-
-Stop if the proof requires provider/live calls, durable Discovery ref writes, Evidence/EVEidence writes, real dispatch/collector invocation, schema changes, or Watch-only Discovery intake machinery.
-
-## HS342 Evidence
-
-Dev updated 2026-06-06:
-
-- Added `buildDiscoveryIntakeConsumerStubCandidateProof(...)` in `src/main/services/discoveryIntakeConsumerStubCandidateService.js`.
-- Added `scripts/verify-discovery-intake-consumer-stub-candidates.js` and `npm.cmd run verify:discovery-intake-consumer-stub-candidates`.
-- The proof composes HS340 `buildWatchDiscoveryBusInputEnvelopeProof(...)`; no renderer/product service command was added.
-- The proof emits deterministic local `zkill_stub` candidate refs only when the Watch Discovery bus input envelope exists.
-- Actor stub candidate sample proves:
-  - `source_lane: watch`
-  - `source_kind: actor`
-  - `scope_key: actor:character:90000001`
-  - stub `killmail_id` and `killmail_hash`
-  - `candidate_only: true`
-  - `stub_only: true`
-  - `durable_ref_written: false`
-  - `evidence_created: false`
-  - local actor context preserved, including `entity_name` when available.
-- System/radius stub candidate sample proves:
-  - `source_lane: watch`
-  - `source_kind: system_radius`
-  - `scope_key: system:30003597:radius:1`
-  - stub `killmail_id` and `killmail_hash`
-  - stored accepted system IDs preserved: `[30003597, 30003599, 30003601]`
-  - `candidate_system_id` is selected from accepted stored system IDs
-  - `accepted_scope_source: stored_watch_scope`
-  - center/radius remain provenance/management only.
-- Invalid stored system/radius scope emits no stub candidate refs and reports `watch_scope_authority_invalid`.
-- Disarmed, active-task, live-provider-gated, no-due, inactive, not-due, and backoff states emit no stub candidate refs.
-- The accepted model reports:
-  - Discovery intake consumer role: candidate ref stub output
-  - stub candidate refs are not durable Discovery refs
-  - stub candidate refs are not Evidence
-  - shared candidate intake shape: true
-  - Watch-only intake model: false
-  - durable Discovery ref write surface: unopened
-  - Evidence write surface: unopened
-- Mutation boundary proof reports unchanged durable Atlas table counts for emitted, invalid, blocked, and idle cases.
-- Verification run:
-  - `node --check src\main\services\discoveryIntakeConsumerStubCandidateService.js` passed.
-  - `node --check scripts\verify-discovery-intake-consumer-stub-candidates.js` passed.
-  - `npm.cmd run verify:discovery-intake-consumer-stub-candidates` passed.
-  - `npm.cmd run verify:watch-discovery-bus-input-envelope` passed.
-  - `npm.cmd run verify:watch-task-creation-fixture-proof` passed.
-  - `npm.cmd run verify:watch-task-creation-boundary` passed.
-  - `npm.cmd run verify:watch-packet-dry-run-dispatch-parity` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with zero warnings before workspace handoff files were added. Final working-set scan after workspace updates covered 4 changed files and reported 475 warning-only items, mostly from the long existing `workspace/current.md` record; no renames or protected-word JSON updates were performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main [ahead 13]` with HS342 working-tree changes.
-
-## HS342 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS342-discovery-intake-consumer-stub-candidates.md
-```
-
-Status: Discovery intake consumer stub candidate proof complete; ready for Overseer review.
-
-Durable Discovery refs, Evidence/EVEidence, provider movement, Watch execution, schema, UI, enforcement, support artifacts, durable Watch results, relationship tags, and fourth-lane behavior remain unopened.
-
-No Watch dispatch runners, collectors, zKillboard, ESI, provider/live/API calls, `discovered_killmail_refs` writes, Evidence/EVEidence writes, Hydration/metadata writes, API log/warning writes, real/operator Watch mutations, real runtime packet persistence, broad provider queue, protected-word JSON updates, renderer UI, support artifact creation, runtime enforcement, or command blocking were added.
-
-## HS340 Acceptance
-
-Accepted:
-
-```txt
-workspace/OverseerHS341-hs340-watch-discovery-bus-input-review.md
-```
-
-Accepted result:
-
-- `buildWatchDiscoveryBusInputEnvelopeProof(...)` proves Watch task intent as a shared Discovery bus input envelope.
-- `npm.cmd run verify:watch-discovery-bus-input-envelope` verifies the proof.
-- No renderer/product service command was added.
-- Discovery bus input is acquisition intent only.
-- Discovery bus input is not Discovery refs.
-- Discovery bus input is not Evidence/EVEidence.
-- Actor Watch bus input preserves `source_lane: watch`, `source_kind: actor`, selected scope key, Watch ID, `watch.executor.actor.watch`, `evidence-creating`, candidate-only posture, lookback/caps, entity type, entity ID, and local entity name when available.
-- System/radius Watch bus input preserves `source_lane: watch`, `source_kind: system_radius`, selected scope key, Watch ID, `watch.executor.system.radius.watch`, `evidence-creating`, candidate-only posture, lookback/caps, stored accepted `included_system_ids`, `accepted_scope_source: stored_watch_scope`, and center/radius as provenance/management only.
-- Invalid stored system/radius scope emits no Discovery bus input and reports `watch_scope_authority_invalid`.
-- Disarmed, active-task, live/provider-gated, no-due, inactive, not-due, and backoff states emit no Discovery bus input.
-- Watch packet/dry-run/dispatch parity payload shape now includes local actor `entity_name`, preserving already-local naming without provider lookup.
-
-Boundary:
-
-No Watch execution, Watch dispatch runner invocation, collector call, zKillboard call, ESI call, provider/live/API call, Discovery ref write, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, real/operator Watch mutation, real runtime packet persistence, broad provider queue, schema change, renderer UI work, popup/modal behavior, R-Scanner redesign, runtime enforcement, command blocking, support artifact creation, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
-
-Resting next options:
-
-1. No-provider Discovery intake consumer proof: convert the bus input envelope into stubbed candidate refs without provider calls or durable ref writes.
-2. Discovery ref write fixture proof: if accepted later, prove stubbed candidate refs can become durable Discovery refs with Watch provenance in disposable fixture scope only.
-3. Rest Watch runtime and shape User-driven Discovery as the shorter non-repeatable path into the same Discovery bus.
-
-Human / Overseer decision needed before a new Dev runway.
-
-## HS340 Active Dev Runway
-
-Opened:
-
-```txt
-workspace/OverseerHS340-watch-task-to-discovery-bus-input-envelope-runway.md
-```
-
-Task:
-
-Add a read-only/local-only proof that converts accepted Watch task shape into a Discovery bus input envelope.
-
-Suggested verifier:
-
-```txt
-verify:watch-discovery-bus-input-envelope
-```
-
-Purpose:
-
-```txt
-prove Watch task intent can feed the shared Discovery candidate-intake bus without becoming Discovery refs or Evidence
-```
-
-Core rule:
-
-```txt
-Discovery bus input is acquisition intent
-Discovery bus input is not Discovery refs
-Discovery bus input is not Evidence
-```
-
-Boundary:
-
-This packet is read-only/local-only. Do not execute a Watch, invoke Watch dispatch runners, call collectors, call zKillboard, ESI, or any provider, perform live/API calls, write Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, mutate real/operator Watch rows, persist real runtime packet rows, create real/product tasks beyond existing fixture-only proof use, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
-
-Stop if the proof requires provider/live calls, Discovery ref writes, Evidence/EVEidence writes, real dispatch/collector invocation, schema changes, or a Watch-only Discovery bus model.
-
-## HS340 Evidence
-
-Dev updated 2026-06-06:
-
-- Added `buildWatchDiscoveryBusInputEnvelopeProof(...)` in `src/main/services/watchDiscoveryBusInputEnvelopeService.js`.
-- Added `scripts/verify-watch-discovery-bus-input-envelope.js` and `npm.cmd run verify:watch-discovery-bus-input-envelope`.
-- The proof composes HS338 `buildWatchTaskCreationFixtureProof(...)`; no renderer/product service command was added.
-- The proof emits plain-data Discovery bus input envelopes only when the accepted Watch task fixture shape exists.
-- Actor bus input sample proves:
-  - `source_lane: watch`
-  - `source_kind: actor`
-  - `scope_key: actor:character:90000001`
-  - `task_type: watch.executor.actor.watch`
-  - `candidate_only: true`
-  - actor local identity fields preserved, including `entity_name` when available.
-- System/radius bus input sample proves:
-  - `source_lane: watch`
-  - `source_kind: system_radius`
-  - `scope_key: system:30003597:radius:1`
-  - `task_type: watch.executor.system.radius.watch`
-  - accepted stored system IDs preserved: `[30003597, 30003599, 30003601]`
-  - `accepted_scope_source: stored_watch_scope`
-  - center/radius remain provenance/management only.
-- Updated Watch packet/dry-run/dispatch parity payload shape to expose `entity_name` from the selected actor payload so the bus input proof can preserve available local actor naming without provider lookup.
-- Invalid stored system/radius scope emits no bus input envelope and reports `watch_scope_authority_invalid`.
-- Disarmed, active-task, live-provider-gated, no-due, inactive, not-due, and backoff states emit no bus input envelope.
-- The accepted model reports:
-  - Discovery bus input role: acquisition intent
-  - Discovery bus input is not Discovery refs
-  - Discovery bus input is not Evidence
-  - shared candidate intake shape: true
-  - Watch-only bus model: false
-- Mutation boundary proof reports unchanged durable Atlas table counts for emitted, invalid, blocked, and idle cases.
-- Verification run:
-  - `node --check src\main\services\watchDiscoveryBusInputEnvelopeService.js` passed.
-  - `node --check scripts\verify-watch-discovery-bus-input-envelope.js` passed.
-  - `node --check src\main\services\watchPacketDryRunDispatchParityService.js` passed.
-  - `npm.cmd run verify:watch-discovery-bus-input-envelope` passed.
-  - `npm.cmd run verify:watch-task-creation-fixture-proof` passed.
-  - `npm.cmd run verify:watch-task-creation-boundary` passed.
-  - `npm.cmd run verify:watch-packet-dry-run-dispatch-parity` passed.
-  - `npm.cmd run verify:watch-executor-tick-dry-run` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output. The final working-set scan covered 5 changed files and reported 472 warning-only items, mostly from the long existing `workspace/current.md` record; no renames or protected-word JSON updates were performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main [ahead 11]` with HS340 working-tree changes.
-
-## HS340 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS340-watch-discovery-bus-input-envelope.md
-```
-
-Status: Watch task to Discovery bus input envelope proof complete; ready for Overseer review.
-
-Discovery refs, Evidence/EVEidence, provider movement, Watch execution, schema, UI, enforcement, support artifacts, durable Watch results, relationship tags, and fourth-lane behavior remain unopened.
-
-No Watch dispatch runners, collectors, zKillboard, ESI, provider/live/API calls, Discovery ref writes, Evidence/EVEidence writes, Hydration/metadata writes, API log/warning writes, real/operator Watch mutations, real runtime packet persistence, broad provider queue, protected-word JSON updates, renderer UI, support artifact creation, runtime enforcement, or command blocking were added.
-
-## HS338 Acceptance
-
-Accepted:
-
-```txt
-workspace/OverseerHS339-hs338-watch-task-fixture-proof-review.md
-```
-
-Accepted result:
-
-- `buildWatchTaskCreationFixtureProof(...)` proves fixture-only Watch task creation shape.
-- `npm.cmd run verify:watch-task-creation-fixture-proof` verifies the proof.
-- No renderer/product service command was added.
-- The proof composes HS336 `watch.task_creation_boundary.preview`.
-- Valid actor and system/radius would-task envelopes are passed to a disposable local `TaskRunner` instance.
-- Only `TaskRunner.createTask` is called.
-- `TaskRunner.runTask`, `TaskRunner.runDetachedTask`, and `TaskRunner.prepareTask` are not called.
-- The default runtime task runner is not used.
-- Created fixture tasks stay queued, with no handler attached and no handler invoked.
-- Actor task shape preserves `watch.executor.actor.watch`, `evidence-creating`, selected scope key, and actor payload meaning.
-- System/radius task shape preserves `watch.executor.system.radius.watch`, `evidence-creating`, selected scope key, stored accepted `included_system_ids`, and center/radius as provenance/management only.
-- Invalid stored system/radius scope creates no fixture task and reports `watch_scope_authority_invalid`.
-- Disarmed, active-task, live/provider-gated, no-due, inactive, not-due, and backoff states create no fixture task.
-
-Boundary:
-
-No live Watch execution, provider movement, provider-backed collector call, zKillboard call, ESI call, live/API call, Watch dispatch runner invocation, Discovery ref write, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, real/operator Watch row mutation, runtime arm/disarm, executor interval change, real runtime packet persistence, broad provider queue, schema change, renderer UI work, popup/modal behavior, R-Scanner redesign, runtime enforcement, command blocking, support artifact, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
-
-Resting next options:
-
-1. Watch execution-adjacent readiness review: decide what remains before a no-provider execution harness or live test can be considered.
-2. No-provider task execution harness proof, if Human/Overseer accept executing a stub handler as the next pre-live seam.
-3. Rest Watch runtime and return to Manual Discovery as the second path for how Evidence gets generated from user intent.
-
-Human / Overseer decision needed before a new Dev runway.
-
-## HS338 Active Dev Runway
-
-Opened:
-
-```txt
-workspace/OverseerHS338-watch-no-provider-task-creation-fixture-proof-runway.md
-```
-
-Task:
-
-Add a fixture-only, no-provider Watch task-creation proof.
-
-Suggested verifier:
-
-```txt
-verify:watch-task-creation-fixture-proof
-```
-
-Purpose:
-
-```txt
-prove the accepted Watch task envelope can cross into controlled task machinery without executing Watch or touching providers
-```
-
-Core rule:
-
-```txt
-fixture task creation may prove the task boundary
-fixture task creation must not execute the Watch
-fixture task creation must not become product authorization
-```
-
-Boundary:
-
-This packet is fixture-only and no-provider. Do not execute a Watch, call provider-backed collectors, call zKillboard, ESI, or any provider, perform live/API calls, invoke Watch dispatch runners, write Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, mutate real/operator Watch rows, arm/disarm Watch runtime, start/stop executor intervals, persist real runtime packet rows, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
-
-Stop if the proof requires live/provider movement, real dispatch/collector invocation, Evidence/EVEidence writes, Discovery writes, schema changes, or real/operator runtime task persistence.
-
-## HS338 Evidence
-
-Dev updated 2026-06-06:
-
-- Added fixture-only helper `buildWatchTaskCreationFixtureProof(...)` in `src/main/services/watchTaskCreationFixtureProofService.js`.
-- Added `scripts/verify-watch-task-creation-fixture-proof.js` and `npm.cmd run verify:watch-task-creation-fixture-proof`.
-- No renderer/product service command was added.
-- Proof composes HS336 `watch.task_creation_boundary.preview`.
-- Valid actor/system would-task envelopes are handed to a disposable local `TaskRunner` instance using only `TaskRunner.createTask`.
-- Fixture task shape proves:
-  - `type` preserved
-  - `classification` preserved
-  - `scopeKey` preserved
-  - task status remains `queued`
-  - `handler_attached: false`
-  - `handler_invoked: false`
-  - `persisted_in_default_runner: false`
-- Actor fixture task sample:
-  - type: `watch.executor.actor.watch`
-  - classification: `evidence-creating`
-  - scope key: `actor:character:90000001`
-  - payload meaning preserved from HS336
-- System/radius fixture task sample:
-  - type: `watch.executor.system.radius.watch`
-  - classification: `evidence-creating`
-  - scope key: `system:30003597:radius:1`
-  - stored accepted system IDs: `[30003597, 30003599, 30003601]`
-  - accepted scope source: `stored_watch_scope`
-  - center/radius remain provenance/management
-- Invalid stored system/radius scope creates no fixture task and reports `watch_scope_authority_invalid`.
-- Disarmed, active-task, live-provider-gated, no-due, inactive, not-due, and backoff states create no fixture task.
-- No-provider/no-execution proof reports:
-  - `fixture_only: true`
-  - `provider_movement: false`
-  - `watch_execution: false`
-  - `dispatch_runner_invoked: false`
-  - `collectors_called: false`
-  - `provider_calls: 0`
-  - `zkill_calls: 0`
-  - `esi_calls: 0`
-  - `evidence_written: false`
-  - `discovery_refs_mutated: 0`
-  - `hydration_writes: 0`
-  - `api_request_log_writes: 0`
-  - `real_runtime_task_persistence: false`
-  - `default_task_runner_used: false`
-  - `product_authorization: false`
-- Verification run:
-  - `node --check src\main\services\watchTaskCreationFixtureProofService.js` passed.
-  - `node --check src\main\services\watchTaskCreationBoundaryService.js` passed.
-  - `node --check scripts\verify-watch-task-creation-fixture-proof.js` passed.
-  - `npm.cmd run verify:watch-task-creation-fixture-proof` passed.
-  - `npm.cmd run verify:watch-task-creation-boundary` passed.
-  - `npm.cmd run verify:watch-packet-dry-run-dispatch-parity` passed.
-  - `npm.cmd run verify:watch-executor-tick-dry-run` passed.
-  - `npm.cmd run verify:task-runner` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 8 warnings across 2 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warning for `package.json` was emitted.
-  - `git status --short --branch` showed branch `main...origin/main [ahead 9]` with HS338 working-tree changes.
-
-## HS338 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS338-watch-no-provider-task-creation-fixture-proof.md
-```
-
-Status: Watch no-provider task-creation fixture proof complete; ready for Overseer review.
-
-No live Watch execution, provider movement, provider-backed collector call, zKillboard call, ESI call, live/API call, Watch dispatch runner invocation, Discovery ref write, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, real/operator Watch row mutation, runtime arm/disarm, executor interval change, real runtime packet persistence, broad provider queue, schema change, renderer UI work, popup/modal behavior, R-Scanner redesign, runtime enforcement, command blocking, support artifact, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
-
-## HS336 Acceptance
-
-Accepted:
-
-```txt
-workspace/OverseerHS337-hs336-watch-task-boundary-review.md
-```
-
-Accepted result:
-
-- `watch.task_creation_boundary.preview` is a renderer-eligible read-only/local-only command.
-- The preview describes the would-task envelope as plain data only.
-- The accepted would-task shape is `type: watch.executor.<dispatch command>`, `classification: evidence-creating`, and `scopeKey: selected Watch scope key`.
-- Due actor Watch produces would-task type `watch.executor.actor.watch`.
-- Due system/radius Watch produces would-task type `watch.executor.system.radius.watch`.
-- System/radius task envelope preserves stored accepted `included_system_ids`.
-- Center/radius remain provenance/management, not execution authority.
-- Invalid stored scope emits no task envelope and reports `watch_scope_authority_invalid`.
-- Disarmed, active-task, live/provider-gated, no-due, inactive, not-due, and backoff states emit no task envelope.
-- TaskRunner task-creation methods are not called.
-
-Boundary:
-
-No task creation, `TaskRunner.runTask`, `TaskRunner.runDetachedTask`, `TaskRunner.prepareTask`, `TaskRunner.createTask`, `WatchSessionExecutor.tick(...)`, Watch execution, runtime arm/disarm, interval change, dispatch runner invocation, collector call, provider movement, live/API call, Watch row mutation, Discovery ref mutation, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, `watch.create` change, topology behavior change, runtime packet persistence, broad provider queue, schema change, renderer UI work, popup/modal behavior, R-Scanner redesign, runtime enforcement, command blocking, support artifact, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
-
-Resting next options:
-
-1. Watch execution-adjacent readiness advisory before any real task creation.
-2. A no-provider task creation fixture proof, if Human/Overseer accept task creation as the next movement seam.
-3. Rest Watch runtime and return to Manual Discovery as the second path for how Evidence gets generated from user intent.
-
-Human / Overseer decision needed before a new Dev runway.
-
-## HS336 Active Dev Runway
-
-Opened:
-
-```txt
-workspace/OverseerHS336-watch-task-creation-boundary-proof-runway.md
-```
-
-Task:
-
-Add a read-only/local-only task-creation boundary proof for Watch execution.
-
-Preferred command:
-
-```txt
-watch.task_creation_boundary.preview
-```
-
-Purpose:
-
-```txt
-prove the task envelope that would be created from accepted Watch intent without creating the task
-```
-
-Core rule:
-
-```txt
-task boundary proof may describe the task envelope
-task boundary proof must not create the task
-```
-
-Boundary:
-
-This packet is read-only/local-only. Do not create tasks, call `TaskRunner.runTask`, `TaskRunner.runDetachedTask`, `TaskRunner.prepareTask`, `TaskRunner.createTask`, call `WatchSessionExecutor.tick(...)`, execute a Watch, arm/disarm Watch runtime, start/stop intervals, invoke dispatch runners, call collectors, call providers, perform live/API calls, mutate Watch rows, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, change `watch.create`, change topology traversal behavior, infer execution authority from center/radius, persist runtime packet rows, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
-
-## HS336 Evidence
-
-Dev updated 2026-06-06:
-
-- Added read-only renderer-eligible service command `watch.task_creation_boundary.preview`.
-- Added `src/main/services/watchTaskCreationBoundaryService.js`.
-- The service composes `watch.packet_dry_run_dispatch_parity.preview` and TaskRunner task definition semantics as plain data only.
-- Would-task envelope shape:
-  - `type: watch.executor.<dispatch command>`
-  - `classification: evidence-creating`
-  - `scopeKey: selected Watch scope key`
-- TaskRunner non-use is explicitly reported:
-  - `would_create_task: false`
-  - `task_creation_authorized: false`
-  - `task_runner_untouched: true`
-  - `task_runner_methods_called: []`
-  - `tasks_created: 0`
-- Added `scripts/verify-watch-task-creation-boundary.js` and `npm.cmd run verify:watch-task-creation-boundary`.
-- Updated service registry, enforcement dry-run coverage, command authority, service registry verification, and passive side-effect verification.
-- Focused verifier proves:
-  - due actor Watch would-task type `watch.executor.actor.watch`
-  - actor classification `evidence-creating`
-  - actor scopeKey matches selected actor Watch scope key
-  - actor payload meaning matches HS334 parity payload
-  - due system/radius Watch would-task type `watch.executor.system.radius.watch`
-  - system/radius classification `evidence-creating`
-  - system/radius scopeKey matches selected system/radius Watch scope key
-  - system/radius payload uses stored accepted `included_system_ids`
-  - center/radius remain provenance/management
-  - invalid stored scope emits no task envelope and reason `watch_scope_authority_invalid`
-  - disarmed, active-task, live-provider-gated, no-due, inactive, not-due, and backoff states emit no task envelope
-  - sentinel TaskRunner methods `runTask`, `runDetachedTask`, `prepareTask`, and `createTask` are not called
-  - table counts stay unchanged
-- Verification run:
-  - `node --check src\main\services\watchTaskCreationBoundaryService.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-watch-task-creation-boundary.js` passed.
-  - `npm.cmd run verify:watch-task-creation-boundary` passed.
-  - `npm.cmd run verify:watch-packet-dry-run-dispatch-parity` passed.
-  - `npm.cmd run verify:watch-executor-tick-dry-run` passed.
-  - `npm.cmd run verify:watch-runtime-packet-plan` passed.
-  - `npm.cmd run verify:task-runner` passed.
-  - `npm.cmd run verify:service-registry` passed on rerun with 240 second timeout after an initial 120 second timeout.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 348 warnings across 8 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main [ahead 7]` with HS336 working-tree changes.
-
-## HS336 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS336-watch-task-creation-boundary-proof.md
-```
-
-Status: Watch task-creation boundary proof complete; ready for Overseer review.
-
-No task creation, TaskRunner task-creation method call, `WatchSessionExecutor.tick(...)`, Watch execution, runtime arm/disarm, interval change, dispatch runner invocation, collector call, provider movement, live/API call, Watch row mutation, Discovery ref mutation, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, `watch.create` change, topology behavior change, runtime packet persistence, broad provider queue, schema change, renderer UI work, popup/modal behavior, R-Scanner redesign, runtime enforcement, command blocking, support artifact, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
-
-## HS334 Acceptance
-
-Accepted:
-
-```txt
-workspace/OverseerHS335-hs334-watch-dispatch-parity-review.md
-```
-
-Accepted result:
-
-- `watch.packet_dry_run_dispatch_parity.preview` is a renderer-eligible read-only/local-only command.
-- The preview proves parity between `watch.runtime_packet_plan.preview`, `watch.executor_tick_dry_run.preview`, and `watchExecutor.dispatchFor(...)`.
-- Due actor command/payload shape matches across all three surfaces.
-- Due system/radius command/payload shape matches across all three surfaces.
-- System/radius movement shape uses stored accepted `included_system_ids`.
-- Center/radius remain provenance/management after accepted Watch setup.
-- Malformed stored `included_system_ids` block with `watch_scope_authority_invalid` instead of becoming partial execution scope.
-- Inactive, not-due, and backoff rows are skipped or diagnostic-only and do not imply dispatch.
-- `dispatchFor(...)` is used only as a pure payload builder; returned runners are not invoked.
-
-Boundary:
-
-No Watch execution, `WatchSessionExecutor.tick(...)`, runtime arm/disarm, interval change, task creation, provider movement, live/API call, collector/runner invocation, Watch row mutation, Discovery ref mutation, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, `watch.create` change, topology traversal behavior change, runtime packet persistence, broad provider queue, schema change, renderer UI work, popup/modal behavior, R-Scanner redesign, runtime enforcement, command blocking, support artifact, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
-
-Resting next options:
-
-1. Watch task-creation boundary proof, still no provider movement.
-2. Watch dispatch packet fixture/readiness proof from selected accepted scope into a task-shaped record without executing providers.
-3. Rest Watch runtime and return to Manual Discovery as the second path for how Evidence gets generated from user intent.
-
-Human / Overseer decision needed before a new Dev runway.
-
-## HS334 Active Dev Runway
-
-Opened:
-
-```txt
-workspace/OverseerHS334-watch-packet-dry-run-dispatch-parity-proof-runway.md
-```
-
-Task:
-
-Add a read-only/local-only parity proof between:
-
-```txt
-watch.runtime_packet_plan.preview
-watch.executor_tick_dry_run.preview
-watchExecutor.dispatchFor(...)
-```
-
-Purpose:
-
-```txt
-prove the Watch surfaces that explain future Evidence generation from user intent are not drifting apart
-```
-
-Core rule:
-
-```txt
-parity proof compares future movement shape
-parity proof does not move
-```
-
-Boundary:
-
-This packet is read-only/local-only. Do not execute a Watch, call `WatchSessionExecutor.tick(...)`, arm/disarm Watch runtime, start/stop intervals, create Watch executor tasks, call providers, perform live/API calls, call collectors or dispatch runners, mutate Watch rows, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, change `watch.create`, change topology traversal behavior, infer execution authority from center/radius, persist runtime packet rows, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
-
-HS332 is accepted and can rest. Do not open real Watch execution, task creation, provider movement, live testing, durable Watch results, schema, UI, active enforcement, support artifacts, relationship tags, or fourth-lane behavior without a new bounded decision.
-
-## HS334 Evidence
-
-Dev updated 2026-06-06:
-
-- Added read-only renderer-eligible service command `watch.packet_dry_run_dispatch_parity.preview`.
-- Added `src/main/services/watchPacketDryRunDispatchParityService.js`.
-- The parity service composes:
-  - `watch.runtime_packet_plan.preview`
-  - `watch.executor_tick_dry_run.preview`
-  - `watchExecutor.dispatchFor(...)`
-- `dispatchFor(...)` is used only as a pure payload builder; returned runners are reported as present but are never invoked.
-- Updated `watch.runtime_packet_plan.preview` system/radius payload preview to include `acceptedScopeProvenance`, matching `dispatchFor(...)`.
-- Tightened `acceptedSystemIdsForWatchSource(...)` so malformed stored `included_system_ids` cannot be partially filtered into an accepted dispatch payload; malformed scope now throws `watch_scope_authority_invalid`.
-- Added `scripts/verify-watch-packet-dry-run-dispatch-parity.js` and `npm.cmd run verify:watch-packet-dry-run-dispatch-parity`.
-- Updated service registry, enforcement dry-run coverage, command authority, service registry verification, and passive side-effect verification.
-- Focused verifier proves:
-  - due actor packet-plan command equals dry-run command equals `dispatchFor(...)` command
-  - due actor payload meaning matches entity type, entity ID, entity name, lookback seconds, max refs, and max expansions
-  - due system/radius packet-plan command equals dry-run command equals `dispatchFor(...)` command
-  - due system/radius payload uses stored accepted `included_system_ids`
-  - system/radius center/radius remain provenance/management, not execution authority
-  - max systems, max refs per system, max expansions, and lookback seconds match
-  - invalid stored system/radius scope blocks across packet-plan, dry-run, and `dispatchFor(...)` before task creation
-  - inactive, not-due, and backoff rows are skipped or diagnostic-only and do not imply dispatch
-  - table counts stay unchanged
-- Verification run:
-  - `node --check src\main\watchlist\watchExecutor.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check src\main\services\watchPacketDryRunDispatchParityService.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `node --check scripts\verify-watch-packet-dry-run-dispatch-parity.js` passed.
-  - `npm.cmd run verify:watch-packet-dry-run-dispatch-parity` passed.
-  - `npm.cmd run verify:watch-runtime-packet-plan` passed.
-  - `npm.cmd run verify:watch-executor-tick-dry-run` passed.
-  - `npm.cmd run verify:watch-executor` passed.
-  - `npm.cmd run verify:watch-scope-authority-conformance` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 345 warnings across 10 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main [ahead 5]` with HS334 working-tree changes.
-
-## HS334 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS334-watch-packet-dry-run-dispatch-parity-proof.md
-```
-
-Status: Watch packet/dry-run/dispatch parity proof complete; ready for Overseer review.
-
-No Watch execution, `WatchSessionExecutor.tick(...)` call, runtime arm/disarm, interval change, task creation, provider movement, live/API call, collector/runner invocation, Watch row mutation, Discovery ref mutation, Evidence/EVEidence write, Hydration/metadata write, API log/warning write, `watch.create` change, topology behavior change, runtime packet persistence, broad provider queue, schema change, renderer UI work, popup/modal behavior, R-Scanner redesign, runtime enforcement, command blocking, support artifact, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
-
-## HS332 Acceptance
-
-Accepted:
-
-```txt
-workspace/OverseerHS333-hs332-watch-executor-tick-dry-run-review.md
-```
-
-Accepted result:
-
-- `watch.executor_tick_dry_run.preview` is a renderer-eligible read-only command.
-- The preview reports blocked, idle, or would-dispatch posture before task creation.
-- It does not call `WatchSessionExecutor.tick(...)`, arm/disarm runtime, start intervals, create tasks, dispatch collectors, call providers, or write rows.
-- Disarmed, active-task, live/provider-gated, no-due, inactive, not-due, backoff, invalid-scope, actor due, system/radius due, and multiple-due cases are covered.
-- System/radius would-dispatch payloads use stored accepted IDs.
-- Invalid stored scope blocks before payload/task shape.
-- Waiting is not failure.
-- Would-dispatch is not execution authority.
-
-Residual note:
-
-```txt
-Before real task creation or provider movement, preserve or explicitly prove parity between watch.runtime_packet_plan.preview, watch.executor_tick_dry_run.preview, and watchExecutor.dispatchFor(...).
-```
-
-## HS332 Active Dev Runway
-
-Opened:
-
-```txt
-workspace/OverseerHS332-watch-executor-tick-dry-run-preview-runway.md
-```
-
-Task:
-
-Add a read-only/local-only Watch executor tick dry-run preview.
-
-Preferred command:
-
-```txt
-watch.executor_tick_dry_run.preview
-```
-
-Core rule:
-
-```txt
-dry-run may say what would happen
-dry-run must not make it happen
-```
-
-Boundary:
-
-This packet is a no-dispatch proof before task creation. Do not execute a Watch, arm/disarm Watch runtime, start/stop intervals, create Watch executor tasks, call providers, perform live/API calls, call collectors, mutate Watch rows, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, write API logs or warnings, change `watch.create`, change topology traversal behavior, infer execution authority from center/radius, persist runtime packet rows, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
-
-## HS332 Evidence
-
-Dev updated 2026-06-06:
-
-- Added read-only renderer-eligible service command `watch.executor_tick_dry_run.preview`.
-- Added pure helper `dryRunExecutorTickDecision(...)` in `src/main/watchlist/watchExecutor.js` to mirror executor tick decision order without calling `WatchSessionExecutor.tick(...)`.
-- Added `src/main/services/watchExecutorTickDryRunService.js` to compose:
-  - `buildWatchScheduleStatus(...)`
-  - `watch.runtime_packet_plan.preview`
-  - `dryRunExecutorTickDecision(...)`
-  - read-only `actionGate(...)`
-- Dry-run decision output reports:
-  - `blocked`, `idle`, or `would_dispatch`
-  - reason codes
-  - selected Watch and scope key when selected
-  - would-be command and payload shape
-  - live gate posture
-  - schedule summary
-  - selected scope authority and invalid-scope diagnostics
-  - non-authority flags
-  - unchanged table mutation proof
-- System/radius would-be payloads use stored accepted `included_system_ids` from packet-plan preview; center/radius remain provenance/management.
-- Invalid stored system/radius scope blocks with `watch_scope_authority_invalid` before command/payload/task shape; any parseable subset remains diagnostic-only and not execution authority.
-- Added `scripts/verify-watch-executor-tick-dry-run.js` and `npm.cmd run verify:watch-executor-tick-dry-run`.
-- Updated service registry, enforcement dry-run coverage, command authority, service registry verification, and passive side-effect verification.
-- Focused verifier proves:
-  - disarmed session blocks with `session_not_armed`
-  - active task blocks before Watch selection
-  - live/provider gate disabled blocks before dispatch
-  - no due Watches idles and waiting is not failure
-  - inactive/not-due/backoff Watches do not become selected
-  - invalid stored scope creates no would-dispatch payload
-  - due actor Watch produces one `actor.watch` would-dispatch payload
-  - due system/radius Watch produces one `system.radius.watch` would-dispatch payload using stored accepted IDs only
-  - multiple due Watches select one stable candidate only
-  - table counts stay unchanged
-- Verification run:
-  - `node --check src\main\watchlist\watchExecutor.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `node --check scripts\verify-watch-executor-tick-dry-run.js` passed.
-  - `npm.cmd run verify:watch-executor-tick-dry-run` passed.
-  - `npm.cmd run verify:watch-runtime-packet-plan` passed.
-  - `npm.cmd run verify:watch-executor` passed.
-  - `npm.cmd run verify:watch-scheduler` passed.
-  - `npm.cmd run verify:watch-scope-authority-conformance` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 342 warnings across 9 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main [ahead 3]` with HS332 working-tree changes.
-
-## HS332 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS332-watch-executor-tick-dry-run-preview.md
-```
-
-Status: Watch executor tick dry-run preview complete; ready for Overseer review.
-
-No Watch execution, runtime arm/disarm, interval changes, task creation, provider movement, collector calls, live/API calls, Watch row mutation, Discovery ref mutation, Evidence/EVEidence writes, Hydration/metadata writes, API log/warning writes, `watch.create` changes, topology behavior changes, runtime packet persistence, broad provider queue, schema changes, renderer UI work, popup/modal behavior, R-Scanner redesign, runtime enforcement, command blocking, support artifacts, durable Watch result identity, relationship tags, protected-word JSON updates, or fourth-lane behavior were opened.
-
-## HS330 Acceptance
-
-Accepted:
-
-```txt
-workspace/OverseerHS331-hs330-watch-runtime-readiness-advisory-review.md
-```
-
-Accepted advisory artifact:
-
-```txt
-workspace/EngineeringDataSecurityHS330-watch-runtime-movement-readiness-advisory.md
-```
-
-Decision:
-
-HS330 is accepted. A no-dispatch executor/tick dry-run is the right next proof.
-
-## HS330 Watch Runtime Movement Readiness Advisory
-
-Opened:
-
-```txt
-workspace/OverseerHS330-watch-runtime-movement-readiness-advisory-request.md
-```
-
-Task:
-
-Review whether the current Atlas Watch setup-to-runtime-planning chain is coherent enough to build on before any execution-adjacent Dev work is opened.
-
-Purpose:
-
-```txt
-prove what we have now works before building on top of it
-```
-
-Core question:
-
-```txt
-Is a no-dispatch executor/tick dry-run the right next proof, or does Atlas need a different assurance seam first?
-```
-
-Boundary:
-
-This is advisory only. Do not implement code, create a Dev runway, call providers, perform live/API testing, dispatch Watch execution, arm runtime, create tasks, mutate Watch rows, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, change schema, update renderer UI, activate runtime enforcement, create support artifacts, update protected-word JSON, or reopen fourth-lane behavior.
-
-Expected output:
-
-```txt
-workspace/EngineeringDataSecurityHS330-watch-runtime-movement-readiness-advisory.md
-```
-
-The artifact should recommend whether the next safe step is:
-
-1. no-dispatch executor/tick dry-run,
-2. another read-only proof,
-3. rest Watch runtime and choose another seam,
-4. stop until Human/Overseer resolves a decision.
-
-HS296, HS298, HS300, HS301, HS302, HS304, HS307, HS310, HS312, HS314, HS316, HS318, HS320, HS322, HS324, and HS327 are accepted and can rest. HS329 is a decision surface only. Do not open provider movement, live testing, topology behavior changes, Discovery ref identity redesign, durable Watch result semantics, relationship tags, schema, popup/modal behavior, final UI design, active enforcement, support artifacts, Watch execution, or fourth-lane work without a new bounded decision.
-
-## HS329 Watch Runtime Next-Seam Decision Surface
-
-Recorded:
-
-```txt
-workspace/OverseerHS329-watch-runtime-next-seam-decision-surface.md
-```
-
-Status: resting decision surface; no Dev runway opened.
-
-Context:
-
-- HS327 proved Watch runtime packet plan preview without dispatch.
-- Watch/task outcome map already exists and was refreshed through HS300 / HS301.
-- System/radius setup health/readout already exists through HS320 / HS321.
-- Setup/readiness bridge and invalid stored-scope normalization already exist through HS322 / HS324.
-
-Recommended next seam:
-
-```txt
-Watch Runtime Movement Readiness Advisory
-```
-
-Reason:
-
-Atlas is now at the edge between read-only runtime planning and execution-adjacent proof. The next question is whether a no-dispatch executor/tick dry-run is useful, premature, or already covered by HS327.
-
-Options:
-
-1. Open Watch Runtime Movement Readiness Advisory.
-2. Open packet-plan/outcome-map conformance preview directly.
-3. Rest Watch runtime and choose another storage/runtime seam.
-
-Human / Overseer decision needed before any new Dev runway.
-
-## HS327 Active Dev Runway
-
-Opened 2026-06-05:
-
-```txt
-workspace/OverseerHS327-watch-runtime-packet-plan-preview-runway.md
-```
-
-Expected handoff:
-
-```txt
-workspace/DevHS327-watch-runtime-packet-plan-preview.md
-```
-
-Task:
-
-Add a read-only/local-only Watch runtime packet plan preview.
-
-Preferred command:
-
-```txt
-watch.runtime_packet_plan.preview
-```
-
-Core rule:
-
-```txt
-accepted Watch scope -> runtime packet plan preview only
-preview is not dispatch
-readiness is not authorization
-invalid stored scope creates no accepted packet plan
-```
-
-Boundary:
-
-This packet is local-only/read-only planning proof. Do not execute a Watch, arm/disarm Watch runtime, create Watch executor tasks, call providers, perform live/API calls, mutate Watch rows, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, change `watch.create`, change topology traversal behavior, infer execution authority from center/radius, create or persist runtime packet rows, create a broad provider queue, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
-
-## HS327 Evidence
-
-Dev updated 2026-06-05:
-
-- Added `watch.runtime_packet_plan.preview` as a renderer-eligible, read-only/local-only service command.
-- Added `src/main/services/watchRuntimePacketPlanService.js`.
-- Added `scripts/verify-watch-runtime-packet-plan.js` and `npm.cmd run verify:watch-runtime-packet-plan`.
-- Registered command authority, service registry, passive side-effect, and enforcement dry-run coverage for the new command.
-- The preview composes existing local facts:
-  - `buildWatchScheduleStatus(...)`
-  - `watch.authored_execution_readiness.preview`
-- The preview does not call `dispatchFor(...)`, Watch runners, provider gates, task runners, or collectors.
-- Actor Watch plan proof:
-  - uses `watchlist_entities` actor Watch source fields
-  - planned lane: `Discovery_then_Evidence_Expansion`
-  - zKill Discovery packet count: 1
-  - ESI Evidence Expansion cap: 7 in fixture sample
-  - `would_dispatch_watch: false`
-  - `would_create_task: false`
-  - `provider_calls: 0`
-  - `writes: 0`
-- System / Radius Watch plan proof:
-  - uses stored `system_watches.included_system_ids`
-  - valid stored scope reports `acceptedScopeSource: stored_watch_scope`
-  - fixture accepted IDs: `[30003597,30003601,30003599]`
-  - center/radius remain `provenance_and_management`
-  - `center_radius_used_as_authority: false`
-  - `would_recompute_from_center_radius: false`
-  - zKill Discovery packet count: 3
-  - ESI Evidence Expansion cap: 9 in fixture sample
-  - max refs per system: 3
-- Waiting/gated rows:
-  - inactive, not-due, and backoff rows report `blocked_no_plan`
-  - waiting is explicitly not failure
-  - valid stored scope can remain visible as accepted authority while `selected_for_packet_plan: false`
-- Invalid stored scope proof:
-  - invalid stored scope reports `blocked_no_plan`
-  - blocked reason includes `watch_scope_authority_invalid`
-  - accepted system IDs are `[]`
-  - selected runtime systems are `[]`
-  - runtime packet plan is `null`
-  - diagnostic parseable IDs remain only under `invalid_scope_diagnostic.diagnostic_parseable_system_ids`
-  - diagnostic IDs are not operator-actionable, accepted authority, execution authority, selected runtime systems, or stored-row repair
-- Focused verifier summary:
-  - watch count: 10
-  - planned count: 2
-  - blocked/no-plan count: 8
-  - actor plan count: 1
-  - system/radius plan count: 1
-  - invalid stored scope blocked count: 1
-  - dispatches: 0
-  - tasks created: 0
-  - provider calls: 0
-  - writes: 0
-  - readiness is authorization: false
-- Mutation boundary proof:
-  - no Watch execution
-  - no Watch runtime arm/disarm
-  - no Watch executor task creation
-  - no provider/live/API calls
-  - no Watch row mutation
-  - no Discovery ref mutation
-  - no Evidence/EVEidence writes
-  - no Hydration/metadata label writes
-  - no `watch.create` behavior change
-  - no topology traversal behavior change
-  - no center/radius fallback authority
-  - no runtime packet row creation/persistence
-  - no broad provider queue
-  - no schema changes
-  - no renderer/UI work
-  - no support artifacts
-  - no runtime enforcement or command blocking
-  - no Watch result identity, relationship tags, protected-word JSON updates, or fourth-lane behavior
-- Verification run:
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `node --check src\main\watchlist\watchScheduler.js` passed.
-  - `node --check src\main\watchlist\watchExecutor.js` passed.
-  - `node --check scripts\verify-watch-scheduler.js` passed.
-  - `node --check scripts\verify-watch-executor.js` passed.
-  - `node --check scripts\verify-watch-authored-execution-readiness.js` passed.
-  - `node --check src\main\services\watchRuntimePacketPlanService.js` passed.
-  - `node --check scripts\verify-watch-runtime-packet-plan.js` passed.
-  - `npm.cmd run verify:watch-runtime-packet-plan` passed.
-  - `npm.cmd run verify:watch-scheduler` passed.
-  - `npm.cmd run verify:watch-executor` passed.
-  - `npm.cmd run verify:watch-authored-execution-readiness` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 341 warnings across 8 changed working-set files; no renames or protected-word JSON updates performed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS327 working-tree changes.
-
-## HS327 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS327-watch-runtime-packet-plan-preview.md
-```
-
-Status: Watch runtime packet plan preview complete; pending Overseer review.
-
-## HS327 Acceptance
-
-Accepted:
-
-```txt
-workspace/OverseerHS328-hs327-watch-runtime-packet-plan-review.md
-```
-
-Decision:
-
-HS327 is accepted.
-
-Accepted result:
-
-- `watch.runtime_packet_plan.preview` is a renderer-eligible read-only command.
-- The preview shapes accepted Watch state into future runtime/acquisition packet plans without dispatch.
-- Actor Watch plans use `watchlist_entities` source fields.
-- System / Radius Watch plans use stored accepted `included_system_ids` only.
-- Center/radius remain provenance and management after acceptance.
-- Inactive, not-due, backoff, and invalid-scope rows are `blocked_no_plan`.
-- Invalid stored scope creates no accepted packet plan and keeps diagnostic parseable IDs diagnostic-only.
-- No Watch execution, runtime arm/disarm, task creation, provider movement, Watch row mutation, Discovery/Evidence/Hydration mutation, schema, UI, support artifact, active enforcement, command blocking, durable Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened.
-
-HS327 can rest.
-
-## HS324 Active Dev Runway
-
-Opened 2026-06-05:
-
-```txt
-workspace/OverseerHS324-invalid-stored-scope-authority-normalization-runway.md
-```
-
-Expected handoff:
-
-```txt
-workspace/DevHS324-invalid-stored-scope-authority-normalization.md
-```
-
-Task:
-
-Normalize invalid stored System / Radius Watch scope handling across setup readout, authored execution readiness, and the readout/readiness bridge.
-
-Accepted rule:
-
-```txt
-invalid stored scope => no accepted/usable included_system_ids
-invalid stored scope => not ready
-invalid stored scope => blocked with invalid_stored_scope
-partial parsed IDs => diagnostic only, never authority
-```
-
-Boundary:
-
-This packet is local-only normalization. Do not execute a Watch, arm/disarm Watch runtime, create Watch executor tasks, call providers, perform live/API calls, mutate Watch rows, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, change `watch.create`, change topology traversal behavior, infer execution authority from center/radius, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
-
-## HS324 Evidence
-
-Dev updated 2026-06-05:
-
-- Normalized invalid stored System / Radius Watch scope handling across setup readout, authored execution readiness, and the readout/readiness bridge.
-- Invalid stored scope now exposes no accepted or usable included system IDs:
-  - setup `accepted_scope_authority.included_system_ids` is `[]`
-  - setup `included_systems` is `[]`
-  - readiness `execution_system_ids` is `[]`
-  - readiness `stored_scope.included_system_ids` is `[]`
-  - readiness `future_execution_payload` remains `null`
-- Parseable numeric subsets from invalid stored scope are retained only as diagnostic/non-authority detail:
-  - `invalid_scope_diagnostic.diagnostic_parseable_system_ids`
-  - `operator_actionable: false`
-  - `accepted_authority: false`
-  - `execution_authority: false`
-  - `repairs_stored_row: false`
-- The fixture invalid stored scope `[30003597,"bad"]` now reports `stored_scope_status: invalid`, blocked with `invalid_stored_scope`, not ready, empty usable/accepted IDs, and diagnostic subset `[30003597]` only under `invalid_scope_diagnostic`.
-- The HS322 bridge mismatch is resolved:
-  - bridge summary status: `all_setup_readout_and_readiness_rows_match`
-  - bridge rows: 7
-  - matched rows: 7
-  - mismatched rows: 0
-  - mismatch watch IDs: `[]`
-- The bridge also compares `invalid_scope_diagnostic.diagnostic_parseable_system_ids` as a non-authority conformance field.
-- Mutation boundary proof:
-  - no Watch execution
-  - no Watch runtime arm/disarm
-  - no Watch executor task creation
-  - no provider/live/API calls
-  - no Watch row mutation or repair
-  - no Discovery ref mutation
-  - no Evidence/EVEidence writes
-  - no Hydration/metadata label writes
-  - no `watch.create` behavior change
-  - no topology traversal behavior change
-  - no center/radius fallback authority
-  - no schema changes
-  - no renderer/UI work
-  - no support artifacts
-  - no runtime enforcement or command blocking
-  - no Watch result identity, relationship tags, protected-word JSON updates, or fourth-lane behavior
-- Verification run:
-  - `node --check src\main\services\watchAuthoredExecutionReadinessService.js` passed.
-  - `node --check src\main\services\systemRadiusReadoutReadinessBridgeService.js` passed.
-  - `node --check scripts\verify-watch-authored-execution-readiness.js` passed.
-  - `node --check scripts\verify-system-radius-readout-readiness-bridge.js` passed.
-  - `npm.cmd run verify:watch-authored-execution-readiness` passed.
-  - `npm.cmd run verify:system-radius-readout-readiness-bridge` passed.
-  - `npm.cmd run verify:system-radius-setup-readout` passed.
-  - `npm.cmd run verify:watch-create-accepted-scope-contract` passed; fixture-only verifier created expected fixture `system_watches` rows and reported only those rows changed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 53 warnings across 6 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS324 working-tree changes.
-
-## HS324 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS324-invalid-stored-scope-authority-normalization.md
-```
-
-Status: invalid stored scope authority normalization complete; pending Overseer review.
-
-## HS324 Acceptance
-
-Accepted:
-
-```txt
-workspace/OverseerHS325-hs324-invalid-stored-scope-normalization-review.md
-```
-
-Decision:
-
-HS324 is accepted.
-
-Accepted result:
-
-- invalid stored scope exposes no accepted/usable `included_system_ids`
-- invalid stored scope remains not ready and blocked with `invalid_stored_scope`
-- parseable numeric fragments from invalid stored scope are diagnostic only
-- `invalid_scope_diagnostic` explicitly reports no operator action, no accepted authority, no execution authority, and no stored-row repair
-- setup readout and authored execution readiness now match on invalid stored scope handling
-- bridge mismatch count is `0`
-- no Watch execution, provider movement, Watch row repair, Discovery/Evidence/Hydration mutation, schema, UI, support artifact, runtime enforcement, command blocking, Watch result identity, relationship tag, protected-word JSON update, or fourth-lane behavior was opened
-
-HS324 can rest.
-
-## HS326 Watch Setup Chain Next-Seam Decision Surface
-
-Recorded:
-
-```txt
-workspace/OverseerHS326-watch-setup-chain-next-seam-decision-surface.md
-```
-
-Status: resting decision surface; no Dev runway opened.
-
-Stable landing:
-
-- topology preflight -> explicit operator confirmation -> stored included system IDs -> readout -> future execution readiness is coherent
-- accepted Watch scope authority remains stored `included_system_ids`
-- center/radius remain provenance and management after acceptance
-- invalid stored scope is blocked and diagnostic only
-- no Watch execution, provider movement, dispatch, schema, active enforcement, support artifacts, durable Watch result identity, relationship tags, or final UI design is open
-
-Recommended next seam:
-
-```txt
-Watch Runtime Packet Plan Preview
-```
-
-Reason:
-
-Atlas has proven accepted Watch setup and readiness. The next uncertainty is whether stored accepted scope can be shaped into a future runtime/acquisition packet plan while staying read-only, local-only, non-dispatching, and non-live.
-
-Alternative seams:
-
-- Watch Result / Outcome Shape Advisory
-- Local Scope Health / Repair Readout
-- rest Watch chain and return to another storage/runtime seam
-
-Human/Overseer decision needed before Dev runway.
-
-## HS322 Active Dev Runway
-
-Opened 2026-06-05:
-
-```txt
-workspace/OverseerHS322-system-watch-readout-readiness-bridge-runway.md
-```
-
-Expected handoff:
-
-```txt
-workspace/DevHS322-system-watch-readout-readiness-bridge.md
-```
-
-Task:
-
-Add a read-only/local-only bridge preview that compares:
-
-```txt
-watch.system_radius_setup_readout.preview
-watch.authored_execution_readiness.preview
-```
-
-Preferred command:
-
-```txt
-watch.system_radius_readout_readiness_bridge.preview
-```
-
-Core rule:
-
-```txt
-stored included_system_ids = shared authority
-setup readout = what Atlas accepted/stored
-execution readiness = whether the stored scope is usable as future execution input
-bridge = conformance proof only
-```
-
-Boundary:
-
-This packet is read-only/local-only. Do not execute a Watch, arm/disarm Watch runtime, create Watch executor tasks, call providers, perform live/API calls, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, change `watch.create`, change topology traversal behavior, infer execution authority from center/radius, change schema, implement renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
-
-## HS322 Evidence
-
-Dev updated 2026-06-05:
-
-- Added `watch.system_radius_readout_readiness_bridge.preview` as a renderer-eligible, read-only/local-only service command.
-- Added `src/main/services/systemRadiusReadoutReadinessBridgeService.js`.
-- Added `scripts/verify-system-radius-readout-readiness-bridge.js` and `npm.cmd run verify:system-radius-readout-readiness-bridge`.
-- Registered command authority, service registry, passive side-effect, and enforcement dry-run coverage for the new bridge.
-- The bridge composes:
-  - `buildSystemRadiusSetupReadout`
-  - `buildWatchAuthoredExecutionReadinessPreview`
-- Bridge output compares per Watch:
-  - Watch ID
-  - active/inactive state
-  - stored-scope status
-  - stored included-system IDs
-  - included-system count
-  - center/radius role as provenance/management
-  - whether center/radius are used as authority
-  - readiness for future execution input
-  - blocked reasons
-  - next safe action
-- The bridge reports matched fields, mismatch fields, equivalent mappings, and report-only mismatch handling.
-- Focused verifier sample:
-  - valid active accepted stored scope matches setup/readiness for Hare radius 1 and accepted IDs `[30003597,30003601,30003599,30003598,30003596]`.
-  - inactive Watch with valid stored scope matches stored IDs/status and is not ready in both views.
-  - missing, malformed, and empty stored scopes are blocked and matched in both views.
-  - valid stored scope with missing local display name remains matched and ready from raw IDs.
-  - invalid stored scope is blocked in both views but reports a source-view mismatch: setup readout exposes no accepted IDs for invalid scope while readiness exposes the valid numeric subset `[30003597]` in `stored_scope.included_system_ids`; the bridge reports this mismatch without fixing it.
-  - next-safe-action wording differs between setup and readiness views; the bridge discloses these as equivalent safe-review mappings rather than silently flattening them.
-- Mutation boundary proof:
-  - no Watch execution
-  - no Watch runtime arm/disarm
-  - no Watch executor task creation
-  - no provider/live/API calls
-  - no Discovery ref mutation
-  - no Evidence/EVEidence writes
-  - no Hydration/metadata label writes
-  - no `watch.create` behavior change
-  - no source readout behavior change
-  - no topology traversal behavior change
-  - no center/radius execution authority
-  - no schema changes
-  - no renderer UI work
-  - no support artifacts
-  - no runtime enforcement or command blocking
-  - no Watch result identity, relationship tags, protected-word JSON, or fourth-lane work
-- Verification run:
-  - `node --check src/main/services/serviceRegistry.js` passed.
-  - `node --check src/main/services/enforcementDryRunService.js` passed.
-  - `node --check scripts/verify-command-authority.js` passed.
-  - `node --check scripts/verify-service-registry.js` passed.
-  - `node --check scripts/verify-passive-side-effects.js` passed.
-  - `node --check src/main/services/systemRadiusReadoutReadinessBridgeService.js` passed.
-  - `node --check scripts/verify-system-radius-readout-readiness-bridge.js` passed.
-  - `npm.cmd run verify:system-radius-readout-readiness-bridge` passed.
-  - `npm.cmd run verify:system-radius-setup-readout` passed.
-  - `npm.cmd run verify:watch-authored-execution-readiness` passed.
-  - `npm.cmd run verify:watch-create-accepted-scope-contract` passed; fixture-only verifier created expected fixture `system_watches` rows and reported only those rows changed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 792 warnings across 10 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS322 working-tree changes.
-
-## HS322 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS322-system-watch-readout-readiness-bridge.md
-```
-
-Status: system Watch readout/readiness bridge complete and accepted by Overseer.
-
-## HS322 Acceptance
-
-Accepted:
-
-```txt
-workspace/OverseerHS323-hs322-system-watch-readout-readiness-bridge-review.md
-```
-
-Decision:
-
-HS322 is accepted.
-
-Accepted result:
-
-- `watch.system_radius_readout_readiness_bridge.preview` is a renderer-eligible, read-only/local-only bridge preview.
-- The bridge composes setup readout and authored execution readiness.
-- Stored `included_system_ids` remain shared authority.
-- Setup readout reports what Atlas accepted/stored.
-- Execution readiness reports whether stored scope is usable as future execution input.
-- Center/radius remain provenance/management and are not authority.
-- Mismatches are reported only and are not repaired or mutated.
-- Invalid stored scope exposed a useful source-view mismatch:
-  - setup readout exposes no accepted IDs for invalid scope
-  - readiness exposes the valid numeric subset in `stored_scope.included_system_ids`
-  - both views still block with `invalid_stored_scope`
-- No Watch execution, runtime arm/disarm, task creation, provider movement, Discovery/Evidence/Hydration mutation, source readout behavior change, topology behavior change, schema change, renderer UI work, enforcement, support artifacts, Watch result semantics, relationship tags, protected-word JSON updates, or fourth-lane behavior were opened.
-
-HS322 can rest.
-
-## HS320 Active Dev Runway
-
-Opened 2026-06-05:
-
-```txt
-workspace/OverseerHS320-system-watch-post-create-readout-runway.md
-```
-
-Expected handoff:
-
-```txt
-workspace/DevHS320-system-watch-post-create-readout.md
-```
-
-Task:
-
-Add a read-only post-create Watch setup readout for accepted System / Radius Watches.
-
-Preferred command:
-
-```txt
-watch.system_radius_setup_readout.preview
-```
-
-Core rule:
-
-```txt
-stored included_system_ids = accepted Watch scope authority
-center/radius = provenance and management after acceptance
-readout = inspection only
-```
-
-Required readout:
-
-- Watch ID
-- active/inactive state
-- center system ID/name as provenance/management
-- radius as provenance/management
-- stored included system IDs as accepted Watch scope authority
-- included system display names when available locally
-- included system count
-- stored-scope status
-- whether the row is ready for future execution input from stored scope
-- next safe operator/system action
-- what this readout does not do
-
-Boundary:
-
-This packet is read-only/local-only. Do not execute a Watch, create Watch executor tasks, call providers, perform live/API calls, mutate Discovery refs, write Evidence/EVEidence, write Hydration/metadata labels, change `watch.create`, change topology traversal behavior, recompute accepted scope from center/radius as readout authority, change schema, implement final renderer UI, add popup/modal behavior, redesign R-Scanner, activate runtime enforcement or command blocking, create support artifacts, add durable Watch result identity, add relationship tags, rename source-owned terms, update protected-word JSON, or open fourth-lane behavior.
-
-## HS320 Evidence
-
-Dev updated 2026-06-05:
-
-- Added `watch.system_radius_setup_readout.preview` as a renderer-eligible, read-only/local-only service command.
-- Added `src/main/services/systemRadiusSetupReadoutService.js`.
-- Added `scripts/verify-system-radius-setup-readout.js` and `npm.cmd run verify:system-radius-setup-readout`.
-- Registered command authority, service registry, passive side-effect, and enforcement dry-run coverage for the new readout.
-- The readout inspects existing `system_watches` rows and reports:
-  - Watch ID
-  - active/inactive state
-  - center system ID/name as provenance/management
-  - radius as provenance/management
-  - stored `included_system_ids` as accepted Watch scope authority
-  - local included-system display names when available
-  - included system count
-  - stored-scope status: `valid`, `missing`, `malformed`, `empty`, `invalid`
-  - whether the row is ready for future execution input from stored scope
-  - next safe operator/system action
-  - explicit `does_not_do` and boundary statements
-- The readout does not recompute accepted scope from center/radius; it uses stored `system_watches.included_system_ids` only.
-- Local display names are readability only and do not replace raw stored IDs.
-- Focused verifier sample:
-  - valid active accepted stored scope: Hare center, radius 1, 5 included systems `[30003597,30003601,30003599,30003598,30003596]`, ready from stored scope.
-  - inactive Watch with valid stored scope: stored IDs preserved, not ready because inactive.
-  - missing stored scope: blocked with `missing_stored_scope`.
-  - malformed stored scope: blocked with `malformed_stored_scope`.
-  - empty stored scope: blocked with `empty_stored_scope`.
-  - invalid stored scope: blocked with `invalid_stored_scope`.
-  - valid stored scope with unknown local display name: raw ID preserved and `missing_local_name` reported.
-- Mutation boundary proof:
-  - no Watch execution
-  - no Watch executor task creation
-  - no provider/live/API calls
-  - no Discovery ref mutation
-  - no Evidence/EVEidence writes
-  - no Hydration/metadata label writes
-  - no `watch.create` behavior change
-  - no topology traversal behavior change
-  - no schema changes
-  - no renderer UI work
-  - no support artifacts
-  - no runtime enforcement or command blocking
-  - no Watch result identity, relationship tags, protected-word JSON, or fourth-lane work
-- Verification run:
-  - `node --check src/main/services/serviceRegistry.js` passed.
-  - `node --check src/main/services/enforcementDryRunService.js` passed.
-  - `node --check scripts/verify-command-authority.js` passed.
-  - `node --check scripts/verify-service-registry.js` passed.
-  - `node --check scripts/verify-passive-side-effects.js` passed.
-  - `node --check src/main/services/systemRadiusSetupReadoutService.js` passed.
-  - `node --check scripts/verify-system-radius-setup-readout.js` passed.
-  - `npm.cmd run verify:system-radius-setup-readout` passed.
-  - `npm.cmd run verify:watch-create-accepted-scope-contract` passed; fixture-only verifier created expected fixture `system_watches` rows and reported only those rows changed.
-  - `npm.cmd run verify:watch-authored-execution-readiness` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 690 warnings across 9 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS320 working-tree changes.
-
-## HS320 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS320-system-watch-post-create-readout.md
-```
-
-Status: system Watch post-create setup readout complete and accepted by Overseer.
-
-## HS320 Acceptance
-
-Accepted:
-
-```txt
-workspace/OverseerHS321-hs320-system-watch-post-create-readout-review.md
-```
-
-Decision:
-
-HS320 is accepted.
-
-Accepted result:
-
-- `watch.system_radius_setup_readout.preview` is a renderer-eligible, read-only/local-only post-create setup readout.
-- Stored `included_system_ids` are reported as accepted Watch scope authority.
-- Center system and radius are reported as provenance/management after acceptance.
-- Local display names are readability only and do not replace raw stored IDs.
-- Missing local names are disclosed without invalidating valid stored scope.
-- Missing, malformed, empty, invalid, inactive, and valid setup states are explicit.
-- The readout does not recompute accepted scope from center/radius.
-- No Watch execution, task creation, provider movement, Discovery/Evidence/Hydration mutation, schema change, renderer UI work, enforcement, support artifacts, Watch result semantics, relationship tags, protected-word JSON updates, or fourth-lane behavior were opened.
-
-HS320 can rest.
-
-## HS318 Active Dev Runway
-
-Opened 2026-06-05:
-
-```txt
-workspace/OverseerHS318-renderer-system-watch-confirmation-path-runway.md
-```
-
-Expected handoff:
-
-```txt
-workspace/DevHS318-renderer-system-watch-confirmation-path.md
-```
-
-Task:
-
-Implement a bounded renderer/operator confirmation path for existing System / Radius Watch authoring.
-
-Existing direct path to harden:
-
-```txt
-src/renderer/queueWatch.js saveSystemWatch()
-```
-
-Required flow:
-
-```txt
-operator inputs system/radius settings
-renderer runs watch.system_radius_authoring_preflight.preview
-renderer displays included systems/status
-renderer uses watch.operator_confirmation_contract.preview
-explicit operator confirmation produces accepted payload
-watch.create stores the confirmed accepted scope
-```
-
-Boundary:
-
-This packet may call the existing local `watch.create` mutation only after explicit system/radius confirmation. Do not implement final UI design, popup/modal behavior, R-Scanner redesign, Watch execution, Watch executor tasks, provider calls, live/API calls, Discovery/Evidence/Hydration mutation, backend `watch.create` changes, topology traversal changes, schema, support artifacts, runtime enforcement, command blocking, result identity, relationship tags, source-term renames, protected-word JSON updates, or fourth-lane work.
-
-## HS318 Evidence
-
-Dev updated 2026-06-05:
-
-- Added light renderer wiring to the existing System / Radius Watch authoring panel:
-  - `Preview System Watch Scope`
-  - explicit `Confirm current included systems for local Watch setup` checkbox
-  - `system-watch-scope-preview` readout for status and included systems
-- Updated `src/renderer/queueWatch.js` so `saveSystemWatch()` no longer validates scope and calls `watch.create` directly.
-- New system/radius Watch save path now requires:
-  - current-scope preview through `watch.system_radius_authoring_preflight.preview`
-  - operator confirmation contract through `watch.operator_confirmation_contract.preview`
-  - explicit confirmation checkbox
-  - current authoring input match between preview and save
-  - fresh confirmed contract at save time
-  - `accepted_payload_shape` before calling `watch.create`
-- `watch.create` payload is built from the confirmed accepted payload shape and preserves exact accepted `included_system_ids`; center/radius remain provenance/management fields.
-- Renderer displays included systems/status and states that visible preflight, focus, hover, keyboard navigation, and local topology lookup are not acceptance.
-- Blocked/capped/unknown or otherwise non-confirmable preflight states cannot produce an accepted payload through this renderer path.
-- Actor Watch authoring was not changed except shared event-binding proximity in `app.js`.
-- Added renderer-shell verifier coverage for the new controls, service calls, explicit-confirmation contract input, accepted payload usage, passive-signal boundary copy, and light CSS hooks.
-- Boundary confirmation:
-  - no final UI design
-  - no popup/modal behavior
-  - no R-Scanner redesign
-  - no Watch execution
-  - no Watch executor task creation
-  - no provider/live/API calls
-  - no Discovery ref mutation
-  - no Evidence/EVEidence writes
-  - no Hydration writes
-  - no backend `watch.create` behavior change
-  - no topology traversal behavior change
-  - no schema changes
-  - no support artifacts
-  - no runtime enforcement or command blocking
-  - no Watch/result identity, relationship tags, protected-word JSON, or fourth-lane work
-- Verification run:
-  - `node --check src/renderer/app.js` passed.
-  - `node --check src/renderer/queueWatch.js` passed.
-  - `node --check scripts/verify-renderer-shell.js` passed.
-  - `npm.cmd run verify:watch-operator-confirmation-contract` passed.
-  - `npm.cmd run verify:system-radius-authoring-preflight` passed.
-  - `npm.cmd run verify:watch-create-accepted-scope-contract` passed; fixture-only verifier created expected fixture `system_watches` rows and reported only those rows changed.
-  - `npm.cmd run verify:watch-authored-execution-readiness` passed.
-  - `npm.cmd run verify:renderer-shell` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 554 warnings across 6 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS318 working-tree changes.
-
-## HS318 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS318-renderer-system-watch-confirmation-path.md
-```
-
-Status: renderer system Watch confirmation path complete and accepted by Overseer.
-
-## HS318 Acceptance
-
-Accepted:
-
-```txt
-workspace/OverseerHS319-hs318-renderer-system-watch-confirmation-path-review.md
-```
-
-Decision:
-
-HS318 is accepted.
-
-Accepted result:
-
-- System/radius Watch authoring now uses a renderer preview and explicit confirmation path before `watch.create`.
-- Preflight visibility, focus, hover, keyboard navigation, and local topology lookup are not acceptance.
-- Blocked/capped/unknown or otherwise non-confirmable preflight states cannot save through this path.
-- The save path reruns a fresh explicit confirmation contract before calling `watch.create`.
-- `watch.create` receives the confirmed accepted payload preserving exact `included_system_ids`.
-- Center/radius remain provenance/management fields after acceptance.
-- Stored included system IDs remain future execution authority.
-- Actor Watch authoring behavior remains materially unchanged.
-- No provider movement, Watch execution, task creation, Discovery/Evidence/Hydration mutation, backend `watch.create` behavior change, topology behavior change, schema, enforcement, support artifacts, result semantics, relationship tags, protected-word JSON updates, popup/modal behavior, final UI design, R-Scanner redesign, or fourth-lane work were opened.
-
-Naming breadcrumb:
-
-- `accepted_payload_shape` remains acceptable as contract output.
-- Future renderer-local or handoff naming should prefer `user_confirmed_*` when a value exists only after explicit operator intent.
-
-HS318 can rest.
-
-## HS316 Active Dev Runway
-
-Opened 2026-06-05:
-
-```txt
-workspace/OverseerHS316-watch-operator-confirmation-listen-hook-contract-runway.md
-```
-
-Expected handoff:
-
-```txt
-workspace/DevHS316-watch-operator-confirmation-listen-hook-contract.md
-```
-
-Task:
-
-Add a read-only/local-only contract preview for the Watch operator confirmation/listen-hook path.
-
-Preferred command:
-
-```txt
-watch.operator_confirmation_contract.preview
-```
-
-The preview should prove the path from system/radius authoring preflight to accepted `watch.create` payload without implementing renderer behavior.
-
-Core rule:
-
-```txt
-Preflight result visible is not acceptance.
-Focus/hover/highlight is not acceptance.
-Successful local topology lookup is not acceptance.
-Only an explicit renderer/listen-hook confirming act can produce accepted scope for watch.create.
-```
-
-Boundary:
-
-This is contract/preview only. Do not implement renderer UI, popup/modal behavior, final copy/design, Watch execution, Watch tasks, provider calls, live/API calls, Watch row mutation, Discovery/Evidence/Hydration mutation, `watch.create` changes, topology traversal behavior changes, schema, support artifacts, runtime enforcement, command blocking, result identity, relationship tags, source-term renames, protected-word JSON updates, or fourth-lane work.
-
-## HS316 Evidence
-
-Dev updated 2026-06-05:
-
-- Added `watch.operator_confirmation_contract.preview` as a renderer-eligible, read-only/local-only service command.
-- Added `src/main/services/watchOperatorConfirmationContractService.js`.
-- Added `scripts/verify-watch-operator-confirmation-contract.js` and `npm.cmd run verify:watch-operator-confirmation-contract`.
-- Registered command authority, service registry, passive side-effect, and enforcement dry-run coverage for the new preview.
-- Preview composes the system/radius authoring preflight path and exposes the contract boundary before renderer UI behavior exists.
-- Preview discloses source preflight shape from `watch.system_radius_authoring_preflight.preview`:
-  - selected center system
-  - requested radius
-  - operator-facing included systems
-  - accepted/storable `included_system_ids`
-  - cap/block/local topology status
-- Preview proves passive states are not acceptance:
-  - list visible is not acceptance
-  - focus is not acceptance
-  - hover is not acceptance
-  - highlight is not acceptance
-  - keyboard navigation is not acceptance
-  - successful local topology lookup is not acceptance
-- Preview represents expected states:
-  - `preflight_visible_not_accepted`
-  - `confirmation_ready`
-  - `confirmation_pending_operator_intent`
-  - `confirmed_accepted_scope_payload`
-  - `blocked_not_confirmable`
-- Explicit confirmation state produces an accepted `watch.create` payload shape with:
-  - `watchType: system_radius`
-  - center system ID/name
-  - radius jumps
-  - exact accepted `included_system_ids`
-  - `accepted_preflight_action: watch.system_radius_authoring_preflight.preview`
-  - `accepted_preflight_status: acceptable`
-  - `accepted_scope_source: operator_confirmation_listen_hook`
-  - `stored_scope_authority.source: accepted_preflight_included_system_ids`
-  - `topology_recomputed_for_payload: false`
-- Renderer/client-provided IDs remain non-authoritative:
-  - accepted IDs source is `server_local_preflight_result_after_explicit_confirmation`
-  - renderer claims may not replace preflight IDs
-  - local validation posture remains required before `watch.create`
-- Interaction affordance remains parked:
-  - typed command
-  - keyboard action
-  - mouse action
-  - light check
-  - hold/press
-  - terminal initialize action
-- Focused verifier sample:
-  - visible preflight state: `preflight_visible_not_accepted`
-  - passive focus/hover/highlight/keyboard state: `confirmation_ready`, still pending operator intent
-  - explicit confirmation state: `confirmed_accepted_scope_payload`
-  - accepted IDs preserved exactly: `[30003597,30003601,30003599,30003598,30003596]`
-  - capped preflight: `blocked_not_confirmable`
-  - unknown system: `blocked_not_confirmable`
-- Mutation boundary proof:
-  - no renderer UI
-  - no popup/modal behavior
-  - no Watch dispatch
-  - no task creation
-  - no provider/live/API calls
-  - no Watch row mutation
-  - no Discovery ref mutation
-  - no Evidence/EVEidence writes
-  - no Hydration writes
-  - no API request log writes
-  - no schema changes
-  - no support artifacts
-  - no runtime enforcement or command blocking
-  - no Watch result / relationship tag / fourth-lane work
-- Verification run:
-  - `node --check src\main\services\watchOperatorConfirmationContractService.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-watch-operator-confirmation-contract.js` passed.
-  - `npm.cmd run verify:watch-operator-confirmation-contract` passed.
-  - `npm.cmd run verify:system-radius-authoring-preflight` passed.
-  - `npm.cmd run verify:watch-create-accepted-scope-contract` passed.
-  - `npm.cmd run verify:watch-authored-execution-readiness` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 682 warnings across 10 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS316 working-tree changes.
-
-## HS316 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS316-watch-operator-confirmation-listen-hook-contract.md
-```
-
-Status: Watch operator confirmation/listen-hook contract preview complete and accepted by Overseer.
-
-## HS316 Acceptance
-
-Accepted:
-
-```txt
-workspace/OverseerHS317-hs316-watch-operator-confirmation-contract-review.md
-```
-
-Decision:
-
-HS316 is accepted.
-
-Accepted result:
-
-- `watch.operator_confirmation_contract.preview` is a renderer-eligible, read-only/local-only contract preview.
-- Preflight visibility is not acceptance.
-- Focus, hover, highlight, keyboard navigation, and successful local topology lookup are not acceptance.
-- Explicit operator confirmation is required before accepted scope can be formed.
-- Blocked, capped, and unknown preflight states cannot be confirmed.
-- Accepted payload shape preserves exact preflight `included_system_ids`.
-- Center/radius remain provenance/explanation/management after acceptance.
-- Renderer-provided IDs are not authority and may not replace local preflight IDs.
-- Exact UI affordance remains parked for UI/design phase.
-- The accepted payload shape is suitable for the accepted `watch.create` contract after explicit confirmation, but it is not Watch execution authorization.
-- No renderer UI, popup/modal behavior, final copy/design, Watch execution, tasks, provider calls, Watch mutation, Discovery mutation, Evidence/EVEidence writes, Hydration writes, schema, support artifacts, runtime enforcement, command blocking, Watch result semantics, relationship tags, source-term renames, protected-word JSON updates, or fourth-lane behavior were opened.
-
-HS316 can rest.
-
-Likely future seam, not open now:
-
-```txt
-bounded renderer/operator confirmation implementation
-```
-
-## HS314 Active Dev Runway
-
-Opened 2026-06-05:
-
-```txt
-workspace/OverseerHS314-authored-watch-execution-readiness-runway.md
-```
-
-Expected handoff:
-
-```txt
-workspace/DevHS314-authored-watch-execution-readiness.md
-```
-
-Task:
-
-Add a read-only/local-only authored-Watch execution readiness preview, preferably:
-
-```txt
-watch.authored_execution_readiness.preview
-```
-
-The preview should prove that Atlas can read authored system/radius Watch rows and derive future execution input from stored accepted `included_system_ids`.
-
-Boundary:
-
-This is readiness only. Do not dispatch Watch execution, create tasks, call providers, mutate Watch rows, mutate Discovery/Evidence/Hydration, change `watch.create`, change topology traversal behavior, change schema, add UI, create support artifacts, activate enforcement, open result semantics, add relationship tags, rename source-owned terms, or update protected-word JSON.
-
-## HS314 Evidence
-
-Dev updated 2026-06-05:
-
-- Added `watch.authored_execution_readiness.preview` as a renderer-eligible, read-only/local-only service command.
-- Added `src/main/services/watchAuthoredExecutionReadinessService.js`.
-- Added `scripts/verify-watch-authored-execution-readiness.js` and `npm.cmd run verify:watch-authored-execution-readiness`.
-- Registered command authority, service registry, passive side-effect, and enforcement dry-run coverage for the new preview.
-- Preview reads authored `system_watches` rows and derives future execution input only from stored `included_system_ids`.
-- Preview reports center system and radius as `provenance_and_management`.
-- Preview reports:
-  - `execution_ready_from_stored_scope`
-  - `execution_scope_source: stored_included_system_ids`
-  - `execution_system_ids`
-  - `center_radius_role: provenance_and_management`
-  - `would_recompute_from_center_radius: false`
-  - `would_dispatch_watch: false`
-  - `watch_dispatches: 0`
-  - `tasks_created: 0`
-  - `provider_calls: 0`
-  - `discovery_refs_mutated: 0`
-  - `evidence_rows_written: 0`
-  - `hydration_writes: 0`
-- Blocked stored-scope cases are distinguished:
-  - `missing_stored_scope`
-  - `malformed_stored_scope`
-  - `empty_stored_scope`
-  - `invalid_stored_scope`
-  - `inactive_watch`
-- Focused verifier fixture sample:
-  - six authored system/radius Watch rows
-  - one valid active stored-scope row ready for future execution input
-  - one missing stored scope row
-  - one malformed stored scope row
-  - one empty stored scope row
-  - one invalid stored scope row
-  - one inactive Watch row
-  - accepted execution IDs preserved exactly: `[30003597,30003601,30003599,30003598,30003596]`
-- Future consumer disclosure:
-  - `watch.executor.tick`
-  - `watchExecutor.dispatchFor`
-  - `system.radius.watch`
-  - `systemRadiusCollector.collectSystemRadiusWatch`
-  - `systemRadiusPlanner.planSystemRadiusWatch`
-  - future execution field: `acceptedSystemIds`
-  - readiness is not authorization
-- Mutation boundary proof:
-  - no Watch dispatch
-  - no task creation
-  - no provider/live/API calls
-  - no Watch row mutation
-  - no Discovery ref mutation
-  - no Evidence/EVEidence writes
-  - no Hydration writes
-  - no API request log writes
-  - no schema changes
-  - no UI work
-  - no support artifacts
-  - no runtime enforcement
-  - no Watch result / relationship tag / fourth-lane work
-- Verification run:
-  - `node --check src\main\services\watchAuthoredExecutionReadinessService.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-watch-authored-execution-readiness.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `node --check scripts\verify-enforcement-dry-run.js` passed.
-  - `npm.cmd run verify:watch-authored-execution-readiness` passed.
-  - `npm.cmd run verify:watch-create-accepted-scope-contract` passed.
-  - `npm.cmd run verify:watch-scope-authority-conformance` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 731 warnings across 12 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS314 working-tree changes and Overseer/current workspace updates.
-
-## HS314 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS314-authored-watch-execution-readiness.md
-```
-
-Status: authored Watch execution readiness preview complete and accepted by Overseer.
-
-## HS314 Acceptance
-
-Accepted:
-
-```txt
-workspace/OverseerHS315-hs314-authored-watch-execution-readiness-review.md
-```
-
-Decision:
-
-HS314 is accepted.
-
-Accepted result:
-
-- `watch.authored_execution_readiness.preview` is a renderer-eligible, read-only/local-only authored Watch execution readiness preview.
-- The preview reads authored `system_watches` rows.
-- Future execution input is derived from stored accepted `included_system_ids`.
-- Center system and radius are provenance/management fields only.
-- Ready authored Watch rows expose future payload fields:
-  - `acceptedSystemIds`
-  - `acceptedScopeSource: stored_watch_scope`
-- Missing, malformed, empty, invalid, and inactive Watch scope cases block before provider movement.
-- Readiness is not authorization.
-- No Watch execution, tasks, provider calls, Discovery mutation, Evidence/EVEidence writes, Hydration writes, Watch mutation, schema, UI, support artifacts, active enforcement, Watch result semantics, relationship tags, or fourth-lane behavior were opened.
-
-HS314 can rest.
-
-Likely future seam, not open now:
-
-```txt
-renderer/operator confirmation path for accepted Watch setup
-```
-
-## HS312 Active Dev Runway
-
-Opened 2026-06-05:
-
-```txt
-workspace/OverseerHS312-watch-create-accepted-scope-mutation-contract-runway.md
-```
-
-Expected handoff:
-
-```txt
-workspace/DevHS312-watch-create-accepted-scope-mutation-contract.md
-```
-
-Task:
-
-Implement the first actual `watch.create` mutation contract for accepted system/radius Watch setup.
-
-Intent:
-
-- preflight shows a concrete included-system list;
-- operator accepts that exact list;
-- `watch.create` stores that exact list;
-- later execution reads that stored list.
-
-The mutation should:
-
-- require accepted `included_system_ids` for the accepted-preflight system/radius path;
-- store those exact accepted IDs in `system_watches.included_system_ids`;
-- preserve center system ID/name and radius as provenance/explanation/management fields;
-- preserve existing operator settings such as lookback, caps, active flag, poll interval, notes, and excluded IDs if already supported;
-- reject missing, empty, malformed, capped, unknown, invalid, or mismatched accepted included-ID payloads;
-- avoid silent recomputation from center/radius when accepted IDs are supplied;
-- keep any legacy/direct center-radius authoring behavior explicitly separate if it must remain for compatibility.
-
-Boundary:
-
-This is Watch authoring persistence only. Do not dispatch Watch execution, create tasks, call providers, mutate Discovery/Evidence/Hydration, change topology traversal behavior, add UI, create support artifacts, activate enforcement, open result semantics, add relationship tags, rename source-owned terms, or update protected-word JSON.
-
-## HS312 Evidence
-
-Dev updated 2026-06-05:
-
-- Updated `watch.create` system/radius handling so accepted preflight included-system IDs can be consumed and stored as Watch scope authority.
-- Updated `src/main/services/mutatingActionService.js` to extract accepted scope inputs from accepted payload shapes:
-  - `included_system_ids`
-  - `accepted_included_system_ids`
-  - `stored_scope_authority.included_system_ids`
-  - candidate/future acceptance payload aliases
-  - accepted preflight action/status/source fields
-- Updated `src/main/watchlist/watchlistRepository.js` so `addSystemRadiusWatch`:
-  - validates accepted IDs when the accepted-preflight path is used
-  - rejects missing, empty, malformed, duplicate, capped/not-acceptable, unknown, invalid, or mismatched accepted-ID payloads
-  - validates accepted IDs against current local topology membership without replacing accepted order
-  - stores the exact accepted `included_system_ids` list in `system_watches.included_system_ids`
-  - preserves center system ID/name and radius as provenance/management fields
-  - keeps legacy direct center/radius authoring separate as `legacy_center_radius_authoring`
-- Updated `watch.create_mutation_safety_map.preview` to reflect the post-HS312 state:
-  - accepted-preflight path now consumes accepted included IDs
-  - legacy direct authoring remains the recompute branch
-  - renderer/operator confirmation path is the next seam
-- Added `scripts/verify-watch-create-accepted-scope-contract.js` and `npm.cmd run verify:watch-create-accepted-scope-contract`.
-- Focused verifier sample:
-  - stored IDs: `[30003597,30003601,30003599,30003598,30003596]`
-  - `scope_authority.source: accepted_preflight_included_system_ids`
-  - `center_radius_role: provenance_and_management`
-  - `topology_recomputed_for_storage: false`
-  - center system ID: `30003597`
-  - radius: `1`
-  - lookback hours: `48`
-  - max systems per run: `5`
-  - max killmails per run: `3`
-  - active flag: `0`
-  - poll interval: `45`
-  - legacy direct authoring remains separate with `topology_recomputed_for_storage: true`
-- Rejection coverage:
-  - missing accepted IDs
-  - empty accepted IDs
-  - malformed accepted IDs
-  - mismatched accepted IDs
-  - capped/not-acceptable status
-  - unknown center
-  - invalid radius
-- Mutation boundary proof:
-  - intended mutation is limited to `system_watches`
-  - no provider calls
-  - no Watch dispatch
-  - no task creation
-  - no Discovery ref mutation
-  - no Evidence/EVEidence writes
-  - no Hydration writes
-  - no schema changes
-  - no UI behavior
-  - no support artifacts
-  - no runtime enforcement
-  - no result semantics / relationship tags / fourth lane
-- Verification run:
-  - `node --check src\main\services\mutatingActionService.js` passed.
-  - `node --check src\main\watchlist\watchlistRepository.js` passed.
-  - `node --check src\main\services\watchCreateMutationSafetyMapService.js` passed.
-  - `node --check scripts\verify-watch-create-accepted-scope-contract.js` passed.
-  - `node --check scripts\verify-watch-create-mutation-safety-map.js` passed.
-  - `npm.cmd run verify:watch-create-accepted-scope-contract` passed.
-  - `npm.cmd run verify:watch-create-mutation-safety-map` passed.
-  - `npm.cmd run verify:watch-scope-authority-conformance` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:mutating-services` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 440 warnings across 9 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS312 working-tree changes and Overseer/current workspace updates.
-
-## HS312 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS312-watch-create-accepted-scope-mutation-contract.md
-```
-
-Status: Watch create accepted-scope mutation contract accepted by Overseer.
-
-## HS312 Acceptance
-
-Accepted:
-
-```txt
-workspace/OverseerHS313-hs312-watch-create-accepted-scope-review.md
-```
-
-Decision:
-
-HS312 is accepted.
-
-Accepted result:
-
-- `watch.create` can consume accepted system/radius included IDs from accepted preflight/acceptance payload shapes.
-- `watch.create` stores the accepted IDs exactly in `system_watches.included_system_ids`.
-- Center system and radius are preserved as provenance/explanation/management fields.
-- The accepted-preflight path reports `scope_authority.source: accepted_preflight_included_system_ids`.
-- The accepted-preflight path reports `topology_recomputed_for_storage: false`.
-- Legacy direct center/radius authoring remains separate as `legacy_center_radius_authoring`.
-- Authoring-time local topology validation does not replace or reorder the accepted list.
-- Mutation is limited to `system_watches`.
-
-HS312 can rest.
-
-Likely future seams, not open now:
-
-```txt
-renderer/operator confirmation path for accepted Watch setup
-Watch execution smoke using a real authored Watch
-Watch/task result identity
-```
-
-## HS310 Active Dev Runway
-
-Opened 2026-06-05:
-
-```txt
-workspace/OverseerHS310-watch-create-mutation-safety-map-runway.md
-```
-
-Expected handoff:
-
-```txt
-workspace/DevHS310-watch-create-mutation-safety-map.md
-```
-
-Task:
-
-Build a read-only/local-only mutation safety map for the future system/radius `watch.create` contract before changing mutation behavior.
-
-Preferred proof target:
-
-```txt
-watch.create_mutation_safety_map.preview
-```
-
-Use a better local naming pattern if the repo already has one.
-
-The proof should expose:
-
-- current `watch.create` path;
-- current system/radius mutation inputs and stored fields;
-- current recomputation point from center/radius;
-- future required mutation-contract input for accepted preflight `included_system_ids`;
-- future fields that may be written in a real mutation packet;
-- fields/tables that must not be touched;
-- center/radius as provenance/explanation;
-- accepted included IDs as future stored-scope authority;
-- unsafe/mismatched accepted-ID rejection posture for later mutation;
-- focused term drift assurance for Watch/scope/radius wording and nearby Atlas terms.
-
-## HS310 Evidence
-
-Dev updated 2026-06-05:
-
-- Added `watch.create_mutation_safety_map.preview` as a renderer-eligible, local-only, read-only mutation safety map.
-- Added `src/main/services/watchCreateMutationSafetyMapService.js`.
-- Added `scripts/verify-watch-create-mutation-safety-map.js` and `npm.cmd run verify:watch-create-mutation-safety-map`.
-- Registered service command and enforcement dry-run coverage as `local_db_inspection` / `watch_create_mutation_safety_map_readout` / `read_only_non_enforcing_proof`.
-- Updated service registry, command authority, enforcement dry-run, and passive side-effect verification for the new read-only command.
-- Preview exposes:
-  - `current_watch_create_consumes_preflight_included_ids: false`
-  - `future_mutation_contract_required: true`
-  - `future_payload_directly_executable_now: false`
-  - `expected_future_mutation_target: watch.create`
-  - `current_packet_allows_watch_row_write: false`
-  - `would_write_watch_row: false`
-  - `watch_rows_written: 0`
-  - `watch_dispatches: 0`
-  - `provider_calls: 0`
-  - `discovery_refs_mutated: 0`
-  - `evidence_rows_written: 0`
-  - `hydration_writes: 0`
-- Current `watch.create` path disclosed:
-  - `serviceRegistry watch.create`
-  - `mutatingActionService.runWatchCreateService`
-  - `normalizeSystemRadiusWatchScope`
-  - `watchlistRepository.addSystemRadiusWatch`
-  - `TopologyService.getSystemsWithinRadius`
-- Current recomputation point disclosed:
-  - `watchlistRepository.addSystemRadiusWatch -> TopologyService.getSystemsWithinRadius`
-  - input basis: `center_system_id + radius_jumps + maxRadius/maxTopologySystems`
-  - consumes accepted preflight included IDs: `false`
-- Future allowed write surface is bounded to `system_watches` Watch authoring fields only:
-  - center system ID/name
-  - radius
-  - accepted included system IDs
-  - excluded IDs
-  - lookback/max systems/max killmails
-  - active/poll interval/notes
-- Must-not-touch surface includes Evidence/EVEidence tables, Discovery refs, run/API provenance, Hydration/metadata output, Assessment, support artifacts, provider calls, dispatch, task creation, schema, topology behavior, UI, runtime enforcement, durable Watch result semantics, relationship tags, and fourth lane.
-- Focused term drift assurance included for:
-  - Watch
-  - `watch.create`
-  - system/radius
-  - radius
-  - included systems
-  - direct neighbors
-  - stargate / topology source data
-  - Discovery
-  - Evidence/EVEidence
-  - Hydration
-  - Observation
-  - Assessment
-- Term assurance is warning-only and reports:
-  - renames performed: `false`
-  - protected-word JSON updated: `false`
-  - caution-prone terms: `watch.create`, `radius`, `stargate / topology source data`
-- Verification run:
-  - `node --check src\main\services\watchCreateMutationSafetyMapService.js` passed.
-  - `node --check scripts\verify-watch-create-mutation-safety-map.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `node --check scripts\verify-enforcement-dry-run.js` passed.
-  - `npm.cmd run verify:watch-create-mutation-safety-map` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 718 warnings across 12 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS310 working-tree changes and Overseer/current workspace updates.
-
-## HS310 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS310-watch-create-mutation-safety-map.md
-```
-
-Status: Watch create mutation safety map accepted by Overseer.
-
-Boundary:
-
-This is not Watch creation. Do not change `watch.create`, write Watch rows, dispatch Watch execution, create tasks, call providers, mutate Discovery/Evidence/Hydration, change topology traversal behavior, change schema, add UI, create support artifacts, activate enforcement, rename source-owned terms, update protected-word JSON, or open Watch/result semantics.
-
-Follow-up, not open now:
-
-```txt
-Actual watch.create mutation contract consuming accepted preflight included_system_ids as stored-scope authority.
-```
-
-## HS310 Acceptance
-
-Accepted:
-
-```txt
-workspace/OverseerHS311-hs310-watch-create-mutation-safety-map-acceptance.md
-```
-
-Decision:
-
-HS310 is accepted.
-
-Accepted result:
-
-- `watch.create_mutation_safety_map.preview` is a renderer-eligible, local-only, read-only mutation safety map.
-- It preserves the accepted gap:
-  - `current_watch_create_consumes_preflight_included_ids: false`
-  - `future_mutation_contract_required: true`
-  - `future_payload_directly_executable_now: false`
-  - `expected_future_mutation_target: watch.create`
-  - `current_packet_allows_watch_row_write: false`
-- Current `watch.create` path and recomputation point are disclosed.
-- Future allowed write surface is bounded to `system_watches` Watch-authoring fields only.
-- Must-not-touch surface includes Evidence/EVEidence, Discovery refs, run/API provenance, Hydration/metadata output, Assessment, support artifacts, provider calls, dispatch, task creation, schema, topology behavior, UI, runtime enforcement, durable Watch result semantics, relationship tags, and fourth lane.
-- Focused term drift assurance is warning-only and performs no renames or protected-word JSON updates.
-- No `watch.create` behavior change, Watch row writes, Watch dispatch, provider calls, tasks, Discovery/Evidence/Hydration mutation, topology behavior changes, schema changes, UI behavior, runtime enforcement, support artifacts, relationship tags, or fourth-lane work were opened.
-
-HS310 can rest.
-
-Likely next seam if this line continues, not open now:
-
-```txt
-Actual watch.create mutation contract consuming accepted preflight included_system_ids as stored-scope authority.
-```
-
-Latest accepted advisory request:
-
-```txt
-workspace/OverseerHS298-system-radius-discovery-ref-identity-advisory-request.md
-```
-
-Latest accepted advisory artifact:
-
-```txt
-workspace/EngineeringDataHS298-system-radius-discovery-ref-identity-advisory.md
-```
-
-Latest advisory review:
-
 ```txt
-workspace/OverseerHS299-hs298-system-radius-discovery-ref-identity-advisory-review.md
+workspace/OverseerHS484-hs482-product-watch-bucket-persistence-review.md
 ```
 
-Latest accepted advisory request:
+Latest forecast note:
 
 ```txt
-workspace/OverseerHS290-watch-task-outcome-map-assurance-scope-request.md
+workspace/OverseerHS467-watch-bucket-forecast-and-open-questions.md
 ```
 
-Latest accepted advisory artifact:
+Latest accepted shaping note:
 
 ```txt
-workspace/EngineeringDataHS290-watch-task-outcome-map-assurance-scope.md
+workspace/OverseerHS457-discovery-settled-posture-reporting-note.md
 ```
-
-Latest Overseer advisory review:
-
-```txt
-workspace/OverseerHS291-hs290-watch-task-outcome-map-assurance-review.md
-```
-
-Latest accepted advisory request:
-
-```txt
-workspace/OverseerHS286-user-input-fetch-selected-resolution-missing-links-assurance-request.md
-```
-
-Accepted advisory artifacts:
-
-```txt
-workspace/EngineeringDataHS286-user-input-fetch-selected-resolution-missing-links.md
-workspace/EngineeringDataHS286-secondary-task-creation-watch-mechanics.md
-```
-
-Latest Overseer advisory review:
-
-```txt
-workspace/OverseerHS287-hs286-missing-links-assurance-review.md
-```
-
-HS284 Dev handoff:
-
-```txt
-workspace/DevHS284-selected-id-readability-repair-execution.md
-```
-
-Current decision surface:
-
-```txt
-workspace/OverseerHS282-selected-id-product-hydration-execution-decision-surface.md
-```
-
-Accepted posture:
-
-```txt
-workspace/OverseerHS283-selected-id-resolve-readability-posture-acceptance.md
-docs/features/selected-id-readability-repair.md
-```
-
-HS280 Dev handoff:
-
-```txt
-workspace/DevHS280-selected-id-product-hydration-authority-preflight.md
-```
-
-## Recent Accepted State
 
-Latest accepted Dev runway:
+Previous accepted advisory artifact:
 
 ```txt
-workspace/OverseerHS288-selected-id-resolve-candidate-report-handoff-runway.md
+workspace/ArchitectureDataHS474-watch-bucket-next-seam-assurance.md
 ```
 
 Latest accepted Dev handoff:
 
 ```txt
-workspace/DevHS288-selected-id-resolve-candidate-report-handoff.md
+workspace/DevHS478-discovery-pickup-consumer-hold-contract.md
 ```
 
-Latest Overseer review:
+Latest landed Dev handoff pending review:
 
 ```txt
-workspace/OverseerHS289-hs288-selected-id-resolve-candidate-review.md
+workspace/DevHS482-product-watch-bucket-persistence.md
 ```
 
-Status: accepted.
+## Stable Landing
 
-Latest accepted missing-links advisory request:
+Source runway:
 
 ```txt
-workspace/OverseerHS286-user-input-fetch-selected-resolution-missing-links-assurance-request.md
+workspace/OverseerHS482-product-watch-bucket-persistence-runway.md
 ```
 
-Latest accepted missing-links advisory artifacts:
+Landed handoff:
 
 ```txt
-workspace/EngineeringDataHS286-user-input-fetch-selected-resolution-missing-links.md
-workspace/EngineeringDataHS286-secondary-task-creation-watch-mechanics.md
+workspace/DevHS482-product-watch-bucket-persistence.md
 ```
 
-Latest accepted missing-links advisory review:
+Accepted review:
 
 ```txt
-workspace/OverseerHS287-hs286-missing-links-assurance-review.md
+workspace/OverseerHS484-hs482-product-watch-bucket-persistence-review.md
 ```
 
-Accepted recommendation:
+Accepted design basis:
 
 ```txt
-selected unresolved local ID -> Resolve candidate -> future report readability reuse
+workspace/OverseerHS481-hs480-watch-bucket-schema-runtime-design-review.md
+workspace/ArchitectureDataHS480-watch-bucket-schema-runtime-design.md
+workspace/ExternalIntegrationHS480-provider-policy-watch-bucket-discovery-pickup-design-pressure.md
 ```
 
-This is the recommended next rich surface if selected-ID Resolve continues. The separate Watch/task outcome map is accepted as a useful parked lane, not the same seam.
-
-## HS288 Accepted State
-
-Opened 2026-06-05:
+Accepted proof chain:
 
 ```txt
-workspace/OverseerHS288-selected-id-resolve-candidate-report-handoff-runway.md
+HS470 Watch bucket identity projection
+HS472 Watch bucket pickup posture bridge
+HS476 Watch bucket disposable persistence fixture
+HS478 Discovery pickup consumer hold contract
 ```
 
-Expected handoff:
+Question:
 
 ```txt
-workspace/DevHS288-selected-id-resolve-candidate-report-handoff.md
+What is the next safe seam after accepted product Watch bucket persistence?
 ```
 
-Accepted 2026-06-05:
+Boundary:
 
 ```txt
-workspace/OverseerHS289-hs288-selected-id-resolve-candidate-review.md
+Only minimal Watch bucket schema/repository/service/readout work is open. Discovery pickup start, lease/queue/dispatcher runtime, provider calls, Watch cadence mutation, candidate ref writes, Evidence/EVEidence writes, Hydration, Observation, UI, source-term rename, and protected-word JSON update remain closed.
 ```
 
-Accepted task:
+Provider-sourced guidance remains design pressure for later Discovery/provider movement, but HS482 must not start that movement.
 
-Build a read-only selected-ID Resolve candidate/report handoff preview, preferably:
+Likely next seam:
 
 ```txt
-metadata.selected_id_resolve_candidate.preview
+read-only product bucket pickup readout / Discovery pickup selection over open bucket rows
 ```
 
-It should prove the local handoff from a report/Observation-visible unresolved ID into one selected Resolve candidate, without provider calls, writes, Resolve execution, renderer/UI behavior, schema, queues, support artifacts, Watch/task result work, or fourth-lane work.
+No new runway is open.
 
-## HS288 Evidence
+## HS482 Evidence
 
-Dev updated 2026-06-05:
+Dev updated 2026-06-12:
 
-- Added `metadata.selected_id_resolve_candidate.preview` as a renderer-eligible, read-only/local-only selected-ID Resolve candidate/report handoff preview.
-- Added `src/main/services/selectedIdResolveCandidatePreviewService.js`.
-- Added `scripts/verify-selected-id-resolve-candidate-preview.js` and `npm.cmd run verify:selected-id-resolve-candidate-preview`.
-- Registered service command and enforcement dry-run coverage as `hydration_readability_repair` / `selected_id_resolve_candidate_report_handoff_readout` / `covered_read_only`.
-- Updated service registry, command authority, enforcement dry-run, and passive side-effect verification for the new read-only command.
-- Preview derives candidates from local report response raw IDs when `report_type` / `report_params` are supplied, with equivalent local candidate queries as fallback when report context is absent or cannot be built.
-- Preview returns:
-  - report/local context identity
-  - unresolved visible IDs
-  - selected ID type/value
-  - provider-backed Resolve type support
-  - current local label state
-  - strong local basis
-  - parked/conditional basis
-  - whether selected-ID Resolve preflight would be relevant
-  - report/corpus context that would benefit after later readability repair
-  - future preflight/execution command hints marked as non-authority
-  - boundary statements that focus/visibility/candidate status is not request/provider execution
-  - boundary statements that report-wide or multi-ID Hydration is not being used
-- Basis classification covered:
-  - `provider_backed_resolve_candidate_with_strong_local_basis`
-  - `already_local_readable`
-  - `unsupported_static_local_lookup`
-  - `parked_conditional_basis_only`
-  - `invalid_or_missing_selected_id`
-- Focused verifier sample:
-  - strong selected candidate: `character:91000001`
-  - classification: `provider_backed_resolve_candidate_with_strong_local_basis`
-  - selected-ID Resolve preflight relevant: `true`
-  - provider call authorized: `false`
-  - visible unresolved count: `4`
-  - static selected candidate: `inventory_type:999999` classified `unsupported_static_local_lookup`
-  - parked selected candidate: `alliance:99000999` classified `parked_conditional_basis_only`
-  - provider calls: `0`
-  - Resolve execution invoked: `false`
-  - old report-scoped `metadata.hydration` used: `false`
-  - table mutation proof unchanged: `true`
-- Boundaries confirmed:
-  - no provider calls
-  - no live/API verification
-  - no selected-ID Resolve execution
-  - no old report-scoped `metadata.hydration` selected-ID product path
-  - no Hydration writes
-  - no metadata run writes
-  - no API request log writes
-  - no entity writes/upserts
-  - no `activity_events` label patches
-  - no Evidence/EVEidence creation
-  - no Discovery ref mutation
-  - no queues, Bucket, Dispatcher, worker, lease, retry, or persisted work
-  - no schema changes
-  - no renderer/UI behavior
-  - no runtime enforcement or command blocking
-  - no support artifacts
-  - no Watch/task result work
-  - no fourth lane / fast lane
-- Verification run:
-  - `node --check src\main\services\selectedIdResolveCandidatePreviewService.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-selected-id-resolve-candidate-preview.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-enforcement-dry-run.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `npm.cmd run verify:selected-id-resolve-candidate-preview` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 282 warnings across 8 changed working-set files; no renames or protected-word JSON updates performed.
+- Added product Watch bucket schema:
 
-## HS288 Dev Handoff
+```txt
+watch_bucket_items
+```
+
+- Added repository / service:
+
+```txt
+src/main/db/watchBucketRepository.js
+src/main/services/watchBucketProductPersistenceService.js
+```
+
+- Added trusted local service command:
+
+```txt
+watch.bucket_product_persistence.emit
+```
+
+- Added focused verifier and package script:
+
+```txt
+scripts/verify-watch-bucket-product-persistence.js
+npm.cmd run verify:watch-bucket-product-persistence
+```
+
+- Registered command metadata / coverage in:
+
+```txt
+src/main/services/serviceRegistry.js
+src/main/services/enforcementDryRunService.js
+scripts/verify-service-registry.js
+scripts/verify-command-authority.js
+scripts/verify-enforcement-dry-run.js
+package.json
+```
+
+- Updated migration/schema and compatibility verifier coverage:
+
+```txt
+src/main/db/schema.sql
+scripts/verify-migrations.js
+scripts/verify-watch-bucket-disposable-persistence-fixture.js
+scripts/verify-discovery-pickup-consumer-hold-contract.js
+```
+
+Schema diff summary:
+
+```txt
+CREATE TABLE IF NOT EXISTS watch_bucket_items (
+  bucket_item_id TEXT PRIMARY KEY,
+  watch_run_id TEXT NOT NULL UNIQUE,
+  watch_type TEXT NOT NULL CHECK (watch_type IN ('system_radius', 'actor')),
+  watch_id INTEGER NOT NULL,
+  source_kind TEXT NOT NULL CHECK (source_kind IN ('watch_system_radius', 'watch_actor')),
+  status TEXT NOT NULL CHECK (status IN ('open', 'settled', 'cancelled', 'blocked_integrity')),
+  emitted_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  accepted_scope_json TEXT NOT NULL,
+  window_json TEXT NOT NULL,
+  caps_json TEXT NOT NULL,
+  provenance_json TEXT NOT NULL,
+  identity_fingerprint TEXT NOT NULL,
+  pickup_posture TEXT,
+  settled_at TEXT,
+  receipt_status TEXT,
+  receipt_summary_json TEXT,
+  provider_timing_json TEXT,
+  last_error_json TEXT
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_watch_bucket_items_one_open_per_watch
+ON watch_bucket_items(watch_type, watch_id)
+WHERE status = 'open';
+```
+
+Focused verifier sample:
+
+```json
+{
+  "status": "Watch bucket product persistence verified",
+  "command": "watch.bucket_product_persistence.emit",
+  "first_summary": {
+    "emission_basis_count": 5,
+    "inserted_open_bucket_item_count": 5,
+    "idempotent_existing_open_count": 0,
+    "integrity_conflict_count": 0,
+    "integrity_error_count": 0,
+    "open_bucket_item_count": 5,
+    "stale_current_open_item_count": 1,
+    "catch_up_rows_created": 0,
+    "overlapping_open_item_pairs": 10,
+    "watch_bucket_items_delta": 5,
+    "provider_packets": 0,
+    "discovery_pickup_packets_created": 0,
+    "candidate_refs_written": 0,
+    "evidence_eveidence_writes": 0,
+    "watch_cadence_mutations": 0
+  },
+  "idempotent_summary": {
+    "inserted_open_bucket_item_count": 0,
+    "idempotent_existing_open_count": 5,
+    "watch_bucket_items_delta": 0
+  },
+  "conflict_summary": {
+    "integrity_conflict_count": 1,
+    "watch_bucket_items_delta": 0
+  },
+  "watch_run_id_mismatch_summary": {
+    "inserted_open_bucket_item_count": 1,
+    "integrity_error_count": 1,
+    "watch_bucket_items_delta": 1
+  }
+}
+```
+
+Behavior proven:
+
+- valid due system/radius Watch emission basis creates one open `watch_bucket_items` row
+- re-emitting the same Watch while open is idempotent and writes no new row
+- same Watch with mismatched open identity produces `integrity_conflict_existing_open_bucket_item`
+- same `watch_run_id` with mismatched identity produces `integrity_error_watch_run_id_mismatch`
+- overlapping system scopes for different Watches coexist as independent open bucket rows
+- stale missed intervals collapse to one current open item and create zero catch-up rows
+- External I/O off does not block bucket row creation
+- External I/O off creates zero provider packets and zero Discovery refs
+- renderer IPC cannot call `watch.bucket_product_persistence.emit`
+- service output reports `fetch_runs_as_bucket_state: false`
+- service output reports `discovered_killmail_refs_as_bucket_state: false`
+- table mutation proof shows only `watch_bucket_items` changes during bucket emission
+
+Verification completed before handoff write:
+
+```txt
+node --check src\main\db\watchBucketRepository.js
+node --check src\main\services\watchBucketProductPersistenceService.js
+node --check scripts\verify-watch-bucket-product-persistence.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-enforcement-dry-run.js
+node --check scripts\verify-migrations.js
+node --check scripts\verify-watch-bucket-disposable-persistence-fixture.js
+node --check scripts\verify-discovery-pickup-consumer-hold-contract.js
+npm.cmd run verify:watch-bucket-product-persistence
+npm.cmd run verify:migrations
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+npm.cmd run verify:watch-bucket-disposable-persistence-fixture
+npm.cmd run verify:discovery-pickup-consumer-hold-contract
+npm.cmd run verify:db-integrity
+git diff --check
+git diff -- src\main\db\schema.sql
+git status --short --branch
+```
+
+Results:
+
+- listed syntax checks passed
+- focused product Watch bucket persistence verifier passed
+- migration verifier passed
+- service registry verifier passed
+- command authority verifier passed
+- passive side-effect verifier passed
+- enforcement dry-run verifier passed with 123/123 commands covered and no gaps
+- previous disposable fixture and Discovery pickup hold contract verifiers passed after updating their schema-era assertions to reject disposable fixture schema leakage, not the new product table
+- database integrity verifier passed
+- `git diff --check` returned exit code 0 with CRLF normalization warnings only
+- `git diff -- src/main/db/schema.sql` showed only `watch_bucket_items` table/index additions
+- `git status --short --branch` showed branch `main...origin/main [ahead 19]` with the existing broad unaccepted working set plus HS482-touched files
+
+Boundary confirmation:
+
+- system/radius only
+- actor Watch migration remains parked
+- no `collectActorWatch(...)` retirement
+- no system/radius collector redirect
+- no Discovery pickup execution
+- no provider packets, zKill calls, or ESI calls
+- no candidate refs or Discovery ref writes
+- no Evidence/EVEidence writes
+- no Hydration, Observation/reporting behavior, Watch cadence mutation, lease, dispatcher runtime, broad queue behavior, runtime enforcement, command blocking, UI, source-term rename, or protected-word JSON update
+- `held_by_external_io` is not persisted as a bucket lifecycle status
+- bucket rows are authored only by trusted local service logic, not renderer IPC
+
+## HS482 Dev Handoff
 
 Completed:
 
 ```txt
-workspace/DevHS288-selected-id-resolve-candidate-report-handoff.md
+workspace/DevHS482-product-watch-bucket-persistence.md
 ```
 
-Status: selected-ID Resolve candidate/report handoff preview complete and accepted by Overseer.
+Status: ready for Overseer review.
 
-## Current Decision Point
+## HS478 Evidence
 
-Atlas is resting after accepting the selected-ID Resolve candidate/report handoff proof.
+Dev updated 2026-06-12:
 
-Safe options:
-
-1. Rest selected-ID Resolve productization here.
-2. Ask for additional assurance/security review if a specific concern appears.
-3. Later, shape renderer/UI Resolve trigger behavior when the interface path is ready.
-4. Pivot to the separate parked Watch/task outcome map lane if Human chooses that direction.
-
-Do not open renderer-triggered Resolve execution, UI confirmation behavior, background/report-wide Hydration, Bucket/Dispatcher, schema, runtime enforcement, support artifacts, Watch/task result persistence, or fourth-lane work without a new bounded decision.
-
-## HS290 Accepted State
-
-Opened 2026-06-05:
+- Added fixture-only Discovery pickup consumer hold contract proof command:
 
 ```txt
-workspace/OverseerHS290-watch-task-outcome-map-assurance-scope-request.md
+discovery.pickup_consumer_hold_contract.preview
 ```
 
-Expected advisory artifact:
+- Added implementation:
 
 ```txt
-workspace/EngineeringDataHS290-watch-task-outcome-map-assurance-scope.md
+src/main/services/discoveryPickupConsumerHoldContractService.js
 ```
 
-Accepted 2026-06-05:
+- Added focused verifier and package script:
 
 ```txt
-workspace/OverseerHS291-hs290-watch-task-outcome-map-assurance-review.md
+scripts/verify-discovery-pickup-consumer-hold-contract.js
+npm.cmd run verify:discovery-pickup-consumer-hold-contract
 ```
 
-Accepted task:
-
-Scope and pressure-test the Watch/task outcome map lane before any implementation.
-
-Focus:
-
-- Manual Discovery origin and durable outputs
-- Manual Expansion origin and durable outputs
-- Watch authoring as durable intent
-- Watch schedule state as readout/posture
-- Watch executor task creation as volatile runtime movement
-- Watch collection outputs as durable provenance and Evidence/EVEidence changes
-- radius Watch scope snapshot versus recomputed topology
-- system/radius Discovery ref identity
-- whether any source path currently implies `watch_result`, relationship tag, durable task result, or relationship truth
-- smallest future read-only Watch/task outcome map surface, if any
-
-Accepted recommendation:
+- Registered command metadata / coverage in:
 
 ```txt
-Atlas has enough source truth to derive a read-only Watch/task origin and durable outcome map without new schema, provider calls, task dispatch, or Watch execution.
+src/main/services/serviceRegistry.js
+src/main/services/enforcementDryRunService.js
+scripts/verify-service-registry.js
+scripts/verify-command-authority.js
+scripts/verify-passive-side-effects.js
+scripts/verify-enforcement-dry-run.js
+package.json
 ```
 
-Not ready:
-
-- durable `watch_result`
-- `watch_result_items`
-- relationship tags
-- durable task queues
-- dispatcher/Bucket machinery
-- schema changes
-- Watch-derived relationship truth
-
-Open decision:
+Contract proof shape:
 
 ```txt
-Should Atlas open a bounded read-only Dev proof for a Watch/task outcome map preview?
+pickup_contract_rows
+future_pickup_eligible_rows
+held_by_external_io_rows
+rejected_before_pickup_consumption_rows
+independent_overlap_rows
+boundary_table_check
 ```
 
-## HS292 Accepted State
+Focused verifier sample:
 
-Opened 2026-06-05:
+```json
+{
+  "status": "Discovery pickup consumer hold contract verified",
+  "command": "discovery.pickup_consumer_hold_contract.preview",
+  "external_io_on_summary": {
+    "disposable_open_row_count": 5,
+    "contract_row_count": 12,
+    "future_pickup_eligible_count": 5,
+    "held_by_external_io_count": 0,
+    "duplicate_idempotent_result_count": 1,
+    "integrity_conflict_or_error_count": 2,
+    "rejected_source_row_count": 4,
+    "rejected_before_pickup_consumption_count": 7,
+    "independent_overlap_count": 10,
+    "provider_packets": 0,
+    "discovery_pickup_started": false,
+    "discovery_pickup_packets_created": 0,
+    "leases_created": 0,
+    "queue_items_created": 0,
+    "candidate_refs_written": 0,
+    "evidence_eveidence_writes": 0,
+    "watch_cadence_mutations": 0
+  },
+  "external_io_off_summary": {
+    "disposable_open_row_count": 5,
+    "contract_row_count": 12,
+    "future_pickup_eligible_count": 0,
+    "held_by_external_io_count": 5,
+    "duplicate_idempotent_result_count": 1,
+    "integrity_conflict_or_error_count": 2,
+    "rejected_source_row_count": 4,
+    "rejected_before_pickup_consumption_count": 7,
+    "independent_overlap_count": 10,
+    "provider_packets": 0,
+    "discovery_pickup_started": false,
+    "discovery_pickup_packets_created": 0,
+    "leases_created": 0,
+    "queue_items_created": 0,
+    "candidate_refs_written": 0,
+    "evidence_eveidence_writes": 0,
+    "watch_cadence_mutations": 0
+  }
+}
+```
+
+Behavior proven:
+
+- open disposable fixture row with External I/O on reports `future_pickup_eligible` while pickup remains unstarted
+- open disposable fixture row with External I/O off reports `held_by_external_io` as provider movement hold only
+- duplicate/idempotent persistence result reports `not_pickup_input_duplicate_idempotent_result` and creates no pickup unit
+- integrity conflict, integrity error, and rejected source rows report `rejected_before_pickup_consumption`
+- overlapping open rows from different Watches remain independent pickup candidates or holds
+- provider packet count remains zero
+- Discovery pickup started remains false
+- lease/queue/dispatcher behavior remains false
+- candidate refs, Discovery refs, Evidence/EVEidence, Hydration, Observation, Watch cadence, and product tables remain untouched
+
+Verification completed before handoff write:
 
 ```txt
-workspace/OverseerHS292-watch-task-outcome-map-preview-runway.md
+node --check src\main\services\discoveryPickupConsumerHoldContractService.js
+node --check scripts\verify-discovery-pickup-consumer-hold-contract.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-passive-side-effects.js
+node --check scripts\verify-enforcement-dry-run.js
+npm.cmd run verify:discovery-pickup-consumer-hold-contract
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+git diff --check
+git diff -- src\main\db\schema.sql
+git status --short --branch
 ```
 
-Expected handoff:
+Results:
 
-```txt
-workspace/DevHS292-watch-task-outcome-map-preview.md
-```
+- listed syntax checks passed
+- focused Discovery pickup consumer hold contract verifier passed
+- service registry verifier passed
+- command authority verifier passed
+- passive side-effect verifier passed
+- enforcement dry-run verifier passed with 122/122 commands covered and no gaps
+- `git diff --check` returned exit code 0 with CRLF normalization warnings only
+- `git diff -- src/main/db/schema.sql` returned no diff
+- `git status --short --branch` showed branch `main...origin/main [ahead 19]` with the existing broad unaccepted working set plus HS478-touched files
 
-Accepted task:
+Boundary confirmation:
 
-Build a read-only Watch/task origin and durable outcome map preview, preferably:
+- fixture/contract only
+- no update to `src/main/db/schema.sql`
+- no operator corpus mutation
+- no production bucket consumption
+- no Discovery pickup start
+- no provider packets
+- no lease / queue / dispatcher runtime
+- no candidate refs / Discovery refs
+- no Evidence/EVEidence writes
+- no Hydration, Observation, Watch cadence mutation, runtime enforcement, command blocking, UI, source-term rename, or protected-word JSON update
+- `held_by_external_io` remains provider movement hold, not Watch failure or persisted bucket status
 
-```txt
-runtime.watch_task_outcome_map.preview
-```
-
-It should prove Atlas can explain origin kind, operator act/trigger, command, volatile versus durable state, expected durable rows, latest matching `fetch_runs`, Discovery ref counts, Evidence/EVEidence counts, Watch schedule posture, system/radius authored versus planned scope, and queue identity posture without provider calls, task dispatch, writes, schema, `watch_result`, relationship tags, UI, enforcement, support artifacts, or fourth-lane work.
-
-Accepted 2026-06-05:
-
-```txt
-workspace/OverseerHS293-hs292-watch-task-outcome-map-preview-review.md
-```
-
-Accepted result:
-
-```txt
-runtime.watch_task_outcome_map.preview
-```
-
-HS292 is accepted as a read-only/local-only Watch/task origin and durable outcome map preview. It proves current origin/output posture and exposes system/radius identity ambiguity without creating durable Watch results or relationship truth.
-
-## HS292 Evidence
-
-Dev updated 2026-06-05:
-
-- Added `runtime.watch_task_outcome_map.preview` as a renderer-eligible, read-only/local-only Watch/task origin and durable outcome map preview.
-- Added `src/main/services/watchTaskOutcomeMapPreviewService.js`.
-- Added `scripts/verify-watch-task-outcome-map-preview.js` and `npm.cmd run verify:watch-task-outcome-map`.
-- Registered service command and enforcement dry-run coverage as `local_db_inspection` / `watch_task_outcome_map_readout` / `read_only_non_enforcing_proof`.
-- Updated service registry, command authority, enforcement dry-run, and passive side-effect verification for the new read-only command.
-- Preview returns:
-  - Manual Discovery origin and durable Discovery ref/provenance posture.
-  - Manual Expansion origin and durable Evidence/EVEidence/provenance posture.
-  - Watch authoring durable intent rows.
-  - Watch schedule readout posture derived from existing Watch rows and gates.
-  - Watch executor dispatch posture with direct volatile executor/task snapshots only.
-  - Actor Watch and system/radius Watch collection durable outputs from existing `fetch_runs`, Discovery refs, Evidence/EVEidence rows, warnings, and deferrals.
-  - system/radius authored included/excluded scope versus current collector planned scope.
-  - system/radius queue identity posture as current center-only `discovered_by_id`, with radius/watch id not present.
-  - absence of durable `watch_result`, `watch_results`, `watch_result_items`, relationship tag column, and relationship truth artifacts.
-- Focused verifier sample:
-  - origin sections: Manual Discovery, Manual Expansion, Watch authoring, Watch schedule readout, Watch executor dispatch, Actor Watch collection, System/radius Watch collection.
-  - volatile task snapshot: 2 total in-memory fixture tasks, 1 Watch executor task, `creates_tasks: false`.
-  - system/radius identity: `center_only`, no radius or watch id in Discovery ref identity.
-  - authored system/radius scope: valid included `[30000101,30000102]`, valid excluded `[30000102]`.
-  - current collector planned scope: recomputed from `TopologyService.getSystemsWithinRadius(center,radius)`, excluded systems not applied from Watch row.
-  - malformed stored included scope distinguished.
-  - durable result artifacts absent.
-  - table mutation proof unchanged.
-- Boundaries confirmed:
-  - no provider calls
-  - no live/API verification
-  - no Watch dispatch
-  - no task creation
-  - no queue dispatch
-  - no Evidence/EVEidence writes
-  - no Discovery ref mutation
-  - no Watch row mutation
-  - no Hydration or metadata writes
-  - no `watch_result`, `watch_result_items`, relationship tag, or relationship truth creation
-  - no schema changes
-  - no runtime enforcement or command blocking
-  - no renderer/UI work beyond renderer-eligible read-only service command registration
-  - no support artifacts
-  - no fourth lane / fast lane
-- Verification run:
-  - `node --check src\main\services\watchTaskOutcomeMapPreviewService.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-watch-task-outcome-map-preview.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `npm.cmd run verify:watch-task-outcome-map` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS292 working-tree changes.
-
-## HS292 Dev Handoff
+## HS478 Dev Handoff
 
 Completed:
 
 ```txt
-workspace/DevHS292-watch-task-outcome-map-preview.md
+workspace/DevHS478-discovery-pickup-consumer-hold-contract.md
 ```
 
-Status: Watch/task outcome map preview complete and accepted by Overseer.
+Status: ready for Overseer review.
 
-## Current Decision Point
+## HS476 Evidence
 
-Atlas is resting after accepting the Watch/task outcome map preview.
+Dev updated 2026-06-12:
 
-Safe options:
-
-1. Rest Watch/task outcome map here.
-2. Ask for additional assurance if a specific concern appears.
-3. Later prove Watch scope authority conformance: execution should use stored included system IDs, while recomputed topology is diagnostic only.
-4. Later decide system/radius Discovery ref identity before relying on durable result semantics.
-5. Later decide whether durable `watch_result` / `watch_result_items` schema is needed.
-
-Do not open durable Watch result storage, relationship tags, dispatcher/Bucket machinery, provider movement, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
-
-## Watch Scope Authority Landing
-
-Accepted 2026-06-05:
+- Added fixture-only disposable persistence proof command:
 
 ```txt
-docs/features/watch-scope-authority.md
+watch.bucket_disposable_persistence_fixture.preview
 ```
 
-Landing:
-
-- SDE source material is import provenance, not runtime lookup authority.
-- Runtime geometry should use local topology lookup tables produced from import.
-- During Watch authoring/preflight, Atlas may resolve center system + radius into an included system ID set.
-- Once accepted, the stored included system ID set is the Watch scope authority.
-- Watch execution should use the stored included system ID set.
-- Center system and radius remain provenance/explanation fields.
-- Recomputed topology is diagnostic comparison only unless the operator deliberately re-authors the Watch.
-
-Current implication:
-
-HS292's disclosed recomputed topology path is a conformance pressure point. The next safe seam, if this line continues, is read-only Watch scope authority conformance before any durable Watch result semantics.
-
-## HS294 Accepted State
-
-Opened 2026-06-05:
+- Added implementation:
 
 ```txt
-workspace/OverseerHS294-watch-scope-authority-conformance-runway.md
+src/main/services/watchBucketDisposablePersistenceFixtureService.js
 ```
 
-Expected handoff:
+- Added focused verifier and package script:
 
 ```txt
-workspace/DevHS294-watch-scope-authority-conformance.md
+scripts/verify-watch-bucket-disposable-persistence-fixture.js
+npm.cmd run verify:watch-bucket-disposable-persistence-fixture
 ```
 
-Accepted task:
-
-Add a read-only/local-only Watch scope authority conformance preview, preferably:
+- Registered command metadata / coverage in:
 
 ```txt
-watch.scope_authority_conformance.preview
+src/main/services/serviceRegistry.js
+src/main/services/enforcementDryRunService.js
+scripts/verify-service-registry.js
+scripts/verify-command-authority.js
+scripts/verify-passive-side-effects.js
+scripts/verify-enforcement-dry-run.js
+package.json
 ```
 
-It should prove how current Atlas code conforms, or fails to conform, to the accepted Watch scope authority model:
-
-- local topology lookup tables support authoring/preflight geometry
-- accepted stored `included_system_ids` are Watch scope authority
-- center/radius are provenance/explanation after acceptance
-- execution should use stored included system IDs
-- recomputed topology is diagnostic only
-- current execution either uses stored included IDs or exposes the exact conformance gap
-
-The proof may report a mismatch. This packet should not correct execution behavior.
-
-Stop if this requires provider calls, Watch dispatch, task creation, writes, schema, execution correction, durable `watch_result`, relationship tags, UI, runtime enforcement, support artifacts, or fourth-lane work.
-
-Accepted 2026-06-05:
+Disposable proof shape:
 
 ```txt
-workspace/OverseerHS295-hs294-watch-scope-authority-conformance-review.md
+disposable_fixture_rows
+persistence_results
+overlapping_fixture_rows
+boundary_table_check
 ```
 
-Accepted result:
+Focused verifier sample:
+
+```json
+{
+  "status": "Watch bucket disposable persistence fixture verified",
+  "command": "watch.bucket_disposable_persistence_fixture.preview",
+  "summary": {
+    "attempted_candidate_count": 8,
+    "rejected_source_row_count": 4,
+    "disposable_open_row_count": 5,
+    "inserted_count": 5,
+    "idempotent_noop_count": 1,
+    "integrity_conflict_count": 1,
+    "integrity_error_count": 1,
+    "rejected_before_persistence_count": 4,
+    "stale_current_open_row_count": 1,
+    "catch_up_rows_created": 0,
+    "overlapping_open_row_pairs": 10,
+    "provider_packets": 0,
+    "discovery_pickup_packets_created": 0,
+    "candidate_refs_written": 0,
+    "evidence_eveidence_writes": 0,
+    "watch_cadence_mutations": 0
+  }
+}
+```
+
+Behavior proven:
+
+- inserting one valid projected candidate creates one open disposable fixture row
+- inserting same Watch / same open identity again is idempotent and leaves one open row
+- inserting same Watch / different open identity reports integrity conflict and no second open row
+- inserting same `watch_run_id` with mismatched scope/provenance reports integrity error and rolls back inside disposable fixture
+- stale missed intervals create one current open row and zero catch-up rows
+- overlapping system scopes for different Watch IDs coexist and shared systems do not merge identity
+- External I/O off does not block disposable row persistence and creates zero provider packets / no Discovery pickup
+- invalid, not-due, inactive, and backoff source rows persist no disposable rows
+- boundary table check shows no `fetch_runs`, `discovered_killmail_refs`, `killmails`, `activity_events`, `api_request_logs`, warnings, or Watch cadence rows mutated
+
+Verification completed before handoff write:
 
 ```txt
-watch.scope_authority_conformance.preview
-current conformance status: gap
+node --check src\main\services\watchBucketDisposablePersistenceFixtureService.js
+node --check scripts\verify-watch-bucket-disposable-persistence-fixture.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-passive-side-effects.js
+node --check scripts\verify-enforcement-dry-run.js
+npm.cmd run verify:watch-bucket-disposable-persistence-fixture
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
 ```
 
-HS294 is accepted as a read-only/local-only Watch scope authority conformance proof. The gap is intentional proof output: authoring and readout mostly conform, but current system/radius Watch execution still recomputes from center/radius instead of consuming accepted stored included system IDs.
+Results:
 
-## HS294 Evidence
+- listed syntax checks passed
+- focused disposable persistence fixture verifier passed
+- service registry verifier passed
+- command authority verifier passed
+- passive side-effect verifier passed
+- enforcement dry-run verifier passed with 121/121 commands covered and no gaps
 
-Dev updated 2026-06-05:
+Boundary confirmation:
 
-- Added `watch.scope_authority_conformance.preview` as a renderer-eligible, read-only/local-only Watch scope authority conformance preview.
-- Added `src/main/services/watchScopeAuthorityConformanceService.js`.
-- Added `scripts/verify-watch-scope-authority-conformance.js` and `npm.cmd run verify:watch-scope-authority-conformance`.
-- Registered service command and enforcement dry-run coverage as `local_db_inspection` / `watch_scope_authority_conformance_readout` / `read_only_non_enforcing_proof`.
-- Updated service registry, command authority, enforcement dry-run, and passive side-effect verification for the new read-only command.
-- Preview reports:
-  - accepted Watch scope authority chain
-  - SDE source material as import/source provenance only
-  - local topology lookup tables as runtime geometry substrate
-  - stored `included_system_ids` as accepted Watch scope authority
-  - center/radius as provenance/explanation after Watch acceptance
-  - recomputed topology as diagnostic comparison only
-  - Discovery refs as possible leads, not Evidence/EVEidence
-  - Evidence/EVEidence as ESI-expanded killmail records only
-  - source-path conformance for authoring, schedule readout, offline readout, executor dispatch, collector planning, planner recompute, and Discovery ref identity
-  - per-Watch stored scope status for valid, missing, and malformed included scope
-  - stored scope versus recomputed diagnostic scope
-  - exact correction seams if execution still recomputes from center/radius
-- Focused verifier sample:
-  - summary status: `gap`
-  - system/radius Watch count: `3`
-  - valid stored scope count: `1`
-  - missing stored scope count: `1`
-  - malformed stored scope count: `1`
-  - stored versus recomputed mismatch count: `1`
-  - execution uses stored included IDs now: `false`
-  - execution recomputes from center/radius now: `true`
-  - exact correction seam: `watchExecutor.dispatchFor / systemRadiusCollector.collectSystemRadiusWatch / systemRadiusPlanner.planSystemRadiusWatch`
-  - valid fixture stored included scope `[30000101,30000103]` differs from recomputed diagnostic scope `[30000101,30000102]`
-  - table mutation proof unchanged
-- Current conformance result:
-  - `watchlistRepository.addSystemRadiusWatch`: `conforms` for local topology lookup authoring/preflight geometry.
-  - `watchScheduler.buildWatchScheduleStatus`: `conforms` for reading/parsing stored included/excluded scope as readout posture.
-  - `watchOfflineReadout.buildWatchOfflineReadout`: `partial` for local readout context, with center fallback only as diagnostic/readout posture.
-  - `watchExecutor.dispatchFor`: `gap`; builds system-radius execution payload from center/radius and caps, not stored included IDs.
-  - `systemRadiusCollector.collectSystemRadiusWatch`: `gap`; calls planner from input/topology unless fixture planner output is injected.
-  - `systemRadiusPlanner.planSystemRadiusWatch`: `partial`; recompute is useful for authoring/preflight or diagnostics but not accepted execution authority.
-  - system/radius Discovery ref identity remains center-only and separate from Watch scope authority.
-- Boundaries confirmed:
-  - no provider calls
-  - no live/API verification
-  - no Watch dispatch
-  - no Watch arm/tick
-  - no task creation
-  - no queue dispatch
-  - no Evidence/EVEidence writes
-  - no Discovery ref mutation
-  - no Watch row mutation
-  - no Hydration or metadata writes
-  - no API request log writes
-  - no execution correction
-  - no `watch_result`, `watch_result_items`, relationship tag, or relationship truth creation
-  - no schema changes
-  - no runtime enforcement or command blocking
-  - no renderer/UI work beyond renderer-eligible read-only service command registration
-  - no support artifacts
-  - no fourth lane / fast lane
-- Verification run:
-  - `node --check src\main\services\watchScopeAuthorityConformanceService.js` passed.
-  - `node --check scripts\verify-watch-scope-authority-conformance.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `npm.cmd run verify:watch-scope-authority-conformance` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 294 warnings across 8 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS294 working-tree changes.
+- fixture/disposable only
+- no update to `src/main/db/schema.sql`
+- no product schema or durable bucket rows
+- no operator corpus mutation
+- no provider calls
+- no Discovery pickup
+- no candidate refs / Discovery refs
+- no Evidence/EVEidence writes
+- no Hydration, Observation, dispatcher, queue, lease, enforcement, UI, source-term rename, or protected-word JSON update
+- reports `fetch_runs_as_bucket_state: false`
+- reports `discovered_killmail_refs_as_bucket_state: false`
 
-## HS294 Dev Handoff
+## HS476 Dev Handoff
 
 Completed:
 
 ```txt
-workspace/DevHS294-watch-scope-authority-conformance.md
+workspace/DevHS476-watch-bucket-disposable-persistence-fixture.md
 ```
 
-Status: Watch scope authority conformance preview complete and accepted by Overseer.
+Status: ready for Overseer review.
 
-## Current Decision Point
+## HS472 Evidence
 
-Atlas is resting after accepting the Watch scope authority conformance proof.
+Dev updated 2026-06-12:
 
-Accepted next mechanical seam, if this line continues:
+- Added read-only fixture/projection command:
 
 ```txt
-system/radius Watch execution should consume accepted stored included_system_ids
+watch.bucket_pickup_posture_bridge.preview
 ```
 
-Likely correction surface:
+- Added implementation:
 
 ```txt
-watchExecutor.dispatchFor
-systemRadiusCollector.collectSystemRadiusWatch
-systemRadiusPlanner.planSystemRadiusWatch
+src/main/services/watchBucketPickupPostureBridgeService.js
 ```
 
-Safe options:
-
-1. Rest Watch scope authority here.
-2. Ask for additional assurance if a specific concern appears.
-3. Open a bounded execution correction packet that routes system/radius Watch execution through stored included system IDs while preserving recompute as diagnostic/preflight only.
-4. Later decide system/radius Discovery ref identity before relying on durable result semantics.
-5. Later decide whether durable `watch_result` / `watch_result_items` schema is needed.
-
-Do not open durable Watch result storage, relationship tags, Discovery ref identity changes, provider movement, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
-
-## HS296 Active Dev Runway
-
-Opened 2026-06-05:
+- Added focused verifier and package script:
 
 ```txt
-workspace/OverseerHS296-watch-scope-authority-execution-correction-runway.md
+scripts/verify-watch-bucket-pickup-posture-bridge.js
+npm.cmd run verify:watch-bucket-pickup-posture-bridge
 ```
 
-Expected handoff:
+- Registered command metadata / coverage in:
 
 ```txt
-workspace/DevHS296-watch-scope-authority-execution-correction.md
+src/main/services/serviceRegistry.js
+src/main/services/enforcementDryRunService.js
+scripts/verify-service-registry.js
+scripts/verify-command-authority.js
+scripts/verify-passive-side-effects.js
+scripts/verify-enforcement-dry-run.js
+package.json
 ```
 
-Accepted task:
+Projection shape proven:
 
-Correct the Watch executor path so system/radius Watch execution consumes accepted stored `included_system_ids`.
+```txt
+pickup_posture_rows
+future_pickup_eligible_candidates
+held_by_external_io_candidates
+rejected_before_pickup_rows
+independent_overlap_posture
+```
 
-The correction should:
+Focused verifier sample:
 
-- pass stored included system IDs from `watchExecutor.dispatchFor` into system/radius collection when schedule source has valid stored scope
-- preserve center/radius as provenance/explanation
-- use supplied stored included IDs as execution authority when present
-- preserve existing direct/manual `system.radius.watch` center/radius planner behavior when no stored included IDs are supplied
-- fail/block missing or malformed stored Watch scope before provider work instead of silently recomputing
-- update conformance proof so the execution gap closes or narrows explicitly
+```json
+{
+  "status": "Watch bucket pickup posture bridge verified",
+  "command": "watch.bucket_pickup_posture_bridge.preview",
+  "external_io_on_summary": {
+    "projected_candidate_fixture_count": 5,
+    "pickup_posture_row_count": 13,
+    "future_pickup_eligible_count": 5,
+    "held_by_external_io_count": 0,
+    "rejected_before_pickup_count": 8,
+    "provider_packets": 0,
+    "discovery_pickup_packets_created": 0,
+    "bucket_rows_persisted": 0,
+    "writes": 0
+  },
+  "external_io_off_summary": {
+    "projected_candidate_fixture_count": 5,
+    "pickup_posture_row_count": 13,
+    "future_pickup_eligible_count": 0,
+    "held_by_external_io_count": 5,
+    "rejected_before_pickup_count": 8,
+    "provider_packets": 0,
+    "discovery_pickup_packets_created": 0,
+    "bucket_rows_persisted": 0,
+    "writes": 0
+  }
+}
+```
 
-Stop if this requires provider calls in verification, schema changes, Discovery ref identity changes, durable Watch result semantics, direct/manual collection redesign, UI, active enforcement, support artifacts, or fourth-lane work.
+Behavior proven:
 
-## HS296 Evidence
+- fixture projected candidate with External I/O on reports `future_pickup_eligible` but does not start pickup
+- fixture projected candidate with External I/O off reports `held_by_external_io` as provider movement hold, not Watch emission failure
+- duplicate-open suppression and no-candidate rows from HS470 do not become pickup eligible
+- integrity conflict and integrity error rows do not become pickup eligible
+- overlapping candidates from different Watches remain independently eligible/held
+- provider packet count remains zero
+- Discovery pickup started remains false
+- bucket rows persisted remains zero
+- candidate refs, Evidence/EVEidence, Hydration, Observation, dispatcher, queue, lease, enforcement, and UI remain untouched
 
-Dev updated 2026-06-05:
+Verification completed before handoff write:
 
-- Corrected system/radius Watch execution so accepted stored `included_system_ids` are passed from `watchExecutor.dispatchFor` into `system.radius.watch` as `acceptedSystemIds`.
-- Watch dispatch now preserves center/radius as provenance fields while identifying `acceptedScopeSource: stored_watch_scope`.
-- Watch dispatch validates stored included scope before task creation. Missing, malformed, or empty stored included scope returns `watch_scope_authority_invalid` from the tick path and creates no task.
-- Updated `systemRadiusPlanner.planSystemRadiusWatch` so supplied `acceptedSystemIds` are used as exact execution authority instead of recomputing topology from center/radius.
-- Preserved direct/manual `system.radius.watch` behavior: when no accepted IDs are supplied, planner continues to use center/radius local topology planning.
-- Updated `systemRadiusCollector` summaries to disclose:
-  - `scope_authority.source`
-  - `uses_stored_included_system_ids`
-  - `recomputed_topology_used_as_authority`
-  - `center_radius_role`
-  - collection-plan scope authority source
-- Updated `watch.scope_authority_conformance.preview` so execution conformance now reports:
-  - `accepted_model_conformance: conforms`
-  - `execution_uses_stored_included_ids_now: true`
-  - `execution_recomputes_from_center_radius_now: false`
-  - `invalid_stored_scope_blocks_before_provider: true`
-  - `direct_manual_system_radius_preserves_center_radius_planner: true`
-  - `exact_correction_seam: null`
-- Focused verifier coverage added:
-  - stored Watch scope `[30000001,30000004]` drives exact zKill target systems in collector fixture even when center/radius topology could differ.
-  - collector discloses `stored_watch_scope`.
-  - direct/manual center/radius collector behavior remains covered by existing collector tests.
-  - valid system/radius Watch dispatch carries stored accepted IDs.
-  - malformed stored scope fails before dispatch payload and blocks executor tick before task creation.
-  - conformance preview fixture still distinguishes stored scope from recomputed diagnostic topology while reporting execution conformance.
-- Boundaries confirmed:
-  - no provider/live/API verification
-  - no schema changes
-  - no `system_watches` stored shape changes
-  - no Discovery ref identity changes
-  - no durable `watch_result`, `watch_result_items`, relationship tag, or relationship truth
-  - no durable Watch result semantics
-  - no renderer/UI work
-  - no runtime enforcement or command blocking activation
-  - no support artifacts
-  - no fourth lane / fast lane
-- Verification run:
-  - `node --check src\main\watchlist\watchExecutor.js` passed.
-  - `node --check src\main\workers\systemRadiusCollector.js` passed.
-  - `node --check src\main\workers\systemRadiusPlanner.js` passed.
-  - `node --check src\main\services\watchScopeAuthorityConformanceService.js` passed.
-  - `node --check scripts\verify-watch-scope-authority-conformance.js` passed.
-  - `node --check scripts\verify-system-radius-collector.js` passed.
-  - `node --check scripts\verify-watch-executor.js` passed.
-  - `npm.cmd run verify:watch-scope-authority-conformance` passed.
-  - `node scripts\verify-system-radius-collector.js` passed.
-  - `npm.cmd run verify:collector` passed as the repo's equivalent package script for `scripts\verify-system-radius-collector.js`.
-  - `npm.cmd run verify:watch-executor` passed.
-  - `npm.cmd run verify:planner` passed.
-  - `npm.cmd run verify:watch-scheduler` passed.
-  - `npm.cmd run verify:watch-offline-readout` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 28 warnings across 7 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS296 working-tree changes.
+```txt
+node --check src\main\services\watchBucketPickupPostureBridgeService.js
+node --check scripts\verify-watch-bucket-pickup-posture-bridge.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-passive-side-effects.js
+node --check scripts\verify-enforcement-dry-run.js
+npm.cmd run verify:watch-bucket-pickup-posture-bridge
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+```
 
-## HS296 Dev Handoff
+Results:
+
+- listed syntax checks passed
+- focused Watch bucket pickup posture bridge verifier passed
+- service registry verifier passed
+- command authority verifier passed
+- passive side-effect verifier passed
+- enforcement dry-run verifier passed with 120/120 commands covered and no gaps
+
+Boundary confirmation:
+
+- read-only fixture/projection bridge only
+- projected candidates are fixture input only
+- no schema
+- no durable bucket rows
+- no Watch row or cadence mutation
+- no `fetch_runs` as bucket state
+- no `discovered_killmail_refs` as pre-acquisition Watch bucket state
+- no Watch executor tick, TaskRunner, collectors, Discovery pickup, zKill, ESI, Evidence writer, Hydration, Observation, dispatcher, queue, lease, enforcement, UI, provider calls, candidate refs, Discovery refs, Evidence/EVEidence writes, source-term rename, or protected-word JSON update
+
+## HS472 Dev Handoff
 
 Completed:
 
 ```txt
-workspace/DevHS296-watch-scope-authority-execution-correction.md
+workspace/DevHS472-watch-bucket-pickup-posture-bridge.md
 ```
 
-Status: Watch scope authority execution correction complete and accepted by Overseer.
+Status: ready for Overseer review.
 
-## HS296 Overseer Review
+## HS470 Evidence
+
+Dev updated 2026-06-12:
+
+- Added read-only fixture/projection command:
+
+```txt
+watch.bucket_identity_projection.preview
+```
+
+- Added implementation:
+
+```txt
+src/main/services/watchBucketIdentityProjectionService.js
+```
+
+- Added focused verifier and package script:
+
+```txt
+scripts/verify-watch-bucket-identity-projection.js
+npm.cmd run verify:watch-bucket-identity-projection
+```
+
+- Registered command metadata / coverage in:
+
+```txt
+src/main/services/serviceRegistry.js
+src/main/services/enforcementDryRunService.js
+scripts/verify-service-registry.js
+scripts/verify-command-authority.js
+scripts/verify-passive-side-effects.js
+scripts/verify-enforcement-dry-run.js
+package.json
+```
+
+Projection shape proven:
+
+```txt
+projected_bucket_candidates
+duplicate_open_suppressions
+allowed_overlaps
+integrity_conflicts
+integrity_errors
+rejected_stubs
+candidate_ref_killmail_overlap_principle
+```
+
+Focused verifier sample:
+
+```json
+{
+  "status": "Watch bucket identity projection verified",
+  "command": "watch.bucket_identity_projection.preview",
+  "summary": {
+    "input_stub_count": 12,
+    "existing_open_stub_fixture_count": 3,
+    "projected_bucket_candidate_count": 5,
+    "duplicate_open_suppression_count": 1,
+    "allowed_overlap_count": 10,
+    "integrity_conflict_count": 1,
+    "integrity_error_count": 2,
+    "rejected_stub_count": 4,
+    "provider_packets": 0,
+    "discovery_pickup_packets_created": 0,
+    "bucket_rows_persisted": 0,
+    "writes": 0
+  },
+  "external_io_posture": {
+    "state": "off",
+    "watch_bucket_candidate_projection_blocked": false,
+    "external_io_is_provider_movement_gate": true,
+    "provider_packets": 0,
+    "discovery_pickup_started": false
+  }
+}
+```
+
+Behavior proven:
+
+- due valid system/radius Watch with no existing open stub emits one projected candidate
+- due valid system/radius Watch with existing open stub for same Watch emits no candidate and reports duplicate-open suppression
+- stale Watch with multiple missed intervals emits one current candidate only and zero catch-up candidates
+- overlapping included systems across different Watches are allowed
+- same Watch with mismatched existing open scope/provenance flags integrity conflict
+- same `watch_run_id` with mismatched Watch/scope/window/provenance flags integrity error
+- External I/O closed still allows Watch bucket candidate projection while provider packets remain zero and Discovery pickup is not started
+- invalid stored scope emits no candidate
+- not-due, inactive, and backoff stubs emit no candidate
+- candidate-ref / killmail overlap remains principle-only with no writes and no provenance-table claim
+
+Verification completed before handoff write:
+
+```txt
+node --check src\main\services\watchBucketIdentityProjectionService.js
+node --check scripts\verify-watch-bucket-identity-projection.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-passive-side-effects.js
+node --check scripts\verify-enforcement-dry-run.js
+npm.cmd run verify:watch-bucket-identity-projection
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+```
+
+Results:
+
+- listed syntax checks passed
+- focused Watch bucket identity projection verifier passed
+- service registry verifier passed
+- command authority verifier passed
+- passive side-effect verifier passed
+- enforcement dry-run verifier passed with 119/119 commands covered and no gaps
+
+Boundary confirmation:
+
+- read-only fixture/projection only
+- existing-open state is fixture input only
+- no schema
+- no durable bucket rows
+- no Watch row or cadence mutation
+- no `fetch_runs` as bucket state
+- no `discovered_killmail_refs` as pre-acquisition Watch bucket state
+- no Watch executor tick, TaskRunner, collectors, Discovery pickup, zKill, ESI, Evidence writer, Hydration, Observation, dispatcher, queue, lease, enforcement, UI, provider calls, Discovery refs, Evidence/EVEidence writes, source-term rename, or protected-word JSON update
+
+## HS470 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS470-watch-bucket-identity-projection.md
+```
+
+Status: ready for Overseer review.
+
+## HS463 Evidence
+
+Dev updated 2026-06-12:
+
+- Added read-only/no-provider service command:
+
+```txt
+watch.system_radius_run_stub.preview
+```
+
+- Added implementation:
+
+```txt
+src/main/services/watchSystemRadiusRunStubService.js
+```
+
+- Added focused verifier and package script:
+
+```txt
+scripts/verify-watch-system-radius-run-stub.js
+npm.cmd run verify:watch-system-radius-run-stub
+```
+
+- Registered command metadata / coverage in:
+
+```txt
+src/main/services/serviceRegistry.js
+src/main/services/enforcementDryRunService.js
+scripts/verify-service-registry.js
+scripts/verify-command-authority.js
+scripts/verify-passive-side-effects.js
+scripts/verify-enforcement-dry-run.js
+package.json
+```
+
+Stub shape proven:
+
+```txt
+watch_run_stub.watch_id
+watch_run_stub.watch_run_id
+watch_run_stub.source_kind: watch_system_radius
+watch_run_stub.accepted_scope.execution_authority: stored_included_system_ids
+watch_run_stub.accepted_scope.included_system_ids
+watch_run_stub.accepted_scope.center_radius_is_provenance_only: true
+watch_run_stub.window.lookback_seconds / due_at / emitted_at
+watch_run_stub.caps.max_systems / max_refs_per_system / max_expansions
+watch_run_stub.provenance.source_intent: Watch/system-radius
+watch_run_stub.boundary_flags.bucket_row_created: false
+watch_run_stub.boundary_flags.discovery_pickup_started: false
+watch_run_stub.boundary_flags.evidence_or_eveidence: false
+watch_run_stub.boundary_flags.observation: false
+```
+
+Focused verifier sample:
+
+```json
+{
+  "status": "System/radius Watch-run stub preview verified",
+  "command": "watch.system_radius_run_stub.preview",
+  "summary": {
+    "system_radius_watch_count": 5,
+    "due_system_radius_watch_count": 2,
+    "valid_stub_count": 1,
+    "emitted_stub_count": 1,
+    "invalid_stored_scope_count": 1,
+    "provider_calls": 0,
+    "live_api_calls": 0,
+    "writes": 0,
+    "bucket_rows_created": 0,
+    "discovery_pickup_packets_created": 0,
+    "watch_mutations": 0,
+    "parked_tension_resolved": false
+  }
+}
+```
+
+Behavior proven:
+
+- accepted stored `included_system_ids` are execution authority
+- center/radius remain provenance and explanation only
+- one eligible due system/radius Watch emits one deterministic fixture stub
+- invalid stored scope emits no stub and reports `watch_scope_authority_invalid`
+- invalid parseable IDs remain diagnostic-only
+- disarmed, inactive, not-due, backoff, and live-gate-waiting rows emit no valid stub
+- the stub is candidate input for later bucket or Discovery pickup behavior
+- the stub is not a bucket, Discovery pickup, Discovery ref, Evidence/EVEidence, Hydration, provider execution, or Observation
+- parked External I/O bucket eligibility tension is reported but not resolved
+
+Verification completed before handoff write:
+
+```txt
+node --check src\main\services\watchSystemRadiusRunStubService.js
+node --check scripts\verify-watch-system-radius-run-stub.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-passive-side-effects.js
+node --check scripts\verify-enforcement-dry-run.js
+npm.cmd run verify:watch-system-radius-run-stub
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+```
+
+Results:
+
+- listed syntax checks passed
+- focused Watch-run stub verifier passed
+- service registry verifier passed
+- command authority verifier passed
+- passive side-effect verifier passed
+- enforcement dry-run verifier passed with 118/118 commands covered and no gaps
+
+Boundary confirmation:
+
+- read-only/no-provider Watch-run stub projection only
+- no durable bucket rows
+- no product Watch run rows
+- no `WatchSessionExecutor.tick(...)`
+- no Watch dispatch
+- no `TaskRunner`
+- no old collector invocation
+- no zKillboard, ESI, or provider call
+- no `discovered_killmail_refs` write
+- no Evidence/EVEidence write
+- no Hydration or metadata write
+- no API log or warning write
+- no Watch row or cadence mutation
+- no Discovery outcome decision or receipt handling
+- no dispatcher, queue, lease, retry, or External I/O policy implementation
+- no schema, runtime behavior, collector retirement, actor Watch behavior, UI, storage enforcement, source-term, or protected-word change
+
+## HS463 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS463-system-radius-watch-run-stub-projection.md
+```
+
+Status: ready for Overseer review.
+
+## HS461 Evidence
+
+Dev updated 2026-06-12:
+
+- Corrected stale scheduled actor Watch readout in:
+
+```txt
+src/main/discovery/actorWatchTransportFailureParityProof.js
+scripts/verify-watch-actor-transport-failure-parity.js
+```
+
+- Removed active proof/verifier use of:
+
+```txt
+scheduled_actor_watch_legacy_parked
+```
+
+- Replaced it with current runtime posture:
+
+```txt
+scheduled_actor_watch_current_runner: runScheduledActorWatch
+scheduled_actor_watch_runner_call_target: runActorWatchDirectBody
+collectActorWatch_status: legacy_compatibility_available_retirement_candidate
+```
+
+- Updated source-boundary assertions to require:
+
+```txt
+runActorWatchService -> runActorWatchDirectBody
+watchExecutor.dispatchFor(actor) -> runScheduledActorWatch
+runScheduledActorWatch -> runActorWatchDirectBody
+```
+
+Verification completed before handoff write:
+
+```txt
+node --check src\main\discovery\actorWatchTransportFailureParityProof.js
+node --check scripts\verify-watch-actor-transport-failure-parity.js
+npm.cmd run verify:watch-actor-transport-failure-parity
+rg -n "scheduled_actor_watch_legacy_parked|scheduled actor Watch should remain parked|runner: collectActorWatch|pre-HS446 legacy" src\main\discovery\actorWatchTransportFailureParityProof.js scripts\verify-watch-actor-transport-failure-parity.js
+```
+
+Results:
+
+- listed syntax checks passed
+- transport/failure parity verifier passed
+- focused stale scan returned no matches in the active target files
+- verifier sample reports `scheduled_actor_watch_current_runner: runScheduledActorWatch`
+- verifier sample reports `scheduled_actor_watch_runner_call_target: runActorWatchDirectBody`
+- verifier sample reports `collectActorWatch_status: legacy_compatibility_available_retirement_candidate`
+
+Boundary confirmation:
+
+- readout/assertion correction only
+- no production actor Watch runtime change
+- no `collectActorWatch(...)` retirement, deletion, import, or invocation
+- no live actor Watch runner change
+- no broad verifier seed-path migration
+- no provider behavior change
+- no live/provider calls
+- no Watch cadence, scheduling, backoff, bucket, or completion behavior change
+- no Discovery handling/recovery behavior change
+- no Evidence/EVEidence behavior change
+- no Hydration, Observation, Assessment, storage, schema, dispatcher, queue, lease, enforcement, UI, source-term, or protected-word change
+
+## HS461 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS461-transport-failure-parity-stale-scheduled-readout-correction.md
+```
+
+Status: ready for Overseer review.
+
+## HS459 Evidence
+
+Dev updated 2026-06-12:
+
+- Corrected stale runtime compatibility preview readout in:
+
+```txt
+src/main/services/watchActorCompatibilityWrapperRuntimePreviewService.js
+scripts/verify-watch-actor-compatibility-wrapper-runtime-preview.js
+```
+
+- Corrected the same stale current-path claim in the touched contract surface:
+
+```txt
+src/main/services/watchActorCompatibilityWrapperContractService.js
+scripts/verify-watch-actor-compatibility-wrapper-contract.js
+```
+
+- Updated service registry assertions in:
+
+```txt
+scripts/verify-service-registry.js
+```
+
+Runtime preview now reports:
+
+```txt
+existing_runtime_preserved.actor_watch_runtime_entry_point: runActorWatchService
+existing_runtime_preserved.runActorWatchService_current_call_target: runActorWatchDirectBody
+existing_runtime_preserved.scheduled_actor_watch_dispatch_command: actor.watch
+existing_runtime_preserved.scheduled_actor_watch_current_runner: runScheduledActorWatch
+existing_runtime_preserved.scheduled_actor_watch_runner_call_target: runActorWatchDirectBody
+existing_runtime_preserved.collectActorWatch_status: legacy_compatibility_available_retirement_candidate
+```
+
+Contract proof now reports:
+
+```txt
+direct_command_path_basis.current_path includes:
+  runActorWatchDirectBody(input, { ...dependencies, db })
+
+scheduled_dispatch_path_basis.current_runner: runScheduledActorWatch
+scheduled_dispatch_path_basis.runner_call_target: runActorWatchDirectBody
+scheduled_dispatch_path_basis.collectActorWatch_status: legacy_compatibility_available_retirement_candidate
+```
+
+Verification completed before handoff write:
+
+```txt
+node --check src\main\services\watchActorCompatibilityWrapperRuntimePreviewService.js
+node --check src\main\services\watchActorCompatibilityWrapperContractService.js
+node --check scripts\verify-watch-actor-compatibility-wrapper-runtime-preview.js
+node --check scripts\verify-watch-actor-compatibility-wrapper-contract.js
+node --check scripts\verify-service-registry.js
+npm.cmd run verify:watch-actor-compatibility-wrapper-runtime-preview
+npm.cmd run verify:watch-actor-compatibility-wrapper-contract
+npm.cmd run verify:service-registry
+git diff --check
+git status --short --branch
+```
+
+Results:
+
+- all listed syntax checks passed
+- runtime compatibility wrapper preview verifier passed
+- compatibility wrapper contract verifier passed
+- service registry verifier passed
+- `git diff --check` passed with CRLF normalization warnings only
+- `git status --short --branch` showed branch `main...origin/main [ahead 19]` with the existing broad uncommitted/untracked milestone stack plus HS459 changes
+
+Deferred stale references:
+
+```txt
+src/main/discovery/actorWatchTransportFailureParityProof.js
+scripts/verify-watch-actor-transport-failure-parity.js
+```
+
+These still expose/assert `scheduled_actor_watch_legacy_parked`. They were not changed because HS459 targeted compatibility-wrapper readout/assertion cleanup and explicitly avoided broad verifier migration.
+
+Boundary confirmation:
+
+- stale compatibility readout/assertion correction only
+- no `collectActorWatch(...)` retirement or deletion
+- no provider behavior change
+- no live/provider calls
+- no Watch cadence, scheduling, backoff, or bucket behavior change
+- no Discovery handling/recovery behavior change
+- no Evidence/EVEidence behavior change
+- no Hydration, Observation, Assessment, storage, schema, dispatcher, queue, lease, enforcement, UI, source-term, or protected-word change
+- no broad verifier seed-path migration
+- no live actor Watch runner replacement
+
+## HS459 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS459-stale-actor-watch-compatibility-readout-correction.md
+```
+
+Status: ready for Overseer review.
+
+## HS452 Evidence
+
+Dev updated 2026-06-12:
+
+- Added read-only / fixture-only service:
+
+```txt
+src/main/services/watchActorDiscoveryHandoffContractService.js
+```
+
+- Registered command:
+
+```txt
+watch.actor_discovery_handoff_contract.preview
+```
+
+- Added focused verifier:
+
+```txt
+scripts/verify-watch-actor-discovery-handoff-contract.js
+npm.cmd run verify:watch-actor-discovery-handoff-contract
+```
+
+- Registered command metadata / coverage in:
+
+```txt
+src/main/services/serviceRegistry.js
+src/main/services/enforcementDryRunService.js
+scripts/verify-service-registry.js
+scripts/verify-command-authority.js
+scripts/verify-passive-side-effects.js
+package.json
+```
+
+Projection shape proven:
+
+```txt
+actor_watch_discovery_request
+actor_watch_discovery_receipt
+```
+
+Direct projection:
+
+```txt
+caller: runActorWatchService -> runActorWatchDirectBody
+request.source: direct_actor_watch
+request.model: actor_watch_discovery_request
+receipt.model: actor_watch_discovery_receipt
+receipt.outcome.code: complete_refs_found
+```
+
+Scheduled projection:
+
+```txt
+caller: WatchSessionExecutor.tick -> dispatchFor(actor) -> runScheduledActorWatch -> runActorWatchDirectBody
+request.source: scheduled_actor_watch
+request.model: actor_watch_discovery_request
+receipt.model: actor_watch_discovery_receipt
+receipt.outcome.code: complete_refs_found
+```
+
+Compatibility posture:
+
+```txt
+compatibility_posture.field_count: 22
+compatibility_posture.field_parity.matches: true
+contract_projection_shape.compatibility_summary_nested: true
+contract_projection_shape.compatibility_summary_is_future_contract: false
+```
+
+Focused verifier sample:
+
+```json
+{
+  "status": "Actor Watch / Discovery handoff contract projection verified",
+  "action": "watch.actor_discovery_handoff_contract.preview",
+  "request_models": [
+    "actor_watch_discovery_request",
+    "actor_watch_discovery_request"
+  ],
+  "receipt_models": [
+    "actor_watch_discovery_receipt",
+    "actor_watch_discovery_receipt"
+  ],
+  "direct_source": "direct_actor_watch",
+  "scheduled_source": "scheduled_actor_watch",
+  "compatibility_field_count": 22,
+  "direct_outcome": "complete_refs_found",
+  "scheduled_outcome": "complete_refs_found",
+  "operator_corpus_unchanged": true
+}
+```
+
+Verification completed before handoff write:
+
+```txt
+node --check src\main\services\watchActorDiscoveryHandoffContractService.js
+node --check scripts\verify-watch-actor-discovery-handoff-contract.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-passive-side-effects.js
+npm.cmd run verify:watch-actor-discovery-handoff-contract
+npm.cmd run verify:watch-actor-scheduled-redirect
+npm.cmd run verify:watch-actor-direct-redirect
+npm.cmd run verify:watch-actor-production-like-fake-client-direct-proof
+npm.cmd run verify:watch-executor
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+```
+
+Results:
+
+- all listed syntax checks passed
+- focused HS452 handoff contract verifier passed
+- scheduled actor Watch redirect verifier passed
+- direct actor.watch redirect verifier passed
+- production-like fake-client direct proof verifier passed
+- watch executor verifier passed
+- service registry, command authority, passive side-effects, and enforcement dry-run verifiers passed
+- `npm.cmd run verify:enforcement-dry-run` remained complete: 117 commands covered, 0 gaps
+
+Boundary confirmation:
+
+- read-only command surface only
+- fixture/fake-client proof basis only
+- no live/provider calls
+- no operator corpus writes
+- no Discovery ref writes
+- no Evidence/EVEidence writes
+- no Hydration writes
+- no Watch execution, dispatch, task creation, or Watch mutation
+- no runtime behavior change
+- no direct actor.watch redirect by this proof
+- no scheduled actor Watch redirect by this proof
+- no `collectActorWatch(...)` retirement
+- no system/radius Watch redirect
+- no schema, durable receipt/task/packet persistence, dispatcher/queue/lease behavior, runtime enforcement, command blocking, renderer UI, source-term rename, or protected-word JSON update
+
+## HS452 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS452-actor-watch-discovery-handoff-contract-projection.md
+```
+
+Status: accepted by HS453.
+
+## HS448 Evidence
+
+Dev updated 2026-06-12:
+
+- Corrected stale HS433 production-like fake-client direct proof/verifier readout in:
+
+```txt
+src/main/discovery/actorWatchProductionLikeFakeClientDirectProof.js
+scripts/verify-watch-actor-production-like-fake-client-direct-proof.js
+```
+
+- Removed the stale scheduled runtime claim:
+
+```txt
+scheduled_actor_watch_legacy_parked: true
+scheduled actor Watch should remain parked on legacy collector during HS433
+```
+
+- Replaced it with explicit post-HS440 / post-HS446 runtime posture:
+
+```txt
+production_direct_redirect_status.actor_watch_redirected_after_hs440: true
+production_direct_redirect_status.runActorWatchService_call_target: runActorWatchDirectBody
+scheduled_runtime_status.scheduled_actor_watch_redirected_after_hs446: true
+scheduled_runtime_status.current_runner: runScheduledActorWatch
+scheduled_runtime_status.legacy_collectActorWatch_still_available: true
+scheduled_runtime_status.system_radius_current_runner: collectSystemRadiusWatch
+```
+
+- Preserved the proof's own no-runtime-movement posture:
+
+```txt
+production_actor_watch_redirected: false
+runActorWatchService_production_call_target_changed: false
+watchExecutor_dispatchFor_changed: false
+non_invocation_proof.scheduled_actor_watch_redirected_by_this_proof: false
+```
+
+- Preserved fake-client proof purpose:
+  - fixture-owned DBs only
+  - injected fake clients only
+  - no live/provider calls
+  - no operator corpus mutation
+  - fake zKill/ESI invocation posture
+  - synthetic fixture API-count posture disclosed
+  - no claim of HttpClient logging parity
+  - 22-field compatibility summary parity enforced
+
+Verification completed before handoff write:
+
+```txt
+node --check scripts\verify-watch-actor-production-like-fake-client-direct-proof.js
+node --check src\main\discovery\actorWatchProductionLikeFakeClientDirectProof.js
+npm.cmd run verify:watch-actor-production-like-fake-client-direct-proof
+npm.cmd run verify:watch-actor-scheduled-redirect
+npm.cmd run verify:watch-actor-direct-redirect
+npm.cmd run verify:watch-actor-controlled-adapter-return-path
+npm.cmd run verify:watch-actor-transport-failure-parity
+npm.cmd run verify:watch-executor
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+```
+
+Results:
+
+- listed syntax checks passed
+- corrected production-like fake-client proof verifier passed
+- scheduled actor Watch redirect verifier passed
+- direct actor Watch redirect verifier passed
+- controlled-adapter return-path verifier passed
+- transport/failure parity verifier passed
+- watch executor verifier passed
+- service registry, command authority, passive side-effects, and enforcement dry-run verifiers passed
+- `npm.cmd run verify:service-registry` passed with a 300 second ceiling
+- `npm.cmd run verify:enforcement-dry-run` remained complete: 116 commands covered, 0 gaps
+
+Boundary confirmation:
+
+- proof/verifier correction only
+- no runtime behavior change
+- no scheduled actor Watch redirect change
+- no direct actor Watch change
+- no `WatchSessionExecutor.tick(...)`, `TaskRunner`, or `recordWatchRunResult(...)` redesign
+- no `collectActorWatch(...)` retirement
+- no system/radius Watch redirect
+- no live/provider calls
+- no schema, dispatcher/queue/lease, Hydration, Observation/report, Assessment, runtime enforcement, command blocking, renderer UI, source-term rename, or protected-word JSON update
+
+## HS448 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS448-production-like-fake-client-verifier-post-hs446-correction.md
+```
+
+Status: accepted by HS449.
+
+## HS446 Evidence
+
+Dev updated 2026-06-12:
+
+- Redirected only scheduled actor Watch from the legacy mixed collector runner to the boundary-owned actor Watch route.
+- Direct actor Watch remains the HS440 route:
+
+```txt
+serviceRegistry -> runActorWatchService(...) -> runActorWatchDirectBody(...)
+```
+
+- Scheduled actor Watch now routes:
+
+```txt
+watchExecutor.dispatchFor(actor)
+-> command: actor.watch
+-> runner: runScheduledActorWatch
+-> runActorWatchDirectBody(...)
+```
+
+- Added thin scheduled wrapper:
+
+```txt
+runScheduledActorWatch(payload, dependencies) -> runActorWatchDirectBody(payload, dependencies)
+```
+
+- Preserved `WatchSessionExecutor.tick(...)`, `TaskRunner`, `recordWatchRunResult(...)`, `actionGate(dispatch.command, dispatch.payload)`, task classification, `taskContext.signal` propagation, and scheduled result wrapping.
+- Scheduled success result remains:
+
+```txt
+{ status: 'succeeded', data: { watch, collection } }
+```
+
+- `data.collection` remains the accepted 22-field actor Watch compatibility summary.
+- System/radius Watch remains legacy:
+
+```txt
+runner: collectSystemRadiusWatch
+```
+
+- `collectActorWatch(...)` remains available in `actorWatchCollector.js` but is no longer used by direct or scheduled actor Watch runtime.
+- Added focused verifier:
+
+```txt
+scripts/verify-watch-actor-scheduled-redirect.js
+npm.cmd run verify:watch-actor-scheduled-redirect
+```
+
+Focused verifier proves:
+
+- due actor Watch dispatches through `runScheduledActorWatch`
+- `watchExecutor.dispatchFor(actor)` no longer uses `runner: collectActorWatch`
+- system/radius still uses `collectSystemRadiusWatch`
+- direct `actor.watch` remains the HS440 direct body path
+- `collectActorWatch(...)` remains available but unused by direct/scheduled actor Watch runtime
+- task classification remains `evidence-creating`
+- success task result includes selected `watch`
+- success task result places the 22-field summary under `data.collection`
+- success updates `last_success_at`, clears `last_error_at`, and sets `next_poll_at`
+- timeout-style failure updates `last_error_at`, `backoff_until`, and `next_poll_at`
+- fake `fetchImpl` drives zKill and ESI through real `HttpClient`
+- API logs flow through `HttpClient -> EvidenceRepository.insertApiRequestLog(...)`
+- no live provider calls occur
+
+Verification completed before handoff write:
+
+```txt
+node --check src\main\watchlist\watchExecutor.js
+node --check src\main\discovery\actorWatchDirectBody.js
+node --check scripts\verify-watch-actor-scheduled-redirect.js
+node --check scripts\verify-watch-actor-direct-redirect.js
+node --check scripts\verify-watch-actor-transport-failure-parity.js
+node --check scripts\verify-watch-actor-controlled-adapter-return-path.js
+npm.cmd run verify:watch-actor-scheduled-redirect
+npm.cmd run verify:watch-executor
+npm.cmd run verify:watch-actor-direct-redirect
+npm.cmd run verify:watch-actor-transport-failure-parity
+npm.cmd run verify:watch-actor-controlled-adapter-return-path
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+```
+
+Results:
+
+- listed syntax checks passed
+- focused HS446 scheduled redirect verifier passed
+- watch executor verifier passed
+- direct actor.watch redirect verifier passed after post-HS446 source-boundary assertion refresh
+- transport/failure parity verifier passed after post-HS446 source-boundary assertion refresh
+- controlled-adapter return-path verifier passed after post-HS446 scheduled runtime readout refresh
+- service registry, command authority, passive side-effects, and enforcement dry-run verifiers passed
+- `npm.cmd run verify:service-registry` passed with a 300 second ceiling
+- `npm.cmd run verify:enforcement-dry-run` remained complete: 116 commands covered, 0 gaps
+
+Source-boundary sweep:
+
+```txt
+rg -n "collectActorWatch|runScheduledActorWatch|runActorWatchDirectBody|collectSystemRadiusWatch|runner:" src\main\watchlist\watchExecutor.js src\main\services\mutatingActionService.js src\main\discovery\actorWatchDirectBody.js src\main\workers\actorWatchCollector.js scripts\verify-watch-actor-scheduled-redirect.js
+```
+
+Result:
+
+- direct service path calls `runActorWatchDirectBody(...)`
+- scheduled actor Watch dispatch uses `runner: runScheduledActorWatch`
+- scheduled wrapper calls `runActorWatchDirectBody(...)`
+- system/radius Watch dispatch still uses `runner: collectSystemRadiusWatch`
+- `collectActorWatch(...)` remains defined/exported in `actorWatchCollector.js`
+- direct body does not import or call `collectActorWatch(...)`
+
+Boundary confirmation:
+
+- scheduled actor Watch runner target changed
+- no direct actor Watch behavior change beyond accepted HS440 path
+- no `WatchSessionExecutor.tick(...)` redesign
+- no `TaskRunner` redesign
+- no `recordWatchRunResult(...)` redesign
+- no system/radius Watch redirect
+- no `collectActorWatch(...)` retirement
+- no live/provider verification
+- no schema, dispatcher/queue/lease, Hydration, Observation/report, Evidence/EVEidence behavior, Assessment, runtime enforcement, command blocking, renderer UI, source-term rename, or protected-word JSON update
+
+## HS446 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS446-scheduled-actor-watch-redirect.md
+```
+
+Status: ready for Overseer review.
+
+## HS442 Evidence
+
+Dev updated 2026-06-12:
+
+- Corrected stale controlled-adapter return-path verifier readout language in:
+
+```txt
+scripts/verify-watch-actor-controlled-adapter-return-path.js
+```
+
+- Replaced the misleading output block:
+
+```txt
+production_runtime_unchanged
+```
+
+with:
+
+```txt
+production_direct_redirect_status
+scheduled_runtime_status
+controlled_adapter_preview_status
+```
+
+- The verifier now reports the accepted post-HS440 direct state:
+
+```txt
+production_direct_redirect_status.actor_watch_redirected_after_hs440: true
+production_direct_redirect_status.runActorWatchService_call_target: runActorWatchDirectBody
+production_direct_redirect_status.direct_body_imports_collectActorWatch: false
+production_direct_redirect_status.direct_body_invokes_collectActorWatch: false
+```
+
+- The verifier separately reports scheduled actor Watch remains parked:
+
+```txt
+scheduled_runtime_status.scheduled_actor_watch_legacy_parked: true
+scheduled_runtime_status.watchExecutor_dispatchFor_uses_collectActorWatch: true
+scheduled_runtime_status.current_runner: collectActorWatch
+```
+
+- The verifier separately reports the controlled-adapter proof remains fixture-only / non-production:
+
+```txt
+controlled_adapter_preview_status.fixture_only: true
+controlled_adapter_preview_status.non_production: true
+controlled_adapter_preview_status.preview_performed_redirect: false
+controlled_adapter_preview_status.preview_changed_runActorWatchService: false
+controlled_adapter_preview_status.preview_changed_watchExecutor_dispatchFor: false
+```
+
+- Updated assertion wording so future readers distinguish accepted HS440 direct redirect from the controlled-adapter proof's no-runtime-movement posture.
+- Renamed the field-set source check to legacy compatibility wording:
+
+```txt
+verifyLegacyCollectorCompatibilityFieldSet(...)
+```
+
+Verification completed before handoff write:
+
+```txt
+node --check scripts\verify-watch-actor-controlled-adapter-return-path.js
+npm.cmd run verify:watch-actor-controlled-adapter-return-path
+npm.cmd run verify:watch-actor-direct-redirect
+npm.cmd run verify:watch-actor-transport-failure-parity
+npm.cmd run verify:watch-actor-production-like-fake-client-direct-proof
+npm.cmd run verify:watch-actor-controlled-runtime-adapter-fixture
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+```
+
+Results:
+
+- listed syntax check passed
+- corrected return-path verifier passed
+- direct actor.watch redirect verifier passed
+- transport/failure parity verifier passed
+- production-like fake-client direct proof verifier passed
+- controlled runtime adapter fixture verifier passed
+- service registry, command authority, passive side-effects, and enforcement dry-run verifiers passed
+- `npm.cmd run verify:service-registry` passed with a 300 second ceiling
+- `npm.cmd run verify:enforcement-dry-run` remained complete: 116 commands covered, 0 gaps
+
+Boundary confirmation:
+
+- readout/verifier correction only
+- no runtime behavior change
+- direct production redirect remains HS440
+- scheduled actor Watch remains legacy/parked
+- no `watchExecutor.dispatchFor(...)` replacement
+- no `collectActorWatch(...)` retirement
+- no system/radius Watch change
+- no live/provider calls
+- no schema, dispatcher/queue/lease, Hydration, Observation/report, Evidence/EVEidence behavior, runtime enforcement, command blocking, renderer UI, source-term rename, or protected-word JSON update
+
+## HS442 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS442-post-redirect-return-path-verifier-correction.md
+```
+
+Status: accepted by HS443.
+
+## HS443 Review
 
 Accepted:
 
 ```txt
-workspace/OverseerHS297-hs296-watch-scope-authority-execution-correction-review.md
+workspace/OverseerHS443-hs442-post-redirect-return-path-verifier-correction-review.md
 ```
 
-Decision:
+Outcome:
 
-HS296 is accepted.
+- HS442 verifier/readout correction accepted.
+- `verify:watch-actor-controlled-adapter-return-path` now reports direct production redirect as accepted post-HS440 state.
+- Scheduled actor Watch remains explicitly legacy/parked.
+- Controlled adapter proof remains fixture-only / non-production.
 
-Accepted state:
+## HS444 Advisory Request
 
-- system/radius Watch execution consumes accepted stored `included_system_ids`
-- invalid stored Watch scope blocks before task creation with `watch_scope_authority_invalid`
-- center/radius remain provenance/explanation after Watch acceptance
-- direct/manual `system.radius.watch` behavior remains center/radius planner behavior when no accepted IDs are supplied
-- conformance preview now reports the execution seam as conforming
-
-Watch scope authority can rest.
-
-Do not open Discovery ref identity redesign, durable Watch result semantics, relationship tags, provider movement, live testing, schema, UI, active enforcement, support artifacts, or fourth-lane work without a new bounded decision.
-
-## HS298 Active Advisory Request
-
-Opened 2026-06-05:
+Opened:
 
 ```txt
-workspace/OverseerHS298-system-radius-discovery-ref-identity-advisory-request.md
+workspace/OverseerHS444-scheduled-actor-watch-redirect-readiness-trace-request.md
 ```
 
 Expected artifact:
 
 ```txt
-workspace/EngineeringDataHS298-system-radius-discovery-ref-identity-advisory.md
+workspace/EngineeringTraceHS444-scheduled-actor-watch-redirect-readiness.md
 ```
 
 Purpose:
 
-Pressure-test current system/radius Discovery ref identity before Atlas builds durable Watch/task result semantics.
-
-Question:
-
 ```txt
-Is center-only system/radius Discovery ref identity sufficient for the next safe Atlas phase?
+trace scheduled actor Watch redirect readiness before any scheduled runtime movement or collector retirement
 ```
 
-Scope:
+Status: accepted by HS445.
 
-- source trace only
-- no code implementation
-- no provider calls
-- no Watch dispatch/task creation
-- no Discovery/Evidence/Watch/Assessment mutation
-- no schema
-- no durable `watch_result` / `watch_result_items`
-- no relationship tags
-- no UI, enforcement, support artifacts, or fourth-lane work
-
-## HS298 Overseer Review
+## HS445 Review
 
 Accepted:
 
 ```txt
-workspace/OverseerHS299-hs298-system-radius-discovery-ref-identity-advisory-review.md
+workspace/OverseerHS445-hs444-scheduled-actor-watch-redirect-readiness-review.md
 ```
 
-Decision:
+Outcome:
 
-HS298 is accepted.
+- HS444 source trace accepted.
+- Scheduled actor Watch is ready for a narrow redirect only if Watch executor/task/cadence/result ownership remains intact.
+- Scheduled redirect should not route through `runActorWatchService(...)`.
+- Scheduled redirect may use `runActorWatchDirectBody(...)` directly or through a thin scheduled runner wrapper.
 
-Accepted posture:
+## HS446 Dev Runway
 
-- current `system_radius` Discovery ref identity is center-only
-- center-only identity is acceptable for the current safe phase
-- center-only identity is not sufficient as the foundation for future durable Watch/task result semantics
-- future Watch/task result semantics should use a separate result/readout membership layer rather than mutating Evidence/EVEidence or overloading Discovery refs
-
-Review consequence:
-
-The older `runtime.watch_task_outcome_map.preview` still describes pre-HS296 execution posture and should be refreshed before it is used as a current instrument.
-
-## HS300 Active Dev Runway
-
-Opened 2026-06-05:
+Opened:
 
 ```txt
-workspace/OverseerHS300-watch-task-outcome-map-hs296-refresh-runway.md
+workspace/OverseerHS446-scheduled-actor-watch-redirect-runway.md
 ```
 
 Expected handoff:
 
 ```txt
-workspace/DevHS300-watch-task-outcome-map-hs296-refresh.md
+workspace/DevHS446-scheduled-actor-watch-redirect.md
 ```
 
-Task:
-
-Refresh `runtime.watch_task_outcome_map.preview` so it reflects both:
+Purpose:
 
 ```txt
-HS296: Watch execution uses stored included_system_ids as authority
-HS298: system_radius Discovery ref identity remains center-only
+redirect scheduled actor Watch only, preserving WatchSessionExecutor, TaskRunner, recordWatchRunResult, task wrapping, and system/radius isolation
 ```
 
-Do not change Discovery ref identity, create durable Watch results, create relationship tags, call providers, dispatch Watch execution, create tasks, mutate local rows, add schema, change UI, activate enforcement, create support artifacts, or reopen fourth-lane work.
-
-## HS300 Evidence
-
-Dev updated 2026-06-05:
-
-- Refreshed `runtime.watch_task_outcome_map.preview` so `system_radius_scope` now reports:
-  - `watch_execution_scope_authority: stored_watch_scope`
-  - `direct_manual_scope_authority: center_radius_planner`
-  - `discovery_ref_identity_level: center_only`
-  - `result_semantics_ready: false`
-  - Watch execution does not recompute topology from center/radius as authority.
-  - Direct/manual `system.radius.watch` preserves center/radius planner behavior.
-  - invalid stored scope blocks before provider work.
-- Updated system/radius Watch scope rows to show:
-  - authored/stored included scope status and accepted authority
-  - Watch execution scope authority from stored included IDs
-  - diagnostic recomputed topology as diagnostic-only
-  - direct/manual planner scope as separate from accepted Watch execution authority
-  - center-only Discovery ref identity separate from Watch execution scope authority
-  - parked durable result semantics
-- Updated queue identity wording so center-only `system_radius` Discovery refs remain possible leads/provenance and not exact Watch result membership.
-- Updated `scripts/verify-watch-task-outcome-map-preview.js` so it no longer asserts the stale pre-HS296 posture.
-- Fixture coverage now proves stored Watch execution authority can differ from diagnostic recomputed topology:
-  - stored accepted scope: `[30000101,30000103]`
-  - diagnostic recompute from center/radius: `[30000101,30000102]`
-  - `scope_match: false`
-  - Discovery ref identity remains `center_only`
-  - valid, missing, and malformed stored scopes are distinguished.
-- Boundaries confirmed:
-  - no provider calls
-  - no live/API verification
-  - no Watch dispatch
-  - no Watch arming
-  - no task creation
-  - no Discovery ref mutation
-  - no Evidence/EVEidence writes
-  - no Watch row mutation
-  - no Assessment Memory mutation
-  - no schema changes
-  - no durable `watch_result` / `watch_result_items`
-  - no relationship tags or relationship truth
-  - no renderer/UI behavior beyond existing read-only command
-  - no runtime enforcement or command blocking
-  - no support artifacts
-  - no fourth lane / fast lane
-- Verification run:
-  - `node --check src\main\services\watchTaskOutcomeMapPreviewService.js` passed.
-  - `node --check scripts\verify-watch-task-outcome-map-preview.js` passed.
-  - `npm.cmd run verify:watch-task-outcome-map` passed.
-  - `npm.cmd run verify:watch-scope-authority-conformance` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 31 warnings across 2 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS300 working-tree changes.
-
-## HS300 Dev Handoff
+## HS446 Dev Handoff
 
 Completed:
 
 ```txt
-workspace/DevHS300-watch-task-outcome-map-hs296-refresh.md
+workspace/DevHS446-scheduled-actor-watch-redirect.md
 ```
 
-Status: Watch/task outcome map HS296 refresh complete and accepted by Overseer.
+Status: accepted by HS449 after HS448 corrected the stale verifier/proof readout.
 
-## HS300 Overseer Review
+## HS447 Review
 
-Accepted:
+Redirected:
 
 ```txt
-workspace/OverseerHS301-hs300-watch-task-outcome-map-refresh-review.md
+workspace/OverseerHS447-hs446-scheduled-actor-watch-redirect-review.md
 ```
 
-Decision:
+Outcome:
 
-HS300 is accepted.
+- HS446 scheduled redirect proof passed.
+- `verify:watch-executor`, direct redirect, transport parity, controlled-adapter return path, registry, authority, passive side-effects, and enforcement dry-run passed.
+- `verify:watch-actor-production-like-fake-client-direct-proof` failed because it still asserts scheduled actor Watch should remain parked on the legacy collector.
+- HS446 was not accepted until that stale verifier/proof readout was corrected by HS448 and reviewed by HS449.
 
-Accepted result:
+## HS448 Dev Runway
 
-- `runtime.watch_task_outcome_map.preview` now reflects HS296 stored-scope Watch execution authority.
-- It also preserves HS298 center-only `system_radius` Discovery ref identity limitation.
-- It distinguishes Watch execution authority from direct/manual `system.radius.watch` planner behavior.
-- It keeps durable Watch/task result semantics parked.
-
-Hare topology semantics note:
-
-- Atlas radius semantics include the center system.
-- Direct neighbor counts exclude the center system.
-- Prefer `neighbors` / `direct neighbors` in operator-facing wording when describing adjacency/counts.
-- Use `stargate` only when specifically discussing the imported local topology connection type or source data.
-
-HS300 can rest.
-
-## HS302 Active Dev Runway
-
-Opened 2026-06-05:
+Opened:
 
 ```txt
-workspace/OverseerHS302-radius-neighbor-wording-refresh-runway.md
+workspace/OverseerHS448-production-like-fake-client-verifier-post-hs446-correction-runway.md
 ```
 
 Expected handoff:
 
 ```txt
-workspace/DevHS302-radius-neighbor-wording-refresh.md
+workspace/DevHS448-production-like-fake-client-verifier-post-hs446-correction.md
 ```
 
-Task:
-
-Tighten radius/topology wording so Atlas distinguishes:
+Purpose:
 
 ```txt
-radius scope including center
+correct stale HS433 fake-client proof/verifier posture after HS446 without runtime movement
 ```
 
-from:
+## HS440 Evidence
+
+Dev updated 2026-06-12:
+
+- Redirected only the direct production `actor.watch` final call target.
+- `runActorWatchService(...)` still performs actor input resolution, actor Watch scope normalization, and `assertLiveAllowed('actor.watch', input, dependencies)`.
+- Direct path now calls:
 
 ```txt
-direct neighbors excluding center
+runActorWatchDirectBody(input, { ...dependencies, db })
 ```
 
-Accepted semantics:
-
-- radius 0 = center only
-- radius 1 = center + direct neighbors
-- direct neighbor count excludes center
-- prefer `neighbors` / `direct neighbors` for operator-facing adjacency/counts
-- use `stargate` only when discussing imported local topology connection type or source data
-- user-facing content should stay simple:
+- Added boundary-owned direct body:
 
 ```txt
-System X with a radius of Y jumps:
-
-Included systems:
-Center
-itemlist1
-itemlist2
-itemlist3
-itemlist4
+src/main/discovery/actorWatchDirectBody.js
 ```
 
-Do not change topology traversal behavior, schema, imported connection type values, Watch scope authority, Discovery refs, Evidence/EVEidence, Watch rows, Hydration, UI, support artifacts, durable Watch results, or fourth-lane behavior.
+- The direct body uses real `EvidenceRepository`, `HttpClient`, `ZKillDiscoveryClient`, and `EsiClient`.
+- API request logging remains through:
 
-## HS302 Evidence
+```txt
+HttpClient -> EvidenceRepository.insertApiRequestLog(...)
+```
 
-Dev updated 2026-06-05:
+- Direct caller return shape remains the accepted 22-field actor Watch compatibility summary.
+- Production `actor.watch` service registry metadata/effects remain unchanged: `evidence-creating`, `external-live-api`, `evidence-creation`, non-renderer.
+- Scheduled actor Watch remains parked on the legacy collector:
 
-- Updated `docs/terms/system-radius-watch.md` to state:
-  - radius scopes include the center system
-  - radius 1 means center plus direct neighbors
-  - direct neighbor counts exclude the center system
-  - simple presentation should show selected system, radius, and included systems plainly
-  - center appears first and is marked as `(center)`
-  - counts should be labeled as included systems, not neighbors
-  - direct-neighbor count is reserved for diagnostic/detail wording
-- Updated `docs/roadmap/system-radius-watch.md` to state:
-  - radius 0 is center only
-  - radius 1 is center plus direct neighbors
-  - user-facing output should show selected system, radius, and included systems plainly
-  - user-facing lists should put the center first and mark it as the center
-  - direct-neighbor counts exclude center and should be diagnostic/detail wording only
-  - planning calculates included system scope
-- Updated `scripts/verify-radius.js` assertion text from stale `direct neighbors` wording to `center and direct neighbors` while preserving the same expected IDs.
-- Runtime behavior unchanged:
-  - no topology traversal behavior change
-  - no schema change
-  - no `system_adjacency.connection_type = stargate` rename
-  - no Watch scope authority change
-  - no Discovery refs, Evidence/EVEidence, Watch rows, Hydration, UI, support artifact, durable Watch result, or fourth-lane work
-- Verification run:
-  - `node --check scripts\verify-radius.js` passed.
-  - `node --check scripts\verify-system-radius-planner.js` passed.
-  - `npm.cmd run verify:radius` passed.
-  - `npm.cmd run verify:planner` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 356 warnings across 5 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS302 working-tree changes.
+```txt
+watchExecutor.dispatchFor(actor) -> runner: collectActorWatch
+```
 
-## HS302 Dev Handoff
+- Added focused verifier:
+
+```txt
+scripts/verify-watch-actor-direct-redirect.js
+npm.cmd run verify:watch-actor-direct-redirect
+```
+
+- Updated older HS433/HS438 proof verifier source-boundary assumptions so they accept the HS440 post-redirect direct-body call while continuing to prove scheduled actor Watch remains legacy/parked.
+
+Strict source-boundary check:
+
+```txt
+rg -n "runActorWatchDirectBody|collectActorWatch|actorWatchCollector" src\main\services\mutatingActionService.js src\main\discovery\actorWatchDirectBody.js src\main\watchlist\watchExecutor.js scripts\verify-watch-actor-direct-redirect.js
+```
+
+Result:
+
+- `mutatingActionService.js` calls `runActorWatchDirectBody(...)`.
+- `mutatingActionService.js` no longer imports or calls `collectActorWatch(...)`.
+- `actorWatchDirectBody.js` does not import or call `collectActorWatch(...)`.
+- `watchExecutor.js` still imports `collectActorWatch(...)`.
+- `watchExecutor.js` still has `runner: collectActorWatch`.
+
+Verification completed before handoff write:
+
+```txt
+node --check src\main\discovery\actorWatchDirectBody.js
+node --check src\main\services\mutatingActionService.js
+node --check scripts\verify-watch-actor-direct-redirect.js
+node --check scripts\verify-watch-actor-transport-failure-parity.js
+node --check scripts\verify-watch-actor-production-like-fake-client-direct-proof.js
+npm.cmd run verify:watch-actor-direct-redirect
+npm.cmd run verify:watch-actor-transport-failure-parity
+npm.cmd run verify:watch-actor-production-like-fake-client-direct-proof
+npm.cmd run verify:watch-actor-controlled-adapter-disabled-seam
+npm.cmd run verify:watch-actor-controlled-adapter-return-path
+npm.cmd run verify:watch-actor-controlled-runtime-adapter-fixture
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+```
+
+Results:
+
+- listed JavaScript syntax checks passed
+- focused HS440 direct redirect verifier passed
+- HS438 transport/failure parity verifier passed after post-HS440 source-boundary assertion refresh
+- HS433 production-like fake-client direct proof verifier passed after post-HS440 source-boundary assertion refresh
+- HS428 disabled seam verifier passed
+- HS423 return-path verifier passed
+- HS419 controlled runtime adapter fixture verifier passed
+- service registry, command authority, passive side-effects, and enforcement dry-run verifiers passed
+- `npm.cmd run verify:service-registry` passed with a 300 second ceiling
+- `npm.cmd run verify:enforcement-dry-run` remained complete: 116 commands covered, 0 gaps
+
+Boundary confirmation:
+
+- direct `actor.watch` may move and did move
+- scheduled actor Watch remains legacy/parked
+- system/radius Watch remains unchanged
+- mixed collector retirement remains parked
+- no live/provider verification
+- no Hydration write
+- no Observation/report behavior change
+- no Assessment change
+- no schema, dispatcher/queue/lease, runtime enforcement, command blocking, renderer UI, source-term rename, or protected-word JSON update
+
+## HS440 Dev Handoff
 
 Completed:
 
 ```txt
-workspace/DevHS302-radius-neighbor-wording-refresh.md
+workspace/DevHS440-direct-actor-watch-redirect.md
 ```
 
-Status: radius neighbor wording refresh complete and accepted by Overseer.
+Status: accepted by HS441.
 
-## HS302 Overseer Review
+Remaining parked items:
+
+- scheduled actor Watch redirect
+- system/radius Watch redirect
+- mixed collector retirement
+- live provider verification
+- dispatcher / queue / lease work
+- schema work
+- renderer UI work
+- runtime enforcement
+
+## HS441 Review
 
 Accepted:
 
 ```txt
-workspace/OverseerHS303-hs302-radius-neighbor-wording-refresh-review.md
+workspace/OverseerHS441-hs440-direct-actor-watch-redirect-review.md
 ```
 
-Decision:
+Outcome:
 
-HS302 is accepted.
+- HS440 direct `actor.watch` redirect accepted.
+- `runActorWatchService(...)` keeps actor input resolution, actor Watch scope normalization, and `assertLiveAllowed(...)`.
+- Direct execution now routes to `runActorWatchDirectBody(...)`.
+- Scheduled actor Watch remains parked on `watchExecutor.dispatchFor(actor) -> runner: collectActorWatch`.
 
-Accepted result:
+Follow-up:
 
-- radius scope includes center
-- radius 0 = center only
-- radius 1 = center plus direct neighbors
-- direct neighbor count excludes center
-- user-facing radius lists should use `Included systems`
-- center should appear first and be marked as `(center)`
-- direct-neighbor counts belong in diagnostic/detail wording only
+- `verify:watch-actor-controlled-adapter-return-path` used pre-HS440 `production_runtime_unchanged` wording.
+- HS442 corrected that verifier/readout wording and was accepted by HS443.
 
-Runtime topology behavior did not change.
+## HS442 Dev Runway
 
-HS302 can rest.
-
-## HS304 Active Dev Runway
-
-Opened 2026-06-05:
+Opened:
 
 ```txt
-workspace/OverseerHS304-system-radius-authoring-preflight-runway.md
+workspace/OverseerHS442-post-redirect-return-path-verifier-correction-runway.md
 ```
 
 Expected handoff:
 
 ```txt
-workspace/DevHS304-system-radius-authoring-preflight.md
+workspace/DevHS442-post-redirect-return-path-verifier-correction.md
 ```
 
-Task:
-
-Prove the local-only operator-facing preflight/readout shape for authoring a system/radius Watch scope.
-
-The readout should show:
-
-- selected center system ID/name
-- requested radius
-- included systems in operator-facing order
-- center first and marked `(center)`
-- included system count
-- direct-neighbor count only as diagnostic/detail, if present
-- cap/guardrail posture
-- missing topology / unknown system posture
-- invalid radius posture
-- whether the scope is acceptable for Watch authoring
-- the exact `included_system_ids` that would become accepted stored scope if the operator accepts
-
-Preferred plain shape:
+Purpose:
 
 ```txt
-System Hare with a radius of 1 jump:
-
-Included systems:
-Hare (center)
-Babirmoult
-Heluene
-Ogaria
-Oruse
+make the old return-path verifier truthful after HS440 by distinguishing direct production redirect, scheduled legacy runtime, and fixture-only controlled adapter preview
 ```
 
-Boundary:
+Status: accepted by HS443.
 
-This is not Watch result identity work. Watch/task result semantics need richer sample data and remain parked. Do not change provider movement, live testing, topology traversal, Watch execution, Watch rows, Discovery refs, Evidence/EVEidence, Hydration, schema, UI, support artifacts, active enforcement, or fourth-lane behavior.
+## HS438 Evidence
 
-## HS304 Evidence
+Dev updated 2026-06-12:
 
-Dev updated 2026-06-05:
+- Added no-live transport/failure parity proof module `src/main/discovery/actorWatchTransportFailureParityProof.js`.
+- Added focused verifier `scripts/verify-watch-actor-transport-failure-parity.js`.
+- Added npm script `verify:watch-actor-transport-failure-parity`.
+- The proof uses real `HttpClient`, real `ZKillDiscoveryClient`, and real `EsiClient` with fake `fetchImpl`.
+- The proof logs API request rows through:
 
-- Added `watch.system_radius_authoring_preflight.preview` as a renderer-eligible, read-only/local-only system/radius Watch authoring preflight.
-- Added `src/main/services/systemRadiusAuthoringPreflightService.js`.
-- Added `scripts/verify-system-radius-authoring-preflight.js` and `npm.cmd run verify:system-radius-authoring-preflight`.
-- Registered service command and enforcement dry-run coverage as `local_db_inspection` / `system_radius_authoring_preflight_readout` / `read_only_non_enforcing_proof`.
-- Updated service registry, command authority, enforcement dry-run, and passive side-effect verification for the new read-only command.
-- Preflight returns:
-  - selected center system ID/name from local topology
-  - requested radius and guard settings
-  - operator-facing heading
-  - `Included systems` list
-  - center first and marked `(center)`
-  - included system count
-  - direct-neighbor count as diagnostic/detail only
-  - exact `included_system_ids_for_acceptance`
-  - exact `would_store_included_system_ids`
-  - local topology/import posture
-  - acceptance status for Watch authoring
-  - missing topology, unknown system, invalid radius, and capped scope postures
-  - table mutation proof
-- Focused verifier sample:
-  - heading: `System Hare with a radius of 1 jump:`
-  - included systems: `Hare (center)`, `Babirmoult`, `Heluene`, `Ogaria`, `Oruse`
-  - included system count: `5`
-  - direct neighbor count: `4`
-  - direct neighbor count role: `diagnostic_detail_only`
-  - acceptance IDs: `[30003597,30003601,30003599,30003598,30003596]`
-  - acceptable for Watch authoring: `true`
-  - HS305 revision coverage: radius 2 fixture reports included system count `6` while direct neighbor count remains `4`, proving direct neighbors are immediate adjacency only
-  - radius 2 acceptance IDs include the full uncapped included scope: `[30003597,30003601,30003599,30003598,30003596,30003650]`
-  - capped scope reports `included_system_scope_capped_by_max_systems` and does not expose partial IDs as acceptable stored scope
-  - unknown system, invalid radius, and missing topology are distinguished
-  - table mutation proof unchanged
-- Boundaries confirmed:
-  - no provider calls
-  - no live/API verification
-  - no Watch dispatch
-  - no Watch row writes
-  - no task creation
-  - no Discovery ref mutation
-  - no Evidence/EVEidence writes
-  - no Hydration or metadata writes
-  - no schema changes
-  - no durable `watch_result` / `watch_result_items`
-  - no relationship tags
-  - no Discovery ref identity change
-  - no topology traversal behavior change
-  - no imported `stargate` connection type rename
-  - no renderer/UI behavior beyond existing read-only command registration
-  - no runtime enforcement or command blocking
-  - no support artifacts
-  - no fourth lane / fast lane
-- Verification run:
-  - `node --check src\main\services\systemRadiusAuthoringPreflightService.js` passed.
-  - `node --check scripts\verify-system-radius-authoring-preflight.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check src\main\workers\systemRadiusPlanner.js` passed.
-  - `node --check scripts\verify-system-radius-planner.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `node --check scripts\verify-enforcement-dry-run.js` passed.
-  - `npm.cmd run verify:system-radius-authoring-preflight` passed.
-  - `npm.cmd run verify:planner` passed.
-  - `npm.cmd run verify:radius` passed.
-  - `npm.cmd run verify:watch-scope-authority-conformance` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 660 warnings across 11 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS304 working-tree changes.
+```txt
+HttpClient -> EvidenceRepository.insertApiRequestLog(...)
+```
 
-## HS304 Dev Handoff
+- The proof does not manually insert synthetic API logs for the main parity cases.
+- The proof uses fixture-owned `:memory:` DBs only.
+- The proof includes a near-final direct-body candidate that finalizes fatal fetch runs as `failed` before rethrowing.
+- Production `actor.watch`, `runActorWatchService(...)`, `watchExecutor.dispatchFor(...)`, scheduled actor Watch, and `collectActorWatch(...)` remain unchanged.
+
+Cases covered:
+
+```txt
+success_transport_logging:
+  zKill 200 logged through HttpClient
+  ESI 200 logged through HttpClient
+  fetch run finalized success
+  persisted killmails: 1
+
+retry_after_capacity_deferred:
+  final ESI 429 logged through HttpClient
+  retry_count: 1
+  rate_limited: true
+  provider_capacity_deferred: 1
+  failed_refs_count: 0
+  fetch run finalized success
+
+terminal_esi_failed_expansion:
+  ESI 500 logged through HttpClient
+  failed_refs_count: 1
+  fetch run finalized success with failed-expansion posture
+
+invalid_json_failure:
+  invalid ESI JSON logged through HttpClient
+  status_code: null
+  error_message present
+  failed_refs_count: 1
+
+cancelled_fatal_finalization:
+  HTTP_CANCELLED logged through HttpClient
+  fatal error rethrown
+  fetch run finalized failed
+  Evidence/EVEidence writes: 0
+
+timeout_fatal_finalization:
+  HTTP_TIMEOUT logged through HttpClient
+  fatal error rethrown
+  fetch run finalized failed
+  Evidence/EVEidence writes: 0
+
+zkill_discovery_failure_warning:
+  zKill 500 logged through HttpClient
+  collection warning present
+  Discovery refs written: 0
+  Evidence/EVEidence writes: 0
+  fetch run finalized success with warning posture
+```
+
+API log fields proven:
+
+```txt
+provider
+endpoint
+status_code
+retry_count
+rate_limited
+error_message
+```
+
+Strict import/call check:
+
+```txt
+rg -n "require\(.*actorWatchCollector|collectActorWatch\(" src\main\discovery\actorWatchTransportFailureParityProof.js scripts\verify-watch-actor-transport-failure-parity.js
+```
+
+Result:
+
+- no matches
+- no `actorWatchCollector.js` import in the new proof path
+- no `collectActorWatch(...)` call in the new proof path
+
+Verification completed before handoff write:
+
+```txt
+node --check src\main\discovery\actorWatchTransportFailureParityProof.js
+node --check scripts\verify-watch-actor-transport-failure-parity.js
+npm.cmd run verify:watch-actor-transport-failure-parity
+npm.cmd run verify:watch-actor-production-like-fake-client-direct-proof
+npm.cmd run verify:watch-actor-controlled-adapter-disabled-seam
+npm.cmd run verify:watch-actor-controlled-adapter-return-path
+npm.cmd run verify:watch-actor-controlled-runtime-adapter-fixture
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+git diff --check
+git status --short --branch
+```
+
+Results:
+
+- listed JavaScript syntax checks passed
+- focused HS438 verifier passed
+- HS433 production-like fake-client direct proof verifier passed
+- HS428 disabled seam verifier passed
+- HS423 return-path verifier passed
+- HS419 controlled runtime adapter fixture verifier passed
+- service registry, command authority, passive side-effects, and enforcement dry-run verifiers passed
+- `npm.cmd run verify:service-registry` passed with a 300 second ceiling
+- `npm.cmd run verify:enforcement-dry-run` remained complete: 116 commands covered, 0 gaps
+- `git diff --check` returned exit code 0 with CRLF normalization warnings only
+- `git status --short --branch` showed branch `main...origin/main [ahead 19]` with the existing broad unaccepted working set plus HS438-touched files
+
+Boundary confirmation:
+
+- no production `actor.watch` redirect
+- no `runActorWatchService(...)` production call-target change
+- no `watchExecutor.dispatchFor(...)` change
+- no scheduled actor Watch redirect
+- no `WatchSessionExecutor.tick(...)` invocation
+- no `TaskRunner` change or invocation
+- no `collectActorWatch(...)` invocation/import/retirement
+- no live/provider/API call
+- no operator DB write
+- no operator Discovery ref write
+- no operator Evidence/EVEidence write
+- no Hydration write
+- no Observation/report path change
+- no system/radius Watch behavior change
+- no schema, dispatcher, queue, lease, enforcement, command blocking, UI, source-term rename, or protected-word JSON update
+
+## HS438 Dev Handoff
 
 Completed:
 
 ```txt
-workspace/DevHS304-system-radius-authoring-preflight.md
+workspace/DevHS438-actor-watch-transport-failure-parity-proof.md
 ```
 
-Status: system/radius authoring preflight complete after HS305 revision; pending Overseer review.
+Status: ready for Overseer review.
 
-## HS304 Overseer Review
+Remaining parked items:
 
-Reviewed:
+- production `actor.watch` redirect remains parked
+- scheduled Watch redirect remains parked
+- `runActorWatchService(...)` replacement remains parked
+- `watchExecutor.dispatchFor(...)` replacement remains parked
+- `collectActorWatch(...)` retirement remains parked
+- live zKill/ESI provider movement remains parked
+- operator-corpus direct redirect writes remain parked
+- durable Discovery receipt/task/packet persistence, Watch cadence mutation, dispatcher/queue/lease/runtime enforcement/UI work remain parked
+
+## HS433 Evidence
+
+Dev updated 2026-06-11:
+
+- Added Discovery-owned production-like fake-client direct proof body `src/main/discovery/actorWatchProductionLikeFakeClientDirectProof.js`.
+- Added focused verifier `scripts/verify-watch-actor-production-like-fake-client-direct-proof.js`.
+- Added npm script `verify:watch-actor-production-like-fake-client-direct-proof`.
+- The proof exercises a function shaped like a future direct `runActorWatchService(...)` replacement body without changing `runActorWatchService(...)`.
+- The proof runs actor input resolution and current actor Watch scope normalization against fixture-owned `:memory:` DBs.
+- The proof represents `actor.watch` live-gate expectations without entering production provider attempt control.
+- The proof uses injected fake zKill and ESI clients only.
+- The proof writes production-like rows only to fixture-owned DBs:
+  - fetch-run lifecycle rows
+  - Discovery candidate refs and status movement
+  - selected / expanded / cached / failed candidate-ref posture
+  - Evidence/EVEidence writer landing for fake expanded killmail payloads
+  - data quality warning posture
+  - synthetic fixture `api_request_logs` for API count posture
+- The proof returns the boundary-owned caller compatibility summary shape with 22-field parity.
+- The proof covers fresh, pending, cached, and failed selected-ref expansion cases.
+- Production `actor.watch` remains unchanged and still routes through the legacy collector.
+- Scheduled actor Watch remains parked on the legacy collector.
+
+Focused proof sample:
 
 ```txt
-workspace/OverseerHS305-hs304-system-radius-authoring-preflight-review.md
+action: watch.actor_production_like_fake_client_direct_proof
+production_like_direct_body: true
+fixture_owned_db_only: true
+provider_calls: 0
+live_api_calls: 0
+production_actor_watch_redirected: false
+scheduled_actor_watch_legacy_parked: true
+fresh: zkill=1, esi=2, refs=3, selected=2, expanded=2, persisted=2, api_counts zkill=1 esi=2
+pending: zkill=0, esi=2, pending_refs=2, expanded=2, persisted=2
+cached: zkill=1, esi=1, cached=1, expanded=1, persisted=1
+failed: zkill=1, esi=1, failed=1, persisted=0
 ```
 
-Decision:
-
-HS304 was not accepted at first pass. HS305 revision returned for Overseer review.
-
-Blocking finding:
-
-`direct_neighbor_count` currently appears to be computed as full included radius result minus center. That is correct only for radius 1. For radius 2 or higher, it means all included non-center systems, not direct neighbors.
-
-Required revision:
-
-- compute `direct_neighbor_count` as immediate adjacent systems excluding center;
-- do not let radius 2+ inflate direct-neighbor count;
-- keep `direct_neighbor_count_role: diagnostic_detail_only`;
-- add verifier coverage for a radius 2 or multi-depth fixture proving included system count can exceed direct-neighbor count plus one while direct-neighbor count remains immediate-neighbor-only;
-- preserve read-only/local-only boundaries.
-
-## HS304 Acceptance
-
-Accepted:
+API request count posture:
 
 ```txt
-workspace/OverseerHS306-hs304-system-radius-authoring-preflight-acceptance.md
+represented: true
+fixture_synthetic_logs: true
+http_client_logging_parity_proven: false
+limitation: injected fake clients insert fixture api_request_logs for count posture; they do not exercise HttpClient/ZKillDiscoveryClient/EsiClient transport logging
 ```
 
-Decision:
-
-HS304 is accepted after HS305 revision.
-
-Accepted result:
-
-- `watch.system_radius_authoring_preflight.preview` is a renderer-eligible, local-only, read-only authoring/preflight readout.
-- It proves the operator-facing shape for system/radius Watch setup without creating a Watch.
-- Center is listed first and marked `(center)`.
-- `included_system_count` is the primary count.
-- `direct_neighbor_count` is diagnostic/detail only.
-- `direct_neighbor_count` now means immediate adjacent systems excluding center, including for radius 2+.
-- Radius 2 coverage proves included system count can exceed direct-neighbor count plus one.
-- Exact `included_system_ids_for_acceptance` / `would_store_included_system_ids` are exposed only when the scope is acceptable.
-- Capped partial scope is not acceptable without operator adjustment.
-
-HS304 can rest.
-
-## HS307 Active Dev Runway
-
-Opened 2026-06-05:
+Strict import/call check:
 
 ```txt
-workspace/OverseerHS307-system-radius-watch-authoring-acceptance-payload-runway.md
+rg -n "require\(.*actorWatchCollector|collectActorWatch\(" src\main\discovery\actorWatchProductionLikeFakeClientDirectProof.js scripts\verify-watch-actor-production-like-fake-client-direct-proof.js
 ```
 
-Expected handoff:
+Result:
+
+- no matches
+- no `actorWatchCollector.js` import in the new proof body
+- no `collectActorWatch(...)` call in the new proof body
+
+Verification completed before handoff write:
 
 ```txt
-workspace/DevHS307-system-radius-watch-authoring-acceptance-payload.md
+node --check src\main\discovery\actorWatchProductionLikeFakeClientDirectProof.js
+node --check scripts\verify-watch-actor-production-like-fake-client-direct-proof.js
+npm.cmd run verify:watch-actor-production-like-fake-client-direct-proof
+npm.cmd run verify:watch-actor-controlled-adapter-disabled-seam
+npm.cmd run verify:watch-actor-controlled-adapter-return-path
+npm.cmd run verify:watch-actor-controlled-runtime-adapter-fixture
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+git diff --check
+git status --short --branch
 ```
 
-Task:
+Results:
 
-Prove how an accepted HS304 system/radius authoring preflight becomes a future Watch authoring payload, without writing the Watch row yet.
+- listed JavaScript syntax checks passed
+- focused HS433 verifier passed
+- HS428 disabled seam verifier passed
+- HS423 return-path verifier passed
+- HS419 controlled runtime adapter fixture verifier passed
+- service registry, command authority, passive side-effects, and enforcement dry-run verifiers passed
+- `npm.cmd run verify:service-registry` passed with a 300 second ceiling
+- `npm.cmd run verify:enforcement-dry-run` remained complete: 116 commands covered, 0 gaps
+- `git diff --check` returned exit code 0 with CRLF normalization warnings only
+- `git status --short --branch` showed branch `main...origin/main [ahead 19]` with the existing broad unaccepted working set plus HS433-touched files
 
-Preferred proof target:
+Boundary confirmation:
 
-```txt
-watch.system_radius_acceptance_payload.preview
-```
+- no production `actor.watch` redirect
+- no `runActorWatchService(...)` production call-target change
+- no `watchExecutor.dispatchFor(...)` change
+- no scheduled actor Watch redirect
+- no `WatchSessionExecutor.tick(...)` invocation
+- no `TaskRunner` change or invocation
+- no `collectActorWatch(...)` invocation/import/retirement
+- no live/provider/API call
+- no operator DB write
+- no operator Discovery ref write
+- no operator Evidence/EVEidence write
+- no Hydration write
+- no Observation/report path change
+- no system/radius Watch behavior change
+- no schema, dispatcher, queue, lease, enforcement, command blocking, UI, source-term rename, or protected-word JSON update
 
-Use a better existing naming pattern if the repo already has one.
-
-The proof should expose:
-
-- source preflight action/name
-- source preflight status
-- whether the preflight is acceptable for Watch authoring
-- selected center system ID/name
-- radius
-- exact `included_system_ids` that would be supplied to/stored by future Watch creation
-- center/radius as provenance/explanation
-- optional operator settings for future `watch.create`
-- confirmation/authority posture for the future write
-- future target command, likely `watch.create`
-- explicit `would_write_watch_row: false`
-- explicit `watch_rows_written: 0`
-- explicit no-dispatch/no-provider/no-task posture
-
-Reject or mark not acceptable:
-
-- capped preflight
-- unknown system
-- missing topology
-- invalid radius
-- preflight without accepted included IDs
-- mismatched or forged payload claims that try to replace the preflight's accepted IDs
-
-Boundary:
-
-This is not Watch creation. Do not write Watch rows, dispatch Watch execution, create tasks, call providers, mutate Discovery/Evidence/Hydration, change schema, change `watch.create`, add UI, create support artifacts, activate enforcement, or open Watch/result semantics.
-
-## HS307 Evidence
-
-Dev updated 2026-06-05:
-
-- Added `watch.system_radius_acceptance_payload.preview` as a renderer-eligible, local-only, read-only acceptance payload preview.
-- Added `src/main/services/systemRadiusAcceptancePayloadService.js`.
-- Added `scripts/verify-system-radius-acceptance-payload.js` and `npm.cmd run verify:system-radius-acceptance-payload`.
-- Registered service command and enforcement dry-run coverage as `local_db_inspection` / `system_radius_acceptance_payload_readout` / `read_only_non_enforcing_proof`.
-- Updated service registry, command authority, enforcement dry-run, and passive side-effect verification for the new read-only command.
-- Preview composes a candidate future `watch.create` mutation-contract payload from accepted HS304 preflight output and exposes:
-  - source preflight action: `watch.system_radius_authoring_preflight.preview`
-  - source preflight status
-  - preflight authoring acceptability
-  - selected center system ID/name
-  - radius
-  - exact accepted `included_system_ids`
-  - center/radius role as provenance/explanation only
-  - stored included IDs as future execution authority after `watch.create`
-  - optional operator settings: lookback, max systems, max refs, max killmails, poll interval, active, notes
-  - future target command: `watch.create`
-  - current `watch.create` compatibility: `requires_future_mutation_contract`
-  - current `watch.create` consumes accepted preflight IDs: `false`
-  - future mutation contract required: `true`
-  - future payload directly executable now: `false`
-  - future confirmation token posture: `confirm:watch.create`
-  - explicit `would_write_watch_row: false`
-  - explicit `watch_rows_written: 0`
-  - explicit no-dispatch/no-provider/no-task posture
-- Focused verifier sample:
-  - source preflight status: `acceptable`
-  - payload status: `ready_for_future_mutation_contract_payload`
-  - future target command: `watch.create`
-  - current `watch.create` compatibility: `requires_future_mutation_contract`
-  - current `watch.create` consumes accepted preflight IDs: `false`
-  - future mutation contract required: `true`
-  - future payload directly executable now: `false`
-  - included IDs: `[30003597,30003601,30003599,30003598,30003596]`
-  - future payload stored scope source: `accepted_preflight_included_system_ids`
-  - center/radius provenance: Hare / radius 1
-  - optional settings preserved: lookback 48, max systems 10, max refs 25, max killmails 10, poll interval 60, active true, fixture notes
-  - `would_write_watch_row: false`
-  - `watch_rows_written: 0`
-  - `watch_dispatches: 0`
-  - `provider_calls: 0`
-- HS308 revision coverage:
-  - disclosed current path: `serviceRegistry watch.create -> mutatingActionService.runWatchCreateService -> normalizeSystemRadiusWatchScope -> watchlistRepository.addSystemRadiusWatch -> TopologyService.getSystemsWithinRadius`
-  - disclosed current gap: current `watch.create` recomputes included systems from center/radius and does not yet consume accepted preflight `included_system_ids`
-  - candidate payload is marked `contract_role: candidate_future_mutation_contract`
-  - candidate payload is marked `directly_executable_by_current_watch_create: false`
-  - stored scope authority marks `current_watch_create_consumes_this_field: false`
-  - stored scope authority marks `future_mutation_contract_required: true`
-- Rejection coverage:
-  - capped preflight -> `preflight_capped_not_acceptable`
-  - unknown system -> `preflight_unknown_system`
-  - invalid radius -> `preflight_invalid_radius`
-  - missing topology -> `preflight_missing_topology`
-  - forged/mismatched included IDs -> `payload_claim_rejected` with `included_system_ids_claim_mismatch`
-- Boundaries confirmed:
-  - no provider calls
-  - no live/API verification
-  - no Watch row writes
-  - no Watch dispatch
-  - no task creation
-  - no Discovery ref mutation
-  - no Evidence/EVEidence writes
-  - no Hydration or metadata writes
-  - no schema changes
-  - no `watch.create` behavior change
-  - no topology traversal behavior change
-  - no Discovery ref identity change
-  - no durable `watch_result` / `watch_result_items`
-  - no relationship tags
-  - no renderer/UI behavior beyond existing read-only command registration
-  - no runtime enforcement or command blocking
-  - no support artifacts
-  - no fourth lane / fast lane
-- Verification run:
-  - `node --check src\main\services\systemRadiusAcceptancePayloadService.js` passed.
-  - `node --check scripts\verify-system-radius-acceptance-payload.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `node --check scripts\verify-enforcement-dry-run.js` passed.
-  - `npm.cmd run verify:system-radius-acceptance-payload` passed.
-  - `npm.cmd run verify:system-radius-authoring-preflight` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:watch-scope-authority-conformance` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 663 warnings across 11 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS307 working-tree changes.
-
-## HS307 Dev Handoff
+## HS433 Dev Handoff
 
 Completed:
 
 ```txt
-workspace/DevHS307-system-radius-watch-authoring-acceptance-payload.md
+workspace/DevHS433-actor-watch-production-like-fake-client-direct-proof.md
 ```
 
-Status: system/radius Watch authoring acceptance payload accepted by Overseer after HS308 revision.
+Status: ready for Overseer review.
 
-## HS307 Overseer Review
+Remaining parked items:
 
-Reviewed:
+- production `actor.watch` redirect remains parked
+- scheduled Watch redirect remains parked
+- `runActorWatchService(...)` replacement remains parked
+- `watchExecutor.dispatchFor(...)` replacement remains parked
+- `collectActorWatch(...)` retirement remains parked
+- live zKill/ESI provider movement remains parked
+- true HttpClient/ZKillDiscoveryClient/EsiClient API-log parity remains unproven by this fake-client proof
+- durable Discovery receipt/task/packet persistence, Watch cadence mutation, dispatcher/queue/lease/runtime enforcement/UI work remain parked
+
+## HS428 Evidence
+
+Dev updated 2026-06-11:
+
+- Added disabled/proof-only service seam `src/main/services/watchActorControlledAdapterDisabledService.js`.
+- Added non-renderer service command `watch.actor_controlled_adapter_disabled.preview`.
+- Added focused verifier `scripts/verify-watch-actor-controlled-adapter-disabled-seam.js`.
+- Added npm script `verify:watch-actor-controlled-adapter-disabled-seam`.
+- Updated service registry, command authority, passive side-effect, and enforcement dry-run coverage for the new fixture-only/non-production command.
+- The disabled seam calls the boundary-owned controlled runtime adapter fixture preview path, not `collectActorWatch(...)`.
+- The seam returns the accepted HS423 direct compatibility summary shape:
+  - direct caller return is the summary object itself
+  - field-set parity matches the 22-field production compatibility summary contract
+- The seam includes scheduled-style wrapper posture through `data.collection` without invoking `WatchSessionExecutor.tick(...)`.
+- The seam proves operator/caller DB non-mutation while the wrapped proof uses internal disposable `:memory:` DBs and fake clients only.
+- Production `actor.watch`, `runActorWatchService(...)`, `watchExecutor.dispatchFor(...)`, and `collectActorWatch(...)` remain unchanged.
+
+Focused proof sample:
 
 ```txt
-workspace/OverseerHS308-hs307-system-radius-acceptance-payload-review.md
+command: watch.actor_controlled_adapter_disabled.preview
+classification: metadata-only
+effects: local-data-mutation
+renderer_allowed: false
+direct_summary_field_count: 22
+scheduled_wrapper_status: succeeded
+operator_corpus_non_mutation: true
+production_actor_watch_redirected: false
+collect_actor_watch_invoked: false
+provider_calls: 0
+live_api_calls: 0
 ```
 
-Decision:
-
-HS307 was not accepted at first pass. HS308 revision returned for Overseer review.
-
-Blocking finding:
-
-The preview presents a future `watch.create` payload that includes accepted preflight `included_system_ids`, but current `watch.create` system/radius handling does not consume those IDs as stored-scope authority. Current `watch.create` still normalizes center/radius and `addSystemRadiusWatch` recomputes included systems from local topology.
-
-Required revision:
-
-- disclose that current `watch.create` does not yet consume accepted preflight `included_system_ids`;
-- keep the preview payload as a future/candidate mutation contract, not a directly executable current command payload;
-- expose compatibility posture such as:
-  - `current_watch_create_consumes_preflight_included_ids: false`
-  - `future_mutation_contract_required: true`
-  - `future_payload_directly_executable_now: false`
-- preserve read-only/local-only boundaries.
-
-## HS307 Acceptance
-
-Accepted:
+Strict import/call check:
 
 ```txt
-workspace/OverseerHS309-hs307-system-radius-acceptance-payload-acceptance.md
+rg -n "require\(.*actorWatchCollector|collectActorWatch\(" src\main\services\watchActorControlledAdapterDisabledService.js scripts\verify-watch-actor-controlled-adapter-disabled-seam.js
 ```
 
-Decision:
+Result:
 
-HS307 is accepted after HS308 revision.
+- no matches
+- no `actorWatchCollector.js` import in the new seam path
+- no `collectActorWatch(...)` call in the new seam path
 
-Accepted result:
-
-- `watch.system_radius_acceptance_payload.preview` is a renderer-eligible, local-only, read-only acceptance payload preview.
-- It composes accepted HS304 preflight output into a candidate future `watch.create` mutation-contract payload.
-- Accepted `included_system_ids` are preserved as the future stored-scope authority.
-- Center system and radius remain provenance/explanation only.
-- The preview explicitly discloses the current `watch.create` gap:
-  - `current_watch_create_compatibility: requires_future_mutation_contract`
-  - `current_watch_create_consumes_preflight_included_ids: false`
-  - `future_mutation_contract_required: true`
-  - `future_payload_directly_executable_now: false`
-- Capped, unknown, invalid, missing topology, and forged/mismatched included-ID cases are not acceptable.
-- No Watch row writes, Watch dispatch, provider calls, tasks, schema changes, topology behavior changes, Discovery/Evidence/Hydration mutation, UI behavior, runtime enforcement, support artifacts, or fourth-lane work were opened.
-
-HS307 can rest.
-
-Future possible seam, not open now:
+Verification completed before handoff write:
 
 ```txt
-Actual watch.create mutation contract consuming accepted preflight included_system_ids as stored-scope authority.
+node --check src\main\services\watchActorControlledAdapterDisabledService.js
+node --check scripts\verify-watch-actor-controlled-adapter-disabled-seam.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+node --check scripts\verify-command-authority.js
+node --check scripts\verify-service-registry.js
+node --check scripts\verify-passive-side-effects.js
+node --check scripts\verify-enforcement-dry-run.js
+npm.cmd run verify:watch-actor-controlled-adapter-disabled-seam
+npm.cmd run verify:watch-actor-controlled-adapter-return-path
+npm.cmd run verify:watch-actor-controlled-runtime-adapter-fixture
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+npm.cmd run verify:protected-terms
 ```
 
-Latest accepted advisory request:
+Results:
 
-```txt
-workspace/OverseerHS278-selected-id-product-hydration-transition-advisory-request.md
-```
+- all listed syntax checks passed
+- focused HS428 disabled seam verifier passed
+- HS423 return-path verifier passed
+- HS419 controlled runtime adapter fixture verifier passed
+- service registry, command authority, passive side-effects, and enforcement dry-run verifiers passed
+- `npm.cmd run verify:enforcement-dry-run` remained complete: 116 commands covered, 0 gaps
+- `watch.actor_controlled_adapter_disabled.preview` appears as fixture-only/non-production in enforcement dry-run coverage
+- final `npm.cmd run verify:protected-terms` completed with warning-only advisory output: 936 warnings across the broad current working set; no source-term rename or protected-word JSON update was performed
+- `git diff --check` returned exit code 0 with CRLF normalization warnings only
+- `git status --short --branch` showed branch `main...origin/main [ahead 19]` with the existing broad unaccepted working set plus HS428-touched files and the HS428 handoff artifact
 
-Latest accepted advisory artifact:
+Boundary confirmation:
 
-```txt
-workspace/EngineeringSecurityHS278-selected-id-product-hydration-transition-advisory.md
-```
+- no production `actor.watch` redirect
+- no `runActorWatchService(...)` change
+- no `watchExecutor.dispatchFor(...)` change
+- no `WatchSessionExecutor.tick(...)` invocation
+- no `TaskRunner` change or invocation
+- no `collectActorWatch(...)` invocation/import/retirement
+- no provider/live/API call
+- no operator DB write
+- no operator Discovery ref write
+- no operator Evidence/EVEidence write
+- no Hydration, Observation, or Assessment change
+- no Watch cadence mutation
+- no system/radius Watch behavior change
+- no schema, dispatcher, queue, lease, enforcement, command blocking, UI, source-term rename, or protected-word JSON update
 
-Latest advisory review:
-
-```txt
-workspace/OverseerHS279-hs278-selected-id-product-hydration-transition-review.md
-```
-
-Accepted classification:
-
-```txt
-ready for read-only product authority/preflight contract only
-```
-
-Do not open renderer-triggered Hydration, full product live Hydration, broad live testing, Bucket/Dispatcher, background Hydration, schema, runtime enforcement, support artifacts, UI, or fourth-lane work.
-
-## HS284 Accepted State
-
-Opened 2026-06-05:
-
-```txt
-workspace/OverseerHS284-selected-id-readability-repair-execution-runway.md
-```
-
-Expected handoff:
-
-```txt
-workspace/DevHS284-selected-id-readability-repair-execution.md
-```
-
-Accepted 2026-06-05:
-
-```txt
-workspace/OverseerHS285-hs284-selected-id-readability-repair-execution-review.md
-```
-
-Accepted task:
-
-Add product execution command:
-
-```txt
-metadata.selected_id_readability_repair.execute
-selected_id_readability_repair
-```
-
-The command should perform selected-ID Resolve / readability repair for one selected unresolved local ID if all trusted gates pass.
-
-Preserve:
-
-- trusted / non-renderer only
-- one selected unresolved ID only
-- user-facing act: `Resolve`
-- internal lane: Hydration/readability repair
-- supported provider-backed ID types only: `character`, `corporation`, `alliance`
-- strong local basis only: Evidence/EVEidence-derived `activity_events` appearance or existing local `entities` row missing label
-- local label short-circuit with no provider call, no write, no audit row
-- External I/O, live/provider gate, storage/write posture, command authority, and provider cadence re-read from trusted state
-- allowed writes only: `metadata_runs`, sanitized `api_request_logs`, selected `entities` row, matching `activity_events` readability label columns
-
-Stop if:
-
-- live/API verification is needed
-- renderer/UI behavior becomes necessary
-- background/report-wide/multi-ID Hydration becomes necessary
-- Bucket/Dispatcher/queue design becomes necessary
-- schema changes become necessary
-- runtime enforcement or command blocking becomes necessary
-- support artifacts become necessary
-- command authority cannot be satisfied without a new project decision
-- Watch/Discovery/Assessment-only basis needs to authorize Resolve
-- Hydration blurs into Evidence Expansion
-- HS276 proof scaffolding starts acting as product authority
-
-## HS284 Evidence
-
-Dev updated 2026-06-05:
-
-- Added `metadata.selected_id_readability_repair.execute` as the trusted, non-renderer selected-ID Resolve/readability repair execution command.
-- Added product run type `selected_id_readability_repair`.
-- Added `src/main/services/selectedIdReadabilityRepairExecutionService.js`.
-- Added `scripts/verify-selected-id-readability-repair-execution.js` and `npm.cmd run verify:selected-id-readability-repair-execution`.
-- Registered service command and enforcement dry-run coverage as `hydration_readability_repair` / `trusted_selected_id_readability_repair_execute` / `covered_provider_and_storage_gated`.
-- Updated service registry, command authority, and enforcement dry-run verification for the new non-renderer execution command.
-- Command shape:
-  - user-facing act: `Resolve`
-  - trusted non-renderer only
-  - confirmation authority: `confirm:metadata.hydration`
-  - one selected unresolved ID only
-  - provider-backed ID types only: `character`, `corporation`, `alliance`
-  - strong local basis only: Evidence/EVEidence-derived `activity_events` appearance or existing unlabeled `entities` row
-  - local label short-circuit returns `already_readable` with no provider call, write, or audit row
-  - reuses product preflight facts but re-enters live provider attempt path only after trusted gates pass
-  - calls ESI `/universe/names` for exactly one selected ID through injected/fixture provider in verification
-  - validates provider response ID/category/label before write
-  - rechecks local label before write and closes `race_resolved_already_readable` without overwriting if readability appeared
-  - writes only `metadata_runs`, sanitized `api_request_logs` on provider contact, selected `entities` row, and matching `activity_events` readability label columns
-- Focused verifier covered:
-  - successful character Resolve with Evidence/EVEidence-derived activity basis
-  - successful corporation Resolve
-  - successful alliance Resolve
-  - existing local label short-circuit with no provider/no write/no audit row
-  - local label appears before write and prevents overwrite
-  - unsupported/malformed ID rejected before provider
-  - local SDE/static ID rejected from ESI names path
-  - missing local basis rejected
-  - Discovery-only basis rejected as non-authorizing
-  - Watch-only basis rejected as non-authorizing
-  - Assessment-only basis rejected as non-authorizing
-  - External I/O held produces held/no provider/no write
-  - live/provider gate blocked produces no accepted attempt/no write
-  - storage blocked stops before provider/no write
-  - provider unresolved response produces `partial` metadata run/no label write
-  - provider category mismatch fails/no label write
-  - provider unsafe/empty label fails/no label write
-  - provider/network error fails/no label write
-  - renderer invocation rejected
-  - missing confirmation rejected under authority enforcement
-  - HS276 proof flags rejected as non-authority
-  - fixed HS276 ID is not special
-  - allowed table writes only in success/provider-contact cases
-  - forbidden tables unchanged
-- Sample success output:
-  - `outcome`: `success`
-  - `selected_id`: `character:90000021`
-  - `provider_calls`: `1`
-  - `metadata_run_status`: `success`
-  - `metadata_run_writes`: `1`
-  - `api_request_log_writes`: `1`
-  - `entities_upserted`: `1`
-  - `activity_event_label_patches`: `2`
-- Sample quiet short-circuit:
-  - `outcome`: `already_readable`
-  - `provider_calls`: `0`
-  - `metadata_run_writes`: `0`
-  - `api_request_log_writes`: `0`
-  - `entities_upserted`: `0`
-  - `activity_event_label_patches`: `0`
-- Sample provider outcomes:
-  - unresolved: `partial_unresolved`, metadata status `partial`, no label write
-  - category mismatch: `provider_response_rejected`, metadata status `failed`, no label write
-  - unsafe label: `provider_response_rejected`, metadata status `failed`, no label write
-  - provider error: `provider_error`, metadata status `failed`, no label write
-- Boundaries confirmed:
-  - no zKillboard calls
-  - no killmail expansion / Evidence/EVEidence creation
-  - no raw ESI killmail payload mutation
-  - no numeric `activity_events` fact mutation
-  - no `discovered_killmail_refs`, `fetch_runs`, `ingestion_audits`, Evidence-related `data_quality_warnings`, Watch, Marked, or Assessment Memory mutation
-  - no storage config or External I/O config writes
-  - no support artifacts
-  - no schema changes
-  - no runtime enforcement or command blocking activation
-  - no renderer/UI trigger or confirmation behavior
-  - no background/report-wide/multi-ID Hydration
-  - no Watch/background Hydration pickup
-  - no Bucket, Dispatcher, worker, lease, retry, or persisted queue behavior
-  - no fourth lane / fast lane
-  - HS276 proof/test flags are not product authority
-- Verification run:
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\selectedIdReadabilityRepairExecutionService.js` passed.
-  - `node --check scripts\verify-selected-id-readability-repair-execution.js` passed.
-  - `npm.cmd run verify:selected-id-readability-repair-execution` passed.
-  - `npm.cmd run verify:selected-id-product-hydration-preflight` passed.
-  - `npm.cmd run verify:hydration-selected-id-real-execution-preflight` passed.
-  - `npm.cmd run verify:hydration-pickup-contract` passed.
-  - `npm.cmd run verify:hydration-request-posture` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 253 warnings across 7 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main` with HS284 working-tree changes.
-
-## HS284 Dev Handoff
+## HS428 Dev Handoff
 
 Completed:
 
 ```txt
-workspace/DevHS284-selected-id-readability-repair-execution.md
+workspace/DevHS428-actor-watch-controlled-adapter-disabled-seam.md
 ```
 
-Status: selected-ID Resolve/readability repair execution complete and accepted by Overseer.
+Status: ready for Overseer review.
 
-## Current Decision Point
+Remaining parked items:
 
-Atlas is resting after accepting the selected-ID Resolve execution seam.
+- production `actor.watch` redirect remains parked
+- scheduled Watch redirect remains parked
+- `runActorWatchService(...)` replacement remains parked
+- `watchExecutor.dispatchFor(...)` replacement remains parked
+- `collectActorWatch(...)` retirement remains parked
+- live zKill/ESI provider movement remains parked
+- durable Discovery receipt/task/packet persistence, Watch cadence mutation, dispatcher/queue/lease/runtime enforcement/UI work remain parked
 
-Safe options:
+## HS423 Evidence
 
-1. Rest selected-ID Resolve here and return to a different storage/runtime seam.
-2. Ask for additional assurance/security review if a specific concern appears.
-3. Later, shape renderer/UI Resolve trigger behavior when the interface path is ready.
+Dev updated 2026-06-11:
 
-Do not open renderer-triggered execution, UI confirmation behavior, background/report-wide Hydration, Bucket/Dispatcher, schema, runtime enforcement, support artifacts, or fourth-lane work without a new bounded decision.
+- Added Discovery-owned compatibility projection helper `src/main/discovery/actorWatchCompatibilitySummary.js`.
+- Updated `src/main/discovery/actorWatchControlledRuntimeAdapterFixture.js` to use the shared compatibility summary builder instead of a local duplicate builder.
+- Added focused verifier `scripts/verify-watch-actor-controlled-adapter-return-path.js`.
+- Added npm script `verify:watch-actor-controlled-adapter-return-path`.
+- Direct caller return shape is proven as the summary object itself.
+- Scheduled-style wrapping is proven as `data.collection` preserving the same summary object.
+- Compatibility field-set parity is asserted against the production `collectActorWatch(...)` summary contract.
+- Compatibility/debug terms remain explicitly old-return-shape language only:
+  - `collection`
+  - `collection_plan`
+  - `expansion_queue`
+  - `expansion_queue_summary`
+  - `zkill_refs_discovered`
+  - `zkill_discovery_skipped`
+- Production `actor.watch`, `runActorWatchService(...)`, `watchExecutor.dispatchFor(...)`, and `collectActorWatch(...)` remain unchanged.
 
-## HS283 Accepted Resolve Posture
+Compatibility field-set parity result:
 
-Accepted 2026-06-05:
+```txt
+field_count: 22
+missing: []
+extra: []
+matches: true
+```
 
-- Human/Overseer accepted the user-facing act `Resolve`.
-- Resolve means repairing readability for one selected unresolved local ID.
-- Atlas trusts deliberate operator intent, but moderates provider movement through local-first checks, gates, and pacing.
-- If a local label already exists, report / Observation construction should use it automatically.
-- If Resolve is requested and local readability already exists, Atlas should close quietly without provider call, write, or audit row.
-- Durable note: `docs/features/selected-id-readability-repair.md`.
+Direct caller proof:
 
-## HS280 Accepted State
+```txt
+buildDirectActorWatchCompatibilityReturn(summary) === summary
+top_level_is_summary_object: true
+```
 
-Overseer reviewed 2026-06-05:
+Scheduled-style wrapper proof:
 
-- Accepted HS280 in `workspace/OverseerHS281-hs280-selected-id-product-hydration-preflight-review.md`.
-- Accepted `metadata.selected_id_readability_repair.product_preflight` as a renderer-eligible, read-only selected-ID product readability repair authority preflight.
-- Confirmed no provider calls, no Hydration writes, no corpus mutation, no product execution, no Bucket/Dispatcher, no schema, no runtime enforcement, no support artifact, no UI, and no fourth-lane work.
-- Confirmed HS276 proof/test scaffolding remains non-authority.
-- Product live selected-ID Hydration execution remains unopened.
+```txt
+status: succeeded
+data.collection === summary
+collection_field_count: 22
+```
+
+Source/import proof:
+
+```txt
+rg -n "collectActorWatch|actor\.watch|runActorWatchService|dispatchFor|data\.collection|compatibility" src\main\discovery\actorWatchCompatibilitySummary.js src\main\discovery\actorWatchControlledRuntimeAdapterFixture.js scripts\verify-watch-actor-controlled-adapter-return-path.js scripts\verify-watch-actor-controlled-runtime-adapter-fixture.js package.json
+```
+
+Result:
+
+- references are proof labels, assertions, compatibility field names, and npm script names
+- no production runtime redirect was introduced
+
+Strict import/call check:
+
+```txt
+rg -n "require\(.*actorWatchCollector|collectActorWatch\(" src\main\discovery\actorWatchCompatibilitySummary.js src\main\discovery\actorWatchControlledRuntimeAdapterFixture.js scripts\verify-watch-actor-controlled-adapter-return-path.js
+```
+
+Result:
+
+- no matches
+- no `collectActorWatch(...)` import/call in the new path
+- no `actorWatchCollector.js` import in the new path
+
+Verification completed before handoff write:
+
+```txt
+node --check src\main\discovery\actorWatchCompatibilitySummary.js
+node --check src\main\discovery\actorWatchControlledRuntimeAdapterFixture.js
+node --check scripts\verify-watch-actor-controlled-adapter-return-path.js
+npm.cmd run verify:watch-actor-controlled-adapter-return-path
+npm.cmd run verify:watch-actor-controlled-runtime-adapter-fixture
+```
+
+Results:
+
+- all listed syntax checks passed
+- focused return-path verifier passed
+- affected HS419 controlled runtime adapter fixture verifier passed
+- `npm.cmd run verify:protected-terms` completed with warning-only advisory output: 838 warnings across the broad current working set; no source-term rename or protected-word JSON update was performed
+- `git diff --check` returned exit code 0 with CRLF normalization warnings only
+- `git status --short --branch` showed branch `main...origin/main [ahead 19]` with the existing broad unaccepted working set plus HS423 files
+
+Boundary confirmation:
+
+- no production `actor.watch` redirect
+- no `runActorWatchService(...)` change
+- no `watchExecutor.dispatchFor(...)` change
+- no `collectActorWatch(...)` invocation/import/retirement
+- no provider/live/API call
+- no operator DB write
+- no operator Discovery ref write
+- no operator Evidence/EVEidence write
+- no Hydration, Observation, or Assessment change
+- no Watch cadence mutation
+- no schema, dispatcher, queue, lease, enforcement, command blocking, UI, source-term rename, or protected-word JSON update
+
+## HS423 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS423-actor-watch-controlled-adapter-return-path-proof.md
+```
+
+Status: ready for Overseer review.
+
+Remaining parked items:
+
+- production `actor.watch` redirect remains parked
+- scheduled Watch redirect remains parked
+- `runActorWatchService(...)` replacement remains parked
+- `watchExecutor.dispatchFor(...)` replacement remains parked
+- `collectActorWatch(...)` retirement remains parked
+- live zKill/ESI provider movement remains parked
+- durable Discovery receipt/task/packet persistence, Watch cadence mutation, dispatcher/queue/lease/runtime enforcement/UI work remain parked
+
+## HS419 Evidence
+
+Dev updated 2026-06-08:
+
+- Added disposable-DB actor Watch controlled runtime adapter fixture module `src/main/discovery/actorWatchControlledRuntimeAdapterFixture.js`.
+- Added service wrapper `src/main/services/watchActorControlledRuntimeAdapterFixtureService.js`.
+- Added non-renderer service command `watch.actor_controlled_runtime_adapter_fixture.preview`.
+- Added focused verifier `scripts/verify-watch-actor-controlled-runtime-adapter-fixture.js` and npm script `verify:watch-actor-controlled-runtime-adapter-fixture`.
+- Updated service registry, command authority, passive side-effect, and enforcement dry-run coverage for the new fixture-only command.
+- The fixture uses injected fake zKill/ESI clients only and internal disposable `:memory:` DBs.
+- The service wrapper snapshots any caller/operator DB before/after and proves unchanged operator corpus state.
+- The proof uses real repository/service paths in disposable DBs:
+  - `createFetchRun(...)`
+  - `upsertDiscoveredKillmailRefs(...)`
+  - `pendingDiscoveryRefs(...)`
+  - `markDiscoveryRefsSelected(...)`
+  - `persistEvidencePackage(...)`
+  - `markDiscoveryRefsExpanded(...)`
+  - `markDiscoveryRefsCached(...)`
+  - `markDiscoveryRefsFailed(...)`
+  - `insertWarning(...)`
+  - `finalizeFetchRun(...)`
+- The proof composes current Discovery helper surfaces:
+  - `discoverActorRefs(...)`
+  - `pendingActorDiscovery(...)`
+  - `selectExpansionCandidates(...)`
+  - `markFailedExpansionCandidates(...)`
+  - `summarizeExpansionQueue(...)`
+  - `buildEvidencePackageFromRefs(...)`
+- Fixture cases cover fresh actor candidate acquisition, pending candidate drain, local Evidence/EVEidence cache skip, and ESI-backed expansion failure posture.
+- Disposable mutation proof demonstrates `fetch_runs`, Discovery ref status movement, Evidence/EVEidence writer landing, warnings, failures, and compatibility summary posture without touching the operator corpus.
+- Production `actor.watch`, `runActorWatchService(...)`, `watchExecutor.dispatchFor(...)`, and `collectActorWatch(...)` remain unchanged.
+
+Source/import proof:
+
+```txt
+rg -n "watch.actor_controlled_runtime_adapter_fixture|actorWatchControlledRuntimeAdapterFixture|collectActorWatch" src\main\discovery\actorWatchControlledRuntimeAdapterFixture.js src\main\services\watchActorControlledRuntimeAdapterFixtureService.js scripts\verify-watch-actor-controlled-runtime-adapter-fixture.js src\main\services\serviceRegistry.js
+```
+
+Result:
+
+- new fixture module, service wrapper, verifier, and service command references are visible
+- `collectActorWatch` appears only in explicit not-imported / not-invoked / unchanged proof labels and assertions
+- no `collectActorWatch(...)` call was added
+- no import from `actorWatchCollector.js` was added
+
+Sample focused proof output:
+
+```txt
+Actor Watch controlled runtime adapter fixture proof validated
+fresh_actor_candidate_acquisition:
+  fake_zkill_client_invocations: 1
+  fake_esi_client_invocations: 2
+  refs_written: 3
+  selected_count: 2
+  expanded_count: 2
+  persisted_killmails: 2
+  activity_events_written: 12
+  finalized: true
+  status_counts.expanded: 2
+  status_counts.pending: 1
+pending_candidate_drain:
+  fake_zkill_client_invocations: 0
+  selected_count: 2
+  expanded_count: 2
+local_evidence_cache_skip:
+  cached_count: 1
+  fake_esi_client_invocations: 1
+expansion_failure:
+  failed_count: 1
+  persisted_killmails: 0
+operator_corpus_non_mutation_proof:
+  operator_db_written: false
+  disposable_db_only: true
+  unchanged: true
+```
+
+Verification completed before handoff write:
+
+```txt
+node --check src\main\discovery\actorWatchControlledRuntimeAdapterFixture.js
+node --check src\main\services\watchActorControlledRuntimeAdapterFixtureService.js
+node --check scripts\verify-watch-actor-controlled-runtime-adapter-fixture.js
+node --check src\main\discovery\actorWatchDiscoveryRouteBodyFixture.js
+node --check src\main\services\watchActorDiscoveryRouteBodyFixtureService.js
+node --check src\main\workers\actorWatchCollector.js
+node --check src\main\services\mutatingActionService.js
+node --check src\main\watchlist\watchExecutor.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+npm.cmd run verify:watch-actor-controlled-runtime-adapter-fixture
+npm.cmd run verify:watch-actor-discovery-route-body-fixture
+npm.cmd run verify:watch-actor-compatibility-wrapper-runtime-preview
+npm.cmd run verify:watch-actor-compatibility-wrapper-adapter-fixture
+npm.cmd run verify:watch-actor-compatibility-wrapper-contract
+npm.cmd run verify:watch-actor-replacement-parity
+npm.cmd run verify:discovery-acquisition-to-evidence-handoff-fixture
+npm.cmd run verify:discovery-esi-expansion-intake-posture
+npm.cmd run verify:evidence-writer-landing-package-fixture
+npm.cmd run verify:evidence-rules
+npm.cmd run verify:watch-executor
+npm.cmd run verify:mutating-services
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+```
+
+Results:
+
+- all listed syntax checks passed
+- all listed npm verification commands passed
+- `npm.cmd run verify:service-registry` passed with a 300 second ceiling
+- `npm.cmd run verify:enforcement-dry-run` remained complete: 115 commands covered, 0 gaps
+- the new command appears as fixture-only/non-production in enforcement dry-run coverage
+- `npm.cmd run verify:protected-terms` completed with warning-only advisory output: 825 warnings across the broad current working set; no source-term rename or protected-word JSON update was performed
+- `git diff --check` returned exit code 0 with CRLF normalization warnings only
+- `git status --short --branch` showed branch `main...origin/main [ahead 19]` with the existing broad unaccepted working set plus HS419-touched files and the HS419 handoff artifact
+
+Boundary confirmation:
+
+- no production `actor.watch` redirect
+- no `runActorWatchService(...)` change
+- no `watchExecutor.dispatchFor(...)` change
+- no `collectActorWatch(...)` invocation or retirement
+- no provider/live/API call
+- no operator DB write
+- no operator Discovery ref write
+- no operator Evidence/EVEidence write
+- no Hydration write
+- no Watch cadence mutation
+- no schema, dispatcher, queue, lease, enforcement, command blocking, UI, support artifact, source-term rename, or protected-word JSON update
+
+## HS419 Dev Handoff
+
+Completed:
+
+```txt
+workspace/DevHS419-actor-watch-controlled-runtime-adapter-fixture-proof.md
+```
+
+Status: accepted by HS420.
+
+Remaining parked items:
+
+- production `actor.watch` redirect remains parked
+- scheduled Watch redirect remains parked
+- `runActorWatchService(...)` replacement remains parked
+- `watchExecutor.dispatchFor(...)` replacement remains parked
+- `collectActorWatch(...)` retirement remains parked
+- live zKill/ESI provider movement remains parked
+- durable Discovery receipt/task/packet persistence, Watch cadence mutation, dispatcher/queue/lease/runtime enforcement/UI work remain parked
+
+## Latest Accepted Advisory
+
+HS417: Actor Watch controlled runtime adapter readiness.
+
+Accepted by:
+
+```txt
+workspace/OverseerHS418-hs417-actor-watch-controlled-runtime-adapter-readiness-review.md
+```
+
+Advisory artifact:
+
+```txt
+workspace/EngineeringTraceHS417-actor-watch-controlled-runtime-adapter-readiness.md
+```
+
+Accepted finding:
+
+- Atlas is not ready for default `actor.watch` redirect, scheduled Watch redirect, or `collectActorWatch(...)` retirement.
+- Atlas is ready for a narrower no-provider, disposable-DB controlled runtime adapter fixture proof.
+- HS415 proved route-body composition, not runtime replacement.
+- The missing proof is mutation choreography: `fetch_runs`, candidate-ref persistence/status mutation, Evidence/EVEidence writer landing, warning/failure posture, and old compatibility summary from a mutation-capable proof.
+
+## Latest Accepted State
+
+HS415: Actor Watch Discovery-owned route body fixture proof accepted by HS416.
+
+Accepted by:
+
+```txt
+workspace/OverseerHS416-hs415-actor-watch-discovery-route-body-fixture-proof-review.md
+```
 
 Runway:
 
 ```txt
-workspace/OverseerHS280-selected-id-product-hydration-authority-preflight-runway.md
+workspace/OverseerHS415-actor-watch-discovery-route-body-fixture-proof-runway.md
 ```
 
-Expected handoff:
+Dev handoff:
 
 ```txt
-workspace/DevHS280-selected-id-product-hydration-authority-preflight.md
+workspace/DevHS415-actor-watch-discovery-route-body-fixture-proof.md
 ```
-
-Accepted task:
-
-Add a read-only selected-ID product Hydration authority/preflight contract. Preferred command:
-
-```txt
-metadata.selected_id_readability_repair.product_preflight
-```
-
-The command should prove product-authority posture for selected-ID readability repair/Hydration without provider calls or writes.
-
-Preserve:
-
-- read-only preview only
-- no zKillboard or ESI calls
-- no Hydration writes
-- no corpus mutation
-- no product execution
-- no Bucket, Dispatcher, worker, lease, retry, persisted queue, schema, runtime enforcement, command blocking, support artifact, or UI behavior
-- no fourth lane / fast lane
-- HS276 proof/test scaffolding remains non-authority
-
-Stop if:
-
-- product execution becomes necessary
-- provider contact becomes necessary
-- writes become necessary
-- renderer-triggered execution becomes necessary
-- Bucket/Dispatcher/queue design becomes necessary
-- local basis policy needs Human/Overseer choice
-- Hydration blurs into Evidence Expansion
-- HS276 proof scaffolding starts acting as product authority
-
-## Current Decision Point
-
-Atlas is now at a product execution boundary.
-
-Safe options:
-
-1. Rest selected-ID Hydration productization at accepted preflight.
-2. Ask for an additional Engineering/Security advisory before execution.
-3. If explicitly accepted, open a narrow trusted non-renderer product execution packet for:
-
-```txt
-metadata.selected_id_readability_repair.execute
-selected_id_readability_repair
-```
-
-Do not open renderer-triggered execution, UI confirmation behavior, background/report-wide Hydration, Bucket/Dispatcher, schema, runtime enforcement, support artifacts, or fourth-lane work.
-
-## HS278 Accepted State
-
-Overseer reviewed 2026-06-05:
-
-- Accepted HS278 in `workspace/OverseerHS279-hs278-selected-id-product-hydration-transition-review.md`.
-- Accepted `workspace/EngineeringSecurityHS278-selected-id-product-hydration-transition-advisory.md` as the selected-ID product Hydration transition advisory.
-- Accepted that selected-ID Hydration should not move directly from HS276 proof/test machinery into product behavior.
-- Accepted that the next safe packet is a read-only product authority/preflight contract.
-- Product live Hydration, renderer-triggered Hydration, background Hydration, Bucket/Dispatcher, schema, runtime enforcement, support artifacts, UI, and fourth-lane work remain parked.
-
-Accepted product command/run-type candidates:
-
-```txt
-metadata.selected_id_readability_repair.execute
-selected_id_readability_repair
-```
-
-## HS280 Evidence
-
-Dev updated 2026-06-05:
-
-- Added `metadata.selected_id_readability_repair.product_preflight` as a renderer-eligible, read-only selected-ID product readability repair authority/preflight command.
-- Added `src/main/services/selectedIdReadabilityRepairProductPreflightService.js`.
-- Added `scripts/verify-selected-id-product-hydration-preflight.js` and `npm.cmd run verify:selected-id-product-hydration-preflight`.
-- Registered service command and enforcement dry-run coverage as `hydration_readability_repair` / `selected_id_product_readability_repair_preflight_readout` / `covered_read_only`.
-- Updated service registry, command authority, enforcement dry-run, and passive side-effect verification for the new read-only command.
-- Product preflight composes:
-  - normalized selected ID type/value
-  - supported product provider-backed ID types: `character`, `corporation`, `alliance`
-  - local/static lookup posture for `inventory_type` and `solar_system`
-  - strong local basis from Evidence/EVEidence-derived `activity_events` appearance
-  - strong local basis from existing local `entities` rows missing labels
-  - parked/conditional basis for Watch-only, Assessment-only, and Discovery-only appearances
-  - local label short-circuit
-  - External I/O readback
-  - live/provider gate posture without provider-attempt recording
-  - storage/write posture from trusted storage setup gate state
-  - command authority and confirmation requirements for future execution
-  - future command/run-type candidates: `metadata.selected_id_readability_repair.execute` / `selected_id_readability_repair`
-  - expected allowed writes and forbidden mutations for later execution
-  - explicit `Bucket`/`Dispatcher` not required posture
-- Focused verifier covered:
-  - character with Evidence/EVEidence-derived activity basis and no label
-  - corporation and alliance supported shapes
-  - fixed HS276 ID `character:92418041` is not special product authority
-  - HS276 proof flags are disclosed and ignored as non-authority
-  - renderer-forged local label, local basis, storage, External I/O, live gate, confirmation, and command-authority claims are ignored
-  - missing local basis rejected
-  - Discovery-only, Watch-only, and Assessment-only basis classified as conditional/parked, not first product authority
-  - existing local label short-circuits
-  - local SDE/static ID does not use ESI names Hydration
-  - External I/O held is held, not failure
-  - live gate blocked does not record provider attempts
-  - storage write blocked stops before provider contact
-  - unsupported/malformed ID rejected
-  - no providers and no table writes occur
-- Sample ready output:
-  - `product_preflight_state`: `provider_needed_product_preflight_ready`
-  - `selected_id`: `character:90000011`
-  - `strong_basis`: `activity_events`
-  - `provider_calls`: `0`
-  - `writes_authorized_now`: `false`
-  - `next_safe_action`: `future_execution_command_must_revalidate_before_provider_contact`
-- Sample parked-only output:
-  - `product_preflight_state`: `conditional_basis_only`
-  - `parked_basis`: `discovered_killmail_refs`, `watchlist_entities`, or `assessment_artifacts`
-  - `next_safe_action`: `require_evidence_activity_or_unlabeled_entity_basis_before_provider_hydration`
-- Boundaries confirmed:
-  - no zKillboard or ESI calls
-  - no Hydration writes
-  - no `metadata_runs`, `api_request_logs`, entity writes, or `activity_events` patches
-  - no Evidence/EVEidence writes
-  - no Discovery ref, Watch, Marked, or Assessment Memory mutation
-  - no storage config or External I/O config writes
-  - no product execution
-  - no Bucket, Dispatcher, worker, lease, retry, persisted queue, schema, runtime enforcement, command blocking, support artifact, or UI behavior
-  - no fourth lane / fast lane
-  - HS276 proof/test scaffolding remains non-authority
-- Verification run:
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\selectedIdReadabilityRepairProductPreflightService.js` passed.
-  - `node --check scripts\verify-selected-id-product-hydration-preflight.js` passed.
-  - `npm.cmd run verify:selected-id-product-hydration-preflight` passed.
-  - `npm.cmd run verify:hydration-selected-id-real-execution-preflight` passed.
-  - `npm.cmd run verify:hydration-pickup-contract` passed.
-  - `npm.cmd run verify:hydration-request-posture` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 271 warnings across 8 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main` with HS280 working-tree changes.
-
-## HS280 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS280-selected-id-product-hydration-authority-preflight.md
-```
-
-Status: selected-ID product Hydration authority/preflight contract complete and ready for Overseer review.
-
-## HS276 Accepted State
-
-Overseer reviewed 2026-06-05:
-
-- Accepted HS276 in `workspace/OverseerHS277-hs276-selected-id-real-hydration-execution-proof-review.md`.
-- Accepted `metadata.hydration_selected_id_real_execution_proof` as a trusted, non-renderer, controlled-temp-store proof command.
-- Confirmed one live ESI `/universe/names` lookup for `[92418041]`.
-- Confirmed ESI returned `character:92418041` / `Reuben Orlenard`.
-- Confirmed successful proof writes only controlled temp-store Hydration/readability rows:
-  - one `metadata_runs` row
-  - one sanitized `api_request_logs` row
-  - one selected `entities` row
-  - matching `activity_events` readability label columns only
-- Confirmed real operator corpus was not mutated.
-- Confirmed no zKillboard, Discovery, Evidence Expansion, Bucket/Dispatcher, schema, enforcement, support artifact, UI, or fourth-lane work.
-- Product live Hydration remains unopened.
-
-Follow-up local ADR:
-
-```txt
-docs/adr/ADR-0006-selected-id-hydration-proof-is-not-product-flow.md
-```
-
-Accepted guardrail: HS276 proof/test machinery must not become product Hydration flow by accident.
-
-## HS276 Evidence
-
-Opened 2026-06-05 and accepted by HS277:
-
-```txt
-workspace/OverseerHS276-selected-id-real-hydration-execution-proof-runway.md
-```
-
-Expected handoff:
-
-```txt
-workspace/DevHS276-selected-id-real-hydration-execution-proof.md
-```
-
-Accepted task:
-
-Implement the smallest trusted, non-renderer, one-ID real provider-backed selected-ID Hydration execution proof.
-
-Known selected-ID target:
-
-```txt
-id_type: character
-id_value: 92418041
-basis: Human-provided own character ID for controlled proof
-```
-
-Accepted proof shape:
-
-```txt
-controlled temp Atlas store with local unresolved ID basis
--> explicit trusted selected-ID execution context
--> rebuild local-first request posture
--> rebuild non-durable pickup contract
--> re-read External I/O and live/provider gate
--> enter live provider attempt path for one ESI names lookup
--> call ESI /universe/names for exactly one ID
--> validate provider response
--> write Hydration readability repair transaction in controlled temp store
--> finalize metadata run
--> verify allowed rows only
-```
-
-Do not mutate the real operator corpus. Do not call zKillboard. Do not perform Discovery or Evidence Expansion. Do not broaden beyond this one selected-ID Hydration proof.
-
-Recent decision surface:
-
-```txt
-workspace/OverseerHS270-hydration-real-execution-decision-surface.md
-```
-
-Latest advisory artifact:
-
-```txt
-workspace/DataEngineering-provider-work-structure-readiness-advisory.md
-```
-
-Latest Overseer review:
-
-```txt
-workspace/OverseerHS271-provider-work-structure-readiness-review.md
-```
-
-Accepted recommendation:
-
-Do not open real provider-backed selected-ID Hydration execution automatically. Choose deliberately between:
-
-1. Engineering/Security advisory on real execution gate fit.
-2. Read-only selected-ID real execution preflight.
-3. Real provider-backed execution packet, only after explicit Human/Overseer acceptance of external-contact movement.
 
 Accepted result:
 
-HS268 added the smallest fixture-only selected-ID Hydration execution proof. This proof exercises selected-ID execution/write boundaries using injected fixture provider results only.
-
-Accepted command:
-
 ```txt
-metadata.hydration_selected_id_execution_fixture_proof
+actor Watch-shaped input can flow through a Discovery-owned route body using injected clients and current Discovery helper surfaces, without invoking collectActorWatch or changing production actor.watch
 ```
 
-Overseer correction: the new command's dry-run coverage label was changed from `fast_view_metadata_hydration` to `hydration_readability_repair` to preserve the accepted lane simplification.
+Boundary still closed:
 
-No providers are called. No real operator Hydration execution exists. The command is not renderer eligible.
+No production `actor.watch` redirect, `runActorWatchService(...)` change, `watchExecutor.dispatchFor(...)` change, `collectActorWatch(...)` invocation, collector retirement, provider/live/API call, real/operator Discovery ref write, real/operator Evidence/EVEidence write, Hydration write, Watch cadence mutation, schema, dispatcher, system/radius change, UI, support artifact, source-term rename, or protected-word JSON update.
 
-Preserve:
+## HS415 Evidence
+
+Dev updated 2026-06-08:
+
+- Added Discovery-owned route-body proof module `src/main/discovery/actorWatchDiscoveryRouteBodyFixture.js`.
+- Added read-only service wrapper `src/main/services/watchActorDiscoveryRouteBodyFixtureService.js`.
+- Added renderer-eligible read-only command `watch.actor_discovery_route_body_fixture.preview`.
+- Added focused verifier `scripts/verify-watch-actor-discovery-route-body-fixture.js` and npm script `verify:watch-actor-discovery-route-body-fixture`.
+- Updated service registry, command authority, passive side-effect, and enforcement dry-run coverage for the new command.
+- The route body composes current Discovery-owned helpers:
+  - `discoverActorRefs(...)`
+  - `pendingActorDiscovery(...)`
+  - `selectExpansionCandidates(...)`
+  - `markFailedExpansionCandidates(...)`
+  - `summarizeExpansionQueue(...)`
+  - `buildEvidencePackageFromRefs(...)`
+- The proof uses injected fixture zKill/ESI clients only.
+- The proof accepts actor Watch-shaped intent and returns an old caller-facing compatibility summary without redirecting production `actor.watch`.
+- Watch remains an intent/cadence/provenance source only in this proof; Discovery owns acquisition and ESI-backed expansion route-body work.
+- Candidate refs remain possible leads/provenance, not Evidence/EVEidence.
+- ESI-backed selected-ref expansion remains Discovery-owned and is not Hydration.
+- Evidence/EVEidence writer boundary is represented but not invoked.
+- Pending Discovery refs are preferred before fresh fixture zKill candidate acquisition.
+- Fixture cases cover fresh candidate acquisition, pending candidate drain, local cache skip, and retryable/terminal expansion failure posture.
+- Service wrapper snapshots durable table counts before/after and proves no operator corpus mutation for the route proof.
+
+Source/import proof:
 
 ```txt
-Discovery outputs possible leads.
-Evidence Expansion outputs Evidence/EVEidence.
-Hydration outputs readability repair.
-Fourth lane stays parked.
-
-Request posture is pickup-readable, not pickup.
-Pickup is not execution.
-Execution is not write until the write path succeeds under policy.
+rg -n "actorWatchDiscoveryRouteBodyFixture|watch.actor_discovery_route_body_fixture|collectActorWatch\(" src\main\discovery\actorWatchDiscoveryRouteBodyFixture.js src\main\services\watchActorDiscoveryRouteBodyFixtureService.js scripts\verify-watch-actor-discovery-route-body-fixture.js src\main\services\serviceRegistry.js
 ```
 
-Stop if:
+Result:
 
-- Hydration blurs into Evidence Expansion
-- request posture or pickup contract is treated as execution authority
-- provider-backed execution is implemented
-- write behavior touches anything beyond Hydration/readability proof rows
-- queues, dispatcher, worker, leases, retries, schema, UI, or fourth-lane design become necessary before the fixture proof can stay bounded
+- new route body and service references are visible
+- `collectActorWatch(` did not appear in the new route body, service wrapper, registry handler, or focused verifier
+- no import from `actorWatchCollector.js` was added by HS415
 
-## HS276 Evidence
-
-Dev updated 2026-06-05:
-
-- Added `metadata.hydration_selected_id_real_execution_proof` as a trusted, non-renderer, one-ID selected-ID real Hydration execution proof command.
-- Added `src/main/services/hydrationSelectedIdRealExecutionProofService.js`.
-- Added `scripts/verify-hydration-selected-id-real-execution.js` and `npm.cmd run verify:hydration-selected-id-real-execution`.
-- Registered service command and enforcement dry-run coverage as `hydration_readability_repair` / `trusted_selected_id_real_hydration_execution_proof` / `trusted_controlled_proof_only`.
-- Command shape:
-  - non-renderer eligible
-  - requires trusted context: `allowHydrationSelectedIdRealExecutionProof=true`
-  - requires controlled temp/test store context: `controlledTempAtlasStore=true`
-  - supports only the HS276 target for this first proof: `character:92418041`
-  - rebuilds local-first request posture from trusted local state
-  - rebuilds non-durable pickup contract
-  - short-circuits before provider contact when a local label exists
-  - requires External I/O released, live/provider gate allowed, and storage write posture safe before provider contact
-  - uses `enterLiveProviderAttempt('metadata.hydration', ...)` for accepted-attempt/cadence recording
-  - calls ESI `/universe/names` for exactly one ID
-  - validates provider response ID/category/label safety before writing
-  - writes Hydration/readability repair rows only in the controlled temp store
-- Controlled temp store setup:
-  - verifier creates per-case DBs under `.tmp/hydration-selected-id-real-execution/<case>/atlas.sqlite`
-  - local basis is intentionally seeded in `activity_events` for `character:92418041`
-  - no real operator corpus DB is mutated
-- Focused verifier default mode uses counted fetch doubles and covered:
-  - successful provider response
-  - local label short-circuit before provider contact
-  - External I/O held
-  - storage write blocked
-  - live/provider gate blocked
-  - provider selected ID missing
-  - provider category mismatch
-  - empty/unsafe provider label
-  - provider error
-  - untrusted context rejected before provider/write
-  - renderer invocation rejected by service registry
-- Default success sample:
-  - provider calls: 1
-  - endpoint: `https://esi.evetech.net/latest/universe/names/?datasource=tranquility`
-  - method: `POST`
-  - body: `[92418041]`
-  - provider validation: `provider_response_valid`
-  - metadata run status: `success`
-  - metadata run writes: 1
-  - API request log writes: 1
-  - entity upserts: 1
-  - activity event label patches: 2
-- Opt-in live proof run:
-  - command: `$env:AURA_ATLAS_HS276_LIVE='1'; npm.cmd run verify:hydration-selected-id-real-execution`
-  - live success provider calls: 1
-  - live endpoint: `https://esi.evetech.net/latest/universe/names/?datasource=tranquility`
-  - live method: `POST`
-  - live body: `[92418041]`
-  - returned/persisted label: `Reuben Orlenard`
-  - persisted entity row: `character:92418041 -> Reuben Orlenard`
-  - patched labels: `entity_name` and `character_name` on event `276:attacker:92418041`
-  - metadata run: `selected_id_real_hydration_execution_proof`, `status=success`, `requested_from_esi=1`, `resolved=1`, `entities_upserted=1`, `activity_events_patched=2`, `api_calls_esi=1`
-  - API log: provider `esi`, method `POST`, status `200`, endpoint persisted as `https://esi.evetech.net/latest/universe/names/?datasource=[redacted]`
-- Invariants proved:
-  - raw killmail payloads unchanged
-  - numeric `activity_events` IDs/facts unchanged
-  - Discovery refs unchanged
-  - `fetch_runs` unchanged
-  - `ingestion_audits` unchanged
-  - `data_quality_warnings` unchanged
-  - Watch rows unchanged
-  - Assessment Memory rows unchanged
-  - only allowed tables changed in success/provider-attempt cases
-- Boundaries confirmed:
-  - no zKillboard calls
-  - no Discovery
-  - no Evidence Expansion
-  - no real operator corpus mutation
-  - no pickup/request persistence
-  - no Bucket persistence
-  - no Dispatcher, worker, lease, retry, queue, or background Hydration machinery
-  - no schema changes
-  - no `killmails` mutation
-  - no raw ESI killmail payload mutation
-  - no numeric activity fact mutation
-  - no Watch, Marked, or Assessment Memory mutation
-  - no storage config or External I/O config writes
-  - no support artifacts
-  - no runtime enforcement or command blocking activation
-  - no renderer UI work
-  - fourth lane stays parked
-- Verification run:
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\hydrationSelectedIdRealExecutionProofService.js` passed.
-  - `node --check scripts\verify-hydration-selected-id-real-execution.js` passed.
-  - `npm.cmd run verify:hydration-selected-id-real-execution` passed.
-  - `$env:AURA_ATLAS_HS276_LIVE='1'; npm.cmd run verify:hydration-selected-id-real-execution` passed with the accepted one-ID live proof.
-  - `npm.cmd run verify:hydration-selected-id-real-execution-preflight` passed.
-  - `npm.cmd run verify:hydration-selected-id-execution-fixture` passed.
-  - `npm.cmd run verify:hydration-pickup-contract` passed.
-  - `npm.cmd run verify:hydration-request-posture` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 250 warnings across 7 changed working-set files before workspace handoff updates; no renames or protected-word JSON updates performed.
-
-## HS276 Dev Handoff
-
-Completed:
+Sample focused proof output:
 
 ```txt
-workspace/DevHS276-selected-id-real-hydration-execution-proof.md
-```
-
-Status: selected-ID real Hydration execution proof complete and ready for Overseer review.
-
-## HS272 Accepted State
-
-Overseer reviewed 2026-06-05:
-
-- Accepted HS272 in `workspace/OverseerHS273-hs272-selected-id-real-execution-preflight-review.md`.
-- Accepted `metadata.hydration_selected_id_real_execution_preflight.preview` as a read-only, renderer-eligible selected-ID real execution preflight.
-- Confirmed the command composes local-first request posture, non-durable pickup contract, External I/O, live/provider gate, storage write posture, supported selected-ID type, expected future write path, and revalidation checklists.
-- Confirmed no provider calls, Hydration writes, metadata/API/entity/activity writes, Bucket persistence, Dispatcher, schema, runtime enforcement, or UI work.
-- Real provider-backed selected-ID Hydration execution remains unopened.
-
-## HS272 Evidence
-
-Dev updated 2026-06-05:
-
-- Added `metadata.hydration_selected_id_real_execution_preflight.preview` as a read-only, renderer-eligible selected-ID real Hydration execution preflight.
-- Added `src/main/services/hydrationSelectedIdRealExecutionPreflightService.js`.
-- Added `scripts/verify-hydration-selected-id-real-execution-preflight.js` and `npm.cmd run verify:hydration-selected-id-real-execution-preflight`.
-- Registered service command and enforcement dry-run coverage as `hydration_readability_repair` / `selected_id_hydration_real_execution_preflight_readout` / `covered_read_only`.
-- Updated service registry, command authority, enforcement dry-run, and passive side-effect verification for the new read-only command.
-- Preflight composes:
-  - local-first selected-ID request posture
-  - non-durable pickup contract
-  - External I/O posture
-  - live/provider gate posture with blocked-attempt recording disabled
-  - storage write posture for future Hydration readability repair
-  - supported selected-ID type
-  - expected write path
-  - execution revalidation checklist
-  - post-provider write checklist
-- Focused verifier covered states:
-  - `not_a_request`
-  - `invalid`
-  - `insufficient_basis`
-  - `already_local`
-  - `local_lookup_available`
-  - `held`
-  - `blocked`
-  - `provider_needed_but_not_live_ready`
-  - `provider_needed_live_preflight_ready`
-- Ready sample:
-  - `preflight_state`: `provider_needed_live_preflight_ready`
-  - `request_posture_state`: `provider_needed`
-  - `provider_posture`: `released_to_normal_gates_only`
-  - External I/O held: false
-  - live gate allowed: true
-  - storage writes blocked: false
-  - next safe action: `future_explicit_execution_command_must_revalidate_before_provider_contact`
-- Not-live-ready sample:
-  - `preflight_state`: `provider_needed_but_not_live_ready`
-  - `request_posture_state`: `blocked`
-  - `provider_posture`: `blocked`
-  - live gate allowed: false
-  - storage writes blocked: false
-  - next safe action: `do_not_call_provider_recheck_live_gate_and_command_authority`
-- Renderer anti-forgery proof:
-  - renderer invocation is allowed only as read-only preview
-  - forged local label, storage posture, External I/O state, live gate, and provider posture were ignored as authority
-  - renderer-supplied posture remains explanation only
-- Table mutation proof:
-  - unchanged before/after counts for `killmails`, `activity_events`, `discovered_killmail_refs`, `fetch_runs`, `api_request_logs`, `metadata_runs`, `entities`, `watchlist_entities`, `system_watches`, and `assessment_artifacts`
-- Boundaries confirmed:
-  - no provider calls
-  - no Hydration writes
-  - no `metadata_runs` writes
-  - no `api_request_logs` writes
-  - no entity writes
-  - no `activity_events` patches
-  - no Evidence/EVEidence writes
-  - no Discovery ref mutations
-  - no Watch, Marked, or Assessment Memory mutations
-  - no pickup/request persistence
-  - no Bucket persistence
-  - no Dispatcher, worker, lease, retry, queue dispatch, or background Hydration
-  - no storage config or External I/O config writes
-  - no support artifacts
-  - no schema changes
-  - no runtime enforcement or command blocking activation
-  - no UI work
-  - fourth lane stays parked
-- Verification run:
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\hydrationSelectedIdRealExecutionPreflightService.js` passed.
-  - `node --check scripts\verify-hydration-selected-id-real-execution-preflight.js` passed.
-  - `npm.cmd run verify:hydration-selected-id-real-execution-preflight` passed.
-  - `npm.cmd run verify:hydration-selected-id-execution-fixture` passed.
-  - `npm.cmd run verify:hydration-pickup-contract` passed.
-  - `npm.cmd run verify:hydration-request-posture` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main` with HS272 working-tree changes.
-
-## HS272 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS272-selected-id-real-execution-preflight.md
-```
-
-Status: selected-ID real execution preflight complete and ready for Overseer review.
-
-## HS268 Evidence
-
-Dev updated 2026-06-05:
-
-- Added `metadata.hydration_selected_id_execution_fixture_proof` as a trusted fixture-only, non-renderer service command.
-- Added `src/main/services/hydrationSelectedIdExecutionFixtureProofService.js`.
-- Added `scripts/verify-hydration-selected-id-execution-fixture.js` and `npm.cmd run verify:hydration-selected-id-execution-fixture`.
-- Registered enforcement dry-run coverage for the new command as `hydration_readability_repair` / `fixture_selected_id_hydration_execution_proof` / `fixture_only_non_production`.
-- Updated service registry, command authority, and service registry verification for the new command.
-- Fixture proof shape:
-  - selected-ID pickup contract
-  - trusted execution revalidation
-  - injected fixture provider response
-  - provider-response validation
-  - Hydration write transaction
-  - `metadata_runs` / `entities` / `activity_events` / optional sanitized `api_request_logs` proof
-- Success case proved:
-  - rebuilt request posture: `provider_needed`
-  - provider posture: `released_to_normal_gates_only`
-  - metadata run status: `success`
-  - metadata run writes: 1
-  - fixture API log writes: 1
-  - selected entity upserts: 1
-  - activity event readability label patches: 2
-  - provider response validation: `fixture_provider_response_valid`
-- Rejection cases proved:
-  - `not_a_request`
-  - `invalid`
-  - `insufficient_basis`
-  - `already_local` / local label short-circuit
-  - `local_lookup_available`
-  - `held`
-  - `blocked`
-  - fixture provider response ID mismatch
-  - fixture provider response category/type mismatch
-  - empty/unsafe provider label
-- Rejected cases finalize a fixture `metadata_runs` row as partial/failed and do not upsert entities or patch activity labels.
-- Invariants proved:
-  - numeric activity-event IDs/facts unchanged
-  - raw killmail payloads unchanged
-  - Discovery refs unchanged
-  - `fetch_runs` unchanged
-  - Watch rows unchanged
-  - Assessment Memory rows unchanged
-  - only expected tables changed in success
-- Boundaries confirmed:
-  - no live/API/provider calls
-  - no real operator Hydration execution
-  - command is not renderer eligible
-  - no pickup/request persistence
-  - no queue, dispatcher, worker, lease, or retry state
-  - no schema changes
-  - no `killmails` mutation
-  - no raw ESI payload mutation
-  - no numeric activity fact mutation
-  - no Discovery ref mutation
-  - no `fetch_runs`, ingestion audit, or data quality warning mutation
-  - no Watch, Marked, or Assessment Memory mutation
-  - no storage config or External I/O config writes
-  - no support artifacts
-  - no runtime enforcement activation or command blocking
-  - no renderer UI work
-  - fourth lane stays parked
-- Verification run:
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\hydrationSelectedIdExecutionFixtureProofService.js` passed.
-  - `node --check scripts\verify-hydration-selected-id-execution-fixture.js` passed.
-  - `npm.cmd run verify:hydration-selected-id-execution-fixture` passed.
-  - `npm.cmd run verify:hydration-pickup-contract` passed.
-  - `npm.cmd run verify:hydration-request-posture` passed.
-  - `npm.cmd run verify:hydration-write-fixture` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 248 warnings across 7 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main` with HS268 working-tree changes.
-
-## HS268 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS268-selected-id-hydration-execution-fixture-proof.md
-```
-
-Status: selected-ID Hydration execution fixture proof complete and ready for Overseer review.
-
-## Recent Accepted Advisory
-
-Latest advisory request:
-
-```txt
-workspace/OverseerHS266-selected-id-hydration-execution-readiness-advisory-request.md
-```
-
-Latest advisory artifact:
-
-```txt
-workspace/DataEngineeringHS266-selected-id-hydration-execution-readiness-advisory.md
-```
-
-Latest Overseer review:
-
-```txt
-workspace/OverseerHS267-hs266-hydration-execution-readiness-review.md
-```
-
-Status: accepted.
-
-Accepted result:
-
-Atlas is not ready for real provider-backed selected-ID Hydration execution. Atlas is ready for a fixture-only selected-ID Hydration execution proof.
-
-Recommended proof shape:
-
-```txt
-selected-ID pickup contract
--> trusted execution revalidation
--> fixture provider response
--> provider-response validation
--> Hydration write transaction
--> metadata_runs / entities / activity_events / api_request_logs proof
-```
-
-## Recent Accepted State
-
-Current executor before HS266: none
-
-Latest accepted Dev runway:
-
-```txt
-workspace/OverseerHS264-hydration-pickup-eligibility-contract-preview-runway.md
-```
-
-Latest accepted Dev handoff:
-
-```txt
-workspace/DevHS264-hydration-pickup-eligibility-contract-preview.md
-```
-
-Latest Overseer review:
-
-```txt
-workspace/OverseerHS265-hs264-hydration-pickup-contract-review.md
-```
-
-Status: accepted.
-
-No active Dev runway is open.
-
-Accepted result:
-
-HS264 added the read-only selected-ID Hydration pickup eligibility / execution-input contract preview.
-
-Target command concept:
-
-```txt
-metadata.hydration_pickup_contract.preview
-```
-
-No provider calls, Hydration execution, Hydration writes, metadata run creation, entity writes, activity-event patches, pickup persistence, queue persistence, dispatcher, worker, schema change, runtime enforcement, storage/config mutation, Watch mutation, support artifact, or renderer UI work.
-
-Latest accepted advisory request:
-
-```txt
-workspace/OverseerHS262-hydration-request-pickup-shaping-advisory-request.md
-```
-
-Latest accepted advisory artifact:
-
-```txt
-workspace/DataEngineeringHS262-hydration-request-pickup-shaping-advisory.md
-```
-
-Latest Overseer review:
-
-```txt
-workspace/OverseerHS263-hs262-hydration-pickup-shaping-review.md
-```
-
-Status: accepted.
-
-No active Dev runway is open.
-
-Accepted result:
-
-Define selected-ID Hydration pickup as non-durable candidate acceptance for a future execution command. Pickup is not queue persistence, dispatcher behavior, provider execution, or Hydration write.
-
-Preserve:
-
-```txt
-Request posture is pickup-readable, not pickup.
-Pickup is not execution.
-Execution is not write until the write path succeeds under policy.
-```
-
-Next optional seam, if continuing:
-
-```txt
-selected-ID Hydration pickup eligibility / execution-input contract preview
-```
-
-This is optional and read-only only. Provider-backed execution, persistence, dispatcher/worker design, Watch/background pickup, and UI behavior remain parked.
-
-Latest accepted Dev runway:
-
-```txt
-workspace/OverseerHS260-selected-id-hydration-request-posture-preview-runway.md
-```
-
-Latest accepted Dev handoff:
-
-```txt
-workspace/DevHS260-selected-id-hydration-request-posture-preview.md
-```
-
-Latest Overseer review:
-
-```txt
-workspace/OverseerHS261-hs260-selected-id-hydration-request-posture-review.md
-```
-
-Status: accepted.
-
-No active Dev runway is open.
-
-Accepted result:
-
-HS260 added the read-only selected-ID Hydration request posture proof:
-
-```txt
-selected unresolved ID
--> explicit operator act
--> local-first lookup
--> Hydration request posture
-```
-
-Target command concept:
-
-```txt
-metadata.hydration_request_posture.preview
-```
-
-No provider calls, Hydration writes, metadata run creation, entity writes, activity-event patches, queue persistence, dispatcher, schema change, runtime enforcement, storage/config mutation, Watch mutation, support artifact, or renderer UI work.
-
-Latest accepted advisory request:
-
-```txt
-workspace/OverseerHS258-hydration-request-posture-advisory-request.md
-```
-
-Latest accepted advisory artifact:
-
-```txt
-workspace/DataEngineeringHS258-hydration-request-posture-advisory.md
-```
-
-Latest Overseer review:
-
-```txt
-workspace/OverseerHS259-hs258-hydration-request-posture-review.md
-```
-
-Status: accepted.
-
-No active Dev runway is open.
-
-Accepted result:
-
-Shape provider-backed Hydration request posture as a read-only selected-ID classification, not queue insertion, pickup, provider execution, or write behavior.
-
-Core model:
-
-```txt
-selected unresolved ID
--> explicit operator request
--> local-first check
--> Hydration request posture
--> eligible / held / blocked / already local / invalid
-```
-
-Accepted distinction:
-
-```txt
-Request posture is pickup-readable, not pickup.
-Pickup is not execution.
-Execution is not write until the write path succeeds under policy.
-```
-
-Preserve the north star:
-
-```txt
-Local readability is part of report construction.
-Provider readability is an explicit operator act.
-Focus is not request.
-Request is not provider execution.
-```
-
-Accepted clarification:
-
-```txt
-Provider resolution is a one-time explicit operator act for an unresolved ID.
-Once resolved and stored, that label becomes local readability cache.
-Local cache reuse is not Hydration execution.
-Provider lookup for a new unresolved ID remains explicit, gated Hydration.
-```
-
-HS258/HS259 refinement:
-
-```txt
-Explicit act creates a Hydration request posture.
-Request posture is for pickup, not direct lane injection.
-Provider movement remains gated and unopened.
-```
-
-Next candidate seam, if continuing:
-
-```txt
-read-only selected-ID Hydration request posture preview
-```
-
-No active Dev runway is open for that seam yet.
-
-Recent accepted advisory request:
-
-```txt
-workspace/OverseerHS256-local-readability-report-construction-audit-request.md
-```
-
-Recent accepted advisory artifact:
-
-```txt
-workspace/DataEngineeringHS256-local-readability-report-construction-audit.md
-```
-
-Recent Overseer review:
-
-```txt
-workspace/OverseerHS257-hs256-local-readability-review.md
-```
-
-Status: accepted.
-
-Accepted result: local report / Observation construction can reuse cached/local labels and disclose unresolved IDs without provider-backed Hydration.
-
-Latest accepted Dev runway:
-
-```txt
-workspace/OverseerHS254-queue-clock-no-intent-semantics-matrix-runway.md
-```
-
-Latest accepted Dev handoff:
-
-```txt
-workspace/DevHS254-queue-clock-no-intent-semantics-matrix.md
-```
-
-Latest Overseer review:
-
-```txt
-workspace/OverseerHS255-hs254-queue-clock-no-intent-review.md
-```
-
-Status: accepted.
-
-No active Dev runway is open. HS256 is advisory review only.
-
-Header correction accepted 2026-06-04:
-
-```txt
-Evidence/EVEidence -> raw-ID Observation -> selective Hydration for readability -> Assessment
-```
-
-Meaning: Observation can form from local Evidence IDs before labels are complete. Hydration is expected selective readability repair where labels matter, not a prerequisite for raw-ID Observation and not a global completion demand.
-
-Current seam north star:
-
-```txt
-Local readability is part of report construction.
-Provider readability is an explicit operator act.
-Focus is not request.
-Request is not provider execution.
-```
-
-Meaning: Atlas may use local DB/SDE/entity cache during report or Observation construction to make IDs readable. UI focus, hover, highlight, or navigation should not create provider-backed Hydration. A distinct operator trigger may create provider-backed Hydration posture, and normal gates still decide whether external movement is eligible, held, or blocked.
-
-Verification cadence:
-
-- Runtime efficiency is optimization, not constraint; do not skip needed proof or model shaping to save credits.
-- Dev packets should run only the checks listed for that packet unless touched files require wider proof.
-- Dev handoffs must report exact commands and results.
-- Do not run live/API/provider checks unless explicitly authorized.
-- Do not run broad verification by default.
-- Overseer acceptance verifies enough to stand behind the seam, then later agents should reuse that evidence unless relevant files changed or evidence is missing/stale.
-
-Preserve:
-
-- no packet table
-- no persisted queue
-- no active dispatcher
-- no provider calls
-- no zKill Discovery execution
-- no ESI Evidence Expansion execution
-- no Hydration execution
-- no Hydration writes
-- no Evidence/EVEidence writes
-- no Discovery ref mutation
-- no Watch mutation or arming
-- no Assessment Memory or Marked mutation
-- no storage config write or movement
-- no support artifact creation
-- no schema changes
-- no runtime enforcement activation
-- no command blocking
-- no pruning/deletion behavior
-- no renderer UI work
-
-## HS264 Evidence
-
-Dev updated 2026-06-05:
-
-- Added `metadata.hydration_pickup_contract.preview` as a read-only, renderer-eligible service command.
-- Added `src/main/services/hydrationPickupContractService.js` to rebuild HS260 request posture from trusted local state/gates and emit a selected-ID pickup eligibility / execution-input contract preview.
-- Added `scripts/verify-hydration-pickup-contract.js` and `npm.cmd run verify:hydration-pickup-contract`.
-- Registered enforcement dry-run coverage for the new command as `local_db_inspection` / `selected_id_hydration_pickup_contract_readout` / `covered_read_only`.
-- Updated service registry, command authority, enforcement dry-run, and passive side-effect verifiers for the new command.
-- Focused verifier proves non-candidate rejection for:
-  - `not_a_request`
-  - `invalid`
-  - `insufficient_basis`
-  - `already_local`
-  - `local_lookup_available`
-  - `held`
-  - `blocked`
-- Focused verifier proves the only accepted pickup candidate shape:
-  - rebuilt request posture: `provider_needed`
-  - provider posture: `released_to_normal_gates_only`
-  - pickup state: `pickup_candidate`
-  - non-durable: true
-  - persisted: false
-  - execution authorized: false
-  - provider call authorized: false
-  - Hydration write authorized: false
-- Execution-input hints include:
-  - `id_type`
-  - `id_value`
-  - `source_surface`
-  - `source_context`
-  - `basis_anchor`
-  - `basis_layer`
-  - `request_reason`
-  - `request_posture_id`
-  - `request_digest`
-  - `posture_gate_summary`
-- Renderer anti-forgery proof shows renderer-supplied `localLabel`, `gateSummary`, `storagePosture`, `externalIoState`, `liveGate`, and `pickupEligible` are ignored as authority.
-- Boundary confirmations:
-  - pickup candidate is not execution or authorization
-  - future execution input is hints/explanation only
-  - request digest comparison is freshness evidence only, not authority
-  - future execution must rebuild local-first posture from trusted local state
-  - future execution must short-circuit to local readability if a label has become local
-  - no provider calls
-  - no Hydration execution or Hydration writes
-  - no `metadata_runs` writes
-  - no entity writes or activity-event label patches
-  - no Evidence/EVEidence writes
-  - no Discovery ref mutation
-  - no Watch, Assessment Memory, or Marked mutation
-  - no pickup, request, queue, lease, or retry persistence
-  - no dispatcher or worker
-  - no schema changes
-  - no runtime enforcement activation or command blocking
-  - no storage config / External I/O config writes
-  - no support artifact creation
-  - no renderer UI work
-- Verification run:
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\hydrationPickupContractService.js` passed.
-  - `node --check scripts\verify-hydration-pickup-contract.js` passed.
-  - `npm.cmd run verify:hydration-pickup-contract` passed.
-  - `npm.cmd run verify:hydration-request-posture` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 261 warnings across 8 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main` with HS264 working-tree changes.
-
-## HS264 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS264-hydration-pickup-eligibility-contract-preview.md
-```
-
-Status: accepted by `workspace/OverseerHS265-hs264-hydration-pickup-contract-review.md`.
-
-## HS260 Evidence
-
-Dev updated 2026-06-05:
-
-- Added `metadata.hydration_request_posture.preview` as a read-only, renderer-eligible service command.
-- Added `src/main/services/hydrationRequestPostureService.js` to classify explicit selected-ID Hydration request posture from existing local state and existing gate readouts only.
-- Registered enforcement dry-run coverage for the new command as `local_db_inspection` / `selected_id_hydration_request_posture_readout` / `covered_read_only`.
-- Added `scripts/verify-hydration-request-posture.js` and `npm.cmd run verify:hydration-request-posture`.
-- Updated service registry, command authority, enforcement dry-run, and passive side-effect verifiers for the new command.
-- Fixture coverage proves:
-  - focus/hover-style non-request posture: `not_a_request`
-  - local entity cache label posture: `already_local`
-  - local SDE/static lookup label posture: `local_lookup_available`
-  - local SDE/static lookup gap posture: `local_lookup_available` / `local_sde_gap`, not ESI Hydration
-  - supported unresolved local-basis ID posture: `held` / `held_by_external_io` when External I/O is off
-  - storage-missing future write posture: `blocked` / `blocked_by_storage_write_posture`
-  - free-floating supported ID without Atlas-local basis: `insufficient_basis`
-  - unsupported ID type: `invalid` / `invalid_or_unsupported_id`
-- Sample focused verifier output:
-  - status: `hydration request posture preview verified`
-  - provider-held sample: `request_posture_state=held`, `label_state=provider_needed`, `provider_posture=held_by_external_io`, `pickup_eligible=false`
-  - storage-block sample: `storage_state=configured_storage_missing_unavailable`, `future_hydration_write_posture=block_writes`, `future_hydration_writes_blocked=true`
-  - local SDE gap sample: `next_safe_action=repair_local_sde_lookup_or_continue_without_provider`
-- Boundaries confirmed:
-  - no provider calls
-  - no Hydration execution or Hydration writes
-  - no `metadata_runs` writes
-  - no entity writes or activity-event label patches
-  - no Evidence/EVEidence writes
-  - no Discovery ref mutation
-  - no Watch, Assessment Memory, or Marked mutation
-  - no persisted queue, pickup creation, dispatcher, or execution start
-  - no schema changes
-  - no runtime enforcement activation or command blocking
-  - no storage config / External I/O config writes
-  - no support artifact creation
-  - no renderer UI work
-- Verification run:
-  - `node --check src\main\services\hydrationRequestPostureService.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check scripts\verify-hydration-request-posture.js` passed.
-  - `npm.cmd run verify:hydration-request-posture` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 264 warnings across 8 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main` with HS260 working-tree changes.
-
-## HS260 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS260-selected-id-hydration-request-posture-preview.md
-```
-
-Status: accepted by `workspace/OverseerHS261-hs260-selected-id-hydration-request-posture-review.md`.
-
-Recent accepted advisory request:
-
-```txt
-workspace/OverseerHS252-queue-clock-current-work-semantics-review-request.md
-```
-
-Recent accepted advisory artifact:
-
-```txt
-workspace/DataEngineeringHS252-queue-clock-current-work-semantics-review.md
-```
-
-Recent advisory acceptance:
-
-```txt
-workspace/OverseerHS253-hs252-queue-clock-semantics-acceptance.md
-```
-
-Status: accepted.
-
-HS254 is accepted by HS255.
-
-## HS254 Acceptance Target
-
-Dev should prove at least:
-
-- empty DB / no Watch / no manual discovery scope
-- no pending refs and no explicit manual or Watch acquisition intent
-- explicit manual discovery scope
-- pending/failed Discovery refs
-- due/eligible Watch acquisition intent with valid scope
-- not-due, inactive, held, missing, or malformed Watch acquisition posture
-- Watch/background Hydration demand without Watch acquisition intent
-- summary provider-backed current-work counts exclude capability-only posture
-
-Preferred outcome:
-
-```txt
-provider capability exists != current provider-backed work exists
+Actor Watch Discovery-owned route body fixture proof validated
+sample_fresh_route:
+  action: watch.actor_discovery_route_body_fixture.preview
+  route_body_fixture_only: true
+  fake_zkill_client_invocations: 1
+  fake_esi_client_invocations: 2
+  provider_calls: 0
+  live_api_calls: 0
+  discovery_refs_written: false
+  evidence_writes: 0
+  hydration_writes: 0
+  watch_mutations: 0
+  table_mutation_proof.unchanged: true
+sample_pending_route:
+  helpers include pendingActorDiscovery
+  fake_zkill_client_invocations: 0
+  pending_refs_considered: 1
+  zkill_discovery_skipped: true
 ```
 
 Verification:
 
 ```txt
-node --check src\main\services\queueClockPostureService.js
-node --check scripts\verify-queue-clock-posture-preview.js
-npm.cmd run verify:queue-clock-posture
-npm.cmd run verify:patient-packet-identity-sparse
-git status --short --branch
-```
-
-If a new verifier is added:
-
-```txt
-node --check scripts\verify-queue-clock-no-intent-semantics.js
-npm.cmd run verify:queue-clock-no-intent
-```
-
-## HS254 Evidence
-
-Dev updated 2026-06-03:
-
-- Narrowly corrected `runtime.queue_clock_posture.preview` so zKill provider capability is distinct from current provider-backed work.
-- Kept existing `provider_backed_work` field, now coherently equal to current provider-backed work.
-- Added explicit readout fields on lanes:
-  - `current_provider_backed_work`
-  - `provider_capability_available`
-  - `requires_explicit_scope_or_watch_intent`
-  - `manual_discovery_intent`
-  - `watch_acquisition_intent`
-- Added summary fields:
-  - `current_provider_backed_work`
-  - `provider_capability_available_lanes`
-  - `capability_only_lanes`
-- Removed the implicit default manual discovery scope from queue-clock provider-gate input; manual discovery intent is present only when explicit discovery gate input is supplied.
-- Added `scripts/verify-queue-clock-no-intent-semantics.js`.
-- Added `npm.cmd run verify:queue-clock-no-intent`.
-- No-intent semantics matrix covered 8 cases:
-  - empty DB / no Watch / no manual discovery scope
-  - no pending refs and no explicit manual or Watch acquisition intent
-  - explicit manual discovery scope
-  - pending/failed Discovery refs
-  - due/eligible Watch acquisition intent with valid scope
-  - not-due, inactive, missing, or malformed Watch acquisition posture
-  - Watch/background Hydration demand without Watch acquisition intent
-  - summary current-work counts exclude capability-only posture
-- Matrix sample output:
-  - status: `queue clock no-intent semantics verified`
-  - required cases covered: 8
-  - `provider_backed_work_means`: `current_provider_backed_work`
-  - `provider_capability_available_is_counted_as_current_work`: false
-  - `manual_discovery_intent_requires_explicit_scope`: true
-  - `watch_acquisition_intent_distinct_from_hydration`: true
-- Populated queue-clock verifier still passes and reports:
-  - lanes: 4
-  - provider-backed work: 7
-  - current provider-backed work: 7
-  - provider capability available lanes: 4
-  - capability-only lanes: 1
-  - pending Discovery refs possible leads: 3
-  - ESI expansion candidates from local refs: 3
-  - Hydration candidates: 4
-  - preview authorizes execution: false
-- Verification run:
-  - `node --check src\main\services\queueClockPostureService.js` passed.
-  - `node --check scripts\verify-queue-clock-posture-preview.js` passed.
-  - `node --check scripts\verify-queue-clock-no-intent-semantics.js` passed.
-  - `npm.cmd run verify:queue-clock-no-intent` passed.
-  - `npm.cmd run verify:queue-clock-posture` passed.
-  - `npm.cmd run verify:patient-packet-identity-sparse` passed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS254 working-tree changes.
-- Boundaries preserved:
-  - no packet table
-  - no persisted queue
-  - no active dispatcher
-  - no provider calls
-  - no zKill Discovery execution
-  - no ESI Evidence Expansion execution
-  - no Hydration execution
-  - no Hydration writes
-  - no Evidence/EVEidence writes
-  - no Discovery ref mutation
-  - no Watch mutation or arming
-  - no Assessment Memory or Marked mutation
-  - no storage config write or movement
-  - no support artifact creation
-  - no schema changes
-  - no runtime enforcement activation
-  - no command blocking
-  - no pruning/deletion behavior
-  - no renderer UI work
-
-## HS254 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS254-queue-clock-no-intent-semantics-matrix.md
-```
-
-Status: queue/clock no-intent current-work semantics matrix complete; accepted by HS255.
-
-HS254 result:
-
-- Atlas now distinguishes provider capability from current provider-backed work in `runtime.queue_clock_posture.preview`. Empty/no-intent zKill posture shows capability only, explicit manual discovery scope and due valid Watch acquisition intent count as current work, pending Discovery refs remain preferred local work, and Watch/background Hydration demand remains separate from Watch acquisition intent.
-
-## HS250 Evidence
-
-Dev updated 2026-06-03:
-
-- Extended `runtime.patient_packet_identity.preview` with sparse-confidence disclosure:
-  - row-level `identity_confidence`
-  - summary `rows_with_identity_gaps`
-  - summary `uncomputable_rows`
-  - top-level `confidence_guard`
-- Added explicit system/radius Watch scope anchors to zKill Discovery identity rows:
-  - `included_system_scope_status`
-  - `included_system_ids`
-  - `excluded_system_scope_status`
-  - `excluded_system_ids`
-- Added missing/malformed included/excluded system scope unknowns without guessing exact radius membership.
-- Added local cache-skip posture disclosure for ESI Evidence Expansion candidate rows when a matching `killmails` Evidence/EVEidence row already exists.
-- Added trusted fixture-only Hydration preview input support for sparse verifier coverage; renderer payloads cannot activate it without trusted context.
-- Added `scripts/verify-patient-packet-identity-sparse.js`.
-- Added `npm.cmd run verify:patient-packet-identity-sparse`.
-- Sparse matrix verifier covered 11 required cases:
-  - empty DB / no Watch / no Discovery refs / no Hydration candidates
-  - system/radius Watch with valid scope
-  - system/radius Watch with missing stored included/excluded scope
-  - system/radius Watch with malformed included or excluded scope
-  - pending Discovery ref without `killmail_hash`
-  - failed Discovery ref with valid hash
-  - already-cached Evidence/EVEidence matching a Discovery ref
-  - no Hydration candidates
-  - Hydration candidate missing source anchors
-  - local SDE gap candidate versus provider-needed entity label
-  - mixed view/local-record and Watch/background Hydration lanes
-- Sparse matrix sample output:
-  - status: `patient packet identity sparse matrix verified`
-  - required cases covered: 11
-  - read-only: true
-  - provider calls: 0
-  - writes: 0
-  - packet tables created: 0
-  - persisted queue created: false
-  - dispatcher added: false
-  - enforcement active: false
-  - UI work: false
-- Happy-path patient identity verifier still reports:
-  - identity rows: 4
-  - derivable now: 4
-  - unknown rows: 0
-  - rows with identity gaps: 0
-  - uncomputable rows: 0
-  - packet persistence recommended: false
-- Verification run:
-  - `node --check src\main\services\patientPacketIdentityService.js` passed.
-  - `node --check scripts\verify-patient-packet-identity-preview.js` passed.
-  - `node --check scripts\verify-patient-packet-identity-sparse.js` passed.
-  - `npm.cmd run verify:patient-packet-identity-sparse` passed.
-  - `npm.cmd run verify:patient-packet-identity` passed.
-  - `npm.cmd run verify:watch-offline-readout` passed.
-  - `npm.cmd run verify:hydration-candidate-preview` passed.
-  - `npm.cmd run verify:hydration-backlog-preview` passed.
-  - `npm.cmd run verify:queue-clock-posture` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 284 warnings across 4 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS250 working-tree changes.
-- Boundaries preserved:
-  - no packet table
-  - no persisted queue
-  - no active dispatcher
-  - no provider calls
-  - no zKill Discovery execution
-  - no ESI Evidence Expansion execution
-  - no Hydration execution
-  - no Hydration writes
-  - no Evidence/EVEidence writes
-  - no Discovery ref mutation outside fixture setup
-  - no Watch mutation or arming outside fixture setup
-  - no Assessment Memory or Marked mutation
-  - no storage config write or movement
-  - no support artifact creation
-  - no schema changes
-  - no runtime enforcement activation
-  - no command blocking
-  - no pruning/deletion behavior
-  - no renderer UI work
-
-## HS250 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS250-patient-packet-identity-sparse-gap-matrix.md
-```
-
-Status: patient packet identity sparse gap matrix complete; accepted by HS251.
-
-HS250 result:
-
-- Atlas now proves `runtime.patient_packet_identity.preview` handles sparse, malformed, failed, cached, local SDE, provider-needed, and mixed-lane local states as read-only identity posture without false confidence, packet persistence, provider movement, writes, enforcement, support artifacts, pruning/deletion, or UI.
-
-## Resting Next Candidates
-
-1. Rest patient packet identity and continue another storage/runtime seam.
-2. Review queue/clock posture output for the next mechanical gap.
-3. If provider-backed execution becomes the next focus, seek Data Engineering input before opening Dev.
-4. Keep active dispatch, provider movement, schema-backed queues, runtime enforcement activation, command blocking, pruning/deletion execution, support artifacts for packet state, and UI parked.
-
-Latest Overseer review:
-
-```txt
-workspace/OverseerHS247-hs246-patient-packet-identity-review.md
-```
-
-Status: accepted.
-
-Latest accepted advisory request:
-
-```txt
-workspace/OverseerHS248-patient-packet-identity-real-data-gap-review-request.md
-```
-
-Latest accepted advisory artifact:
-
-```txt
-workspace/DataEngineeringHS248-patient-packet-identity-real-data-gap-review.md
-```
-
-Latest advisory acceptance:
-
-```txt
-workspace/OverseerHS249-hs248-real-data-gap-review-acceptance.md
-```
-
-Latest accepted Dev runway:
-
-```txt
-workspace/OverseerHS246-patient-packet-identity-conformance-preview-runway.md
-```
-
-Latest accepted Dev handoff:
-
-```txt
-workspace/DevHS246-patient-packet-identity-conformance-preview.md
-```
-
-Status: HS246 accepted by HS247.
-
-## HS246 Evidence
-
-Dev updated 2026-06-03:
-
-- Added `runtime.patient_packet_identity.preview` as a read-only service command and renderer-eligible preview.
-- Added `src/main/services/patientPacketIdentityService.js`.
-- Added `scripts/verify-patient-packet-identity-preview.js`.
-- Added `npm.cmd run verify:patient-packet-identity`.
-- Updated service registry, command authority, passive side-effect, and enforcement dry-run coverage for the new command.
-- The preview derives lane-specific future identity shapes from existing local posture without creating packet persistence:
-  - zKill Discovery movement intent: Watch/scope/lookback/cadence/provider-action identity.
-  - ESI Evidence Expansion candidate: Discovery ref killmail/hash identity.
-  - view/local-record Hydration candidate: Hydration candidate key + lane identity.
-  - Watch/background Hydration candidate: Hydration candidate key + lane identity.
-- Sample focused verifier output:
-  - action: `runtime.patient_packet_identity.preview`
-  - identity rows: 4
-  - derivable now: 4
-  - unknown rows: 0
-  - clocks: `acquisition`, `hydration_recovery`
-  - lanes: `zkill_discovery`, `esi_evidence_expansion`, `view_local_record`, `watch_background`
-  - acquisition and Hydration separate: true
-  - all rows `derived_for_now`: true
-  - all rows not execution authority: true
-  - packet persistence recommended: false
-- Row posture proven:
-  - zKill Discovery movement intent uses local Watch schedule/scope/cadence anchors and does not run zKill.
-  - ESI Evidence Expansion identity is derived from local pending Discovery refs and does not call ESI or write Evidence/EVEidence.
-  - view/local-record Hydration identity is lane-specific readability demand and does not write metadata.
-  - Watch/background Hydration identity remains separate from Watch arming/provider movement permission.
-  - duplicate-prevention basis is disclosed per lane rather than collapsed into a generic provider packet.
-  - restart, storage unlock, and External I/O re-enable do not create catch-up flood or request debt.
-  - each row says it is not persisted, not executable, and not execution authority.
-- Focused verifier mutation check stayed unchanged for killmails, activity events, Discovery refs, fetch runs, API request logs, warnings, metadata runs, Assessment artifacts, Watch rows, and system Watch rows.
-- Verification run:
-  - `node --check src\main\services\patientPacketIdentityService.js` passed.
-  - `node --check scripts\verify-patient-packet-identity-preview.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\queueClockPostureService.js` passed.
-  - `npm.cmd run verify:patient-packet-identity` passed.
-  - `npm.cmd run verify:queue-clock-posture` passed.
-  - `npm.cmd run verify:queue-selection` passed.
-  - `npm.cmd run verify:queue-scope-isolation` passed.
-  - `npm.cmd run verify:watch-offline-readout` passed.
-  - `npm.cmd run verify:hydration-candidate-preview` passed.
-  - `npm.cmd run verify:hydration-backlog-preview` passed.
-  - `npm.cmd run verify:hydration-execution-policy` passed.
-  - `npm.cmd run verify:external-io-state` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed as additional new-command coverage verification.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 529 warnings across 10 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS246 working-tree changes.
-- Boundaries preserved:
-  - no packet table
-  - no persisted queue
-  - no active dispatcher
-  - no provider calls
-  - no zKill Discovery execution
-  - no ESI Evidence Expansion execution
-  - no Hydration execution
-  - no Hydration writes
-  - no Evidence/EVEidence writes
-  - no Discovery ref mutation
-  - no Watch mutation or arming
-  - no Assessment Memory or Marked mutation
-  - no storage config write or movement
-  - no support artifact creation
-  - no schema changes
-  - no runtime enforcement activation
-  - no command blocking
-  - no pruning/deletion behavior
-  - no renderer UI work
-
-## HS246 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS246-patient-packet-identity-conformance-preview.md
-```
-
-Status: patient packet identity conformance preview complete; accepted by HS247.
-
-HS246 result:
-
-- Atlas now has a read-only `runtime.patient_packet_identity.preview` surface that proves current lane-specific identity candidates can be derived now for zKill Discovery, ESI Evidence Expansion, view/local-record Hydration, and Watch/background Hydration without packet persistence, dispatcher behavior, provider calls, writes, enforcement, support artifacts, or UI.
-
-## Resting Next Candidates
-
-1. Review the new patient-packet identity preview output for any real-data gaps or uncomputable facts.
-2. Continue a nearby storage/runtime seam after choosing the next proof surface.
-3. Seek Data Engineering input if the next seam touches durable packet/checkpoint state, Hydration freshness policy, provider-backed execution, or multi-worker coordination.
-4. Keep active dispatch, provider movement, schema-backed queues, runtime enforcement activation, command blocking, pruning/deletion execution, support artifacts for packet state, and UI parked.
-
-## HS242 Accepted Background
-
-Latest accepted queue/clock Dev runway:
-
-Add a read-only queue / clock runtime posture preview, preferably:
-
-```txt
-runtime.queue_clock_posture.preview
-```
-
-The preview should show what local work exists, what is eligible now, what is held, what is waiting normally, and what would be safe after restart without implementing a dispatcher, provider queue, persisted sequencer, schema migration, runtime enforcement, or provider movement.
-
-Required posture coverage:
-
-- Acquisition Clock
-  - zKill Discovery lane
-  - ESI Evidence Expansion lane
-- Hydration Recovery Clock
-  - Watch/background hydration lane
-  - view/local-record hydration lane
-- existing Discovery ref queue posture
-- Watch/offline/restart posture where available
-- External I/O hold posture where provider-backed work would be held
-- storage/setup gate posture where it affects provider-backed or write-capable movement
-- waiting/held/deferred posture as non-failure
-- no-catch-up-flood posture after restart, storage unlock, or External I/O re-enable
-
-The preview should distinguish:
-
-- local-only available work
-- provider-backed work held by `external_io`
-- provider-backed work waiting on cadence/capacity
-- Watch/session arming required
-- storage/setup blocked or budget hard-stop posture
-- pending Discovery refs that are possible leads, not Evidence/EVEidence
-- ESI Evidence expansion candidates, if computable from existing local refs without mutation
-- Hydration candidates/readability demand, if computable from existing Hydration candidate/backlog previews
-- unknown or not-yet-computable state, disclosed plainly rather than guessed
-
-Preserve:
-
-- no dispatcher
-- no broad provider work queue
-- no persisted sequencer state
-- no schema changes
-- no provider calls
-- no zKill Discovery execution
-- no ESI Evidence expansion execution
-- no Hydration writes
-- no Evidence/EVEidence writes
-- no Discovery ref mutation
-- no Watch mutation or arming
-- no Assessment Memory or Marked mutation
-- no storage config write or movement
-- no support artifact creation
-- no pruning/deletion behavior
-- no runtime enforcement activation
-- no command blocking
-- no UI work
-
-Latest Overseer review:
-
-```txt
-workspace/OverseerHS243-hs242-queue-clock-posture-review.md
-```
-
-No active Dev runway is open.
-
-Latest accepted advisory request:
-
-```txt
-workspace/OverseerHS244-patient-packet-identity-data-engineering-request.md
-```
-
-Latest accepted advisory artifact:
-
-```txt
-workspace/DataEngineeringHS244-patient-packet-identity-boundaries.md
-```
-
-Latest Overseer review:
-
-```txt
-workspace/OverseerHS245-hs244-patient-packet-identity-review.md
-```
-
-Accepted advisory result:
-
-- Do not create a broad provider work queue yet.
-- Do not turn `runtime.queue_clock_posture.preview` into architecture authority.
-- Keep most patient packet posture derived/read-only from existing local facts for now.
-- If durable movement state is later needed, use lane-specific identity:
-  - Watch/scope/cadence identity for zKill Discovery
-  - Discovery ref identity for ESI Evidence Expansion
-  - Hydration candidate key + lane + basis policy for Hydration
-- Do not collapse Acquisition and Hydration into one generic provider packet unless a later proof shows that shared persistence is necessary.
-
-No active Dev runway is open.
-
-Best next candidate if this line continues:
-
-```txt
-read-only patient packet identity conformance preview
-```
-
-Purpose:
-
-- Map current derived posture into proposed lane-specific identity shapes.
-- Do not create tables, queues, dispatcher behavior, provider calls, writes, runtime enforcement, support artifacts, or UI.
-
-Resting next candidates:
-
-1. Open the optional read-only patient packet identity conformance preview.
-2. Keep patient packet identity as accepted design context and continue another runtime/storage seam.
-3. Rest system hardening briefly and review the new queue/clock posture output for gaps.
-4. Keep active dispatcher, schema-backed provider queues, persisted sequencer state, provider-backed Hydration execution, active runtime enforcement, real deletion execution, and UI work parked until Human/Overseer explicitly chooses and bounds those lines.
-
-Do not open active dispatch, schema-backed queues, provider calls, mutation, catch-up flooding, runtime enforcement, command blocking, or UI work unless Human/Overseer explicitly chooses and bounds that seam.
-
-## HS242 Runway
-
-Opened:
-
-```txt
-workspace/OverseerHS242-queue-clock-runtime-posture-preview-runway.md
-```
-
-Expected handoff:
-
-```txt
-workspace/DevHS242-queue-clock-runtime-posture-preview.md
-```
-
-Status: queue/clock runtime posture preview complete; accepted by HS243.
-
-HS242 result target:
-
-- Atlas should have a read-only queue / clock posture preview that composes existing local posture into an inspectable internal truth surface while keeping Acquisition, ESI Evidence Expansion, Hydration Recovery, Discovery refs, Watch, External I/O, storage, and waiting states distinct.
-
-Latest Overseer review:
-
-```txt
-workspace/OverseerHS243-hs242-queue-clock-posture-review.md
-```
-
-## HS242 Evidence
-
-Dev updated 2026-06-03:
-
-- Added `runtime.queue_clock_posture.preview` as a read-only service command.
-- Added `src/main/services/queueClockPostureService.js`.
-- Added `scripts/verify-queue-clock-posture-preview.js`.
-- Added `npm.cmd run verify:queue-clock-posture`.
-- Updated service registry, command authority, passive-side-effect sweep, and enforcement dry-run classification coverage for the new command.
-- The preview composes:
-  - local `discovered_killmail_refs` queue posture
-  - zKill Discovery lane posture
-  - ESI Evidence Expansion lane posture
-  - Watch/offline/restart posture from durable local Watch state
-  - Hydration candidate, attention-runtime, and execution-policy previews
-  - External I/O state/readback posture
-  - storage/setup gate action-class posture
-  - read-only live/provider cadence posture
-- Sample focused verifier output:
-  - action: `runtime.queue_clock_posture.preview`
-  - lanes: 4
-  - local-only available work: 10
-  - provider-backed work: 7
-  - held by External I/O: 2 lanes
-  - Watch/session arming required: 1 lane
-  - pending Discovery refs possible leads: 3
-  - ESI expansion candidates from local refs: 3
-  - Hydration candidates: 4
-  - Watch configured: 7
-  - preview authorizes execution: false
-  - mutation check unchanged for killmails, activity events, Discovery refs, fetch runs, API request logs, warnings, metadata runs, Assessment artifacts, Watch rows, and system Watch rows
-- Posture proven:
-  - pending Discovery refs are preferred before fresh zKill Discovery
-  - Discovery refs remain possible leads, not Evidence/EVEidence
-  - ESI expansion candidates are computed from local refs without mutation
-  - ESI Evidence Expansion remains the future evidence-creating lane if executed later
-  - Hydration remains readability demand, not Evidence/EVEidence or Discovery work
-  - local/readability work is visible separately from provider-backed work
-  - provider-backed work can be held by External I/O
-  - provider-backed work exposes read-only cadence/capacity posture without authorization
-  - Watch/session arming remains distinct from provider movement permission
-  - storage/setup and budget posture are represented through the existing setup gate matrix
-  - restart, storage unlock, and External I/O re-enable do not create catch-up flood or request debt
-  - unknown/uncomputable facts are reported rather than guessed
-- Verification run:
-  - `node --check src\main\services\queueClockPostureService.js` passed.
-  - `node --check scripts\verify-queue-clock-posture-preview.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `npm.cmd run verify:queue-clock-posture` passed.
-  - `npm.cmd run verify:queue-report` passed.
-  - `npm.cmd run verify:queue-preflight` passed.
-  - `npm.cmd run verify:queue-selection` passed.
-  - `npm.cmd run verify:queue-scope-isolation` passed.
-  - `npm.cmd run verify:watch-scheduler` passed.
-  - `npm.cmd run verify:watch-executor` passed.
-  - `npm.cmd run verify:watch-offline-readout` passed.
-  - `npm.cmd run verify:hydration-backlog-preview` passed.
-  - `npm.cmd run verify:hydration-candidate-preview` passed.
-  - `npm.cmd run verify:hydration-attention-runtime` passed.
-  - `npm.cmd run verify:hydration-execution-policy` passed.
-  - `npm.cmd run verify:external-io-state` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed as additional new-command coverage verification.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output; no protected-term JSON or terminology authority files were changed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS242 working-tree changes.
-- Boundaries preserved:
-  - no dispatcher
-  - no broad provider work queue
-  - no persisted sequencer state
-  - no schema changes
-  - no provider calls
-  - no zKill Discovery execution
-  - no ESI Evidence expansion execution
-  - no Hydration writes
-  - no Evidence/EVEidence writes
-  - no Discovery ref mutation
-  - no Watch mutation or arming
-  - no Assessment Memory or Marked mutation
-  - no storage config write or movement
-  - no support artifact creation
-  - no pruning/deletion behavior
-  - no runtime enforcement activation
-  - no command blocking
-  - no UI work
-
-## HS242 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS242-queue-clock-runtime-posture-preview.md
-```
-
-Status: queue/clock runtime posture preview complete; pending Overseer review.
-
-HS242 result:
-
-- Atlas now has a read-only `runtime.queue_clock_posture.preview` truth surface that composes local queue, Watch/restart, Hydration, External I/O, storage/setup, and cadence posture without dispatching, writing, calling providers, enforcing, or flooding catch-up work.
-
-## HS240 Evidence
-
-Dev updated 2026-06-03:
-
-- Added an internal fixture-only Evidence/EVEidence prune execution contract proof in `src/main/services/retentionActionService.js`.
-- The emitted proof action name is:
-
-```txt
-retention.evidence_prune_execution.fixture_proof
-```
-
-- The proof is not registered in `serviceRegistry`, is not renderer eligible, and is not a product deletion command.
-- Added `npm.cmd run verify:retention-prune-fixture-proof`.
-- Added `scripts/verify-retention-prune-fixture-proof.js`.
-- Updated the historical fixture sketch in `scripts/verify-retention-deletion-boundary.js` so warning rows are deleted by selected `killmail_id`, not shared `run_id`.
-- Contract behavior proven:
-  - fixture-only context required
-  - candidate killmail IDs computed from server-side `retention.preflight`
-  - renderer/payload-style candidate IDs ignored as authority
-  - exact preview digest confirmation required
-  - digest mismatch stops before deletion
-  - stale/changed preview digest stops before deletion
-  - empty scope stops cleanly
-  - deletion runs inside `BEGIN IMMEDIATE` transaction
-  - injected failure rolls back all fixture counts
-  - success deletes only selected `activity_events`, selected `ingestion_audits`, selected killmail-linked `data_quality_warnings`, and selected `killmails`
-  - success retains run-level warning rows where `killmail_id` is null
-  - success retains other mixed-run killmail warning rows
-  - success retains Discovery refs, Assessment Memory, fetch runs, API request logs, Watch/Marked-adjacent rows, entities, metadata rows, local SDE lookup rows, storage/config/runtime/support-artifact state
-  - post-delete integrity has no selected dependent rows and passes `PRAGMA foreign_key_check`
-  - returned result includes counts, support-artifact disclosure, and no-footprint posture only
-  - no retained deletion footprint, raw Evidence payload, full participant array, hidden copy, support artifact cleanup, or Assessment stale marking is created
-- Verification run:
-  - `node --check src\main\services\retentionActionService.js` passed.
-  - `node --check scripts\verify-retention-deletion-boundary.js` passed.
-  - `node --check scripts\verify-retention-prune-fixture-proof.js` passed.
-  - `npm.cmd run verify:retention-prune-fixture-proof` passed.
-  - `npm.cmd run verify:retention-preflight` passed.
-  - `npm.cmd run verify:retention-deletion-boundary` passed.
-  - `npm.cmd run verify:assessment-artifacts` passed.
-  - `npm.cmd run verify:queue-report` passed.
-  - `npm.cmd run verify:db-integrity` passed.
-  - `npm.cmd run verify:evidence-rules` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output; no protected-term JSON or terminology authority files were changed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS240 working-tree changes.
-- Boundaries preserved:
-  - no real operator deletion
-  - no renderer command
-  - no product deletion command
-  - no schema changes
-  - no support artifact creation/deletion/cleanup
-  - no provider calls
-  - no Hydration writes
-  - no Discovery ref mutation
-  - no Assessment Memory mutation or stale marking
-  - no Watch/Marked mutation
-  - no provenance/log mutation outside fixture setup/assertion data
-  - no runtime enforcement activation
-  - no command blocking
-  - no UI work
-  - no storage movement
-  - no retained deletion footprint
-
-## HS240 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS240-fixture-only-evidence-prune-execution-contract.md
-```
-
-Status: fixture-only Evidence prune execution contract proof complete; accepted by HS241.
-
-HS240 result:
-
-- Atlas now has a disposable fixture proof for the minimum future Evidence/EVEidence prune execution contract while real operator deletion remains blocked and no product deletion surface exists.
-
-## Resting Prior Acceptance
-
-Latest accepted advisory request:
-
-```txt
-workspace/OverseerHS238-pruning-deletion-execution-prerequisites-advisory-request.md
-```
-
-Latest accepted advisory artifact:
-
-```txt
-workspace/EngineeringSecurityDataHS238-pruning-deletion-execution-prerequisites.md
-```
-
-Latest Overseer review:
-
-```txt
-workspace/OverseerHS239-hs238-pruning-deletion-prerequisites-review.md
-```
-
-Accepted result:
-
-- Atlas is not ready for real destructive Evidence/EVEidence pruning execution.
-- If pruning continues, the next safe step is a fixture-only deletion execution contract proof.
-- Real operator deletion remains blocked.
-- Future proof must delete only killmail-linked `data_quality_warnings`, not all warnings sharing a mixed `run_id`.
-- Discovery refs, Assessment Memory, provenance/log rows, Watch/Marked rows, support artifacts, storage config, schema, runtime enforcement, provider movement, and UI remain untouched.
-
-No active Dev runway is open.
-
-Resting next candidates:
-
-1. Rest pruning and return to another storage/runtime seam.
-2. If pruning continues, open fixture-only deletion execution contract proof.
-3. If pruning continues later, open Discovery ref pruning policy design.
-4. If pruning continues later, open no-interest/Marked pruning policy design.
-5. If SDE returns, open only a narrow source-disappears-after-authority proof.
-
-Do not open real destructive pruning/deletion execution, schema changes, support artifact cleanup, runtime enforcement, provider calls, or UI work unless Human/Overseer explicitly chooses and bounds that seam.
-
-## Resting Prior Acceptance
-
-Latest accepted Dev runway:
-
-```txt
-workspace/OverseerHS236-pruning-intelligence-preview-runway.md
-```
-
-Latest accepted Dev handoff:
-
-```txt
-workspace/DevHS236-pruning-intelligence-preview.md
-```
-
-Accepted task:
-
-Extend the existing read-only `retention.preflight` output for `evidence.prune_scope` so Atlas can preview what a future prune would affect across Evidence/EVEidence, derived activity rows, ingestion audits, warnings, Discovery refs/provenance, Assessment Memory references, provenance/log summaries, and support-artifact disclosure.
-
-Preserve:
-
-- no destructive pruning execution
-- no new delete/prune/expire command
-- no Evidence/EVEidence mutation
-- no Discovery ref mutation
-- no Assessment Memory creation/mutation/deletion
-- no Watch or Marked mutation
-- no provider calls
-- no Hydration writes
-- no support artifact creation/deletion/cleanup
-- no storage movement
-- no schema changes unless returned to Overseer first
-- no runtime enforcement activation
-- no command blocking
-- no renderer UI work
-- no retained deletion footprint
-
-Latest Overseer review:
-
-```txt
-workspace/OverseerHS237-hs236-pruning-intelligence-preview-review.md
-```
-
-## HS236 Evidence
-
-Dev updated 2026-06-03:
-
-- Extended the existing read-only `retention.preflight` output for `evidence.prune_scope`.
-- Added `impact.relationship_context` while preserving existing top-level impact counts.
-- Relationship/context groups now include:
-  - selected Evidence/EVEidence row basis
-  - derived `activity_events` role/entity/system counts
-  - ingestion audit rows and data quality warning summaries
-  - same-killmail Discovery refs with status separation
-  - affected Assessment Memory references with stale-risk/non-blocker posture
-  - Watch/Marked-adjacent rows where determinable without inventing meaning
-  - fetch run and API request provenance/log summaries
-  - support artifact disclosure that active-record pruning would not clean snapshots, trace packs, logs, or readiness/preflight reports
-  - explicit no-retained-footprint preview posture
-- The relationship basis explicitly states:
-  - the preview is read-only
-  - computed relationships are not durable truth
-  - Discovery refs are possible leads/provenance, not Evidence/EVEidence
-  - relationship context does not authorize deletion
-- Extended focused fixture verification in `scripts/verify-retention-preflight.js` to prove:
-  - selected killmail preview reports Evidence/EVEidence, activity, audit, warning, Discovery, Assessment Memory, provenance/log, Watch/Marked-adjacent, support-artifact, and no-footprint groups
-  - actor/entity plus time-window preview reports distinct affected killmails
-  - Discovery refs are not used as observations
-  - support artifacts are disclosed as separate historical/recovery material
-  - preflight paths do not mutate Evidence, Discovery refs, provenance/logs, warnings, Watch-adjacent rows, or Assessment rows
-- Verification run:
-  - `node --check src\main\services\retentionActionService.js` passed.
-  - `node --check scripts\verify-retention-preflight.js` passed.
-  - `npm.cmd run verify:retention-preflight` passed.
-  - `npm.cmd run verify:retention-deletion-boundary` passed.
-  - `npm.cmd run verify:assessment-artifacts` passed.
-  - `npm.cmd run verify:queue-report` passed.
-  - `npm.cmd run verify:db-integrity` passed.
-  - `npm.cmd run verify:evidence-rules` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output; no protected-term JSON or authority files were changed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS236 working-tree changes.
-- Boundaries preserved:
-  - no destructive pruning execution
-  - no new delete/prune/expire command
-  - no Evidence/EVEidence mutation
-  - no Discovery ref mutation
-  - no Assessment Memory creation, mutation, deletion, or stale marking
-  - no Watch or Marked mutation
-  - no provider calls
-  - no Hydration writes
-  - no support artifact creation/deletion/cleanup or real artifact inspection
-  - no storage movement
-  - no schema changes
-  - no runtime enforcement activation
-  - no command blocking
-  - no renderer UI work
-  - no retained deletion footprint
-
-## HS236 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS236-pruning-intelligence-preview.md
-```
-
-Status: pruning intelligence preview complete; accepted by HS237.
-
-HS236 result:
-
-- Atlas can now preview future active-record pruning impact across Evidence/EVEidence, relationships/appearances, provenance, Discovery refs, Assessment Memory, Watch/Marked-adjacent context, and support-artifact disclosure while deletion execution remains blocked and no data is mutated.
-
-Latest accepted handoff:
-
-```txt
-workspace/DevHS230-real-local-sde-topology-import-conformance.md
-```
-
-Latest Overseer review:
-
-```txt
-workspace/OverseerHS231-hs230-real-local-sde-topology-conformance-review.md
-```
-
-Active Dev runway:
-
-```txt
-workspace/OverseerHS232-real-local-sde-inventory-import-conformance-runway.md
-```
-
-Latest accepted handoff:
-
-```txt
-workspace/DevHS232-real-local-sde-inventory-import-conformance.md
-```
-
-Latest Overseer review:
-
-```txt
-workspace/OverseerHS233-hs232-real-local-sde-inventory-conformance-review.md
-```
-
-Latest advisory request:
-
-```txt
-workspace/OverseerHS234-sde-real-local-consolidation-advisory-request.md
-```
-
-Latest advisory artifact:
-
-```txt
-workspace/EngineeringSecurityHS234-sde-real-local-consolidation-advisory.md
-```
-
-Latest Overseer review:
-
-```txt
-workspace/OverseerHS235-hs234-sde-real-local-consolidation-review.md
-```
-
-No active Dev runway is open.
-
-## Resting State
-
-Accepted 2026-06-03:
-
-- HS230 real-local SDE topology import/rewrite conformance accepted by HS231.
-- The existing `sde.import.topology` path now conforms to HS224 authority/recovery expectations under fixture verification.
-- Atlas has proven the topology half of local SDE import/rewrite mechanics:
-  - trusted local source authority required
-  - renderer source paths ignored as authority
-  - selected storage and explicit budget required for this packet
-  - staged temp topology material before promotion
-  - transactional visible rewrite
-  - provenance only after complete promotion
-  - failure preserves previous visible topology/provenance
-  - no provider calls or SDE download
-
-Likely next shaping candidates:
-
-1. Rest SDE movement and return to another storage/runtime seam.
-2. If Human/Overseer wants to keep SDE active, open only a narrow source-disappears-after-authority proof.
-3. Decide whether old developer scripts and `sde.build-lookups` need explicit labeling/quarantine before any operator-facing SDE work.
-4. Keep combined SDE behavior, provider-backed `sde.build-lookups`, support artifacts, runtime enforcement, pruning/deletion, and UI work parked unless HS234 and Human/Overseer acceptance say otherwise.
-
-## HS235 Acceptance
-
-Accepted 2026-06-03:
-
-- HS234 SDE real-local consolidation advisory accepted by HS235.
-- Local SDE import/rewrite mechanics can rest for now.
-- No new Dev runway is required for SDE local import mechanics unless Human/Overseer explicitly chooses to continue this exact line.
-- Combined local SDE import/orchestration remains deferred.
-- Operator source picker/UI is not ready yet and needs source authority design first.
-- Source-disappears-after-authority edge is non-blocking for resting mechanics, but blocking before operator-facing source selection or combined orchestration.
-- Provider-backed `sde.build-lookups`, support artifacts around SDE failures, runtime enforcement/command blocking, and script promotion remain parked.
-
-## HS234 Advisory Request
-
-Opened 2026-06-03:
-
-- `workspace/OverseerHS234-sde-real-local-consolidation-advisory-request.md`
-
-Expected advisory artifact:
-
-```txt
-workspace/EngineeringSecurityHS234-sde-real-local-consolidation-advisory.md
-```
-
-Purpose:
-
-Review the post-HS231/HS233 SDE state and advise what should happen before Atlas opens any combined local SDE import, operator source picker, provider-backed download/build, support artifact writer, or runtime enforcement work.
-
-This is advisory only. It does not authorize Dev work.
-
-## HS233 Acceptance
-
-Accepted 2026-06-03:
-
-- HS232 real-local SDE inventory/type import/rewrite conformance accepted by HS233.
-- The existing `sde.import.inventory` path now conforms to HS226 authority/recovery expectations under fixture verification.
-- Atlas has proven both halves of local SDE import/rewrite mechanics:
-  - topology: HS230 accepted by HS231
-  - inventory/type: HS232 accepted by HS233
-- Combined local SDE import orchestration, provider-backed `sde.build-lookups`, real operator source picker/UI, support artifacts, runtime enforcement, and command blocking remain unopened.
-- Non-blocking note: source-disappears-after-authority failure proof should be considered before operator-facing source selection or broader operator import orchestration.
-
-## Active HS232 Runway
-
-Opened 2026-06-03:
-
-- `workspace/OverseerHS232-real-local-sde-inventory-import-conformance-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS232-real-local-sde-inventory-import-conformance.md
-```
-
-Task:
-
-Harden the real-local SDE inventory/type import/rewrite path so it conforms to the accepted HS226 authority and recovery model.
-
-Preferred focus:
-
-- existing `sde.import.inventory` / real inventory importer path
-- `src/main/sde/sdeInventoryImporter.js`
-- `src/main/services/mutatingActionService.js`
-
-Required outcome:
-
-- renderer source paths are not authority for operator mutation
-- trusted local inventory source authority is required before mutation
-- remote source references are rejected for local inventory import
-- selected storage and explicit budget are checked before mutation
-- projected source/temp/cache/staged/DB/WAL-SHM growth is represented before mutation
-- inventory/type rows are staged before promotion
-- staged inventory/type completeness is validated before promotion
-- promotion is transactional
-- provenance is inserted only after complete promotion
-- failed import preserves previous visible inventory/type readiness
-- failed import does not write success provenance
-- staged/temp material cleanup is represented
-- retry/rerun is explicit and not automatic
-
-Preserve:
-
-- no topology import behavior changes
-- no combined topology + inventory orchestration
-- no provider-backed `sde.build-lookups`
-- no SDE download
-- no real operator source path inspection in verification
-- no real operator lookup-table mutation in verification
-- no storage movement
-- no real operator config write
-- no support artifact creation
-- no provider calls
-- no Hydration writes
-- no Evidence/EVEidence writes
-- no Discovery ref mutation
-- no Watch mutation
-- no Assessment Memory or Marked mutation
-- no renderer UI/source picker work
-- no pruning/deletion behavior
-- no runtime enforcement activation
-- no command blocking
-- no schema changes unless returned to Overseer first
-
-Stop if this requires schema changes, topology import behavior changes, combined topology + inventory behavior, provider-backed SDE download/build, real operator source path inspection, real operator lookup-table mutation in verification, UI/source picker work, support artifact creation, runtime enforcement, command blocking, storage movement, destructive/private/live action, or policy decisions not already accepted.
-
-## HS232 Evidence
-
-Dev updated 2026-06-03:
-
-- Hardened the existing real-local inventory/type import path:
-  - `sde.import.inventory`
-  - `src/main/sde/sdeInventoryImporter.js`
-  - `src/main/services/mutatingActionService.js`
-- Added `npm.cmd run verify:sde-inventory-real-local-conformance`.
-- Added `scripts/verify-sde-inventory-real-local-conformance.js`.
-- `sde.import.inventory` remains:
-  - non-renderer
-  - `classification: exclusive`
-  - effects: `metadata-readability`, `local-data-mutation`
-- Source authority behavior:
-  - renderer/payload source paths are ignored as mutation authority
-  - renderer-only source claims block with `renderer_source_path_non_authoritative`
-  - trusted local inventory source authority is required before mutation
-  - remote source references block with `remote_source_rejected_for_local_inventory_import`
-  - accepted trusted source basis is explicit
-  - no provider-backed SDE download path is opened
-- Storage/budget behavior:
-  - selected storage is required for real inventory/type rewrite
-  - app-local fallback acknowledgement is not sufficient for this packet
-  - missing/unavailable storage blocks
-  - invalid/degraded storage blocks
-  - unconfigured budget blocks
-  - hard-lock budget blocks
-  - projected source/temp/cache/staged/DB/WAL-SHM growth is represented before mutation
-  - projected growth exceeding available budget blocks
-- Staging/promotion/recovery behavior:
-  - inventory/type rows are staged into temp tables before promotion
-  - type/group/category readability labels are resolved from staged category/group rows
-  - staged inventory/type completeness is validated before promotion
-  - visible inventory/type tables are deleted/replaced only inside a transaction
-  - `sde_inventory_imports` provenance is inserted only after complete promotion
-  - failed import after stage but before promotion preserves previous visible inventory/type rows and provenance
-  - failed import after promotion but before provenance rolls back visible inventory/type rows and provenance
-  - failed import does not write success provenance
-  - staged temp material cleanup is represented and verified
-  - retry/rerun is explicit and not automatic
-  - concurrent service inventory imports are excluded by the service path
-- Focused verifier proves:
-  - source authority blocks renderer-only, remote, and missing-trusted-source cases
-  - selected storage and explicit budget are required
-  - hard-lock budget blocks
-  - successful service import stages and promotes complete fixture inventory/type data
-  - failure paths preserve prior visible inventory/provenance and clean staged material
-  - Evidence/EVEidence and Assessment table counts are unchanged
-  - no provider calls, SDE downloads, or provider-backed builds occur
-- Verification run:
-  - `node --check src\main\sde\sdeInventoryImporter.js` passed.
-  - `node --check src\main\services\mutatingActionService.js` passed.
-  - `node --check scripts\verify-sde-inventory-real-local-conformance.js` passed.
-  - `npm.cmd run verify:sde-inventory-real-local-conformance` passed.
-  - `npm.cmd run verify:sde-inventory-import-rewrite-authority` passed.
-  - `npm.cmd run verify:local-sde-source-posture` passed when run alone.
-  - `npm.cmd run verify:local-sde-readiness` passed.
-  - `npm.cmd run verify:sde-inventory` passed with fixture-safe local JSONL source override: `$env:AURA_ATLAS_LIVE_SDE_JSONL_PATH='F:\Projects\AURA-Atlas\.tmp\hs232-inventory-jsonl'; npm.cmd run verify:sde-inventory`.
-  - `npm.cmd run verify:sde-topology-real-local-conformance` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 294 warnings across 6 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS232 working-tree changes.
-- Boundaries preserved:
-  - no topology import behavior changes
-  - no combined topology + inventory orchestration
-  - no provider-backed `sde.build-lookups`
-  - no SDE download
-  - no real operator source path inspection in verification
-  - no real operator lookup-table mutation in verification
-  - no storage movement
-  - no real operator config write
-  - no support artifact creation
-  - no provider calls
-  - no Hydration writes
-  - no Evidence/EVEidence writes
-  - no Discovery ref mutation
-  - no Watch mutation
-  - no Assessment Memory or Marked mutation
-  - no renderer UI/source picker work
-  - no pruning/deletion behavior
-  - no runtime enforcement activation
-  - no command blocking
-  - no schema changes
-
-## HS232 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS232-real-local-sde-inventory-import-conformance.md
-```
-
-Status: real-local SDE inventory/type import/rewrite conformance complete; accepted by HS233.
-
-HS232 result:
-
-- Atlas now has a real-local inventory/type import service path that conforms to HS226 source authority, storage/budget, staged promotion, provenance, cleanup, recovery, and concurrency-exclusion semantics under fixture verification.
-- Combined topology + inventory import, provider-backed SDE download/build, support artifact creation, active enforcement, command blocking, and UI/source picker work remain unopened.
-
-## Active HS230 Runway
-
-Opened 2026-06-03:
-
-- `workspace/OverseerHS230-real-local-sde-topology-import-conformance-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS230-real-local-sde-topology-import-conformance.md
-```
-
-Task:
-
-Harden the real-local SDE topology import/rewrite path so it conforms to the accepted HS224 authority and recovery model.
-
-Preferred focus:
-
-- existing `sde.import.topology` / real topology importer path
-- `src/main/sde/sdeImporter.js`
-- `src/main/services/mutatingActionService.js`
-
-Required outcome:
-
-- renderer source paths are not authority for operator mutation
-- trusted local source authority is required before mutation
-- remote source references are rejected for local topology import
-- selected storage and explicit budget are checked before mutation
-- projected source/temp/cache/staged/DB/WAL-SHM growth is represented before mutation
-- topology rows are staged before promotion
-- staged topology completeness is validated before promotion
-- promotion is transactional
-- provenance is inserted only after complete promotion
-- failed import preserves previous visible topology readiness
-- failed import does not write success provenance
-- staged/temp material cleanup is represented
-- retry/rerun is explicit and not automatic
-
-Preserve:
-
-- no inventory import behavior changes
-- no combined topology + inventory orchestration
-- no provider-backed `sde.build-lookups`
-- no SDE download
-- no real operator source path inspection in verification
-- no real operator lookup-table mutation in verification
-- no storage movement
-- no real operator config write
-- no support artifact creation
-- no provider calls
-- no Hydration writes
-- no Evidence/EVEidence writes
-- no Discovery ref mutation
-- no Watch mutation
-- no Assessment Memory or Marked mutation
-- no renderer UI/source picker work
-- no pruning/deletion behavior
-- no runtime enforcement activation
-- no command blocking
-- no schema changes unless returned to Overseer first
-
-Stop if this requires schema changes, inventory import behavior changes, combined topology + inventory behavior, provider-backed SDE download/build, real operator source path inspection, real operator lookup-table mutation in verification, UI/source picker work, support artifact creation, runtime enforcement, command blocking, storage movement, destructive/private/live action, or policy decisions not already accepted.
-
-## HS230 Evidence
-
-Dev updated 2026-06-03:
-
-- Hardened the existing real-local topology import path:
-  - `sde.import.topology`
-  - `src/main/sde/sdeImporter.js`
-  - `src/main/services/mutatingActionService.js`
-- Added `npm.cmd run verify:sde-topology-real-local-conformance`.
-- Added `scripts/verify-sde-topology-real-local-conformance.js`.
-- Updated `scripts/verify-sde-fixture.js` for complete staged rewrite return counts.
-- `sde.import.topology` remains:
-  - non-renderer
-  - `classification: exclusive`
-  - effects: `metadata-readability`, `local-data-mutation`
-- Source authority behavior:
-  - renderer/payload source paths are ignored as mutation authority
-  - renderer-only source claims block with `renderer_source_path_non_authoritative`
-  - trusted local source authority is required before mutation
-  - remote source references block with `remote_source_rejected_for_local_topology_import`
-  - accepted trusted source basis is explicit
-  - no provider-backed SDE download path is opened
-- Storage/budget behavior:
-  - selected storage is required for real topology rewrite
-  - app-local fallback acknowledgement is not sufficient for this packet
-  - missing/unavailable storage blocks
-  - invalid/degraded storage blocks
-  - unconfigured budget blocks
-  - hard-lock budget blocks
-  - projected source/temp/cache/staged/DB/WAL-SHM growth is represented before mutation
-  - projected growth exceeding available budget blocks
-- Staging/promotion/recovery behavior:
-  - topology rows are staged into temp tables before promotion
-  - staged topology completeness is validated before promotion
-  - visible topology tables are deleted/replaced only inside a transaction
-  - `sde_imports` provenance is inserted only after complete promotion
-  - failed import after stage but before promotion preserves previous visible topology and provenance
-  - failed import after promotion but before provenance rolls back visible topology and provenance
-  - failed import does not write success provenance
-  - staged temp material cleanup is represented and verified
-  - retry/rerun is explicit and not automatic
-  - concurrent service topology imports are excluded by the service path
-- Focused verifier proves:
-  - source authority blocks renderer-only, remote, and missing-trusted-source cases
-  - selected storage and explicit budget are required
-  - hard-lock budget blocks
-  - successful service import stages and promotes complete fixture topology
-  - failure paths preserve prior visible topology/provenance and clean staged material
-  - Evidence/EVEidence and Assessment table counts are unchanged
-  - no provider calls, SDE downloads, or provider-backed builds occur
-- Verification run:
-  - `node --check src\main\sde\sdeImporter.js` passed.
-  - `node --check src\main\services\mutatingActionService.js` passed.
-  - `node --check scripts\verify-sde-topology-real-local-conformance.js` passed.
-  - `npm.cmd run verify:sde-topology-real-local-conformance` passed.
-  - `npm.cmd run verify:sde-topology-import-rewrite-authority` passed.
-  - `npm.cmd run verify:local-sde-source-posture` passed when run alone.
-  - `npm.cmd run verify:local-sde-readiness` passed.
-  - `npm.cmd run verify:sde-fixture` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 292 warnings across 7 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS230 working-tree changes.
-- Boundaries preserved:
-  - no inventory import behavior changes
-  - no combined topology + inventory orchestration
-  - no provider-backed `sde.build-lookups`
-  - no SDE download
-  - no real operator source path inspection in verification
-  - no real operator lookup-table mutation in verification
-  - no storage movement
-  - no real operator config write
-  - no support artifact creation
-  - no provider calls
-  - no Hydration writes
-  - no Evidence/EVEidence writes
-  - no Discovery ref mutation
-  - no Watch mutation
-  - no Assessment Memory or Marked mutation
-  - no renderer UI/source picker work
-  - no pruning/deletion behavior
-  - no runtime enforcement activation
-  - no command blocking
-  - no schema changes
-
-## HS230 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS230-real-local-sde-topology-import-conformance.md
-```
-
-Status: real-local SDE topology import/rewrite conformance complete; accepted by HS231.
-
-HS230 result:
-
-- Atlas now has a real-local topology import service path that conforms to HS224 source authority, storage/budget, staged promotion, provenance, cleanup, recovery, and concurrency-exclusion semantics under fixture verification.
-- Real operator source selection, inventory conformance, combined topology + inventory import, provider-backed SDE download/build, support artifact creation, active enforcement, command blocking, and UI/source picker work remain unopened.
-
-## HS229 Advisory Acceptance
-
-Accepted 2026-06-03:
-
-- `workspace/EngineeringSecurityHS229-sde-post-proof-readiness-advisory.md`
-
-Decision:
-
-- Advisory accepted as shaping input for HS230.
-- Atlas is ready to open a topology-only real-local implementation conformance runway.
-- Atlas is not ready to execute real operator SDE import/rewrite as-is.
-- No additional fixture/offline authority proof is needed before topology-only conformance.
-- The next missing evidence is a real-path verifier proving the topology service/import path follows HS224 semantics against controlled fixture/test DB state.
-
-Accepted recommendations:
-
-- topology first
-- inventory remains parked until topology real-local behavior is accepted
-- combined topology + inventory behavior remains parked
-- provider-backed `sde.build-lookups` remains parked
-- support artifact creation around SDE failure remains parked
-- runtime enforcement and command blocking remain parked
-- selected storage should be required for the first real topology rewrite unless Human/Overseer explicitly accepts app-local fallback risk
-- staged/shadow-table promotion is preferred and treated as mandatory for the first conformance runway
-
-## Resting HS229 Advisory Request
-
-Opened 2026-06-03:
-
-- `workspace/OverseerHS229-sde-post-proof-readiness-advisory-request.md`
-
-Expected advisory artifact:
-
-```txt
-workspace/EngineeringSecurityHS229-sde-post-proof-readiness-advisory.md
-```
-
-Status: advisory complete and accepted into HS230.
-
-## Resting HS226 Runway
-
-Opened 2026-06-03:
-
-- `workspace/OverseerHS226-sde-inventory-import-rewrite-authority-proof-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS226-sde-inventory-import-rewrite-authority-proof.md
-```
-
-Task:
-
-Add a fixture/offline proof for inventory/type import/rewrite authority and recovery.
-
-Preferred command:
-
-```txt
-sde.inventory_import_rewrite_authority.proof
-```
-
-Acceptable alternative:
-
-Add a focused verifier/service helper without renderer command exposure if the existing service architecture makes a command inappropriate. If no command is added, the verifier must still prove the same authority and recovery shape.
-
-Preferred outcome:
-
-- renderer source paths are ignored
-- trusted local inventory source authority shape is explicit
-- remote source references are rejected for local inventory import
-- missing source blocks rewrite
-- missing/invalid/degraded storage blocks future inventory rewrite
-- unconfigured or hard-lock budget blocks future inventory rewrite
-- projected source/temp/cache/staged/DB/WAL-SHM growth is represented
-- inventory/type staged fixture writes can fail without corrupting visible ready inventory/type lookups
-- provenance is written only after complete promotion
-- failed staged rewrite preserves previous visible inventory/type lookup counts
-- failed staged rewrite does not write failure provenance
-- partial temp/staged material cleanup is represented
-- retry/rerun posture is explicit and not automatic
-
-Preserve:
-
-- no SDE download
-- no provider-backed `sde.build-lookups`
-- no real operator source path inspection
-- no real operator lookup-table mutation
-- no topology import behavior changes
-- no combined topology + inventory behavior
-- no storage movement
-- no real operator config write
-- no support artifact creation
-- no provider calls
-- no Hydration writes
-- no Evidence/EVEidence writes
-- no Discovery ref mutation
-- no Watch mutation
-- no Assessment Memory or Marked mutation
-- no renderer UI work
-- no pruning/deletion behavior
-- no runtime enforcement activation
-- no command blocking
-- no schema changes unless returned to Overseer first
-
-Stop if proving recovery requires schema changes, mutating the real operator DB, inspecting real operator source paths, starting provider-backed SDE download/build, changing topology import behavior, combining topology and inventory import behavior, UI work, runtime enforcement, command blocking, support artifact creation, destructive/private/live action, or real operator data inspection.
-
-## HS226 Evidence
-
-Dev updated 2026-06-03:
-
-- Added `src/main/services/sdeInventoryImportRewriteAuthorityProofService.js` as a fixture/offline inventory/type import/rewrite authority and recovery proof.
-- Added non-renderer command:
-  - `sde.inventory_import_rewrite_authority.proof`
-- Added `npm.cmd run verify:sde-inventory-import-rewrite-authority`.
-- Added command classification coverage in `src/main/services/enforcementDryRunService.js`.
-- Added service registry, command authority, and enforcement dry-run verifier coverage.
-- Command classification:
-  - `classification: metadata-only`
-  - effects: `local-data-mutation`, `metadata-readability`
-  - renderer eligible: false
-  - enforcement status: `fixture_only_non_production`
-  - External I/O dependency: `none`
-  - runtime context: `fixture_sde_inventory_import_rewrite_authority_proof`
-- The proof exposes:
-  - renderer source path non-authority
-  - trusted fixture local inventory source authority shape
-  - remote source rejection for local inventory import
-  - no-source block
-  - storage/budget authority cases for inventory rewrite
-  - projected source/temp/cache/staged/DB/WAL-SHM growth
-  - staged/transactional fixture promotion model for inventory/type rows
-  - provenance-after-complete-promotion rule
-  - failed staged rewrite preservation for visible inventory/type counts
-  - no failure provenance for interrupted staged rewrite
-  - partial staged material cleanup posture
-  - explicit retry/rerun posture with no automatic retry
-- Focused verifier proves:
-  - renderer-only source path is blocked and ignored
-  - trusted fixture source can be accepted while renderer source claims remain ignored
-  - remote source references are rejected for local inventory import
-  - missing source blocks rewrite
-  - missing/unavailable storage blocks rewrite
-  - invalid/degraded storage blocks rewrite
-  - unconfigured budget blocks rewrite
-  - budget hard lock blocks rewrite
-  - projected source/temp/cache/staged/DB/WAL-SHM growth is represented
-  - successful fixture rewrite promotes complete inventory/type rows and writes provenance afterward
-  - failed staged rewrite preserves previous visible inventory/type counts
-  - failed staged rewrite does not write failure provenance
-  - staged temp material cleanup is represented
-  - retry/rerun is explicit and not automatic
-  - Evidence/EVEidence and Assessment table counts are unchanged by the fixture proof
-- The proof did not alter existing real `sde.import.topology`, `sde.import.inventory`, or `sde.build-lookups` execution behavior.
-- Verification run:
-  - `node --check src\main\services\sdeInventoryImportRewriteAuthorityProofService.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-sde-inventory-import-rewrite-authority.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-enforcement-dry-run.js` passed.
-  - `npm.cmd run verify:sde-inventory-import-rewrite-authority` passed.
-  - `npm.cmd run verify:local-sde-readiness` passed.
-  - `npm.cmd run verify:local-sde-source-posture` passed when run alone.
-  - `npm.cmd run verify:sde-inventory` passed with fixture-safe local JSONL source override: `$env:AURA_ATLAS_LIVE_SDE_JSONL_PATH='F:\Projects\AURA-Atlas\.tmp\hs226-inventory-jsonl'; npm.cmd run verify:sde-inventory`. Plain cached/full SDE runs timed out at 120s and 300s.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 477 warnings across 9 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS226 working-tree changes.
-- Boundaries preserved:
-  - no real SDE download
-  - no provider-backed `sde.build-lookups`
-  - no real operator source path inspection
-  - no real operator lookup-table mutation
-  - no topology import behavior changes
-  - no combined topology + inventory behavior
-  - no storage movement
-  - no real operator config write
-  - no support artifact creation
-  - no provider calls
-  - no Hydration writes
-  - no Evidence/EVEidence writes
-  - no Discovery ref mutation
-  - no Watch mutation
-  - no Assessment Memory or Marked mutation
-  - no renderer UI work
-  - no pruning/deletion behavior
-  - no runtime enforcement activation
-  - no command blocking
-  - no schema file changes
-
-## HS226 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS226-sde-inventory-import-rewrite-authority-proof.md
-```
-
-Status: SDE inventory/type import/rewrite authority fixture proof complete and accepted by Overseer.
-
-HS226 result:
-
-- Atlas can now prove the future inventory/type import/rewrite authority and recovery shape in fixture/offline mode.
-- Source authority, storage validity, budget posture, projected growth, staged promotion, provenance timing, cleanup, and retry posture are distinct.
-- Real operator inventory import/rewrite, provider-backed SDE download/build, topology import behavior changes, runtime enforcement, command blocking, and UI work remain unopened.
-
-## HS226 Acceptance
-
-Accepted 2026-06-03:
-
-- `workspace/DevHS226-sde-inventory-import-rewrite-authority-proof.md`
-- `workspace/OverseerHS228-hs226-sde-inventory-import-rewrite-authority-proof-review.md`
-
-Decision:
-
-- HS226 accepted.
-- No blocking issues found.
-- `sde.inventory_import_rewrite_authority.proof` is accepted as a fixture/offline proof of future inventory/type import/rewrite authority and recovery posture.
-
-Accepted outcome:
-
-- renderer source paths are ignored as authority
-- trusted fixture local inventory source authority is explicit
-- remote source references are rejected for local inventory import
-- missing source blocks rewrite
-- storage and budget posture blocks future inventory rewrite in invalid/unconfigured/hard-lock cases
-- projected source/temp/cache/staged/DB/WAL-SHM growth is represented
-- staged fixture promotion is transactional
-- provenance is written only after complete promotion
-- failed staged rewrite preserves visible inventory/type counts
-- failed staged rewrite does not write failure provenance
-- partial staged cleanup posture is represented
-- retry/rerun is explicit and not automatic
-
-Verification re-run by Overseer:
-
-- `node --check src\main\services\sdeInventoryImportRewriteAuthorityProofService.js` passed.
-- `node --check scripts\verify-sde-inventory-import-rewrite-authority.js` passed.
-- `npm.cmd run verify:sde-inventory-import-rewrite-authority` passed.
-- `npm.cmd run verify:local-sde-readiness` passed.
-- `npm.cmd run verify:local-sde-source-posture` passed when run alone.
-- `npm.cmd run verify:sde-inventory` passed with fixture-safe local JSONL source override.
-- `npm.cmd run verify:enforcement-dry-run` passed.
-- `npm.cmd run verify:service-registry` passed.
-- `npm.cmd run verify:command-authority` passed.
-- `npm.cmd run verify:passive-side-effects` passed.
-- `npm.cmd run verify:protected-terms` passed warning-only with 513 warnings across 11 changed working-set files; no renames or protected-word JSON updates performed.
-- `git diff --check` passed with CRLF normalization warnings only.
-
-Note:
-
-- A parallel verifier run reproduced the known temp-path scanning race; `verify:local-sde-source-posture` passed when rerun alone. This is treated as test-fixture interference, not an HS226 blocking issue.
-
-Likely next options:
-
-1. Ask Engineering/Security for a short post-proof readiness review before any real operator SDE mutation.
-2. Rest SDE movement and continue another storage/runtime seam.
-3. Keep provider-backed SDE download/build, combined topology + inventory behavior, UI/source picker, support artifact creation around SDE failures, and active runtime enforcement parked.
-
-Do not open Dev implementation until one of these is selected and bounded.
-
-## Resting HS224 Runway
-
-Opened 2026-06-03:
-
-- `workspace/OverseerHS224-sde-topology-import-rewrite-authority-proof-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS224-sde-topology-import-rewrite-authority-proof.md
-```
-
-Task:
-
-Add a fixture/offline proof for topology import/rewrite authority and recovery.
-
-Preferred command:
-
-```txt
-sde.topology_import_rewrite_authority.proof
-```
-
-Acceptable alternative:
-
-Add a focused verifier/service helper without renderer command exposure if the existing service architecture makes a command inappropriate. If no command is added, the verifier must still prove the same authority and recovery shape.
-
-Preferred outcome:
-
-- renderer source paths are ignored
-- trusted local source authority shape is explicit
-- remote source references are rejected for local topology import
-- missing/invalid/degraded storage blocks future topology rewrite
-- unconfigured or hard-lock budget blocks future topology rewrite
-- projected temp/cache/DB growth is represented
-- topology staged/fixture writes can fail without corrupting visible ready topology lookups
-- provenance is written only after complete promotion
-- partial temp/staged material cleanup is represented
-- retry/rerun posture is explicit and not automatic
-
-Preserve:
-
-- no SDE download
-- no provider-backed `sde.build-lookups`
-- no real operator source path inspection
-- no real operator lookup-table mutation
-- no storage movement
-- no real operator config write
-- no support artifact creation
-- no provider calls
-- no Hydration writes
-- no Evidence/EVEidence writes
-- no Discovery ref mutation
-- no Watch mutation
-- no Assessment Memory or Marked mutation
-- no renderer UI work
-- no pruning/deletion behavior
-- no inventory import behavior
-- no combined topology+inventory behavior
-- no runtime enforcement activation
-- no command blocking
-- no schema changes unless returned to Overseer first
-
-Stop if proving recovery requires schema changes, mutating the real operator DB, inspecting real operator source paths, starting provider-backed SDE download/build, touching inventory import behavior beyond context reading, UI work, runtime enforcement, command blocking, support artifact creation, destructive/private/live action, or real operator data inspection.
-
-## HS224 Evidence
-
-Dev updated 2026-06-03:
-
-- Added `src/main/services/sdeTopologyImportRewriteAuthorityProofService.js` as a fixture/offline topology import/rewrite authority and recovery proof.
-- Added non-renderer command:
-  - `sde.topology_import_rewrite_authority.proof`
-- Added `npm.cmd run verify:sde-topology-import-rewrite-authority`.
-- Added command classification coverage in `src/main/services/enforcementDryRunService.js`.
-- Added service registry, command authority, and enforcement dry-run verifier coverage.
-- Command classification:
-  - `classification: metadata-only`
-  - effects: `local-data-mutation`, `metadata-readability`
-  - renderer eligible: false
-  - enforcement status: `fixture_only_non_production`
-  - External I/O dependency: `none`
-  - runtime context: `fixture_sde_topology_import_rewrite_authority_proof`
-- The proof exposes:
-  - renderer source path non-authority
-  - trusted fixture local source authority shape
-  - remote source rejection for local topology import
-  - no-source block
-  - storage/budget authority cases for topology rewrite
-  - projected source/temp/cache/staged/DB/WAL-SHM growth
-  - staged/transactional fixture promotion model
-  - provenance-after-complete-promotion rule
-  - failed staged rewrite preservation
-  - partial staged material cleanup posture
-  - explicit retry/rerun posture with no automatic retry
-- Focused verifier proves:
-  - renderer-only source path is blocked and ignored
-  - trusted fixture source can be accepted while renderer source claims remain ignored
-  - remote source references are rejected for local topology import
-  - missing source blocks rewrite
-  - missing/unavailable storage blocks rewrite
-  - invalid/degraded storage blocks rewrite
-  - unconfigured budget blocks rewrite
-  - budget hard lock blocks rewrite
-  - successful fixture rewrite promotes complete topology and writes provenance afterward
-  - failed staged rewrite preserves previous visible topology counts
-  - failed staged rewrite does not write failure provenance
-  - staged temp material cleanup is represented
-  - retry/rerun is explicit and not automatic
-- The proof did not alter existing real `sde.import.topology`, `sde.import.inventory`, or `sde.build-lookups` execution behavior.
-- Verification run:
-  - `node --check src\main\services\sdeTopologyImportRewriteAuthorityProofService.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-sde-topology-import-rewrite-authority.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-enforcement-dry-run.js` passed.
-  - `npm.cmd run verify:sde-topology-import-rewrite-authority` passed.
-  - `npm.cmd run verify:local-sde-source-posture` passed after rerun. An initial parallel run overlapped with `verify:sde-fixture` and saw a temp SDE fixture directory removed during support-path scanning.
-  - `npm.cmd run verify:local-sde-readiness` passed.
-  - `npm.cmd run verify:sde-fixture` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 470 warnings across 9 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS224 working-tree changes.
-- Boundaries preserved:
-  - no real SDE download
-  - no provider-backed `sde.build-lookups`
-  - no real operator source path inspection
-  - no real operator lookup-table mutation
-  - no storage movement
-  - no real operator config write
-  - no support artifact creation
-  - no provider calls
-  - no Hydration writes
-  - no Evidence/EVEidence writes
-  - no Discovery ref mutation
-  - no Watch mutation
-  - no Assessment Memory or Marked mutation
-  - no renderer UI work
-  - no pruning/deletion behavior
-  - no inventory import behavior
-  - no combined topology + inventory behavior
-  - no runtime enforcement activation
-  - no command blocking
-  - no schema changes
-
-## HS224 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS224-sde-topology-import-rewrite-authority-proof.md
-```
-
-Status: SDE topology import/rewrite authority fixture proof complete and accepted by Overseer.
-
-HS224 result:
-
-- Atlas can now prove the future topology import/rewrite authority and recovery shape in fixture/offline mode.
-- Source authority, storage validity, budget posture, projected growth, staged promotion, provenance timing, cleanup, and retry posture are distinct.
-- Real operator SDE import/rewrite, provider-backed SDE download/build, inventory import, runtime enforcement, command blocking, and UI work remain unopened.
-
-## HS224 Acceptance
-
-Accepted 2026-06-03:
-
-- `workspace/DevHS224-sde-topology-import-rewrite-authority-proof.md`
-- `workspace/OverseerHS225-hs224-sde-topology-import-rewrite-authority-proof-review.md`
-
-Decision:
-
-- HS224 accepted.
-- No blocking issues found.
-- `sde.topology_import_rewrite_authority.proof` is accepted as a fixture/offline proof of future topology import/rewrite authority and recovery posture.
-
-Accepted outcome:
-
-- renderer source paths are ignored as authority
-- trusted fixture local source authority is explicit
-- remote source references are rejected for local topology import
-- missing source blocks rewrite
-- storage and budget posture blocks future topology rewrite in invalid/unconfigured/hard-lock cases
-- projected source/temp/cache/staged/DB/WAL-SHM growth is represented
-- staged fixture promotion is transactional
-- provenance is written only after complete promotion
-- failed staged rewrite preserves visible topology
-- failed staged rewrite does not write failure provenance
-- partial staged cleanup posture is represented
-- retry/rerun is explicit and not automatic
-
-Verification re-run by Overseer:
-
-- `npm.cmd run verify:sde-topology-import-rewrite-authority` passed.
-- `npm.cmd run verify:local-sde-source-posture` passed when run alone.
-- `npm.cmd run verify:local-sde-readiness` passed.
-- `npm.cmd run verify:sde-fixture` passed.
-- `npm.cmd run verify:enforcement-dry-run` passed.
-- `npm.cmd run verify:service-registry` passed.
-- `npm.cmd run verify:command-authority` passed.
-- `npm.cmd run verify:passive-side-effects` passed.
-- `npm.cmd run verify:protected-terms` passed warning-only with 471 warnings across 9 changed working-set files; no renames or protected-word JSON updates performed.
-- `node --check src\main\services\sdeTopologyImportRewriteAuthorityProofService.js` passed.
-- `node --check scripts\verify-sde-topology-import-rewrite-authority.js` passed.
-- `git diff --check` passed with CRLF normalization warnings only.
-
-Note:
-
-- A parallel verifier run reproduced the handoff-noted temp-directory race between `verify:local-sde-source-posture` and `verify:sde-fixture`; the isolated source-posture rerun passed. This is treated as test-fixture interference, not an HS224 blocking issue.
-
-Likely next options:
-
-1. Decide whether a matching inventory import/rewrite authority proof is needed.
-2. Ask advisory whether topology proof is sufficient before broader SDE import planning.
-3. Rest SDE movement and continue another storage/runtime seam.
-
-Do not open Dev implementation until one of these is selected and bounded.
-
-## Resting HS222 Advisory Runway
-
-Opened 2026-06-03:
-
-- `workspace/OverseerHS222-sde-import-download-readiness-advisory-request.md`
-
-Expected advisory artifact:
-
-```txt
-workspace/EngineeringSecurityHS222-sde-import-download-readiness-advisory.md
-```
-
-Task:
-
-Review whether Atlas is ready to open a real SDE import/download or lookup-table rewrite Dev packet, or whether another dry proof is needed first.
-
-Answer:
-
-- whether local SDE import/rewrite is ready
-- whether provider-backed SDE download/build is ready
-- smallest next Dev packet if ready
-- smallest missing proof if not ready
-- source path authority needed before import
-- storage/budget authority needed before lookup-table rewrite
-- External I/O posture needed before provider-backed download/build
-- partial failure/recovery requirements
-- verification commands expected
-- parked items and Human/Overseer decisions needed
-
-Preserve:
-
-- no code implementation
-- no Dev runway
-- no SDE download
-- no SDE import
-- no lookup-table rewrite
-- no arbitrary user-file inspection
-- no storage movement
-- no config writes
-- no support artifact creation
-- no provider calls
-- no schema changes
-- no term renames
-
-Stop if the review requires live/private/destructive action, real operator source path inspection, SDE download/import, lookup-table rewrite, storage movement, schema changes, or Dev implementation.
-
-## HS222 Acceptance
-
-Accepted 2026-06-03:
-
-- `workspace/EngineeringSecurityHS222-sde-import-download-readiness-advisory.md`
-- `workspace/OverseerHS223-hs222-sde-import-download-readiness-review.md`
-
-Decision:
-
-- Do not open real operator SDE import/rewrite yet.
-- Do not open provider-backed SDE download/build yet.
-- Open a fixture/offline topology import-rewrite authority proof first.
-
-Accepted parked items:
-
-- provider-backed SDE download/build
-- real operator lookup-table rewrite
-- renderer-supplied SDE source paths
-- remote URL local import
-- broad combined topology + inventory + download packet
-- environment-variable-only source authority as product posture
-- active runtime enforcement for SDE commands
-- UI/source picker
-- support artifact creation around SDE failures
-- pruning/deletion interactions with SDE source/cache material
-
-## Resting HS220 Runway
-
-Opened 2026-06-03:
-
-- `workspace/OverseerHS220-local-sde-source-import-posture-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS220-local-sde-source-import-posture.md
-```
-
-Task:
-
-Add or refine a read-only preview that explains SDE source/import posture without executing it.
-
-Preferred command:
-
-```txt
-metadata.local_sde_source_posture.preview
-```
-
-Acceptable alternative:
-
-Extend `metadata.local_sde_readiness.preview` with a clearly separated `source_import_posture` section if that avoids duplicate command shape.
-
-Preferred outcome:
-
-- show whether local SDE lookup readiness is complete, partial, or missing
-- show whether missing material is inventory/type lookup, topology/geography lookup, import provenance, or mixed
-- distinguish future local source import/rewrite from provider-backed SDE download/build
-- disclose which posture requires External I/O and which does not
-- disclose whether storage authority/budget would block future lookup-table rewrite without blocking this readout
-- disclose whether a supplied/observed source path is local, absent, unsupported, or not inspected
-- disclose that SDE source/cache material is support/corpus-adjacent and should stay under storage authority
-- prove SDE readiness does not authorize provider calls, imports, downloads, or lookup rewrites
-
-Preserve:
-
-- no SDE download
-- no SDE import
-- no lookup-table rewrite
-- no arbitrary user-file inspection
-- no storage movement
-- no config writes
-- no support artifact creation
-- no provider calls
-- no Hydration writes
-- no `metadata_runs` writes
-- no Evidence/EVEidence creation
-- no Discovery ref mutation
-- no Watch mutation
-- no Assessment Memory or Marked mutation
-- no schema changes
-- no runtime enforcement activation
-- no command blocking
-- no renderer UI work
-- no pruning/deletion behavior
-
-Stop if the proof requires downloading/importing SDE, lookup-table writes, arbitrary path inspection outside existing safe preview posture, blurring local SDE lookup readiness with provider-backed Hydration, treating readiness as authorization, treating External I/O on as authorization, runtime enforcement, command blocking, UI work, schema changes, destructive/private/live action, or real operator data inspection.
-
-## HS220 Acceptance
-
-Accepted 2026-06-03:
-
-- `workspace/OverseerHS221-hs220-local-sde-source-import-posture-review.md`
-
-Decision:
-
-- HS220 accepted.
-- No blocking issues found.
-- `metadata.local_sde_source_posture.preview` is accepted as read-only local SDE source/import posture proof.
-
-Accepted outcome:
-
-- local SDE readiness is local readability/geometry support, not provider-backed Hydration
-- local source import/rewrite is distinct from provider-backed SDE download/build
-- renderer-supplied source paths are ignored and not inspected
-- trusted/local source shapes are classified without arbitrary filesystem inspection
-- External I/O off holds provider-backed SDE download/build without making it failure
-- storage/budget posture can block future lookup-table rewrites without blocking the readout
-- readiness does not authorize provider calls, imports, downloads, or lookup rewrites
-
-Verification re-run by Overseer:
-
-- `npm.cmd run verify:local-sde-source-posture` passed.
-- `npm.cmd run verify:local-sde-readiness` passed.
-- `npm.cmd run verify:hydration-attention-runtime` passed.
-- `npm.cmd run verify:hydration-execution-policy` passed.
-- `npm.cmd run verify:enforcement-dry-run` passed.
-- `npm.cmd run verify:gate-stack-readout` passed.
-- `npm.cmd run verify:service-registry` passed.
-- `npm.cmd run verify:command-authority` passed.
-- `npm.cmd run verify:passive-side-effects` passed.
-- `npm.cmd run verify:protected-terms` passed warning-only with 486 warnings across 10 changed working-set files; no renames or protected-word JSON updates performed.
-- `git diff --check` passed with CRLF normalization warnings only.
-
-Likely next options:
-
-1. Rest SDE source/import posture and continue a different storage/runtime seam.
-2. Ask for advisory readiness review before any real SDE import/download or lookup-table rewrite packet.
-3. Keep provider-backed Hydration execution, persisted Hydration queues, active runtime enforcement, and UI work parked until explicitly opened.
-
-## HS220 Evidence
-
-Dev updated 2026-06-03:
-
-- Added `src/main/services/localSdeSourcePostureService.js` as a read-only local SDE source/import posture preview.
-- Added renderer-eligible command:
-  - `metadata.local_sde_source_posture.preview`
-- Added `npm.cmd run verify:local-sde-source-posture`.
-- Added command classification coverage in `src/main/services/enforcementDryRunService.js`.
-- Added service registry, command authority, passive side-effect, and enforcement dry-run verifier coverage.
-- The new readout reuses existing local/support posture where practical:
-  - `metadata.local_sde_readiness.preview`
-  - `storage.setup_gate_readout`
-  - `support.gate_stack_readout`
-  - enforcement dry-run command coverage posture
-  - support artifact path authority posture
-- The preview exposes:
-  - source posture summary
-  - readiness summary
-  - source path authority
-  - command-family posture
-  - External I/O posture
-  - storage/budget posture for future lookup rewrites
-  - support/corpus posture
-  - representative missing groups
-  - explicit boundary statements
-- Focused verifier sample:
-  - `metadata.local_sde_source_posture.preview`
-  - readiness state: `partial`
-  - missing material: topology/geography lookup, import provenance, mixed
-  - renderer-supplied source path posture: `not_inspected_renderer_payload_ignored`
-  - `sde.import.topology`: `local_source_import_rewrite`, External I/O not required
-  - `sde.import.inventory`: `local_source_import_rewrite`, External I/O not required
-  - `sde.build-lookups`: `provider_backed_download_build`, held by External I/O off without a trusted local source
-  - storage posture: no storage selected / budget unconfigured; future lookup rewrite blocked while local readout remains available
-  - representative missing groups: `inventory_type_lookup_gap`, `topology_lookup_gap`, `import_provenance_gap`
-  - `provider_calls: 0`
-  - `sde_downloads: 0`
-  - `sde_imports_started: 0`
-  - `lookup_writes: 0`
-- The preview proves:
-  - local SDE readiness is local readability/geometry support, not provider-backed Hydration
-  - future local source import/rewrite is distinct from provider-backed SDE download/build
-  - External I/O off holds provider-backed download/build without making local source posture readout fail
-  - External I/O on is not authorization
-  - readiness does not authorize provider calls, imports, downloads, or lookup rewrites
-  - storage/setup posture may block future lookup-table rewrites without blocking this readout
-  - renderer-supplied source paths are not trusted and are not inspected
-- Verification run:
-  - `node --check src\main\services\localSdeSourcePostureService.js` passed.
-  - `npm.cmd run verify:local-sde-source-posture` passed.
-  - `npm.cmd run verify:local-sde-readiness` passed. Note: the HS220 runway named `verify:local-sde-readiness-preview`; the current package script is `verify:local-sde-readiness`, which runs `scripts/verify-local-sde-readiness-preview.js`.
-  - `npm.cmd run verify:hydration-attention-runtime` passed.
-  - `npm.cmd run verify:hydration-execution-policy` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:gate-stack-readout` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 486 warnings across 10 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS220 working-tree changes.
-- Boundaries preserved:
-  - no SDE download
-  - no SDE import
-  - no lookup-table rewrite
-  - no arbitrary user-file inspection
-  - no storage movement
-  - no config writes
-  - no support artifact creation
-  - no provider calls
-  - no Hydration writes
-  - no `metadata_runs` writes
-  - no Evidence/EVEidence creation
-  - no Discovery ref mutation
-  - no Watch mutation
-  - no Assessment Memory or Marked mutation
-  - no schema changes
-  - no runtime enforcement activation
-  - no command blocking
-  - no renderer UI work
-  - no pruning/deletion behavior
-
-## HS220 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS220-local-sde-source-import-posture.md
-```
-
-Status: local SDE source/import posture proof complete; pending Overseer review.
-
-HS220 result:
-
-- Atlas can now explain local SDE source/import posture before execution.
-- Local source import/rewrite, provider-backed SDE download/build, local readiness gaps, External I/O posture, and storage/budget write posture are distinct.
-- Renderer-supplied source paths are ignored for authority and are not inspected.
-- SDE download/import, lookup rewrites, provider calls, storage/config writes, support artifact creation, Hydration writes, Evidence/EVEidence writes, runtime enforcement, command blocking, and UI work remain unopened.
-
-## Resting HS218 Runway
-
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS218-hydration-attention-runtime-posture-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS218-hydration-attention-runtime-posture.md
-```
-
-Task:
-
-Add or refine a read-only preview that turns existing Hydration candidate and attention-lens data into runtime-facing posture.
-
-Preferred command:
-
-```txt
-metadata.hydration_attention_runtime.preview
-```
-
-Acceptable alternative:
-
-Extend `metadata.hydration_attention_lens.preview` with a clearly separated `runtime_posture` section if that is cleaner and avoids duplicate command shape.
-
-Preferred outcome:
-
-- show which visible/local IDs should remain raw for now
-- show which IDs already have known local labels
-- show which IDs are provider-needed labels for future Hydration
-- show which gaps are local SDE/type/geography lookup gaps, not provider-backed Hydration
-- show which candidates are deferred because they are Watch/background or corpus-hygiene work
-- disclose whether the posture is view/local-record, target/report-scoped, explicit-ID, Watch/background, or corpus hygiene
-- prove External I/O off holds provider-needed labels without making them failure
-- prove storage/setup posture can block future Hydration writes without blocking local readout
-- prove selected attention, eligibility, and local readability need do not authorize provider calls
-
-Preserve:
-
-- no persisted Hydration queue
-- no provider calls
-- no Hydration writes
-- no `metadata_runs` writes
-- no `entities` writes
-- no `activity_events` patches
-- no Evidence/EVEidence creation
-- no Discovery ref mutation
-- no Watch mutation
-- no Assessment Memory or Marked mutation
-- no schema changes
-- no support artifact creation
-- no runtime enforcement activation
-- no command blocking
-- no renderer UI work
-- no pruning/deletion behavior
-- no label removal, label hiding, or attention de-emphasis behavior
-
-Stop if the proof requires provider calls, persisted queue/state, schema changes, treating missing labels as Evidence gaps, blurring Hydration with ESI Evidence Expansion, blurring local SDE lookup gaps with provider-backed Hydration, reprioritizing Watch/background readability over view/local-record readability without Human/Overseer decision, UI work, runtime enforcement, command blocking, destructive/private/live action, or real operator data inspection.
-
-## HS218 Acceptance
-
-Accepted 2026-06-03:
-
-- `workspace/OverseerHS219-hs218-hydration-attention-runtime-posture-review.md`
-
-Decision:
-
-- HS218 accepted.
-- No blocking issues found.
-- `metadata.hydration_attention_runtime.preview` is accepted as read-only posture proof.
-
-Accepted outcome:
-
-- raw IDs remain truthful local facts
-- known-local labels are readability landmarks
-- provider-needed labels are future Hydration/readability work, not Evidence/EVEidence work
-- local SDE gaps are local lookup/readiness gaps, not provider-backed Hydration
-- deferred candidates remain visible/patient
-- External I/O off holds provider-needed labels without making them failure
-- storage/setup posture can block future Hydration writes without blocking local readout
-- selected attention, eligibility, and local readability need do not authorize provider calls
-
-Verification re-run by Overseer:
-
-- `npm.cmd run verify:hydration-attention-runtime` passed.
-- `npm.cmd run verify:hydration-attention-lens` passed.
-- `npm.cmd run verify:hydration-candidate-preview` passed.
-- `npm.cmd run verify:hydration-execution-policy` passed.
-- `npm.cmd run verify:hydration-backlog-preview` passed.
-- `npm.cmd run verify:service-registry` passed.
-- `npm.cmd run verify:command-authority` passed.
-- `npm.cmd run verify:passive-side-effects` passed.
-- `npm.cmd run verify:enforcement-dry-run` passed.
-- `npm.cmd run verify:hydration` passed.
-- `npm.cmd run verify:metadata-status` passed.
-- `npm.cmd run verify:metadata-lookup` passed.
-- `npm.cmd run verify:protected-terms` passed warning-only with 470 warnings across 10 changed working-set files; no renames or protected-word JSON updates performed.
-- `git diff --check` passed with CRLF normalization warnings only.
-
-Likely next options:
-
-1. Rest Hydration attention posture and move to another storage/runtime seam.
-2. Review whether Hydration posture needs one more local-readout proof before execution planning.
-3. Keep provider-backed Hydration execution, persisted Hydration queues, and active runtime enforcement parked until Human/Overseer explicitly decides to continue those lines.
-
-## HS218 Evidence
-
-Dev updated 2026-06-02:
-
-- Added `src/main/services/hydrationAttentionRuntimePostureService.js` as a read-only runtime-facing Hydration attention posture preview.
-- Added renderer-eligible command:
-  - `metadata.hydration_attention_runtime.preview`
-- Added `npm.cmd run verify:hydration-attention-runtime`.
-- Added command classification coverage in `src/main/services/enforcementDryRunService.js`.
-- Added service registry, command authority, passive side-effect, and enforcement dry-run verifier coverage.
-- The new readout reuses `metadata.hydration_attention_lens.preview` and exposes:
-  - input/lens summary
-  - runtime posture summary
-  - posture scope
-  - External I/O posture
-  - storage/setup posture
-  - representative posture groups
-  - explicit boundary statements
-- Fixture sample:
-  - source candidates: 4
-  - selected candidates: 3
-  - deferred candidates: 1
-  - `raw_visible_for_now`: 1
-  - `known_local_labels`: 1
-  - `provider_needed_labels`: 1
-  - `local_sde_lookup_gaps`: 1
-  - `deferred_candidates`: 1
-  - External I/O off posture: `held_by_external_io`
-  - storage/setup posture: future Hydration writes blocked, local readout available
-- Representative items:
-  - `entity:character:90000003` as provider-needed target/report-scoped label held by External I/O off
-  - `entity:corporation:98000002` as known-local/stale readability label
-  - `local_sde:inventory_type:999999` as local SDE lookup gap, not provider-backed Hydration
-  - `entity:character:90000004` as Watch/background raw-visible/deferred candidate
-- The preview proves:
-  - raw IDs remain truthful local facts
-  - labels are readability
-  - provider-needed labels are future Hydration/readability work, not Evidence/EVEidence work
-  - local SDE gaps are local lookup/readiness gaps, not provider-backed Hydration
-  - selected attention, eligibility, and local readability need do not authorize provider calls
-  - External I/O off holds provider-needed labels without making them failure
-  - storage/setup posture can block future Hydration writes without blocking local readout
-  - Watch/background and corpus-hygiene candidates remain patient/deferred behind view/local-record attention
-- Focused verifier sample:
-  - `metadata.hydration_attention_runtime.preview`
-  - `provider_calls: 0`
-  - `hydration_writes: 0`
-  - `persisted_queue: false`
-  - `runtime_enforcement_active: false`
-  - `command_blocking_active: false`
-  - `ui_work: false`
-- Verification run:
-  - `node --check src\main\services\hydrationAttentionRuntimePostureService.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-hydration-attention-runtime-posture.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `node --check scripts\verify-enforcement-dry-run.js` passed.
-  - `npm.cmd run verify:hydration-attention-runtime` passed.
-  - `npm.cmd run verify:hydration-attention-lens` passed.
-  - `npm.cmd run verify:hydration-candidate-preview` passed.
-  - `npm.cmd run verify:hydration-backlog-preview` passed.
-  - `npm.cmd run verify:hydration-execution-policy` passed.
-  - `npm.cmd run verify:hydration` passed.
-  - `npm.cmd run verify:metadata-status` passed.
-  - `npm.cmd run verify:metadata-lookup` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 470 warnings across 10 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-  - `git status --short --branch` showed branch `main...origin/main` with HS218 working-tree changes.
-- Boundaries preserved:
-  - no persisted Hydration queue
-  - no provider calls
-  - no Hydration writes
-  - no `metadata_runs` writes
-  - no `entities` writes
-  - no `activity_events` patches
-  - no Evidence/EVEidence creation
-  - no Discovery ref mutation
-  - no Watch mutation
-  - no Assessment Memory or Marked mutation
-  - no schema changes
-  - no support artifact creation
-  - no runtime enforcement activation
-  - no command blocking
-  - no renderer UI work
-  - no pruning/deletion behavior
-  - no label removal, label hiding, or attention de-emphasis behavior
-
-## HS218 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS218-hydration-attention-runtime-posture.md
-```
-
-Status: Hydration attention runtime posture proof complete; pending Overseer review.
-
-HS218 result:
-
-- Atlas can now explain runtime-facing Hydration attention posture from local candidate/lens data before provider-backed Hydration execution exists.
-- Raw IDs, known-local labels, provider-needed labels, local SDE gaps, and deferred candidates are distinct.
-- External I/O off and storage/setup write blocks are exposed as posture without blocking local readout or becoming execution authority.
-- Provider-backed Hydration execution, persisted queues, Hydration writes, active runtime enforcement, and UI work remain unopened.
-
-## Resting HS216 Runway
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS216-runtime-enforcement-active-semantics-fixture-matrix-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS216-runtime-enforcement-active-semantics-fixture-matrix.md
-```
-
-Task:
-
-Add a pure active runtime enforcement semantics fixture matrix, preferably as a new read-only/pure service module plus verifier.
-
-Preferred outcome:
-
-- define active decision meanings for `pass`, `block`, `hold`, `conditional`, `unknown`, `stop_before_boundary`, missing facts, malformed facts, stale facts, and spoofed facts
-- define mandatory fact families by command family
-- define first-active excluded command families
-- prove `conditional` and `hold` do not dispatch
-- prove `hold` is non-failure and non-mutating
-- prove missing/malformed/spoofed mandatory facts cannot silently pass
-- prove renderer-origin authority facts are ignored/rejected
-- prove trusted supplied facts are allowed only under explicit trusted/test posture
-- prove External I/O on, dry-run `would_allow`, provider `allowed`, Watch arming, and destination/path authority are each non-authorizing alone
-- prove fixture/proof and destructive execution commands cannot active-pass in production semantics
-
-Preserve:
-
-- no active runtime enforcement
-- no command blocking
-- no insertion into `invokeServiceCommand`
-- no handler dispatch from the semantics proof
-- no task wrapping or task execution
-- no provider calls
-- no provider attempt recording
-- no service-memory cooldown/lockout mutation
-- no Watch arming/disarming/tick execution
-- no Watch mutation
-- no DB writes
-- no config writes
-- no support artifact creation
-- no snapshot or trace-pack creation
-- no storage movement or migration
-- no Hydration writes
-- no Evidence/EVEidence creation
-- no Discovery ref mutation
-- no Assessment Memory or Marked mutation
-- no schema changes
-- no renderer UI work
-- no pruning or deletion behavior
-- no terminology renames
-
-Stop if the proof requires active command blocking, runtime authorization, insertion into `invokeServiceCommand`, calling target handlers, task dispatch or task wrapping, provider calls, provider attempt recording, service-memory cooldown/lockout mutation, Watch mutation, DB writes, config writes, support artifact creation, schema changes, UI work, treating any single preview fact as authorization, or broad global enforcement semantics.
-
-## HS216 Evidence
-
-Dev updated 2026-06-02:
-
-- Added `src/main/services/runtimeEnforcementActiveSemanticsService.js` as a pure active runtime enforcement semantics fixture matrix.
-- Added read-only renderer-eligible command:
-  - `runtime.enforcement_active_semantics.preview`
-- Added `npm.cmd run verify:runtime-enforcement-active-semantics`.
-- Added command classification coverage in `src/main/services/enforcementDryRunService.js`.
-- Added command authority and passive side-effect verifier coverage.
-- Semantics states defined:
-  - `pass`
-  - `block`
-  - `hold`
-  - `conditional`
-  - `unknown`
-  - `stop_before_boundary`
-  - `missing_mandatory_fact`
-  - `malformed_authority_fact`
-  - `stale_authority_fact`
-  - `spoofed_renderer_fact`
-- Only `pass` is marked as hypothetical `may_dispatch`; `conditional`, `hold`, `unknown`, and `stop_before_boundary` are no-dispatch.
-- `hold` is explicitly non-failure and non-mutating.
-- Mandatory fact families are declared by command family.
-- First-active candidate family:
-  - `local_readout_preflight`
-- First-active excluded families:
-  - `local_setup_config_write`
-  - `local_metadata_write`
-  - `provider_backed_manual`
-  - `watch_background_provider`
-  - `support_artifact_write`
-  - `sde_import_lookup`
-  - `runtime_task_control`
-  - `fixture_proof`
-  - `destructive_execution`
-- Trusted fact supply treatment:
-  - renderer payload authority facts are ignored/rejected
-  - renderer facts may not override sourced facts
-  - trusted supplied facts are allowed only with explicit trusted/test posture
-  - arbitrary `runtimeEnforcementFacts` are not production active authority
-- Focused verifier proves:
-  - `conditional` does not dispatch
-  - `hold` does not dispatch, is not failure, and is non-mutating
-  - missing mandatory facts cannot silently pass
-  - malformed facts cannot silently pass
-  - stale durable authority facts cannot silently pass
-  - stale volatile Watch runtime posture holds rather than dispatches
-  - renderer-origin authority facts are rejected
-  - trusted test supplied facts can pass only under explicit trusted/test posture
-  - trusted supplied facts without explicit test posture block
-  - External I/O on alone is not authorization
-  - dry-run `would_allow` alone is not authorization
-  - provider `allowed` alone is not authorization
-  - Watch arming alone is not provider movement permission
-  - destination/path authority alone is not support artifact creation permission
-  - fixture/proof commands cannot active-pass in production semantics
-  - destructive execution cannot active-pass in first active semantics
-- Focused verifier sample:
-  - decision states: 10
-  - command families: 10
-  - fixture cases: 20
-  - first-active candidate families: `local_readout_preflight`
-  - active runtime enforcement: false
-  - command blocking: false
-  - `invokeServiceCommand` insertion: false
-  - target handlers called: false
-  - task runners called: false
-  - providers called: false
-  - DB writes: false
-  - config writes: false
-  - support artifacts created: false
-- Verification run:
-  - `node --check src\main\services\runtimeEnforcementActiveSemanticsService.js` passed.
-  - `node --check scripts\verify-runtime-enforcement-active-semantics.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `npm.cmd run verify:runtime-enforcement-active-semantics` passed.
-  - `npm.cmd run verify:runtime-enforcement-adapter` passed.
-  - `npm.cmd run verify:runtime-enforcement-hook` passed.
-  - `npm.cmd run verify:runtime-hook-telemetry` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:gate-stack-readout` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 182 warnings across 6 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed with CRLF normalization warnings only.
-- Boundaries preserved:
-  - no active runtime enforcement
-  - no command blocking
-  - no insertion into `invokeServiceCommand`
-  - no handler dispatch from the semantics proof
-  - no task wrapping or task execution
-  - no provider calls
-  - no provider attempt recording
-  - no service-memory cooldown/lockout mutation
-  - no Watch arming/disarming/tick execution
-  - no Watch mutation
-  - no DB writes
-  - no config writes
-  - no support artifact creation
-  - no snapshot or trace-pack creation
-  - no storage movement or migration
-  - no Hydration writes
-  - no Evidence/EVEidence creation
-  - no Discovery ref mutation
-  - no Assessment Memory or Marked mutation
-  - no schema changes
-  - no renderer UI work
-  - no pruning or deletion behavior
-  - no terminology renames
-
-## HS216 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS216-runtime-enforcement-active-semantics-fixture-matrix.md
-```
-
-Status: runtime enforcement active semantics fixture matrix complete and accepted by Overseer.
-
-HS216 result:
-
-- Atlas now has a pure fixture matrix defining first active semantics before any command blocking.
-- The matrix is staged by command family rather than global enforcement.
-- First active candidate is local readout/preflight only.
-- Provider-backed, Watch/background, support-artifact write, config write, fixture/proof, destructive, task-control, and local metadata-write families are excluded from first active enforcement.
-- Preview facts and one-off gate states remain non-authorizing alone.
-- Active runtime enforcement and command blocking remain inactive and parked.
-
-Overseer reviewed 2026-06-02:
-
-- Accepted HS216 in `workspace/OverseerHS217-hs216-runtime-enforcement-active-semantics-review.md`.
-- Confirmed the new semantics matrix is pure/static and not inserted into `invokeServiceCommand`.
-- Confirmed `runtime.enforcement_active_semantics.preview` is read-only and renderer-eligible.
-- Confirmed first-active candidate is local readout/preflight only.
-- Confirmed provider-backed, Watch/background, support-artifact write, config write, local metadata write, SDE/import, task-control, fixture/proof, and destructive families remain excluded from first active enforcement.
-- Confirmed no active runtime enforcement, command blocking, provider calls, task dispatch, DB writes, config writes, support artifacts, storage movement, UI work, or terminology renames were added.
-
-## Resting Next Options
-
-Recommended next shaping candidates:
-
-1. Rest runtime enforcement work and continue a different storage/runtime seam.
-2. Request/adopt advisory review of whether local readout/preflight is worth a non-blocking active-semantics preview.
-3. Keep command blocking and active enforcement parked until Human/Overseer explicitly decides to continue this line.
-
-Do not open active runtime enforcement, command blocking, or `invokeServiceCommand` behavior changes without a fresh Human/Overseer decision.
-
-## Active HS214 Advisory Request
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS214-runtime-enforcement-semantics-design-request.md`
-
-Expected advisory handoff:
-
-```txt
-workspace/EngineeringSafetyAuditHS214-runtime-enforcement-semantics-design.md
-```
-
-Task:
-
-Define the active runtime enforcement semantics Atlas would need before any command blocking implementation is opened.
-
-This is design/assurance only. Do not implement code.
-
-Review focus:
-
-- what `pass`, `block`, `conditional`, `hold`, `stop_before_boundary`, `unknown`, and missing-fact states would mean if active enforcement existed
-- which fact classes must be mandatory for active enforcement by command family
-- which commands should be excluded from first active enforcement
-- whether `conditional` and `hold` block, defer, return structured held posture, or pass to existing handler gates
-- how active enforcement should handle missing, malformed, stale, spoofed, renderer-origin, or explicitly supplied facts
-- who may supply authority-bearing facts in future active mode
-- what remains outside runtime hook responsibility
-- the smallest possible next packet, if any
-
-Preserve:
-
-- no code changes
-- no runtime enforcement activation
-- no command blocking
-- no provider calls
-- no provider attempt recording
-- no config writes
-- no schema changes
-- no support artifact creation
-- no storage movement
-- no renderer UI work
-- no terminology renames
-
-Stop if the review requires implementation, runtime enforcement activation, command blocking, provider calls, provider attempt recording, config writes, schema changes, support artifact creation, storage movement, UI work, or terminology renames.
-
-## HS214 Evidence
-
-Engineering/Security audit landed 2026-06-02:
-
-- `workspace/EngineeringSafetyAuditHS214-runtime-enforcement-semantics-design.md`
-
-Finding:
-
-- Do not open active command blocking yet.
-- Atlas should stage active semantics by command family.
-- `conditional` and `hold` should not dispatch in first active semantics.
-- Preview facts, dry-run `would_allow`, External I/O on, Watch arming, provider `allowed`, and destination/path authority are not authorization alone.
-- The smallest next seam is a pure active semantics fixture matrix.
-
-## HS214 Handoff
-
-Completed:
-
-```txt
-workspace/EngineeringSafetyAuditHS214-runtime-enforcement-semantics-design.md
-```
-
-Overseer reviewed 2026-06-02:
-
-- Accepted HS214 in `workspace/OverseerHS215-hs214-runtime-enforcement-semantics-review.md`.
-- Opened HS216 as pure active semantics fixture matrix.
-
-## Active HS212 Runway
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS212-runtime-hook-watch-task-runtime-fact-preview-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS212-runtime-hook-watch-task-runtime-fact-preview.md
-```
-
-Task:
-
-Add compact, read-only `watch_runtime` fact sourcing to the inactive runtime enforcement hook preview.
-
-Preferred outcome:
-
-- `actor.watch`, `system.radius.watch`, `watch.executor.arm`, and `watch.executor.tick` receive explicit Watch/task runtime posture.
-- Non-Watch commands report not-applicable Watch posture.
-- Missing or malformed Watch/task state is reported as posture rather than guessed.
-- Supplied `runtimeEnforcementFacts.watch_runtime` remains preserved and is not overwritten.
-- The inactive dry adapter no longer reports `watch_runtime` missing for covered Watch/background commands when sourced posture is available.
-- Runtime hook telemetry can show `watch_runtime` as a sourced broad fact class when present.
-- Active runtime enforcement remains false.
-
-Preserve:
-
-- no active runtime enforcement
-- no command blocking
-- no handler dispatch from the hook
-- no task wrapping or task execution from the hook
-- no provider calls
-- no provider attempt recording
-- no service-memory cooldown/lockout mutation from the hook
-- no Watch arming/disarming/tick execution from the hook
-- no Watch mutation
-- no DB writes
-- no config writes
-- no support artifact creation
-- no snapshot or trace-pack creation
-- no storage movement or migration
-- no Hydration writes
-- no Evidence/EVEidence creation
-- no Discovery ref mutation
-- no Assessment Memory or Marked mutation
-- no schema changes
-- no renderer UI work
-- no pruning or deletion behavior
-- no terminology renames
-
-Stop if the proof requires active command blocking, runtime authorization, calling target handlers from the hook, task dispatch or task wrapping from the hook, provider calls, provider attempt recording, service-memory cooldown/lockout mutation, Watch mutation, DB writes, config writes, support artifact creation, schema changes, UI work, treating `watch_runtime` as may-run-now authorization, guessing missing Watch/task state, or changing Watch execution behavior.
-
-## HS212 Evidence
-
-Dev updated 2026-06-02:
-
-- Added compact read-only `watch_runtime` fact sourcing to the inactive runtime enforcement hook in `src/main/services/serviceRegistry.js`.
-- Covered Watch/background commands:
-  - `actor.watch` -> `direct_actor_watch_collection`
-  - `system.radius.watch` -> `direct_system_radius_watch_collection`
-  - `watch.executor.arm` -> `watch_executor_arm`
-  - `watch.executor.tick` -> `watch_executor_tick`
-- Non-Watch commands now receive explicit `sourced_not_applicable` posture with `applies: false` / `state: not_applicable`.
-- The hook reads passive volatile executor fields and task-runner list posture only.
-- The hook does not call `watch.executor.status`, because that status helper can clear stale active task IDs.
-- Missing/stale/malformed Watch/task state is reported as posture instead of guessed.
-- Renderer Watch/runtime claims such as `watch_runtime`, `sessionArmed`, and `activeTaskId` are detected as ignored and are not echoed into hook facts.
-- `watch.executor.arm` explicitly reports `session_arm_is_provider_permission: false`.
-- `watch_runtime` is passed through the dry adapter/evaluator gate inputs and runtime hook telemetry broad fact readout.
-- Supplied `runtimeEnforcementFacts.watch_runtime` remains preserved and is not overwritten.
-- Focused hook verifier sample:
-  - Watch runtime sourced: true
-  - actor Watch runtime sourced: true
-  - system/radius Watch runtime sourced: true
-  - Watch executor runtime sourced: true
-  - malformed Watch runtime reported as posture: true
-  - active runtime enforcement: false
-  - command blocking: false
-  - target handlers called by hook: false
-  - task runners called by hook: false
-  - providers called by hook: false
-- Runtime hook telemetry sample:
-  - sourced broad fact classes: `storage_authority`, `budget`, `external_io`, `provider_live_gate`, `composed_policy`, `destination_path_authority`, `watch_runtime`
-  - `watch_runtime` status for local command: `sourced`
-  - `watch_runtime` source status for local command: `sourced_not_applicable`
-- Verification run:
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\runtimeEnforcementDryAdapter.js` passed.
-  - `node --check src\main\services\runtimeEnforcementEvaluator.js` passed.
-  - `node --check src\main\services\runtimeHookTelemetryReadoutService.js` passed.
-  - `node --check scripts\verify-runtime-enforcement-hook.js` passed.
-  - `node --check scripts\verify-runtime-hook-telemetry.js` passed.
-  - `npm.cmd run verify:runtime-enforcement-hook` passed.
-  - `npm.cmd run verify:runtime-hook-telemetry` passed.
-  - `npm.cmd run verify:runtime-enforcement-adapter` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:gate-stack-readout` passed.
-  - `npm.cmd run verify:watch-executor` passed.
-  - `npm.cmd run verify:watch-offline-readout` passed.
-  - `npm.cmd run verify:task-runner` passed.
-  - `npm.cmd run verify:task-concurrency` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 152 warnings across 6 changed working-set files; no renames or protected-word JSON updates performed.
-- Boundaries preserved:
-  - no active runtime enforcement
-  - no command blocking
-  - no handler dispatch from the hook
-  - no task wrapping or task execution from the hook
-  - no provider calls
-  - no provider attempt recording
-  - no service-memory cooldown/lockout mutation from the hook
-  - no Watch arming/disarming/tick execution from the hook
-  - no Watch mutation from the hook
-  - no DB writes from the hook
-  - no config writes
-  - no support artifact creation
-  - no snapshot or trace-pack creation
-  - no storage movement or migration
-  - no Hydration writes
-  - no Evidence/EVEidence creation
-  - no Discovery ref mutation
-  - no Assessment Memory or Marked mutation
-  - no schema changes
-  - no renderer UI work
-  - no pruning or deletion behavior
-  - no terminology renames
-
-## HS212 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS212-runtime-hook-watch-task-runtime-fact-preview.md
-```
-
-Status: runtime hook Watch/task runtime fact preview complete and accepted by Overseer.
-
-HS212 result:
-
-- The inactive runtime hook now previews compact current-command Watch/task runtime posture for direct Watch and Watch executor commands.
-- Non-Watch commands report Watch runtime as not applicable.
-- Missing/stale/malformed Watch/task runtime state is visible as posture rather than guessed.
-- Watch runtime remains preview-only and non-authorizing.
-- Runtime enforcement remains inactive.
-
-Overseer reviewed 2026-06-02:
-
-- Accepted HS212 in `workspace/OverseerHS213-hs212-runtime-hook-watch-task-runtime-review.md`.
-- Verified Watch/task runtime facts are sourced for direct Watch and Watch executor commands.
-- Confirmed non-Watch commands report Watch runtime not applicable.
-- Confirmed supplied `runtimeEnforcementFacts.watch_runtime` remains preserved and not overwritten.
-- Confirmed missing/stale/malformed Watch/task state is reported as posture rather than guessed.
-- Confirmed renderer Watch/runtime claims are ignored and not echoed into hook facts.
-- Confirmed the hook avoids `watch.executor.status` and does not clear stale active task IDs.
-- Confirmed no active runtime enforcement, command blocking, handler dispatch, task execution, provider calls, Watch mutation, DB writes, config writes, support artifacts, storage movement, Evidence/EVEidence, Discovery, Assessment Memory, Marked, schema changes, UI work, pruning/deletion, or terminology renames were added.
-
-## Resting Next Options
-
-Recommended next shaping candidates:
-
-1. Rest runtime hook fact sourcing and continue a different storage/runtime seam.
-2. Request/adopt an advisory active enforcement semantics design before any active command blocking packet.
-3. Shape trusted supplied-fact doctrine only if active enforcement design continues.
-
-Do not open active runtime enforcement or command blocking until active semantics, mandatory facts, and trusted fact authority are explicitly accepted.
-
-## Active HS210 Advisory Request
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS210-runtime-enforcement-readiness-review-request.md`
-
-Expected advisory handoff:
-
-```txt
-workspace/EngineeringSafetyAuditHS210-runtime-enforcement-readiness-review.md
-```
-
-Task:
-
-Review whether Atlas is ready to move from inactive runtime enforcement hook proofing toward any active runtime enforcement design.
-
-This is assurance only. Do not implement code.
-
-Review focus:
-
-- whether the inactive runtime hook fact sourcing is coherent enough to support a later active enforcement design discussion
-- what facts, tests, or posture evidence are still missing before active command blocking should be scoped
-- whether hook placement preserves renderer eligibility, confirmation, task wrapping, and handler dispatch boundaries
-- whether any sourced facts are too broad, stale, mutable, spoofable, or misleading for future enforcement use
-- whether Atlas boundaries are preserved between Evidence/EVEidence, Discovery, Hydration, Watch, Assessment Memory, support artifacts, storage authority, External I/O, and runtime authorization
-- whether Watch/task runtime fact sourcing is needed before active enforcement or can stay parked
-- what should be rejected or deferred to avoid overbuilding
-
-Preserve:
-
-- no code changes
-- no runtime enforcement activation
-- no command blocking
-- no provider calls
-- no provider attempt recording
-- no config writes
-- no schema changes
-- no support artifact creation
-- no storage movement
-- no renderer UI work
-- no terminology renames
-
-Stop if the review requires implementation, runtime enforcement activation, command blocking, provider calls, provider attempt recording, config writes, schema changes, support artifact creation, storage movement, UI work, or terminology renames.
-
-## HS210 Evidence
-
-Engineering/Security audit landed 2026-06-02:
-
-- `workspace/EngineeringSafetyAuditHS210-runtime-enforcement-readiness-review.md`
-
-Finding:
-
-- Atlas is ready for later active-enforcement design discussion.
-- Atlas is not ready for active command blocking implementation.
-- The next safe seam is narrower proof/fact closure.
-- The main missing fact before active enforcement is Watch/task runtime posture.
-- Active decision semantics remain unopened.
-
-## HS210 Handoff
-
-Completed:
-
-```txt
-workspace/EngineeringSafetyAuditHS210-runtime-enforcement-readiness-review.md
-```
-
-Overseer reviewed 2026-06-02:
-
-- Accepted HS210 in `workspace/OverseerHS211-hs210-runtime-enforcement-readiness-review.md`.
-- Opened HS212 as inactive runtime hook Watch/task runtime fact preview.
-
-## Resting HS208 State
-
-## Accepted HS208 Runway
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS208-runtime-hook-destination-path-authority-fact-preview-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS208-runtime-hook-destination-path-authority-fact-preview.md
-```
-
-Task:
-
-Add read-only, non-enforcing `destination_path_authority` fact sourcing to the inactive runtime enforcement hook preview.
-
-Preferred outcome:
-
-- support-artifact commands can include compact destination/path authority posture
-- renderer-forged path claims remain ignored and are not echoed in hook facts
-- supplied `runtimeEnforcementFacts.destination_path_authority` remains preserved and not overwritten
-- commands without support-artifact destination needs remain not-applicable
-- destination/path authority remains separate from storage authority, budget, composed policy, support artifact creation policy, and runtime authorization
-- active runtime enforcement remains false
-
-Preserve:
-
-- no active runtime enforcement
-- no command blocking
-- no handler dispatch from the hook
-- no task wrapping or task execution from the hook
-- no provider calls
-- no provider attempt recording
-- no service-memory cooldown/lockout mutation from the hook
-- no support artifact creation
-- no snapshot creation
-- no trace-pack creation
-- no file or directory creation
-- no filesystem deletion/move/copy
-- no SDE download/import
-- no Hydration writes
-- no Evidence/EVEidence creation
-- no Discovery ref mutation
-- no Watch, Assessment Memory, or Marked mutation
-- no schema changes
-- no config writes
-- no storage movement or migration
-- no renderer UI work
-- no pruning or deletion behavior
-
-Stop if the proof requires active command blocking, runtime authorization, treating destination/path authority as a may-run-now answer, calling target handlers from the hook, task dispatch or task wrapping from the hook, provider calls, support artifact creation, snapshot or trace-pack creation, file or directory creation, filesystem deletion/move/copy, config writes, schema changes, SDE import/download, storage movement/migration, UI work, hiding missing fact classes, accepting renderer path claims as authority, or dumping unbounded path authority inventories into every hook preview.
-
-## HS208 Evidence
-
-Dev updated 2026-06-02:
-
-- Added read-only `destination_path_authority` fact sourcing to the inactive runtime enforcement hook in `src/main/services/serviceRegistry.js`.
-- Reused existing `support.artifact_path_authority.preview` posture via `buildSupportArtifactPathAuthorityPreview(...)`.
-- Mapped support-artifact destination classes:
-  - `runtime.db_snapshot.create` -> `runtime_snapshot_rolling`, `runtime_snapshot_retained`
-  - `support.debug_trace_pack` -> `operator_debug_trace_pack`
-- Commands without support-artifact destination needs now receive explicit `sourced_not_applicable` posture with `applies: false` / `state: not_applicable`.
-- Renderer path claims are detected as ignored but are not accepted as authority and are not echoed in the hook fact.
-- Compact class summaries include only bounded posture fields; full path authority inventories and raw paths are not dumped into hook previews.
-- Supplied `runtimeEnforcementFacts.destination_path_authority` remains preserved and is not overwritten.
-- Runtime hook telemetry now reports `destination_path_authority` as a sourced broad fact class.
-- Focused hook verifier sample:
-  - destination path authority sourced: true
-  - runtime snapshot destination path authority sourced: true
-  - trace-pack destination path authority sourced: true
-  - active runtime enforcement: false
-  - command blocking: false
-  - file writers called by hook: false
-  - providers called by hook: false
-- Runtime hook telemetry sample:
-  - sourced broad fact classes: `storage_authority`, `budget`, `external_io`, `provider_live_gate`, `composed_policy`, `destination_path_authority`
-  - destination path authority source status for local command: `sourced_not_applicable`
-  - destination path authority applies for local command: false
-- Verification run:
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check scripts\verify-runtime-enforcement-hook.js` passed.
-  - `node --check scripts\verify-runtime-hook-telemetry.js` passed.
-  - `node --check src\main\services\runtimeEnforcementDryAdapter.js` passed.
-  - `node --check src\main\services\runtimeHookTelemetryReadoutService.js` passed.
-  - `node --check src\main\services\supportArtifactPathAuthorityService.js` passed.
-  - `node --check scripts\verify-support-artifact-path-authority.js` passed.
-  - `npm.cmd run verify:runtime-enforcement-hook` passed.
-  - `npm.cmd run verify:runtime-hook-telemetry` passed.
-  - `npm.cmd run verify:support-artifact-path-authority` passed.
-  - `npm.cmd run verify:support-artifact-creation-policy` passed.
-  - `npm.cmd run verify:runtime-snapshot` passed.
-  - `npm.cmd run verify:operator-debug-trace` passed.
-  - `npm.cmd run verify:support-trace-log-redaction-policy` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 123 warnings across 3 changed working-set files; no renames or protected-word JSON updates performed.
-  - `npm.cmd run verify:trace-pack-redaction` was attempted and failed because `package.json` does not define that script; the available trace-pack/redaction verifiers `verify:operator-debug-trace` and `verify:support-trace-log-redaction-policy` were run instead.
-- Boundaries preserved:
-  - no active runtime enforcement
-  - no command blocking
-  - no handler dispatch from the hook
-  - no task wrapping or task execution from the hook
-  - no provider calls
-  - no provider attempt recording
-  - no service-memory cooldown/lockout mutation from the hook
-  - no support artifact creation from the hook
-  - no snapshot creation from the hook
-  - no trace-pack creation from the hook
-  - no file or directory creation from the hook
-  - no filesystem deletion/move/copy
-  - no SDE download/import
-  - no Hydration writes
-  - no Evidence/EVEidence creation
-  - no Discovery ref mutation
-  - no Watch, Assessment Memory, or Marked mutation
-  - no schema changes
-  - no config writes
-  - no storage movement or migration
-  - no renderer UI work
-  - no pruning or deletion behavior
-
-## HS208 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS208-runtime-hook-destination-path-authority-fact-preview.md
-```
-
-Status: runtime hook destination path authority fact preview complete and accepted by Overseer.
-
-HS208 result:
-
-- The inactive runtime hook now previews compact current-command destination/path authority posture for mapped support-artifact commands.
-- Renderer-forged path claims remain ignored and are not echoed in hook facts.
-- Commands without support-artifact destination needs remain not-applicable.
-- Destination/path authority remains preview-only and non-authorizing.
-- Runtime enforcement remains inactive.
-
-Overseer reviewed 2026-06-02:
-
-- Accepted HS208 in `workspace/OverseerHS209-hs208-runtime-hook-destination-path-authority-review.md`.
-- Verified inactive runtime hook previews can source compact destination/path authority posture for mapped support-artifact commands.
-- Confirmed renderer-forged path claims remain ignored and are not echoed in hook facts.
-- Confirmed commands without support-artifact destination needs remain not-applicable.
-- Confirmed supplied `runtimeEnforcementFacts.destination_path_authority` remains preserved and not overwritten.
-- Confirmed destination/path authority remains preview-only and non-authorizing.
-- Confirmed no active runtime enforcement, command blocking, provider calls, provider attempt recording, service-memory cooldown/lockout mutation, handler dispatch, task execution, support artifact creation, snapshot creation, trace-pack creation, file/directory creation, filesystem deletion/move/copy, config writes, schema changes, Evidence/EVEidence, Discovery, Watch, Assessment Memory, Marked, pruning/deletion, SDE import/download, storage movement, or UI work were added.
-
-## Resting Next Options
-
-Recommended next shaping candidates:
-
-1. Rest runtime hook fact sourcing and continue a different storage/runtime seam.
-2. Request engineering/security readiness review before any active runtime enforcement packet.
-3. Shape Watch/task runtime fact sourcing only if the runtime hook proof line continues and Human/Overseer agree it is needed before readiness review.
-
-Do not open Dev implementation until one of these is selected and bounded.
-
-## Resting HS206 State
-
-## Accepted HS206 Runway
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS206-runtime-hook-composed-policy-fact-preview-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS206-runtime-hook-composed-policy-fact-preview.md
-```
-
-Task:
-
-Add read-only, non-enforcing `composed_policy` fact sourcing to the inactive runtime enforcement hook preview.
-
-Preferred outcome:
-
-- the inactive hook can include compact current-command composed policy posture
-- supplied `runtimeEnforcementFacts.composed_policy` remains preserved and not overwritten
-- composed policy state remains preview posture only, not runtime authorization
-- mapped local/read-only and provider-capable commands can show composed policy basis
-- unmapped commands report explicit unmapped posture rather than guessed authorization
-- active runtime enforcement remains false
-
-Preserve:
-
-- no active runtime enforcement
-- no command blocking
-- no handler dispatch from the hook
-- no task wrapping or task execution from the hook
-- no provider calls
-- no provider attempt recording
-- no service-memory cooldown/lockout mutation from the hook
-- no SDE download/import
-- no Hydration writes
-- no Evidence/EVEidence creation
-- no Discovery ref mutation
-- no Watch, Assessment Memory, or Marked mutation
-- no schema changes
-- no support artifact creation
-- no config writes
-- no storage movement or migration
-- no renderer UI work
-- no pruning or deletion behavior
-
-Stop if the proof requires active command blocking, runtime authorization, treating composed policy as a may-run-now answer, calling target handlers from the hook, task dispatch or task wrapping from the hook, `enterLiveProviderAttempt(...)`, provider calls, service-memory cooldown/lockout mutation from the hook, config writes, schema changes, support artifact creation, SDE import/download, storage movement/migration, UI work, hiding missing fact classes, blurring composed policy with runtime authorization, or dumping unbounded composed policy rows into every hook preview.
-
-## HS206 Evidence
-
-Dev updated 2026-06-02:
-
-- Added read-only `composed_policy` fact sourcing to the inactive runtime enforcement hook in `src/main/services/serviceRegistry.js`.
-- Used existing `buildComposedGatePolicyPreview(...)` / `storage.composed_gate_policy.preview` posture only.
-- Sourced only compact current-command facts:
-  - fact class/source/source status
-  - command
-  - matched composed policy row id when mapped
-  - composed state
-  - reason codes
-  - compact gate summary by gate name
-  - inactive enforcement/runtime authorization flags
-  - `would_allow_is_authorization: false`
-  - `answers_may_run_now: false`
-- Unmapped commands now receive explicit `sourced_unmapped` posture rather than guessed authorization.
-- Supplied `runtimeEnforcementFacts.composed_policy` remains preserved and is not overwritten.
-- Runtime hook telemetry now includes `composed_policy` as a sourced broad fact class while still reporting separate unsourced broad facts such as `destination_path_authority`.
-- Mapped local/read-only proof verifies:
-  - `runtime.enforcement_boundary.preview` maps to `runtime_enforcement_boundary_readout`
-  - compact composed policy fact contains no full `rows` dump
-  - runtime authorization remains inactive
-- Mapped provider-capable proof verifies:
-  - `manual.discovery` maps to `zkill_discovery` after renderer confirmation is satisfied
-  - provider/live gate, External I/O, storage, budget, confirmation, and composed policy remain distinct facts
-  - existing live/API gate behavior still owns the command stop
-- Focused hook verifier sample:
-  - composed policy sourced: true
-  - mapped local composed policy sourced: true
-  - provider-capable External I/O sourced without authorizing: true
-  - active runtime enforcement: false
-  - command blocking: false
-  - providers called by hook: false
-  - task runners called by hook: false
-- Runtime hook telemetry sample:
-  - missing fact classes: none for the covered `scope.defaults` sample
-  - sourced broad fact classes: `storage_authority`, `budget`, `external_io`, `provider_live_gate`, `composed_policy`
-  - composed policy source status for unmapped command: `sourced_unmapped`
-  - destination path authority status: `not_sourced`
-- Verification run:
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\runtimeEnforcementDryAdapter.js` passed.
-  - `node --check src\main\services\runtimeHookTelemetryReadoutService.js` passed.
-  - `node --check src\main\services\composedGatePolicyService.js` passed.
-  - `node --check scripts\verify-runtime-enforcement-hook.js` passed.
-  - `node --check scripts\verify-runtime-hook-telemetry.js` passed.
-  - `node --check scripts\verify-composed-gate-policy.js` passed.
-  - `npm.cmd run verify:runtime-enforcement-hook` passed.
-  - `npm.cmd run verify:runtime-hook-telemetry` passed.
-  - `npm.cmd run verify:composed-gate-policy` passed.
-  - `npm.cmd run verify:gate-stack-readout` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 113 warnings across 4 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main` with HS206 working-tree changes.
-- Boundaries preserved:
-  - no active runtime enforcement
-  - no command blocking
-  - no handler dispatch from the hook
-  - no task wrapping or task execution from the hook
-  - no provider calls
-  - no provider attempt recording
-  - no service-memory cooldown/lockout mutation from the hook
-  - no SDE download/import
-  - no Hydration writes
-  - no Evidence/EVEidence creation
-  - no Discovery ref mutation
-  - no Watch, Assessment Memory, or Marked mutation
-  - no schema changes
-  - no support artifact creation
-  - no config writes
-  - no storage movement or migration
-  - no renderer UI work
-  - no pruning or deletion behavior
-
-## HS206 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS206-runtime-hook-composed-policy-fact-preview.md
-```
-
-Status: runtime hook composed policy fact preview complete and accepted by Overseer.
-
-HS206 result:
-
-- The inactive runtime hook now previews compact current-command composed policy posture.
-- Mapped local/read-only and provider-capable commands show matched composed policy row basis.
-- Unmapped commands show explicit unmapped posture instead of guessed authorization.
-- Composed policy remains preview-only and non-authorizing.
-- Runtime enforcement remains inactive.
-
-Overseer reviewed 2026-06-02:
-
-- Accepted HS206 in `workspace/OverseerHS207-hs206-runtime-hook-composed-policy-review.md`.
-- Verified inactive runtime hook previews can source compact current-command composed policy posture.
-- Confirmed mapped commands include row basis, composed state, reason codes, and compact gate summaries.
-- Confirmed unmapped commands report explicit `sourced_unmapped` posture rather than guessed authorization.
-- Confirmed full composed policy rows are not dumped into every hook preview.
-- Confirmed supplied `runtimeEnforcementFacts.composed_policy` remains preserved and not overwritten.
-- Confirmed composed policy remains preview-only and non-authorizing.
-- Confirmed no active runtime enforcement, command blocking, provider calls, provider attempt recording, service-memory cooldown/lockout mutation, handler dispatch, task execution, config writes, schema changes, support artifacts, Evidence/EVEidence, Discovery, Watch, Assessment Memory, Marked, pruning/deletion, SDE import/download, storage movement, or UI work were added.
-
-## Resting Next Options
-
-Recommended next shaping candidates:
-
-1. Rest runtime hook fact sourcing and continue a different storage/runtime seam.
-2. Shape destination path authority fact sourcing only if runtime hook proof continues.
-3. Request engineering/security readiness review before any active runtime enforcement packet.
-
-Do not open Dev implementation until one of these is selected and bounded.
-
-## Resting HS204 State
-
-## Accepted HS204 Runway
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS204-runtime-hook-provider-live-gate-fact-preview-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS204-runtime-hook-provider-live-gate-fact-preview.md
-```
-
-Task:
-
-Add read-only, non-enforcing `provider_live_gate` fact sourcing to the inactive runtime enforcement hook preview, using existing safe live/provider gate posture only.
-
-Preferred outcome:
-
-- provider-capable commands with clear mappings can include sourced `provider_live_gate` facts
-- local-only commands remain local-only / not-applicable
-- live API disabled, missing User-Agent, cooldown, lockout, duplicate running work, and live radius rejection remain read-only blocker posture
-- supplied `runtimeEnforcementFacts.provider_live_gate` remains preserved and not overwritten
-- External I/O, storage authority, storage budget, confirmation, composed policy, destination path authority, Watch arming, and runtime authorization remain separate
-- active runtime enforcement remains false
-
-Preserve:
-
-- no active runtime enforcement
-- no command blocking
-- no handler dispatch from the hook
-- no task wrapping or task execution from the hook
-- no provider calls
-- no provider attempt recording
-- no service-memory cooldown/lockout mutation from the hook
-- no SDE download/import
-- no Hydration writes
-- no Evidence/EVEidence creation
-- no Discovery ref mutation
-- no Watch, Assessment Memory, or Marked mutation
-- no schema changes
-- no support artifact creation
-- no config writes
-- no storage movement or migration
-- no renderer UI work
-- no pruning or deletion behavior
-
-Stop if the proof requires active command blocking, composed runtime authorization, calling target handlers from the hook, task dispatch or task wrapping from the hook, `enterLiveProviderAttempt(...)`, provider calls, service-memory cooldown/lockout mutation from the hook, config writes, schema changes, support artifact creation, SDE import/download, storage movement/migration, UI work, treating External I/O on as authorization, treating provider/live gate `allowed` as authorization, hiding missing fact classes, or blurring live/provider gate with External I/O, storage authority, confirmation, or composed policy.
-
-## HS204 Evidence
-
-Dev updated 2026-06-02:
-
-- Added read-only `provider_live_gate` fact sourcing to the inactive runtime enforcement hook in `src/main/services/serviceRegistry.js`.
-- Used existing `liveApiGateService.actionGate(...)` only; did not call `enterLiveProviderAttempt(...)`.
-- Added accepted provider/live gate mappings:
-  - `manual.discovery` -> `manual.discovery`
-  - `manual.expansion` -> `manual.expansion`
-  - `metadata.hydration` -> `metadata.hydration`
-  - `sde.build-lookups` -> `sde.build-lookups` when no local source path is supplied
-- Local-only/unmapped non-provider commands now receive explicit local-only / not-applicable provider-live posture.
-- Unmapped provider-capable commands now receive explicit `sourced_unmapped_provider_capable` posture rather than guessed gate posture.
-- Supplied `runtimeEnforcementFacts.provider_live_gate` remains preserved and is not overwritten.
-- Provider/live gate `allowed` is carried as preview posture only with `allowed_is_authorization: false`.
-- Provider-capable proof verifies:
-  - `manual.discovery` with renderer confirmation reaches the inactive hook.
-  - sourced provider/live gate reports `LIVE_API_DISABLED` as read-only blocker posture.
-  - existing live/API gate behavior still owns the command stop after the hook.
-  - live radius rejection appears as `LIVE_RADIUS_REJECTED` provider/live gate posture without provider calls.
-- Runtime hook telemetry now reports `provider_live_gate` as sourced when present while still reporting other unsourced broad fact classes such as `destination_path_authority`.
-- Focused hook verifier sample:
-  - provider live gate sourced: true
-  - provider-capable External I/O sourced without authorizing: true
-  - live radius rejection sourced without provider call: true
-  - active runtime enforcement: false
-  - command blocking: false
-  - providers called by hook: false
-  - task runners called by hook: false
-- Runtime hook telemetry sample:
-  - sourced broad fact classes: `storage_authority`, `budget`, `external_io`, `provider_live_gate`
-  - provider live gate status: `sourced`
-  - provider live gate source status for local command: `sourced_local_only_not_applicable`
-  - destination path authority status: `not_sourced`
-- Verification run:
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\runtimeEnforcementDryAdapter.js` passed.
-  - `node --check src\main\services\runtimeHookTelemetryReadoutService.js` passed.
-  - `node --check src\main\services\liveApiGateService.js` passed.
-  - `node --check scripts\verify-runtime-enforcement-hook.js` passed.
-  - `node --check scripts\verify-runtime-hook-telemetry.js` passed.
-  - `node --check scripts\verify-live-api-gate.js` passed.
-  - `npm.cmd run verify:runtime-enforcement-hook` passed.
-  - `npm.cmd run verify:runtime-hook-telemetry` passed.
-  - `npm.cmd run verify:live-api-gate` passed.
-  - `npm.cmd run verify:gate-stack-readout` initially failed only when run in parallel with `verify:passive-side-effects`, because the passive-side-effect verifier removed `.tmp\passive-side-effects` while gate-stack was scanning byte usage; `npm.cmd run verify:gate-stack-readout` passed when rerun sequentially.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 104 warnings across 3 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main` with HS204 working-tree changes.
-- Boundaries preserved:
-  - no active runtime enforcement
-  - no command blocking
-  - no handler dispatch from the hook
-  - no task wrapping or task execution from the hook
-  - no provider calls
-  - no provider attempt recording
-  - no service-memory cooldown/lockout mutation from the hook
-  - no SDE download/import
-  - no Hydration writes
-  - no Evidence/EVEidence creation
-  - no Discovery ref mutation
-  - no Watch, Assessment Memory, or Marked mutation
-  - no schema changes
-  - no support artifact creation
-  - no config writes
-  - no storage movement or migration
-  - no renderer UI work
-  - no pruning or deletion behavior
-
-## HS204 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS204-runtime-hook-provider-live-gate-fact-preview.md
-```
-
-Status: runtime hook provider/live gate fact preview complete and accepted by Overseer.
-
-HS204 result:
-
-- The inactive runtime hook now previews provider/live gate posture from existing safe live gate logic.
-- Mapped provider-capable commands show live/API disabled, live radius rejection, duplicate/cooldown/lockout posture when available from `actionGate(...)`.
-- Local-only commands remain local-only / not-applicable.
-- Provider/live gate facts remain separate from External I/O, storage authority, storage budget, confirmation, composed policy, destination path authority, Watch arming, and runtime authorization.
-- Runtime enforcement remains inactive and non-authorizing.
-
-Overseer reviewed 2026-06-02:
-
-- Accepted HS204 in `workspace/OverseerHS205-hs204-runtime-hook-provider-live-gate-review.md`.
-- Verified inactive runtime hook previews can source provider/live gate posture from existing `actionGate(...)` logic.
-- Applied one Overseer correction so local-source `sde.build-lookups` reports provider-optional local-source posture rather than unmapped provider-capable posture.
-- Confirmed supplied `runtimeEnforcementFacts.provider_live_gate` remains preserved and not overwritten.
-- Confirmed provider/live gate `allowed` remains non-authorizing.
-- Confirmed External I/O, storage authority, storage budget, confirmation, composed policy, destination path authority, Watch arming, and runtime authorization remain separate.
-- Confirmed no active runtime enforcement, command blocking, provider calls, provider attempt recording, service-memory cooldown/lockout mutation, handler dispatch, task execution, config writes, schema changes, support artifacts, Evidence/EVEidence, Discovery, Watch, Assessment Memory, Marked, pruning/deletion, SDE import/download, storage movement, or UI work were added.
-
-## Resting Next Options
-
-Recommended next shaping candidates:
-
-1. Rest runtime hook fact sourcing and continue a different storage/runtime seam.
-2. Shape composed policy fact sourcing only if runtime hook proof continues.
-3. Request engineering/security readiness review before any active runtime enforcement packet.
-
-Do not open Dev implementation until one of these is selected and bounded.
-
-## Resting HS202 State
-
-## Accepted HS202 Runway
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS202-runtime-hook-real-gate-fact-preview-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS202-runtime-hook-real-gate-fact-preview.md
-```
-
-Task:
-
-Add a read-only, non-enforcing fact-sourcing preview for the inactive runtime enforcement hook so it can report storage authority, storage budget, and External I/O posture from existing real readback/config posture.
-
-Preferred outcome:
-
-- inactive runtime hook previews can include storage authority facts
-- inactive runtime hook previews can include storage budget posture
-- inactive runtime hook previews can include External I/O posture
-- supplied runtime facts are preserved and not overwritten
-- missing config/budget state remains explicit posture, not failure
-- runtime hook telemetry shows sourced broad fact classes when present
-- active runtime enforcement remains false
-
-Preserve:
-
-- no active runtime enforcement
-- no command blocking
-- no provider calls
-- no SDE download/import
-- no Hydration writes
-- no Evidence/EVEidence creation
-- no Discovery ref mutation
-- no Watch, Assessment Memory, or Marked mutation
-- no schema changes
-- no support artifact creation
-- no config writes
-- no storage movement or migration
-- no renderer UI work
-- no pruning or deletion behavior
-
-Stop if the proof requires active command blocking, composed runtime authorization, calling target handlers from the hook, config writes, provider calls, schema changes, support artifact creation, SDE import/download, storage movement/migration, UI work, treating External I/O on as authorization, treating sourced facts as Dev/run authorization, or hiding missing fact classes.
-
-Overseer reviewed 2026-06-02:
-
-- Accepted HS202 in `workspace/OverseerHS203-hs202-runtime-hook-gate-fact-review.md`.
-- Verified inactive runtime hook previews can source storage authority, storage budget, and External I/O posture from existing read-only local posture.
-- Confirmed supplied runtime facts are preserved and not overwritten.
-- Confirmed composed policy, provider live gate, destination path authority, and Watch/task runtime facts remain unsourced unless supplied.
-- Confirmed no active runtime enforcement, command blocking, provider calls, config writes, schema changes, support artifacts, Evidence/EVEidence, Discovery, Watch, Assessment Memory, Marked, pruning/deletion, SDE import/download, storage movement, or UI work were added.
-
-## HS202 Evidence
-
-Dev updated 2026-06-02:
-
-- Added read-only broad gate fact sourcing to the inactive runtime enforcement hook in `src/main/services/serviceRegistry.js`.
-- The hook now sources absent runtime facts from existing accepted local readback surfaces:
-  - `storage_authority` from storage authority config/setup readback posture
-  - `budget` from `storage.setup_gate_readout`
-  - `external_io` from External I/O config readback posture
-- Explicit supplied `runtimeEnforcementFacts` remain preserved and are not overwritten when a fact key is present.
-- Missing config/budget posture remains explicit and non-failing:
-  - storage authority sample source status: `sourced_absent_unconfigured`
-  - budget sample source status: `sourced_absent_unconfigured`
-  - External I/O sample source status: `sourced_missing`
-- Runtime hook telemetry now reports:
-  - `sourced_broad_fact_classes`
-  - `unsourced_broad_fact_classes`
-  - per-class `broad_fact_class_statuses`
-- Still-unsourced classes remain visible, including `provider_live_gate`, `destination_path_authority`, and `composed_gate_policy`.
-- Provider-capable proof verifies `manual.discovery` receives sourced External I/O held posture while existing live/API gate behavior still owns the actual stop.
-- Focused hook verifier sample:
-  - broad fact sourcing: true
-  - storage authority sourced: true
-  - storage budget sourced: true
-  - External I/O sourced: true
-  - provider-capable External I/O sourced without authorizing: true
-  - active runtime enforcement: false
-  - command blocking: false
-  - providers called by hook: false
-  - config writers called by hook: false
-- Runtime hook telemetry sample:
-  - missing fact classes: `composed_gate_policy`
-  - sourced broad fact classes: `storage_authority`, `budget`, `external_io`
-  - unsourced broad fact classes include `provider_live_gate` and `destination_path_authority`
-- Verification run:
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\runtimeEnforcementDryAdapter.js` passed.
-  - `node --check src\main\services\runtimeHookTelemetryReadoutService.js` passed.
-  - `node --check scripts\verify-runtime-enforcement-hook.js` passed.
-  - `node --check scripts\verify-runtime-hook-telemetry.js` passed.
-  - `npm.cmd run verify:runtime-enforcement-hook` passed.
-  - `npm.cmd run verify:runtime-hook-telemetry` passed.
-  - `npm.cmd run verify:storage-authority-config-write` passed.
-  - `npm.cmd run verify:external-io-state` passed.
-  - `npm.cmd run verify:gate-stack-readout` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 245 warnings across 6 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main` with HS202 working-tree changes.
-- Boundaries preserved:
-  - no active runtime enforcement
-  - no command blocking
-  - no handler dispatch from the hook
-  - no provider calls
-  - no SDE download/import
-  - no Hydration writes
-  - no Evidence/EVEidence creation
-  - no Discovery ref mutation
-  - no Watch, Assessment Memory, or Marked mutation
-  - no schema changes
-  - no support artifact creation
-  - no config writes
-  - no storage movement or migration
-  - no renderer UI work
-  - no pruning or deletion behavior
-
-## HS202 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS202-runtime-hook-real-gate-fact-preview.md
-```
-
-Status: runtime hook real gate fact preview complete and accepted by Overseer.
-
-HS202 result:
-
-- The inactive runtime hook now previews real read-only storage authority, storage budget, and External I/O posture when those facts are not explicitly supplied.
-- Supplied runtime facts remain authoritative diagnostic input and are not overwritten.
-- Missing config/budget state remains explicit posture, not command failure.
-- Telemetry shows sourced broad fact classes and still-unsourced fact classes clearly.
-- Runtime enforcement remains inactive and non-authorizing.
-
-## Resting Next Options
-
-Recommended next shaping candidates:
-
-1. Rest runtime hook fact sourcing and continue a different storage/runtime seam.
-2. Shape a read-only provider/live gate fact preview if runtime hook proof continues.
-3. Shape a read-only composed policy fact preview if runtime hook proof continues.
-4. Request a security/engineering readiness audit before any active runtime enforcement packet.
-
-Do not open Dev implementation until one of these is selected and bounded.
-
-## Resting HS200 State
-
-## Accepted HS200 Runway
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS200-local-sde-readiness-gap-lens-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS200-local-sde-readiness-gap-lens.md
-```
-
-Task:
-
-Add a read-only preview surface for local SDE lookup readiness gaps, preferably:
-
-```txt
-metadata.local_sde_readiness.preview
-```
-
-Preferred outcome:
-
-- Atlas can show whether local topology and inventory/type lookup tables appear ready.
-- Atlas can show representative static lookup gaps from local Evidence/EVEidence-derived rows.
-- Inventory/type gaps, topology/geography gaps, and import provenance gaps remain distinct.
-- Local SDE gaps remain local readiness/import gaps, not ESI provider-needed Hydration.
-- Missing static labels degrade display/readiness but do not imply missing Evidence/EVEidence.
-
-Preserve:
-
-- no SDE download or import
-- no provider calls
-- no lookup writes
-- no Hydration writes
-- no `metadata_runs`, `entities`, or `activity_events` label writes
-- no Evidence/EVEidence creation
-- no Discovery ref mutation
-- no Watch, Assessment Memory, or Marked mutation
-- no schema changes
-- no support artifact creation
-- no runtime enforcement activation
-- no command blocking
-- no renderer UI work
-- no pruning or deletion behavior
-
-Stop if the proof requires SDE import/download, provider calls, persisted state, lookup writes, schema changes, UI work, runtime enforcement, command blocking, destructive/private/live action, real operator data inspection, or blurs local SDE readiness with ESI Hydration execution.
-
-Overseer reviewed 2026-06-02:
-
-- Accepted HS200 in `workspace/OverseerHS201-hs200-local-sde-readiness-review.md`.
-- Verified `metadata.local_sde_readiness.preview` as read-only local SDE readiness gap posture.
-- Accepted inventory/type lookup gaps, topology/geography lookup gaps, and import provenance gaps as distinct local readiness groups.
-- Confirmed local SDE gaps are not ESI provider-needed Hydration and do not create or invalidate Evidence/EVEidence.
-- Confirmed no SDE download/import, provider calls, lookup writes, Hydration writes, schema changes, runtime enforcement, command blocking, support artifact creation, Evidence/EVEidence, Discovery, Watch, Assessment Memory, Marked, pruning/deletion, or UI work were added.
-
-## HS200 Evidence
-
-Dev updated 2026-06-02:
-
-- Added `metadata.local_sde_readiness.preview` as a read-only local SDE lookup readiness gap lens.
-- Added `src/main/services/localSdeReadinessPreviewService.js`.
-- Registered the command as renderer-eligible read-only service metadata.
-- Added enforcement dry-run coverage metadata for the new command:
-  - storage/action class: `local_db_inspection`
-  - External I/O dependency: `none`
-  - runtime context: `local_sde_readiness_readout`
-  - enforcement status: `covered_read_only`
-- Added focused offline verifier:
-  - `scripts/verify-local-sde-readiness-preview.js`
-  - `npm.cmd run verify:local-sde-readiness`
-- Updated service registry, command authority, passive side-effect, and enforcement dry-run verifiers for the new command.
-- Table/count readiness posture covers:
-  - `type_metadata`
-  - `solar_systems`
-  - `regions`
-  - `constellations`
-  - `system_adjacency`
-  - `sde_imports`
-  - `sde_inventory_imports`
-- Sample focused verifier output:
-  - `type_metadata`: 1
-  - `solar_systems`: 1
-  - `regions`: 0
-  - `constellations`: 0
-  - `system_adjacency`: 0
-  - `sde_imports`: 0
-  - `sde_inventory_imports`: 0
-  - topology lookup ready: false
-  - inventory/type lookup ready: true
-  - import provenance ready: false
-  - overall ready: false
-- Gap groups:
-  - `inventory_type_lookup_gap`
-  - `topology_lookup_gap`
-  - `import_provenance_gap`
-- Representative inventory/type gap:
-  - lookup type: `inventory_type`
-  - lookup id: `999999`
-  - source basis: `ship_type_id`, `weapon_type_id`
-  - local Evidence/EVEidence-derived anchors: killmail IDs `8301`, `8302`
-  - provider-needed: false
-- Representative topology/geography gap:
-  - lookup type: `solar_system`
-  - lookup id: `30099999`
-  - source basis: `activity_events.solar_system_id`, `killmails.solar_system_id`
-  - local Evidence/EVEidence-derived anchor: killmail ID `8302`
-  - provider-needed: false
-- Representative import provenance gaps:
-  - missing `sde_imports`
-  - missing `sde_inventory_imports`
-- Boundary statements explicitly preserve:
-  - local SDE gaps are local lookup/import gaps, not ESI provider-needed Hydration
-  - local SDE gaps do not create or invalidate Evidence/EVEidence
-  - missing static labels degrade display/readiness, not trigger live ESI label work
-  - no SDE download/import is performed by this preview
-  - SDE lookup readiness repairs static local labels and geometry; ESI Hydration repairs entity readability labels
-- Verification run:
-  - `node --check src\main\services\localSdeReadinessPreviewService.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-local-sde-readiness-preview.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `node --check scripts\verify-enforcement-dry-run.js` passed.
-  - `npm.cmd run verify:local-sde-readiness` passed.
-  - `npm.cmd run verify:metadata-lookup` passed.
-  - `npm.cmd run verify:sde-build-lookups` passed.
-  - `npm.cmd run verify:hydration-candidate-preview` passed.
-  - `npm.cmd run verify:hydration-attention-lens` passed.
-  - `npm.cmd run verify:app-readiness` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 436 warnings across 12 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main` with HS200 working-tree changes.
-- Boundaries preserved:
-  - no SDE download/import
-  - no provider calls
-  - no lookup writes
-  - no Hydration writes
-  - no persisted queue
-  - no `metadata_runs`, `entities`, or `activity_events` label writes
-  - no Evidence/EVEidence creation
-  - no Discovery ref mutation
-  - no Watch, Assessment Memory, or Marked mutation
-  - no schema changes
-  - no support artifact creation
-  - no runtime enforcement activation
-  - no command blocking
-  - no renderer UI work
-  - no pruning or deletion behavior
-
-## HS200 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS200-local-sde-readiness-gap-lens.md
-```
-
-Status: local SDE readiness gap lens complete and accepted by Overseer.
-
-HS200 result:
-
-- `metadata.local_sde_readiness.preview` now proves local SDE table/count posture, import provenance posture, and representative static lookup gaps from local Evidence/EVEidence-derived rows.
-- Inventory/type gaps, topology/geography gaps, and import provenance gaps remain distinct.
-- Local SDE gaps are explicitly not ESI provider-needed Hydration and not Evidence/EVEidence gaps.
-- The readout is local, deterministic, read-only, non-authorizing, and import/download-free.
-
-## Resting Next Options
-
-Recommended next shaping candidates:
-
-1. Rest Hydration/SDE previews and continue a different storage/runtime seam.
-2. Shape SDE import/download controls only after deciding operator action and storage authority expectations.
-3. Return to storage/runtime enforcement readiness without activating command blocking.
-
-Do not open Dev implementation until one of these is selected and bounded.
-
-## Resting HS198 State
-
-## Accepted HS198 Runway
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS198-hydration-attention-lens-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS198-hydration-attention-lens.md
-```
-
-Task:
-
-Add or refine a read-only preview surface for Hydration attention selection, preferably:
-
-```txt
-metadata.hydration_attention_lens.preview
-```
-
-Acceptable alternative:
-
-- extend `metadata.hydration_candidates.preview` with a clearly separated `attention_lens` section if that better fits the existing service shape.
-
-Preferred outcome:
-
-- Atlas can show which local IDs become selected readability landmarks for a current operator lens.
-- Atlas can show which candidate IDs remain deferred/background/unresolved.
-- Provider-needed, known-local, and local-SDE-gap candidates remain distinct.
-- Unhydrated IDs are not treated as failure, missing Evidence/EVEidence, or proof gaps.
-- Watch/background candidates do not starve view/local-record candidates.
-
-Preserve:
-
-- no persisted Hydration queue
-- no provider calls
-- no Hydration writes
-- no `metadata_runs`, `entities`, or `activity_events` label writes
-- no Evidence/EVEidence creation
-- no Discovery ref mutation
-- no Watch, Assessment Memory, or Marked mutation
-- no schema changes
-- no support artifact creation
-- no runtime enforcement activation
-- no command blocking
-- no renderer UI work
-- no pruning, deletion, label removal, or de-emphasis behavior
-
-Stop if the proof requires provider calls, persisted state, schema changes, UI work, runtime enforcement, command blocking, destructive/private/live action, real operator data inspection, or blurs Hydration with ESI Evidence Expansion.
-
-Overseer reviewed 2026-06-02:
-
-- Accepted HS198 in `workspace/OverseerHS199-hs198-hydration-attention-lens-review.md`.
-- Verified `metadata.hydration_attention_lens.preview` as read-only local Hydration attention selection.
-- Accepted selected readability landmarks and deferred unresolved IDs as preview posture only.
-- Confirmed provider-needed, known-local, and local-SDE-gap groups remain distinct.
-- Confirmed no provider calls, Hydration writes, persisted queue, schema changes, pruning/deletion, runtime enforcement, command blocking, support artifact creation, Evidence/EVEidence, Discovery, Watch, Assessment Memory, Marked, or UI work were added.
-
-## HS198 Evidence
-
-Dev updated 2026-06-02:
-
-- Added `metadata.hydration_attention_lens.preview` as a read-only Hydration attention selection surface.
-- Added `src/main/services/hydrationAttentionLensService.js`.
-- Reused existing `metadata.hydration_candidates.preview` derivation as source material instead of creating another data path.
-- Registered the command as renderer-eligible read-only service metadata.
-- Added enforcement dry-run coverage metadata for the new command:
-  - storage/action class: `local_db_inspection`
-  - External I/O dependency: `none`
-  - runtime context: `hydration_attention_lens_readout`
-  - enforcement status: `covered_read_only`
-- Added focused offline verifier:
-  - `scripts/verify-hydration-attention-lens.js`
-  - `npm.cmd run verify:hydration-attention-lens`
-- Updated service registry, command authority, and passive side-effect verifiers for the new read-only command.
-- Sample attention lens output:
-  - source candidate count: 4
-  - selected candidate count: 3
-  - deferred/background candidate count: 1
-  - provider-needed selected count: 2
-  - known-local selected count: 1
-  - local-SDE-gap selected count: 1
-  - selected groups: provider-needed = 1, known-local = 1, local-SDE-gap = 1
-  - deferred groups: provider-needed = 1, known-local = 0, local-SDE-gap = 0
-- Selected candidates are represented with stable `dedupe_key`, candidate kind, entity/lookup ids, label state, provider-needed flag, group, attention role, attention basis, lanes, source anchors, source basis, killmail count, appearance count, and Hydration/Evidence boundary text.
-- Deferred candidates are represented with stable `dedupe_key`, candidate kind, entity/lookup ids, label state, provider-needed flag, group, deferred reason, lanes, source anchors, killmail count, and appearance count.
-- Provider-needed, known-local, and local-SDE-gap candidates remain distinct:
-  - provider-needed means entity label readability may need future provider-backed Hydration under gates
-  - known-local means a readable local label already exists or is stale local metadata
-  - local-SDE-gap means static type/geography label gap belongs to local SDE lookup readiness, not ESI Hydration
-- Boundary statements explicitly preserve:
-  - IDs remain facts and labels are readability landmarks over local records
-  - unhydrated IDs are not failure, missing Evidence/EVEidence, or proof gaps
-  - the lens is not a persisted Hydration queue and not authorization to call providers
-  - Watch/background readability demand is patient and must not starve view/local-record readability
-- Verification run:
-  - `node --check src\main\services\hydrationAttentionLensService.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-hydration-attention-lens.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `npm.cmd run verify:hydration-attention-lens` passed.
-  - `npm.cmd run verify:hydration-candidate-preview` passed.
-  - `npm.cmd run verify:hydration-backlog-preview` passed.
-  - `npm.cmd run verify:hydration-execution-policy` passed.
-  - `npm.cmd run verify:hydration` passed.
-  - `npm.cmd run verify:metadata-status` passed.
-  - `npm.cmd run verify:metadata-lookup` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 345 warnings across 10 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main` with HS198 working-tree changes.
-- Boundaries preserved:
-  - no provider calls
-  - no Hydration writes
-  - no persisted Hydration queue
-  - no `metadata_runs`, `entities`, or `activity_events` label writes
-  - no Evidence/EVEidence creation
-  - no Discovery ref mutation
-  - no Watch, Assessment Memory, or Marked mutation
-  - no schema changes
-  - no support artifact creation
-  - no runtime enforcement activation
-  - no command blocking
-  - no renderer UI work
-  - no pruning, deletion, label removal, or de-emphasis behavior
-
-## HS198 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS198-hydration-attention-lens.md
-```
-
-Status: Hydration attention lens preview complete and accepted by Overseer.
-
-HS198 result:
-
-- `metadata.hydration_attention_lens.preview` now proves selected Hydration readability landmarks from local candidate demand.
-- Selected/deferred candidates remain inspectable with stable IDs, basis/source anchors, lane posture, and explicit boundary text.
-- Provider-needed, known-local, and local-SDE-gap candidates remain separate, and Watch/background candidates remain patient behind view/local-record attention.
-- The readout is local, deterministic, read-only, non-authorizing, and queue-free.
-
-## Resting Next Options
-
-Recommended next shaping candidates:
-
-1. Rest Hydration previews and continue a different storage/runtime seam.
-2. Shape a later provider/write-capable Hydration runway only after deciding execution policy.
-3. Explore local SDE readiness gaps separately from ESI Hydration.
-
-Do not open Dev implementation until one of these is selected and bounded.
-
-## Resting HS196 State
-
-## Accepted HS196 Runway
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS196-readiness-preflight-alias-normalization-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS196-readiness-preflight-alias-normalization.md
-```
-
-Overseer reviewed 2026-06-02:
-
-- Accepted HS196 in `workspace/OverseerHS197-hs196-readiness-preflight-alias-review.md`.
-- Verified readiness/preflight canonical/alias disclosure across contents contract, path authority, creation policy, and writer conformance map.
-- Accepted `readiness_preflight_export` as canonical contents/creation class and `readiness_preflight_reports` as current path-authority/readout alias.
-- Confirmed no readiness/preflight export writer, support artifact creation, provider calls, schema/report changes, runtime enforcement activation, command blocking, or UI work were added.
-- No conformance-map gaps or unknown classes remain.
-
-## Historical HS196 Runway Details
-
-Task:
-
-Normalize readiness/preflight artifact class naming across read-only support artifact previews.
-
-Preferred outcome:
-
-- `readiness_preflight_export` remains the canonical contents/creation class id
-- `readiness_preflight_reports` remains an accepted path-authority alias for the current in-memory/readout posture
-- the conformance map reports alias normalization as conforming or no longer a gap
-- the path authority and/or conformance map explicitly discloses the canonical/alias relationship
-
-Preserve:
-
-- no readiness/preflight export writer creation
-- no support artifact, snapshot, trace-pack, log, file, export, package, or directory creation
-- no `app.readiness` behavior change except metadata/readout class/alias disclosure if needed
-- no runtime snapshot, trace-pack writer, or API request log persistence behavior changes
-- no provider calls
-- no schema changes
-- no report changes
-- no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or runtime enforcement mutation
-- no command blocking
-- no renderer UI work
-
-Stop if closing the gap requires a write-capable readiness/preflight export, runtime behavior changes, schema changes, provider calls, runtime enforcement, command blocking, destructive/private/live action, UI work, or making path authority override contents/creation authority.
-
-## Resting Next Options
-
-Recommended next shaping candidates:
-
-1. Rest support artifacts and continue a different storage/runtime seam.
-2. Inspect readiness/preflight local path sensitivity only if support artifact work continues.
-3. Runtime enforcement activation remains resting.
-
-Do not open Dev implementation until one of these is selected and bounded.
-
-## Resting HS194 State
-
-## Accepted HS194 Runway
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS194-light-operational-log-conformance-refresh-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS194-light-operational-log-conformance-refresh.md
-```
-
-Overseer reviewed 2026-06-02:
-
-- Accepted HS194 in `workspace/OverseerHS195-hs194-light-log-conformance-review.md`.
-- Verified the read-only conformance map refresh, API log readiness alignment, support trace/log policy compatibility, queue/API/Evidence boundary, HTTP boundary, Hydration boundary, registry/authority/passive-side-effect coverage, dry-run coverage, protected-term advisory output, and diff hygiene.
-- Accepted `light_operational_logs` conformance movement for persisted `api_request_logs` row posture after HS192.
-- No dedicated light operational log writer/export exists.
-- Support artifact creation, log export creation, provider behavior, schema changes, reports, trace-pack writer behavior, runtime enforcement activation, command blocking, provider work, and UI work remain unopened.
-
-## Historical HS194 Runway Details
-
-Task:
-
-Refresh `support.artifact_writer_conformance_gap_map.preview` so `light_operational_logs` distinguishes persisted `api_request_logs` row posture after HS192 from the still-absent light operational log export writer.
-
-Required behavior:
-
-- report persisted endpoint/error sanitization as proven for tested patterns at repository insert
-- report endpoint query value redaction before persistence
-- report secret/token/auth/cookie-like redaction for tested endpoint/error patterns before persistence
-- report error-message free text bounds before persistence
-- keep raw provider response bodies and raw ESI payloads excluded by schema
-- keep dedicated light operational log export writer posture as absent/partial
-- update focused verifier expectations
-
-Preserve:
-
-- no light operational log writer/export creation
-- no support artifact, snapshot, trace-pack, log, file, export, package, or directory creation
-- no API request log persistence behavior changes
-- no `EvidenceRepository.insertApiRequestLog` changes
-- no `HttpClient` or provider worker behavior changes
-- no provider calls
-- no schema changes
-- no report changes
-- no trace-pack writer behavior changes
-- no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or runtime enforcement mutation
-- no command blocking
-- no renderer UI work
-
-Stop if the map cannot distinguish persisted API logs from future light-log exports, or if the change requires writer/export behavior, schema changes, provider calls, runtime enforcement, command blocking, destructive/private/live action, or UI work.
-
-## Resting Next Options
-
-Recommended next shaping candidates:
-
-1. Readiness/preflight class-id alias normalization, if support artifact naming consistency should be tidied.
-2. Rest support artifacts and continue a different storage/runtime seam.
-3. Runtime enforcement remains resting.
-
-Do not open Dev implementation until one of these is selected and bounded.
-
-## Resting HS192 State
-
-## Accepted HS192 Runway
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS192-api-request-log-persistence-sanitization-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS192-api-request-log-persistence-sanitization.md
-```
-
-Overseer reviewed 2026-06-02:
-
-- Accepted HS192 in `workspace/OverseerHS193-hs192-api-log-sanitization-review.md`.
-- Verified endpoint/error persistence sanitization at `EvidenceRepository.insertApiRequestLog(log)`, API log readiness posture movement, queue/API/Evidence boundary, HTTP boundary, Hydration boundary, registry/authority/passive-side-effect coverage, dry-run coverage, protected-term advisory output, and diff hygiene.
-- Accepted persisted `api_request_logs.endpoint` and `api_request_logs.error_message` sanitization for tested patterns.
-- Provider request behavior, schema, reports, trace-pack writer behavior, light-log export behavior, runtime enforcement activation, command blocking, provider work, support artifact creation, and UI work remain unopened.
-
-## Historical HS192 Runway Details
-
-Task:
-
-Apply the HS190 readiness finding to the smallest useful implementation seam: sanitize persisted `api_request_logs.endpoint` and `api_request_logs.error_message` before insert.
-
-Preferred insertion point:
-
-```txt
-EvidenceRepository.insertApiRequestLog(log)
-```
-
-Required behavior:
-
-- preserve useful endpoint route shape for diagnostics/report parsing
-- strip or redact query values before persistence
-- redact secret/token/auth/cookie-like values in endpoint and error text
-- bound persisted endpoint and error-message length
-- preserve provider/status/timing/cache/retry provenance fields
-- keep raw provider bodies and raw ESI payloads out of `api_request_logs`
-- update `support.api_request_log_redaction_readiness.preview` to report the new persistence posture truthfully
-
-Preserve:
-
-- no provider request URL changes before network calls
-- no `HttpClient.json` fetch/retry/provider execution behavior changes
-- no provider worker behavior changes
-- no schema changes
-- no trace-pack writer behavior changes
-- no light-log writer/export creation
-- no provider calls
-- no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or runtime enforcement mutation
-- no command blocking
-- no renderer UI work
-
-Stop if hardening requires schema changes, broad logging framework/export work, provider behavior changes, route-shape breakage, provider calls, runtime enforcement, command blocking, destructive/private/live action, or UI work.
-
-## Resting Next Options
-
-Recommended next shaping candidates:
-
-1. Light-log redaction / writer proof, if support artifact hardening continues.
-2. Readiness/preflight class-id alias normalization, if naming consistency should be tidied.
-3. Rest support artifacts and continue a different storage/runtime seam.
-
-Do not open Dev implementation until one of these is selected and bounded.
-
-## Resting HS190 State
-
-## Accepted HS190 Runway
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS190-api-request-log-redaction-readiness-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS190-api-request-log-redaction-readiness.md
-```
-
-Overseer reviewed 2026-06-02:
-
-- Accepted HS190 in `workspace/OverseerHS191-hs190-api-request-log-redaction-readiness-review.md`.
-- Verified the new command, registry/authority/passive-side-effect coverage, dry-run coverage, support artifact policy compatibility, queue/API/Evidence write boundary, HTTP boundary, Hydration boundary, protected-term advisory output, and diff hygiene.
-- Accepted `support.api_request_log_redaction_readiness.preview` as read-only proof of persisted API request log redaction posture.
-- Persisted `api_request_logs` endpoint/error sanitization, light-log writer/export work, readiness alias normalization, runtime enforcement activation, command blocking, provider work, and UI work remain unopened.
-
-## Resting Next Options
-
-Recommended next shaping candidates:
-
-1. Persisted `api_request_logs` endpoint/error sanitization before insert.
-2. Light-log redaction / writer proof, if support artifact hardening continues.
-3. Readiness/preflight class-id alias normalization, if naming consistency should be tidied.
-4. Rest support artifacts and continue a different storage/runtime seam.
-
-Do not open Dev implementation until one of these is selected and bounded.
-
-## Historical HS190 Runway Details
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS190-api-request-log-redaction-readiness-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS190-api-request-log-redaction-readiness.md
-```
-
-Task:
-
-Add a read-only proof/readout for persisted `api_request_logs` endpoint and error text redaction posture, preferably:
-
-```txt
-support.api_request_log_redaction_readiness.preview
-```
-
-This should map current log write sources, persisted fields, endpoint/query/error posture, raw payload exclusion, and the smallest later hardening insertion point before Atlas changes log persistence or creates a light-log export writer.
-
-Preserve:
-
-- no `api_request_logs` write behavior changes
-- no `httpClient` or provider worker behavior changes
-- no trace-pack writer changes
-- no light-log writer/export creation
-- no provider calls
-- no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or schema mutation
-- no runtime enforcement activation
-- no command blocking
-- no renderer UI work
-
-Stop if proof requires live provider calls, real operator data inspection, logging behavior changes, schema changes, broad log framework/export work, runtime enforcement, command blocking, destructive actions, or UI work.
-
-## Accepted HS188 Runway
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS188-trace-pack-writer-redaction-hardening-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS188-trace-pack-writer-redaction-hardening.md
-```
-
-Task:
-
-Apply the accepted HS186 trace/log redaction policy to the existing operator debug trace-pack writer only:
-
-```txt
-support.debug_trace_pack
-```
-
-Hardening should target bounded summaries, endpoint/query redaction, free-text truncation, local-path sensitivity disclosure, sample/exclusion disclosure, and support/debug non-authority posture.
-
-Preserve:
-
-- no light-log hardening
-- no new support artifact classes
-- no new support artifact commands
-- no snapshot/readiness export changes
-- no provider calls
-- no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or schema mutation
-- no runtime enforcement activation
-- no command blocking
-- no renderer UI work
-
-Stop if the slice requires schema/provider changes, real operator artifact inspection, a broad support-artifact framework, raw ESI payload inclusion, provider calls, live/private/destructive actions, runtime enforcement, command blocking, or UI work.
-
-Overseer reviewed 2026-06-02:
-
-- Accepted HS188 in `workspace/OverseerHS189-hs188-trace-pack-writer-hardening-review.md`.
-- Verified trace-pack redaction/truncation, local path sensitivity summaries, sample/exclusion disclosure, writer conformance map movement, protected-term advisory output, and diff hygiene.
-- Accepted `support.debug_trace_pack` writer hardening for the bounded trace-pack seam.
-- Light-log redaction, readiness/preflight alias normalization, support artifact framework work, runtime enforcement activation, command blocking, and UI work remain unopened.
-
-## Accepted HS186 Runway
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS186-trace-log-redaction-policy-proof-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS186-trace-log-redaction-policy-proof.md
-```
-
-Task:
-
-Add a read-only trace/log redaction and free-text truncation policy proof, preferably:
-
-```txt
-support.trace_log_redaction_policy.preview
-```
-
-The proof should define policy posture for trace packs and light logs before any writer hardening. It should cover provider endpoints, query/parameter strings, provider/runtime error text, data-quality warning messages, queue latest-ref samples, local filesystem paths, sample limits, omitted-count disclosure, and excluded-material disclosure.
-
-Preserve:
-
-- no trace-pack writer behavior changes
-- no log writer/export behavior changes
-- no support artifact creation
-- no snapshot/trace-pack/log/export/file/directory creation except normal source/verifier edits
-- no real operator artifact inspection
-- no provider calls
-- no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or schema mutation
-- no runtime enforcement activation
-- no command blocking
-- no renderer UI work
-
-Stop if policy proof requires actual writer redesign, real artifact inspection, raw ESI payload inclusion, provider calls, live/private/destructive actions, or runtime enforcement.
-
-Overseer reviewed 2026-06-02:
-
-- Accepted HS186 in `workspace/OverseerHS187-hs186-trace-log-redaction-policy-review.md`.
-- Verified the new command, policy-only posture, registry/authority/passive-side-effect coverage, writer conformance gap map compatibility, dry-run coverage, protected-term advisory output, and diff hygiene.
-- Accepted `support.trace_log_redaction_policy.preview` as read-only support-hardening policy evidence.
-- Trace-pack/log writer redaction, provider endpoint/error leakage proof against writer output, readiness alias normalization, support artifact creation behavior, deletion/pruning behavior, runtime enforcement activation, command blocking, and UI work remain unopened.
-
-## Accepted HS178 Context
-
-Human / Overseer direction:
-
-- return to support artifacts only after deciding what artifacts must preserve
-- implement the first bounded proof, then let reviewer/specialist correction happen against something concrete
-- avoid premature broad schema, bucket, snapshot, trace-pack, or runtime-enforcement work
-- preserve data-layer boundaries while defining support artifact contents
-
-Accepted source material:
-
-- `docs/features/data-layer-boundaries.md`
-- `docs/current-state/current-storage-runtime-hardening.md`
-- `workspace/OverseerHS147-hs146-support-artifact-path-authority-review.md`
-- `workspace/OverseerHS161-hs160-support-artifact-creation-policy-review.md`
-- `src/main/services/supportArtifactPathAuthorityService.js`
-- `src/main/services/supportArtifactCreationPolicyService.js`
-- `src/main/support/operatorDebugTracePack.js`
-- `src/main/support/runtimeBoundaryStatus.js`
-- existing runtime snapshot / trace pack services and verifiers
-
-Accepted context:
-
-- `support.artifact_path_authority.preview` proves path authority and artifact classes.
-- `support.artifact_creation_policy.preview` proves creation posture before creation.
-- The missing piece is a contents contract: what each support artifact class may contain, must exclude, must redact, must classify, and must disclose.
-
-## Completed HS178 Scope
-
-1. Inspect existing support artifact path authority, creation policy, runtime snapshot, operator debug trace pack, readiness/preflight, runtime boundary, and related verifiers.
-2. Add a read-only support artifact contents contract preview, preferably as:
-
-```txt
-support.artifact_contents_contract.preview
-```
-
-3. Cover at minimum:
-
-- rolling runtime DB snapshot
-- retained/manual runtime DB snapshot
-- operator debug trace pack
-- light operational logs
-- readiness/preflight export
-
-4. For each class, report:
-
-- artifact id/class
-- family: operational support or corpus-adjacent support
-- allowed content categories
-- forbidden content categories
-- redaction / omission rules
-- whether raw ESI payloads may be included
-- whether Discovery refs may be included
-- whether Evidence/EVEidence rows may be included
-- whether Hydration labels/candidates may be included
-- whether Assessment Memory may be included
-- whether Watch state may be included
-- whether local paths may be included
-- whether runtime telemetry may be included
-- whether the artifact can be used as Evidence/EVEidence, Observation, Assessment Memory, or deletion/pruning authority
-- basis/provenance disclosure requirement
-- privacy/sensitivity posture
-
-5. Preserve these core rules:
-
-- support artifacts are support/recovery/debug material, not Evidence/EVEidence
-- snapshots may contain a DB copy, but that does not make the snapshot itself new Evidence/EVEidence
-- trace packs must be bounded and must not become raw Evidence/EVEidence exports
-- trace packs must not dump raw ESI payload objects or full provider payload strings
-- readiness/preflight exports are local posture/support, not product truth
-- logs must avoid secrets and raw payloads
-- support artifacts may preserve basis/provenance/context, but must not override deletion/pruning policy
-
-6. Add focused verification proving:
-
-- the contents contract is read-only
-- no support artifacts, snapshots, trace packs, logs, files, or directories are created
-- no provider calls occur
-- no Evidence/EVEidence, Discovery, Hydration, Assessment, Watch, storage config, or schema writes occur
-- trace-pack contract forbids raw ESI payload dumps
-- snapshot contract classifies DB copies as high-sensitivity corpus-adjacent support
-- support artifacts are explicitly non-authoritative for Evidence/EVEidence, Observation, Assessment, and deletion/pruning decisions
-
-## Accepted HS178 Boundaries And Non-Goals
-
-- No actual support artifact creation.
-- No snapshot creation.
-- No trace-pack creation.
-- No file or directory creation.
-- No log file creation.
-- No cleanup, delete, prune, restore, move, copy, migration, upload, export, or packaging.
-- No provider calls.
-- No zKill calls.
-- No ESI calls.
-- No SDE download calls.
-- No Evidence/EVEidence writes.
-- No Discovery ref mutation.
-- No Hydration writes.
-- No Assessment Memory writes.
-- No Watch mutation.
-- No storage config writes.
-- No schema migration.
-- No runtime enforcement activation.
-- No command blocking.
-- No renderer redesign or UI wording work.
-- Do not treat support artifacts as Evidence/EVEidence, Discovery, Observation, Assessment Memory, or product reports.
-- Do not treat trace packs as evidence exports.
-- Do not let renderer payloads define path/content authority.
-
-## Historical HS178 Stop Conditions
-
-During HS178, Dev was required to stop and return to Overseer if:
-
-- implementation needs to create, read, package, export, or inspect real artifact files
-- implementation needs to change snapshot or trace-pack creation behavior
-- content classification cannot be expressed without schema changes
-- support artifact contents blur into Evidence/EVEidence, Discovery, Observation, Assessment Memory, or deletion/pruning authority
-- raw ESI payload inclusion is required for trace packs
-- renderer-origin payloads would need to define content/path authority
-- provider calls or live/private/destructive actions become necessary
-- the result becomes a full cleanup/export/pruning design instead of a contents contract preview
-
-## HS178 Verification Expectations
-
-Run syntax checks on every new or changed JavaScript file.
-
-Run exact commands when known:
-
-```powershell
-npm.cmd run verify:support-artifact-path-authority
-npm.cmd run verify:support-artifact-creation-policy
+node --check src\main\discovery\actorWatchDiscoveryRouteBodyFixture.js
+node --check src\main\services\watchActorDiscoveryRouteBodyFixtureService.js
+node --check scripts\verify-watch-actor-discovery-route-body-fixture.js
+node --check src\main\workers\actorWatchCollector.js
+node --check src\main\services\mutatingActionService.js
+node --check src\main\watchlist\watchExecutor.js
+node --check src\main\services\serviceRegistry.js
+node --check src\main\services\enforcementDryRunService.js
+npm.cmd run verify:watch-actor-discovery-route-body-fixture
+npm.cmd run verify:watch-actor-compatibility-wrapper-runtime-preview
+npm.cmd run verify:watch-actor-compatibility-wrapper-adapter-fixture
+npm.cmd run verify:watch-actor-compatibility-wrapper-contract
+npm.cmd run verify:watch-actor-replacement-parity
+npm.cmd run verify:discovery-acquisition-to-evidence-handoff-fixture
+npm.cmd run verify:discovery-esi-expansion-intake-posture
+npm.cmd run verify:evidence-writer-landing-package-fixture
+npm.cmd run verify:evidence-rules
+npm.cmd run verify:watch-executor
+npm.cmd run verify:mutating-services
 npm.cmd run verify:service-registry
 npm.cmd run verify:command-authority
 npm.cmd run verify:passive-side-effects
@@ -9773,803 +2925,657 @@ git diff --check
 git status --short --branch
 ```
 
-If Dev adds a new verifier, also run it, likely:
+Results:
 
-```powershell
-npm.cmd run verify:support-artifact-contents-contract
-```
+- all listed syntax checks passed
+- all listed npm verification commands passed
+- `npm.cmd run verify:service-registry` passed with a 300 second ceiling
+- `npm.cmd run verify:enforcement-dry-run` remained complete: 114 commands covered, 0 gaps
+- `npm.cmd run verify:protected-terms` completed with warning-only advisory output: 801 warnings across the broad current working set; no source-term rename or protected-word JSON update was performed
+- `git diff --check` returned exit code 0 with CRLF normalization warnings only
+- `git status --short --branch` showed branch `main...origin/main [ahead 19]` with the existing broad unaccepted working set plus HS415-touched files and the HS415 handoff artifact
 
-Do not run snapshot/trace-pack write verifiers unless changed code requires it. If run, clearly state those existing verifiers create fixture support artifacts and are not the new contents contract preview creating operator artifacts.
+Boundary confirmation:
 
-## Evidence
+- no production `actor.watch` redirect
+- no `runActorWatchService(...)` change
+- no `watchExecutor.dispatchFor(...)` change
+- no `collectActorWatch(...)` invocation or retirement
+- no provider/live/API call
+- no real/operator Discovery ref write
+- no real/operator Evidence/EVEidence write from the route proof
+- no Hydration write
+- no Watch cadence mutation
+- no schema, dispatcher, system/radius, UI, support artifact, source-term rename, or protected-word JSON update
 
-Dev updated 2026-06-02 for HS196:
-
-- Normalized readiness/preflight support artifact class naming across read-only support artifact previews.
-- Canonical/alias model:
-  - `readiness_preflight_export` remains the canonical contents/creation class id
-  - `readiness_preflight_reports` remains the accepted path-authority alias for current in-memory/readout posture
-  - `app.readiness` remains the current read-only service command
-  - no dedicated readiness/preflight export writer exists
-- Updated `support.artifact_contents_contract.preview` so `readiness_preflight_export` exposes:
-  - `canonical_artifact_class: readiness_preflight_export`
-  - `aliases: [readiness_preflight_reports]`
-  - alias disclosure naming `readiness_preflight_reports` as the path-authority alias for in-memory/readout posture
-- Updated `support.artifact_path_authority.preview` so `readiness_preflight_reports` exposes:
-  - `canonical_artifact_class: readiness_preflight_export`
-  - `alias_role: path_authority_alias_for_current_in_memory_readout`
-  - alias disclosure stating that the alias does not create an export writer
-- Updated `support.artifact_creation_policy.preview` so `readiness_preflight_export` exposes:
-  - `path_authority.accepted_alias: readiness_preflight_reports`
-  - `alias_relationship.export_writer_exists: false`
-  - future/no current write-capable surface posture remains unchanged
-- Updated `support.artifact_writer_conformance_gap_map.preview` so:
-  - `readiness_preflight_export.alias_relationship` links canonical and alias ids
-  - `class_id_alias_normalization` moved from `gap` to `conforms`
-  - `writer_surface_exists` remains `partial`
-  - `local_path_sensitivity` remains `partial`
-- Focused conformance map sample:
-  - class count: 5
-  - check count: 25
-  - status counts: `conforms` = 22, `partial` = 3
-  - classes with gaps: none
-  - classes with unknowns: none
-- Remaining partials:
-  - readiness/preflight export writer surface is still absent/partial
-  - readiness/preflight local path sensitivity remains partial
-  - light operational log writer surface remains absent/partial
-- Verification run:
-  - `node --check src\main\services\supportArtifactContentsContractService.js` passed.
-  - `node --check src\main\services\supportArtifactPathAuthorityService.js` passed.
-  - `node --check src\main\services\supportArtifactCreationPolicyService.js` passed.
-  - `node --check src\main\services\supportArtifactWriterConformanceGapMapService.js` passed.
-  - `node --check scripts\verify-support-artifact-contents-contract.js` passed.
-  - `node --check scripts\verify-support-artifact-path-authority.js` passed.
-  - `node --check scripts\verify-support-artifact-creation-policy.js` passed.
-  - `node --check scripts\verify-support-artifact-writer-conformance-gap-map.js` passed.
-  - `npm.cmd run verify:support-artifact-writer-conformance-gap-map` passed.
-  - `npm.cmd run verify:support-artifact-path-authority` passed.
-  - `npm.cmd run verify:support-artifact-creation-policy` passed.
-  - `npm.cmd run verify:support-artifact-contents-contract` passed.
-  - `npm.cmd run verify:app-readiness` passed.
-  - `npm.cmd run verify:service-registry` passed after a rerun; the first parallel run hit a transient `.tmp\passive-side-effects\seeded-passive.sqlite-journal` `ENOENT` while `verify:passive-side-effects` was running concurrently.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:api-request-log-redaction-readiness` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output after workspace documentation updates: 225 warnings across 12 changed working-set files; no renames or protected-word JSON updates performed.
-- Boundaries preserved:
-  - no readiness/preflight export writer creation
-  - no support artifact, snapshot, trace-pack, log, file, export, package, or directory creation
-  - no `app.readiness` runtime behavior change beyond read-only metadata/alias disclosure
-  - no runtime snapshot, trace-pack writer, or API request log persistence behavior changes
-  - no provider calls
-  - no schema changes
-  - no report changes
-  - no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or runtime enforcement mutation
-  - no command blocking
-  - no renderer UI work
-
-Dev updated 2026-06-02 for HS194:
-
-- Refreshed `support.artifact_writer_conformance_gap_map.preview` for the `light_operational_logs` class after accepted HS192.
-- Preserved the distinction between persisted `api_request_logs` rows and a future/dedicated light operational log export writer.
-- `light_operational_logs.writer_surface_exists` remains `partial` because no dedicated light operational log support artifact writer or export surface exists.
-- `light_operational_logs.raw_payload_forbidden` remains `conforms` because `api_request_logs` has no raw provider response body column and no raw ESI payload column.
-- Added `light_operational_logs.persisted_endpoint_error_sanitization` as `conforms`, based on HS192 insert-time sanitization at `EvidenceRepository.insertApiRequestLog`.
-- Added `light_operational_logs.endpoint_query_value_redaction` as `conforms`, preserving route shape and query key names while redacting query values before persistence.
-- Changed `light_operational_logs.secret_redaction_policy` from `unknown` to `conforms` for HS192-tested token/auth/cookie/session/password/key-like endpoint/error patterns plus bearer/basic values.
-- Changed `light_operational_logs.free_text_length_policy` from `unknown` to `conforms`, reflecting persisted endpoint and error-message bounds of 160 and 240 characters.
-- Focused verifier sample:
-  - class count: 5
-  - check count: 25
-  - status counts: `conforms` = 21, `partial` = 3, `gap` = 1
-  - classes with gaps: `readiness_preflight_export`
-  - classes with unknowns: none
-  - HS180 provider endpoint/error secret leakage focus now reports `conforms` for trace pack and light operational logs
-- Verification run:
-  - `node --check src\main\services\supportArtifactWriterConformanceGapMapService.js` passed.
-  - `node --check scripts\verify-support-artifact-writer-conformance-gap-map.js` passed.
-  - `npm.cmd run verify:support-artifact-writer-conformance-gap-map` passed.
-  - `npm.cmd run verify:api-request-log-redaction-readiness` passed.
-  - `npm.cmd run verify:support-trace-log-redaction-policy` passed.
-  - `npm.cmd run verify:queue-api-evidence-write` passed.
-  - `npm.cmd run verify:http-boundaries` passed.
-  - `npm.cmd run verify:hydration` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output after workspace documentation updates: 150 warnings across 6 changed working-set files; no renames or protected-word JSON updates performed.
-- Boundaries preserved:
-  - no light operational log writer/export creation
-  - no support artifact, snapshot, trace-pack, log, file, export, package, or directory creation
-  - no API request log persistence behavior changes
-  - no `EvidenceRepository.insertApiRequestLog` changes
-  - no `HttpClient` or provider worker behavior changes
-  - no provider calls
-  - no schema changes
-  - no report changes
-  - no trace-pack writer behavior changes
-  - no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or runtime enforcement mutation
-  - no command blocking
-  - no renderer UI work
-
-Dev updated 2026-06-02 for HS192:
-
-- Added bounded persistence sanitization for `api_request_logs.endpoint` and `api_request_logs.error_message` at `EvidenceRepository.insertApiRequestLog(log)`.
-- Sanitization helpers live in `src/main/db/evidenceRepository.js`:
-  - `sanitizeApiRequestLogPersistence(log)`
-  - `sanitizeApiLogEndpoint(endpoint)`
-  - `sanitizeApiLogErrorMessage(message)`
-  - `API_REQUEST_LOG_SANITIZATION_LIMITS`
-- Persistence rules now:
-  - preserve useful endpoint route shape for diagnostics/report parsing
-  - preserve query key names while replacing query values with `[redacted]`
-  - redact secret/token/auth/cookie/session/password/key-like query/path/assignment material
-  - redact bearer/basic authorization values in error text
-  - redact provider/ESI-payload-like JSON fragments in error text with `[redacted: provider payload]`
-  - bound persisted endpoints to 160 characters and error text to 240 characters
-  - preserve provider, method, status, timing, cache, retry, rate-limit, run, and timestamp provenance fields
-- `HttpClient.json` provider fetch behavior is unchanged; focused verification proves the original provider URL reaches `fetchImpl` unchanged before only the persisted log row is sanitized.
-- Updated `support.api_request_log_redaction_readiness.preview` to report the new posture:
-  - endpoint string persistence: `proven_at_insert`
-  - query values: `proven_at_insert`
-  - secret/token/auth/cookie-like redaction: `proven_for_tested_patterns`
-  - error message free text: `proven_at_insert`
-  - free-text length bounds: `proven_at_insert`
-  - raw provider response bodies: `excluded_by_schema`
-  - raw ESI payloads: `excluded_by_schema`
-- Updated `scripts/verify-api-request-log-redaction-readiness.js` to prove direct repository sanitization, `HttpClient` fetch URL preservation, route-shape preservation, bounded strings, provenance preservation, query/secret redaction, and provider-payload-fragment omission.
-- Sample persisted endpoint:
-  - input: `https://esi.evetech.net/latest/killmails/123456/abcDEF/?token=secret-token&scope=esi-killmails.read.v1&cookie=private-cookie`
-  - stored: `https://esi.evetech.net/latest/killmails/123456/abcDEF/?token=[redacted]&scope=[redacted]&cookie=[redacted]`
-- Verification run:
-  - `node --check src\main\db\evidenceRepository.js` passed.
-  - `node --check src\main\services\apiRequestLogRedactionReadinessService.js` passed.
-  - `node --check scripts\verify-api-request-log-redaction-readiness.js` passed.
-  - `npm.cmd run verify:api-request-log-redaction-readiness` passed.
-  - `npm.cmd run verify:support-artifact-writer-conformance-gap-map` passed.
-  - `npm.cmd run verify:support-trace-log-redaction-policy` passed.
-  - `npm.cmd run verify:queue-api-evidence-write` passed.
-  - `npm.cmd run verify:http-boundaries` passed.
-  - `npm.cmd run verify:hydration` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output after workspace documentation updates: 127 warnings across 7 changed working-set files; no renames or protected-word JSON updates performed.
-- Boundaries preserved:
-  - no provider request URL changes before network calls
-  - no `HttpClient.json` fetch/retry/provider execution behavior changes
-  - no provider worker behavior changes
-  - no schema changes
-  - no report behavior changes
-  - no trace-pack writer behavior changes
-  - no light-log writer/export creation
-  - no provider calls
-  - no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or runtime enforcement mutation
-  - no command blocking
-  - no renderer UI work
-
-Dev updated 2026-06-02 for HS190:
-
-- Added `support.api_request_log_redaction_readiness.preview` as a read-only service command and renderer-eligible readiness readout.
-- Added `src/main/services/apiRequestLogRedactionReadinessService.js` with a static persisted API request log redaction posture map. It does not inspect real operator data, call providers, write logs, mutate state, or create exports.
-- Added `scripts/verify-api-request-log-redaction-readiness.js` and `npm.cmd run verify:api-request-log-redaction-readiness`.
-- Updated service registry, enforcement dry-run coverage, command authority, service registry, and passive side-effect verification coverage for the new command.
-- Mapped log write sources:
-  - `src/main/api/httpClient.js` / `HttpClient.log(entry)`
-  - `src/main/db/evidenceRepository.js` / `EvidenceRepository.insertApiRequestLog(log)`
-  - `src/main/workers/manualDiscoveryWorker.js`
-  - `src/main/workers/manualExpansionWorker.js`
-  - `src/main/workers/actorWatchCollector.js`
-  - `src/main/workers/systemRadiusCollector.js`
-  - `src/main/metadata/reportHydrator.js`
-  - verification fixtures that call `insertApiRequestLog`
-- Mapped persisted `api_request_logs` fields:
-  - `request_id`
-  - `run_id`
-  - `run_type`
-  - `provider`
-  - `endpoint`
-  - `method`
-  - `status_code`
-  - `duration_ms`
-  - `cache_status`
-  - `retry_count`
-  - `rate_limited`
-  - `error_message`
-  - `requested_at`
-- Current persisted log redaction posture:
-  - endpoint string redaction before persistence: `unproven`
-  - query value stripping before persistence: `absent`
-  - secret/token/auth/cookie-like redaction before persistence: `unproven`
-  - error message free-text redaction before persistence: `unproven`
-  - free-text length bounds before persistence: `absent`
-  - provider/status/timing/cache/retry fields: `proven_present`
-  - raw provider response bodies: `excluded_by_schema`
-  - raw ESI payloads: `excluded_by_schema`
-- The preview explicitly states:
-  - persisted `api_request_logs` are provider provenance / operational diagnostics, not Evidence/EVEidence
-  - trace-pack assembly redaction from HS188 is separate from persisted log redaction
-  - reports, Hydration, Evidence/EVEidence, Discovery, and provider execution are not changed by this readout
-  - no light-log writer/export is created
-- Recommended smallest later hardening insertion point:
-  - centralize sanitization immediately before `EvidenceRepository.insertApiRequestLog` persists `endpoint` and `error_message`
-  - likely files for a future hardening packet: `src/main/db/evidenceRepository.js` and `src/main/api/httpClient.js`
-- Conformance map state after HS190:
-  - trace-pack checks remain conforming after HS188
-  - light operational log secret redaction remains `unknown`
-  - readiness/preflight alias normalization remains `gap`
-  - no conformance status was changed by HS190 because this packet is proof/readiness only, not log persistence hardening
-- Verification run:
-  - `node --check src\main\services\apiRequestLogRedactionReadinessService.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-api-request-log-redaction-readiness.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `npm.cmd run verify:api-request-log-redaction-readiness` passed.
-  - `npm.cmd run verify:support-artifact-writer-conformance-gap-map` passed.
-  - `npm.cmd run verify:support-trace-log-redaction-policy` passed.
-  - `npm.cmd run verify:queue-api-evidence-write` passed.
-  - `npm.cmd run verify:http-boundaries` passed.
-  - `npm.cmd run verify:hydration` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 268 warnings across 9 changed working-set files after workspace documentation updates; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main` with HS190 working-tree changes.
-- Boundaries preserved:
-  - no `api_request_logs` write behavior changes
-  - no `httpClient` behavior changes
-  - no provider worker behavior changes
-  - no trace-pack writer behavior changes
-  - no light-log writer/export creation
-  - no provider calls
-  - no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or schema mutation
-  - no runtime enforcement activation
-  - no command blocking
-  - no renderer UI work
-
-Dev updated 2026-06-02 for HS188:
-
-- Hardened the existing operator debug trace-pack writer for `support.debug_trace_pack`.
-- Updated `src/main/support/operatorDebugTracePack.js` with local redaction/truncation helpers and trace-pack disclosure metadata.
-- Updated `scripts/verify-operator-debug-trace-pack.js` with unsafe fixture strings proving redaction/truncation against the actual trace-pack writer and written fixture artifact.
-- Updated `support.artifact_writer_conformance_gap_map.preview` trace-pack checks to reflect the now-hardened writer posture.
-- Updated `scripts/verify-support-artifact-writer-conformance-gap-map.js` expectations for HS188.
-- Writer fields hardened:
-  - `fetch_runs.error_summary`
-  - `api_request_logs.endpoint`
-  - `api_request_logs.error_message`
-  - task `scope_key`
-  - task `error.message`
-  - data-quality warning `message`
-  - queue latest refs `last_error`
-  - runtime `database_path`
-  - runtime `temp_root`
-  - smoke artifact `root`
-  - smoke artifact file paths
-- Trace-pack redaction/truncation behavior:
-  - endpoint query values are stripped and replaced with a redacted query marker plus query-key count
-  - secret/token/authorization/cookie-like strings are redacted from diagnostic text
-  - diagnostic free text is bounded at 240 characters
-  - endpoint strings are bounded at 160 characters
-  - queue `last_error` is bounded at 160 characters
-  - data-quality warning message is bounded at 220 characters
-  - task `scope_key` is bounded at 128 characters
-  - local path strings are bounded at 260 characters
-- Trace-pack disclosure added:
-  - `policy_source: support.trace_log_redaction_policy.preview`
-  - redaction/truncation posture
-  - local path sensitivity posture
-  - sample limit
-  - omitted/excluded material posture
-  - support/debug non-authority posture
-- Local path posture:
-  - runtime DB path, temp root, smoke artifact root, and smoke artifact file paths are emitted as local path summary objects with role, basename, truncated value, `sensitive_support_metadata`, and `local_path_not_authority`.
-- Queue latest-ref posture:
-  - latest refs remain bounded samples and now include `sample_posture: bounded_support_provenance_only_not_evidence`.
-- Conformance map change:
-  - trace-pack `free_text_length_policy` now `conforms`
-  - trace-pack `sample_limit_disclosure` now `conforms`
-  - trace-pack `local_path_sensitivity` now `conforms`
-  - trace-pack `provider_endpoint_secret_leakage` now `conforms` for trace-pack assembly
-  - trace-pack `queue_latest_refs_bounded_summary` now `conforms`
-  - light operational log secret redaction remains `unknown`
-  - readiness/preflight alias normalization remains `gap`
-- Focused conformance summary:
-  - `conforms` = 17
-  - `partial` = 3
-  - `gap` = 1
-  - `unknown` = 2
-  - classes with gaps: `readiness_preflight_export`
-  - classes with unknowns: `light_operational_logs`
-- Verification run:
-  - `node --check src\main\support\operatorDebugTracePack.js` passed.
-  - `node --check scripts\verify-operator-debug-trace-pack.js` passed.
-  - `node --check src\main\services\supportArtifactWriterConformanceGapMapService.js` passed.
-  - `node --check scripts\verify-support-artifact-writer-conformance-gap-map.js` passed.
-  - `npm.cmd run verify:operator-debug-trace` initially failed while developing the fixture because the only queue ref had been moved to `failed`, removing the existing pending queue indicator; after adding a second pending fixture ref, rerun passed.
-  - `npm.cmd run verify:support-artifact-writer-conformance-gap-map` passed.
-  - `npm.cmd run verify:support-trace-log-redaction-policy` passed.
-  - `npm.cmd run verify:support-artifact-contents-contract` passed.
-  - `npm.cmd run verify:support-artifact-creation-policy` passed.
-  - `npm.cmd run verify:support-artifact-path-authority` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 23 warnings across 4 changed working-set files before workspace documentation updates; no renames or protected-word JSON updates performed.
-  - Final post-documentation `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 99 warnings across 6 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main` with HS188 working-tree changes.
-- `npm.cmd run verify:operator-debug-trace` creates fixture/test-controlled trace-pack artifacts under `.tmp`, as allowed by HS188 because the packet changes the trace-pack writer. These are not real operator artifacts.
-- Boundaries preserved:
-  - no light-log hardening
-  - no new support artifact classes or commands
-  - no snapshot writer or readiness/preflight export behavior changes
-  - no provider calls
-  - no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or schema mutation
-  - no runtime enforcement activation
-  - no command blocking
-  - no renderer UI work
-
-Dev updated 2026-06-02 for HS186:
-
-- Added `support.trace_log_redaction_policy.preview` as a read-only service command and renderer-eligible policy readout.
-- Added `src/main/services/traceLogRedactionPolicyService.js` with a static trace/log redaction and free-text truncation policy preview. It does not inspect real operator artifacts, create support artifacts, call providers, or mutate runtime/project state.
-- Added `scripts/verify-support-trace-log-redaction-policy.js` and `npm.cmd run verify:support-trace-log-redaction-policy`.
-- Updated service registry, enforcement dry-run coverage, command authority, service registry, and passive side-effect verification coverage for the new command.
-- Policy families covered:
-  - `operator_debug_trace_pack`
-  - `light_operational_logs`
-  - `provider_endpoint_and_query_strings`
-  - `provider_and_runtime_error_text`
-  - `data_quality_warning_messages`
-  - `queue_latest_ref_samples`
-  - `local_filesystem_paths`
-  - `sample_limits_omissions_and_exclusions`
-  - `task_run_ids_and_provider_provenance`
-- Sample preview summary:
-  - policy count: 9
-  - families: `trace_pack_support_artifact` = 1, `operational_support_log` = 1, `provider_diagnostics` = 1, `free_text_diagnostics` = 2, `discovery_queue_support_summary` = 1, `local_runtime_context` = 1, `support_artifact_disclosure` = 1, `runtime_provenance` = 1
-  - sensitivity: `high` = 4, `medium` = 5
-  - enforcement status: `policy_only` = 9
-  - max-length examples: trace pack 240, light operational logs 180, provider endpoint path 160, provider/runtime error text 240, data-quality warning message 220, queue `last_error` 160, local path strings 260, task/run/provider IDs 128
-- Policy proof covers:
-  - allowed summary content
-  - forbidden content
-  - redaction rules
-  - truncation / maximum-length rules
-  - replacement markers or disclosure phrases
-  - basis/provenance requirements
-  - raw ESI payload posture
-  - Discovery ref / killmail hash posture
-  - Evidence/EVEidence row posture
-  - Assessment Memory posture
-  - local path posture
-  - enforcement status
-- Core boundaries proved:
-  - all policies are `policy_only` and do not claim writer enforcement
-  - renderer payload is ignored
-  - no support artifacts, snapshots, trace packs, logs, exports, files, or directories are created
-  - no real operator support artifacts are inspected
-  - no provider, zKill, ESI, or SDE download calls occur
-  - no Evidence/EVEidence, Discovery, Hydration, Assessment Memory, Watch, storage config, External I/O config, or schema mutations occur
-  - no runtime enforcement activation or command blocking occurs
-- `support.artifact_writer_conformance_gap_map.preview` remains intentionally unchanged in posture for trace/log writer items: trace-pack free-text/sample/path/queue summary checks remain `partial`, and trace/log provider endpoint/error leakage remains `unknown`, because HS186 proves policy only and does not harden writer behavior.
-- Verification run:
-  - `node --check src\main\services\traceLogRedactionPolicyService.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-support-trace-log-redaction-policy.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `node --check scripts\verify-support-artifact-writer-conformance-gap-map.js` passed.
-  - `npm.cmd run verify:support-trace-log-redaction-policy` passed.
-  - `npm.cmd run verify:support-artifact-writer-conformance-gap-map` passed.
-  - `npm.cmd run verify:support-artifact-contents-contract` passed.
-  - `npm.cmd run verify:support-artifact-creation-policy` passed.
-  - `npm.cmd run verify:support-artifact-path-authority` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 184 warnings across 7 changed working-set files before workspace documentation updates; no renames or protected-word JSON updates performed.
-  - Final post-documentation `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 255 warnings across 9 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main` with HS186 working-tree changes.
-
-Dev updated 2026-06-02:
-
-- Added `support.artifact_contents_contract.preview` as a read-only service command and renderer-eligible readout.
-- Added `src/main/services/supportArtifactContentsContractService.js` with a static contents contract preview. It does not read artifact files, create support artifacts, inspect live provider data, or mutate runtime/project state.
-- Added `scripts/verify-support-artifact-contents-contract.js` and `npm.cmd run verify:support-artifact-contents-contract`.
-- Updated service registry, enforcement dry-run coverage, command authority, service registry, and passive side-effect verification coverage for the new command.
-- Artifact classes covered:
-  - `runtime_snapshot_rolling`
-  - `runtime_snapshot_retained`
-  - `operator_debug_trace_pack`
-  - `light_operational_logs`
-  - `readiness_preflight_export`
-- Sample preview summary:
-  - class count: 5
-  - families: `corpus_adjacent_support` = 3, `operational_support` = 2
-  - high sensitivity classes: rolling runtime DB snapshot, retained/manual runtime DB snapshot, operator debug trace pack
-  - raw ESI payloads forbidden for: operator debug trace pack, light operational logs, readiness/preflight export
-  - DB-copy raw content allowance limited to runtime snapshot classes only
-  - all classes explicitly non-authoritative for Evidence/EVEidence, Observation, Assessment Memory, and deletion/pruning authority
-- Allowed/forbidden/redaction proof:
-  - each class reports allowed content categories, forbidden categories, redaction/omission rules, raw ESI posture, Discovery ref posture, Evidence/EVEidence row posture, Hydration label/candidate posture, Assessment Memory posture, Watch state posture, local path posture, runtime telemetry posture, basis/provenance disclosure, and privacy/sensitivity.
-  - trace packs forbid raw ESI dumps, full provider payload strings, full participant payload strings, secrets, unbounded dumps, and Evidence/EVEidence export packaging.
-  - logs and readiness/preflight exports forbid raw ESI payloads and secrets.
-  - snapshots are classified as high-sensitivity corpus-adjacent support that may contain an existing DB copy, but the snapshot itself is not new Evidence/EVEidence and is not pruning/deletion authority.
-- Focused verifier proves no support artifacts, snapshots, trace packs, logs, files, or directories are created, no provider calls occur, and no Evidence/EVEidence, Discovery, Hydration, Assessment, Watch, storage config, or schema writes occur.
-- Verification run:
-  - `node --check src\main\services\supportArtifactContentsContractService.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-support-artifact-contents-contract.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `npm.cmd run verify:support-artifact-contents-contract` passed.
-  - `npm.cmd run verify:support-artifact-path-authority` passed.
-  - `npm.cmd run verify:support-artifact-creation-policy` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 225 warnings across 9 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main [ahead 1]` with HS178 working-tree changes.
-
-## Dev Handoff
+## HS415 Dev Handoff
 
 Completed:
 
 ```txt
-workspace/DevHS196-readiness-preflight-alias-normalization.md
+workspace/DevHS415-actor-watch-discovery-route-body-fixture-proof.md
 ```
 
-Status: readiness/preflight alias normalization complete; pending Overseer review.
+Status: actor Watch Discovery-owned route body fixture proof accepted by HS416.
 
-HS196 result:
+Remaining parked items:
 
-- `readiness_preflight_export` remains canonical across contents and creation policy.
-- `readiness_preflight_reports` is explicitly disclosed as the path-authority alias for current in-memory/readout posture.
-- The conformance map no longer reports readiness/preflight alias normalization as a gap.
-- No readiness/preflight export writer, support artifact creation, runtime behavior change, provider behavior, schema, reports, runtime enforcement, command blocking, or UI work was added.
+- production `actor.watch` redirect remains parked
+- `runActorWatchService(...)` replacement remains parked
+- `watchExecutor.dispatchFor(...)` replacement remains parked
+- `collectActorWatch(...)` retirement remains parked
+- live zKill/ESI provider movement remains parked
+- durable Discovery ref writes, Evidence/EVEidence writes, Watch receipt/cadence mutation, dispatcher/queue/schema/UI/enforcement work remain parked
+
+## Latest Accepted Advisory
+
+HS413: Actor Watch redirect readiness re-check.
+
+Accepted by:
+
+```txt
+workspace/OverseerHS414-hs413-actor-watch-redirect-readiness-recheck-review.md
+```
+
+Advisory artifact:
+
+```txt
+workspace/EngineeringTraceHS413-actor-watch-redirect-readiness-recheck.md
+```
+
+Accepted finding:
+
+- actor Watch is not ready for default `actor.watch` runtime redirect
+- actor Watch is ready only for a narrower no-provider / injected-client route-body proof
+- `collectActorWatch(...)` remains the only live-capable actor Watch orchestrator today
+- existing compatibility wrapper previews are not live-capable replacements
+- redirecting directly to a preview would silently lose behavior
+- cloning `collectActorWatch(...)` would preserve the mixed collector model
+
+## Latest Accepted Seam
+
+HS419: Actor Watch controlled runtime adapter fixture proof.
+
+Accepted by:
+
+```txt
+workspace/OverseerHS420-hs419-actor-watch-controlled-runtime-adapter-fixture-review.md
+```
+
+Dev handoff:
+
+```txt
+workspace/DevHS419-actor-watch-controlled-runtime-adapter-fixture-proof.md
+```
+
+Accepted result:
+
+- `src/main/discovery/actorWatchControlledRuntimeAdapterFixture.js` proves actor Watch controlled runtime adapter mutation choreography in fixture form.
+- the proof uses disposable `:memory:` DBs and injected fake zKill/ESI clients only.
+- real repository choreography is exercised in disposable DBs: fetch run lifecycle, Discovery ref persistence/status movement, Evidence/EVEidence writer landing, warnings, failures, and compatibility summary posture.
+- production `actor.watch`, `runActorWatchService(...)`, `watchExecutor.dispatchFor(...)`, and `collectActorWatch(...)` remain unchanged.
+- no provider/live/API calls, operator Discovery ref writes, operator Evidence/EVEidence writes, Hydration writes, Watch cadence mutation, schema, dispatcher, system/radius, UI, or support artifact work was opened.
+- Candidate refs remain possible leads/provenance, not Evidence.
+- ESI-backed expansion remains Discovery-owned and is not Hydration.
+- Evidence/EVEidence writer landing is invoked only inside disposable fixture DBs.
+
+Previous accepted seam:
+
+HS415: Actor Watch Discovery-owned route body fixture proof.
+
+Previous accepted seam:
+
+HS411: Discovery ESI-backed selected-ref expansion package helper extraction.
+
+Previous accepted seam:
+
+HS407: Discovery candidate-ref pending rehydration helper extraction.
+
+Accepted by:
+
+```txt
+workspace/OverseerHS408-hs407-discovery-candidate-ref-pending-rehydration-helper-extraction-review.md
+```
+
+Dev handoff:
+
+```txt
+workspace/DevHS407-discovery-candidate-ref-pending-rehydration-helper-extraction.md
+```
+
+Accepted result:
+
+- `src/main/discovery/candidateRefMemory.js` now owns pending candidate-ref rehydration helpers.
+- `pendingActorDiscovery(...)` and `pendingSystemRadiusDiscovery(...)` live under Discovery ownership.
+- actor and system/radius collectors import those helpers from Discovery.
+- old collector-local pending helper bodies were removed.
+- mixed collector runtime behavior, manual discovery, queue/status mutation behavior, provider movement, schema, receipts, dispatcher, enforcement, UI, and support artifacts remain unchanged.
+
+Previous accepted seam:
+
+HS405: Candidate ref memory / status helper ownership trace.
+
+Accepted by:
+
+```txt
+workspace/OverseerHS406-hs405-candidate-ref-memory-status-helper-ownership-review.md
+```
+
+Advisory artifact:
+
+```txt
+workspace/EngineeringTraceHS405-candidate-ref-memory-status-helper-ownership.md
+```
+
+Accepted clarification:
+
+- Watch owns the cadence decision. When currently due, missed, or otherwise ready, Watch emits/populates a Discovery acquisition task for the accepted scope/window.
+- Discovery does not monitor Watch cadence; it consumes work after an accepted intent source populates the basket.
+- Watch can rest/schedule from a bounded Discovery zKill acquisition receipt/outcome for the accepted scope/window.
+- Watch does not wait for all candidate refs to become Evidence/EVEidence.
+- `discovered_killmail_refs` is Discovery working memory, not the completion surface Watch consumes.
+- Candidate refs may be evidence behind the receipt; the receipt is the Watch completion handoff.
+- Discovery ESI-backed expansion continues downstream recovery/work from landed candidate refs.
+
+Accepted follow-up candidate:
+
+- ESI-backed expansion/package helper boundary trace.
+
+## Recent Accepted Dev Packet
+
+HS419 is the most recent accepted Dev packet.
+
+Most recent completed runway:
+
+```txt
+workspace/OverseerHS419-actor-watch-controlled-runtime-adapter-fixture-proof-runway.md
+```
+
+Most recent Dev handoff:
+
+```txt
+workspace/DevHS419-actor-watch-controlled-runtime-adapter-fixture-proof.md
+```
+
+Accepted review:
+
+```txt
+workspace/OverseerHS420-hs419-actor-watch-controlled-runtime-adapter-fixture-review.md
+```
+
+HS419 purpose:
+
+Prove actor Watch controlled runtime adapter mutation choreography in disposable DBs using injected fake clients and real repository methods, without invoking `collectActorWatch(...)` or changing production `actor.watch`.
+
+Scope:
+
+- add `src/main/discovery/actorWatchControlledRuntimeAdapterFixture.js`
+- add `src/main/services/watchActorControlledRuntimeAdapterFixtureService.js`
+- add `watch.actor_controlled_runtime_adapter_fixture.preview`
+- add focused fixture verifier coverage
+- keep production actor Watch runtime and scheduled dispatch unchanged
+
+Boundary:
+
+No production Evidence writer behavior change, candidate-ref status policy rewrite, provider/live behavior, runtime enforcement, Watch cadence, collector invocation, actor Watch redirect, scheduled Watch redirect, collector retirement, schema, dispatcher, Hydration, Observation, Assessment, support artifact, UI, source-term rename, or protected-word JSON update.
+
+## HS411 Evidence
+
+Implemented the Discovery-owned ESI-backed selected-ref expansion/package helper extraction.
+
+Added:
+
+- `src/main/discovery/esiBackedExpansionPackage.js`
+
+Moved/re-homed helper surface:
+
+- `buildEvidencePackageFromRefs({ refs, repository, esiClient, run, discoveredBy })`
+
+Ownership result:
+
+```txt
+src/main/discovery/esiBackedExpansionPackage.js now defines and exports:
+  buildEvidencePackageFromRefs
+
+src/main/workers/killmailIngestionWorker.js imports buildEvidencePackageFromRefs from:
+  ../discovery/esiBackedExpansionPackage
+
+src/main/workers/killmailIngestionWorker.js continues to export:
+  buildEvidencePackageFromRefs
+  evidencePackageFromExpandedKillmails
+```
+
+Preserved behavior:
+
+- local cache skip remains through `repository.hasKillmail(...)`
+- ESI expansion remains through injected `esiClient.expandKillmail(...)`
+- `HTTP_CANCELLED`, `TASK_CANCELLED`, and `AbortError` are rethrown
+- provider capacity errors still create `provider_capacity_deferred` warnings
+- other expansion failures still increment `failed_count` and create `failed_expansion` warnings
+- raw expanded killmails still normalize through `normalizeKillmail(...)`
+- returned package shape remains compatible with `EvidenceRepository.persistEvidencePackage(...)`
+- the helper does not persist Evidence/EVEidence itself
+- the helper does not mutate candidate-ref status itself
+
+Updated callers/imports:
+
+- `src/main/workers/actorWatchCollector.js`
+- `src/main/workers/systemRadiusCollector.js`
+- `src/main/workers/manualExpansionWorker.js`
+
+Compatibility export decision:
+
+- `killmailIngestionWorker.js` remains a compatibility export for `buildEvidencePackageFromRefs(...)`.
+- `evidencePackageFromExpandedKillmails(...)` remains in `killmailIngestionWorker.js` for no-provider fixture/package builder use.
+
+Focused source ownership check:
+
+```txt
+rg -n "buildEvidencePackageFromRefs|esiBackedExpansionPackage|evidencePackageFromExpandedKillmails" src\main\workers src\main\discovery scripts
+```
+
+Result:
+
+- `buildEvidencePackageFromRefs(...)` implementation lives in `src/main/discovery/esiBackedExpansionPackage.js`
+- actor/system/manual expansion callers import it from Discovery
+- `killmailIngestionWorker.js` imports/re-exports it as compatibility
+- `evidencePackageFromExpandedKillmails(...)` remains in `killmailIngestionWorker.js`
+- existing scripts still consume `evidencePackageFromExpandedKillmails(...)` through `killmailIngestionWorker.js`
+
+Verification:
+
+```txt
+node --check src\main\discovery\esiBackedExpansionPackage.js
+node --check src\main\workers\killmailIngestionWorker.js
+node --check src\main\workers\actorWatchCollector.js
+node --check src\main\workers\systemRadiusCollector.js
+node --check src\main\workers\manualExpansionWorker.js
+rg -n "buildEvidencePackageFromRefs|esiBackedExpansionPackage|evidencePackageFromExpandedKillmails" src\main\workers src\main\discovery scripts
+npm.cmd run verify:actor-watch
+npm.cmd run verify:collector
+npm.cmd run verify:manual-discovery
+npm.cmd run verify:queue-scope-isolation
+npm.cmd run verify:queue-selection
+npm.cmd run verify:queue-report
+npm.cmd run verify:queue-api-evidence-write
+npm.cmd run verify:discovery-acquisition-to-evidence-handoff-fixture
+npm.cmd run verify:discovery-esi-expansion-intake-posture
+npm.cmd run verify:evidence-writer-landing-package-fixture
+npm.cmd run verify:evidence-rules
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+npm.cmd run verify:protected-terms
+git diff --check
+git status --short --branch
+```
+
+Results:
+
+- all listed syntax checks passed
+- all listed npm verification commands passed
+- `npm.cmd run verify:service-registry` passed with a 300 second ceiling
+- `npm.cmd run verify:enforcement-dry-run` remained complete: 113 commands covered, 0 gaps
+- `npm.cmd run verify:protected-terms` completed with warning-only advisory output: 775 warnings across the current broad working set; no source-term rename or protected-word JSON update was performed
+- `git diff --check` returned exit code 0 with CRLF normalization warnings only
+- `git status --short --branch` showed branch `main...origin/main [ahead 19]` with the existing broad unaccepted working set plus HS411-touched files and the HS411 handoff artifact
+
+Boundary confirmation:
+
+- no Evidence writer change
+- no `normalizeKillmail(...)` behavior change
+- no `EvidenceRepository.persistEvidencePackage(...)` behavior change
+- no `evidencePackageFromExpandedKillmails(...)` behavior change
+- no candidate-ref status policy rewrite
+- no `selectExpansionCandidates(...)`, `markFailedExpansionCandidates(...)`, `pendingDiscoveryRefs(...)`, `upsertDiscoveredKillmailRefs(...)`, selected/expanded/cached/failed mutation behavior, timestamp, failure count, or last-error behavior change
+- no actor/system/manual expansion result shape change intended
+- no `fetch_runs` or `api_request_logs` behavior change
+- no provider/live access behavior change
+- no command metadata/authority change
+- no runtime enforcement or command blocking
+- no Watch cadence or Watch receipt behavior change
+- no collector invocation, actor Watch redirect, scheduled Watch redirect, or collector retirement
+- no durable Discovery task/packet schema, dispatcher, queue, lease, or sequencer behavior change
+- no Hydration, Observation, Assessment, support artifact, renderer UI, source-term rename, or protected-word JSON update
+
+## HS411 Dev Handoff
 
 Completed:
 
 ```txt
-workspace/DevHS194-light-operational-log-conformance-refresh.md
+workspace/DevHS411-discovery-esi-backed-expansion-package-helper-extraction.md
 ```
 
-Status: light operational log conformance refresh complete; pending Overseer review.
+Status: accepted by Overseer.
 
-HS194 result:
+Remaining parked items:
 
-- `support.artifact_writer_conformance_gap_map.preview` now reports HS192-proven persisted API request log row sanitization for `light_operational_logs`.
-- `light_operational_logs` no longer leaves endpoint/error secret redaction or free-text bounds as `unknown`.
-- The map still reports no dedicated light operational log export writer via `writer_surface_exists: partial`.
-- No writer/export behavior, persistence behavior, provider behavior, schema, runtime enforcement, command blocking, support artifact creation, or UI work changed.
+- actor Watch runtime redirect remains parked
+- scheduled Watch redirect remains parked
+- collector retirement remains parked
+- live/provider movement expansion remains parked
+- durable Discovery task/packet schema and dispatcher work remain parked
+
+## HS407 Evidence
+
+Implemented the Discovery-owned pending-ref rehydration helper extraction.
+
+Added:
+
+- `src/main/discovery/candidateRefMemory.js`
+
+Moved/re-homed helper surfaces:
+
+- `pendingActorDiscovery(pendingRefs, plannerOutput)`
+- `pendingSystemRadiusDiscovery(pendingRefs)`
+
+Updated callers/imports:
+
+- `src/main/workers/actorWatchCollector.js`
+- `src/main/workers/systemRadiusCollector.js`
+
+Ownership proof:
+
+```txt
+src/main/discovery/candidateRefMemory.js now defines and exports:
+  pendingActorDiscovery
+  pendingSystemRadiusDiscovery
+
+src/main/workers/actorWatchCollector.js imports pendingActorDiscovery from:
+  ../discovery/candidateRefMemory
+
+src/main/workers/systemRadiusCollector.js imports pendingSystemRadiusDiscovery from:
+  ../discovery/candidateRefMemory
+```
+
+Focused source ownership check:
+
+```txt
+rg -n "pendingActorDiscovery|pendingSystemRadiusDiscovery|candidateRefMemory" src\main\workers src\main\discovery
+```
+
+Result:
+
+- pending-ref rehydration helper definitions live in `src/main/discovery/candidateRefMemory.js`
+- actor/system collectors import and call the helpers from the Discovery module
+- old collector-local helper bodies were removed
+- no repository method or candidate-ref status mutation logic was moved
+
+Verification:
+
+```txt
+node --check src\main\discovery\candidateRefMemory.js
+node --check src\main\workers\actorWatchCollector.js
+node --check src\main\workers\systemRadiusCollector.js
+rg -n "pendingActorDiscovery|pendingSystemRadiusDiscovery|candidateRefMemory" src\main\workers src\main\discovery
+npm.cmd run verify:actor-watch
+npm.cmd run verify:collector
+npm.cmd run verify:manual-discovery
+npm.cmd run verify:queue-scope-isolation
+npm.cmd run verify:queue-selection
+npm.cmd run verify:queue-report
+npm.cmd run verify:queue-api-evidence-write
+npm.cmd run verify:discovery-acquisition-to-evidence-handoff-fixture
+npm.cmd run verify:discovery-esi-expansion-intake-posture
+npm.cmd run verify:evidence-writer-landing-package-fixture
+npm.cmd run verify:evidence-rules
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+npm.cmd run verify:protected-terms
+git diff --check
+git status --short --branch
+```
+
+Results:
+
+- all listed verification commands passed
+- `npm.cmd run verify:service-registry` passed with a 300 second ceiling
+- `npm.cmd run verify:enforcement-dry-run` remained complete: 113 commands covered, 0 gaps
+- `npm.cmd run verify:protected-terms` completed with warning-only advisory output: 717 warnings across the current broad working set; no source-term rename or protected-word JSON update was performed
+- `git diff --check` returned exit code 0 with CRLF normalization warnings only
+- `git status --short --branch` showed branch `main...origin/main [ahead 19]` with the existing broad unaccepted working set plus HS407-touched files
+
+Boundary confirmation:
+
+- no repository method move
+- no candidate-ref status service
+- no status-policy rewrite
+- no `pendingDiscoveryRefs(...)`, `upsertDiscoveredKillmailRefs(...)`, selected/expanded/cached/failed mutation behavior, timestamp, failure count, or last-error behavior change
+- no manual discovery or manual expansion change
+- no `actor.watch` or `system.radius.watch` redirect
+- no `runActorWatchService(...)` or `watchExecutor.dispatchFor(...)` change
+- no collector invocation/rewrite/retirement
+- no provider movement
+- no Discovery ref write behavior change
+- no Evidence/EVEidence write behavior change
+- no Hydration/metadata write
+- no `fetch_runs`, API logs, warnings, Watch cadence, Watch run records, or old summary result behavior change
+- no schema, receipt machinery, Discovery task/packet persistence, dispatcher/queue/lease/worker behavior, command metadata/authority change, runtime enforcement, command blocking, UI, support artifact, source-term rename, or protected-word JSON update
+
+## HS407 Review
 
 Completed:
 
 ```txt
-workspace/DevHS192-api-request-log-persistence-sanitization.md
+workspace/DevHS407-discovery-candidate-ref-pending-rehydration-helper-extraction.md
 ```
 
-Status: API request log persistence sanitization complete; pending Overseer review.
-
-HS192 result:
-
-- `api_request_logs.endpoint` and `api_request_logs.error_message` are sanitized and bounded at `EvidenceRepository.insertApiRequestLog` before persistence.
-- `support.api_request_log_redaction_readiness.preview` now reports the insert-time hardening posture truthfully.
-- Provider request URLs, fetch/retry/provider execution behavior, provider workers, schema, reports, trace-pack writer behavior, light-log exports, runtime enforcement activation, command blocking, support artifact creation, and UI work remain unchanged.
-- Historical already-persisted API log rows are not backfilled or migrated.
-
-Completed:
+Accepted:
 
 ```txt
-workspace/DevHS190-api-request-log-redaction-readiness.md
+workspace/OverseerHS408-hs407-discovery-candidate-ref-pending-rehydration-helper-extraction-review.md
 ```
 
-Status: API request log redaction readiness proof complete; pending Overseer review.
+Status: Discovery candidate-ref pending rehydration helper extraction accepted.
 
-HS190 result:
+HS407 result:
 
-- `support.api_request_log_redaction_readiness.preview` proves current persisted API log posture without changing log writes.
-- Persisted endpoint/query/error redaction remains unopened implementation work.
-- Trace-pack assembly redaction remains separate and accepted from HS188.
-- Light-log writer/export creation, provider calls, runtime enforcement activation, command blocking, schema changes, and UI work remain unopened.
+- pending-ref rehydration helper definitions now live under Discovery ownership in `src/main/discovery/candidateRefMemory.js`
+- actor and system/radius collectors import pending-ref rehydration helpers from Discovery
+- current actor/system collector behavior and result shapes are preserved
+- manual discovery/manual expansion compatibility and candidate-ref status mutation behavior remain unchanged
+- this remains helper ownership extraction only, not status service extraction, runtime redirect, collector retirement, provider movement, schema, receipt machinery, or task/packet persistence
 
-Completed:
+Previous accepted seam:
+
+HS403: Discovery zKill candidate acquisition helper extraction.
+
+Accepted by:
 
 ```txt
-workspace/DevHS188-trace-pack-writer-redaction-hardening.md
+workspace/OverseerHS404-hs403-discovery-zkill-candidate-acquisition-helper-extraction-review.md
 ```
 
-Status: trace-pack writer redaction hardening complete and accepted by Overseer.
-
-HS188 result:
-
-- `support.debug_trace_pack` now applies the accepted HS186 redaction/truncation policy to trace-pack assembly.
-- Actual light-log hardening remains unopened.
-- Runtime artifact class expansion, provider calls, storage movement, deletion/pruning behavior, runtime enforcement activation, command blocking, and UI work remain unopened.
-
-## Resting Next Options
-
-Recommended next shaping candidates:
-
-1. Rest support artifacts and continue a different storage/runtime seam.
-2. Light-log redaction policy/writer proof, if support artifact hardening continues.
-3. Readiness/preflight class-id alias normalization, if naming consistency should be tidied.
-
-Do not open Dev implementation until one of these is selected and bounded.
-
-Completed:
+Dev handoff:
 
 ```txt
-workspace/DevHS186-trace-log-redaction-policy-proof.md
+workspace/DevHS403-discovery-zkill-candidate-acquisition-helper-extraction.md
 ```
 
-Status: trace/log redaction policy proof complete and accepted by Overseer.
-
-HS186 result:
-
-- `support.trace_log_redaction_policy.preview` proves the support-hardening policy posture for trace/log redaction and free-text truncation without changing writer behavior.
-- Actual trace-pack/log writer hardening remains unopened.
-- Runtime artifact creation, real artifact inspection, provider calls, storage movement, deletion/pruning behavior, runtime enforcement activation, command blocking, and UI work remain unopened.
-
-## Resting Next Options
-
-Recommended next shaping candidates:
-
-1. Small trace-pack writer hardening slice using `support.trace_log_redaction_policy.preview` as basis.
-2. Readiness/preflight class-id alias normalization, if support artifact naming consistency should be tidied first.
-3. Rest support artifacts and continue a different storage/runtime seam.
-
-Do not open Dev implementation until one of these is selected and bounded.
-
-Completed:
+Runway:
 
 ```txt
-workspace/DevHS178-support-artifact-contents-contract.md
+workspace/OverseerHS403-discovery-zkill-candidate-acquisition-helper-extraction-runway.md
 ```
 
-Status: contents contract preview complete and accepted by Overseer.
+Accepted result:
 
-Overseer reviewed 2026-06-02:
+- `src/main/discovery/zkillCandidateAcquisition.js` now owns zKill candidate acquisition helpers.
+- `discoverActorRefs(...)` and `discoverSystemRefs(...)` live under Discovery ownership.
+- `actorWatchCollector.js`, `systemRadiusCollector.js`, and `manualDiscoveryWorker.js` import zKill acquisition helpers from Discovery.
+- Manual discovery no longer imports zKill acquisition helpers from Watch collector modules.
+- Old collector helper export surfaces remain only as compatibility aliases/imported surfaces.
+- Existing mixed collector runtime behavior remains intact.
 
-- Accepted HS178 in `workspace/OverseerHS179-hs178-support-artifact-contents-contract-review.md`.
-- Verified the new command, registry/authority/passive-side-effect coverage, dry-run coverage, protected-term advisory output, and diff hygiene.
-- Accepted `support.artifact_contents_contract.preview` as read-only content posture for support artifact classes.
-- Runtime artifact creation, snapshot creation, trace-pack creation, support export writing, deletion/pruning behavior, and runtime enforcement activation remain unopened.
+## Active Boundaries
 
-## Resting Next Options
+Do not open or imply:
 
-Recommended next shaping candidates:
+- default `actor.watch` redirect
+- scheduled Watch redirect
+- collector retirement
+- collector invocation rewrite
+- live/provider movement
+- dispatcher / queue / lease / worker behavior
+- Discovery task/packet persistence
+- schema changes
+- Evidence/EVEidence write behavior changes
+- Hydration / metadata write behavior changes
+- Watch cadence mutation
+- runtime enforcement or command blocking
+- renderer UI work
+- support artifact work
+- source-term rename
+- protected-word JSON update
 
-1. Read-only conformance gap map between existing snapshot/trace-pack/readiness support code and the accepted contents contract.
-2. Continue a different storage/runtime seam if support artifacts should rest.
+Current accepted model:
 
-Do not open Dev implementation until one of these is selected and bounded.
+- Watch is a scheduler and scope-authority source.
+- A due Watch emits Discovery pickup intent; it does not acquire candidates itself.
+- Discovery is the provider-facing acquisition utility.
+- Discovery services zKill candidate-lead acquisition and ESI-backed killmail/detail expansion lanes.
+- Discovery refs are possible leads / provenance, not Evidence.
+- Evidence/EVEidence is final landed memory from expanded ESI killmails and normalized rows.
+- Hydration repairs readability and labels; it does not create Evidence.
+- Observation derives local records into stories/readouts and should disclose basis.
+- Assessment Memory is human-authored judgment, not Evidence.
+- Raw IDs remain truthful facts; readable labels are applied attention.
 
-## Active HS184 Runway
+Accepted Discovery outcome vocabulary for shaping:
 
-Opened 2026-06-02:
+- `complete_refs_found`
+- `complete_no_refs`
+- `partial_deferred`
+- `provider_deferred`
+- `held_by_external_io`
+- `acquisition_capped`
+- `failed_retryable`
+- `failed_terminal`
 
-- `workspace/OverseerHS184-runtime-snapshot-manifest-disclosure-runway.md`
+`invalid_scope` belongs before Discovery acceptance at Intent / Scope Authority.
 
-Expected Dev handoff:
+## Verification Posture
+
+HS403 acceptance verification passed:
 
 ```txt
-workspace/DevHS184-runtime-snapshot-manifest-disclosure.md
+node --check src\main\discovery\zkillCandidateAcquisition.js
+node --check src\main\workers\actorWatchCollector.js
+node --check src\main\workers\systemRadiusCollector.js
+node --check src\main\workers\manualDiscoveryWorker.js
+npm.cmd run verify:actor-watch
+npm.cmd run verify:collector
+npm.cmd run verify:manual-discovery
+npm.cmd run verify:watch-actor-compatibility-wrapper-runtime-preview
+npm.cmd run verify:watch-actor-compatibility-wrapper-adapter-fixture
+npm.cmd run verify:discovery-acquisition-to-evidence-handoff-fixture
+npm.cmd run verify:discovery-esi-expansion-intake-posture
+npm.cmd run verify:evidence-writer-landing-package-fixture
+npm.cmd run verify:evidence-rules
+npm.cmd run verify:service-registry
+npm.cmd run verify:command-authority
+npm.cmd run verify:passive-side-effects
+npm.cmd run verify:enforcement-dry-run
+npm.cmd run verify:protected-terms
+git diff --check
+git status --short --branch
 ```
 
-Task:
+Notes:
 
-Add metadata/manifest-style disclosure to runtime snapshot preflight and create results. This should make high sensitivity, corpus-adjacent support posture, copied DB content posture, raw ESI DB-copy posture, non-authority, local path sensitivity, and cleanup/deletion review responsibility explicit.
+- `verify:protected-terms` completed with warning-only advisory output across the broad current working set.
+- `git diff --check` returned exit code 0 with CRLF normalization warnings only.
+- Repo status remains noisy: `main...origin/main [ahead 19]` with a large uncommitted/untracked milestone stack.
 
-Preserve:
+## Next Candidate Seams
 
-- no sidecar/manifest file creation
-- no new artifact files beyond the existing runtime snapshot command behavior
-- no trace-pack/log/export changes
-- no provider calls
-- no schema/runtime enforcement/UI work
+Recommended next options:
 
-## HS184 Evidence
+1. Compatibility summary / caller return path source trace.
+   - Decide whether production actor Watch replacement can return the expected caller shape without reviving mixed collector ownership.
+   - This is the calmest warm-start seam after HS419.
 
-Dev updated 2026-06-02:
+2. Narrow runtime-adapter implementation runway.
+   - Only open if the return-path trace or orientation confirms the remaining gap is mechanical and bounded.
+   - Expected boundary would still avoid scheduled Watch redirect, live/provider movement, and collector retirement unless explicitly authorized.
 
-- Added `support_artifact_disclosure` to runtime snapshot preflight and create results.
-- Added internal `snapshotArtifactDisclosure(...)` and `snapshotArtifactClass(...)` helpers in `src/main/services/runtimeSnapshotService.js`.
-- Disclosure covers:
-  - `artifact_class`
-  - `artifact_class_posture`
-  - `artifact_family: corpus_adjacent_support`
-  - `privacy_sensitivity: high`
-  - support/recovery/debug-only material posture
-  - existing DB-copy content posture
-  - raw ESI, Discovery refs, Evidence/EVEidence rows, Hydration labels/candidates, Watch state, and Assessment Memory included only as existing DB-copy content
-  - non-authority for Evidence/EVEidence, Discovery, Observation, Assessment Memory, product truth, deletion/pruning authority, and cleanup authority
-  - retained/manual snapshot outlive posture and cleanup/deletion review responsibility
-  - local path sensitivity for source DB path, snapshot path, and destination directory
-  - basis/provenance for source DB path, snapshot path, destination, generated time, and storage/budget context
-- Updated `support.artifact_writer_conformance_gap_map.preview` snapshot rows so snapshot manifest disclosure, raw ESI DB-copy posture, local path sensitivity, retained class split, cleanup/deletion disclosure, and non-authority now conform.
-- Remaining conformance gaps after HS184:
-  - `readiness_preflight_export` class-id alias normalization remains `gap`
-  - trace-pack free-text/sample/path/queue summary items remain `partial`
-  - trace/log provider endpoint/error-message secret leakage remains `unknown`
-- Verification run:
-  - `node --check src\main\services\runtimeSnapshotService.js` passed.
-  - `node --check src\main\services\supportArtifactWriterConformanceGapMapService.js` passed.
-  - `node --check scripts\verify-runtime-db-snapshot.js` passed.
-  - `node --check scripts\verify-support-artifact-writer-conformance-gap-map.js` passed.
-  - `npm.cmd run verify:runtime-snapshot` passed; this creates fixture runtime snapshot files under test-controlled `.tmp` paths as permitted by HS184.
-  - `npm.cmd run verify:support-artifact-writer-conformance-gap-map` passed.
-  - `npm.cmd run verify:support-artifact-contents-contract` passed.
-  - `npm.cmd run verify:support-artifact-creation-policy` passed.
-  - `npm.cmd run verify:support-artifact-path-authority` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 188 warnings across 6 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main` with HS184 working-tree changes.
+3. Discovery body map cleanup / source trace.
+   - Optional rest-state cleanup if the next runtime-adapter decision feels too hot for immediate motion.
 
-## HS184 Dev Handoff
+Do not open default runtime redirect, scheduled Watch redirect, collector retirement, live/provider movement expansion, dispatcher work, schema work, or enforcement until the next seam explicitly accepts that movement.
 
-Completed:
+## Recovery Pointers
+
+Primary active files:
+
+- `workspace/current.md`
+- `workspace/overview.md`
+- `workspace/OverseerHS420-hs419-actor-watch-controlled-runtime-adapter-fixture-review.md`
+- `workspace/DevHS419-actor-watch-controlled-runtime-adapter-fixture-proof.md`
+- `workspace/OverseerHS419-actor-watch-controlled-runtime-adapter-fixture-proof-runway.md`
+- `workspace/OverseerHS418-hs417-actor-watch-controlled-runtime-adapter-readiness-review.md`
+- `workspace/EngineeringTraceHS417-actor-watch-controlled-runtime-adapter-readiness.md`
+- `workspace/OverseerHS417-actor-watch-controlled-runtime-adapter-readiness-request.md`
+- `workspace/OverseerHS416-hs415-actor-watch-discovery-route-body-fixture-proof-review.md`
+- `workspace/DevHS415-actor-watch-discovery-route-body-fixture-proof.md`
+- `workspace/OverseerHS415-actor-watch-discovery-route-body-fixture-proof-runway.md`
+- `workspace/OverseerHS412-hs411-discovery-esi-backed-expansion-package-helper-extraction-review.md`
+- `workspace/DevHS411-discovery-esi-backed-expansion-package-helper-extraction.md`
+- `workspace/OverseerHS411-discovery-esi-backed-expansion-package-helper-extraction-runway.md`
+- `workspace/OverseerHS410-hs409-esi-backed-expansion-package-helper-boundary-review.md`
+- `workspace/EngineeringTraceHS409-esi-backed-expansion-package-helper-boundary.md`
+- `workspace/OverseerHS409-esi-backed-expansion-package-helper-boundary-trace-request.md`
+- `workspace/OverseerHS408-hs407-discovery-candidate-ref-pending-rehydration-helper-extraction-review.md`
+- `workspace/DevHS407-discovery-candidate-ref-pending-rehydration-helper-extraction.md`
+- `workspace/OverseerHS407-discovery-candidate-ref-pending-rehydration-helper-extraction-runway.md`
+- `workspace/OverseerHS406-hs405-candidate-ref-memory-status-helper-ownership-review.md`
+- `workspace/EngineeringTraceHS405-candidate-ref-memory-status-helper-ownership.md`
+- `workspace/OverseerHS405-candidate-ref-memory-status-helper-ownership-trace-request.md`
+- `workspace/OverseerHS404-hs403-discovery-zkill-candidate-acquisition-helper-extraction-review.md`
+- `workspace/DevHS403-discovery-zkill-candidate-acquisition-helper-extraction.md`
+- `workspace/OverseerHS403-discovery-zkill-candidate-acquisition-helper-extraction-runway.md`
+
+Recent Discovery replacement chain:
+
+- HS351 / HS352: Discovery boundary task-handling audit accepted.
+- HS353: Discovery outcome shaping note.
+- HS354 / HS355: Discovery outcome derivation feasibility accepted.
+- HS356 / HS357: Discovery outcome derivation proof accepted.
+- HS358: Discovery receipt shaping note.
+- HS359 / HS360: Discovery receipt source trace accepted.
+- HS361 / HS362: Discovery receipt data model accepted.
+- HS363 / HS364: Discovery receipt projection fixture proof accepted.
+- HS365: Discovery next-seam decision surface.
+- HS366 / HS367: Discovery utility / Watch split readiness accepted.
+- HS368 / HS369: Watch-to-Discovery acquisition split fixture accepted.
+- HS370 / HS371: Discovery acquisition-to-Evidence handoff fixture accepted.
+- HS372 / HS373: mixed Watch collector replacement plan accepted.
+- HS374 / HS375: mixed collector replacement route preview accepted.
+- HS376 / HS378: actor Watch first replacement/parity accepted.
+- HS379 / HS380: Discovery ESI-backed expansion intake posture accepted.
+- HS381 / HS384: actor Watch compatibility-wrapper contract/adapter fixture accepted.
+- HS385 / HS392: Evidence/EVEidence writer landing and conflict behavior accepted.
+- HS393 / HS396: actor Watch runtime redirect readiness and compatibility-wrapper command accepted.
+- HS397 / HS398: Discovery helper ownership source trace accepted.
+- HS399 / HS400: Discovery expansion queue helper extraction accepted.
+- HS401 / HS402: zKill acquisition helper ownership trace accepted.
+- HS403 / HS404: Discovery zKill candidate acquisition helper extraction accepted.
+- HS405 / HS406: candidate-ref memory/status helper ownership trace accepted.
+
+Older detailed `current.md` material lives in:
 
 ```txt
-workspace/DevHS184-runtime-snapshot-manifest-disclosure.md
+workspace/archive/current-legacy-2026-06-07-pre-flatten.md
 ```
 
-Status: runtime snapshot manifest disclosure complete and accepted by Overseer.
+## Dot Command
 
-Overseer reviewed 2026-06-02:
+On `.` as Overseer:
 
-- Accepted HS184 in `workspace/OverseerHS185-hs184-runtime-snapshot-disclosure-review.md`.
-- Verified snapshot disclosure, conformance map updates, support artifact contract/path/creation dependencies, registry/authority/passive-side-effect coverage, dry-run coverage, protected-term advisory output, and diff hygiene.
-- Accepted `support_artifact_disclosure` on runtime snapshot preflight and create results.
-- Snapshot manifest disclosure gaps are now closed in the conformance map.
-- Trace/log redaction, readiness alias normalization, support artifact creation behavior, deletion/pruning behavior, runtime enforcement activation, and UI work remain unopened.
-
-## Resting Next Options
-
-Recommended next shaping candidates:
-
-1. Trace/log redaction and free-text truncation policy proof.
-2. Readiness/preflight class-id alias normalization, if support artifact naming consistency should be tidied before trace/log work.
-3. Rest support artifacts and continue a different storage/runtime seam.
-
-Do not open Dev implementation until one of these is selected and bounded.
-
-## Advisory Input Accepted
-
-Accepted 2026-06-02:
-
-- `workspace/SecurityReviewHS180-support-artifact-contents-contract.md`
-- `workspace/OverseerHS181-hs180-security-review-acceptance.md`
-
-HS180 found no blocking issue in the contract preview and recommended a read-only writer conformance gap map before any support artifact writer changes.
-
-## Active HS182 Runway
-
-Opened 2026-06-02:
-
-- `workspace/OverseerHS182-support-artifact-writer-conformance-gap-map-runway.md`
-
-Expected Dev handoff:
-
-```txt
-workspace/DevHS182-support-artifact-writer-conformance-gap-map.md
-```
-
-Task:
-
-Add a read-only support artifact writer conformance gap map, preferably:
-
-```txt
-support.artifact_writer_conformance_gap_map.preview
-```
-
-It should compare existing snapshot, trace-pack, readiness/preflight, and light-log writer/output posture against `support.artifact_contents_contract.preview` without changing writer behavior or creating artifacts.
-
-Preserve:
-
-- no writer behavior changes
-- no support artifact creation
-- no snapshot/trace-pack/log/export/file/directory creation
-- no provider calls
-- no Evidence/EVEidence, Discovery, Hydration, Assessment, Watch, storage config, schema, runtime enforcement, command blocking, or UI work
-
-## HS182 Evidence
-
-Dev updated 2026-06-02:
-
-- Added `support.artifact_writer_conformance_gap_map.preview` as a read-only service command and renderer-eligible readout.
-- Added `src/main/services/supportArtifactWriterConformanceGapMapService.js` with a static writer conformance map that compares current writer/output postures to `support.artifact_contents_contract.preview`.
-- Added `scripts/verify-support-artifact-writer-conformance-gap-map.js` and `npm.cmd run verify:support-artifact-writer-conformance-gap-map`.
-- Updated service registry, enforcement dry-run coverage, command authority, service registry, and passive side-effect coverage for the new command.
-- Mapped artifact classes:
-  - `runtime_snapshot_rolling`
-  - `runtime_snapshot_retained`
-  - `operator_debug_trace_pack`
-  - `readiness_preflight_export`
-  - `light_operational_logs`
-- Focused verifier sample:
-  - class count: 5
-  - check count: 23
-  - status counts: `conforms` = 4, `gap` = 3, `partial` = 13, `unknown` = 3
-  - risk counts: `low` = 8, `medium` = 12, `high` = 3
-  - classes with gaps: runtime snapshot rolling, runtime snapshot retained, readiness/preflight export
-  - classes with unknowns: operator debug trace pack, light operational logs
-- HS180 concerns are carried forward:
-  - trace-pack free-text max length/truncation: `partial`
-  - local path sensitivity disclosure: `partial`
-  - sample limit/exclusions disclosure: `partial`
-  - readiness class-id alias normalization: `gap`
-  - snapshot manifest sensitivity/non-authority/cleanup disclosure: `gap` / `partial`
-  - provider endpoint/error-message secret leakage: `unknown`
-  - queue latest refs bounded summary: `partial`
-- Focused verifier proves no support artifacts, snapshots, trace packs, logs, exports, files, or directories are created, no provider calls occur, no DB table counts change, and no writer behavior changes.
-- Verification run:
-  - `node --check src\main\services\supportArtifactWriterConformanceGapMapService.js` passed.
-  - `node --check src\main\services\serviceRegistry.js` passed.
-  - `node --check src\main\services\enforcementDryRunService.js` passed.
-  - `node --check scripts\verify-support-artifact-writer-conformance-gap-map.js` passed.
-  - `node --check scripts\verify-command-authority.js` passed.
-  - `node --check scripts\verify-service-registry.js` passed.
-  - `node --check scripts\verify-passive-side-effects.js` passed.
-  - `npm.cmd run verify:support-artifact-writer-conformance-gap-map` passed.
-  - `npm.cmd run verify:support-artifact-contents-contract` passed.
-  - `npm.cmd run verify:support-artifact-path-authority` passed.
-  - `npm.cmd run verify:support-artifact-creation-policy` passed.
-  - `npm.cmd run verify:service-registry` passed.
-  - `npm.cmd run verify:command-authority` passed.
-  - `npm.cmd run verify:passive-side-effects` passed.
-  - `npm.cmd run verify:enforcement-dry-run` passed.
-  - `npm.cmd run verify:protected-terms` passed with warning-only advisory output: 241 warnings across 9 changed working-set files; no renames or protected-word JSON updates performed.
-  - `git diff --check` passed; only CRLF normalization warnings were emitted.
-  - `git status --short --branch` showed branch `main...origin/main` with HS182 working-tree changes.
-
-## HS182 Dev Handoff
-
-Completed:
-
-```txt
-workspace/DevHS182-support-artifact-writer-conformance-gap-map.md
-```
-
-Status: writer conformance gap map preview complete and accepted by Overseer.
-
-Overseer reviewed 2026-06-02:
-
-- Accepted HS182 in `workspace/OverseerHS183-hs182-support-artifact-writer-conformance-review.md`.
-- Verified the new command, support artifact contract/path/creation dependencies, registry/authority/passive-side-effect coverage, dry-run coverage, protected-term advisory output, and diff hygiene.
-- Accepted `support.artifact_writer_conformance_gap_map.preview` as read-only gap evidence for later support artifact hardening.
-- Actual writer behavior changes, support artifact creation, snapshot creation, trace-pack creation, log/export creation, deletion/pruning behavior, and runtime enforcement activation remain unopened.
-
-## Resting Next Options
-
-Recommended next shaping candidates:
-
-1. Snapshot manifest / metadata disclosure hardening.
-2. Trace/log redaction and free-text truncation policy proof.
-3. Rest support artifacts and continue a different storage/runtime seam.
-
-Do not open Dev implementation until one of these is selected and bounded.
+1. Refresh `workspace/current.md` and `workspace/overview.md`.
+2. If a Dev handoff has landed, review it.
+3. If no handoff is pending, present or shape the next bounded seam.
+4. Do not create a Dev runway unless the next seam is coherent.

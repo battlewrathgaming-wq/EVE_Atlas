@@ -25,6 +25,11 @@ function main() {
   assertTable(db, 'metadata_runs');
   assertTable(db, 'regions');
   assertTable(db, 'constellations');
+  assertTable(db, 'watch_bucket_items');
+  assertColumn(db, 'watch_bucket_items', 'bucket_item_id');
+  assertColumn(db, 'watch_bucket_items', 'watch_run_id');
+  assertColumn(db, 'watch_bucket_items', 'accepted_scope_json');
+  assertColumn(db, 'watch_bucket_items', 'provider_timing_json');
 
   const legacyLog = db.prepare('SELECT run_type FROM api_request_logs WHERE request_id = ?').get('legacy_request_1');
   assert(legacyLog.run_type === 'collection', 'legacy API logs with run IDs should default to collection run_type');

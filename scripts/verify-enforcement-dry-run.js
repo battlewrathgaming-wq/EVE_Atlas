@@ -229,7 +229,7 @@ function verifyCoverageMetadata(map) {
   assert(command(map, 'storage.authority_config.write').runtime_context === 'storage_authority_operator_config_write', 'Storage authority config write should be classified as operator config write');
   assert(command(map, 'storage.authority_config.write').external_io_dependency === 'none', 'Storage authority config write should not declare provider dependency');
 
-  for (const commandName of ['storage.authority_config.write_proof', 'storage.authority_config.acknowledgement_persistence_proof', 'external_io.state_persistence_proof', 'metadata.hydration_write_fixture_proof', 'metadata.hydration_selected_id_execution_fixture_proof']) {
+  for (const commandName of ['storage.authority_config.write_proof', 'storage.authority_config.acknowledgement_persistence_proof', 'external_io.state_persistence_proof', 'metadata.hydration_write_fixture_proof', 'metadata.hydration_selected_id_execution_fixture_proof', 'watch.actor_controlled_runtime_adapter_fixture.preview', 'watch.actor_controlled_adapter_disabled.preview']) {
     assert(command(map, commandName).enforcement_status === 'fixture_only_non_production', `${commandName} should be fixture-only/non-production`);
     assert(map.coverage.fixture_only_commands.includes(commandName), `${commandName} should appear in fixture-only coverage summary`);
   }
@@ -286,6 +286,30 @@ function verifyCoverageMetadata(map) {
   assert(command(map, 'watch.task_creation_boundary.preview').runtime_context === 'watch_task_creation_boundary_readout', 'Watch task creation boundary preview should be classified as a readout');
   assert(command(map, 'watch.task_creation_boundary.preview').enforcement_status === 'read_only_non_enforcing_proof', 'Watch task creation boundary preview should identify itself as a non-enforcing proof');
   assert(command(map, 'watch.task_creation_boundary.preview').external_io_dependency === 'none', 'Watch task creation boundary preview should not declare External I/O dependency');
+  assert(command(map, 'watch.system_radius_run_stub.preview').storage_action_class === 'local_db_inspection', 'system/radius Watch-run stub preview should be a local DB inspection');
+  assert(command(map, 'watch.system_radius_run_stub.preview').runtime_context === 'watch_system_radius_run_stub_readout', 'system/radius Watch-run stub preview should be classified as a readout');
+  assert(command(map, 'watch.system_radius_run_stub.preview').enforcement_status === 'read_only_non_enforcing_proof', 'system/radius Watch-run stub preview should identify itself as a non-enforcing proof');
+  assert(command(map, 'watch.system_radius_run_stub.preview').external_io_dependency === 'none', 'system/radius Watch-run stub preview should not declare External I/O dependency');
+  assert(command(map, 'watch.bucket_identity_projection.preview').storage_action_class === 'local_db_inspection', 'Watch bucket identity projection should be a local DB inspection');
+  assert(command(map, 'watch.bucket_identity_projection.preview').runtime_context === 'watch_bucket_identity_projection_readout', 'Watch bucket identity projection should be classified as a readout');
+  assert(command(map, 'watch.bucket_identity_projection.preview').enforcement_status === 'read_only_non_enforcing_proof', 'Watch bucket identity projection should identify itself as a non-enforcing proof');
+  assert(command(map, 'watch.bucket_identity_projection.preview').external_io_dependency === 'none', 'Watch bucket identity projection should not declare External I/O dependency');
+  assert(command(map, 'watch.bucket_pickup_posture_bridge.preview').storage_action_class === 'local_db_inspection', 'Watch bucket pickup posture bridge should be a local DB inspection');
+  assert(command(map, 'watch.bucket_pickup_posture_bridge.preview').runtime_context === 'watch_bucket_pickup_posture_bridge_readout', 'Watch bucket pickup posture bridge should be classified as a readout');
+  assert(command(map, 'watch.bucket_pickup_posture_bridge.preview').enforcement_status === 'read_only_non_enforcing_proof', 'Watch bucket pickup posture bridge should identify itself as a non-enforcing proof');
+  assert(command(map, 'watch.bucket_pickup_posture_bridge.preview').external_io_dependency === 'none', 'Watch bucket pickup posture bridge should not declare External I/O dependency');
+  assert(command(map, 'watch.bucket_disposable_persistence_fixture.preview').storage_action_class === 'local_db_inspection', 'Watch bucket disposable persistence fixture should be a local DB inspection');
+  assert(command(map, 'watch.bucket_disposable_persistence_fixture.preview').runtime_context === 'watch_bucket_disposable_persistence_fixture_readout', 'Watch bucket disposable persistence fixture should be classified as a readout');
+  assert(command(map, 'watch.bucket_disposable_persistence_fixture.preview').enforcement_status === 'read_only_non_enforcing_proof', 'Watch bucket disposable persistence fixture should identify itself as a non-enforcing proof');
+  assert(command(map, 'watch.bucket_disposable_persistence_fixture.preview').external_io_dependency === 'none', 'Watch bucket disposable persistence fixture should not declare External I/O dependency');
+  assert(command(map, 'watch.bucket_product_persistence.emit').storage_action_class === 'setup_config_changes', 'Watch bucket product persistence should be a local mutation class');
+  assert(command(map, 'watch.bucket_product_persistence.emit').runtime_context === 'watch_bucket_product_persistence', 'Watch bucket product persistence should be classified as bucket persistence');
+  assert(command(map, 'watch.bucket_product_persistence.emit').enforcement_status === 'covered_local_mutation', 'Watch bucket product persistence should identify itself as covered local mutation');
+  assert(command(map, 'watch.bucket_product_persistence.emit').external_io_dependency === 'none', 'Watch bucket product persistence should not declare External I/O dependency');
+  assert(command(map, 'discovery.pickup_consumer_hold_contract.preview').storage_action_class === 'local_db_inspection', 'Discovery pickup consumer hold contract should be a local DB inspection');
+  assert(command(map, 'discovery.pickup_consumer_hold_contract.preview').runtime_context === 'discovery_pickup_consumer_hold_contract_readout', 'Discovery pickup consumer hold contract should be classified as a readout');
+  assert(command(map, 'discovery.pickup_consumer_hold_contract.preview').enforcement_status === 'read_only_non_enforcing_proof', 'Discovery pickup consumer hold contract should identify itself as a non-enforcing proof');
+  assert(command(map, 'discovery.pickup_consumer_hold_contract.preview').external_io_dependency === 'none', 'Discovery pickup consumer hold contract should not declare External I/O dependency');
   assert(command(map, 'watch.operator_confirmation_contract.preview').storage_action_class === 'local_db_inspection', 'Watch operator confirmation contract preview should be a local DB inspection');
   assert(command(map, 'watch.operator_confirmation_contract.preview').runtime_context === 'watch_operator_confirmation_contract_readout', 'Watch operator confirmation contract preview should be classified as a readout');
   assert(command(map, 'watch.operator_confirmation_contract.preview').enforcement_status === 'read_only_non_enforcing_proof', 'Watch operator confirmation contract preview should identify itself as a non-enforcing proof');

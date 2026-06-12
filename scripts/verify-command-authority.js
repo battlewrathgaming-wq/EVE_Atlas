@@ -123,10 +123,56 @@ async function main() {
     assert(commands.get('watch.packet_dry_run_dispatch_parity.preview')?.effects.includes('read-only'), 'Watch packet/dry-run/dispatch parity preview should declare read-only effect');
     assert(commands.get('watch.task_creation_boundary.preview')?.classification === 'read-only', 'Watch task creation boundary preview should be read-only');
     assert(commands.get('watch.task_creation_boundary.preview')?.effects.includes('read-only'), 'Watch task creation boundary preview should declare read-only effect');
+    assert(commands.get('watch.system_radius_run_stub.preview')?.classification === 'read-only', 'system/radius Watch-run stub preview should be read-only');
+    assert(commands.get('watch.system_radius_run_stub.preview')?.effects.includes('read-only'), 'system/radius Watch-run stub preview should declare read-only effect');
+    assert(commands.get('watch.bucket_identity_projection.preview')?.classification === 'read-only', 'Watch bucket identity projection should be read-only');
+    assert(commands.get('watch.bucket_identity_projection.preview')?.effects.includes('read-only'), 'Watch bucket identity projection should declare read-only effect');
+    assert(commands.get('watch.bucket_pickup_posture_bridge.preview')?.classification === 'read-only', 'Watch bucket pickup posture bridge should be read-only');
+    assert(commands.get('watch.bucket_pickup_posture_bridge.preview')?.effects.includes('read-only'), 'Watch bucket pickup posture bridge should declare read-only effect');
+    assert(commands.get('watch.bucket_disposable_persistence_fixture.preview')?.classification === 'read-only', 'Watch bucket disposable persistence fixture should be read-only');
+    assert(commands.get('watch.bucket_disposable_persistence_fixture.preview')?.effects.includes('read-only'), 'Watch bucket disposable persistence fixture should declare read-only effect');
+    assert(commands.get('watch.bucket_product_persistence.emit')?.classification === 'metadata-only', 'Watch bucket product persistence should be metadata-only');
+    assert(commands.get('watch.bucket_product_persistence.emit')?.effects.includes('local-data-mutation'), 'Watch bucket product persistence should declare local-data-mutation effect');
+    assert(!commands.get('watch.bucket_product_persistence.emit')?.effects.includes('external-live-api'), 'Watch bucket product persistence should not declare external-live-api effect');
+    assert(!commands.get('watch.bucket_product_persistence.emit')?.effects.includes('evidence-creation'), 'Watch bucket product persistence should not declare Evidence/EVEidence creation effect');
     assert(commands.get('watch.discovery_pickup_packet_proof.preview')?.classification === 'read-only', 'Watch Discovery pickup packet proof should be read-only');
     assert(commands.get('watch.discovery_pickup_packet_proof.preview')?.effects.includes('read-only'), 'Watch Discovery pickup packet proof should declare read-only effect');
     assert(commands.get('discovery.pickup_consumer_fixture.preview')?.classification === 'read-only', 'Discovery pickup consumer fixture should be read-only');
     assert(commands.get('discovery.pickup_consumer_fixture.preview')?.effects.includes('read-only'), 'Discovery pickup consumer fixture should declare read-only effect');
+    assert(commands.get('discovery.pickup_consumer_hold_contract.preview')?.classification === 'read-only', 'Discovery pickup consumer hold contract should be read-only');
+    assert(commands.get('discovery.pickup_consumer_hold_contract.preview')?.effects.includes('read-only'), 'Discovery pickup consumer hold contract should declare read-only effect');
+    assert(commands.get('discovery.outcome_derivation.preview')?.classification === 'read-only', 'Discovery outcome derivation should be read-only');
+    assert(commands.get('discovery.outcome_derivation.preview')?.effects.includes('read-only'), 'Discovery outcome derivation should declare read-only effect');
+    assert(commands.get('discovery.receipt_projection_fixture.preview')?.classification === 'read-only', 'Discovery receipt projection fixture should be read-only');
+    assert(commands.get('discovery.receipt_projection_fixture.preview')?.effects.includes('read-only'), 'Discovery receipt projection fixture should declare read-only effect');
+    assert(commands.get('watch.discovery_acquisition_split_fixture.preview')?.classification === 'read-only', 'Watch Discovery acquisition split fixture should be read-only');
+    assert(commands.get('watch.discovery_acquisition_split_fixture.preview')?.effects.includes('read-only'), 'Watch Discovery acquisition split fixture should declare read-only effect');
+    assert(commands.get('discovery.acquisition_to_evidence_handoff_fixture.preview')?.classification === 'read-only', 'Discovery acquisition to Evidence handoff fixture should be read-only');
+    assert(commands.get('discovery.acquisition_to_evidence_handoff_fixture.preview')?.effects.includes('read-only'), 'Discovery acquisition to Evidence handoff fixture should declare read-only effect');
+    assert(commands.get('discovery.esi_expansion_intake_posture.preview')?.classification === 'read-only', 'Discovery ESI expansion intake posture should be read-only');
+    assert(commands.get('discovery.esi_expansion_intake_posture.preview')?.effects.includes('read-only'), 'Discovery ESI expansion intake posture should declare read-only effect');
+    assert(commands.get('evidence.writer_landing_package_fixture.preview')?.classification === 'metadata-only', 'Evidence writer landing package fixture should be metadata-only');
+    assert(commands.get('evidence.writer_landing_package_fixture.preview')?.effects.includes('local-data-mutation'), 'Evidence writer landing package fixture should declare fixture local mutation');
+    assert(commands.get('watch.mixed_collector_replacement_route.preview')?.classification === 'read-only', 'Watch mixed collector replacement route preview should be read-only');
+    assert(commands.get('watch.mixed_collector_replacement_route.preview')?.effects.includes('read-only'), 'Watch mixed collector replacement route preview should declare read-only effect');
+    assert(commands.get('watch.actor_replacement_parity.preview')?.classification === 'read-only', 'Actor Watch replacement parity preview should be read-only');
+    assert(commands.get('watch.actor_replacement_parity.preview')?.effects.includes('read-only'), 'Actor Watch replacement parity preview should declare read-only effect');
+    assert(commands.get('watch.actor_compatibility_wrapper_contract.preview')?.classification === 'read-only', 'Actor Watch compatibility wrapper contract preview should be read-only');
+    assert(commands.get('watch.actor_compatibility_wrapper_contract.preview')?.effects.includes('read-only'), 'Actor Watch compatibility wrapper contract preview should declare read-only effect');
+    assert(commands.get('watch.actor_compatibility_wrapper_adapter_fixture.preview')?.classification === 'read-only', 'Actor Watch compatibility wrapper adapter fixture preview should be read-only');
+    assert(commands.get('watch.actor_compatibility_wrapper_adapter_fixture.preview')?.effects.includes('read-only'), 'Actor Watch compatibility wrapper adapter fixture preview should declare read-only effect');
+    assert(commands.get('watch.actor_compatibility_wrapper.preview')?.classification === 'read-only', 'Actor Watch compatibility wrapper runtime preview should be read-only');
+    assert(commands.get('watch.actor_compatibility_wrapper.preview')?.effects.includes('read-only'), 'Actor Watch compatibility wrapper runtime preview should declare read-only effect');
+    assert(commands.get('watch.actor_discovery_route_body_fixture.preview')?.classification === 'read-only', 'Actor Watch Discovery route body fixture preview should be read-only');
+    assert(commands.get('watch.actor_discovery_route_body_fixture.preview')?.effects.includes('read-only'), 'Actor Watch Discovery route body fixture preview should declare read-only effect');
+    assert(commands.get('watch.actor_discovery_handoff_contract.preview')?.classification === 'read-only', 'Actor Watch / Discovery handoff contract preview should be read-only');
+    assert(commands.get('watch.actor_discovery_handoff_contract.preview')?.effects.includes('read-only'), 'Actor Watch / Discovery handoff contract preview should declare read-only effect');
+    assert(commands.get('watch.actor_controlled_runtime_adapter_fixture.preview')?.classification === 'metadata-only', 'Actor Watch controlled runtime adapter fixture proof should be metadata-only');
+    assert(commands.get('watch.actor_controlled_runtime_adapter_fixture.preview')?.effects.includes('local-data-mutation'), 'Actor Watch controlled runtime adapter fixture proof should declare fixture local mutation effect');
+    assert(commands.get('watch.actor_controlled_adapter_disabled.preview')?.classification === 'metadata-only', 'Actor Watch controlled adapter disabled seam should be metadata-only');
+    assert(commands.get('watch.actor_controlled_adapter_disabled.preview')?.effects.includes('local-data-mutation'), 'Actor Watch controlled adapter disabled seam should declare fixture local mutation effect');
+    assert(!commands.get('watch.actor_controlled_adapter_disabled.preview')?.effects.includes('external-live-api'), 'Actor Watch controlled adapter disabled seam should not declare external-live-api effect');
+    assert(!commands.get('watch.actor_controlled_adapter_disabled.preview')?.effects.includes('evidence-creation'), 'Actor Watch controlled adapter disabled seam should not declare Evidence/EVEidence creation effect');
     assert(commands.get('watch.operator_confirmation_contract.preview')?.classification === 'read-only', 'Watch operator confirmation contract preview should be read-only');
     assert(commands.get('watch.operator_confirmation_contract.preview')?.effects.includes('read-only'), 'Watch operator confirmation contract preview should declare read-only effect');
     assert(commands.get('watch.system_radius_authoring_preflight.preview')?.classification === 'read-only', 'system/radius authoring preflight should be read-only');
@@ -195,8 +241,29 @@ async function main() {
     assert(rendererNames.has('watch.executor_tick_dry_run.preview'), 'Watch executor tick dry-run preview should be renderer eligible as read-only');
     assert(rendererNames.has('watch.packet_dry_run_dispatch_parity.preview'), 'Watch packet/dry-run/dispatch parity preview should be renderer eligible as read-only');
     assert(rendererNames.has('watch.task_creation_boundary.preview'), 'Watch task creation boundary preview should be renderer eligible as read-only');
+    assert(rendererNames.has('watch.system_radius_run_stub.preview'), 'system/radius Watch-run stub preview should be renderer eligible as read-only');
+    assert(rendererNames.has('watch.bucket_identity_projection.preview'), 'Watch bucket identity projection should be renderer eligible as read-only');
+    assert(rendererNames.has('watch.bucket_pickup_posture_bridge.preview'), 'Watch bucket pickup posture bridge should be renderer eligible as read-only');
+    assert(rendererNames.has('watch.bucket_disposable_persistence_fixture.preview'), 'Watch bucket disposable persistence fixture should be renderer eligible as read-only');
+    assert(!rendererNames.has('watch.bucket_product_persistence.emit'), 'Watch bucket product persistence should not be renderer eligible');
     assert(rendererNames.has('watch.discovery_pickup_packet_proof.preview'), 'Watch Discovery pickup packet proof should be renderer eligible as read-only');
     assert(rendererNames.has('discovery.pickup_consumer_fixture.preview'), 'Discovery pickup consumer fixture should be renderer eligible as read-only');
+    assert(rendererNames.has('discovery.pickup_consumer_hold_contract.preview'), 'Discovery pickup consumer hold contract should be renderer eligible as read-only');
+    assert(rendererNames.has('discovery.outcome_derivation.preview'), 'Discovery outcome derivation should be renderer eligible as read-only');
+    assert(rendererNames.has('discovery.receipt_projection_fixture.preview'), 'Discovery receipt projection fixture should be renderer eligible as read-only');
+    assert(rendererNames.has('watch.discovery_acquisition_split_fixture.preview'), 'Watch Discovery acquisition split fixture should be renderer eligible as read-only');
+    assert(rendererNames.has('discovery.acquisition_to_evidence_handoff_fixture.preview'), 'Discovery acquisition to Evidence handoff fixture should be renderer eligible as read-only');
+    assert(rendererNames.has('discovery.esi_expansion_intake_posture.preview'), 'Discovery ESI expansion intake posture should be renderer eligible as read-only');
+    assert(!rendererNames.has('evidence.writer_landing_package_fixture.preview'), 'Evidence writer landing package fixture should not be renderer eligible');
+    assert(rendererNames.has('watch.mixed_collector_replacement_route.preview'), 'Watch mixed collector replacement route preview should be renderer eligible as read-only');
+    assert(rendererNames.has('watch.actor_replacement_parity.preview'), 'Actor Watch replacement parity preview should be renderer eligible as read-only');
+    assert(rendererNames.has('watch.actor_compatibility_wrapper_contract.preview'), 'Actor Watch compatibility wrapper contract preview should be renderer eligible as read-only');
+    assert(rendererNames.has('watch.actor_compatibility_wrapper_adapter_fixture.preview'), 'Actor Watch compatibility wrapper adapter fixture preview should be renderer eligible as read-only');
+    assert(rendererNames.has('watch.actor_compatibility_wrapper.preview'), 'Actor Watch compatibility wrapper runtime preview should be renderer eligible as read-only');
+    assert(rendererNames.has('watch.actor_discovery_route_body_fixture.preview'), 'Actor Watch Discovery route body fixture preview should be renderer eligible as read-only');
+    assert(rendererNames.has('watch.actor_discovery_handoff_contract.preview'), 'Actor Watch / Discovery handoff contract preview should be renderer eligible as read-only');
+    assert(!rendererNames.has('watch.actor_controlled_runtime_adapter_fixture.preview'), 'Actor Watch controlled runtime adapter fixture proof should not be renderer eligible');
+    assert(!rendererNames.has('watch.actor_controlled_adapter_disabled.preview'), 'Actor Watch controlled adapter disabled seam should not be renderer eligible');
     assert(rendererNames.has('watch.operator_confirmation_contract.preview'), 'Watch operator confirmation contract preview should be renderer eligible as read-only');
     assert(rendererNames.has('watch.system_radius_authoring_preflight.preview'), 'system/radius authoring preflight should be renderer eligible as read-only');
     assert(rendererNames.has('watch.system_radius_acceptance_payload.preview'), 'system/radius acceptance payload should be renderer eligible as read-only');
@@ -272,6 +339,26 @@ async function main() {
       () => invoke(null, { command: 'sde.inventory_import_rewrite_authority.proof', payload: { sourcePath: 'fixture.zip' } }),
       'SERVICE_COMMAND_NOT_RENDERER_ELIGIBLE',
       'renderer IPC should reject SDE inventory authority proof'
+    );
+    await assertRejects(
+      () => invoke(null, { command: 'watch.bucket_product_persistence.emit', payload: {} }),
+      'SERVICE_COMMAND_NOT_RENDERER_ELIGIBLE',
+      'renderer IPC should reject Watch bucket product persistence'
+    );
+    await assertRejects(
+      () => invoke(null, { command: 'evidence.writer_landing_package_fixture.preview', payload: {} }),
+      'SERVICE_COMMAND_NOT_RENDERER_ELIGIBLE',
+      'renderer IPC should reject Evidence writer landing package fixture proof'
+    );
+    await assertRejects(
+      () => invoke(null, { command: 'watch.actor_controlled_runtime_adapter_fixture.preview', payload: {} }),
+      'SERVICE_COMMAND_NOT_RENDERER_ELIGIBLE',
+      'renderer IPC should reject actor Watch controlled runtime adapter fixture proof'
+    );
+    await assertRejects(
+      () => invoke(null, { command: 'watch.actor_controlled_adapter_disabled.preview', payload: {} }),
+      'SERVICE_COMMAND_NOT_RENDERER_ELIGIBLE',
+      'renderer IPC should reject actor Watch controlled adapter disabled seam'
     );
     await assertRejects(
       () => invoke(null, { command: 'manual.discovery', payload: { scope: 'actor', entityType: 'character', entityId: 90000002 } }),

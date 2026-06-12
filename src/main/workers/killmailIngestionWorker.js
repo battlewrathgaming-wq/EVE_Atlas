@@ -1,53 +1,5 @@
 const { normalizeKillmail } = require('../normalization/killmailNormalizer');
-
-async function buildEvidencePackageFromRefs({ refs, repository, esiClient, run, discoveredBy }) {
-  const output = emptyEvidencePackage(run);
-  output.run.discovered_refs = refs.length;
-
-  for (const ref of refs) {
-    if (repository.hasKillmail(ref.killmail_id)) {
-      output.run.already_cached += 1;
-      continue;
-    }
-
-    try {
-      const rawKillmail = await esiClient.expandKillmail(ref.killmail_id, ref.hash);
-      const normalized = normalizeKillmail(rawKillmail, {
-        killmailHash: ref.hash,
-        discoveredBy
-      });
-
-      output.killmails.push(normalized.killmail);
-      output.activity_events.push(...normalized.activity_events);
-      output.entity_updates.push(...normalized.entity_updates);
-      output.ingestion_audits.push(normalized.ingestion_audit);
-      output.warnings.push(...normalized.warnings);
-      output.run.expanded_count += 1;
-    } catch (error) {
-      if (error?.code === 'HTTP_CANCELLED' || error?.code === 'TASK_CANCELLED' || error?.name === 'AbortError') {
-        throw error;
-      }
-      if (isProviderCapacityError(error)) {
-        output.warnings.push({
-          killmail_id: ref.killmail_id,
-          warning_type: 'provider_capacity_deferred',
-          message: error.message,
-          created_at: new Date().toISOString()
-        });
-        continue;
-      }
-      output.run.failed_count += 1;
-      output.warnings.push({
-        killmail_id: ref.killmail_id,
-        warning_type: 'failed_expansion',
-        message: error.message,
-        created_at: new Date().toISOString()
-      });
-    }
-  }
-
-  return output;
-}
+const { buildEvidencePackageFromRefs } = require('../discovery/esiBackedExpansionPackage');
 
 function evidencePackageFromExpandedKillmails({ killmails, run, discoveredBy }) {
   const output = emptyEvidencePackage(run);
@@ -91,12 +43,6 @@ function emptyEvidencePackage(run) {
     ingestion_audits: [],
     warnings: []
   };
-}
-
-function isProviderCapacityError(error) {
-  return error?.code === 'PROVIDER_CAPACITY_DEFERRED' ||
-    error?.code === 'HTTP_RETRYABLE_CAPACITY' ||
-    [420, 429, 503].includes(Number(error?.statusCode || error?.status_code));
 }
 
 module.exports = {

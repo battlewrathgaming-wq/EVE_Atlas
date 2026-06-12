@@ -4,8 +4,11 @@ const { ZKillDiscoveryClient } = require('../api/zkillClient');
 const { TopologyService } = require('../sde/topologyService');
 const { planActorWatch } = require('./actorWatchPlanner');
 const { planSystemRadiusWatch } = require('./systemRadiusPlanner');
-const { discoverActorRefs } = require('./actorWatchCollector');
-const { discoverRefs: discoverSystemRefs, summarizeExpansionQueue } = require('./systemRadiusCollector');
+const { summarizeExpansionQueue } = require('../discovery/expansionQueueSelection');
+const {
+  discoverActorRefs,
+  discoverSystemRefs
+} = require('../discovery/zkillCandidateAcquisition');
 
 async function discoverManualRefs(input, dependencies = {}) {
   const db = dependencies.db;

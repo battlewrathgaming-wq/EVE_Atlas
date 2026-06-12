@@ -4,7 +4,14 @@ const { ZKillDiscoveryClient } = require('../api/zkillClient');
 const { EsiClient } = require('../api/esiClient');
 const { TopologyService } = require('../sde/topologyService');
 const { planSystemRadiusWatch } = require('./systemRadiusPlanner');
-const { buildEvidencePackageFromRefs } = require('./killmailIngestionWorker');
+const {
+  selectExpansionCandidates,
+  markFailedExpansionCandidates,
+  summarizeExpansionQueue
+} = require('../discovery/expansionQueueSelection');
+const { pendingSystemRadiusDiscovery } = require('../discovery/candidateRefMemory');
+const { discoverSystemRefs } = require('../discovery/zkillCandidateAcquisition');
+const { buildEvidencePackageFromRefs } = require('../discovery/esiBackedExpansionPackage');
 
 async function collectSystemRadiusWatch(input, dependencies = {}) {
   const db = dependencies.db;
@@ -40,7 +47,7 @@ async function collectSystemRadiusWatch(input, dependencies = {}) {
     });
     const discovery = pendingRefs.length
       ? pendingSystemRadiusDiscovery(pendingRefs)
-      : await discoverRefs(plannerOutput, zkillClient);
+      : await discoverSystemRefs(plannerOutput, zkillClient);
     if (!pendingRefs.length) {
       repository.upsertDiscoveredKillmailRefs(discovery.expansionQueue, {
         runId: fetchRun.run_id,
@@ -149,191 +156,6 @@ async function collectSystemRadiusWatch(input, dependencies = {}) {
   }
 }
 
-function pendingSystemRadiusDiscovery(pendingRefs) {
-  const expansionQueue = pendingRefs.map((ref, index) => ({
-    killmail_id: ref.killmail_id,
-    hash: ref.hash,
-    discovered_by_type: ref.discovered_by_type,
-    discovered_by_id: ref.discovered_by_id,
-    source_system_id: ref.source_system_id || null,
-    discovered_at: new Date().toISOString(),
-    priority: ref.priority || index + 1,
-    already_cached: false,
-    selected_for_expansion: false,
-    skip_reason: null
-  }));
-  return {
-    systemsScanned: 0,
-    discoveredRefs: 0,
-    duplicateRefsRemoved: 0,
-    malformedRefsRemoved: 0,
-    uniqueRefs: pendingRefs.map((ref) => ({ killmail_id: ref.killmail_id, hash: ref.hash })),
-    pendingRefsConsidered: pendingRefs.length,
-    expansionQueue,
-    warnings: ['zKill discovery skipped; draining pending system-radius discovery refs from local queue']
-  };
-}
-
-async function discoverRefs(plannerOutput, zkillClient) {
-  const refsByKillmailId = new Map();
-  let discoveredRefs = 0;
-  let duplicateRefsRemoved = 0;
-  let malformedRefsRemoved = 0;
-  let systemsScanned = 0;
-  let priority = 0;
-  const warnings = [];
-  const expansionQueue = [];
-
-  for (const request of plannerOutput.plannedZkillRequests) {
-    try {
-      const refs = await zkillClient.discoverRefs({
-        targetType: 'system',
-        targetId: request.target_id,
-        pastSeconds: request.past_seconds,
-        maxRefs: request.max_refs,
-        includePreview: request.include_preview || false
-      });
-      if (!Array.isArray(refs)) {
-        warnings.push(`zKill discovery for system ${request.target_id} returned a non-array response`);
-        continue;
-      }
-      systemsScanned += 1;
-      discoveredRefs += refs.length;
-
-      for (const ref of refs) {
-        const candidate = expansionCandidate(ref, request.target_id, priority += 1);
-        if (!candidate.killmail_id || !candidate.hash) {
-          candidate.skip_reason = 'malformed';
-          malformedRefsRemoved += 1;
-          expansionQueue.push(candidate);
-          continue;
-        }
-
-        if (refsByKillmailId.has(candidate.killmail_id)) {
-          candidate.skip_reason = 'duplicate';
-          duplicateRefsRemoved += 1;
-          expansionQueue.push(candidate);
-          continue;
-        }
-
-        refsByKillmailId.set(candidate.killmail_id, {
-          killmail_id: candidate.killmail_id,
-          hash: candidate.hash
-        });
-        expansionQueue.push(candidate);
-      }
-    } catch (error) {
-      warnings.push(`zKill discovery failed for system ${request.target_id}: ${error.message}`);
-    }
-  }
-
-  return {
-    systemsScanned,
-    discoveredRefs,
-    duplicateRefsRemoved,
-    malformedRefsRemoved,
-    uniqueRefs: [...refsByKillmailId.values()],
-    expansionQueue,
-    warnings
-  };
-}
-
-function expansionCandidate(ref, sourceSystemId, priority) {
-  const killmailId = Number(ref?.killmail_id);
-  return {
-    killmail_id: Number.isInteger(killmailId) && killmailId > 0 ? killmailId : null,
-    hash: ref?.hash || null,
-    source_system_id: sourceSystemId,
-    discovered_at: new Date().toISOString(),
-    priority,
-    already_cached: false,
-    selected_for_expansion: false,
-    skip_reason: null,
-    preview: ref?.preview || null
-  };
-}
-
-function selectExpansionCandidates(expansionQueue, repository, maxExpansions) {
-  const selectedRefs = [];
-  const queue = expansionQueue.map((candidate) => ({ ...candidate }));
-
-  for (const candidate of queue) {
-    if (candidate.skip_reason) {
-      continue;
-    }
-
-    if (repository.hasKillmail(candidate.killmail_id)) {
-      candidate.already_cached = true;
-      candidate.skip_reason = 'cached';
-      continue;
-    }
-
-    if (selectedRefs.length >= maxExpansions) {
-      candidate.skip_reason = 'cap_skipped';
-      continue;
-    }
-
-    candidate.selected_for_expansion = true;
-    selectedRefs.push({
-      killmail_id: candidate.killmail_id,
-      hash: candidate.hash,
-      discovered_by_type: candidate.discovered_by_type,
-      discovered_by_id: candidate.discovered_by_id
-    });
-  }
-
-  return {
-    selectedRefs,
-    expansionQueue: queue,
-    skipCounts: summarizeExpansionQueue(queue)
-  };
-}
-
-function markFailedExpansionCandidates(expansionQueue, warnings) {
-  const failedByKillmailId = new Map();
-  for (const warning of warnings || []) {
-    if (warning.warning_type !== 'failed_expansion' || !warning.killmail_id) {
-      continue;
-    }
-    failedByKillmailId.set(Number(warning.killmail_id), warning.message || 'ESI expansion failed');
-  }
-
-  if (!failedByKillmailId.size) {
-    return;
-  }
-
-  for (const candidate of expansionQueue) {
-    if (!candidate.selected_for_expansion || !failedByKillmailId.has(candidate.killmail_id)) {
-      continue;
-    }
-    candidate.skip_reason = 'failed';
-    candidate.error_message = failedByKillmailId.get(candidate.killmail_id);
-  }
-}
-
-function summarizeExpansionQueue(expansionQueue) {
-  const summary = {
-    total: expansionQueue.length,
-    selected: 0,
-    cached: 0,
-    duplicate: 0,
-    cap_skipped: 0,
-    malformed: 0,
-    failed: 0
-  };
-
-  for (const candidate of expansionQueue) {
-    if (candidate.selected_for_expansion) {
-      summary.selected += 1;
-    }
-    if (candidate.skip_reason && Object.prototype.hasOwnProperty.call(summary, candidate.skip_reason)) {
-      summary[candidate.skip_reason] += 1;
-    }
-  }
-
-  return summary;
-}
-
 function buildCollectionPlanSummary(plannerOutput, selection) {
   return {
     scope_authority_source: plannerOutput.scopeAuthority?.source || 'center_radius_planner',
@@ -369,8 +191,5 @@ function apiCountsForRun(db, runId) {
 
 module.exports = {
   collectSystemRadiusWatch,
-  discoverRefs,
-  selectExpansionCandidates,
-  markFailedExpansionCandidates,
-  summarizeExpansionQueue
+  discoverRefs: discoverSystemRefs
 };

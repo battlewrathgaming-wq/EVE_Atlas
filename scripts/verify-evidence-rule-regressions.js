@@ -48,6 +48,19 @@ const REQUIRED_GUARDS = [
   }
 ];
 
+const REQUIRED_LOCAL_GUARD_PHRASES = [
+  {
+    file: 'scripts/verify-evidence-writer-landing-package-fixture.js',
+    phrase: 'conflict behavior should report hardened dependent-row suppression',
+    boundary: 'duplicate conflicting killmail packages must suppress conflict-derived dependent rows'
+  },
+  {
+    file: 'scripts/verify-evidence-writer-landing-package-fixture.js',
+    phrase: 'mixed package should land clean rows and suppress conflict-derived rows',
+    boundary: 'mixed clean/conflict killmail packages must land clean rows while suppressing conflict-derived rows'
+  }
+];
+
 function main() {
   const packageJson = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
   const verifyGroup = fs.readFileSync(path.join(ROOT, 'scripts', 'verify-group.js'), 'utf8');
@@ -56,6 +69,11 @@ function main() {
     assert(packageJson.scripts[guard.script], `Evidence boundary missing npm script: ${guard.boundary}`);
     assert(verifyGroup.includes(`'${guard.script}'`), `Evidence boundary not included in verify:all group: ${guard.boundary}`);
 
+    const guardFile = fs.readFileSync(path.join(ROOT, guard.file), 'utf8');
+    assert(guardFile.includes(guard.phrase), `Evidence boundary guard assertion missing: ${guard.boundary}`);
+  }
+
+  for (const guard of REQUIRED_LOCAL_GUARD_PHRASES) {
     const guardFile = fs.readFileSync(path.join(ROOT, guard.file), 'utf8');
     assert(guardFile.includes(guard.phrase), `Evidence boundary guard assertion missing: ${guard.boundary}`);
   }

@@ -2,8 +2,8 @@ const { actionGate, enterLiveProviderAttempt } = require('./liveApiGateService')
 const { taxonomyMessage } = require('./messageTaxonomy');
 const { discoverManualRefs } = require('../workers/manualDiscoveryWorker');
 const { expandManualRefs } = require('../workers/manualExpansionWorker');
-const { collectActorWatch } = require('../workers/actorWatchCollector');
 const { collectSystemRadiusWatch } = require('../workers/systemRadiusCollector');
+const { runActorWatchDirectBody } = require('../discovery/actorWatchDirectBody');
 const {
   hydrateActorReportCandidates,
   hydrateCorporationReportCandidates,
@@ -58,7 +58,7 @@ async function runActorWatchService(db, payload = {}, dependencies = {}) {
     entityName: actor.entity_name
   });
   assertLiveAllowed('actor.watch', input, dependencies);
-  return collectActorWatch(input, { ...dependencies, db });
+  return runActorWatchDirectBody(input, { ...dependencies, db });
 }
 
 async function runSystemRadiusWatchService(db, payload = {}, dependencies = {}) {

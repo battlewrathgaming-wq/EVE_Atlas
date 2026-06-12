@@ -273,6 +273,28 @@ CREATE TABLE IF NOT EXISTS metadata_runs (
   error_summary TEXT
 );
 
+CREATE TABLE IF NOT EXISTS watch_bucket_items (
+  bucket_item_id TEXT PRIMARY KEY,
+  watch_run_id TEXT NOT NULL UNIQUE,
+  watch_type TEXT NOT NULL CHECK (watch_type IN ('system_radius', 'actor')),
+  watch_id INTEGER NOT NULL,
+  source_kind TEXT NOT NULL CHECK (source_kind IN ('watch_system_radius', 'watch_actor')),
+  status TEXT NOT NULL CHECK (status IN ('open', 'settled', 'cancelled', 'blocked_integrity')),
+  emitted_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  accepted_scope_json TEXT NOT NULL,
+  window_json TEXT NOT NULL,
+  caps_json TEXT NOT NULL,
+  provenance_json TEXT NOT NULL,
+  identity_fingerprint TEXT NOT NULL,
+  pickup_posture TEXT,
+  settled_at TEXT,
+  receipt_status TEXT,
+  receipt_summary_json TEXT,
+  provider_timing_json TEXT,
+  last_error_json TEXT
+);
+
 CREATE TABLE IF NOT EXISTS discovered_killmail_refs (
   killmail_id INTEGER NOT NULL,
   killmail_hash TEXT NOT NULL,
@@ -362,6 +384,8 @@ CREATE INDEX IF NOT EXISTS idx_discovered_refs_actor ON discovered_killmail_refs
 CREATE INDEX IF NOT EXISTS idx_discovered_refs_system ON discovered_killmail_refs(source_system_id);
 CREATE INDEX IF NOT EXISTS idx_api_request_logs_run_provider_requested ON api_request_logs(run_id, provider, requested_at);
 CREATE INDEX IF NOT EXISTS idx_data_quality_warnings_run_killmail ON data_quality_warnings(run_id, killmail_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_watch_bucket_items_one_open_per_watch ON watch_bucket_items(watch_type, watch_id) WHERE status = 'open';
+CREATE INDEX IF NOT EXISTS idx_watch_bucket_items_status_type ON watch_bucket_items(status, watch_type, emitted_at);
 
 CREATE VIEW IF NOT EXISTS ship_types AS
 SELECT *

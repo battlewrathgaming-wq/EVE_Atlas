@@ -1,6 +1,6 @@
 const { actionGate } = require('../services/liveApiGateService');
 const { TASK_CLASSIFICATIONS, defaultTaskRunner } = require('../services/taskRunner');
-const { collectActorWatch } = require('../workers/actorWatchCollector');
+const { runActorWatchDirectBody } = require('../discovery/actorWatchDirectBody');
 const { collectSystemRadiusWatch } = require('../workers/systemRadiusCollector');
 const { buildWatchScheduleStatus, recordWatchRunResult } = require('./watchScheduler');
 
@@ -297,7 +297,7 @@ function dispatchFor(watch) {
     return {
       command: 'actor.watch',
       payload,
-      runner: collectActorWatch
+      runner: runScheduledActorWatch
     };
   }
 
@@ -331,6 +331,10 @@ function dispatchFor(watch) {
     },
     runner: collectSystemRadiusWatch
   };
+}
+
+function runScheduledActorWatch(payload, dependencies = {}) {
+  return runActorWatchDirectBody(payload, dependencies);
 }
 
 function acceptedSystemIdsForWatchSource(source = {}) {
@@ -392,5 +396,6 @@ module.exports = {
   selectDueWatch,
   dryRunExecutorTickDecision,
   dispatchFor,
+  runScheduledActorWatch,
   acceptedSystemIdsForWatchSource
 };

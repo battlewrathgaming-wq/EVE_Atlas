@@ -1,11 +1,11 @@
 const { EvidenceRepository } = require('../db/evidenceRepository');
 const { HttpClient } = require('../api/httpClient');
 const { EsiClient } = require('../api/esiClient');
-const { buildEvidencePackageFromRefs } = require('./killmailIngestionWorker');
 const {
   markFailedExpansionCandidates,
   summarizeExpansionQueue
-} = require('./systemRadiusCollector');
+} = require('../discovery/expansionQueueSelection');
+const { buildEvidencePackageFromRefs } = require('../discovery/esiBackedExpansionPackage');
 
 async function expandManualRefs(input, dependencies = {}) {
   const db = dependencies.db;

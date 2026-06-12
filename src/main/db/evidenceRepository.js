@@ -202,11 +202,23 @@ class EvidenceRepository {
     try {
       let eventsWritten = 0;
       let killmailsWritten = 0;
+      const conflictingKillmailIds = new Set();
+      const suppressedEntityKeys = new Set();
+      const landedEntityKeys = new Set();
+      const conflictDependentRowsSuppressed = {
+        activity_events: 0,
+        entities: 0,
+        ingestion_audits: 0,
+        warnings: 0
+      };
 
       for (const killmail of evidencePackage.killmails || []) {
         const existing = this.killmailDetails(killmail.killmail_id);
         if (existing) {
-          this.insertKillmailConflictWarnings(evidencePackage.run.run_id, existing, killmail);
+          const conflictDetected = this.insertKillmailConflictWarnings(evidencePackage.run.run_id, existing, killmail);
+          if (conflictDetected) {
+            conflictingKillmailIds.add(killmail.killmail_id);
+          }
         } else {
           killmailsWritten += 1;
         }
@@ -214,6 +226,17 @@ class EvidenceRepository {
       }
 
       for (const event of evidencePackage.activity_events || []) {
+        const key = entityUpdateKey(event);
+        if (conflictingKillmailIds.has(event.killmail_id)) {
+          if (key) {
+            suppressedEntityKeys.add(key);
+          }
+          conflictDependentRowsSuppressed.activity_events += 1;
+          continue;
+        }
+        if (key) {
+          landedEntityKeys.add(key);
+        }
         const result = this.upsertActivityEvent(event);
         if (result.changes > 0) {
           eventsWritten += 1;
@@ -221,21 +244,35 @@ class EvidenceRepository {
       }
 
       for (const entity of evidencePackage.entity_updates || []) {
+        const key = entityUpdateKey(entity);
+        if (key && suppressedEntityKeys.has(key) && !landedEntityKeys.has(key)) {
+          conflictDependentRowsSuppressed.entities += 1;
+          continue;
+        }
         this.upsertEntity(entity);
       }
 
       for (const audit of evidencePackage.ingestion_audits || []) {
+        if (conflictingKillmailIds.has(audit.killmail_id)) {
+          conflictDependentRowsSuppressed.ingestion_audits += 1;
+          continue;
+        }
         this.insertAudit(evidencePackage.run.run_id, audit);
       }
 
       for (const warning of evidencePackage.warnings || []) {
+        if (conflictingKillmailIds.has(warning.killmail_id)) {
+          conflictDependentRowsSuppressed.warnings += 1;
+          continue;
+        }
         this.insertWarning(evidencePackage.run.run_id, warning);
       }
 
       this.db.exec('COMMIT;');
       return {
         killmailsWritten,
-        eventsWritten
+        eventsWritten,
+        conflictDependentRowsSuppressed
       };
     } catch (error) {
       this.db.exec('ROLLBACK;');
@@ -275,7 +312,7 @@ class EvidenceRepository {
     }
 
     if (!mismatches.length) {
-      return;
+      return false;
     }
 
     this.insertWarning(runId, {
@@ -284,6 +321,7 @@ class EvidenceRepository {
       message: `Existing killmail evidence was preserved for killmail ${incoming.killmail_id}; incoming rediscovery differed: ${mismatches.join('; ')}`,
       created_at: nowIso()
     });
+    return true;
   }
 
   upsertActivityEvent(event) {
@@ -539,6 +577,13 @@ function queueScopeIdentity(ref, scope = {}) {
     discoveredByType,
     discoveredById: String(discoveredById)
   };
+}
+
+function entityUpdateKey(row = {}) {
+  if (!row.entity_type || row.entity_id === undefined || row.entity_id === null) {
+    return null;
+  }
+  return `${row.entity_type}:${row.entity_id}`;
 }
 
 function sanitizeApiRequestLogPersistence(log = {}) {

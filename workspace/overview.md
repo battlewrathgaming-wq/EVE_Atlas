@@ -1,7 +1,7 @@
 # AURA Atlas Workspace Overview
 
 Status: Active breadcrumb map
-Last reviewed: 2026-06-06
+Last reviewed: 2026-06-12
 
 ## Vision Statement
 
@@ -22,6 +22,7 @@ Current product compass:
 ## Coordination Model
 
 - `workspace/current.md` is the only active executable work packet.
+- `workspace/current.md` was flattened on 2026-06-07; the previous large working state is preserved at `workspace/archive/current-legacy-2026-06-07-pre-flatten.md`.
 - `workspace/critical/` protects Atlas-owned meanings and critical assets.
 - `docs/` holds durable product truth.
 - `workspace/complete/` holds completed milestone bundles.
@@ -33,6 +34,18 @@ Shared checkpoints, Shapespace, Orchestration shelves, and external advisory spa
 ## Active Milestone
 
 Milestone: Atlas Storage And Runtime Hardening
+
+## Active Now
+
+- status: HS482 product Watch bucket persistence accepted
+- executor: none - stable landing / pushed-state prep
+- active Dev runway: none
+- latest accepted Dev handoff: `workspace/DevHS482-product-watch-bucket-persistence.md`
+- latest accepted review: `workspace/OverseerHS484-hs482-product-watch-bucket-persistence-review.md`
+- latest accepted advisory artifact: `workspace/ArchitectureDataHS480-watch-bucket-schema-runtime-design.md`
+- supporting advisory input: `workspace/ExternalIntegrationHS480-provider-policy-watch-bucket-discovery-pickup-design-pressure.md`
+- warm-start note: `workspace/OverseerHS483-warm-start-hs482-review.md`
+- current question: what is the next safe seam after accepted product Watch bucket persistence
 
 Current state:
 
@@ -203,6 +216,90 @@ Current state:
 - HS347 accepted by HS348
 - HS349 opened
 - HS349 accepted by HS350
+- HS351 Discovery boundary task-handling audit accepted by HS352
+- HS354 Discovery outcome derivation feasibility audit accepted by HS355
+- HS356 Discovery outcome derivation proof accepted by HS357
+- HS358 Discovery receipt model shaping accepted
+- HS359 Discovery receipt source trace accepted by HS360
+- HS361 Discovery receipt data model accepted by HS362
+- HS363 Discovery receipt projection fixture proof opened
+- HS363 Discovery receipt projection fixture proof accepted by HS364
+- HS365 Discovery next-seam decision surface recorded
+- HS366 Discovery utility / Watch split readiness advisory accepted by HS367
+- HS368 Watch-to-Discovery acquisition split fixture bridge opened
+- HS368 Watch-to-Discovery acquisition split fixture bridge accepted by HS369
+- HS370 Discovery acquisition-to-Evidence-handoff fixture proof opened
+- HS370 Discovery acquisition-to-Evidence-handoff fixture proof accepted by HS371
+- HS372 mixed Watch collector replacement planning advisory opened
+- HS372 mixed Watch collector replacement plan accepted by HS373
+- HS374 mixed collector replacement route preview opened
+- HS374 mixed collector replacement route preview accepted by HS375
+- HS376 actor Watch first replacement slice advisory accepted for shaping
+- HS377 actor Watch replacement parity proof opened
+- HS377 actor Watch replacement parity proof accepted by HS378
+- HS379 Discovery ESI-backed expansion intake posture proof accepted by HS380
+- HS381 actor Watch compatibility-wrapper contract proof accepted by HS382
+- HS383 actor Watch compatibility-wrapper adapter fixture opened
+- HS383 actor Watch compatibility-wrapper adapter fixture accepted by HS384
+- HS385 Evidence/EVEidence writer landing package source trace opened
+- HS385 Evidence/EVEidence writer landing package source trace accepted by HS386
+- HS387 Evidence/EVEidence writer landing package fixture proof opened
+- HS387 Evidence/EVEidence writer landing package fixture proof accepted by HS388
+- HS389 Evidence/EVEidence writer conflict dependent-row hardening opened
+- HS389 Evidence/EVEidence writer conflict dependent-row hardening accepted by HS390
+- HS391 Evidence/EVEidence writer mixed clean/conflict package proof opened
+- HS391 Evidence/EVEidence writer mixed clean/conflict package proof accepted by HS392
+- HS393 actor Watch runtime redirect readiness advisory opened
+- HS393 actor Watch runtime redirect readiness advisory accepted by HS394
+- HS395 actor Watch compatibility-wrapper command runway opened
+- HS395 actor Watch compatibility-wrapper command accepted by HS396
+- HS397 Discovery helper ownership source trace advisory opened
+- HS397 Discovery helper ownership source trace accepted by HS398
+- HS399 Discovery expansion queue helper extraction opened
+- HS399 Discovery expansion queue helper extraction accepted by HS400
+- HS401 zKill acquisition helper ownership source trace accepted by HS402
+- HS403 Discovery zKill candidate acquisition helper extraction opened
+- HS403 Discovery zKill candidate acquisition helper extraction accepted by HS404
+- HS405 candidate-ref memory/status helper ownership source trace opened
+- HS405 candidate-ref memory/status helper ownership source trace accepted by HS406
+- HS407 Discovery candidate-ref pending rehydration helper extraction opened
+- HS407 Discovery candidate-ref pending rehydration helper extraction accepted by HS408
+- HS409 ESI-backed expansion/package helper boundary trace opened
+- HS409 ESI-backed expansion/package helper boundary trace accepted by HS410
+- HS411 Discovery ESI-backed selected-ref expansion package helper extraction opened
+- HS411 Discovery ESI-backed selected-ref expansion package helper extraction accepted by HS412
+- HS413 actor Watch redirect-readiness advisory opened
+- HS413 actor Watch redirect-readiness advisory accepted by HS414
+- HS415 actor Watch Discovery-owned route body fixture proof opened
+- HS415 actor Watch Discovery-owned route body fixture proof accepted by HS416
+- HS417 actor Watch controlled runtime adapter readiness advisory opened
+- HS417 actor Watch controlled runtime adapter readiness advisory accepted by HS418
+- HS419 actor Watch controlled runtime adapter fixture proof opened
+- HS419 actor Watch controlled runtime adapter fixture proof accepted by HS420
+- HS421 actor Watch compatibility summary / caller return path source trace opened
+- HS421 actor Watch compatibility summary / caller return path source trace accepted by HS422
+- HS423 actor Watch controlled adapter return-path proof opened
+- HS423 actor Watch controlled adapter return-path proof accepted by HS424
+- HS425 actor Watch runtime replacement decision surface recorded
+- HS426 actor Watch production-adjacent adapter insertion trace opened
+- HS426 actor Watch production-adjacent adapter insertion trace accepted by HS427
+- HS428 actor Watch controlled adapter disabled seam opened
+- HS428 actor Watch controlled adapter disabled seam accepted by HS429
+- HS430 actor Watch disabled seam next decision surface recorded
+- HS431 actor Watch production redirect readiness trace opened
+- HS431 actor Watch production redirect readiness trace accepted by HS432
+- HS433 actor Watch production-like fake-client direct proof opened
+- HS433 actor Watch production-like fake-client direct proof accepted by HS434
+- HS435 actor Watch direct redirect decision surface opened
+- HS436 actor Watch failure/logging parity trace opened
+- HS436 actor Watch failure/logging parity trace accepted by HS437
+- HS438 actor Watch transport/failure parity proof opened
+- HS438 actor Watch transport/failure parity proof accepted by HS439
+- HS440 direct actor.watch redirect accepted by HS441
+- HS442 post-redirect return-path verifier correction accepted by HS443
+- HS444 scheduled actor Watch redirect readiness trace accepted by HS445
+- HS446 scheduled actor Watch redirect accepted by HS449 after HS448 stale verifier correction
+- HS448 production-like fake-client verifier post-HS446 correction accepted by HS449
 - data-layer boundary support note accepted
 - HS176 accepted
 - HS148 accepted
@@ -219,19 +316,57 @@ Current state:
 - HS170 accepted
 - HS172 accepted
 - HS174 accepted
-- current executor is Human / Overseer decision
-- active Dev runway is none
-- expected Dev handoff is none
+- latest Dev handoff is `workspace/DevHS448-production-like-fake-client-verifier-post-hs446-correction.md`
+- latest accepted review is `workspace/OverseerHS449-hs448-production-like-fake-client-verifier-correction-review.md`
 - latest accepted heading is `How does Evidence get generated from user intent?`
-- current seam is resting after Discovery pickup consumer fixture proof; Dev is paused for boundary consolidation
+- scheduled actor Watch redirect is accepted through HS449; provider movement expansion, collector invocation rewrite beyond actor runner target, collector retirement, dispatcher work, schema, enforcement, and UI remain closed
+- current Discovery replacement chain is HS351-HS449; earlier accepted artifacts remain evidence, HS379, HS381, HS383, HS385/HS386, HS387/HS388, HS389/HS390, HS391/HS392, HS393/HS394, HS395/HS396, HS397/HS398, HS399/HS400, HS401/HS402, HS403/HS404, HS405/HS406, HS407/HS408, HS409/HS410, HS411/HS412, HS413/HS414, HS415/HS416, HS417/HS418, HS419/HS420, HS421/HS422, HS423/HS424, HS426/HS427, HS428/HS429, HS431/HS432, HS433/HS434, HS436/HS437, HS438/HS439, HS440/HS441, HS442/HS443, HS444/HS445, HS446/HS447, and HS448/HS449 are accepted
+- latest accepted Discovery replacement advisory artifact is `workspace/EngineeringTraceHS372-mixed-watch-collector-replacement-plan.md`
+- latest accepted Discovery replacement review is `workspace/OverseerHS375-hs374-mixed-collector-replacement-route-review.md`
+- latest Discovery replacement shaping note is `workspace/OverseerHS353-discovery-outcome-model-shaping-note.md`
+- HS351/HS352 accepted that current docs and HS347/HS349 proofs align with the emerging Discovery boundary, but current live-capable Watch collectors still mix Discovery acquisition, Discovery ref persistence, ESI Evidence Expansion, Evidence writes, warnings/logs, fetch-run lifecycle, and Watch completion posture
+- accepted Discovery outcome-model shaping vocabulary: `complete_refs_found`, `complete_no_refs`, `partial_deferred`, `provider_deferred`, `held_by_external_io`, `acquisition_capped`, `failed_retryable`, `failed_terminal`
+- `invalid_scope` is excluded from Discovery completion vocabulary because it belongs before Discovery acceptance at Intent / Scope Authority
+- HS353 parks Manual path adoption for now and accepts `acquisition_capped` as complete-but-limited: Watch may rest or continue cadence normally, but Atlas must not imply full coverage
+- HS354/HS355 accept that current rows can derive useful coarse Discovery outcome posture, but cannot safely derive product-grade per-packet system/radius outcomes for live Watch completion
+- `discovered_killmail_refs` should remain candidate-ref memory, not Discovery task/packet memory
+- HS356 accepted by `workspace/OverseerHS357-hs356-discovery-outcome-derivation-review.md`: coarse run/ref posture is derivable, but product-grade per-packet Discovery completion is not derivable from current rows
+- next design pressure is a bounded Discovery receipt / task-packet outcome shape before Watch can rely on per-packet completion
+- HS358 accepted the Discovery receipt model posture: Discovery should over-report factual basis and under-claim authority; Discovery reports facts and limits, not caller satisfaction
+- HS359/HS360 accepted the source-trace finding: staged hybrid is the practical path; prove a non-durable fixture Discovery receipt shape before durable task/packet schema
+- next decision is whether to open fixture-only non-durable Discovery receipt proof and settle task/packet vocabulary plus `held_by_external_io` posture
+- HS361/HS362 accepted the data model: Discovery-owned canonical receipt basis, caller-selectable safe projections, `held_by_external_io` as request-level pre-acquisition posture, packet outcomes rolled up by top-level receipt fields, and no schema for the next proof
+- HS363 opens the fixture-only, non-durable proof for canonical Discovery receipt basis plus safe projections; no provider, DB write, schema, Watch mutation, Evidence/EVEidence, Hydration, Observation, UI, dispatcher, or enforcement behavior is authorized
+- HS363 accepted by `workspace/OverseerHS364-hs363-discovery-receipt-projection-fixture-review.md`: `discovery.receipt_projection_fixture.preview` proves canonical Discovery receipt basis plus safe projections in fixture form; durable receipt/task-packet schema remains parked and no new Dev runway is open
+- HS365 records the recommended next seam: audit/source-trace the current write-capable Watch/Discovery collector path so Watch intent, Discovery acquisition, ESI Evidence Expansion, Evidence/EVEidence writes, and caller receipt handoff can be split deliberately before schema or live Watch movement
+- HS366 accepted by `workspace/OverseerHS367-hs366-discovery-watch-split-readiness-review.md`: existing mixed Watch collectors should not become the future boundary; next proof should show Watch dispatch payloads feeding a Discovery-owned acquisition boundary without entering those collectors
+- HS368 opens `workspace/OverseerHS368-watch-to-discovery-acquisition-split-fixture-bridge-runway.md`: fixture/read-only bridge from Watch dispatch payload to Discovery acquisition request, pickup packets, fixture outcomes, canonical receipt basis, and `watch_summary` projection
+- HS368 accepted by `workspace/OverseerHS369-hs368-watch-discovery-split-fixture-review.md`: Watch dispatch payloads can feed a Discovery-owned acquisition fixture boundary without entering mixed collectors; next decision is how to retire or redirect mixed collectors without provider movement
+- HS370 opens `workspace/OverseerHS370-discovery-acquisition-to-evidence-handoff-fixture-runway.md`: fixture/read-only proof that Discovery can carry the provider-facing acquisition utility shape up to ESI Evidence Expansion handoff candidates before retiring or redirecting mixed collectors
+- HS370 accepted by `workspace/OverseerHS371-hs370-discovery-acquisition-to-evidence-handoff-review.md`: Discovery can carry acquisition request, provider-facing fixture packets, fixture zKill outcomes, normalized candidate refs, canonical receipt / `watch_summary`, and ESI Evidence Expansion handoff candidates without providers, writes, schema, collector invocation, or collector retirement/redirect
+- HS372 opens `workspace/OverseerHS372-mixed-watch-collector-replacement-planning-request.md`: advisory/source-trace planning for staged replacement of legacy mixed Watch collectors; `replacement` is the planning frame, `redirect` is temporary compatibility only, and `retire` is the intended end-state
+- HS372 accepted by `workspace/OverseerHS373-hs372-mixed-collector-replacement-plan-review.md`: current mixed collectors still bundle Watch, Discovery zKill acquisition, Discovery ESI-backed expansion, Evidence/EVEidence writes, run posture, warnings, and support logging; staged replacement is accepted
+- HS374 opens `workspace/OverseerHS374-mixed-collector-replacement-route-preview-runway.md`: read-only/local-only route preview for mapping current Watch payload shapes to the future boundary-owned replacement route without provider movement, collector invocation, redirect, retirement, writes, schema, enforcement, or UI
+- HS374 accepted by `workspace/OverseerHS375-hs374-mixed-collector-replacement-route-review.md`: route preview proves current Watch payload shapes can map to Watch intent/cadence, Discovery zKill acquisition, Discovery ESI-backed expansion, Evidence/EVEidence writer, and Watch receipt/cadence posture without provider movement or mutation
+- HS376 advisory `workspace/EngineeringTraceHS376-actor-watch-first-replacement-slice-readiness.md` accepts actor Watch as the safest first replacement target and recommends fixture-only actor replacement parity proof before runtime changes
+- HS377 opens `workspace/OverseerHS377-actor-watch-replacement-parity-proof-runway.md`: actor-only fixture proof that expected actor Watch behavior can be represented through the boundary-owned route without redirecting `actor.watch`, invoking `collectActorWatch`, writing rows, calling providers, changing system/radius, or retiring collectors
+- HS377 accepted by `workspace/OverseerHS378-hs377-actor-watch-replacement-parity-review.md`: actor Watch parity is proven in fixture/read-only form; no runtime replacement, provider movement, write path, redirect, or collector retirement is open
+- HS379 accepted by `workspace/OverseerHS380-hs379-discovery-esi-expansion-intake-posture-review.md`: fixture-only/read-only proof for selected candidate refs entering the Discovery ESI-backed killmail/detail expansion lane, including cache skip, malformed, duplicate, capped/not-selected, deferred, retryable, and terminal posture without provider calls or writes
+- HS381 accepted by `workspace/OverseerHS382-hs381-actor-watch-compatibility-wrapper-contract-review.md`: fixture-only/read-only contract proof for the future `actor.watch` compatibility wrapper before any runtime redirect, provider movement, write path, or collector retirement
+- HS383 opens `workspace/OverseerHS383-actor-watch-compatibility-wrapper-adapter-fixture-runway.md`: fixture-only/non-live adapter proof to construct an old caller-facing actor Watch result shape from injected boundary-owned fixture outputs without redirecting `actor.watch` or moving runtime behavior
+- HS383 accepted by `workspace/OverseerHS384-hs383-actor-watch-compatibility-wrapper-adapter-fixture-review.md`: old caller-facing actor Watch result fixture can be constructed from boundary-owned fixture outputs; runtime adapter, redirect, provider movement, write path, and collector retirement remain parked
+- HS385 opens `workspace/OverseerHS385-evidence-writer-landing-package-source-trace-request.md`: advisory/source trace of current Evidence/EVEidence writer landing package before fixture proof, runtime adapter, redirect, provider movement, or collector retirement
+- HS385 accepted by `workspace/OverseerHS386-hs385-evidence-writer-landing-source-trace-review.md`: current writer landing point is `EvidenceRepository.persistEvidencePackage(...)`; next proof must expose duplicate/conflicting `killmail_id` behavior before runtime replacement work
+- HS387 opens `workspace/OverseerHS387-evidence-writer-landing-package-fixture-proof-runway.md`: fixture-only disposable-DB proof for Evidence/EVEidence writer landing package; no providers, operator corpus mutation, real Discovery refs, Watch cadence, Hydration, Observation, Assessment, schema, runtime adapter, collector retirement, enforcement, or UI is open
+- HS387 accepted by `workspace/OverseerHS388-hs387-evidence-writer-landing-package-fixture-review.md`: proof confirmed current writer preserves existing raw killmail payload but can insert conflicting incoming activity rows; this is accepted as proof but not as acceptable future runtime behavior
+- HS389 opens `workspace/OverseerHS389-evidence-writer-conflict-dependent-row-hardening-runway.md`: harden conflict behavior so conflicting incoming dependent rows are suppressed while raw Evidence/EVEidence and conflict warnings are preserved
 - accepted Watch/Discovery boundary is that Watch is a scheduler and scope-authority source, Discovery is the acquisition utility, and a due Watch emits Discovery pickup intent without acquiring candidates itself
 - system/radius Discovery pickup should fan out stored accepted `included_system_ids` into one packet per accepted system, with center/radius retained as provenance/explanation only
 - accepted Watch chain now proves setup -> packet plan -> dry-run -> dispatch payload-builder -> task envelope without creating tasks or touching providers
-- latest accepted Dev runway is `workspace/OverseerHS336-watch-task-creation-boundary-proof-runway.md`
-- latest accepted Dev handoff is `workspace/DevHS336-watch-task-creation-boundary-proof.md`
-- latest Overseer review is `workspace/OverseerHS337-hs336-watch-task-boundary-review.md`
-- latest accepted command is `watch.task_creation_boundary.preview`
-- current next activity should be boundary consolidation, not implementation: audit each boundary, stale docs, code crossings, scaffold-only proofs, and future Dev seams
+- previous accepted Watch task-creation proof runway was `workspace/OverseerHS336-watch-task-creation-boundary-proof-runway.md`
+- previous accepted Watch task-creation handoff was `workspace/DevHS336-watch-task-creation-boundary-proof.md`
+- previous Watch task-creation review was `workspace/OverseerHS337-hs336-watch-task-boundary-review.md`
+- previous accepted Watch task-creation command was `watch.task_creation_boundary.preview`
 - older direct-collector accepted-scope risk remains parked until the Discovery pickup packet boundary is deliberately routed into runtime
 - latest accepted advisory artifact is `workspace/EngineeringTraceHS346-watch-due-and-discovery-pickup-surfaces.md`
 - latest advisory review is `workspace/OverseerHS346-watch-due-discovery-pickup-acceptance.md`
@@ -353,7 +488,7 @@ Current state:
 - Hydration request posture proof implemented: `metadata.hydration_request_posture.preview`
 - Hydration pickup shaping accepted: selected-ID pickup is non-durable candidate acceptance for a future execution command, not queue persistence, dispatcher behavior, provider execution, or write behavior
 - Hydration pickup contract proof implemented: `metadata.hydration_pickup_contract.preview`
-- Lane simplification accepted: Discovery outputs possible leads; Evidence Expansion outputs Evidence/EVEidence; Hydration outputs readability repair; fourth lane stays parked
+- Lane simplification corrected: Discovery services provider-facing acquisition through zKill candidate-lead acquisition and ESI-backed killmail/detail expansion lanes; Evidence/EVEidence is final landed memory; Hydration outputs readability repair; fourth lane stays parked
 - Watch scope authority accepted: local topology lookup tables support authoring/preflight, accepted stored included system IDs are execution authority, center/radius are provenance, and SDE is import/source provenance only
 - ADR-0006 accepted: HS276 selected-ID Hydration proof/test machinery is not product flow and must not be inherited as operator behavior without a new explicit runway.
 
@@ -473,9 +608,22 @@ Prior accepted packet:
 8. `watch.scope_authority_conformance.preview` now reports execution conformance.
 9. Provider movement, live testing, Discovery ref identity redesign, durable `watch_result`, relationship tags, UI, active enforcement, support artifacts, and fourth-lane work remain unopened.
 
-Active advisory request:
+Historical recent accepted Dev packet:
 
-No active advisory request is open.
+1. `workspace/OverseerHS423-actor-watch-controlled-adapter-return-path-proof-runway.md`
+2. `workspace/DevHS423-actor-watch-controlled-adapter-return-path-proof.md`
+3. `workspace/OverseerHS424-hs423-actor-watch-controlled-adapter-return-path-review.md`
+4. Accepted result: direct caller and scheduled-style return-path compatibility is proven through the boundary-owned actor Watch adapter proof path.
+5. Production `actor.watch`, `runActorWatchService(...)`, `watchExecutor.dispatchFor(...)`, and `collectActorWatch(...)` remain unchanged.
+6. Runtime redirect, scheduled Watch redirect, collector retirement, provider movement expansion, dispatcher work, schema, enforcement, UI, support artifacts, source-term rename, and protected-word JSON updates remain unopened.
+
+Latest accepted advisory:
+
+1. `workspace/OverseerHS421-actor-watch-compatibility-summary-caller-return-path-request.md`
+2. `workspace/EngineeringTraceHS421-actor-watch-compatibility-summary-caller-return-path.md`
+3. `workspace/OverseerHS422-hs421-actor-watch-compatibility-summary-caller-return-path-review.md`
+4. Accepted result: the boundary-owned actor Watch adapter path can preserve current caller-facing compatibility summary shape without importing or invoking `collectActorWatch(...)`, if the next step remains a narrow return-path proof.
+5. Production redirect, scheduled Watch redirect, live provider movement, operator DB writes, and collector retirement remain unopened.
 
 Latest accepted identity advisory:
 

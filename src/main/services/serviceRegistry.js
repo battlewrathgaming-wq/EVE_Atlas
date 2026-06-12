@@ -69,8 +69,29 @@ const { buildWatchRuntimePacketPlanPreview } = require('./watchRuntimePacketPlan
 const { buildWatchExecutorTickDryRunPreview } = require('./watchExecutorTickDryRunService');
 const { buildWatchPacketDryRunDispatchParityPreview } = require('./watchPacketDryRunDispatchParityService');
 const { buildWatchTaskCreationBoundaryPreview } = require('./watchTaskCreationBoundaryService');
+const { buildWatchSystemRadiusRunStubPreview } = require('./watchSystemRadiusRunStubService');
+const { buildWatchBucketIdentityProjectionPreview } = require('./watchBucketIdentityProjectionService');
+const { buildWatchBucketPickupPostureBridgePreview } = require('./watchBucketPickupPostureBridgeService');
+const { buildWatchBucketDisposablePersistenceFixtureProof } = require('./watchBucketDisposablePersistenceFixtureService');
+const { buildWatchBucketProductPersistenceProof } = require('./watchBucketProductPersistenceService');
 const { buildWatchDiscoveryPickupPacketProof } = require('./watchDiscoveryPickupPacketProofService');
 const { buildDiscoveryPickupConsumerFixtureProof } = require('./discoveryPickupConsumerFixtureService');
+const { buildDiscoveryPickupConsumerHoldContractProof } = require('./discoveryPickupConsumerHoldContractService');
+const { buildDiscoveryOutcomeDerivationPreview } = require('./discoveryOutcomeDerivationService');
+const { buildDiscoveryReceiptProjectionFixturePreview } = require('./discoveryReceiptProjectionFixtureService');
+const { buildWatchDiscoveryAcquisitionSplitFixturePreview } = require('./watchDiscoveryAcquisitionSplitFixtureService');
+const { buildDiscoveryAcquisitionToEvidenceHandoffFixturePreview } = require('./discoveryAcquisitionToEvidenceHandoffFixtureService');
+const { buildDiscoveryEsiExpansionIntakePosturePreview } = require('./discoveryEsiExpansionIntakePostureService');
+const { buildEvidenceWriterLandingPackageFixturePreview } = require('./evidenceWriterLandingPackageFixtureService');
+const { buildWatchMixedCollectorReplacementRoutePreview } = require('./watchMixedCollectorReplacementRouteService');
+const { buildWatchActorReplacementParityPreview } = require('./watchActorReplacementParityService');
+const { buildWatchActorCompatibilityWrapperContractPreview } = require('./watchActorCompatibilityWrapperContractService');
+const { buildWatchActorCompatibilityWrapperAdapterFixturePreview } = require('./watchActorCompatibilityWrapperAdapterFixtureService');
+const { buildWatchActorCompatibilityWrapperPreview } = require('./watchActorCompatibilityWrapperRuntimePreviewService');
+const { buildWatchActorDiscoveryRouteBodyFixturePreview } = require('./watchActorDiscoveryRouteBodyFixtureService');
+const { buildWatchActorControlledRuntimeAdapterFixturePreview } = require('./watchActorControlledRuntimeAdapterFixtureService');
+const { buildWatchActorControlledAdapterDisabledPreview } = require('./watchActorControlledAdapterDisabledService');
+const { buildWatchActorDiscoveryHandoffContractPreview } = require('./watchActorDiscoveryHandoffContractService');
 const { buildWatchOperatorConfirmationContractPreview } = require('./watchOperatorConfirmationContractService');
 const { buildSystemRadiusAuthoringPreflight } = require('./systemRadiusAuthoringPreflightService');
 const { buildSystemRadiusAcceptancePayloadPreview } = require('./systemRadiusAcceptancePayloadService');
@@ -750,6 +771,41 @@ const COMMANDS = {
     description: 'Preview the would-task envelope for selected Watch intent without calling TaskRunner methods, execution, providers, writes, schema, or UI work',
     handler: ({ db, payload, ...context }) => buildWatchTaskCreationBoundaryPreview(db, payload, context)
   },
+  'watch.system_radius_run_stub.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview one bounded system/radius Watch-run stub from accepted stored scope without buckets, pickup, providers, writes, schema, or UI work',
+    handler: ({ db, payload }) => buildWatchSystemRadiusRunStubPreview(db, payload)
+  },
+  'watch.bucket_identity_projection.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview fixture-only Watch bucket identity candidates, suppressions, overlaps, and conflicts without schema, buckets, pickup, providers, writes, or UI work',
+    handler: ({ db, payload }) => buildWatchBucketIdentityProjectionPreview(db, payload)
+  },
+  'watch.bucket_pickup_posture_bridge.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview fixture-only Watch bucket candidate pickup eligibility or External I/O hold posture without bucket persistence, Discovery pickup, providers, writes, schema, or UI work',
+    handler: ({ db, payload }) => buildWatchBucketPickupPostureBridgePreview(db, payload)
+  },
+  'watch.bucket_disposable_persistence_fixture.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview fixture-only disposable Watch bucket persistence semantics without product schema, operator corpus mutation, Discovery pickup, providers, writes, or UI work',
+    handler: ({ db, payload }) => buildWatchBucketDisposablePersistenceFixtureProof(db, payload)
+  },
+  'watch.bucket_product_persistence.emit': {
+    classification: 'metadata-only',
+    effects: [EFFECTS.LOCAL_DATA_MUTATION],
+    renderer: false,
+    description: 'Trusted local system/radius Watch bucket persistence surface; creates or reads open bucket items without Discovery pickup, providers, refs, Evidence, Watch cadence mutation, schema runtime, or UI work',
+    handler: ({ db, payload, ...context }) => buildWatchBucketProductPersistenceProof(db, payload, context)
+  },
   'watch.discovery_pickup_packet_proof.preview': {
     classification: 'read-only',
     effects: [EFFECTS.READ_ONLY],
@@ -763,6 +819,118 @@ const COMMANDS = {
     renderer: true,
     description: 'Preview fixture candidate refs from Discovery pickup packets without providers, durable refs, Evidence, writes, schema, or UI work',
     handler: ({ db, payload, ...context }) => buildDiscoveryPickupConsumerFixtureProof(db, payload, context)
+  },
+  'discovery.pickup_consumer_hold_contract.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview fixture-only Discovery pickup consumer eligibility or External I/O hold contract from disposable bucket rows without pickup, leases, providers, refs, writes, schema, or UI work',
+    handler: ({ db, payload }) => buildDiscoveryPickupConsumerHoldContractProof(db, payload)
+  },
+  'discovery.outcome_derivation.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview coarse Discovery outcome derivation from existing local rows without providers, writes, task schema, Watch mutation, or UI work',
+    handler: ({ db, payload }) => buildDiscoveryOutcomeDerivationPreview(db, payload)
+  },
+  'discovery.receipt_projection_fixture.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview non-durable Discovery receipt basis and safe projection from fixture pickup packets and fixture provider outcomes without providers, writes, schema, Watch mutation, or UI work',
+    handler: ({ db, payload, ...context }) => buildDiscoveryReceiptProjectionFixturePreview(db, payload, context)
+  },
+  'watch.discovery_acquisition_split_fixture.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview Watch dispatch payload handoff into a Discovery-owned acquisition fixture boundary without collectors, providers, writes, schema, Watch mutation, or UI work',
+    handler: ({ db, payload, ...context }) => buildWatchDiscoveryAcquisitionSplitFixturePreview(db, payload, context)
+  },
+  'discovery.acquisition_to_evidence_handoff_fixture.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview Discovery acquisition through fixture candidate refs into ESI Evidence Expansion handoff candidates without providers, Evidence writes, schema, collectors, or UI work',
+    handler: ({ db, payload, ...context }) => buildDiscoveryAcquisitionToEvidenceHandoffFixturePreview(db, payload, context)
+  },
+  'discovery.esi_expansion_intake_posture.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview Discovery ESI-backed expansion intake posture for selected fixture candidates without ESI calls, Evidence writes, Hydration writes, schema, runtime replacement, collectors, or UI work',
+    handler: ({ db, payload, ...context }) => buildDiscoveryEsiExpansionIntakePosturePreview(db, payload, context)
+  },
+  'evidence.writer_landing_package_fixture.preview': {
+    classification: 'metadata-only',
+    effects: [EFFECTS.LOCAL_DATA_MUTATION],
+    renderer: false,
+    description: 'Run a fixture-only Evidence/EVEidence writer landing package proof in an internal disposable DB without provider calls or operator corpus mutation',
+    handler: ({ payload }) => buildEvidenceWriterLandingPackageFixturePreview(payload)
+  },
+  'watch.mixed_collector_replacement_route.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview the future Watch-to-Discovery-to-Evidence boundary-owned replacement route without providers, collector invocation, writes, redirect, retirement, schema, or UI work',
+    handler: ({ db, payload, ...context }) => buildWatchMixedCollectorReplacementRoutePreview(db, payload, context)
+  },
+  'watch.actor_replacement_parity.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview actor Watch replacement semantic parity through the future boundary-owned route without providers, collector invocation, writes, redirect, retirement, schema, or UI work',
+    handler: ({ db, payload, ...context }) => buildWatchActorReplacementParityPreview(db, payload, context)
+  },
+  'watch.actor_compatibility_wrapper_contract.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview actor.watch compatibility wrapper contract without redirect, collector invocation, providers, writes, schema, system/radius changes, enforcement, or UI work',
+    handler: ({ db, payload, ...context }) => buildWatchActorCompatibilityWrapperContractPreview(db, payload, context)
+  },
+  'watch.actor_compatibility_wrapper_adapter_fixture.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview actor.watch compatibility wrapper adapter fixture result without redirect, runtime changes, collectors, providers, writes, schema, system/radius changes, enforcement, or UI work',
+    handler: ({ db, payload, ...context }) => buildWatchActorCompatibilityWrapperAdapterFixturePreview(db, payload, context)
+  },
+  'watch.actor_compatibility_wrapper.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview explicit actor.watch compatibility wrapper command output without redirect, runtime changes, collectors, providers, writes, schema, system/radius changes, enforcement, or UI work',
+    handler: ({ db, payload, ...context }) => buildWatchActorCompatibilityWrapperPreview(db, payload, context)
+  },
+  'watch.actor_discovery_route_body_fixture.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview actor Watch-shaped input through a Discovery-owned route body fixture with fake clients only, without redirect, collectors, providers, writes, schema, system/radius changes, enforcement, or UI work',
+    handler: ({ db, payload, ...context }) => buildWatchActorDiscoveryRouteBodyFixturePreview(db, payload, context)
+  },
+  'watch.actor_controlled_runtime_adapter_fixture.preview': {
+    classification: 'metadata-only',
+    effects: [EFFECTS.LOCAL_DATA_MUTATION],
+    renderer: false,
+    description: 'Run a fixture-only actor Watch controlled runtime adapter proof in disposable DBs with fake clients, without redirect, collectors, providers, operator writes, schema, system/radius changes, enforcement, or UI work',
+    handler: ({ db, payload }) => buildWatchActorControlledRuntimeAdapterFixturePreview(db, payload)
+  },
+  'watch.actor_controlled_adapter_disabled.preview': {
+    classification: 'metadata-only',
+    effects: [EFFECTS.LOCAL_DATA_MUTATION],
+    renderer: false,
+    description: 'Preview disabled/proof-only actor Watch controlled adapter seam using fixture-only disposable DB proof paths, without production redirect, collectors, providers, operator writes, schema, system/radius changes, enforcement, or UI work',
+    handler: ({ db, payload }) => buildWatchActorControlledAdapterDisabledPreview(db, payload)
+  },
+  'watch.actor_discovery_handoff_contract.preview': {
+    classification: 'read-only',
+    effects: [EFFECTS.READ_ONLY],
+    renderer: true,
+    description: 'Preview actor Watch / Discovery request and receipt handoff contract projection without runtime movement, providers, writes, schema, or UI work',
+    handler: ({ db, payload }) => buildWatchActorDiscoveryHandoffContractPreview(db, payload)
   },
   'watch.operator_confirmation_contract.preview': {
     classification: 'read-only',

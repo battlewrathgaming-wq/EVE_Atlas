@@ -41,7 +41,9 @@ function main() {
   assert(third.killmailsWritten === 0, 'changed rediscovery should not count as newly written');
   assert(repository.count('killmails') === 1, 'killmail should remain unique');
   assert(repository.count('activity_events') === 7, 'activity events should remain unique');
-  assert(repository.count('ingestion_audits') === 3, 'each run should keep its own audit trail');
+  assert(repository.count('ingestion_audits') === 2, 'same-payload rerun should keep an audit trail, but conflicting rediscovery audit should be suppressed');
+  assert(third.conflictDependentRowsSuppressed.ingestion_audits === 1, 'changed rediscovery should suppress the incoming conflict audit');
+  assert(third.conflictDependentRowsSuppressed.activity_events > 0, 'changed rediscovery should suppress conflicting dependent activity rows');
   assert(afterConflict.killmail_hash === original.killmail_hash, 'rediscovery must not replace original killmail hash');
   assert(afterConflict.killmail_time === original.killmail_time, 'rediscovery must not replace original killmail time');
   assert(afterConflict.solar_system_id === original.solar_system_id, 'rediscovery must not replace original system ID');

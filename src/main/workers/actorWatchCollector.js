@@ -2,12 +2,14 @@ const { EvidenceRepository } = require('../db/evidenceRepository');
 const { HttpClient } = require('../api/httpClient');
 const { ZKillDiscoveryClient } = require('../api/zkillClient');
 const { EsiClient } = require('../api/esiClient');
-const { buildEvidencePackageFromRefs } = require('./killmailIngestionWorker');
 const {
   selectExpansionCandidates,
   markFailedExpansionCandidates,
   summarizeExpansionQueue
-} = require('./systemRadiusCollector');
+} = require('../discovery/expansionQueueSelection');
+const { pendingActorDiscovery } = require('../discovery/candidateRefMemory');
+const { discoverActorRefs } = require('../discovery/zkillCandidateAcquisition');
+const { buildEvidencePackageFromRefs } = require('../discovery/esiBackedExpansionPackage');
 const { planActorWatch } = require('./actorWatchPlanner');
 
 async function collectActorWatch(input, dependencies = {}) {
@@ -148,108 +150,6 @@ async function collectActorWatch(input, dependencies = {}) {
     }, 'failed', error.message);
     throw error;
   }
-}
-
-function pendingActorDiscovery(pendingRefs, plannerOutput) {
-  const expansionQueue = pendingRefs.map((ref, index) => ({
-    killmail_id: ref.killmail_id,
-    hash: ref.hash,
-    discovered_by_type: ref.discovered_by_type,
-    discovered_by_id: ref.discovered_by_id,
-    source_actor_type: plannerOutput.actor.entity_type,
-    source_actor_id: plannerOutput.actor.entity_id,
-    discovered_at: new Date().toISOString(),
-    priority: ref.priority || index + 1,
-    already_cached: false,
-    selected_for_expansion: false,
-    skip_reason: null
-  }));
-  return {
-    discoveredRefs: 0,
-    duplicateRefsRemoved: 0,
-    malformedRefsRemoved: 0,
-    uniqueRefs: pendingRefs.map((ref) => ({ killmail_id: ref.killmail_id, hash: ref.hash })),
-    pendingRefsConsidered: pendingRefs.length,
-    expansionQueue,
-    warnings: ['zKill discovery skipped; draining pending actor discovery refs from local queue']
-  };
-}
-
-async function discoverActorRefs(plannerOutput, zkillClient) {
-  const refsByKillmailId = new Map();
-  let discoveredRefs = 0;
-  let duplicateRefsRemoved = 0;
-  let malformedRefsRemoved = 0;
-  let priority = 0;
-  const warnings = [];
-  const expansionQueue = [];
-
-  for (const request of plannerOutput.plannedZkillRequests) {
-    try {
-      const refs = await zkillClient.discoverRefs({
-        targetType: request.target_type,
-        targetId: request.target_id,
-        pastSeconds: request.past_seconds,
-        maxRefs: request.max_refs,
-        includePreview: request.include_preview || false
-      });
-      if (!Array.isArray(refs)) {
-        warnings.push(`zKill discovery for ${request.target_type} ${request.target_id} returned a non-array response`);
-        continue;
-      }
-      discoveredRefs += refs.length;
-
-      for (const ref of refs) {
-        const candidate = expansionCandidate(ref, request, priority += 1);
-        if (!candidate.killmail_id || !candidate.hash) {
-          candidate.skip_reason = 'malformed';
-          malformedRefsRemoved += 1;
-          expansionQueue.push(candidate);
-          continue;
-        }
-
-        if (refsByKillmailId.has(candidate.killmail_id)) {
-          candidate.skip_reason = 'duplicate';
-          duplicateRefsRemoved += 1;
-          expansionQueue.push(candidate);
-          continue;
-        }
-
-        refsByKillmailId.set(candidate.killmail_id, {
-          killmail_id: candidate.killmail_id,
-          hash: candidate.hash
-        });
-        expansionQueue.push(candidate);
-      }
-    } catch (error) {
-      warnings.push(`zKill discovery failed for ${request.target_type} ${request.target_id}: ${error.message}`);
-    }
-  }
-
-  return {
-    discoveredRefs,
-    duplicateRefsRemoved,
-    malformedRefsRemoved,
-    uniqueRefs: [...refsByKillmailId.values()],
-    expansionQueue,
-    warnings
-  };
-}
-
-function expansionCandidate(ref, request, priority) {
-  const killmailId = Number(ref?.killmail_id);
-  return {
-    killmail_id: Number.isInteger(killmailId) && killmailId > 0 ? killmailId : null,
-    hash: ref?.hash || null,
-    source_actor_type: request.target_type,
-    source_actor_id: request.target_id,
-    discovered_at: new Date().toISOString(),
-    priority,
-    already_cached: false,
-    selected_for_expansion: false,
-    skip_reason: null,
-    preview: ref?.preview || null
-  };
 }
 
 function buildActorCollectionPlanSummary(plannerOutput, selection) {

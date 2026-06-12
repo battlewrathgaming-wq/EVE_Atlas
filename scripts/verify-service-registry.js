@@ -95,8 +95,29 @@ async function main() {
     const watchExecutorTickDryRunCommand = commands.find((entry) => entry.command === 'watch.executor_tick_dry_run.preview');
     const watchPacketDryRunDispatchParityCommand = commands.find((entry) => entry.command === 'watch.packet_dry_run_dispatch_parity.preview');
     const watchTaskCreationBoundaryCommand = commands.find((entry) => entry.command === 'watch.task_creation_boundary.preview');
+    const watchSystemRadiusRunStubCommand = commands.find((entry) => entry.command === 'watch.system_radius_run_stub.preview');
+    const watchBucketIdentityProjectionCommand = commands.find((entry) => entry.command === 'watch.bucket_identity_projection.preview');
+    const watchBucketPickupPostureBridgeCommand = commands.find((entry) => entry.command === 'watch.bucket_pickup_posture_bridge.preview');
+    const watchBucketDisposablePersistenceFixtureCommand = commands.find((entry) => entry.command === 'watch.bucket_disposable_persistence_fixture.preview');
+    const watchBucketProductPersistenceCommand = commands.find((entry) => entry.command === 'watch.bucket_product_persistence.emit');
     const watchDiscoveryPickupPacketCommand = commands.find((entry) => entry.command === 'watch.discovery_pickup_packet_proof.preview');
     const discoveryPickupConsumerFixtureCommand = commands.find((entry) => entry.command === 'discovery.pickup_consumer_fixture.preview');
+    const discoveryPickupConsumerHoldContractCommand = commands.find((entry) => entry.command === 'discovery.pickup_consumer_hold_contract.preview');
+    const discoveryOutcomeDerivationCommand = commands.find((entry) => entry.command === 'discovery.outcome_derivation.preview');
+    const discoveryReceiptProjectionFixtureCommand = commands.find((entry) => entry.command === 'discovery.receipt_projection_fixture.preview');
+    const watchDiscoveryAcquisitionSplitFixtureCommand = commands.find((entry) => entry.command === 'watch.discovery_acquisition_split_fixture.preview');
+    const discoveryAcquisitionToEvidenceHandoffFixtureCommand = commands.find((entry) => entry.command === 'discovery.acquisition_to_evidence_handoff_fixture.preview');
+    const discoveryEsiExpansionIntakePostureCommand = commands.find((entry) => entry.command === 'discovery.esi_expansion_intake_posture.preview');
+    const evidenceWriterLandingPackageFixtureCommand = commands.find((entry) => entry.command === 'evidence.writer_landing_package_fixture.preview');
+    const watchMixedCollectorReplacementRouteCommand = commands.find((entry) => entry.command === 'watch.mixed_collector_replacement_route.preview');
+    const watchActorReplacementParityCommand = commands.find((entry) => entry.command === 'watch.actor_replacement_parity.preview');
+    const watchActorCompatibilityWrapperContractCommand = commands.find((entry) => entry.command === 'watch.actor_compatibility_wrapper_contract.preview');
+    const watchActorCompatibilityWrapperAdapterFixtureCommand = commands.find((entry) => entry.command === 'watch.actor_compatibility_wrapper_adapter_fixture.preview');
+    const watchActorCompatibilityWrapperCommand = commands.find((entry) => entry.command === 'watch.actor_compatibility_wrapper.preview');
+    const watchActorDiscoveryRouteBodyFixtureCommand = commands.find((entry) => entry.command === 'watch.actor_discovery_route_body_fixture.preview');
+    const watchActorDiscoveryHandoffContractCommand = commands.find((entry) => entry.command === 'watch.actor_discovery_handoff_contract.preview');
+    const watchActorControlledRuntimeAdapterFixtureCommand = commands.find((entry) => entry.command === 'watch.actor_controlled_runtime_adapter_fixture.preview');
+    const watchActorControlledAdapterDisabledCommand = commands.find((entry) => entry.command === 'watch.actor_controlled_adapter_disabled.preview');
     const watchOperatorConfirmationContractCommand = commands.find((entry) => entry.command === 'watch.operator_confirmation_contract.preview');
     const systemRadiusAuthoringPreflightCommand = commands.find((entry) => entry.command === 'watch.system_radius_authoring_preflight.preview');
     const systemRadiusAcceptancePayloadCommand = commands.find((entry) => entry.command === 'watch.system_radius_acceptance_payload.preview');
@@ -263,10 +284,53 @@ async function main() {
     assert(watchPacketDryRunDispatchParityCommand?.renderer_allowed === true, 'Watch packet/dry-run/dispatch parity preview should be renderer eligible');
     assert(watchTaskCreationBoundaryCommand?.classification === 'read-only', 'Watch task creation boundary preview should be read-only');
     assert(watchTaskCreationBoundaryCommand?.renderer_allowed === true, 'Watch task creation boundary preview should be renderer eligible');
+    assert(watchSystemRadiusRunStubCommand?.classification === 'read-only', 'system/radius Watch-run stub preview should be read-only');
+    assert(watchSystemRadiusRunStubCommand?.renderer_allowed === true, 'system/radius Watch-run stub preview should be renderer eligible');
+    assert(watchBucketIdentityProjectionCommand?.classification === 'read-only', 'Watch bucket identity projection should be read-only');
+    assert(watchBucketIdentityProjectionCommand?.renderer_allowed === true, 'Watch bucket identity projection should be renderer eligible');
+    assert(watchBucketPickupPostureBridgeCommand?.classification === 'read-only', 'Watch bucket pickup posture bridge should be read-only');
+    assert(watchBucketPickupPostureBridgeCommand?.renderer_allowed === true, 'Watch bucket pickup posture bridge should be renderer eligible');
+    assert(watchBucketDisposablePersistenceFixtureCommand?.classification === 'read-only', 'Watch bucket disposable persistence fixture should be read-only');
+    assert(watchBucketDisposablePersistenceFixtureCommand?.renderer_allowed === true, 'Watch bucket disposable persistence fixture should be renderer eligible');
+    assert(watchBucketProductPersistenceCommand?.classification === 'metadata-only', 'Watch bucket product persistence should be metadata-only');
+    assert(watchBucketProductPersistenceCommand?.renderer_allowed === false, 'Watch bucket product persistence should not be renderer eligible');
+    assert(watchBucketProductPersistenceCommand?.effects.includes('local-data-mutation'), 'Watch bucket product persistence should declare local-data-mutation effect');
     assert(watchDiscoveryPickupPacketCommand?.classification === 'read-only', 'Watch Discovery pickup packet proof should be read-only');
     assert(watchDiscoveryPickupPacketCommand?.renderer_allowed === true, 'Watch Discovery pickup packet proof should be renderer eligible');
     assert(discoveryPickupConsumerFixtureCommand?.classification === 'read-only', 'Discovery pickup consumer fixture should be read-only');
     assert(discoveryPickupConsumerFixtureCommand?.renderer_allowed === true, 'Discovery pickup consumer fixture should be renderer eligible');
+    assert(discoveryPickupConsumerHoldContractCommand?.classification === 'read-only', 'Discovery pickup consumer hold contract should be read-only');
+    assert(discoveryPickupConsumerHoldContractCommand?.renderer_allowed === true, 'Discovery pickup consumer hold contract should be renderer eligible');
+    assert(discoveryOutcomeDerivationCommand?.classification === 'read-only', 'Discovery outcome derivation should be read-only');
+    assert(discoveryOutcomeDerivationCommand?.renderer_allowed === true, 'Discovery outcome derivation should be renderer eligible');
+    assert(discoveryReceiptProjectionFixtureCommand?.classification === 'read-only', 'Discovery receipt projection fixture should be read-only');
+    assert(discoveryReceiptProjectionFixtureCommand?.renderer_allowed === true, 'Discovery receipt projection fixture should be renderer eligible');
+    assert(watchDiscoveryAcquisitionSplitFixtureCommand?.classification === 'read-only', 'Watch Discovery acquisition split fixture should be read-only');
+    assert(watchDiscoveryAcquisitionSplitFixtureCommand?.renderer_allowed === true, 'Watch Discovery acquisition split fixture should be renderer eligible');
+    assert(discoveryAcquisitionToEvidenceHandoffFixtureCommand?.classification === 'read-only', 'Discovery acquisition to Evidence handoff fixture should be read-only');
+    assert(discoveryAcquisitionToEvidenceHandoffFixtureCommand?.renderer_allowed === true, 'Discovery acquisition to Evidence handoff fixture should be renderer eligible');
+    assert(discoveryEsiExpansionIntakePostureCommand?.classification === 'read-only', 'Discovery ESI expansion intake posture should be read-only');
+    assert(discoveryEsiExpansionIntakePostureCommand?.renderer_allowed === true, 'Discovery ESI expansion intake posture should be renderer eligible');
+    assert(evidenceWriterLandingPackageFixtureCommand?.classification === 'metadata-only', 'Evidence writer landing package fixture should be metadata-only');
+    assert(evidenceWriterLandingPackageFixtureCommand?.renderer_allowed === false, 'Evidence writer landing package fixture should not be renderer eligible');
+    assert(watchMixedCollectorReplacementRouteCommand?.classification === 'read-only', 'Watch mixed collector replacement route preview should be read-only');
+    assert(watchMixedCollectorReplacementRouteCommand?.renderer_allowed === true, 'Watch mixed collector replacement route preview should be renderer eligible');
+    assert(watchActorReplacementParityCommand?.classification === 'read-only', 'Actor Watch replacement parity preview should be read-only');
+    assert(watchActorReplacementParityCommand?.renderer_allowed === true, 'Actor Watch replacement parity preview should be renderer eligible');
+    assert(watchActorCompatibilityWrapperContractCommand?.classification === 'read-only', 'Actor Watch compatibility wrapper contract preview should be read-only');
+    assert(watchActorCompatibilityWrapperContractCommand?.renderer_allowed === true, 'Actor Watch compatibility wrapper contract preview should be renderer eligible');
+    assert(watchActorCompatibilityWrapperAdapterFixtureCommand?.classification === 'read-only', 'Actor Watch compatibility wrapper adapter fixture preview should be read-only');
+    assert(watchActorCompatibilityWrapperAdapterFixtureCommand?.renderer_allowed === true, 'Actor Watch compatibility wrapper adapter fixture preview should be renderer eligible');
+    assert(watchActorCompatibilityWrapperCommand?.classification === 'read-only', 'Actor Watch compatibility wrapper runtime preview should be read-only');
+    assert(watchActorCompatibilityWrapperCommand?.renderer_allowed === true, 'Actor Watch compatibility wrapper runtime preview should be renderer eligible');
+    assert(watchActorDiscoveryRouteBodyFixtureCommand?.classification === 'read-only', 'Actor Watch Discovery route body fixture preview should be read-only');
+    assert(watchActorDiscoveryRouteBodyFixtureCommand?.renderer_allowed === true, 'Actor Watch Discovery route body fixture preview should be renderer eligible');
+    assert(watchActorDiscoveryHandoffContractCommand?.classification === 'read-only', 'Actor Watch / Discovery handoff contract preview should be read-only');
+    assert(watchActorDiscoveryHandoffContractCommand?.renderer_allowed === true, 'Actor Watch / Discovery handoff contract preview should be renderer eligible');
+    assert(watchActorControlledRuntimeAdapterFixtureCommand?.classification === 'metadata-only', 'Actor Watch controlled runtime adapter fixture proof should be metadata-only');
+    assert(watchActorControlledRuntimeAdapterFixtureCommand?.renderer_allowed === false, 'Actor Watch controlled runtime adapter fixture proof should not be renderer eligible');
+    assert(watchActorControlledAdapterDisabledCommand?.classification === 'metadata-only', 'Actor Watch controlled adapter disabled seam should be metadata-only');
+    assert(watchActorControlledAdapterDisabledCommand?.renderer_allowed === false, 'Actor Watch controlled adapter disabled seam should not be renderer eligible');
     assert(watchOperatorConfirmationContractCommand?.classification === 'read-only', 'Watch operator confirmation contract preview should be read-only');
     assert(watchOperatorConfirmationContractCommand?.renderer_allowed === true, 'Watch operator confirmation contract preview should be renderer eligible');
     assert(systemRadiusAuthoringPreflightCommand?.classification === 'read-only', 'system/radius authoring preflight should be read-only');
@@ -632,6 +696,99 @@ async function main() {
     assert(watchTaskCreationBoundary.schema_changes === 0, 'Watch task creation boundary preview should not change schema');
     assert(watchTaskCreationBoundary.runtime_enforcement_active === false, 'Watch task creation boundary preview should not activate enforcement');
 
+    const watchSystemRadiusRunStub = await invokeServiceCommand('watch.system_radius_run_stub.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchSystemRadiusRunStub.read_only === true, 'system/radius Watch-run stub preview should declare read-only behavior');
+    assert(watchSystemRadiusRunStub.provider_calls === 0, 'system/radius Watch-run stub preview should not call providers');
+    assert(watchSystemRadiusRunStub.watch_dispatches === 0, 'system/radius Watch-run stub preview should not dispatch Watch execution');
+    assert(watchSystemRadiusRunStub.watch_executor_tick_called === false, 'system/radius Watch-run stub preview should not call executor tick');
+    assert(watchSystemRadiusRunStub.tasks_created === 0, 'system/radius Watch-run stub preview should not create tasks');
+    assert(watchSystemRadiusRunStub.bucket_rows_created === 0, 'system/radius Watch-run stub preview should not create bucket rows');
+    assert(watchSystemRadiusRunStub.discovery_pickup_packets_created === 0, 'system/radius Watch-run stub preview should not create Discovery pickup packets');
+    assert(watchSystemRadiusRunStub.discovery_refs_mutated === 0, 'system/radius Watch-run stub preview should not mutate Discovery refs');
+    assert(watchSystemRadiusRunStub.evidence_writes === 0, 'system/radius Watch-run stub preview should not write Evidence/EVEidence');
+    assert(watchSystemRadiusRunStub.hydration_writes === 0, 'system/radius Watch-run stub preview should not write Hydration output');
+    assert(watchSystemRadiusRunStub.watch_mutations === 0, 'system/radius Watch-run stub preview should not mutate Watch rows');
+    assert(watchSystemRadiusRunStub.cadence_mutations === 0, 'system/radius Watch-run stub preview should not mutate cadence');
+    assert(watchSystemRadiusRunStub.schema_changes === 0, 'system/radius Watch-run stub preview should not change schema');
+    assert(watchSystemRadiusRunStub.runtime_enforcement_active === false, 'system/radius Watch-run stub preview should not activate enforcement');
+
+    const watchBucketIdentityProjection = await invokeServiceCommand('watch.bucket_identity_projection.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchBucketIdentityProjection.read_only === true, 'Watch bucket identity projection should declare read-only behavior');
+    assert(watchBucketIdentityProjection.fixture_only === true, 'Watch bucket identity projection should be fixture-only');
+    assert(watchBucketIdentityProjection.projection_only === true, 'Watch bucket identity projection should be projection-only');
+    assert(watchBucketIdentityProjection.provider_calls === 0, 'Watch bucket identity projection should not call providers');
+    assert(watchBucketIdentityProjection.provider_packets === 0, 'Watch bucket identity projection should not create provider packets');
+    assert(watchBucketIdentityProjection.discovery_pickup_started === false, 'Watch bucket identity projection should not start Discovery pickup');
+    assert(watchBucketIdentityProjection.bucket_rows_persisted === 0, 'Watch bucket identity projection should not persist bucket rows');
+    assert(watchBucketIdentityProjection.durable_bucket_rows_written === 0, 'Watch bucket identity projection should not write durable bucket rows');
+    assert(watchBucketIdentityProjection.fetch_runs_as_bucket_state === false, 'Watch bucket identity projection should not use fetch_runs as bucket state');
+    assert(watchBucketIdentityProjection.discovered_killmail_refs_as_bucket_state === false, 'Watch bucket identity projection should not use discovered refs as bucket state');
+    assert(watchBucketIdentityProjection.discovery_refs_mutated === 0, 'Watch bucket identity projection should not mutate Discovery refs');
+    assert(watchBucketIdentityProjection.evidence_writes === 0, 'Watch bucket identity projection should not write Evidence/EVEidence');
+    assert(watchBucketIdentityProjection.hydration_writes === 0, 'Watch bucket identity projection should not write Hydration output');
+    assert(watchBucketIdentityProjection.watch_mutations === 0, 'Watch bucket identity projection should not mutate Watch rows');
+    assert(watchBucketIdentityProjection.cadence_mutations === 0, 'Watch bucket identity projection should not mutate cadence');
+    assert(watchBucketIdentityProjection.watch_executor_tick_called === false, 'Watch bucket identity projection should not call executor tick');
+    assert(watchBucketIdentityProjection.schema_changes === 0, 'Watch bucket identity projection should not change schema');
+    assert(watchBucketIdentityProjection.runtime_enforcement_active === false, 'Watch bucket identity projection should not activate enforcement');
+
+    const watchBucketPickupPostureBridge = await invokeServiceCommand('watch.bucket_pickup_posture_bridge.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchBucketPickupPostureBridge.read_only === true, 'Watch bucket pickup posture bridge should declare read-only behavior');
+    assert(watchBucketPickupPostureBridge.fixture_only === true, 'Watch bucket pickup posture bridge should be fixture-only');
+    assert(watchBucketPickupPostureBridge.projection_only === true, 'Watch bucket pickup posture bridge should be projection-only');
+    assert(watchBucketPickupPostureBridge.provider_calls === 0, 'Watch bucket pickup posture bridge should not call providers');
+    assert(watchBucketPickupPostureBridge.provider_packets === 0, 'Watch bucket pickup posture bridge should not create provider packets');
+    assert(watchBucketPickupPostureBridge.discovery_pickup_started === false, 'Watch bucket pickup posture bridge should not start Discovery pickup');
+    assert(watchBucketPickupPostureBridge.discovery_pickup_packets_created === 0, 'Watch bucket pickup posture bridge should not create Discovery pickup packets');
+    assert(watchBucketPickupPostureBridge.bucket_rows_persisted === 0, 'Watch bucket pickup posture bridge should not persist bucket rows');
+    assert(watchBucketPickupPostureBridge.durable_bucket_rows_written === 0, 'Watch bucket pickup posture bridge should not write durable bucket rows');
+    assert(watchBucketPickupPostureBridge.fetch_runs_as_bucket_state === false, 'Watch bucket pickup posture bridge should not use fetch_runs as bucket state');
+    assert(watchBucketPickupPostureBridge.discovered_killmail_refs_as_bucket_state === false, 'Watch bucket pickup posture bridge should not use discovered refs as bucket state');
+    assert(watchBucketPickupPostureBridge.candidate_refs_written === 0, 'Watch bucket pickup posture bridge should not write candidate refs');
+    assert(watchBucketPickupPostureBridge.discovery_refs_mutated === 0, 'Watch bucket pickup posture bridge should not mutate Discovery refs');
+    assert(watchBucketPickupPostureBridge.evidence_writes === 0, 'Watch bucket pickup posture bridge should not write Evidence/EVEidence');
+    assert(watchBucketPickupPostureBridge.hydration_writes === 0, 'Watch bucket pickup posture bridge should not write Hydration output');
+    assert(watchBucketPickupPostureBridge.watch_mutations === 0, 'Watch bucket pickup posture bridge should not mutate Watch rows');
+    assert(watchBucketPickupPostureBridge.cadence_mutations === 0, 'Watch bucket pickup posture bridge should not mutate cadence');
+    assert(watchBucketPickupPostureBridge.watch_executor_tick_called === false, 'Watch bucket pickup posture bridge should not call executor tick');
+    assert(watchBucketPickupPostureBridge.schema_changes === 0, 'Watch bucket pickup posture bridge should not change schema');
+    assert(watchBucketPickupPostureBridge.runtime_enforcement_active === false, 'Watch bucket pickup posture bridge should not activate enforcement');
+
+    const watchBucketDisposablePersistenceFixture = await invokeServiceCommand('watch.bucket_disposable_persistence_fixture.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchBucketDisposablePersistenceFixture.read_only === true, 'Watch bucket disposable persistence fixture should declare read-only behavior');
+    assert(watchBucketDisposablePersistenceFixture.fixture_only === true, 'Watch bucket disposable persistence fixture should be fixture-only');
+    assert(watchBucketDisposablePersistenceFixture.disposable_only === true, 'Watch bucket disposable persistence fixture should be disposable-only');
+    assert(watchBucketDisposablePersistenceFixture.operator_corpus_mutated === false, 'Watch bucket disposable persistence fixture should not mutate operator corpus');
+    assert(watchBucketDisposablePersistenceFixture.product_schema_updated === false, 'Watch bucket disposable persistence fixture should not update product schema');
+    assert(watchBucketDisposablePersistenceFixture.fixture_schema_accepted_as_product_schema === false, 'Watch bucket disposable persistence fixture should not accept fixture schema as product schema');
+    assert(watchBucketDisposablePersistenceFixture.provider_calls === 0, 'Watch bucket disposable persistence fixture should not call providers');
+    assert(watchBucketDisposablePersistenceFixture.provider_packets === 0, 'Watch bucket disposable persistence fixture should not create provider packets');
+    assert(watchBucketDisposablePersistenceFixture.discovery_pickup_started === false, 'Watch bucket disposable persistence fixture should not start Discovery pickup');
+    assert(watchBucketDisposablePersistenceFixture.discovery_pickup_packets_created === 0, 'Watch bucket disposable persistence fixture should not create Discovery pickup packets');
+    assert(watchBucketDisposablePersistenceFixture.durable_bucket_rows_written === 0, 'Watch bucket disposable persistence fixture should not write durable bucket rows');
+    assert(watchBucketDisposablePersistenceFixture.fetch_runs_as_bucket_state === false, 'Watch bucket disposable persistence fixture should not use fetch_runs as bucket state');
+    assert(watchBucketDisposablePersistenceFixture.discovered_killmail_refs_as_bucket_state === false, 'Watch bucket disposable persistence fixture should not use discovered refs as bucket state');
+    assert(watchBucketDisposablePersistenceFixture.candidate_refs_written === 0, 'Watch bucket disposable persistence fixture should not write candidate refs');
+    assert(watchBucketDisposablePersistenceFixture.discovery_refs_mutated === 0, 'Watch bucket disposable persistence fixture should not mutate Discovery refs');
+    assert(watchBucketDisposablePersistenceFixture.evidence_writes === 0, 'Watch bucket disposable persistence fixture should not write Evidence/EVEidence');
+    assert(watchBucketDisposablePersistenceFixture.hydration_writes === 0, 'Watch bucket disposable persistence fixture should not write Hydration output');
+    assert(watchBucketDisposablePersistenceFixture.watch_mutations === 0, 'Watch bucket disposable persistence fixture should not mutate Watch rows');
+    assert(watchBucketDisposablePersistenceFixture.cadence_mutations === 0, 'Watch bucket disposable persistence fixture should not mutate cadence');
+    assert(watchBucketDisposablePersistenceFixture.schema_changes === 0, 'Watch bucket disposable persistence fixture should not change schema');
+    assert(watchBucketDisposablePersistenceFixture.runtime_enforcement_active === false, 'Watch bucket disposable persistence fixture should not activate enforcement');
+
     const watchDiscoveryPickupPacket = await invokeServiceCommand('watch.discovery_pickup_packet_proof.preview', {}, {
       db,
       databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
@@ -666,6 +823,423 @@ async function main() {
     assert(discoveryPickupConsumerFixture.watch_mutations === 0, 'Discovery pickup consumer fixture should not mutate Watch rows');
     assert(discoveryPickupConsumerFixture.schema_changes === 0, 'Discovery pickup consumer fixture should not change schema');
     assert(discoveryPickupConsumerFixture.runtime_enforcement_active === false, 'Discovery pickup consumer fixture should not activate enforcement');
+
+    const discoveryPickupConsumerHoldContract = await invokeServiceCommand('discovery.pickup_consumer_hold_contract.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(discoveryPickupConsumerHoldContract.read_only === true, 'Discovery pickup consumer hold contract should declare read-only behavior');
+    assert(discoveryPickupConsumerHoldContract.fixture_only === true, 'Discovery pickup consumer hold contract should be fixture-only');
+    assert(discoveryPickupConsumerHoldContract.contract_only === true, 'Discovery pickup consumer hold contract should be contract-only');
+    assert(discoveryPickupConsumerHoldContract.production_bucket_consumption === false, 'Discovery pickup consumer hold contract should not consume production bucket rows');
+    assert(discoveryPickupConsumerHoldContract.operator_corpus_mutated === false, 'Discovery pickup consumer hold contract should not mutate operator corpus');
+    assert(discoveryPickupConsumerHoldContract.provider_calls === 0, 'Discovery pickup consumer hold contract should not call providers');
+    assert(discoveryPickupConsumerHoldContract.live_api_calls === 0, 'Discovery pickup consumer hold contract should not make live/API calls');
+    assert(discoveryPickupConsumerHoldContract.provider_packets === 0, 'Discovery pickup consumer hold contract should not create provider packets');
+    assert(discoveryPickupConsumerHoldContract.discovery_pickup_started === false, 'Discovery pickup consumer hold contract should not start Discovery pickup');
+    assert(discoveryPickupConsumerHoldContract.discovery_pickup_packets_created === 0, 'Discovery pickup consumer hold contract should not create Discovery pickup packets');
+    assert(discoveryPickupConsumerHoldContract.leases_created === 0, 'Discovery pickup consumer hold contract should not create leases');
+    assert(discoveryPickupConsumerHoldContract.queue_items_created === 0, 'Discovery pickup consumer hold contract should not create queue items');
+    assert(discoveryPickupConsumerHoldContract.dispatcher_queue_lease_behavior === false, 'Discovery pickup consumer hold contract should not implement dispatcher/queue/lease behavior');
+    assert(discoveryPickupConsumerHoldContract.candidate_refs_written === 0, 'Discovery pickup consumer hold contract should not write candidate refs');
+    assert(discoveryPickupConsumerHoldContract.discovery_refs_mutated === 0, 'Discovery pickup consumer hold contract should not mutate Discovery refs');
+    assert(discoveryPickupConsumerHoldContract.discovered_killmail_refs_written === 0, 'Discovery pickup consumer hold contract should not write discovered_killmail_refs');
+    assert(discoveryPickupConsumerHoldContract.evidence_writes === 0, 'Discovery pickup consumer hold contract should not write Evidence/EVEidence');
+    assert(discoveryPickupConsumerHoldContract.hydration_writes === 0, 'Discovery pickup consumer hold contract should not write Hydration output');
+    assert(discoveryPickupConsumerHoldContract.observation_created === false, 'Discovery pickup consumer hold contract should not create Observation');
+    assert(discoveryPickupConsumerHoldContract.watch_mutations === 0, 'Discovery pickup consumer hold contract should not mutate Watch rows');
+    assert(discoveryPickupConsumerHoldContract.cadence_mutations === 0, 'Discovery pickup consumer hold contract should not mutate cadence');
+    assert(discoveryPickupConsumerHoldContract.schema_changes === 0, 'Discovery pickup consumer hold contract should not change schema');
+    assert(discoveryPickupConsumerHoldContract.runtime_enforcement_active === false, 'Discovery pickup consumer hold contract should not activate enforcement');
+
+    const discoveryOutcomeDerivation = await invokeServiceCommand('discovery.outcome_derivation.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(discoveryOutcomeDerivation.read_only === true, 'Discovery outcome derivation should declare read-only behavior');
+    assert(discoveryOutcomeDerivation.provider_calls === 0, 'Discovery outcome derivation should not call providers');
+    assert(discoveryOutcomeDerivation.live_api_calls === 0, 'Discovery outcome derivation should not make live/API calls');
+    assert(discoveryOutcomeDerivation.watch_execution === false, 'Discovery outcome derivation should not execute Watch');
+    assert(discoveryOutcomeDerivation.watch_dispatches === 0, 'Discovery outcome derivation should not dispatch Watch execution');
+    assert(discoveryOutcomeDerivation.tasks_created === 0, 'Discovery outcome derivation should not create tasks');
+    assert(Array.isArray(discoveryOutcomeDerivation.task_runner_methods_called) && discoveryOutcomeDerivation.task_runner_methods_called.length === 0, 'Discovery outcome derivation should call no TaskRunner methods');
+    assert(discoveryOutcomeDerivation.discovery_refs_mutated === 0, 'Discovery outcome derivation should not mutate Discovery refs');
+    assert(discoveryOutcomeDerivation.discovered_killmail_refs_written === 0, 'Discovery outcome derivation should not write discovered_killmail_refs');
+    assert(discoveryOutcomeDerivation.evidence_writes === 0, 'Discovery outcome derivation should not write Evidence/EVEidence');
+    assert(discoveryOutcomeDerivation.hydration_writes === 0, 'Discovery outcome derivation should not write Hydration output');
+    assert(discoveryOutcomeDerivation.watch_mutations === 0, 'Discovery outcome derivation should not mutate Watch rows');
+    assert(discoveryOutcomeDerivation.schema_changes === 0, 'Discovery outcome derivation should not change schema');
+    assert(discoveryOutcomeDerivation.runtime_enforcement_active === false, 'Discovery outcome derivation should not activate enforcement');
+
+    const discoveryReceiptProjectionFixture = await invokeServiceCommand('discovery.receipt_projection_fixture.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(discoveryReceiptProjectionFixture.read_only === true, 'Discovery receipt projection fixture should declare read-only behavior');
+    assert(discoveryReceiptProjectionFixture.fixture_only === true, 'Discovery receipt projection fixture should be fixture-only');
+    assert(discoveryReceiptProjectionFixture.provider_calls === 0, 'Discovery receipt projection fixture should not call providers');
+    assert(discoveryReceiptProjectionFixture.live_api_calls === 0, 'Discovery receipt projection fixture should not make live/API calls');
+    assert(discoveryReceiptProjectionFixture.watch_execution === false, 'Discovery receipt projection fixture should not execute Watch');
+    assert(discoveryReceiptProjectionFixture.watch_dispatches === 0, 'Discovery receipt projection fixture should not dispatch Watch execution');
+    assert(discoveryReceiptProjectionFixture.tasks_created === 0, 'Discovery receipt projection fixture should not create tasks');
+    assert(Array.isArray(discoveryReceiptProjectionFixture.task_runner_methods_called) && discoveryReceiptProjectionFixture.task_runner_methods_called.length === 0, 'Discovery receipt projection fixture should call no TaskRunner methods');
+    assert(discoveryReceiptProjectionFixture.discovery_refs_mutated === 0, 'Discovery receipt projection fixture should not mutate Discovery refs');
+    assert(discoveryReceiptProjectionFixture.discovered_killmail_refs_written === 0, 'Discovery receipt projection fixture should not write discovered_killmail_refs');
+    assert(discoveryReceiptProjectionFixture.evidence_writes === 0, 'Discovery receipt projection fixture should not write Evidence/EVEidence');
+    assert(discoveryReceiptProjectionFixture.hydration_writes === 0, 'Discovery receipt projection fixture should not write Hydration output');
+    assert(discoveryReceiptProjectionFixture.watch_mutations === 0, 'Discovery receipt projection fixture should not mutate Watch rows');
+    assert(discoveryReceiptProjectionFixture.schema_changes === 0, 'Discovery receipt projection fixture should not change schema');
+    assert(discoveryReceiptProjectionFixture.runtime_enforcement_active === false, 'Discovery receipt projection fixture should not activate enforcement');
+
+    const watchDiscoveryAcquisitionSplitFixture = await invokeServiceCommand('watch.discovery_acquisition_split_fixture.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchDiscoveryAcquisitionSplitFixture.read_only === true, 'Watch Discovery acquisition split fixture should declare read-only behavior');
+    assert(watchDiscoveryAcquisitionSplitFixture.fixture_only === true, 'Watch Discovery acquisition split fixture should be fixture-only');
+    assert(watchDiscoveryAcquisitionSplitFixture.provider_calls === 0, 'Watch Discovery acquisition split fixture should not call providers');
+    assert(watchDiscoveryAcquisitionSplitFixture.live_api_calls === 0, 'Watch Discovery acquisition split fixture should not make live/API calls');
+    assert(watchDiscoveryAcquisitionSplitFixture.watch_execution === false, 'Watch Discovery acquisition split fixture should not execute Watch');
+    assert(watchDiscoveryAcquisitionSplitFixture.watch_dispatches === 0, 'Watch Discovery acquisition split fixture should not dispatch Watch execution');
+    assert(watchDiscoveryAcquisitionSplitFixture.dispatch_runner_invoked === false, 'Watch Discovery acquisition split fixture should not invoke dispatch runner');
+    assert(watchDiscoveryAcquisitionSplitFixture.mixed_collectors_invoked === false, 'Watch Discovery acquisition split fixture should not invoke mixed collectors');
+    assert(watchDiscoveryAcquisitionSplitFixture.tasks_created === 0, 'Watch Discovery acquisition split fixture should not create tasks');
+    assert(Array.isArray(watchDiscoveryAcquisitionSplitFixture.task_runner_methods_called) && watchDiscoveryAcquisitionSplitFixture.task_runner_methods_called.length === 0, 'Watch Discovery acquisition split fixture should call no TaskRunner methods');
+    assert(watchDiscoveryAcquisitionSplitFixture.discovery_refs_mutated === 0, 'Watch Discovery acquisition split fixture should not mutate Discovery refs');
+    assert(watchDiscoveryAcquisitionSplitFixture.discovered_killmail_refs_written === 0, 'Watch Discovery acquisition split fixture should not write discovered_killmail_refs');
+    assert(watchDiscoveryAcquisitionSplitFixture.evidence_writes === 0, 'Watch Discovery acquisition split fixture should not write Evidence/EVEidence');
+    assert(watchDiscoveryAcquisitionSplitFixture.esi_evidence_expansion_run === false, 'Watch Discovery acquisition split fixture should not run ESI Evidence Expansion');
+    assert(watchDiscoveryAcquisitionSplitFixture.hydration_writes === 0, 'Watch Discovery acquisition split fixture should not write Hydration output');
+    assert(watchDiscoveryAcquisitionSplitFixture.watch_mutations === 0, 'Watch Discovery acquisition split fixture should not mutate Watch rows');
+    assert(watchDiscoveryAcquisitionSplitFixture.schema_changes === 0, 'Watch Discovery acquisition split fixture should not change schema');
+    assert(watchDiscoveryAcquisitionSplitFixture.runtime_enforcement_active === false, 'Watch Discovery acquisition split fixture should not activate enforcement');
+
+    const discoveryAcquisitionToEvidenceHandoffFixture = await invokeServiceCommand('discovery.acquisition_to_evidence_handoff_fixture.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(discoveryAcquisitionToEvidenceHandoffFixture.read_only === true, 'Discovery acquisition to Evidence handoff fixture should declare read-only behavior');
+    assert(discoveryAcquisitionToEvidenceHandoffFixture.fixture_only === true, 'Discovery acquisition to Evidence handoff fixture should be fixture-only');
+    assert(discoveryAcquisitionToEvidenceHandoffFixture.provider_calls === 0, 'Discovery acquisition to Evidence handoff fixture should not call providers');
+    assert(discoveryAcquisitionToEvidenceHandoffFixture.live_api_calls === 0, 'Discovery acquisition to Evidence handoff fixture should not make live/API calls');
+    assert(discoveryAcquisitionToEvidenceHandoffFixture.watch_execution === false, 'Discovery acquisition to Evidence handoff fixture should not execute Watch');
+    assert(discoveryAcquisitionToEvidenceHandoffFixture.watch_dispatches === 0, 'Discovery acquisition to Evidence handoff fixture should not dispatch Watch execution');
+    assert(discoveryAcquisitionToEvidenceHandoffFixture.mixed_collectors_invoked === false, 'Discovery acquisition to Evidence handoff fixture should not invoke mixed collectors');
+    assert(discoveryAcquisitionToEvidenceHandoffFixture.tasks_created === 0, 'Discovery acquisition to Evidence handoff fixture should not create tasks');
+    assert(Array.isArray(discoveryAcquisitionToEvidenceHandoffFixture.task_runner_methods_called) && discoveryAcquisitionToEvidenceHandoffFixture.task_runner_methods_called.length === 0, 'Discovery acquisition to Evidence handoff fixture should call no TaskRunner methods');
+    assert(discoveryAcquisitionToEvidenceHandoffFixture.discovery_refs_mutated === 0, 'Discovery acquisition to Evidence handoff fixture should not mutate Discovery refs');
+    assert(discoveryAcquisitionToEvidenceHandoffFixture.discovered_killmail_refs_written === 0, 'Discovery acquisition to Evidence handoff fixture should not write discovered_killmail_refs');
+    assert(discoveryAcquisitionToEvidenceHandoffFixture.evidence_writes === 0, 'Discovery acquisition to Evidence handoff fixture should not write Evidence/EVEidence');
+    assert(discoveryAcquisitionToEvidenceHandoffFixture.esi_evidence_expansion_run === false, 'Discovery acquisition to Evidence handoff fixture should not run ESI Evidence Expansion');
+    assert(discoveryAcquisitionToEvidenceHandoffFixture.hydration_writes === 0, 'Discovery acquisition to Evidence handoff fixture should not write Hydration output');
+    assert(discoveryAcquisitionToEvidenceHandoffFixture.watch_mutations === 0, 'Discovery acquisition to Evidence handoff fixture should not mutate Watch rows');
+    assert(discoveryAcquisitionToEvidenceHandoffFixture.schema_changes === 0, 'Discovery acquisition to Evidence handoff fixture should not change schema');
+    assert(discoveryAcquisitionToEvidenceHandoffFixture.runtime_enforcement_active === false, 'Discovery acquisition to Evidence handoff fixture should not activate enforcement');
+
+    const discoveryEsiExpansionIntakePosture = await invokeServiceCommand('discovery.esi_expansion_intake_posture.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(discoveryEsiExpansionIntakePosture.read_only === true, 'Discovery ESI expansion intake posture should declare read-only behavior');
+    assert(discoveryEsiExpansionIntakePosture.fixture_only === true, 'Discovery ESI expansion intake posture should be fixture-only');
+    assert(discoveryEsiExpansionIntakePosture.provider_calls === 0, 'Discovery ESI expansion intake posture should not call providers');
+    assert(discoveryEsiExpansionIntakePosture.live_api_calls === 0, 'Discovery ESI expansion intake posture should not make live/API calls');
+    assert(discoveryEsiExpansionIntakePosture.esi_calls === 0, 'Discovery ESI expansion intake posture should not call ESI');
+    assert(discoveryEsiExpansionIntakePosture.watch_execution === false, 'Discovery ESI expansion intake posture should not execute Watch');
+    assert(discoveryEsiExpansionIntakePosture.watch_dispatches === 0, 'Discovery ESI expansion intake posture should not dispatch Watch execution');
+    assert(discoveryEsiExpansionIntakePosture.mixed_collectors_invoked === false, 'Discovery ESI expansion intake posture should not invoke mixed collectors');
+    assert(discoveryEsiExpansionIntakePosture.actor_watch_redirected === false, 'Discovery ESI expansion intake posture should not redirect actor.watch');
+    assert(discoveryEsiExpansionIntakePosture.mixed_collector_retired === false, 'Discovery ESI expansion intake posture should not retire collectors');
+    assert(discoveryEsiExpansionIntakePosture.tasks_created === 0, 'Discovery ESI expansion intake posture should not create tasks');
+    assert(Array.isArray(discoveryEsiExpansionIntakePosture.task_runner_methods_called) && discoveryEsiExpansionIntakePosture.task_runner_methods_called.length === 0, 'Discovery ESI expansion intake posture should call no TaskRunner methods');
+    assert(discoveryEsiExpansionIntakePosture.discovery_refs_mutated === 0, 'Discovery ESI expansion intake posture should not mutate Discovery refs');
+    assert(discoveryEsiExpansionIntakePosture.discovered_killmail_refs_written === 0, 'Discovery ESI expansion intake posture should not write discovered_killmail_refs');
+    assert(discoveryEsiExpansionIntakePosture.evidence_writes === 0, 'Discovery ESI expansion intake posture should not write Evidence/EVEidence');
+    assert(discoveryEsiExpansionIntakePosture.evidence_landing_performed === false, 'Discovery ESI expansion intake posture should not land Evidence/EVEidence');
+    assert(discoveryEsiExpansionIntakePosture.live_esi_backed_expansion_run === false, 'Discovery ESI expansion intake posture should not run live ESI-backed expansion');
+    assert(discoveryEsiExpansionIntakePosture.hydration_writes === 0, 'Discovery ESI expansion intake posture should not write Hydration output');
+    assert(discoveryEsiExpansionIntakePosture.watch_mutations === 0, 'Discovery ESI expansion intake posture should not mutate Watch rows');
+    assert(discoveryEsiExpansionIntakePosture.schema_changes === 0, 'Discovery ESI expansion intake posture should not change schema');
+    assert(discoveryEsiExpansionIntakePosture.runtime_enforcement_active === false, 'Discovery ESI expansion intake posture should not activate enforcement');
+    assert(discoveryEsiExpansionIntakePosture.boundary_flags.system_radius_behavior_changed === false, 'Discovery ESI expansion intake posture should not change system/radius behavior');
+
+    const evidenceWriterLandingPackageFixture = await invokeServiceCommand('evidence.writer_landing_package_fixture.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(evidenceWriterLandingPackageFixture.fixture_only === true, 'Evidence writer landing package fixture should be fixture-only');
+    assert(evidenceWriterLandingPackageFixture.disposable_db.operator_corpus_mutated === false, 'Evidence writer landing package fixture should not mutate operator corpus');
+    assert(evidenceWriterLandingPackageFixture.disposable_db.context_db_used === false, 'Evidence writer landing package fixture should not use caller DB');
+    assert(evidenceWriterLandingPackageFixture.provider_invocation.provider_not_invoked === true, 'Evidence writer landing package fixture should not invoke providers');
+    assert(evidenceWriterLandingPackageFixture.provider_invocation.zkill === 0, 'Evidence writer landing package fixture should not call zKill');
+    assert(evidenceWriterLandingPackageFixture.provider_invocation.esi === 0, 'Evidence writer landing package fixture should not call ESI');
+    assert(evidenceWriterLandingPackageFixture.tables_proven_unchanged.discovered_killmail_refs === true, 'Evidence writer landing package fixture should not mutate Discovery refs');
+    assert(evidenceWriterLandingPackageFixture.tables_proven_unchanged.api_request_logs === true, 'Evidence writer landing package fixture should not write API logs');
+    assert(evidenceWriterLandingPackageFixture.tables_proven_unchanged.watch_tables === true, 'Evidence writer landing package fixture should not mutate Watch tables');
+    assert(evidenceWriterLandingPackageFixture.tables_proven_unchanged.hydration_metadata_tables === true, 'Evidence writer landing package fixture should not write Hydration/metadata tables');
+    assert(evidenceWriterLandingPackageFixture.tables_proven_unchanged.assessment_tables === true, 'Evidence writer landing package fixture should not write Assessment tables');
+    assert(evidenceWriterLandingPackageFixture.foreign_key_check.ok === true, 'Evidence writer landing package fixture should pass foreign key check');
+
+    const watchMixedCollectorReplacementRoute = await invokeServiceCommand('watch.mixed_collector_replacement_route.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchMixedCollectorReplacementRoute.read_only === true, 'Watch mixed collector replacement route preview should declare read-only behavior');
+    assert(watchMixedCollectorReplacementRoute.fixture_only === true, 'Watch mixed collector replacement route preview should be fixture-only');
+    assert(watchMixedCollectorReplacementRoute.provider_calls === 0, 'Watch mixed collector replacement route preview should not call providers');
+    assert(watchMixedCollectorReplacementRoute.live_api_calls === 0, 'Watch mixed collector replacement route preview should not make live/API calls');
+    assert(watchMixedCollectorReplacementRoute.watch_execution === false, 'Watch mixed collector replacement route preview should not execute Watch');
+    assert(watchMixedCollectorReplacementRoute.watch_dispatches === 0, 'Watch mixed collector replacement route preview should not dispatch Watch execution');
+    assert(watchMixedCollectorReplacementRoute.mixed_collectors_invoked === false, 'Watch mixed collector replacement route preview should not invoke mixed collectors');
+    assert(watchMixedCollectorReplacementRoute.mixed_collector_redirected === false, 'Watch mixed collector replacement route preview should not redirect collectors');
+    assert(watchMixedCollectorReplacementRoute.mixed_collector_retired === false, 'Watch mixed collector replacement route preview should not retire collectors');
+    assert(watchMixedCollectorReplacementRoute.tasks_created === 0, 'Watch mixed collector replacement route preview should not create tasks');
+    assert(Array.isArray(watchMixedCollectorReplacementRoute.task_runner_methods_called) && watchMixedCollectorReplacementRoute.task_runner_methods_called.length === 0, 'Watch mixed collector replacement route preview should call no TaskRunner methods');
+    assert(watchMixedCollectorReplacementRoute.discovery_refs_mutated === 0, 'Watch mixed collector replacement route preview should not mutate Discovery refs');
+    assert(watchMixedCollectorReplacementRoute.discovered_killmail_refs_written === 0, 'Watch mixed collector replacement route preview should not write discovered_killmail_refs');
+    assert(watchMixedCollectorReplacementRoute.evidence_writes === 0, 'Watch mixed collector replacement route preview should not write Evidence/EVEidence');
+    assert(watchMixedCollectorReplacementRoute.live_esi_backed_expansion_run === false, 'Watch mixed collector replacement route preview should not run live ESI-backed expansion');
+    assert(watchMixedCollectorReplacementRoute.hydration_writes === 0, 'Watch mixed collector replacement route preview should not write Hydration output');
+    assert(watchMixedCollectorReplacementRoute.watch_mutations === 0, 'Watch mixed collector replacement route preview should not mutate Watch rows');
+    assert(watchMixedCollectorReplacementRoute.schema_changes === 0, 'Watch mixed collector replacement route preview should not change schema');
+    assert(watchMixedCollectorReplacementRoute.runtime_enforcement_active === false, 'Watch mixed collector replacement route preview should not activate enforcement');
+
+    const watchActorReplacementParity = await invokeServiceCommand('watch.actor_replacement_parity.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchActorReplacementParity.read_only === true, 'Actor Watch replacement parity preview should declare read-only behavior');
+    assert(watchActorReplacementParity.fixture_only === true, 'Actor Watch replacement parity preview should be fixture-only');
+    assert(watchActorReplacementParity.actor_only === true, 'Actor Watch replacement parity preview should be actor-only');
+    assert(watchActorReplacementParity.provider_calls === 0, 'Actor Watch replacement parity preview should not call providers');
+    assert(watchActorReplacementParity.live_api_calls === 0, 'Actor Watch replacement parity preview should not make live/API calls');
+    assert(watchActorReplacementParity.watch_execution === false, 'Actor Watch replacement parity preview should not execute Watch');
+    assert(watchActorReplacementParity.watch_dispatches === 0, 'Actor Watch replacement parity preview should not dispatch Watch execution');
+    assert(watchActorReplacementParity.mixed_collectors_invoked === false, 'Actor Watch replacement parity preview should not invoke mixed collectors');
+    assert(watchActorReplacementParity.actor_watch_redirected === false, 'Actor Watch replacement parity preview should not redirect actor.watch');
+    assert(watchActorReplacementParity.mixed_collector_retired === false, 'Actor Watch replacement parity preview should not retire collectors');
+    assert(watchActorReplacementParity.tasks_created === 0, 'Actor Watch replacement parity preview should not create tasks');
+    assert(Array.isArray(watchActorReplacementParity.task_runner_methods_called) && watchActorReplacementParity.task_runner_methods_called.length === 0, 'Actor Watch replacement parity preview should call no TaskRunner methods');
+    assert(watchActorReplacementParity.discovery_refs_mutated === 0, 'Actor Watch replacement parity preview should not mutate Discovery refs');
+    assert(watchActorReplacementParity.discovered_killmail_refs_written === 0, 'Actor Watch replacement parity preview should not write discovered_killmail_refs');
+    assert(watchActorReplacementParity.evidence_writes === 0, 'Actor Watch replacement parity preview should not write Evidence/EVEidence');
+    assert(watchActorReplacementParity.live_esi_backed_expansion_run === false, 'Actor Watch replacement parity preview should not run live ESI-backed expansion');
+    assert(watchActorReplacementParity.hydration_writes === 0, 'Actor Watch replacement parity preview should not write Hydration output');
+    assert(watchActorReplacementParity.watch_mutations === 0, 'Actor Watch replacement parity preview should not mutate Watch rows');
+    assert(watchActorReplacementParity.schema_changes === 0, 'Actor Watch replacement parity preview should not change schema');
+    assert(watchActorReplacementParity.runtime_enforcement_active === false, 'Actor Watch replacement parity preview should not activate enforcement');
+    assert(watchActorReplacementParity.boundary_flags.system_radius_behavior_changed === false, 'Actor Watch replacement parity preview should not change system/radius behavior');
+
+    const watchActorCompatibilityWrapperContract = await invokeServiceCommand('watch.actor_compatibility_wrapper_contract.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchActorCompatibilityWrapperContract.read_only === true, 'Actor Watch compatibility wrapper contract should declare read-only behavior');
+    assert(watchActorCompatibilityWrapperContract.fixture_only === true, 'Actor Watch compatibility wrapper contract should be fixture-only');
+    assert(watchActorCompatibilityWrapperContract.wrapper_status === 'contract_only_not_active', 'Actor Watch compatibility wrapper contract should be inactive contract only');
+    assert(watchActorCompatibilityWrapperContract.old_entry_point === 'actor.watch', 'Actor Watch compatibility wrapper contract should identify old entry point');
+    assert(watchActorCompatibilityWrapperContract.current_retire_candidate === 'collectActorWatch', 'Actor Watch compatibility wrapper contract should identify collectActorWatch as retire candidate only');
+    assert(watchActorCompatibilityWrapperContract.provider_calls === 0, 'Actor Watch compatibility wrapper contract should not call providers');
+    assert(watchActorCompatibilityWrapperContract.live_api_calls === 0, 'Actor Watch compatibility wrapper contract should not make live/API calls');
+    assert(watchActorCompatibilityWrapperContract.watch_execution === false, 'Actor Watch compatibility wrapper contract should not execute Watch');
+    assert(watchActorCompatibilityWrapperContract.watch_dispatches === 0, 'Actor Watch compatibility wrapper contract should not dispatch Watch execution');
+    assert(watchActorCompatibilityWrapperContract.mixed_collectors_invoked === false, 'Actor Watch compatibility wrapper contract should not invoke mixed collectors');
+    assert(watchActorCompatibilityWrapperContract.collect_actor_watch_invoked === false, 'Actor Watch compatibility wrapper contract should not invoke collectActorWatch');
+    assert(watchActorCompatibilityWrapperContract.actor_watch_redirected === false, 'Actor Watch compatibility wrapper contract should not redirect actor.watch');
+    assert(watchActorCompatibilityWrapperContract.mixed_collector_retired === false, 'Actor Watch compatibility wrapper contract should not retire collectors');
+    assert(watchActorCompatibilityWrapperContract.tasks_created === 0, 'Actor Watch compatibility wrapper contract should not create tasks');
+    assert(Array.isArray(watchActorCompatibilityWrapperContract.task_runner_methods_called) && watchActorCompatibilityWrapperContract.task_runner_methods_called.length === 0, 'Actor Watch compatibility wrapper contract should call no TaskRunner methods');
+    assert(watchActorCompatibilityWrapperContract.discovered_killmail_refs_written === 0, 'Actor Watch compatibility wrapper contract should not write discovered_killmail_refs');
+    assert(watchActorCompatibilityWrapperContract.evidence_writes === 0, 'Actor Watch compatibility wrapper contract should not write Evidence/EVEidence');
+    assert(watchActorCompatibilityWrapperContract.evidence_landing_performed === false, 'Actor Watch compatibility wrapper contract should not land Evidence/EVEidence');
+    assert(watchActorCompatibilityWrapperContract.live_esi_backed_expansion_run === false, 'Actor Watch compatibility wrapper contract should not run live ESI-backed expansion');
+    assert(watchActorCompatibilityWrapperContract.hydration_writes === 0, 'Actor Watch compatibility wrapper contract should not write Hydration output');
+    assert(watchActorCompatibilityWrapperContract.watch_mutations === 0, 'Actor Watch compatibility wrapper contract should not mutate Watch rows');
+    assert(watchActorCompatibilityWrapperContract.schema_changes === 0, 'Actor Watch compatibility wrapper contract should not change schema');
+    assert(watchActorCompatibilityWrapperContract.runtime_enforcement_active === false, 'Actor Watch compatibility wrapper contract should not activate enforcement');
+    assert(watchActorCompatibilityWrapperContract.boundary_flags.system_radius_behavior_changed === false, 'Actor Watch compatibility wrapper contract should not change system/radius behavior');
+
+    const watchActorCompatibilityWrapperAdapterFixture = await invokeServiceCommand('watch.actor_compatibility_wrapper_adapter_fixture.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchActorCompatibilityWrapperAdapterFixture.read_only === true, 'Actor Watch compatibility wrapper adapter fixture should declare read-only behavior');
+    assert(watchActorCompatibilityWrapperAdapterFixture.fixture_only === true, 'Actor Watch compatibility wrapper adapter fixture should be fixture-only');
+    assert(watchActorCompatibilityWrapperAdapterFixture.adapter_fixture_only === true, 'Actor Watch compatibility wrapper adapter fixture should be adapter fixture only');
+    assert(watchActorCompatibilityWrapperAdapterFixture.wrapper_status === 'adapter_fixture_only_not_active', 'Actor Watch compatibility wrapper adapter fixture should be inactive adapter fixture only');
+    assert(watchActorCompatibilityWrapperAdapterFixture.old_entry_point === 'actor.watch', 'Actor Watch compatibility wrapper adapter fixture should identify old entry point');
+    assert(watchActorCompatibilityWrapperAdapterFixture.provider_calls === 0, 'Actor Watch compatibility wrapper adapter fixture should not call providers');
+    assert(watchActorCompatibilityWrapperAdapterFixture.live_api_calls === 0, 'Actor Watch compatibility wrapper adapter fixture should not make live/API calls');
+    assert(watchActorCompatibilityWrapperAdapterFixture.watch_execution === false, 'Actor Watch compatibility wrapper adapter fixture should not execute Watch');
+    assert(watchActorCompatibilityWrapperAdapterFixture.watch_dispatches === 0, 'Actor Watch compatibility wrapper adapter fixture should not dispatch Watch execution');
+    assert(watchActorCompatibilityWrapperAdapterFixture.mixed_collectors_invoked === false, 'Actor Watch compatibility wrapper adapter fixture should not invoke mixed collectors');
+    assert(watchActorCompatibilityWrapperAdapterFixture.collect_actor_watch_invoked === false, 'Actor Watch compatibility wrapper adapter fixture should not invoke collectActorWatch');
+    assert(watchActorCompatibilityWrapperAdapterFixture.actor_watch_redirected === false, 'Actor Watch compatibility wrapper adapter fixture should not redirect actor.watch');
+    assert(watchActorCompatibilityWrapperAdapterFixture.mixed_collector_retired === false, 'Actor Watch compatibility wrapper adapter fixture should not retire collectors');
+    assert(watchActorCompatibilityWrapperAdapterFixture.tasks_created === 0, 'Actor Watch compatibility wrapper adapter fixture should not create tasks');
+    assert(Array.isArray(watchActorCompatibilityWrapperAdapterFixture.task_runner_methods_called) && watchActorCompatibilityWrapperAdapterFixture.task_runner_methods_called.length === 0, 'Actor Watch compatibility wrapper adapter fixture should call no TaskRunner methods');
+    assert(watchActorCompatibilityWrapperAdapterFixture.discovered_killmail_refs_written === 0, 'Actor Watch compatibility wrapper adapter fixture should not write discovered_killmail_refs');
+    assert(watchActorCompatibilityWrapperAdapterFixture.evidence_writes === 0, 'Actor Watch compatibility wrapper adapter fixture should not write Evidence/EVEidence');
+    assert(watchActorCompatibilityWrapperAdapterFixture.evidence_landing_performed === false, 'Actor Watch compatibility wrapper adapter fixture should not land Evidence/EVEidence');
+    assert(watchActorCompatibilityWrapperAdapterFixture.hydration_writes === 0, 'Actor Watch compatibility wrapper adapter fixture should not write Hydration output');
+    assert(watchActorCompatibilityWrapperAdapterFixture.watch_mutations === 0, 'Actor Watch compatibility wrapper adapter fixture should not mutate Watch rows');
+    assert(watchActorCompatibilityWrapperAdapterFixture.schema_changes === 0, 'Actor Watch compatibility wrapper adapter fixture should not change schema');
+    assert(watchActorCompatibilityWrapperAdapterFixture.runtime_enforcement_active === false, 'Actor Watch compatibility wrapper adapter fixture should not activate enforcement');
+    assert(watchActorCompatibilityWrapperAdapterFixture.boundary_flags.system_radius_behavior_changed === false, 'Actor Watch compatibility wrapper adapter fixture should not change system/radius behavior');
+
+    const watchActorCompatibilityWrapper = await invokeServiceCommand('watch.actor_compatibility_wrapper.preview', {}, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchActorCompatibilityWrapper.read_only === true, 'Actor Watch compatibility wrapper runtime preview should declare read-only behavior');
+    assert(watchActorCompatibilityWrapper.fixture_only === true, 'Actor Watch compatibility wrapper runtime preview should be fixture-only');
+    assert(watchActorCompatibilityWrapper.compatibility_wrapper_preview === true, 'Actor Watch compatibility wrapper runtime preview should mark compatibility-wrapper preview posture');
+    assert(watchActorCompatibilityWrapper.wrapper_status === 'explicit_preview_no_provider_no_write_not_active', 'Actor Watch compatibility wrapper runtime preview should be inactive explicit preview only');
+    assert(watchActorCompatibilityWrapper.adapter_basis_action === 'watch.actor_compatibility_wrapper_adapter_fixture.preview', 'Actor Watch compatibility wrapper runtime preview should use adapter fixture basis');
+    assert(watchActorCompatibilityWrapper.old_entry_point === 'actor.watch', 'Actor Watch compatibility wrapper runtime preview should identify old entry point');
+    assert(watchActorCompatibilityWrapper.provider_calls === 0, 'Actor Watch compatibility wrapper runtime preview should not call providers');
+    assert(watchActorCompatibilityWrapper.live_api_calls === 0, 'Actor Watch compatibility wrapper runtime preview should not make live/API calls');
+    assert(watchActorCompatibilityWrapper.watch_execution === false, 'Actor Watch compatibility wrapper runtime preview should not execute Watch');
+    assert(watchActorCompatibilityWrapper.watch_dispatches === 0, 'Actor Watch compatibility wrapper runtime preview should not dispatch Watch execution');
+    assert(watchActorCompatibilityWrapper.mixed_collectors_invoked === false, 'Actor Watch compatibility wrapper runtime preview should not invoke mixed collectors');
+    assert(watchActorCompatibilityWrapper.collect_actor_watch_invoked === false, 'Actor Watch compatibility wrapper runtime preview should not invoke collectActorWatch');
+    assert(watchActorCompatibilityWrapper.actor_watch_redirected === false, 'Actor Watch compatibility wrapper runtime preview should not redirect actor.watch');
+    assert(watchActorCompatibilityWrapper.mixed_collector_retired === false, 'Actor Watch compatibility wrapper runtime preview should not retire collectors');
+    assert(watchActorCompatibilityWrapper.tasks_created === 0, 'Actor Watch compatibility wrapper runtime preview should not create tasks');
+    assert(Array.isArray(watchActorCompatibilityWrapper.task_runner_methods_called) && watchActorCompatibilityWrapper.task_runner_methods_called.length === 0, 'Actor Watch compatibility wrapper runtime preview should call no TaskRunner methods');
+    assert(watchActorCompatibilityWrapper.discovered_killmail_refs_written === 0, 'Actor Watch compatibility wrapper runtime preview should not write discovered_killmail_refs');
+    assert(watchActorCompatibilityWrapper.evidence_writes === 0, 'Actor Watch compatibility wrapper runtime preview should not write Evidence/EVEidence');
+    assert(watchActorCompatibilityWrapper.evidence_landing_performed === false, 'Actor Watch compatibility wrapper runtime preview should not land Evidence/EVEidence');
+    assert(watchActorCompatibilityWrapper.hydration_writes === 0, 'Actor Watch compatibility wrapper runtime preview should not write Hydration output');
+    assert(watchActorCompatibilityWrapper.watch_mutations === 0, 'Actor Watch compatibility wrapper runtime preview should not mutate Watch rows');
+    assert(watchActorCompatibilityWrapper.schema_changes === 0, 'Actor Watch compatibility wrapper runtime preview should not change schema');
+    assert(watchActorCompatibilityWrapper.runtime_enforcement_active === false, 'Actor Watch compatibility wrapper runtime preview should not activate enforcement');
+    assert(watchActorCompatibilityWrapper.existing_runtime_preserved.runActorWatchService_current_call_target === 'runActorWatchDirectBody', 'Actor Watch compatibility wrapper runtime preview should disclose current direct runtime path');
+    assert(watchActorCompatibilityWrapper.existing_runtime_preserved.scheduled_actor_watch_dispatch_command === 'actor.watch', 'Actor Watch compatibility wrapper runtime preview should disclose current scheduled command path');
+    assert(watchActorCompatibilityWrapper.existing_runtime_preserved.scheduled_actor_watch_current_runner === 'runScheduledActorWatch', 'Actor Watch compatibility wrapper runtime preview should disclose current scheduled runner');
+    assert(watchActorCompatibilityWrapper.existing_runtime_preserved.scheduled_actor_watch_runner_call_target === 'runActorWatchDirectBody', 'Actor Watch compatibility wrapper runtime preview should disclose scheduled runner direct body call target');
+    assert(watchActorCompatibilityWrapper.existing_runtime_preserved.collectActorWatch_status === 'legacy_compatibility_available_retirement_candidate', 'Actor Watch compatibility wrapper runtime preview should disclose collectActorWatch parked legacy status');
+    assert(watchActorCompatibilityWrapper.represented_old_result_fields.includes('actor'), 'Actor Watch compatibility wrapper runtime preview should expose represented old result fields');
+    assert(watchActorCompatibilityWrapper.approximate_old_result_fields.includes('warnings'), 'Actor Watch compatibility wrapper runtime preview should expose approximate old result fields');
+    assert(watchActorCompatibilityWrapper.not_represented_old_result_fields.includes('real fetch_runs run_id and lifecycle'), 'Actor Watch compatibility wrapper runtime preview should expose not represented old result fields');
+    assert(watchActorCompatibilityWrapper.parked_old_result_fields.includes('actor.watch redirect'), 'Actor Watch compatibility wrapper runtime preview should expose parked redirect');
+    assert(watchActorCompatibilityWrapper.legacy_term_posture.legacy_mixed_collector_language_is_compatibility_only === true, 'Actor Watch compatibility wrapper runtime preview should mark old mixed terminology as compatibility-only');
+    assert(watchActorCompatibilityWrapper.boundary_flags.system_radius_behavior_changed === false, 'Actor Watch compatibility wrapper runtime preview should not change system/radius behavior');
+
+    const watchActorDiscoveryRouteBodyFixture = await invokeServiceCommand('watch.actor_discovery_route_body_fixture.preview', {
+      now: '2026-06-07T22:15:00.000Z',
+      maxRefs: 5,
+      maxExpansions: 2
+    }, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    assert(watchActorDiscoveryRouteBodyFixture.read_only === true, 'Actor Watch Discovery route body fixture should declare read-only behavior');
+    assert(watchActorDiscoveryRouteBodyFixture.fixture_only === true, 'Actor Watch Discovery route body fixture should be fixture-only');
+    assert(watchActorDiscoveryRouteBodyFixture.route_body_fixture_only === true, 'Actor Watch Discovery route body fixture should identify route-body fixture posture');
+    assert(watchActorDiscoveryRouteBodyFixture.provider_calls === 0, 'Actor Watch Discovery route body fixture should not call providers');
+    assert(watchActorDiscoveryRouteBodyFixture.live_api_calls === 0, 'Actor Watch Discovery route body fixture should not make live/API calls');
+    assert(watchActorDiscoveryRouteBodyFixture.fake_zkill_client_invocations === 1, 'Actor Watch Discovery route body fixture should use fake zKill client');
+    assert(watchActorDiscoveryRouteBodyFixture.fake_esi_client_invocations === 2, 'Actor Watch Discovery route body fixture should use fake ESI client for selected refs');
+    assert(watchActorDiscoveryRouteBodyFixture.watch_execution === false, 'Actor Watch Discovery route body fixture should not execute Watch');
+    assert(watchActorDiscoveryRouteBodyFixture.watch_dispatches === 0, 'Actor Watch Discovery route body fixture should not dispatch Watch execution');
+    assert(watchActorDiscoveryRouteBodyFixture.mixed_collectors_invoked === false, 'Actor Watch Discovery route body fixture should not invoke mixed collectors');
+    assert(watchActorDiscoveryRouteBodyFixture.collect_actor_watch_invoked === false, 'Actor Watch Discovery route body fixture should not invoke collectActorWatch');
+    assert(watchActorDiscoveryRouteBodyFixture.production_actor_watch_redirected === false, 'Actor Watch Discovery route body fixture should not redirect actor.watch');
+    assert(watchActorDiscoveryRouteBodyFixture.runActorWatchService_changed === false, 'Actor Watch Discovery route body fixture should not change runActorWatchService');
+    assert(watchActorDiscoveryRouteBodyFixture.watchExecutor_dispatchFor_changed === false, 'Actor Watch Discovery route body fixture should not change watchExecutor.dispatchFor');
+    assert(watchActorDiscoveryRouteBodyFixture.discovered_killmail_refs_written === 0, 'Actor Watch Discovery route body fixture should not write discovered_killmail_refs');
+    assert(watchActorDiscoveryRouteBodyFixture.evidence_writes === 0, 'Actor Watch Discovery route body fixture should not write Evidence/EVEidence');
+    assert(watchActorDiscoveryRouteBodyFixture.evidence_landing_performed === false, 'Actor Watch Discovery route body fixture should not land Evidence/EVEidence');
+    assert(watchActorDiscoveryRouteBodyFixture.hydration_writes === 0, 'Actor Watch Discovery route body fixture should not write Hydration output');
+    assert(watchActorDiscoveryRouteBodyFixture.watch_mutations === 0, 'Actor Watch Discovery route body fixture should not mutate Watch rows');
+    assert(watchActorDiscoveryRouteBodyFixture.schema_changes === 0, 'Actor Watch Discovery route body fixture should not change schema');
+    assert(watchActorDiscoveryRouteBodyFixture.runtime_enforcement_active === false, 'Actor Watch Discovery route body fixture should not activate enforcement');
+    assert(watchActorDiscoveryRouteBodyFixture.boundary_flags.system_radius_behavior_changed === false, 'Actor Watch Discovery route body fixture should not change system/radius behavior');
+    assert(watchActorDiscoveryRouteBodyFixture.non_invocation_proof.collectActorWatch_imported === false, 'Actor Watch Discovery route body fixture should prove collectActorWatch is not imported');
+    assert(watchActorDiscoveryRouteBodyFixture.old_caller_facing_compatibility_result.expansion_attempted === 2, 'Actor Watch Discovery route body fixture should expose old compatibility result shape');
+
+    const beforeActorDiscoveryHandoff = tableCounts(db);
+    const watchActorDiscoveryHandoffContract = await invokeServiceCommand('watch.actor_discovery_handoff_contract.preview', {
+      now: '2026-06-12T00:00:00.000Z'
+    }, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    const afterActorDiscoveryHandoff = tableCounts(db);
+    assertSame(afterActorDiscoveryHandoff, beforeActorDiscoveryHandoff, 'Actor Watch / Discovery handoff contract preview should not mutate caller/operator DB');
+    assert(watchActorDiscoveryHandoffContract.read_only === true, 'Actor Watch / Discovery handoff contract preview should declare read-only behavior');
+    assert(watchActorDiscoveryHandoffContract.fixture_only === true, 'Actor Watch / Discovery handoff contract preview should be fixture-only');
+    assert(watchActorDiscoveryHandoffContract.provider_calls === 0, 'Actor Watch / Discovery handoff contract preview should not call providers');
+    assert(watchActorDiscoveryHandoffContract.live_api_calls === 0, 'Actor Watch / Discovery handoff contract preview should not make live/API calls');
+    assert(watchActorDiscoveryHandoffContract.watch_execution === false, 'Actor Watch / Discovery handoff contract preview should not execute Watch');
+    assert(watchActorDiscoveryHandoffContract.watch_dispatches === 0, 'Actor Watch / Discovery handoff contract preview should not dispatch Watch');
+    assert(watchActorDiscoveryHandoffContract.tasks_created === 0, 'Actor Watch / Discovery handoff contract preview should not create tasks');
+    assert(watchActorDiscoveryHandoffContract.discovered_killmail_refs_written === 0, 'Actor Watch / Discovery handoff contract preview should not write Discovery refs');
+    assert(watchActorDiscoveryHandoffContract.evidence_writes === 0, 'Actor Watch / Discovery handoff contract preview should not write Evidence/EVEidence');
+    assert(watchActorDiscoveryHandoffContract.hydration_writes === 0, 'Actor Watch / Discovery handoff contract preview should not write Hydration output');
+    assert(watchActorDiscoveryHandoffContract.watch_mutations === 0, 'Actor Watch / Discovery handoff contract preview should not mutate Watch rows');
+    assert(watchActorDiscoveryHandoffContract.schema_changes === 0, 'Actor Watch / Discovery handoff contract preview should not change schema');
+    assert(watchActorDiscoveryHandoffContract.runtime_enforcement_active === false, 'Actor Watch / Discovery handoff contract preview should not activate enforcement');
+    assert(watchActorDiscoveryHandoffContract.collect_actor_watch_retired === false, 'Actor Watch / Discovery handoff contract preview should not retire collectActorWatch');
+    assert(watchActorDiscoveryHandoffContract.system_radius_behavior_changed === false, 'Actor Watch / Discovery handoff contract preview should not change system/radius Watch');
+    assert(watchActorDiscoveryHandoffContract.direct_projection.request.model === 'actor_watch_discovery_request', 'Actor Watch / Discovery handoff contract should expose direct request model');
+    assert(watchActorDiscoveryHandoffContract.direct_projection.receipt.model === 'actor_watch_discovery_receipt', 'Actor Watch / Discovery handoff contract should expose direct receipt model');
+    assert(watchActorDiscoveryHandoffContract.scheduled_projection.request.source === 'scheduled_actor_watch', 'Actor Watch / Discovery handoff contract should expose scheduled request source');
+    assert(watchActorDiscoveryHandoffContract.scheduled_projection.receipt.compatibility_summary.expansion_attempted === 2, 'Actor Watch / Discovery handoff contract should preserve scheduled compatibility summary under receipt');
+    assert(watchActorDiscoveryHandoffContract.compatibility_posture.field_count === 22, 'Actor Watch / Discovery handoff contract should preserve 22 compatibility fields');
+    assert(watchActorDiscoveryHandoffContract.compatibility_posture.field_parity.matches === true, 'Actor Watch / Discovery handoff contract should preserve compatibility field parity');
+    assert(watchActorDiscoveryHandoffContract.contract_projection_shape.compatibility_summary_is_future_contract === false, 'Actor Watch / Discovery handoff contract should not promote compatibility summary as future contract');
+
+    const beforeControlledAdapterFixture = tableCounts(db);
+    const watchActorControlledRuntimeAdapterFixture = await invokeServiceCommand('watch.actor_controlled_runtime_adapter_fixture.preview', {
+      now: '2026-06-08T00:00:00.000Z'
+    }, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    const afterControlledAdapterFixture = tableCounts(db);
+    assertSame(afterControlledAdapterFixture, beforeControlledAdapterFixture, 'Actor Watch controlled runtime adapter fixture should not mutate caller/operator DB');
+    assert(watchActorControlledRuntimeAdapterFixture.fixture_only === true, 'Actor Watch controlled runtime adapter fixture should be fixture-only');
+    assert(watchActorControlledRuntimeAdapterFixture.disposable_db_only === true, 'Actor Watch controlled runtime adapter fixture should use disposable DBs only');
+    assert(watchActorControlledRuntimeAdapterFixture.uses_real_repository_methods === true, 'Actor Watch controlled runtime adapter fixture should use real repository methods');
+    assert(watchActorControlledRuntimeAdapterFixture.provider_calls === 0, 'Actor Watch controlled runtime adapter fixture should not call providers');
+    assert(watchActorControlledRuntimeAdapterFixture.live_api_calls === 0, 'Actor Watch controlled runtime adapter fixture should not make live/API calls');
+    assert(watchActorControlledRuntimeAdapterFixture.collect_actor_watch_invoked === false, 'Actor Watch controlled runtime adapter fixture should not invoke collectActorWatch');
+    assert(watchActorControlledRuntimeAdapterFixture.production_actor_watch_redirected === false, 'Actor Watch controlled runtime adapter fixture should not redirect actor.watch');
+    assert(watchActorControlledRuntimeAdapterFixture.runActorWatchService_changed === false, 'Actor Watch controlled runtime adapter fixture should not change runActorWatchService');
+    assert(watchActorControlledRuntimeAdapterFixture.watchExecutor_dispatchFor_changed === false, 'Actor Watch controlled runtime adapter fixture should not change watchExecutor.dispatchFor');
+    assert(watchActorControlledRuntimeAdapterFixture.operator_corpus_non_mutation_proof.unchanged === true, 'Actor Watch controlled runtime adapter fixture should prove operator DB unchanged');
+    assert(watchActorControlledRuntimeAdapterFixture.cases.fresh_actor_candidate_acquisition.persisted_killmails === 2, 'Actor Watch controlled runtime adapter fixture should land fresh Evidence/EVEidence in disposable DB');
+    assert(watchActorControlledRuntimeAdapterFixture.cases.pending_candidate_drain.fake_zkill_client_invocations === 0, 'Actor Watch controlled runtime adapter fixture should drain pending refs before zKill');
+    assert(watchActorControlledRuntimeAdapterFixture.cases.local_evidence_cache_skip.discovery_ref_status_counts.cached === 1, 'Actor Watch controlled runtime adapter fixture should mark cached refs in disposable DB');
+    assert(watchActorControlledRuntimeAdapterFixture.cases.expansion_failure.discovery_ref_status_counts.failed === 1, 'Actor Watch controlled runtime adapter fixture should mark failed refs in disposable DB');
+
+    const beforeControlledAdapterDisabled = tableCounts(db);
+    const watchActorControlledAdapterDisabled = await invokeServiceCommand('watch.actor_controlled_adapter_disabled.preview', {
+      now: '2026-06-11T00:00:00.000Z'
+    }, {
+      db,
+      databasePath: path.join(auraTempRoot(), 'service-registry.sqlite')
+    });
+    const afterControlledAdapterDisabled = tableCounts(db);
+    assertSame(afterControlledAdapterDisabled, beforeControlledAdapterDisabled, 'Actor Watch controlled adapter disabled seam should not mutate caller/operator DB');
+    assert(watchActorControlledAdapterDisabled.disabled === true, 'Actor Watch controlled adapter disabled seam should report disabled posture');
+    assert(watchActorControlledAdapterDisabled.fixture_only === true, 'Actor Watch controlled adapter disabled seam should be fixture-only');
+    assert(watchActorControlledAdapterDisabled.renderer_eligible === false, 'Actor Watch controlled adapter disabled seam should not be renderer eligible');
+    assert(watchActorControlledAdapterDisabled.provider_calls === 0, 'Actor Watch controlled adapter disabled seam should not call providers');
+    assert(watchActorControlledAdapterDisabled.live_api_calls === 0, 'Actor Watch controlled adapter disabled seam should not make live/API calls');
+    assert(watchActorControlledAdapterDisabled.operator_corpus_non_mutation_proof.unchanged === true, 'Actor Watch controlled adapter disabled seam should prove operator DB unchanged');
+    assert(watchActorControlledAdapterDisabled.production_actor_watch_redirected === false, 'Actor Watch controlled adapter disabled seam should not redirect actor.watch');
+    assert(watchActorControlledAdapterDisabled.runActorWatchService_changed === false, 'Actor Watch controlled adapter disabled seam should not change runActorWatchService');
+    assert(watchActorControlledAdapterDisabled.watchExecutor_dispatchFor_changed === false, 'Actor Watch controlled adapter disabled seam should not change watchExecutor.dispatchFor');
+    assert(watchActorControlledAdapterDisabled.collect_actor_watch_imported === false, 'Actor Watch controlled adapter disabled seam should not import collectActorWatch');
+    assert(watchActorControlledAdapterDisabled.collect_actor_watch_invoked === false, 'Actor Watch controlled adapter disabled seam should not invoke collectActorWatch');
+    assert(watchActorControlledAdapterDisabled.direct_compatibility_summary_proof.top_level_is_summary_object === true, 'Actor Watch controlled adapter disabled seam should return direct compatibility summary object');
+    assert(watchActorControlledAdapterDisabled.direct_compatibility_summary_proof.field_parity.matches === true, 'Actor Watch controlled adapter disabled seam should preserve compatibility summary fields');
+    assert(watchActorControlledAdapterDisabled.scheduled_style_wrapper_proof.collection_under_data === true, 'Actor Watch controlled adapter disabled seam should expose scheduled-style data.collection posture');
+    assert(watchActorControlledAdapterDisabled.scheduled_style_wrapper_proof.tick_invoked === false, 'Actor Watch controlled adapter disabled seam should not invoke tick');
+    assert(watchActorControlledAdapterDisabled.scheduled_style_wrapper_proof.task_created === false, 'Actor Watch controlled adapter disabled seam should not create tasks');
 
     const watchOperatorConfirmationContract = await invokeServiceCommand('watch.operator_confirmation_contract.preview', {}, {
       db,
@@ -830,6 +1404,28 @@ function fakeIpcMain() {
       this.handlers.set(channel, handler);
     }
   };
+}
+
+function tableCounts(db) {
+  return {
+    killmails: count(db, 'killmails'),
+    activity_events: count(db, 'activity_events'),
+    discovered_killmail_refs: count(db, 'discovered_killmail_refs'),
+    fetch_runs: count(db, 'fetch_runs'),
+    api_request_logs: count(db, 'api_request_logs'),
+    data_quality_warnings: count(db, 'data_quality_warnings'),
+    watchlist_entities: count(db, 'watchlist_entities')
+  };
+}
+
+function count(db, tableName) {
+  return Number(db.prepare(`SELECT COUNT(*) AS count FROM ${tableName}`).get()?.count || 0);
+}
+
+function assertSame(actual, expected, message) {
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+    throw new Error(`${message}\nExpected: ${JSON.stringify(expected)}\nActual: ${JSON.stringify(actual)}`);
+  }
 }
 
 async function assertRejects(fn, message) {
